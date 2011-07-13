@@ -7,6 +7,7 @@ gem 'jquery-rails', '1.0.12'
 gem 'carrierwave', '0.5.6'
 gem 'mini_magick', '3.3'
 gem 'fastercsv','1.5.4'
+gem 'feedzirra', '0.0.24'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
