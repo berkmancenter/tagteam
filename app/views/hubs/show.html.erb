@@ -1,0 +1,17 @@
+<div class="hub detailed" id="hub_<%= @hub.id %>">
+  <h1><%= @hub.title %></h1>
+  <div class="description">
+    <%= @hub.description %>
+  </div>
+  <% unless @hub.tag_prefix.blank? %>
+    <div class="tag_prefix">
+      Prefix all tags emitted from the hub with "<%= @hub.tag_prefix %>"
+    </div>
+  <% end %>
+  <div class="meta">
+    <dl>
+      <dt>Owners:</dt>
+      <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
+    </dl>
+  </div>
+</div>

@@ -10,7 +10,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110714202352) do
+ActiveRecord::Schema.define(:version => 20110714220456) do
+
+  create_table "hubs", :force => true do |t|
+    t.string   "title",       :null => false
+    t.string   "description"
+    t.string   "tag_prefix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hubs", ["title"], :name => "index_hubs_on_title"
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40

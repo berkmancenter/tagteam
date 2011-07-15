@@ -21,7 +21,7 @@ end
 
 group :test do
   gem 'cucumber-rails', '0.4.1'
-  gem 'capybara', '1.0.0'
+  gem 'capybara', '0.4.1.2'
   gem 'database_cleaner','0.6.7'
 	gem 'shoulda','2.11.3'
   gem 'shoulda-matchers'
