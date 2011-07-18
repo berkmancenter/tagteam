@@ -1,0 +1,2 @@
+module HubFeedsHelper
+end

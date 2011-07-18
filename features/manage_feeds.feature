@@ -3,6 +3,7 @@ Feature: Manage feeds
   a user
   should be able to create a feed.
   
+	@wip
   Scenario: Register new feed
     Given I am on the new feed page
     When I fill in "Title" with "title 1"

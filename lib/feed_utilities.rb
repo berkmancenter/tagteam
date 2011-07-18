@@ -1,8 +1,9 @@
 module FeedUtilities
 
-  def get_and_parse_feed
-    # Get the feed, setting the title and description to that set by the feed author.
-
+  def get_and_parse_feed(feed)
+		parsed_feed = Feedzirra::Feed.fetch_and_parse(feed.feed_url)
+		
+		return parsed_feed
   end
 
 end

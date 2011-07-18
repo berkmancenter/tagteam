@@ -10,6 +10,9 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+    when /the new hub_feed page/
+      new_hub_feed_path
+
     when /the new feed page/
       new_feed_path
 
