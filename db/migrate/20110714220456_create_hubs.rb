@@ -3,7 +3,7 @@ class CreateHubs < ActiveRecord::Migration
     create_table :hubs do |t|
       t.string :title, :limit => 255, :null => false
       t.string :description
-      t.string :tag_prefix
+      t.string :tag_prefix, :limit => 25
 
       t.timestamps
     end

@@ -1,4 +1,7 @@
 Taghub::Application.routes.draw do
+
+  resources :feeds
+
   resources :hubs
 
   devise_for :users
