@@ -1,0 +1,12 @@
+#feed_feed_url_input p.inline-hints{
+	background: #ccc;
+	width: 6em;
+	color: black;
+	padding: 5px;
+	border-radius: 10px;
+	border: 5px outset #ccc;
+}
+
+#feed_feed_url_input p.inline-hints:hover{
+	cursor: pointer;
+}

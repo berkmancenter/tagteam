@@ -10,12 +10,44 @@ describe Feed do
       @feed.feed_url = 'http://blogs.law.harvard.edu/asdf'
       assert ! @feed.valid?
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed'
+      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feasdf3ked'
       assert ! @feed.valid?
 
       @feed.feed_url = 'htt'
       assert ! @feed.valid?
     end
+
+		it "should follow redirects" do
+      @feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed'
+			assert @feed.valid?
+
+			sleep 2
+
+      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed'
+			assert @feed.valid?
+
+		end
+
+		it "should work with SSL feeds" do
+      @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed/'
+			assert @feed.valid?
+
+			sleep 2
+
+      @feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed/'
+			assert @feed.valid?
+		end
+
+		it "should work with redirected SSL feeds" do
+      @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed'
+			assert @feed.valid?
+
+			sleep 2
+
+      @feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed'
+			assert @feed.valid?
+
+		end
 
     it "is given valid feed_urls" do
 

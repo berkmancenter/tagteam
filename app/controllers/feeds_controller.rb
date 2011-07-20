@@ -1,5 +1,6 @@
 class FeedsController < ApplicationController
-  before_filter :load_feed, :except => [:index, :new, :create]
+  before_filter :load_feed, :except => [:index, :new, :create, :check_feed]
+	before_filter :prep_resources
 
   def index
   end
@@ -10,6 +11,21 @@ class FeedsController < ApplicationController
   def new
 		@feed = Feed.new
   end
+
+	def check_feed
+		feed = Feed.new
+		feed.feed_url = params[:feed_url]
+		if feed.valid?
+			rfeed = feed.raw_feed
+			respond_to do |format|
+				format.json{
+					render :json => rfeed.entries.to_json(:except => [:description])
+				}
+			end
+		else
+			render :text => "Not a valid feed. Please try again.", :status => :not_acceptable
+		end
+	end
 
   def create
     @feed = Feed.new
@@ -41,6 +57,10 @@ class FeedsController < ApplicationController
   def load_feed
     @feed = Feed.find(params[:id])
   end
+
+	def prep_resources
+		@javascripts_extras = ['feeds']
+	end
 
 
 end
