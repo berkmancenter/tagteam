@@ -32,9 +32,9 @@ ActiveRecord::Schema.define(:version => 20110718193629) do
   end
 
   create_table "hubs", :force => true do |t|
-    t.string   "title",                     :null => false
+    t.string   "title",       :null => false
     t.string   "description"
-    t.string   "tag_prefix",  :limit => 25
+    t.string   "tag_prefix"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

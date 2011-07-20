@@ -13,7 +13,7 @@ class FeedsController < ApplicationController
 
   def create
     @feed = Feed.new
-    @feed.attributes = params[:feed]
+    @feed.feed_url = params[:feed][:feed_url]
     respond_to do|format|
       if @feed.save
         current_user.has_role!(:owner, @feed)

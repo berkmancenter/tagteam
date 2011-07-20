@@ -1,2 +1,17 @@
-<h1>Feeds#show</h1>
-<p>Find me in app/views/feeds/show.html.erb</p>
+<h1><%= @feed.title %></h1>
+<div class="description">
+  <%= @feed.description %>
+</div>
+<div class="meta">
+    <dl>
+      <dt>Link:</dt>
+      <dd><%= link_to @feed.url, @feed.url %></dd>
+
+      <dt>Flavor:</dt>
+      <dd><%= @feed.flavor %></dd>
+
+      <dt>Owners:</dt>
+      <dd><%= @feed.owners.collect{|o| o.email}.join(', ') %></dd>
+    </dl>
+  </div>
+</div>
