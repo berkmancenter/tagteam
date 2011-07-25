@@ -47,8 +47,11 @@ module FeedUtilities
 		req.initialize_http_header({"User-Agent" => "tagteam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub"})
 
 		http = Net::HTTP::new(url.host,url.port)
-		if(url.scheme == 'https')
+		if url.scheme == 'https'
 			http.use_ssl = true
+			# Get rid of these errors:
+			# warning: peer certificate won't be verified in this SSL session
+			http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 		end
 
 		response = http.request(req)

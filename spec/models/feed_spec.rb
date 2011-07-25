@@ -1,77 +1,92 @@
 require 'spec_helper'
 
 describe Feed do
-  before :each do
-    @feed = Feed.new
-  end
+	before :each do
+		@feed = Feed.new
+	end
 
-  context do
-    it "is given invalid feed_urls" do
-      @feed.feed_url = 'http://blogs.law.harvard.edu/asdf'
-      assert ! @feed.valid?
+	context do
+		it do
+			should have_many(:feed_retrievals) 
+			should have_and_belong_to_many(:hub_feeds) 
+			should validate_presence_of(:title) 
+			should validate_presence_of(:feed_url) 
+			should validate_uniqueness_of(:feed_url)
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feasdf3ked'
-      assert ! @feed.valid?
+#			it { should respond_to(:move_higher) }
+#			it { should respond_to(:move_lower) }
 
-      @feed.feed_url = 'htt'
-      assert ! @feed.valid?
-    end
+#			it { should have_db_index(:library_id) }
+#			it { should have_db_index(:position) }
+#			it { should have_db_index(:floor_map) }
+		end
+
+		it "is given invalid feed_urls" do
+			@feed.feed_url = 'http://blogs.law.harvard.edu/asdf'
+			assert ! @feed.valid?
+
+			@feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feasdf3ked'
+			assert ! @feed.valid?
+
+			@feed.feed_url = 'htt'
+			assert ! @feed.valid?
+		end
 
 		it "should follow redirects" do
-      @feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed'
+			@feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed'
 			assert @feed.valid?
 
 			sleep 2
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed'
+			@feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed'
 			assert @feed.valid?
 
 		end
 
 		it "should work with SSL feeds" do
-      @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed/'
+			@feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed/'
 			assert @feed.valid?
 
 			sleep 2
 
-      @feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed/'
+			@feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed/'
 			assert @feed.valid?
 		end
 
 		it "should work with redirected SSL feeds" do
-      @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed'
+			@feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed'
 			assert @feed.valid?
 
 			sleep 2
 
-      @feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed'
+			@feed.feed_url = 'https://blogs.law.harvard.edu/djcp/feed'
 			assert @feed.valid?
 
 		end
 
-    it "is given valid feed_urls" do
+		it "is given valid feed_urls" do
 
-      @feed.feed_url = 'http://rss.slashdot.org/Slashdot/slashdot'
-      assert @feed.valid?
+			@feed.feed_url = 'http://rss.slashdot.org/Slashdot/slashdot'
+			assert @feed.valid?
 
-      @feed.feed_url = 'http://feeds.delicious.com/v2/rss/djcp?count=15'
-      assert @feed.valid?
+			@feed.feed_url = 'http://feeds.delicious.com/v2/rss/djcp?count=15'
+			assert @feed.valid?
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed/'
-      assert @feed.valid?
+			@feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed/'
+			assert @feed.valid?
 
-      sleep 2
+			sleep 2
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed/'
-      assert @feed.valid?
+			@feed.feed_url = 'http://blogs.law.harvard.edu/djcp/feed/'
+			assert @feed.valid?
 
-      sleep 2
+			sleep 2
 
-      @feed.feed_url = 'http://blogs.law.harvard.edu/corpgov/feed/atom/'
-      assert @feed.valid?
+			@feed.feed_url = 'http://blogs.law.harvard.edu/corpgov/feed/atom/'
+			assert @feed.valid?
 
-    end
+		end
 
-  end
+	end
 
 end

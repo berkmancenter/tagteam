@@ -1,10 +1,9 @@
 <%= semantic_form_for(@feed) do |f| %>
   <%= f.inputs do %>
 		<%= f.input :feed_url, :hint => 'test feed' %>
-		<%= f.input :title , :hint => 'automatically grabbed from a valid feed', :input_html => {:disabled => 'disabled'} %>
-		<%= f.input :description ,:hint => 'like title, automatically grabbed from a valid feed', :input_html => {:disabled => 'disabled'} %>
-    <%= f.input :url , :input_html => {:disabled => 'disabled'} %>
-
+		<%= f.input :title , :hint => 'automatically grabbed from a valid feed' %>
+		<%= f.input :description ,:hint => 'like title, automatically grabbed from a valid feed' %>
+    <%= f.input :url %>
   <% end %>
   <%= f.buttons %>
 <% end %>

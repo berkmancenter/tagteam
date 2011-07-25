@@ -1,4 +1,6 @@
 Taghub::Application.routes.draw do
+  get "feed_retrievals/show"
+
 	resources :hub_feeds
 	resources :feeds do
 		collection do

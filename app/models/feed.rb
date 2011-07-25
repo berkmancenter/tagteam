@@ -6,6 +6,7 @@ class Feed < ActiveRecord::Base
 	attr_accessible :feed_url
 	attr_accessor :raw_feed
   validates_presence_of :feed_url
+	has_and_belongs_to_many :hub_feeds
 
 	before_validation do
 		return false if feed_url.blank?

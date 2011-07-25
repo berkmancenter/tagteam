@@ -2,6 +2,12 @@ class FeedsController < ApplicationController
   before_filter :load_feed, :except => [:index, :new, :create, :check_feed]
 	before_filter :prep_resources
 
+	access_control do
+		allow :all, :to => [:index, :show]
+		allow :superadmin, :hubadmin
+		allow logged_in
+	end
+
   def index
   end
 
@@ -19,7 +25,7 @@ class FeedsController < ApplicationController
 			rfeed = feed.raw_feed
 			respond_to do |format|
 				format.json{
-					render :json => rfeed.entries.to_json(:except => [:description])
+					render :json => {:entries => rfeed.entries, :title => rfeed.title, :description => rfeed.description, :url => rfeed.url}
 				}
 			end
 		else
