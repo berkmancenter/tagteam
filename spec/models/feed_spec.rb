@@ -6,7 +6,8 @@ describe Feed do
 	end
 
 	context do
-		it do
+		it "has basic attributes", :offline => true do
+      should have_many(:feed_items)
 			should have_many(:feed_retrievals) 
 			should have_and_belong_to_many(:hub_feeds) 
 			should validate_presence_of(:title) 
@@ -16,9 +17,8 @@ describe Feed do
 #			it { should respond_to(:move_higher) }
 #			it { should respond_to(:move_lower) }
 
-#			it { should have_db_index(:library_id) }
-#			it { should have_db_index(:position) }
-#			it { should have_db_index(:floor_map) }
+			should have_db_index(:feed_url)
+
 		end
 
 		it "is given invalid feed_urls" do

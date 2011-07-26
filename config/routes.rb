@@ -1,12 +1,15 @@
 Taghub::Application.routes.draw do
-  get "feed_retrievals/show"
+
+  resources :feed_items
 
 	resources :hub_feeds
+
 	resources :feeds do
 		collection do
 			post 'check_feed'
 		end
 	end
+
   resources :hubs
 
   devise_for :users
