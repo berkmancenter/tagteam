@@ -1,0 +1,2 @@
+class HubTagFiltersController < ApplicationController
+end

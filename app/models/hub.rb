@@ -1,12 +1,13 @@
 class Hub < ActiveRecord::Base
   include AuthUtilities
-
-  validates_presence_of :title
-  validates_length_of :title, :minimum => 1, :maximum => 255
-  validates_length_of :tag_prefix, :maximum => 25
+  include ModelExtensions
 
   attr_accessible :title, :description, :tag_prefix
   acts_as_authorization_object
+  has_many :hub_feeds
+  has_many :hub_tag_filters
+  has_many :republished_feeds
+  has_many :feeds, :through => :hub_feeds
 
 
 end

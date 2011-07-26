@@ -1,5 +1,9 @@
 Taghub::Application.routes.draw do
 
+  resources :republished_feeds
+
+  resources :hub_tag_filters
+
   resources :feed_items
 
 	resources :hub_feeds

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110726122511) do
+ActiveRecord::Schema.define(:version => 20110726185850) do
 
   create_table "feed_items", :force => true do |t|
     t.integer  "feed_id"
@@ -37,26 +37,28 @@ ActiveRecord::Schema.define(:version => 20110726122511) do
   end
 
   create_table "feeds", :force => true do |t|
-    t.string   "title"
-    t.string   "description"
-    t.string   "flavor"
-    t.string   "url"
-    t.string   "feed_url"
-    t.string   "etag"
+    t.string   "title",        :limit => 500,  :null => false
+    t.string   "description",  :limit => 2048
+    t.string   "guid",         :limit => 500
+    t.datetime "last_updated"
+    t.string   "copyright",    :limit => 500
+    t.string   "authors",      :limit => 1024
+    t.string   "feed_url",     :limit => 500,  :null => false
+    t.string   "generator",    :limit => 500
+    t.string   "flavor",       :limit => 25
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "feeds_hub_feeds", :id => false, :force => true do |t|
-    t.integer "feed_id"
-    t.integer "hub_feed_id"
-  end
-
-  add_index "feeds_hub_feeds", ["feed_id"], :name => "index_feeds_hub_feeds_on_feed_id"
-  add_index "feeds_hub_feeds", ["hub_feed_id"], :name => "index_feeds_hub_feeds_on_hub_feed_id"
+  add_index "feeds", ["authors"], :name => "index_feeds_on_authors"
+  add_index "feeds", ["feed_url"], :name => "index_feeds_on_feed_url", :unique => true
+  add_index "feeds", ["flavor"], :name => "index_feeds_on_flavor"
+  add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
+  add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
 
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id"
+    t.integer  "hub_id"
     t.string   "title"
     t.string   "description"
     t.datetime "created_at"
@@ -64,6 +66,15 @@ ActiveRecord::Schema.define(:version => 20110726122511) do
   end
 
   add_index "hub_feeds", ["feed_id"], :name => "index_hub_feeds_on_feed_id"
+  add_index "hub_feeds", ["hub_id"], :name => "index_hub_feeds_on_hub_id"
+
+  create_table "hub_tag_filters", :force => true do |t|
+    t.integer  "hub_id"
+    t.integer  "tag_filter_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "hubs", :force => true do |t|
     t.string   "title",                     :null => false
@@ -74,6 +85,19 @@ ActiveRecord::Schema.define(:version => 20110726122511) do
   end
 
   add_index "hubs", ["title"], :name => "index_hubs_on_title"
+
+  create_table "republished_feeds", :force => true do |t|
+    t.integer  "hub_id"
+    t.string   "title"
+    t.string   "description"
+    t.string   "feed_input_type"
+    t.integer  "feed_input_id"
+    t.string   "default_sort"
+    t.string   "mixing_strategy"
+    t.integer  "item_limit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40

@@ -17,6 +17,8 @@ gem 'feed-normalizer', '1.5.2'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.6.1'
+	gem 'thin'
+  gem 'sqlite3'
 end
 
 group :test do
@@ -28,5 +30,6 @@ group :test do
   gem 'selenium-client','1.2.18'
   gem 'selenium-webdriver','0.2.2'
   gem 'launchy','0.4.0'
+  gem 'sqlite3'
 end
 

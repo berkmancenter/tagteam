@@ -26,7 +26,6 @@ module FeedUtilities
 
     feed.title = parsed_feed.title
 		feed.description = parsed_feed.description
-    feed.url = parsed_feed.url
 		feed.raw_feed = parsed_feed
   end
 	
