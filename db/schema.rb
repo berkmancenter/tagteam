@@ -77,13 +77,14 @@ ActiveRecord::Schema.define(:version => 20110726185850) do
   end
 
   create_table "hubs", :force => true do |t|
-    t.string   "title",                     :null => false
-    t.string   "description"
+    t.string   "title",       :limit => 500,  :null => false
+    t.string   "description", :limit => 2048
     t.string   "tag_prefix",  :limit => 25
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "hubs", ["tag_prefix"], :name => "index_hubs_on_tag_prefix"
   add_index "hubs", ["title"], :name => "index_hubs_on_title"
 
   create_table "republished_feeds", :force => true do |t|

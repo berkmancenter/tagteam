@@ -1,13 +1,14 @@
 class CreateHubs < ActiveRecord::Migration
   def self.up
     create_table :hubs do |t|
-      t.string :title, :limit => 255, :null => false
-      t.string :description
-      t.string :tag_prefix, :limit => 25
+      t.string :title, :limit => 500.bytes, :null => false
+      t.string :description, :limit => 2.kilobytes
+      t.string :tag_prefix, :limit => 25.bytes
 
       t.timestamps
     end
     add_index :hubs, :title
+    add_index :hubs, :tag_prefix
   end
 
   def self.down

@@ -9,5 +9,4 @@ class Hub < ActiveRecord::Base
   has_many :republished_feeds
   has_many :feeds, :through => :hub_feeds
 
-
 end

@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Taghub</title>
-  <%= formtastic_stylesheet_link_tag %>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag ['jquery.min', 'jquery_ujs', 'application', @javascripts_extras].compact.flatten %>
-  <%= csrf_meta_tag %>
-</head>
-<body>
+  <head>
+    <title>Taghub</title>
+    <%= formtastic_stylesheet_link_tag %>
+    <%= stylesheet_link_tag :all %>
+    <%= javascript_include_tag ['jquery.min', 'jquery_ujs', 'application', @javascripts_extras].compact.flatten %>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <header>
+    </header>
 
-<%= yield %>
+    <nav>
+      <section class="user_meta">
+        <% unless current_user.blank? %>
+          Welcome, <%= current_user.email %>
+          <%= link_to('log out', destroy_user_session_path, :confirm => "Are you sure?", :method => :delete) %>
+        <% else %>
+          <%= link_to('log in', new_user_session_path) %>
+        <% end %>
+      </section>
+    </nav>
 
-</body>
+    <% unless flash[:notice].blank? %>
+      <div class="notice">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% unless flash[:error].blank? %>
+      <div class="error">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+
+    <footer>
+    </footer>
+
+  </body>
 </html>

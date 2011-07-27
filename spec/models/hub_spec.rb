@@ -24,8 +24,12 @@ describe Hub do
       should have_many(:hub_tag_filters)
       should have_many(:republished_feeds)
       should have_many(:feeds).through(:hub_feeds)
-      
-
+      should respond_to(:owners)
+      should validate_presence_of(:title)
+      should ensure_length_of(:title).is_at_most(500.bytes)
+      should ensure_length_of(:description).is_at_most(2.kilobytes)
+      should have_db_index(:title)
+      should have_db_index(:tag_prefix)
     end
   end
 

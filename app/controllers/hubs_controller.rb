@@ -1,6 +1,14 @@
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create]
-  
+  before_filter :prep_resources
+
+  access_control do
+    allow all, :to => [:index, :show]
+    allow logged_in, :to => [:new, :create]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy]
+    allow :superadmin, :hubadmin
+  end
+
   def index
   end
 
@@ -34,12 +42,23 @@ class HubsController < ApplicationController
   end
 
   def destroy
+    @hub.destroy
+    flash[:notice] = 'Deleted that hub'
+    respond_to do|format|
+      format.html{
+        redirect_to :action => :index
+      }
+    end
   end
-  
+
   private
 
   def load_hub
     @hub = Hub.find(params[:id])
+    logger.warn('hub is: ' + @hub.inspect)
+  end
+
+  def prep_resources
   end
 
 end
