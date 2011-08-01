@@ -51,5 +51,9 @@ Feature: Manage hubs
     Given I am the user "foo@bar.com" identified by "foobar22"
     And a hub I own titled "Test hub fibble foo"
     And I go to the hub detail page
+    When I fill in "Add Feed" with "http://blogs.law.harvard.edu/djcp/feed/"
+    And I press "Add Feed"
+    Then I should see "Daniel Collis-Puro"
+    And I should see "Added that feed"
 
 

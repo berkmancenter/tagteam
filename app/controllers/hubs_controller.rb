@@ -5,8 +5,34 @@ class HubsController < ApplicationController
   access_control do
     allow all, :to => [:index, :show]
     allow logged_in, :to => [:new, :create]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
+  end
+
+  def add_feed
+    @feed = Feed.find_or_initialize_by_feed_url(params[:feed_url])
+
+    if @feed.new_record? && @feed.save
+      current_user.has_role!(:owner, @feed)
+      current_user.has_role!(:creator, @feed)
+    else
+      # Not valid.
+      respond_to do |format|
+        # Tell 'em why.
+        format.json{ render :json => {:text => @feed.errors.full_messages.join('<br/>')}, :status => :not_acceptable }
+        return
+      end
+    end
+
+    @hub_feed = HubFeed.new(:hub => @hub, :feed => @feed)
+
+    respond_to do |format|
+      if @hub_feed.save
+        format.json{ render :json => {:text => 'Success'} }
+      else
+        format.json{ render :json => {:text => @hub_feed.errors.full_messages.join('<br />')}, :status => :not_acceptable }
+      end
+    end
   end
 
   def index
@@ -27,7 +53,7 @@ class HubsController < ApplicationController
         current_user.has_role!(:owner, @hub)
         current_user.has_role!(:creator, @hub)
         flash[:notice] = 'Added that Hub.'
-        format.html {render :action => :show}
+        format.html {redirect_to hub_path(@hub)}
       else
         flash[:error] = 'Could not add that Hub'
         format.html {render :action => :new}
@@ -55,10 +81,11 @@ class HubsController < ApplicationController
 
   def load_hub
     @hub = Hub.find(params[:id])
-    logger.warn('hub is: ' + @hub.inspect)
+    @owners = @hub.owners
   end
 
   def prep_resources
+    @javascripts_extras = ['hubs']
   end
 
 end

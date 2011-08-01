@@ -1,5 +1,5 @@
 <div class="hub detailed" id="hub_<%= @hub.id %>">
-  <h1><%= @hub.title %><%= (@hub.owners.include?(current_user)) ? link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?') : '' %></h1>
+  <h1><%= @hub.title %><%= (@owners.include?(current_user)) ? link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?') : '' %></h1>
   <div class="description">
     <%= @hub.description %>
   </div>
@@ -13,5 +13,12 @@
       <dt>Owners:</dt>
       <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
     </dl>
+  </div>
+  <div class="hub_feeds">
+    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
+    <% if @owners.include?(current_user) %>
+      <div class="add"></div> 
+      <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button">Add Feed</a>
+    <% end %>
   </div>
 </div>

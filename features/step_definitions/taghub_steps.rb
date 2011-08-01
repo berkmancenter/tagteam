@@ -17,3 +17,9 @@ When /^I visit the hub I just attempted to delete$/ do
   visit(hub_path(@hub))
 end
 
+Given /^a hub I own titled "([^"]*)"$/ do |title|
+  @hub = Hub.new(:title => title)
+  @hub.save
+  @user.has_role!(:owner, @hub)
+  @user.has_role!(:creator, @hub)
+end

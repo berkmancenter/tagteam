@@ -14,7 +14,11 @@ Taghub::Application.routes.draw do
 		end
 	end
 
-  resources :hubs
+  resources :hubs do
+    member do
+      post 'add_feed'
+    end
+  end
 
   devise_for :users
 

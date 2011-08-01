@@ -19,10 +19,8 @@ module NavigationHelpers
     when /the new hub page/
       new_hub_path
 
-    when /a hub detail page/
-      @hub = Hub.first
+    when /the hub detail page/
       hub_path(@hub)
-
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
