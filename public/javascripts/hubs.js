@@ -11,13 +11,18 @@ $(document).ready(function(){
       data: {
         feed_url: $('#feed_url').val()
       },
-      before_send: function(){
+      beforeSend: function(){
+				$('#add_feed_button').append('<img src="' + $.rootPath() + 'images/spinner.gif" id="feedaddspinner" />');
+        $('.add_feed_container .messages').html('');
       },
       complete: function(){
+				$('#feedaddspinner').remove();
       },
       success: function(json){
+        $('.add_feed_container .messages').append('<div class="information">' + json.message + '</div>');
       },
-      error: function(){
+      error: function(jqXHR){
+        $('.add_feed_container .messages').append('<div class="error">' + jqXHR.responseText + '</div>');
       }
 
     });

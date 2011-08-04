@@ -1,2 +1,10 @@
-<h1>Hubs#index</h1>
-<p>Find me in app/views/hubs/index.html.erb</p>
+<div class="hubs">
+  <h1>Hubs</h1>
+  <% unless current_user.blank? %>
+    <h2>My hubs</h2>
+    <div class="my"> 
+      <%= render :partial => 'shared/line_items/hub', :collection => @my_hubs %>
+      <%= link_to('New Hub', new_hub_path) %>
+    <% end %>
+  </div>
+  </div>

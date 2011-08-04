@@ -56,6 +56,14 @@ ActiveRecord::Schema.define(:version => 20110726185850) do
   add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
 
+  create_table "feeds_hub_feeds", :id => false, :force => true do |t|
+    t.integer "feed_id"
+    t.integer "hub_feed_id"
+  end
+
+  add_index "feeds_hub_feeds", ["feed_id"], :name => "index_feeds_hub_feeds_on_feed_id"
+  add_index "feeds_hub_feeds", ["hub_feed_id"], :name => "index_feeds_hub_feeds_on_hub_feed_id"
+
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id"
     t.integer  "hub_id"

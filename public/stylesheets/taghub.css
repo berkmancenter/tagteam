@@ -1,12 +1,23 @@
-#feed_feed_url_input p.inline-hints{
+a.button, #feed_feed_url_input p.inline-hints{
 	background: #ccc;
 	width: 6em;
 	color: black;
 	padding: 5px;
-	border-radius: 10px;
-	border: 5px outset #ccc;
+	border-radius: 5px;
+	border: 3px outset #ccc;
 }
 
-#feed_feed_url_input p.inline-hints:hover{
+a.button:hover, #feed_feed_url_input p.inline-hints:hover{
 	cursor: pointer;
+}
+
+.error{
+  font-size: larger;
+  color: red;
+}
+.information{
+  color: green;
+}
+div.information, div.error{
+  margin: 10px;
 }

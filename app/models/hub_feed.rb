@@ -4,6 +4,8 @@ class HubFeed < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed
 
+  validates_uniqueness_of :feed_id
+
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
   end

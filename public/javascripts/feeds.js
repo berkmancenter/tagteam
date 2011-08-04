@@ -19,7 +19,6 @@ $(document).ready(function(){
 				$('#feedcheckspinner').remove();
 			},
 			success: function(json){
-				console.log(json);
 				var output = '';
 				$('#feed_feed_url_input').append('<p class="feed-check-info"></p>');
 				var items = new Array();
