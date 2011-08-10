@@ -45,6 +45,9 @@ module FeedUtilities
 		req = Net::HTTP::Get.new(url.request_uri + ((url.fragment.blank?) ? '' : '#' + url.fragment ))
 		req.initialize_http_header({"User-Agent" => "tagteam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub"})
 
+    logger.warn(url.inspect)
+    logger.warn(url.port)
+    logger.warn(url.host)
 		http = Net::HTTP::new(url.host,url.port)
 		if url.scheme == 'https'
 			http.use_ssl = true

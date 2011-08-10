@@ -10,6 +10,7 @@ class CreateHubFeeds < ActiveRecord::Migration
     end
     add_index :hub_feeds, :feed_id
     add_index :hub_feeds, :hub_id
+    add_index :hub_feeds, [:hub_id, :feed_id], :unique => true
 
   end
 

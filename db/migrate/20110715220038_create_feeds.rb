@@ -1,7 +1,7 @@
 class CreateFeeds < ActiveRecord::Migration
   def self.up
     create_table :feeds do |t|
-      t.string :title,        :null => false,       :limit => 500.bytes
+      t.string :title,        :limit => 500.bytes
       t.string :description,  :limit => 2.kilobytes
       t.string :guid,         :limit => 500.bytes
       t.datetime :last_updated

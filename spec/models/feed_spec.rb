@@ -14,7 +14,6 @@ describe Feed do
       should have_many(:feed_items)
 			should have_many(:feed_retrievals) 
 			should have_and_belong_to_many(:hub_feeds) 
-			should validate_presence_of(:title) 
 			should validate_presence_of(:feed_url) 
 			should validate_uniqueness_of(:feed_url)
 

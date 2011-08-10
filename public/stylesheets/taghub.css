@@ -1,23 +1,112 @@
-a.button, #feed_feed_url_input p.inline-hints{
-	background: #ccc;
-	width: 6em;
-	color: black;
+@import url(http://fonts.googleapis.com/css?family=Carme);
+
+body{
+  background: url('/images/bgstripe.png');
+  font-size: 14pt;
+  font-family: Verdana;
+}
+
+header{
+  margin-top: 10px;
+  background: #ccc;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+nav{
+  padding: 10px;
+  color: #fff;
+}
+
+nav a{
+  color: #fff;
+}
+
+#wrapper{
+  float: left;
+  background: #333;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 10px 10px 10px #000;
+}
+
+section#content{
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+}
+
+h1, h2, h3, h4{
+  font-family: Carme, serif;
+  color: #222;
+  margin-bottom: .5em;
+}
+
+h1{
+  font-size:2em;
+}
+
+h2{
+  font-size:1.5em;
+}
+
+h3{
+  font-size: 1.25em;
+}
+
+header h1{
+  font-size: 3em;
+  text-shadow: 3px 3px 3px #555;
+  margin-bottom: 0em;
+}
+
+header h1 a{
+  color: #222;
+  text-decoration: none;
+}
+
+.formtastic .create, 
+.formtastic .edit,
+a.button, 
+#feed_feed_url_input p.inline-hints{
+	background: #7a000d;
+	color:white;
 	padding: 5px;
-	border-radius: 5px;
+	border-radius: 10px;
 	border: 3px outset #ccc;
 }
 
-a.button:hover, #feed_feed_url_input p.inline-hints:hover{
+#feed_feed_url_input p.inline-hints{
+  width: 6em;
+}
+
+.formtastic .create:hover, 
+.formtastic .edit:hover,
+a.button:hover,
+#feed_feed_url_input p.inline-hints:hover{
 	cursor: pointer;
 }
 
 .error{
-  font-size: larger;
   color: red;
 }
-.information{
+
+.notice{
   color: green;
 }
-div.information, div.error{
+
+div.error, div.notice{
+  font-size: 0.9em;
+  font-weight: bold;
   margin: 10px;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+footer{
+  text-align: right;
+  padding: 10px;
+  font-size: .8em;
+  color: #444; 
 }

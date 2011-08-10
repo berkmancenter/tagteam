@@ -19,7 +19,7 @@ $(document).ready(function(){
 				$('#feedaddspinner').remove();
       },
       success: function(json){
-        $('.add_feed_container .messages').append('<div class="information">' + json.message + '</div>');
+        $('.add_feed_container .messages').append('<div class="notice">' + json.message + '</div>');
       },
       error: function(jqXHR){
         $('.add_feed_container .messages').append('<div class="error">' + jqXHR.responseText + '</div>');

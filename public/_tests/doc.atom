@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?><feed
+  xmlns="http://www.w3.org/2005/Atom"
+  xmlns:thr="http://purl.org/syndication/thread/1.0"
+  xml:lang="en"
+  xml:base="http://blogs.law.harvard.edu/doc/wp-atom.php"
+  xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+ >
+	<title type="text">Doc Searls Weblog</title>
+	<subtitle type="text">Same old blog, brand new place</subtitle>
+
+	<updated>2011-07-29T12:33:29Z</updated>
+
+	<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc" />
+	<id>http://blogs.law.harvard.edu/doc/feed/atom/</id>
+	<link rel="self" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/feed/atom/" />
+
+	<generator uri="http://wordpress.org/" version="3.2.1">WordPress</generator>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Many years of now]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/29/many-years-of-now/" />
+		<id>http://blogs.law.harvard.edu/doc/?p=4195</id>
+		<updated>2011-07-29T12:33:29Z</updated>
+		<published>2011-07-29T10:43:27Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Art" /><category scheme="http://blogs.law.harvard.edu/doc" term="Broadcasting" /><category scheme="http://blogs.law.harvard.edu/doc" term="Events" /><category scheme="http://blogs.law.harvard.edu/doc" term="Family" /><category scheme="http://blogs.law.harvard.edu/doc" term="Fun" /><category scheme="http://blogs.law.harvard.edu/doc" term="Future" /><category scheme="http://blogs.law.harvard.edu/doc" term="Geography" /><category scheme="http://blogs.law.harvard.edu/doc" term="Geology" /><category scheme="http://blogs.law.harvard.edu/doc" term="Health" /><category scheme="http://blogs.law.harvard.edu/doc" term="history" /><category scheme="http://blogs.law.harvard.edu/doc" term="Life" /><category scheme="http://blogs.law.harvard.edu/doc" term="North Carolina" /><category scheme="http://blogs.law.harvard.edu/doc" term="Past" /><category scheme="http://blogs.law.harvard.edu/doc" term="Personal" />		<summary type="html"><![CDATA[&#8220;When I&#8217;m Sixty-Four&#8221; is 44 years old. I was 20 when it came out, in the summer of 1967,  one among thirteen perfect tracks on The Beatles&#8216; Sgt. Pepper&#8217;s Lonely Hearts Club Band album. For all the years since, I&#8217;ve thought the song began, &#8220;When I get older, losing my head&#8230;&#8221; But yesterday, on the eve of actually [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/29/many-years-of-now/"><![CDATA[<p><img class="alignleft size-full wp-image-4196" src="http://blogs.law.harvard.edu/doc/files/2011/07/lost-head.jpg" alt="" width="145" height="135" /><a href="http://en.wikipedia.org/wiki/When_I'm_Sixty-Four">&#8220;When I&#8217;m Sixty-Four&#8221;</a> is 44 years old.<img class="alignright size-full wp-image-4197" src="http://blogs.law.harvard.edu/doc/files/2011/07/lost-hair.jpg" alt="" width="148" height="134" /> I was 20 when it came out, in the summer of 1967,  one among thirteen perfect tracks on <a href="http://en.wikipedia.org/wiki/The_Beatles">The Beatles</a>&#8216; <em><a href="http://en.wikipedia.org/wiki/Sgt._Pepper%27s_Lonely_Hearts_Club_Band">Sgt. Pepper&#8217;s Lonely Hearts Club Band</a></em> album. For all the years since, I&#8217;ve thought the song began, &#8220;When I get older, losing my head&#8230;&#8221; But yesterday, on the eve of actually turning sixty-four, I watched <a href="http://www.youtube.com/watch?v=tGtSpsYURAQ">this video animation of the song</a> (by theClemmer) and found that Paul McCartney actually sang, &#8220;&#8230; losing my <em>hair</em>.&#8221;</p>
+<p>Well, that&#8217;s true. I&#8217;m not bald yet, but the bare spot in the back and the thin zone in the front are advancing toward each other, while my face continues falling down below.</p>
+<p><img class="alignleft size-full wp-image-4199" src="http://blogs.law.harvard.edu/doc/files/2011/07/doc-then.jpg" alt="" width="128" height="137" />In July 2006, my old friend <a href="http://www.soundtraxnc.com/Tom/tom01.htm">Tom Guild</a><img class="alignright size-full wp-image-4200" src="http://blogs.law.harvard.edu/doc/files/2011/07/62.jpg" alt="" width="99" height="152" /> put <a href="http://www.youtube.com/watch?v=ec-YrUaeXAE">Doc Searls explains driftwood of the land</a> up on YouTube. It&#8217;s an improvisational comedy riff that Tom shot with his huge new shoulder-fire video camera at our friend Steve Tulsky&#8217;s house on a Marin County hillside in June, 1988. It was a reunion of sorts. Tom, Steve and I had all worked in radio together in North Carolina. I was forty at the time, and looked about half that age. When my ten-year-old kid saw it, he said &#8220;Papa, you don&#8217;t look like that.&#8221; I replied, &#8220;No, I <em>do</em> look like that. I don&#8217;t look like <em>this,</em>&#8221; pointing to my face.</p>
+<p>Today it would be nice if I still looked like I did five years ago. The shot in the banner at the top of this blog was taken in the summer of 1999 (<a href="http://doc-weblogs.com/clues">here&#8217;s the original</a>), when I was fifty-two and looked half that age. The one on the right was taken last summer (the shades on my forehead masking a scalp that now reflects light), when I was a few days short of sixty-three. By then I was finally looking my age.</p>
+<p>A couple months back I <a href="http://www.youtube.com/watch?v=4dn1jkWgFvM&amp;feature=youtu.be">gave a talk</a> at the <a href="http://personaldemocracy.com/">Personal Democracy Forum</a> where I was warmly introduced as one of those elders we should all listen to. That was nice, but here&#8217;s the strange part: when it comes to what I do in the world, I&#8217;m still young. Most of the people I hang and work with are half my age or less, yet I rarely notice or think about that, because it&#8217;s irrelevant. My job is changing the world, and that&#8217;s an calling that tends to involve smart, young, energetic people. The difference with a few of us is that we&#8217;ve been young a lot longer.</p>
+<p>But I don&#8217;t have illusions about the facts of life. It&#8217;s in one&#8217;s sixties that the croak rate starts to angle north on the Y axis as age ticks east on the X. Still, I&#8217;m in no less hurry to make things happen than I ever was. I&#8217;m just more patient. That&#8217;s because one of the things I&#8217;ve learned is that now is always earlier than it seems. None of the future has happened yet, and it&#8217;s always bigger than the past.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/29/many-years-of-now/#comments" thr:count="9"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/29/many-years-of-now/feed/atom/" thr:count="9"/>
+		<thr:total>9</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Deficit reduction by spectrum auction?]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/27/deficit-reduction-by-spectrum-auction/" />
+		<id>http://blogs.law.harvard.edu/doc/?p=4188</id>
+		<updated>2011-07-28T03:16:12Z</updated>
+		<published>2011-07-28T02:55:10Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Broadcasting" /><category scheme="http://blogs.law.harvard.edu/doc" term="Business" /><category scheme="http://blogs.law.harvard.edu/doc" term="Politics" /><category scheme="http://blogs.law.harvard.edu/doc" term="at&amp;t" /><category scheme="http://blogs.law.harvard.edu/doc" term="David Weigel" /><category scheme="http://blogs.law.harvard.edu/doc" term="Federal Communications Commission" /><category scheme="http://blogs.law.harvard.edu/doc" term="Slate" /><category scheme="http://blogs.law.harvard.edu/doc" term="Spectrum auction" /><category scheme="http://blogs.law.harvard.edu/doc" term="verizon" /><category scheme="http://blogs.law.harvard.edu/doc" term="Verizon Communications" />		<summary type="html"><![CDATA[So I took up David Weigel&#8216;s challenge in Slate: Read the Reid Plan. Read the Boehner Plan. Get Back to Me&#8230; and got as far as this stuff in Reid&#8217;s plan: (Sorry, I had to take a screen shot because the original is a .pdf and the copied text takes too much work to fix.) [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/27/deficit-reduction-by-spectrum-auction/"><![CDATA[<p>So I took up <a href="http://www.slate.com/?id=3944&amp;qp=49490">David Weigel</a>&#8216;s challenge in <a href="http://slate.com">Slate</a>: <a href="http://www.slate.com/blogs/weigel/2011/07/26/read_the_reid_plan_read_the_boehner_plan_get_back_to_me_.html">Read the Reid Plan. Read the Boehner Plan. Get Back to Me</a>&#8230; and got as far as this stuff in <a href="http://www.scribd.com/doc/60997894/Reid-Plan">Reid&#8217;s plan</a>:</p>
+<p><img class="aligncenter size-full wp-image-4189" src="http://blogs.law.harvard.edu/doc/files/2011/07/reid.jpg" alt="Reid plan" width="95%" height="image" /></p>
+<p>(Sorry, I had to take a screen shot because the original is a .pdf and the copied text takes too much work to fix.)</p>
+<p>So I&#8217;m wondering why&#8230; let&#8217;s see&#8230; Pages 46 to 82 — out of a 104-page document — are devoted to this stuff. I really don&#8217;t know, although I&#8217;m guessing it&#8217;s good for Verizon, AT&amp;T and other bidders on that spectrum.</p>
+<p>There&#8217;s plenty of coverage, of course. Here&#8217;s a list, some ranging a bit from the budget fracas, but perhaps illuminating the politics of spectrum, and why it&#8217;s in the middle of this thing:</p>
+<ul class="zemanta-article-ul">
+<li class="zemanta-article-ul-li"><a href="http://news.cnet.com/8301-30686_3-20083882-266/why-spectrum-debate-is-tied-to-debt-ceiling-plan/?part=rss&amp;subj=news">Why spectrum debate is tied to debt ceiling plan</a> &nbsp;<a href="http://news.cnet.com" title="http://news.cnet.(" target="_blank">news.cnet.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://news.firedoglake.com/2011/07/25/the-reid-plan-includes-a-catfood-commission/">The Reid Plan Includes a Catfood Commission</a>&nbsp;<a href="http://news.firedoglake.com" title="http://news.firedoglake.(" target="_blank">news.firedoglake.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://www.pcworld.com/article/236477/group_spectrum_plan_could_shut_down_tv_stations.html">Group: Spectrum Plan Could Shut Down TV Stations</a> &nbsp;<a href="http://pcworld.com" title="http://pcworld.(" target="_blank">pcworld.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://politics.slashdot.org/story/11/07/18/191237/How-the-New-Spectrum-Bill-Would-Harm-the-Tech-Community">How the New Spectrum Bill Would Harm the Tech Community</a> &nbsp;<a href="http://politics.slashdot.org" title="http://politics.slashdot.(" target="_blank">politics.slashdot.org</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://techdailydose.nationaljournal.com/2011/07/cbo-predicts-less-deficit-savi.php">CBO Predicts Less Deficit Savings For Senate Spectrum Bill Than Predicted</a> &nbsp;<a href="http://techdailydose.nationaljournal.com" title="http://techdailydose.nationaljournal.(" target="_blank">techdailydose.nationaljournal.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://techdailydose.nationaljournal.com/2011/07/telecom-firms-dont-pay-down-de.php">Telecom Firms: Don&#8217;t Pay Down Deficit With USF</a> &nbsp;<a href="http://techdailydose.nationaljournal.com" title="http://techdailydose.nationaljournal.(" target="_blank">techdailydose.nationaljournal.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://news.cnet.com/8301-13578_3-20070626-38/spectrum-reform-public-safety-network-move-forward-in-senate/?part=rss&amp;subj=News-PoliticsandLaw">Spectrum reform, public safety network move forward in Senate</a> &nbsp;<a href="http://news.cnet.com" title="http://news.cnet.(" target="_blank">news.cnet.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://andrewsullivan.thedailybeast.com/2011/07/whats-the-plan.html">What&#8217;s The Plan?</a> &nbsp;<a href="http://andrewsullivan.thedailybeast.com" title="http://andrewsullivan.thedailybeast.(" target="_blank">andrewsullivan.thedailybeast.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://paidcontent.org/article/419-gop-spectrum-bill-could-get-drawn-into-debt-fracas/">GOP Spectrum Bill Could Get Drawn Into Debt Fracas</a> &nbsp;<a href="http://paidcontent.org" title="http://paidcontent.(" target="_blank">paidcontent.org</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://www.cbsnews.com/8301-503544_162-20083190-503544.html">Dueling debt plans: How they compare</a> &nbsp;<a href="http://cbsnews.com" title="http://cbsnews.(" target="_blank">cbsnews.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://reason.com/blog/2011/07/27/debt-plan-gimmicks-are-go">Debt Plan Gimmicks Are Go!</a> &nbsp;<a href="http://reason.com" title="http://reason.(" target="_blank">reason.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://arstechnica.com/tech-policy/news/2011/07/republican-spectrum-bill-reins-in-wireless-free-riders-like-google.ars">Congress goes after unlicensed wireless &#8220;free riders&#8221; (like Google and Microsoft)</a> &nbsp;<a href="http://arstechnica.com" title="http://arstechnica.(" target="_blank">arstechnica.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://paidcontent.org/article/419-gop-spectrum-bill-could-get-drawn-into-debt-fracas/">GOP Spectrum Bill Could Get Drawn Into Debt Fracas</a> &nbsp;<a href="http://paidcontent.org" title="http://paidcontent.(" target="_blank">paidcontent.org</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://arstechnica.com/tech-policy/news/2011/07/republican-spectrum-bill-reins-in-wireless-free-riders-like-google.ars">Congress goes after unlicensed wireless &#8220;free riders&#8221; (like Google and Microsoft)</a> &nbsp;<a href="http://arstechnica.com" title="http://arstechnica.(" target="_blank">arstechnica.com</a>)</li>
+<li class="zemanta-article-ul-li"><a href="http://news.cnet.com/8301-30686_3-20083882-266/why-spectrum-debate-is-tied-to-debt-ceiling-plan/?part=rss&amp;subj=SignalStrength">Why spectrum debate is tied to debt ceiling plan</a> &nbsp;<a href="http://news.cnet.com" title="http://news.cnet.(" target="_blank">news.cnet.com</a>)</li>
+</ul>
+<p>The <a href="http://www.scribd.com/doc/60998283/Boehner-Plan">Boehner plan</a> is utterly opaque to me, at least at this point. But maybe that&#8217;s because this spectrum thing stands out so obviously in the Reid plan, and spectrum is a subject I know a few things about. I&#8217;m opposed to selling any of it, and think we need to get past spectrum alone as a way to understand radio waves and how they work (especially when we sell off rights to use them&#8230; it&#8217;s like selling the color blue. I&#8217;m also big on open spectrum and unlicensed wireless, but no BigCo wants either, so those aren&#8217;t on the table, even though they&#8217;re already proven sources of economic benefits. By the way, whatever happened to &#8220;the public airwaves&#8221;? Remember those?</p>
+<p>What do the rest of ya&#8217;ll think?</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/27/deficit-reduction-by-spectrum-auction/#comments" thr:count="0"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/27/deficit-reduction-by-spectrum-auction/feed/atom/" thr:count="0"/>
+		<thr:total>0</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Tools for Independence]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/27/tools-for-independence/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/27/tools-for-independence/</id>
+		<updated>2011-07-27T23:44:31Z</updated>
+		<published>2011-07-27T23:40:38Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Business" /><category scheme="http://blogs.law.harvard.edu/doc" term="Ideas" /><category scheme="http://blogs.law.harvard.edu/doc" term="infrastructure" /><category scheme="http://blogs.law.harvard.edu/doc" term="Live Web" /><category scheme="http://blogs.law.harvard.edu/doc" term="problems" /><category scheme="http://blogs.law.harvard.edu/doc" term="Technology" />		<summary type="html"><![CDATA[So I signed up for Google+. I added some friends from the roster already there (my Gmail contacts, I guess). Created a small circle to discuss VRM. Nothing happened there that I know of right now, but I haven&#8217;t checked yet. I&#8217;m about to (see below), but first I&#8217;ll go through my other impressions. First, [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/27/tools-for-independence/"><![CDATA[<p>So I signed up for <a href="https://plus.google.com" rel="tag">Google+</a>. I added some friends from the roster already there (my Gmail contacts, I guess). Created a small circle to discuss <a href="http://projectvrm.org">VRM</a>. Nothing happened there that I know of right now, but I haven&#8217;t checked yet. I&#8217;m about to (see below), but first I&#8217;ll go through my other impressions.</p>
+<p>First, the noise level in my email already rivals that of <a class="zem_slink" title="Facebook" href="http://facebook.com" rel="homepage">Facebook</a>&#8216;s and <a class="zem_slink" title="LinkedIn" href="http://www.linkedin.com" rel="homepage">LinkedIn&#8217;s</a>, both of which are thick with notices of interest in friending (or whatever) from people I don&#8217;t know or barely know. On Facebook, which I hardly visit, I see that I have 145 messages from (I guess) among my 857 friends. I also have 709 friend requests. Just said okay to a couple, ignored the rest.</p>
+<p>Second, when I look at <a href="https://plus.google.com">https://plus.google.com</a>, the look is mighty similar to Facebook&#8217;s. Expected, I guess.</p>
+<p>Third, I see now that &#8220;circles&#8221; means streams. Kind of like lists in <a class="zem_slink" title="Twitter" href="http://twitter.com" rel="homepage">Twitter</a>. I had thought that cirlces would be a discussion thing, and I guess it is. But I prefer the threading in a good email client. Or just in email. I&#8217;m so tired of doing this kind of thing in silos. Email is mine. Google+ is Google&#8217;s. In terms of location, I feel like I&#8217;m in a corporate setting in Google+, and I feel like I&#8217;m at home when I&#8217;m in email. The reason, aside from design differences, is that email is free-as-in-freedom. Its protocols are NEA: Nobody owns them, Everybody can use them, and Anybody can improve them. Not the case with these commercial Web <a href="http://blogs.law.harvard.edu/doc/2011/04/02/a-sense-of-bewronging/">dairy farms</a>.</p>
+<p>I don&#8217;t mean &#8216;dairy farms&#8217; as an insult, but as a working metaphor. We are not free there. We are the equivalent of cattle on a ranch.</p>
+<p>The problem remains client-server, which is cow-calf, and was a euphemism in the first place (I&#8217;ve been told) for slave-master.</p>
+<p>We&#8217;ve gone about as far as we can go with that. We need freedom now, and none of these dairies can give it to us. Yet another site/service can&#8217;t work, by the nature of its server-based design. Asking Google, or Yahoo, or Microsoft, or Apple, or a typical new start-up, with yet another site-based service, to make us free, is like asking a railroad to make us a car.</p>
+<p>Email is one kind of primitive car. Or maybe just a primitive way of getting along on the road. (It is, after all, a collection of protocols, like the Net and the Web themselves.) We need more vehicles. More tools. Instruments of independence and sovereignty, as <a href="http://www.moxytongue.com/2011/07/vrm-hopes.html">Moxy Tongue suggests here</a> and I riff on <a href="http://blogs.law.harvard.edu/vrm/2011/07/27/agency/">here</a>.</p>
+<p>I&#8217;m thinking more about infrastructure these days. Facebook, LInkedIn, Google+ and Twitter are all good at what they do, but they are neither necessary nor sufficient as infrastructural elements supporting personal independence and <em>real</em> social interaction, like the kind we&#8217;ve always had offline, and in marketplaces since the days of Ur. Right now nearly all the sites and services we call &#8220;social&#8221; are platforms for advertising. That&#8217;s their <a class="zem_slink" title="Business model" href="http://en.wikipedia.org/wiki/Business_model" rel="wikipedia">business model</a>. Follow the money and that&#8217;s where you end up. Then start there to see where they&#8217;ll all go. (LinkedIn, to its credit is an exception here. They have a serious set of professional personal services.) Yes, a lot of good in the world gets done with ad-supported social sites and services. But they are still built on the dairy model. And everything new we do on that model will have the same problem.</p>
+<p>There are alternatives.</p>
+<p><a href="http://docs.kynetx.com/docs/Execution_Model">Kynetx&#8217; execution model</a>, for example, transcends the calf-cow model, even as it works alongside it. <a href="http://en.wikipedia.org/wiki/RSS">RSS</a> always has supported personal independence, because it&#8217;s something that gives me (or anybody) the power to syndicate &#8212; without locking anybody into some company&#8217;s dairy. There are other tools, protocols and technologies as well, but I&#8217;ll stop naming my own votes here. Add your own in the comments below.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/27/tools-for-independence/#comments" thr:count="13"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/27/tools-for-independence/feed/atom/" thr:count="13"/>
+		<thr:total>13</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[iPaddling PCs]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/</id>
+		<updated>2011-07-27T01:57:52Z</updated>
+		<published>2011-07-27T01:50:56Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Future" /><category scheme="http://blogs.law.harvard.edu/doc" term="Technology" /><category scheme="http://blogs.law.harvard.edu/doc" term="weather" />		<summary type="html"><![CDATA[I wrote my first iPad post on January 28, 2010, and my second one about three months later — both prior to the arrival of the iPad itself. I think both those early posts nailed the iPad, Apple&#8217;s strategy, and the emerging market spaces pretty squarely on the head. The only clear miss was this: [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/"><![CDATA[<p>I wrote my <a href="http://blogs.law.harvard.edu/doc/2010/01/28/up-the-creek-without-an-ipaddle/">first iPad post</a> on January 28, 2010, and my <a href="http://blogs.law.harvard.edu/doc/2010/01/28/up-the-creek-without-an-ipaddle/">second one</a> about three months later — both prior to the arrival of the iPad itself.</p>
+<p>I think both those early posts nailed the iPad, Apple&#8217;s strategy, and the emerging market spaces pretty squarely on the head. The only clear miss was this:</p>
+<blockquote><p>The first versions of unique hardware designs tend to be imperfect and get old fast. Such was the case with the first iPods and iPhones, and will surely be the case with the first iPads as well. The ones being introduced next week will seem antique one year from now.</p></blockquote>
+<p>I ended up getting one of those original ones (with 64Gb of RAM and a 3G data connection), and it ain&#8217;t old yet. In fact it&#8217;s been a workhorse for our family, most recently serving (among other things) as an excellent offline GPS while we drove around Italy. While I won&#8217;t go so far as to say we&#8217;ve come to depend on it, our iPad has proven very handy, in many ways that smartphones and PCs are not. (<a href="http://blogs.law.harvard.edu/doc/2011/02/25/cast-locally-stream-globally/">One example</a>.)</p>
+<p>In fact its level of market success seems to be rising from remarkable to scary.</p>
+<p>Today Bob Evans in Forbes detailed that scariness with <a href="http://blogs.forbes.com/sap/2011/07/26/apple-ipad-unleashing-creative-destruction-on-pc-industry/">Apple iPad Unleashing Creative Destruction On PC Industry</a>. He unpacks five factors involved:</p>
+<blockquote>
+<ol>
+<li>Cannibalization’s Diminishing Returns: while the iPad snacks on Macs, it lives on a non-stop diet of PCs</li>
+<li>Pilot to Penetration: after a year of playing footsie with enterprise customers, Apple’s getting serious</li>
+<li>Unexpected Applications: corporate customers are deploying iPads in totally unprecedented ways</li>
+<li>The Apple-Store Phenomenon: over the past five years, can any retail chain on Earth match Apple’s astonishing financial success?</li>
+<li>Hooking the Kids: the iPad has been a blowout success in the K-12 market.</li>
+</ol>
+</blockquote>
+<p>To those I&#8217;ll add one more: soaking up functions as well as apps from both the Web and PCs.</p>
+<p>Case in point: weather. We have nine weather apps on our iPad, and we use them all. One that&#8217;s especially fun in the Summer is <a href="http://www.lightningfinder.com/">LightningFinder</a>. Last Saturday morning the kid and I sat on our front porch, enjoying a brief morning thunderstorm, along with the iPad and LightningFinder, which told us exactly where the lightning we saw actually happened. It was cool. Today the iPad was elsewhere during a brief thunderstorm, so I went online to the LightningFinder site, thinking &#8220;Hey, they must show the same maps online.&#8221; But they don&#8217;t. They do have weather maps, and will give you a forecast; but if you want to see the lightnng stuff, you gotta get the app. Here&#8217;s the main graphic on their index page:</p>
+<p><a href="http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/lightningfinder/" rel="attachment wp-att-4181"><img class="aligncenter size-full wp-image-4181" src="http://blogs.law.harvard.edu/doc/files/2011/07/lightningfinder.jpg" alt="" width="85%" height="image" /></a></p>
+<p>Two points here. One is that Apple has created a very lively marklet for apps in countless niches. The other is that the iPad has become the primary platform for many of those applications, while the PC has become the secondary one — or worse, a place for promotional messages about iPad apps.</p>
+<p>I still see a bigger market in other tablets over the long run, for the simple reason that the horizontal marketplace for any kind of tablet (especially Androids) has no limits, while Apple&#8217;s silo&#8217;d vertical market can only be as large as Apple lets it be. And, as long as Apple controls that market, those limits are finite. Even if they are, for now, impressively high.</p>
+<p>I also don&#8217;t think PCs will go away. They&#8217;ll just do less of what &#8216;pads and phones do better.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/#comments" thr:count="4"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/26/ipaddling-pcs/feed/atom/" thr:count="4"/>
+		<thr:total>4</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Earth to Microsoft: Don&#8217;t sell Bing.]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/25/earth-to-microsoft-dont-sell-bing/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/25/earth-to-microsoft-dont-sell-bing/</id>
+		<updated>2011-07-25T14:58:48Z</updated>
+		<published>2011-07-25T14:19:11Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Art" /><category scheme="http://blogs.law.harvard.edu/doc" term="Business" /><category scheme="http://blogs.law.harvard.edu/doc" term="Live Web" />		<summary type="html"><![CDATA[In the New York Times, Robert Cryan and Martin Hutchison of Reuters BreakingViews suggest that Microslft sell its Bing search engine, either outright or in exchange for stock in a company that can do more with it than rank a distant #2 to Google while piling up billions per year in losses, which is what Bing [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/25/earth-to-microsoft-dont-sell-bing/"><![CDATA[<p><a href="//nyti.ms/mVdbmT">In the New York Times, Robert Cryan and Martin Hutchison of Reuters BreakingViews suggest that Microslft sell</a> <a href="http://www.bing.com/">its Bing</a> search engine, either outright or in exchange for stock in a company that can do more with it than rank a distant #2 to Google while piling up billions per year in losses, which is what Bing is doing for Microsoft right now.</p>
+<p>Bing is a good search engine, but it still seems derivative. Even where it leads, it seems to follow.</p>
+<p>Take &#8220;bird&#8217;s eye views&#8221; in map searches. That is, views from a low-flying plane, rather than a from a satellite in space. Bing had it long before Google came up with the same thing, and does a better job of integrating it. Case in point: the Rialto Mercado district of Venice, which I <a href="http://blogs.law.harvard.edu/doc/2011/07/13/commercial-web-blues/">covered</a> (using a Google Maps image) a couple weeks ago, when I was there:</p>
+<p><img class="aligncenter size-full wp-image-4097" src="http://blogs.law.harvard.edu/doc/files/2011/07/bancogiro_googlemaps1.jpg" alt="Bancogiro, Rialto Mercado, Venice" width="85%" height="image" /></p>
+<p><a href="http://www.bing.com/maps/?v=2&amp;cp=rk5tjbj0v4h4&amp;lvl=19.000599525659943&amp;dir=266.6710169972466&amp;sty=o&amp;where1=Venice%2C%20Ven.%2C%20Italy&amp;form=LMLTCC">Here&#8217;s the Bing bird&#8217;s eye image of the same place</a>:</p>
+<p><img class="aligncenter size-full wp-image-4166" src="http://blogs.law.harvard.edu/doc/files/2011/07/bing-rialto-mercado.jpg" alt="" width="85%" height="image" /></p>
+<p>Yet who (besides me and too few others) knows that Bing&#8217;s bird&#8217;s eye views are better? (With real street names, rather than a scattering of commercial locations?) And why hasn&#8217;t Microsoft challenged Google on this and other fronts more aggressively? I think the reason is that all Microsoft&#8217;s marketing efforts are all going into revenue production with their customers, which are advertisers, rather than users.</p>
+<p>So here&#8217;s a suggestion for Microsoft: Don&#8217;t sell Bing. Sell Bing-based services directly to users — and fight Google where they&#8217;re weak: with personal attention and support.</p>
+<p>Do that by <em>making customers of users</em>. Sell premium search (and other) services, and provide hand-holding support. Hell, I&#8217;ll pay for <a href="http://en.wikipedia.org/wiki/Organic_search">organic</a> searches (that is, ones where results aren&#8217;t buried under Himilayas of SEO). Ad-driven pollution of search results is Google&#8217;s biggest problem right now, whether it knows that or not (and I&#8217;m sure it does). And, for all its virtues (there are many, most of which are non-trivial), Google remains a server-based company. It isn&#8217;t personal, and probably can&#8217;t be.</p>
+<p>For all its faults (and there are many, also non-trivial), Microsoft has always been a personal computing company. This is a huge advantage. The future, like the past, is personal. Not just &#8220;social.&#8221; (Which, in the business sense, has come to mean advertising-supported.)</p>
+<p>People will pay for value. They always have, and they always will. As <a href="http://zgp.org/~dmarti/">Don Marti</a> <a href="http://cdn.oreilly.com/radar/r1/05-04.pdf">once said</a>, &#8220;Information doesn&#8217;t want to be free. It wants to be $6.95.&#8221; There is a market here. People saying &#8220;Everybody expects everything to be free now&#8221; only masks the opportunity. (And, while I&#8217;m no fan of iTunes, Apple proved with it that people were willing to pay more than nothing for music, if it was easy.)</p>
+<p>Yes, keep the free search engine up, and keep providing plenty of free services. But also remember that the <em>free</em> that matters most to people is <em>freedom</em>. That&#8217;s the ultimate secret ingredient, if you <em>really</em> want to get personal. &#8220;Social&#8221; from the start on the Web has never been about personal freedom. It&#8217;s been full of traps: walled gardens, coerced loyalty, isolation from personal data, stalking by robot advertising slave files&#8230; The list is a long one. So sell freedom too. Help move the <a href="http://www.windley.com/archives/2011/02/a_completely_connected_world_depends_on_loosely_coupled_architectures.shtml">World Live Web</a> evolve from the <a href="http://blogs.law.harvard.edu/doc/2011/04/02/a-sense-of-bewronging/">calf-cow model</a> to the human-human one. Of course you&#8217;ll need to make your services unique. But you can also help customers in ways nobody else (at your scale, anyway) is today: by helping them collect data for themselves, so they can decide on their own what to do with it. Make personal data portable as well as personal. Join the <a href="http://personaldataecosystem.org/">personal data ecosystem</a>. Be a <a href="http://en.wikipedia.org/wiki/Vendor_Relationship_Management">VRM</a> as well as a CRM company.</p>
+<p>Sure, selling ad-free services might undermine <em>some</em> of Bing&#8217;s current ad-based business model, but so what? You&#8217;re already losing $billions — and it will undermine Google&#8217;s model too. (What could be more competitive? And it&#8217;s going to happen anyway.) Go back to your roots. Get personal again. As <a href="http://scripting.com">Dave Winer </a><a href="http://scripting.com/stories/2011/02/14/corporateBloggingSilosInTh.html">often</a> <a href="http://scripting.com/stories/2011/02/04/theyZigWhenTheyShouldZag.html">says</a>, zig where the other guys zag. So stop being derivative. Take the lead. It&#8217;s there for the taking. Nothing could be bigger. Microsoft&#8217;s biggest successes already prove that. You can prove it again.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/25/earth-to-microsoft-dont-sell-bing/#comments" thr:count="14"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/25/earth-to-microsoft-dont-sell-bing/feed/atom/" thr:count="14"/>
+		<thr:total>14</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Boil on]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/24/boil-on/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/24/boil-on/</id>
+		<updated>2011-07-25T12:20:46Z</updated>
+		<published>2011-07-24T13:29:50Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Art" /><category scheme="http://blogs.law.harvard.edu/doc" term="Business" /><category scheme="http://blogs.law.harvard.edu/doc" term="Future" /><category scheme="http://blogs.law.harvard.edu/doc" term="Journalism" /><category scheme="http://blogs.law.harvard.edu/doc" term="problems" />		<summary type="html"><![CDATA[Saw Pom Wonderful Presents The Greatest Movie Ever Sold yesterday*. Brilliant work. I like the way Morgan Spurlock is both respectful and gently mocking of all points of view toward the movie&#8217;s subject: product placement in movies. That approach is why I prefer his movies to Michael Moore&#8216;s. Spurlock explores moral conflicts by living through [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/24/boil-on/"><![CDATA[<p>Saw <a href="http://www.sonyclassics.com/pomwonderfulpresentsthegreatestmovieeversold/">Pom Wonderful Presents The Greatest Movie Ever Sold</a> yesterday*. Brilliant work. I like the way <a href="http://en.wikipedia.org/wiki/Morgan_Spurlock">Morgan Spurlock</a> is both respectful and gently mocking of all points of view toward the movie&#8217;s subject: product placement in movies. That approach is why I prefer his <a href="http://en.wikipedia.org/wiki/Morgan_Spurlock#Film">movies</a> to <a href="http://en.wikipedia.org/wiki/Michael_Moore">Michael Moore</a>&#8216;<a href="http://en.wikipedia.org/wiki/Michael_Moore#Filmography">s</a>. Spurlock explores moral conflicts by living through them and sharing the process with his audience. Moore has a moral agenda, and grinds his axes right down to the handle. Moore also has a cruel streak, while Spurlock does not — except, perhaps, toward himself (for example with <a href="http://en.wikipedia.org/wiki/Super_Size_Me">Super Size Me</a>). Moore&#8217;s treatment of the senescent Charton Heston in <a href="http://www.michaelmoore.com/books-films/bowling-columbine">Bowling for Columbine</a>. still makes me wince.</p>
+<p>* I started this post with the paragraph above on April 24, but didn&#8217;t finish it until now. In the meantime it just scrolled down out of sight in my outliner, below a pile of other old unposted items. I just found it, so now I&#8217;ll finish it.</p>
+<p>The remarkable thing for me now is that The Greatest Movie Ever Sold kinda went nowhere. Walking out of the movie, I said to my wife, &#8220;This is the turning point on product placement.&#8221; But now, three months (to the day) into the future, I&#8217;m sure it&#8217;s not.</p>
+<p>I <a href="http://www.imdb.com/title/tt1743720/business">see here</a> that the movie grossed $629,499, as of July 17. <a href="http://www.imdb.com/title/tt0390521/business">Super Size Me</a>, Spurlock&#8217;s hit from 2004, made <a href="http://www.imdb.com/title/tt0390521/business">almost that much</a> on its opening day in May of that year, and passed $11.5 million in the U.S. alone by late September.</p>
+<p>Why did Pom Wonderful Presents The Greatest Movie Ever Sold tank? Mixed reviews didn&#8217;t help. Nor did ruining a great title by selling it to Pom Wonderful.  (Even though the story behind that was a big part of the movie.) But I think the biggest reason is the topic itself. Nobody gives much of a shit about product placement. First, it&#8217;s beyond obvious, and has been ever since Blade Runner pioneered the practice, decades ago (<a href="http://worstproductplacement.com/blade-runner/">for TDK, Atari, Pan Am, The Bell System and other future fatalities</a>). Second, advertising itself is now beyond ubiquitous. Today, for example, I opened an urgent notice from the U.S. Post Office that contained (in addition to actual information) a home improvement promotion from Lowe&#8217;s. <em>The United States Postal Service, brought to you by Lowe&#8217;s</em>.</p>
+<p>So yeah: we are saturated in advertising. Why would boiling frogs want to see a movie about how they&#8217;re being cooked?</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/24/boil-on/#comments" thr:count="8"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/24/boil-on/feed/atom/" thr:count="8"/>
+		<thr:total>8</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Taking the heat]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/22/taking-the-heat/" />
+		<id>http://blogs.law.harvard.edu/doc/?p=4145</id>
+		<updated>2011-07-23T03:16:37Z</updated>
+		<published>2011-07-23T02:58:45Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Life" /><category scheme="http://blogs.law.harvard.edu/doc" term="Strange stuff" /><category scheme="http://blogs.law.harvard.edu/doc" term="Travel" /><category scheme="http://blogs.law.harvard.edu/doc" term="weather" />		<summary type="html"><![CDATA[That&#8217;s how hot my car thought it was today. I understand it hit 103° at Logan. Right now it&#8217;s 10pm and still 95° on our back porch. It&#8217;s hotter indoors. Up in the attic, where I work, two window AC units bring the space down to about 82°. They can&#8217;t do much better. We have [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/22/taking-the-heat/"><![CDATA[<p><img class="alignleft size-full wp-image-4146" src="http://blogs.law.harvard.edu/doc/files/2011/07/106_degrees.jpg" alt="106 degrees" width="15%" height="image" hspace="8" vspace="8" /> That&#8217;s how hot my car thought it was today. I understand it hit 103° at Logan. Right now it&#8217;s 10pm and still 95° on our back porch. It&#8217;s hotter indoors. Up in the attic, where I work, two window AC units bring the space down to about 82°. They can&#8217;t do much better. We have another unit in our master bedroom, and that one can make the space actually comfortable. Little window fans take care of the other spaces as best they can.</p>
+<p>So we&#8217;re among the lucky ones, if not the greenest. (To be that, we&#8217;d turn the ACs off.)</p>
+<p>I got back from a month in Italy yesterday, flanked at the ends by a day each in Paris. It was a great trip. Details later when I put some pix up. Meanwhile, some observations on differences, in respect to heat.</p>
+<p>First, it was hot much of the time in Italy, but nothing like this current heat wave in Boston. I think the hottest it got was in Rome, when it hit about 35° Celsius, which is about 95° Fahrenheit. Our little apartment there had AC that was pretty good, though not great. But other places didn&#8217;t. As in France, a lot of places have <em>some</em> AC, but not much. Or just none. Two of the places we stayed had no AC, and the AC at none of them was as aggressive as any $100 U.S. window unit.</p>
+<p>In Florence the <a href="http://www.uffizi.com/">Uffizi</a> had no AC that I could tell. All those old paintings just cooked away, along with throngs of visitors. The <a href="http://www.uffizi.com/accademia-gallery-florence.asp">Accademia</a> was a little better, but not much. None of the churches had any, understandably. The <a href="http://www.operaduomo.firenze.it/english/luoghi/museo.asp">Duomo&#8217;s museum</a> had pretty good AC. The <a href="http://en.wikipedia.org/wiki/San_Marco,_Florence">San Marco monastery and convent</a>, decorated by abundant paintings and frescoes by <a href="http://en.wikipedia.org/wiki/Fra_Angelico">Fra Angelico</a>, is kept at a constant cool room temperature and low humidity, and is quite comfortable, at least indoors. Same with the <a href="http://en.wikipedia.org/wiki/Vatican_Museums">Vatican Museums</a>.</p>
+<p>So why do some of these places go to great effort to control temperature and humidity while others do not? I&#8217;m only guessing that it&#8217;s too much trouble in some. I mean, look here:</p>
+<p><img class="aligncenter size-full wp-image-4148" src="http://blogs.law.harvard.edu/doc/files/2011/07/2011_07_16_florence_032a1.jpg" alt="" width="85%" height="image" /></p>
+<p>When your building dates from the 13th century and has walls made of thick stone blocks (and that&#8217;s probably what&#8217;s under the stucco here), you do the best you can on a room-by-room basis. The shot above is of the only three window AC units in a building that had many more windows than you see here. At some point the thinking becomes, &#8220;Hey, if you want to cool off, ride a scooter or buy some <a href="http://en.wikipedia.org/wiki/Gelato">gelato</a>.&#8221;</p>
+<p>But one gathers also that sometimes things just don&#8217;t work. The apartment we rented in a former Palazzo (still called that) in Florence had two AC units, and the main one just moved air without conditioning it a bit. Several attempts were made to fix it, but we finally gave up and lived with AC just in one bedroom. The elevator also bounced on the end of its cable and one time broke off pieces of something in the shaft on the way down. We could hear stuff clatter and fall down the shaft below. At other times the elevator made creepy noises we attibuted to the &#8220;&#8216;vator demon.&#8221;</p>
+<p>I wondered if ice had anything to do with it. Here in the U.S. we not only love AC, but piles of ice in everything that needs to be cold. A drink on the rocks better have more than two little cubes, which is about what you get when you ask for ice in most places I&#8217;ve been in Europe (each cube is transfered carefully to your glass by a small tong). When we got back yesterday, one of the first things I wanted was a tall glass of iced tea — the kind that&#8217;s a glass full of ice with tea poured over it. On the whole, they don&#8217;t have that in Europe. When I got one, it was heaven.</p>
+<p>Why do we like ice so much? One reason might be that we invented the big-time ice shipping business here in the U.S. (especially here in Boston, where <a href="http://en.wikipedia.org/wiki/Frederic_Tudor">Frederic Tudor</a> made a fortune at it, starting on Fresh Pond and Spy Pond, near where we live), and, as a result, we love lots of the stuff. I&#8217;m guessing it was cheaper here too, so we splurged. But, I dunno. Corrections welcome.</p>
+<p>In any case, it&#8217;s good to be back. Lots of work to do, heat or no. (And I do miss the gelato already.)</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/22/taking-the-heat/#comments" thr:count="8"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/22/taking-the-heat/feed/atom/" thr:count="8"/>
+		<thr:total>8</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[The Long Tale]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/17/the-long-tale/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/17/the-long-tale/</id>
+		<updated>2011-07-17T20:48:28Z</updated>
+		<published>2011-07-17T06:54:05Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Art" /><category scheme="http://blogs.law.harvard.edu/doc" term="Awesome" /><category scheme="http://blogs.law.harvard.edu/doc" term="Business" /><category scheme="http://blogs.law.harvard.edu/doc" term="Ideas" /><category scheme="http://blogs.law.harvard.edu/doc" term="infrastructure" /><category scheme="http://blogs.law.harvard.edu/doc" term="Technology" /><category scheme="http://blogs.law.harvard.edu/doc" term="VRM" />		<summary type="html"><![CDATA[I wrote A World of Producers in December 2008. At the time I was talking about camcorders and increased bandwidth demand in both directions: And as camcorder quality goes up, more of us will be producing rather than consuming our video. More importantly, we will be co-producing that video with other people. We will be [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/17/the-long-tale/"><![CDATA[<p>I <a href="http://collabracam.com/"><img class="alignright size-full wp-image-4137" src="http://blogs.law.harvard.edu/doc/files/2011/07/collabracam.jpeg" alt="" width="274" height="184" /></a>wrote <a href="http://blogs.law.harvard.edu/doc/2008/12/13/a-world-of-producers/">A World of Producers</a> in December 2008. At the time I was talking about camcorders and increased bandwidth demand in both directions:</p>
+<blockquote><p>And as camcorder quality goes up, more of us will be producing rather than consuming our video. More importantly, we will be co-producing that video with other people. We will be producers as well as consumers. This is already the case, but the results that appear on YouTube are purposely compressed to a low quality compared to HDTV. In time the demand for better will prevail. When that happens we’ll need upstream as well as downstream capacity.</p></blockquote>
+<p>Since then phones have largely replaced camcorders as first-option video recording devices — not only because they&#8217;re more handy and good enough quality-wise, but because iOS and Android serve well as platforms for collaborative video production, and even of distribution. One proof of this pudding is <a href="http://collabracam.com/">CollabraCam</a>, described as &#8220;The world&#8217;s first multicam video production iPhone app with live editing and director-to-camera communication.&#8221;</p>
+<p>The bandwidth problem here is no longer just with fixed-connection ISPs, but with mobile data service providers: AT&amp;T, Verizon, Vodafone, T-Mobile, Orange, O2 and the rest of them.</p>
+<p>For all ISPs, there are now two big problems that should rather be seen as opportunities. One is the movement of pure-consumption video watching — television, basically — from TVs to everything else, especially mobile devices. The other is increased production from users who are now producers and not just consumers. This is the most important message to the market from CollabraCam and other developments like it.</p>
+<p>The Cloud has a similar message. As more of our digital interactivity and data traffic move between our devices and various clouds of storage and services (especially through APIs), we&#8217;re going to need more symmetrical data traffic capacities than old-fashioned ADSL and cable systems provide. <a href="http://gigaom.com/broadband/lets-talk-about-the-broadband-cap-gap/">(More on this from Gigaom</a>.)</p>
+<p>Personally, I don&#8217;t have a problem with usage-based pricing of those capacities, so long as it —</p>
+<ul>
+<li>isn&#8217;t biased toward consumption alone (the TV model)</li>
+<li>doesn&#8217;t make whole markets go &#8220;bonk!&#8221; when the most enterprising individuals and companies run into ceilings in the form of usage caps or &#8220;bill shocks&#8221; from hockey-stick price increases at usage thesholds,</li>
+<li>doesn&#8217;t bury actual pricing in &#8220;plans&#8221; that are so complicated that nobody other than the phone companies can fully understand them (and in practice are a kind of shell game, and a bet that customers just aren&#8217;t going to bother challenging the bills), and</li>
+<li>doesn&#8217;t foreclose innovations and services from independent (non-phone and non-cable) ISPs, especially wireless ones.</li>
+</ul>
+<p>What matters is that the video production horse has long since left Hollywood&#8217;s barn. The choice for Hollywood and its allies in the old distribution system (the same one from which we still buy Internet access and traffic capacities) is a simple one:</p>
+<ol>
+<li>Serve those wild horses, and let them take the lead in all the directions the market might go, or</li>
+<li>Keep trying to capture them and limiting market sizes and activities to what can be controlled in top-down ways.</li>
+</ol>
+<p>My bet is that there&#8217;s more money in free markets than in captive ones. And that we — the wild horses, and the companies that understand us — will prove that in the long run.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/17/the-long-tale/#comments" thr:count="4"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/17/the-long-tale/feed/atom/" thr:count="4"/>
+		<thr:total>4</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[Free ways]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/16/free-ways/" />
+		<id>http://blogs.law.harvard.edu/doc/2011/07/16/free-ways/</id>
+		<updated>2011-07-16T20:07:08Z</updated>
+		<published>2011-07-16T19:51:01Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Events" /><category scheme="http://blogs.law.harvard.edu/doc" term="infrastructure" /><category scheme="http://blogs.law.harvard.edu/doc" term="News" /><category scheme="http://blogs.law.harvard.edu/doc" term="Strange stuff" /><category scheme="http://blogs.law.harvard.edu/doc" term="Travel" />		<summary type="html"><![CDATA[The first time I heard the term &#8220;Sepulveda pass,&#8221; I thought it was a medical procedure. I mean, I was still new to The Coast, and sepulveda sounded like one of those oddball body parts, like uvula or something. (Not speaking of which, I no longer have an uvula. No idea why. It used to [...]]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/16/free-ways/"><![CDATA[<p>The first time I heard the term &#8220;<a href="http://en.wikipedia.org/wiki/Sepulveda_Pass">Sepulveda pass</a>,&#8221; I thought it was a medical procedure. I mean, <a href="http://www.imdb.com/title/tt0259165/"><img src="http://blogs.law.harvard.edu/doc/files/2011/07/4051.jpg" alt="405" width="22%" height="image" align="left" hspace="8" vspace="8" /></a>I was still new to The Coast, and <em>sepulveda</em> sounded like one of those oddball body parts, like <em><a href="http://en.wikipedia.org/wiki/Uvula">uvula</a></em> or something. (Not speaking of which, I no longer have an uvula. No idea why. It used to be there, but now it&#8217;s gone. Strange.)</p>
+<p>Anyway, <a href="http://en.wikipedia.org/wiki/Interstate_405_(California)#Current_developments">Carmageddon</a> is going on right now, and the Sepulveda pass, a section of the 405 Freeway in Los Angeles, is shut down. My fave links on the matter so far are <a href="http://www.youtube.com/watch?v=_sd0gQyOZcY">here</a>, <a href="http://www.latimes.com/news/local/carmageddon/">here</a> and <a href="http://blogs.laweekly.com/informer/2011/06/405_freeway_closure_july_16_17_traffic_los_angeles_subway.php">here</a>. One of which is <a href="http://busblog.tonypierce.com/2011/07/even-hitler-is-worried-about-next-weeks-carmaggedon.html#more-10944">that to which Tony Pierce points</a>.</p>
+<p>It&#8217;ll all be over on Monday. When it comes to fixing freeways, L.A. doesn&#8217;t fuck around. No &#8216;fence, but the Bay Area does.</p>
+<p>We had a controlled study of the difference with a pair of earthquakes. In 1989 the Loma Prieta quake dropped a hunk of freeway (called the Cypress Structure) in Oakland, plus a piece of the Bay Bridge. It also damaged several freeways in San Francisco, including the Embarcadero Freeway and the 101-280 interchange. So, what did they do? They got rid of the Embarcadero and the Cypress Structure, took more than a few days to fix the Bay Bridge&#8230; and then took years to fix the 101-280 interchange. <em>Years</em>. Lots of them. Meanwhile, when the Northridge quake dropped a hunk of the Santa Monica Freeway in Los Angeles, they got the thing back up in a month or something. (If I have time later I&#8217;ll add the links. Right now I&#8217;m in Florence, where traffic is Cuissinart of pedestrians, motorcycles, taxis, bicycles and stubby busses. Kind of like the rest of urban Italy, only with a higher ratio of tourists to everything else.)</p>
+<p>By the way, the best video you&#8217;ll ever see about The 405 is called <a href="http://www.youtube.com/watch?v=Tpx6o4gvmXE">405</a>, and was done <a href="http://www.imdb.com/title/tt0259165/">in 2000</a> by <a href="http://branitfx.com/">Bruce Branit</a> and <a href="http://www.imdb.com/name/nm0402498/">Jeremy Hunt</a>, who also stars in it. The whole thing is just three minutes long, and it&#8217;s perfect. Especially right now. Dig.</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/16/free-ways/#comments" thr:count="6"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/16/free-ways/feed/atom/" thr:count="6"/>
+		<thr:total>6</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Doc Searls</name>
+						<uri>http://blogs.law.harvard.edu/vrm/</uri>
+					</author>
+		<title type="html"><![CDATA[All the statues eat there]]></title>
+		<link rel="alternate" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/14/all-the-statues-eat-there/" />
+		<id>http://blogs.law.harvard.edu/doc/?p=4114</id>
+		<updated>2011-07-14T15:22:39Z</updated>
+		<published>2011-07-14T15:21:33Z</published>
+		<category scheme="http://blogs.law.harvard.edu/doc" term="Travel" /><category scheme="http://blogs.law.harvard.edu/doc" term="Firenze" /><category scheme="http://blogs.law.harvard.edu/doc" term="Florence" /><category scheme="http://blogs.law.harvard.edu/doc" term="Italy" />		<summary type="html"><![CDATA[&#8230; so you know it&#8217;s gotta be good. (All&#8217;antico Vinaio, on Via dei Neri, in Firenze.)]]></summary>
+		<content type="html" xml:base="http://blogs.law.harvard.edu/doc/2011/07/14/all-the-statues-eat-there/"><![CDATA[<p><img class="aligncenter size-full wp-image-4115" src="http://blogs.law.harvard.edu/doc/files/2011/07/allantico-vinaio.jpg" alt="All'antico Vinaio" width="90%" height="image" /></p>
+<p>&#8230; so you know it&#8217;s gotta be good.</p>
+<p>(All&#8217;antico Vinaio, on Via dei Neri, in Firenze.)</p>
+]]></content>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/</creativeCommons:license>
+		<link rel="replies" type="text/html" href="http://blogs.law.harvard.edu/doc/2011/07/14/all-the-statues-eat-there/#comments" thr:count="0"/>
+		<link rel="replies" type="application/atom+xml" href="http://blogs.law.harvard.edu/doc/2011/07/14/all-the-statues-eat-there/feed/atom/" thr:count="0"/>
+		<thr:total>0</thr:total>
+	</entry>
+	</feed>

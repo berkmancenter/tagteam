@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20110726185850) do
   end
 
   create_table "feeds", :force => true do |t|
-    t.string   "title",        :limit => 500,  :null => false
+    t.string   "title",        :limit => 500
     t.string   "description",  :limit => 2048
     t.string   "guid",         :limit => 500
     t.datetime "last_updated"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20110726185850) do
   end
 
   add_index "hub_feeds", ["feed_id"], :name => "index_hub_feeds_on_feed_id"
+  add_index "hub_feeds", ["hub_id", "feed_id"], :name => "index_hub_feeds_on_hub_id_and_feed_id", :unique => true
   add_index "hub_feeds", ["hub_id"], :name => "index_hub_feeds_on_hub_id"
 
   create_table "hub_tag_filters", :force => true do |t|

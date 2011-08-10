@@ -8,36 +8,48 @@
     <%= csrf_meta_tag %>
   </head>
   <body>
-    <header>
-    </header>
+    <div class="container_16">
+      <div id="wrapper">
+        <header class="grid_16">
+          <h1><a href="/">Tagteam - Social Tagging.</a></h1>
+        </header>
 
-    <nav>
-      <section class="user_meta">
-        <% unless current_user.blank? %>
-          Welcome, <%= current_user.email %>
-          <%= link_to('log out', destroy_user_session_path, :confirm => "Are you sure?", :method => :delete) %>
-        <% else %>
-          <%= link_to('log in', new_user_session_path) %>
+        <nav class="grid_16">
+          <section class="user_meta">
+            <% unless current_user.blank? %>
+              Welcome, <%= current_user.email %>
+              <%= link_to('log out', destroy_user_session_path, :confirm => "Are you sure?", :method => :delete) %>
+            <% else %>
+              <%= link_to('log in', new_user_session_path) %>
+            <% end %>
+          </section>
+        </nav>
+
+        <% unless flash.blank? %>
+          <section class="grid_16" id="notices">
+            <% unless flash[:notice].blank? %>
+              <div class="notice">
+                <%= flash[:notice] %>
+              </div>
+            <% end %>
+
+            <% unless flash[:error].blank? %>
+              <div class="error">
+                <%= flash[:error] %>
+              </div>
+            <% end %>
+          </section>
         <% end %>
-      </section>
-    </nav>
 
-    <% unless flash[:notice].blank? %>
-      <div class="notice">
-        <%= flash[:notice] %>
+        <section class="grid_16" id="content">
+          <%= yield %>
+        </section>
+
+        <footer class="grid_16">
+          &copy; 2011 President and Fellows of Harvard College
+        </footer>
       </div>
-    <% end %>
-
-    <% unless flash[:error].blank? %>
-      <div class="error">
-        <%= flash[:error] %>
-      </div>
-    <% end %>
-
-    <%= yield %>
-
-    <footer>
-    </footer>
+    </div>
 
   </body>
 </html>
