@@ -10,21 +10,42 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110726185850) do
+ActiveRecord::Schema.define(:version => 20110811154645) do
+
+  create_table "feed_item_tags", :force => true do |t|
+    t.string   "tag",                         :null => false
+    t.string   "description", :limit => 5120
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feed_item_tags", ["tag"], :name => "index_feed_item_tags_on_tag"
+
+  create_table "feed_item_tags_feed_items", :id => false, :force => true do |t|
+    t.integer "feed_item_id"
+    t.integer "feed_item_tag_id"
+  end
+
+  add_index "feed_item_tags_feed_items", ["feed_item_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_id"
+  add_index "feed_item_tags_feed_items", ["feed_item_tag_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_tag_id"
 
   create_table "feed_items", :force => true do |t|
     t.integer  "feed_id"
     t.integer  "feed_retrieval_id"
-    t.string   "title"
-    t.string   "url"
-    t.string   "author"
-    t.string   "description"
-    t.string   "content"
-    t.string   "copyright"
+    t.string   "title",             :limit => 500
+    t.string   "url",               :limit => 2048
+    t.string   "author",            :limit => 1024
+    t.string   "description",       :limit => 5120
+    t.string   "content",           :limit => 1048576
+    t.string   "copyright",         :limit => 500
     t.datetime "date_published"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "feed_items", ["date_published"], :name => "index_feed_items_on_date_published"
+  add_index "feed_items", ["feed_id"], :name => "index_feed_items_on_feed_id"
+  add_index "feed_items", ["feed_retrieval_id"], :name => "index_feed_items_on_feed_retrieval_id"
 
   create_table "feed_retrievals", :force => true do |t|
     t.integer  "feed_id"
@@ -55,14 +76,6 @@ ActiveRecord::Schema.define(:version => 20110726185850) do
   add_index "feeds", ["flavor"], :name => "index_feeds_on_flavor"
   add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
-
-  create_table "feeds_hub_feeds", :id => false, :force => true do |t|
-    t.integer "feed_id"
-    t.integer "hub_feed_id"
-  end
-
-  add_index "feeds_hub_feeds", ["feed_id"], :name => "index_feeds_hub_feeds_on_feed_id"
-  add_index "feeds_hub_feeds", ["hub_feed_id"], :name => "index_feeds_hub_feeds_on_hub_feed_id"
 
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id"

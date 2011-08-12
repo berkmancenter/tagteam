@@ -3,7 +3,30 @@ module ModelExtensions
   def self.included(model)
 
     model.class_eval do
+      include ActionView::Helpers::SanitizeHelper
+
+      def auto_sanitize_html(*columns_to_sanitize)
+        columns_to_sanitize.each do|col|
+          tags_to_allow = %w(ul li ol p b em strong div span blockquote img a dd dt dl table tr td th tbody thead tfoot i code strike abbr address h1 h2 h3 h4 h5 q s tt sub sup pre)
+          attributes_to_allow = %w(href src alt title width height)
+          self.send("#{col}=", sanitize(self.send("#{col}"), :tags => tags_to_allow, :attributes => attributes_to_allow) )
+        end
+      end
+
       # Instance methods go here.
+      def auto_strip_tags(*columns_to_strip)
+        columns_to_strip.each do|col|
+          self.send("#{col}=", strip_tags(self.send("#{col}")) )
+        end
+      end
+
+      def auto_truncate_columns(*columns_to_truncate)
+        logger.warn('auto truncating these columns: ' + columns_to_truncate.inspect)
+        columns_to_truncate.each do|col|
+          column_def = self.class.columns.reject{|coldef| coldef.name != col.to_s}.first
+          self.send("#{col}=", self.send("#{col}").to_s[0,column_def.limit])
+        end
+      end
     end
 
     model.instance_eval do

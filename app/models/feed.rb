@@ -15,13 +15,42 @@ class Feed < ActiveRecord::Base
   include ModelExtensions
   acts_as_authorization_object
 
+  after_create :save_feed_items_on_create
+
 	attr_accessible :feed_url, :title, :description
 	attr_accessor :raw_feed
-	has_and_belongs_to_many :hub_feeds
-  has_many :feed_retrievals
+
+	has_many :hub_feeds
+  has_many :feed_retrievals, :order => :created_at
   has_many :feed_items
   
   validates_uniqueness_of :feed_url
+  
+  def save_feed_items_on_create
+    fr = FeedRetrieval.new(:feed_id => self.id)
+
+    #We wouldn't have gotten here if the feed weren't valid on create.
+    fr.success = true
+    fr.status_code = '200'
+    fr.save
+    
+    self.raw_feed.items.each do|item|
+       fi = FeedItem.new(
+        :feed_id => self.id, 
+        :feed_retrieval_id => fr.id, 
+        :title => item.title,
+        :url => item.url,
+        :author => (item.authors.blank?) ? '' : item.authors.join(','),
+        :description => item.description,
+        :content => item.content,
+        :copyright => item.copyright,
+        :date_published => item.date_published
+      )
+      fi.tags = item.categories
+      fi.save
+    end
+
+  end
 
 
 end

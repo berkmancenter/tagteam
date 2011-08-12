@@ -14,4 +14,25 @@ class HubFeed < ActiveRecord::Base
     (self.description.blank?) ? self.feed.description : self.description
   end
 
+  def latest_feed_retrieval
+    feed.feed_retrievals.last
+  rescue Exception => e
+    logger.warn(e.inspect)
+    []
+  end
+
+  def latest_feed_items
+    self.latest_feed_retrieval.feed_items
+  rescue Exception => e
+    logger.warn(e.inspect)
+    []
+  end
+
+  def latest_feed_tags
+    self.latest_feed_items.collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
+  rescue Exception => e
+    logger.warn(e.inspect)
+    return []
+  end
+
 end

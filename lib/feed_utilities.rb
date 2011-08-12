@@ -18,7 +18,7 @@ module FeedUtilities
 			return false
 		end
 
-		parsed_feed = FeedNormalizer::FeedNormalizer.parse(response.body)
+		parsed_feed = FeedNormalizer::FeedNormalizer.parse(response.body, :loose => true)
 		if parsed_feed.nil?
 			self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
 			return false

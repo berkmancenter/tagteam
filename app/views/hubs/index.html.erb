@@ -1,10 +1,13 @@
-<div class="hubs">
-  <h1>Hubs</h1>
-  <% unless current_user.blank? %>
-    <h2>My hubs</h2>
-    <div class="my"> 
-      <%= render :partial => 'shared/line_items/hub', :collection => @my_hubs %>
-      <%= link_to('New Hub', new_hub_path) %>
-    </div>
-  <% end %>
+<% unless current_user.blank? %>
+  <div class="my grid_8 alpha"> 
+  <h2>My hubs</h2>
+    <%= render :partial => 'shared/line_items/hub', :collection => @my_hubs %>
+    <%= link_to('New Hub', new_hub_path) %>
+  </div>
+<% end %>
+
+<div class="hubs <%= (current_user.blank?) ? 'grid_16 alpha' : 'grid_8 omega' %>" style="background: #e4e4e4;">
+  <h2>All Hubs</h2>
+    <%= render :partial => 'shared/line_items/hub', :collection => @hubs %>
+    <%= will_paginate(@hubs) %>
 </div>

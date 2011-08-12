@@ -1,5 +1,7 @@
 Taghub::Application.routes.draw do
 
+  resources :feed_item_tags
+
   resources :republished_feeds
 
   resources :hub_tag_filters
@@ -17,6 +19,7 @@ Taghub::Application.routes.draw do
   resources :hubs do
     member do
       post 'add_feed'
+      get 'feeds'
     end
   end
 

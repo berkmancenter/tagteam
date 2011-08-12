@@ -3,7 +3,7 @@
   <head>
     <title>Taghub</title>
     <%= formtastic_stylesheet_link_tag %>
-    <%= stylesheet_link_tag :all %>
+    <%= stylesheet_link_tag 'formtastic', '992-16col','reset','silk-sprite','taghub' %>
     <%= javascript_include_tag ['jquery.min', 'jquery_ujs', 'application', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
   </head>
@@ -13,6 +13,7 @@
         <header class="grid_16">
           <h1><a href="/">Tagteam - Social Tagging.</a></h1>
         </header>
+        <div class="clear"></div>
 
         <nav class="grid_16">
           <section class="user_meta">
@@ -24,6 +25,7 @@
             <% end %>
           </section>
         </nav>
+        <div class="clear"></div>
 
         <% unless flash.blank? %>
           <section class="grid_16" id="notices">
@@ -39,15 +41,18 @@
               </div>
             <% end %>
           </section>
+        <div class="clear"></div>
         <% end %>
 
         <section class="grid_16" id="content">
           <%= yield %>
         </section>
+        <div class="clear"></div>
 
         <footer class="grid_16">
           &copy; 2011 President and Fellows of Harvard College
         </footer>
+        <div class="clear"></div>
       </div>
     </div>
 

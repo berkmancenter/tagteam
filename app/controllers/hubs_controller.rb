@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show]
+    allow all, :to => [:index, :show, :feeds]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -30,10 +30,22 @@ class HubsController < ApplicationController
 
     respond_to do |format|
       if @hub_feed.save
-        format.json{ render(:json => {:message => 'Success'}) and return }
+        format.json{ render(:json => {:message => 'Added that feed'}) and return }
       else
         format.json{ render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable) and return }
       end
+    end
+  end
+  
+  def feeds
+    respond_to do|format|
+      format.html{
+        if request.xhr?
+          render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds
+        else
+          render
+        end
+      }
     end
   end
 
@@ -41,6 +53,7 @@ class HubsController < ApplicationController
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
     end
+    @hubs = Hub.paginate(:page => params[:page], :per_page => params[:per_page])
   end
 
   def show
@@ -85,7 +98,7 @@ class HubsController < ApplicationController
   private
 
   def load_hub
-    @hub = Hub.find(params[:id])
+    @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_retrievals => [:feed_items => [:feed_item_tags]]]]])
     @owners = @hub.owners
   end
 

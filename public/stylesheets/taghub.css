@@ -1,4 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Carme);
+/* works schema-less! Sweet. */
+@import url(//fonts.googleapis.com/css?family=Carme);
 
 body{
   background: url('/images/bgstripe.png');
@@ -22,20 +23,6 @@ nav a{
   color: #fff;
 }
 
-#wrapper{
-  float: left;
-  background: #333;
-  border-radius: 10px;
-  margin-top: 10px;
-  box-shadow: 10px 10px 10px #000;
-}
-
-section#content{
-  padding: 10px;
-  background: white;
-  border-radius: 5px;
-}
-
 h1, h2, h3, h4{
   font-family: Carme, serif;
   color: #222;
@@ -52,6 +39,22 @@ h2{
 
 h3{
   font-size: 1.25em;
+  margin-top: .5em;
+}
+
+#wrapper{
+  float: left;
+  background: #333;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 10px 10px 10px #000;
+}
+
+section#content{
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  line-height: 1.4em;
 }
 
 header h1{
@@ -63,6 +66,28 @@ header h1{
 header h1 a{
   color: #222;
   text-decoration: none;
+}
+
+.error{
+  color: red;
+}
+
+.notice{
+  color: green;
+}
+
+a.delete{
+  font-size: 11px;
+  margin-left: 2em;
+}
+
+div.error, div.notice{
+  font-size: 0.9em;
+  font-weight: bold;
+  margin: 10px;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .formtastic .create, 
@@ -87,21 +112,29 @@ a.button:hover,
 	cursor: pointer;
 }
 
-.error{
-  color: red;
+.hub_feed{
+  margin-bottom: 1em;
 }
 
-.notice{
-  color: green;
+.metadata{
+  font-size: .8em;
+  color: #444;
 }
 
-div.error, div.notice{
-  font-size: 0.9em;
-  font-weight: bold;
-  margin: 10px;
-  background: white;
+.hub_feed .more{
+  float: right;
+  font-size: .9em;
+}
+
+.hub_feed .metadata{
+  display: none;
+}
+
+input#feed_url{
+  width: 30em;
+  font-size: 14pt;
   padding: 5px;
-  border-radius: 5px;
+	color: #7a000d;
 }
 
 footer{

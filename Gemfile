@@ -11,6 +11,7 @@ gem 'devise', '1.4.2'
 gem 'gravatar-ultimate', '1.0.2'
 gem 'acl9'
 gem 'feed-normalizer', '1.5.2'
+gem "will_paginate"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -19,6 +20,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.6.1'
 	gem 'thin'
   gem 'sqlite3'
+  gem 'silent-postgres'
 end
 
 group :test do

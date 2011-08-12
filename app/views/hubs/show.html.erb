@@ -1,5 +1,5 @@
 <div class="hub detailed" id="hub_<%= @hub.id %>">
-  <h1><%= @hub.title %><%= (@owners.include?(current_user)) ? link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?') : '' %></h1>
+  <h1><%= @hub.title %><%= (@owners.include?(current_user)) ? link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') : '' %></h1>
   <div class="description">
     <%= @hub.description %>
   </div>
@@ -15,11 +15,14 @@
     </dl>
   </div>
   <div class="hub_feeds">
-    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
+    <h3>Feeds in this hub</h3>
+    <div id="hub_feed_list_<%= @hub.id %>">
+      <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
+    </div>
     <% if @owners.include?(current_user) %>
       <div class="add_feed_container">
         <div class="messages"></div>
-        <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Add Feed</a>
+        <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Add Feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
       </div> 
     <% end %>
   </div>
