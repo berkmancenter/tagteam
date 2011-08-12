@@ -1,10 +1,13 @@
 class FeedItem < ActiveRecord::Base
+
   include ModelExtensions
   before_validation do
     auto_strip_tags(:description)
     auto_sanitize_html(:content)
     auto_truncate_columns(:title,:url,:author,:description,:content,:copyright)
   end
+
+  validates_uniqueness_of :url, :scope => :feed_id
 
   has_and_belongs_to_many :feed_item_tags
 

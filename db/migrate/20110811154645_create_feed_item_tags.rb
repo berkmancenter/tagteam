@@ -5,7 +5,7 @@ class CreateFeedItemTags < ActiveRecord::Migration
       t.string :description,  :limit => 5.kilobytes
       t.timestamps
     end
-    add_index :feed_item_tags, :tag
+    add_index :feed_item_tags, :tag, :unique => true
 
     create_table :feed_item_tags_feed_items, :id => false, :force => true do |t|
       t.references :feed_item

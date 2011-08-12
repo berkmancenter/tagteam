@@ -15,9 +15,11 @@ class CreateFeedItems < ActiveRecord::Migration
       t.timestamps
     end
 
-    [:feed_id, :feed_retrieval_id, :date_published].each do|col|
+    [:feed_id, :feed_retrieval_id, :date_published, :url].each do|col|
       add_index :feed_items, col
     end
+
+    add_index :feed_items, [:url,:feed_id], :unique => true
 
   end
 

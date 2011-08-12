@@ -28,29 +28,24 @@ class Feed < ActiveRecord::Base
   
   def save_feed_items_on_create
     fr = FeedRetrieval.new(:feed_id => self.id)
-
     #We wouldn't have gotten here if the feed weren't valid on create.
     fr.success = true
     fr.status_code = '200'
     fr.save
-    
     self.raw_feed.items.each do|item|
-       fi = FeedItem.new(
-        :feed_id => self.id, 
-        :feed_retrieval_id => fr.id, 
-        :title => item.title,
-        :url => item.url,
-        :author => (item.authors.blank?) ? '' : item.authors.join(','),
-        :description => item.description,
-        :content => item.content,
-        :copyright => item.copyright,
-        :date_published => item.date_published
-      )
+      #fi = FeedItem.find_or_initialize_by_url_and_feed_id(item.url, self.id)
+      # Use the above initializer when updating a feed.
+      fi = FeedItem.new(:url => item.url, :feed_id => self.id)
+      fi.feed_retrieval_id = fr.id
+      fi.title = item.title
+      fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
+      fi.description = item.description
+      fi.content = item.content
+      fi.copyright = item.copyright
+      fi.date_published = item.date_published
       fi.tags = item.categories
       fi.save
     end
-
   end
-
 
 end

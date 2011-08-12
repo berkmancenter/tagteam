@@ -137,6 +137,10 @@ input#feed_url{
 	color: #7a000d;
 }
 
+.over{
+  background-color: #e4e4e4;
+}
+
 footer{
   text-align: right;
   padding: 10px;

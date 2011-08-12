@@ -33,21 +33,22 @@ module FeedUtilities
 	# === Parameters
 	# [uri] The URI to download.
 	# [redirect_limit] Allow this many redirects before quitting. Defaults to 10
+  # [sleep] Wait this many seconds in between redirects. Defaults to 1.
 	# === Returns
 	# The Net::HTTP::Response object, or throws an error on failure.
-	def fetch(uri, redirect_limit = 10)
+	def fetch(uri, redirect_limit = 10, sleep_seconds = 1)
 		raise ArgumentError, 'HTTP redirect too deep' if redirect_limit == 0
 		if redirect_limit < 10
 			#On subsequent requests in a request with redirections, wait a second
-			sleep 1
+			sleep sleep_seconds
 		end
 		url = URI.parse(uri)
 		req = Net::HTTP::Get.new(url.request_uri + ((url.fragment.blank?) ? '' : '#' + url.fragment ))
 		req.initialize_http_header({"User-Agent" => "tagteam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub"})
 
-    logger.warn(url.inspect)
-    logger.warn(url.port)
-    logger.warn(url.host)
+    # logger.warn(url.inspect)
+    # logger.warn(url.port)
+    # logger.warn(url.host)
 		http = Net::HTTP::new(url.host,url.port)
 		if url.scheme == 'https'
 			http.use_ssl = true
