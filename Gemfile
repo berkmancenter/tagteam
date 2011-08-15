@@ -12,6 +12,7 @@ gem 'gravatar-ultimate', '1.0.2'
 gem 'acl9'
 gem 'feed-normalizer', '1.5.2'
 gem "will_paginate"
+gem 'acts_as_list', '0.1.4'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

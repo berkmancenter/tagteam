@@ -8,7 +8,7 @@
       <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= hub_feed.feed.feed_retrievals.last.feed_items.length %> items</span>
     </div>
     <div class="grid_6 omega">
-      <span class="feed_item_tags"><span class="ui-silk inline ui-silk-tag-blue"></span> Tags: <%= hub_feed.latest_feed_tags.collect{|t| t.tag}[0,10].join(', ') %></span> 
+      <span class="feed_item_tags"><span class="ui-silk inline ui-silk-tag-blue"></span> Recent Tags: <%= hub_feed.latest_feed_tags.collect{|t| t.tag}[0,10].join(', ') %></span> 
     </div>
   </div>
   <div class="clear"></div>

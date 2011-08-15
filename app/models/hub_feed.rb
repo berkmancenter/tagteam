@@ -4,6 +4,8 @@ class HubFeed < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed
 
+  after_create :auto_create_republished_feed
+
   validates_uniqueness_of :feed_id, :scope => :hub_id
 
   def display_title
@@ -22,17 +24,41 @@ class HubFeed < ActiveRecord::Base
   end
 
   def latest_feed_items
-    self.latest_feed_retrieval.feed_items
+    self.feed.feed_items.limit(15)
   rescue Exception => e
     logger.warn(e.inspect)
     []
   end
 
   def latest_feed_tags
-    self.latest_feed_items.collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
+    self.latest_feed_items.includes(:feed_item_tags).collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
   rescue Exception => e
     logger.warn(e.inspect)
     return []
+  end
+
+  def auto_create_republished_feed
+    rf = RepublishedFeed.new(
+      :hub_id => self.hub_id, 
+      :title => self.feed.title, 
+      :description => self.feed.description,
+      :default_sort => 'date_published',
+      :mixing_strategy => 'date',
+      :limit => 50
+    )
+    rf.save
+
+    logger.warn('RF: ' + rf.inspect)
+
+    is = InputSource.new(
+      :republished_feed_id => rf.id, 
+      :item_source => self.feed ,
+      :effect => 'add',
+      :position => 1,
+      :limit => 50
+    )
+    is.save
+
   end
 
 end

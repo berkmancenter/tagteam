@@ -22,7 +22,7 @@ class Feed < ActiveRecord::Base
 
 	has_many :hub_feeds
   has_many :feed_retrievals, :order => :created_at
-  has_and_belongs_to_many :feed_items
+  has_and_belongs_to_many :feed_items, :order => 'date_published desc'
   
   validates_uniqueness_of :feed_url
   
@@ -33,16 +33,22 @@ class Feed < ActiveRecord::Base
     fr.status_code = '200'
     fr.save
     
-    #FIXME - make this work with the new habtm relationship to feed.
     self.raw_feed.items.each do|item|
       fi = FeedItem.find_or_initialize_by_url(:url => item.url)
+      if fi.new_record?
+        # Instantiate only for new records.
+        fi.title = item.title
+        fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
+        fi.description = item.description
+        fi.content = item.content
+        fi.copyright = item.copyright
+        fi.date_published = item.date_published
+      end
+
       fi.feed_retrieval_id = fr.id
-      fi.title = item.title
-      fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
-      fi.description = item.description
-      fi.content = item.content
-      fi.copyright = item.copyright
-      fi.date_published = item.date_published
+
+      fi.feeds << self unless fi.feeds.include?(self)
+
       # Merge tags. . .
       fi.tags = item.categories
       fi.save

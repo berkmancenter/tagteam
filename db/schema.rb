@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110811154645) do
+ActiveRecord::Schema.define(:version => 20110815194631) do
 
   create_table "feed_item_tags", :force => true do |t|
     t.string   "tag",                         :null => false
@@ -30,7 +30,6 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
   add_index "feed_item_tags_feed_items", ["feed_item_tag_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_tag_id"
 
   create_table "feed_items", :force => true do |t|
-    t.integer  "feed_id"
     t.integer  "feed_retrieval_id"
     t.string   "title",             :limit => 500
     t.string   "url",               :limit => 2048
@@ -43,8 +42,8 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
     t.datetime "updated_at"
   end
 
+  add_index "feed_items", ["author"], :name => "index_feed_items_on_author"
   add_index "feed_items", ["date_published"], :name => "index_feed_items_on_date_published"
-  add_index "feed_items", ["feed_id"], :name => "index_feed_items_on_feed_id"
   add_index "feed_items", ["feed_retrieval_id"], :name => "index_feed_items_on_feed_retrieval_id"
   add_index "feed_items", ["url"], :name => "index_feed_items_on_url", :unique => true
 
@@ -65,6 +64,18 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "feed_sources", :force => true do |t|
+    t.string   "title",       :limit => 500
+    t.string   "description", :limit => 5120
+    t.integer  "feed_id",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feed_sources", ["description"], :name => "index_feed_sources_on_description"
+  add_index "feed_sources", ["feed_id"], :name => "index_feed_sources_on_feed_id"
+  add_index "feed_sources", ["title"], :name => "index_feed_sources_on_title"
 
   create_table "feeds", :force => true do |t|
     t.string   "title",        :limit => 500
@@ -118,18 +129,36 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
   add_index "hubs", ["tag_prefix"], :name => "index_hubs_on_tag_prefix"
   add_index "hubs", ["title"], :name => "index_hubs_on_title"
 
-  create_table "republished_feeds", :force => true do |t|
-    t.integer  "hub_id"
-    t.string   "title"
-    t.string   "description"
-    t.string   "feed_input_type"
-    t.integer  "feed_input_id"
-    t.string   "default_sort"
-    t.string   "mixing_strategy"
-    t.integer  "item_limit"
+  create_table "input_sources", :force => true do |t|
+    t.integer  "republished_feed_id",                                   :null => false
+    t.integer  "item_source_id",                                        :null => false
+    t.string   "item_source_type",    :limit => 100,                    :null => false
+    t.string   "effect",              :limit => 25,  :default => "add", :null => false
+    t.integer  "position"
+    t.integer  "limit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "input_sources", ["effect"], :name => "index_input_sources_on_effect"
+  add_index "input_sources", ["item_source_id"], :name => "index_input_sources_on_item_source_id"
+  add_index "input_sources", ["item_source_type"], :name => "index_input_sources_on_item_source_type"
+  add_index "input_sources", ["position"], :name => "index_input_sources_on_position"
+  add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
+
+  create_table "republished_feeds", :force => true do |t|
+    t.integer  "hub_id"
+    t.string   "title",           :limit => 500,                                :null => false
+    t.string   "description",     :limit => 5120
+    t.string   "default_sort",    :limit => 100,  :default => "date_published"
+    t.string   "mixing_strategy", :limit => 25,   :default => "interlaced"
+    t.integer  "limit",                           :default => 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "republished_feeds", ["hub_id"], :name => "index_republished_feeds_on_hub_id"
+  add_index "republished_feeds", ["title"], :name => "index_republished_feeds_on_title"
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40

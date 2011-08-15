@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  republished_feed_id: 1
+  item_source_id: 1
+  item_source_type: MyString
+  affect: MyString
+  position: 1
+
+two:
+  republished_feed_id: 1
+  item_source_id: 1
+  item_source_type: MyString
+  affect: MyString
+  position: 1
