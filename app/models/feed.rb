@@ -22,7 +22,7 @@ class Feed < ActiveRecord::Base
 
 	has_many :hub_feeds
   has_many :feed_retrievals, :order => :created_at
-  has_many :feed_items
+  has_and_belongs_to_many :feed_items
   
   validates_uniqueness_of :feed_url
   
@@ -32,10 +32,10 @@ class Feed < ActiveRecord::Base
     fr.success = true
     fr.status_code = '200'
     fr.save
+    
+    #FIXME - make this work with the new habtm relationship to feed.
     self.raw_feed.items.each do|item|
-      #fi = FeedItem.find_or_initialize_by_url_and_feed_id(item.url, self.id)
-      # Use the above initializer when updating a feed.
-      fi = FeedItem.new(:url => item.url, :feed_id => self.id)
+      fi = FeedItem.find_or_initialize_by_url(:url => item.url)
       fi.feed_retrieval_id = fr.id
       fi.title = item.title
       fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
@@ -43,6 +43,7 @@ class Feed < ActiveRecord::Base
       fi.content = item.content
       fi.copyright = item.copyright
       fi.date_published = item.date_published
+      # Merge tags. . .
       fi.tags = item.categories
       fi.save
     end

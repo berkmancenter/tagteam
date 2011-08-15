@@ -15,15 +15,24 @@ class CreateFeedItems < ActiveRecord::Migration
       t.timestamps
     end
 
-    [:feed_id, :feed_retrieval_id, :date_published, :url].each do|col|
+    [:feed_id, :feed_retrieval_id, :date_published].each do|col|
       add_index :feed_items, col
     end
 
-    add_index :feed_items, [:url,:feed_id], :unique => true
+    add_index :feed_items, :url, :unique => true
+
+    create_table :feed_items_feeds, :id => false, :force => true do |t|
+      t.references :feed
+      t.references :feed_item
+    end
+
+    add_index :feed_items_feeds, :feed_id
+    add_index :feed_items_feeds, :feed_item_id
 
   end
 
   def self.down
     drop_table :feed_items
+    drop_table :feed_items_feeds
   end
 end

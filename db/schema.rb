@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
     t.datetime "updated_at"
   end
 
-  add_index "feed_item_tags", ["tag"], :name => "index_feed_item_tags_on_tag"
+  add_index "feed_item_tags", ["tag"], :name => "index_feed_item_tags_on_tag", :unique => true
 
   create_table "feed_item_tags_feed_items", :id => false, :force => true do |t|
     t.integer "feed_item_id"
@@ -46,6 +46,15 @@ ActiveRecord::Schema.define(:version => 20110811154645) do
   add_index "feed_items", ["date_published"], :name => "index_feed_items_on_date_published"
   add_index "feed_items", ["feed_id"], :name => "index_feed_items_on_feed_id"
   add_index "feed_items", ["feed_retrieval_id"], :name => "index_feed_items_on_feed_retrieval_id"
+  add_index "feed_items", ["url"], :name => "index_feed_items_on_url", :unique => true
+
+  create_table "feed_items_feeds", :id => false, :force => true do |t|
+    t.integer "feed_id"
+    t.integer "feed_item_id"
+  end
+
+  add_index "feed_items_feeds", ["feed_id"], :name => "index_feed_items_feeds_on_feed_id"
+  add_index "feed_items_feeds", ["feed_item_id"], :name => "index_feed_items_feeds_on_feed_item_id"
 
   create_table "feed_retrievals", :force => true do |t|
     t.integer  "feed_id"
