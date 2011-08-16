@@ -46,4 +46,9 @@ Taghub::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  #FIXME - update for your environment
+  config.action_mailer.default_url_options = { :host => 'dev7.berkmancenter.org' }
+  config.action_mailer.delivery_method = :sendmail
+  
 end
