@@ -44,7 +44,7 @@ module FeedUtilities
 		end
 		url = URI.parse(uri)
 		req = Net::HTTP::Get.new(url.request_uri + ((url.fragment.blank?) ? '' : '#' + url.fragment ))
-		req.initialize_http_header({"User-Agent" => "tagteam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub"})
+		req.initialize_http_header({"User-Agent" => ROBOT_USER_AGENT})
 
     # logger.warn(url.inspect)
     # logger.warn(url.port)

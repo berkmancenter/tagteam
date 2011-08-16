@@ -1,6 +1,7 @@
 atom_feed :language => 'en-US' do |atom|
   atom.title @republished_feed.title
   atom.updated @republished_feed.updated_at
+  atom.generator RSS_GENERATOR
 
   @republished_feed.items.each do |item|
     atom.entry( item ) do |entry|
