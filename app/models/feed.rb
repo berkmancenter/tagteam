@@ -25,6 +25,10 @@ class Feed < ActiveRecord::Base
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
   
   validates_uniqueness_of :feed_url
+
+  def items
+    self.feed_items
+  end
   
   def save_feed_items_on_create
     fr = FeedRetrieval.new(:feed_id => self.id)
@@ -46,7 +50,6 @@ class Feed < ActiveRecord::Base
       end
 
       fi.feed_retrieval_id = fr.id
-
       fi.feeds << self unless fi.feeds.include?(self)
 
       # Merge tags. . .

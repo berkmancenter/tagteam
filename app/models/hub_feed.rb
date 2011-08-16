@@ -48,16 +48,14 @@ class HubFeed < ActiveRecord::Base
     )
     rf.save
 
-    logger.warn('RF: ' + rf.inspect)
-
-    is = InputSource.new(
+    input_source = InputSource.new(
       :republished_feed_id => rf.id, 
-      :item_source => self.feed ,
+      :item_source => self.feed,
       :effect => 'add',
       :position => 1,
       :limit => 50
     )
-    is.save
+    input_source.save
 
   end
 
