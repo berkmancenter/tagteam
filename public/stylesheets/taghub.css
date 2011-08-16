@@ -112,7 +112,9 @@ a.button:hover,
 	cursor: pointer;
 }
 
-.hub_feed{
+.hub_feed,
+.republished_feed
+{
   margin-bottom: 1em;
 }
 
@@ -121,12 +123,12 @@ a.button:hover,
   color: #444;
 }
 
-.hub_feed .more{
+.more{
   float: right;
   font-size: .9em;
 }
 
-.hub_feed .metadata{
+.metadata{
   display: none;
 }
 

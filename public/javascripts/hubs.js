@@ -7,7 +7,11 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       var id = $(this).attr('id').split('_')[3];
-      $('#hub_feed_metadata_' + id).toggle('medium');
+      if($(this).attr('id').match(/republished/)){
+        $('#republished_feed_metadata_' + id).toggle('medium');
+      } else{
+        $('#hub_feed_metadata_' + id).toggle('medium');
+      }
     }
   });
 

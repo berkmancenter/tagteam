@@ -2,7 +2,12 @@ Taghub::Application.routes.draw do
 
   resources :feed_item_tags
 
-  resources :republished_feeds
+  resources :republished_feeds do
+    member do
+      get 'rss'
+      get 'atom'
+    end
+  end
 
   resources :hub_tag_filters
 

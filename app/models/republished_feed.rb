@@ -18,7 +18,7 @@ class RepublishedFeed < ActiveRecord::Base
         items = items - input_source.item_source.items
       end
     end
-    items.uniq.compact
+    items.flatten.uniq.compact
   end
 
 end
