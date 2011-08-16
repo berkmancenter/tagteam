@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds]
+    allow all, :to => [:index, :show, :feeds, :republished_feeds]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -42,6 +42,18 @@ class HubsController < ApplicationController
       format.html{
         if request.xhr?
           render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds
+        else
+          render
+        end
+      }
+    end
+  end
+
+  def republished_feeds
+    respond_to do|format|
+      format.html{
+        if request.xhr?
+          render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds
         else
           render
         end
