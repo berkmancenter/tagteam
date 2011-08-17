@@ -1,5 +1,10 @@
 <div class="hub detailed" id="hub_<%= @hub.id %>">
-  <h1><%= @hub.title %><%= (@owners.include?(current_user)) ? link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') : '' %></h1>
+  <h1><%= @hub.title %>
+    <% if @owners.include?(current_user) %> 
+      <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
+      <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
+    <% end %>
+  </h1>
   <div class="description">
     <%= @hub.description %>
   </div>

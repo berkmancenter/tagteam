@@ -20,8 +20,8 @@ class Feed < ActiveRecord::Base
 	attr_accessible :feed_url, :title, :description
 	attr_accessor :raw_feed
 
-	has_many :hub_feeds
-  has_many :feed_retrievals, :order => :created_at
+	has_many :hub_feeds, :dependent => :destroy
+  has_many :feed_retrievals, :order => :created_at, :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
   
   validates_uniqueness_of :feed_url
@@ -46,7 +46,10 @@ class Feed < ActiveRecord::Base
         fi.description = item.description
         fi.content = item.content
         fi.copyright = item.copyright
-        fi.date_published = item.date_published
+        #Weird bug having to do with a timestamp that has invalid years.
+        unless item.date_published.year < 1969
+          fi.date_published = item.date_published
+        end
       end
 
       fi.feed_retrieval_id = fr.id
@@ -57,5 +60,4 @@ class Feed < ActiveRecord::Base
       fi.save
     end
   end
-
 end

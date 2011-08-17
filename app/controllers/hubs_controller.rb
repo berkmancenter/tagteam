@@ -91,10 +91,21 @@ class HubsController < ApplicationController
     end
   end
 
-  def update
+  def edit
   end
 
-  def edit
+  def update
+    @hub.attributes = params[:hub]
+    respond_to do|format|
+      if @hub.save
+        current_user.has_role!(:editor, @hub)
+        flash[:notice] = 'Updated!'
+        format.html {redirect_to hub_path(@hub)}
+      else
+        flash[:error] = 'Couldn\'t update!'
+        format.html {render :action => :new}
+      end
+    end
   end
 
   def destroy

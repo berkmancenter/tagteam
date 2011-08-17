@@ -2,10 +2,10 @@
   <span class="ui-silk inline ui-silk-feed"></span> <%= hub_feed.display_title %><div class="more" id="hub_feed_more_<%= hub_feed.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div> 
   <div class="metadata" id="hub_feed_metadata_<%= hub_feed.id %>">
     <div class="grid_4 alpha">
-      <span class="updated"> <%= hub_feed.feed.feed_retrievals.last.updated_at.to_s(:long) %></span>
+      <span class="updated"> <%= hub_feed.feed.updated_at.to_s(:long) %></span>
     </div>
     <div class="grid_6">
-      <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= hub_feed.feed.feed_retrievals.last.feed_items.length %> items</span>
+      <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= hub_feed.feed.feed_items.length %> items</span>
     </div>
     <div class="grid_6 omega">
       <span class="feed_item_tags"><span class="ui-silk inline ui-silk-tag-blue"></span> Recent Tags: <%= hub_feed.latest_feed_tags.collect{|t| t.tag}[0,10].join(', ') %></span> 

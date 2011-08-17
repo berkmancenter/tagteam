@@ -3,9 +3,7 @@ class HubFeed < ActiveRecord::Base
 
   belongs_to :hub
   belongs_to :feed
-
   after_create :auto_create_republished_feed
-
   validates_uniqueness_of :feed_id, :scope => :hub_id
 
   def display_title
@@ -38,6 +36,8 @@ class HubFeed < ActiveRecord::Base
   end
 
   def auto_create_republished_feed
+
+    logger.warn('Feed info:' + self.feed.inspect)
     rf = RepublishedFeed.new(
       :hub_id => self.hub_id, 
       :title => self.feed.title, 
@@ -46,7 +46,12 @@ class HubFeed < ActiveRecord::Base
       :mixing_strategy => 'date',
       :limit => 50
     )
-    rf.save
+
+    if rf.valid?
+      rf.save
+    else
+      logger.warn(rf.errors.inspect)
+    end
 
     input_source = InputSource.new(
       :republished_feed_id => rf.id, 
@@ -56,7 +61,6 @@ class HubFeed < ActiveRecord::Base
       :limit => 50
     )
     input_source.save
-
   end
 
 end

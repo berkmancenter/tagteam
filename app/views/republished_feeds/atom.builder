@@ -15,4 +15,3 @@ atom_feed :language => 'en-US' do |atom|
     end
   end
 end
-
