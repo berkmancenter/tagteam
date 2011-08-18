@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+>
+
+<channel>
+	<title>Dan Collis-Puro &#187; code</title>
+	<atom:link href="http://blogs.law.harvard.edu/djcp/tag/code/feed/" rel="self" type="application/rss+xml" />
+	<link>https://blogs.law.harvard.edu/djcp</link>
+	<description>Tech. Open Source. Stuff that doesn&#039;t suck.</description>
+	<lastBuildDate>Wed, 17 Aug 2011 18:55:17 +0000</lastBuildDate>
+	<language>en</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.2.1</generator>
+<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+		<item>
+		<title>Diff&#8217;ing wordpress releases</title>
+		<link>https://blogs.law.harvard.edu/djcp/2011/02/diffing-wordpress-releases/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2011/02/diffing-wordpress-releases/#comments</comments>
+		<pubDate>Wed, 09 Feb -0001 20:10:23 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[svn]]></category>
+		<category><![CDATA[wordpress]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=130</guid>
+		<description><![CDATA[A new wordpress release is out and you&#8217;d like to know what&#8217;s changed? Sure, you can read the changelog, but is that REALLY enough? Point your interweb box to: http://core.svn.wordpress.org/tags/ and then use svn to show you exactly what&#8217;s changed. &#8230; <a href="https://blogs.law.harvard.edu/djcp/2011/02/diffing-wordpress-releases/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>A new wordpress release is out and you&#8217;d like to know what&#8217;s changed? Sure, you can read the changelog, but is that REALLY enough?</p>
+<p>Point your interweb box to: <a href="http://core.svn.wordpress.org/tags/">http://core.svn.wordpress.org/tags/</a> and then use svn to show you exactly what&#8217;s changed. Pick the URLs to the tags that represent the two releases you&#8217;d like to compare, and then:</p>
+<pre>svn diff http://core.svn.wordpress.org/tags/3.0.4/ \
+http://core.svn.wordpress.org/tags/3.0.5/  > ~/tmp/wp-3.0.4_to_3.0.5.txt</pre>
+<p>Then inspect &#8220;~/tmp/wp-3.0.4_to_3.0.5.txt&#8221; to see what&#8217;s changed.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2011/02/diffing-wordpress-releases/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>Pre-loaded Image Rollovers with jQuery</title>
+		<link>https://blogs.law.harvard.edu/djcp/2010/08/pre-loaded-image-rollovers-with-jquery/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2010/08/pre-loaded-image-rollovers-with-jquery/#comments</comments>
+		<pubDate>Tue, 24 Aug 2010 22:45:19 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[javascript]]></category>
+		<category><![CDATA[jquery]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=113</guid>
+		<description><![CDATA[I despise implementing image rollovers, but this makes it almost tolerable. Any &#60;img&#62; tag with a &#8220;hover&#8221; attribute referring to an image URL will have a rollover behavior attached to it. For bonus points, the rollover image will be pre-loaded, &#8230; <a href="https://blogs.law.harvard.edu/djcp/2010/08/pre-loaded-image-rollovers-with-jquery/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>I despise implementing image rollovers, but this makes it almost tolerable.  Any &lt;img&gt; tag with a &#8220;hover&#8221; attribute referring to an image URL will have a rollover behavior attached to it. For bonus points, the rollover image will be pre-loaded, so there&#8217;s no momentary delay the first time an on-state image is loaded.</p>
+<p>In your HTML source:</p>
+<pre class="brush: html">
+&lt;img src=&quot;/images/button.gif&quot; hover=&quot;/images/button_on.gif&quot; /&gt;
+&lt;img src=&quot;/images/another_button.gif&quot; hover=&quot;/images/another_button_on.gif&quot; /&gt;
+</pre>
+<pre class="brush: javascript">
+jQuery(document).ready(function(){
+  jQuery(&#039;img[hover]&#039;).each(function(){
+    // Preload rollover
+    var imageEl = jQuery(&quot;&lt;img alt=&quot;&quot; /&gt;&quot;);
+    imageEl.attr(&#039;src&#039;,jQuery(this).attr(&#039;hover&#039;));
+
+    jQuery(this).hover(
+      function(){
+        // swap the image.
+        var hoverSrc = jQuery(this).attr(&#039;hover&#039;);
+        var regSrc = jQuery(this).attr(&#039;src&#039;);
+        jQuery(this).attr(&#039;src&#039;,hoverSrc);
+        jQuery(this).attr(&#039;hover&#039;,regSrc);
+      }
+    );
+  });
+});
+</pre>
+<p>Thanks jQuery for being so awesome.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2010/08/pre-loaded-image-rollovers-with-jquery/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>A simple bash gpg &#8220;password safe&#8221;</title>
+		<link>https://blogs.law.harvard.edu/djcp/2010/03/a-simple-bash-password-safe/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2010/03/a-simple-bash-password-safe/#comments</comments>
+		<pubDate>Sat, 27 Mar 2010 23:07:04 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[bash]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[gpg]]></category>
+		<category><![CDATA[infosec]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=86</guid>
+		<description><![CDATA[This is definitely not military quality &#8211; but if you need a simple way to manage a GPG-encrypted file containing info you want to protect this works pretty well for me. I use this to manage a set of passwords &#8230; <a href="https://blogs.law.harvard.edu/djcp/2010/03/a-simple-bash-password-safe/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>This is definitely not military quality &#8211; but if you need a simple way to manage a GPG-encrypted file containing info you want to protect this works pretty well for me.  I use this to manage a set of passwords on a trusted machine that I can ssh to.</p>
+<p>It assumes you&#8217;re using a bash-like shell and have a trusted private key available in the account you&#8217;re running it on.</p>
+<pre class="brush: bash">
+
+#!/bin/bash
+
+KEYS=&quot;&quot;
+
+if [ ! -e &quot;$HOME/private&quot; ]
+then
+    mkdir -m 700 &quot;$HOME/private&quot;
+    umask 77 &quot;$HOME/private/&quot;
+fi
+
+# Always delete the unencrypted file at the end of the session. We DO NOT want this hanging around.
+trap &quot;rm -f \&quot;$HOME/private/${USER}_private_store.txt\&quot;; chmod 600 \&quot;$HOME/private/${USER}_private_store.txt\&quot;*; exit&quot; INT TERM EXIT
+
+touch &quot;$HOME/private/${USER}_private_store.txt&quot;
+chmod 600 &quot;$HOME/private/${USER}_private_store.txt&quot;
+
+gpg --decrypt &quot;$HOME/private/${USER}_private_store.txt.asc&quot; &gt; &quot;$HOME/private/${USER}_private_store.txt&quot;
+vim &quot;$HOME/private/${USER}_private_store.txt&quot;
+
+md5sum  &quot;$HOME/private/${USER}_private_store.txt.md5sum.new&quot;
+
+if [ -e &quot;$HOME/private/${USER}_private_store.txt.md5sum&quot; ]
+then
+    if [ &quot;`cmp &quot;$HOME/private/${USER}_private_store.txt.md5sum.new&quot; &quot;$HOME/private/${USER}_private_store.txt.md5sum&quot;`&quot; == &quot;&quot; ]
+    then
+        clear
+        rm -f &quot;$HOME/private/${USER}_private_store.txt.md5sum.new&quot;
+        echo &#039;No changes, not re-encrypting&#039;
+        exit
+    fi
+fi
+
+mv &quot;$HOME/private/${USER}_private_store.txt.md5sum.new&quot; &quot;$HOME/private/${USER}_private_store.txt.md5sum&quot;
+
+echo &#039;File has changed. Re-encrypting. . .&#039;
+gpg -a --encrypt -r $KEYS &quot;$HOME/private/${USER}_private_store.txt&quot;
+clear
+</pre>
+<p>First time it runs it&#8217;ll create a private directory, start vim, and encrypt the text you enter into vim. On subsequent runs it&#8217;ll prompt you for your private key passphrase and repeat the cycle. It won&#8217;t re-encrypt if there haven&#8217;t been any changes.</p>
+<p>I&#8217;m betting wordpress messes up the code, so here&#8217;s the text file: <a href="http://blogs.law.harvard.edu/djcp/files/2010/03/edit_password_safe.sh">edit_password_safe.sh</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2010/03/a-simple-bash-password-safe/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>Play flac, ogg, anything from anywhere on your Pre with Ampache Mobile</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/11/play-flac-ogg-anything-on-your-pre-from-anywhere-with-ampache/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/11/play-flac-ogg-anything-on-your-pre-from-anywhere-with-ampache/#comments</comments>
+		<pubDate>Wed, 18 Nov 2009 00:58:09 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[foss]]></category>
+		<category><![CDATA[palm pre]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=57</guid>
+		<description><![CDATA[I was looking for a way to play my music collection (which is primarily ogg and flac) from anywhere, preferably with some sort of automatic transcoding feature. In the past I&#8217;ve just mounted my music collection via sshfs (more about &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/11/play-flac-ogg-anything-on-your-pre-from-anywhere-with-ampache/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>I was looking for a way to play my music collection (which is primarily ogg and flac) from anywhere, preferably with some sort of automatic transcoding feature. In the past I&#8217;ve just mounted my music collection via sshfs (more about that <a href="http://blogs.law.harvard.edu/djcp/2009/09/cool-stuff-you-can-do-with-ssh-and-fuse/">here</a>) and then played music with some heavyweight app like Amarok. This is fine, but flac files are too large to be streamed realistically.</p>
+<p>So &#8211; along came <a href="http://ampache.org/">Ampache</a> &#8211; an open-source PHP app that is just CHOCK full of features. Just crazy. It&#8217;s got a responsive AJAX interface, creates many different types of playlists, can transcode on the fly to other formats / bitrates and was fairly easy to install. It&#8217;s just awesome, and pretty much any music player can read an Ampache stream.</p>
+<p>THEN I discovered <a href="http://forums.precentral.net/homebrew-apps/200423-ampache-mobile.html">Ampache Mobile</a> (<a href="http://code.google.com/p/ampache-mobile/">google code page</a>) - a FOSS Palm Pre app that hooks into your Ampache instance via XML-RPC. Amazing! I get  flac/ogg files transcoded to 96kbps MP3 streams on-the-fly, allowing me to listen to all my music anywhere I have a Sprint network connection. The app is beautiful, functional, and has made my Pre even more indispensible than it was before.</p>
+<p>If you&#8217;ve got a Pre and a home server with even moderate upload speed, GET THIS WORKING. Now.</p>
+<p><strong>Edit: </strong> Corrected Ampache Mobile link. Thanks, bjgeiser!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/11/play-flac-ogg-anything-on-your-pre-from-anywhere-with-ampache/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>&#8220;Why I use the GPL&#8221; by Zed Shaw</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/07/why-i-use-the-gpl-by-zed-shaw/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/07/why-i-use-the-gpl-by-zed-shaw/#comments</comments>
+		<pubDate>Tue, 14 Jul 2009 17:36:19 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[freedom]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=37</guid>
+		<description><![CDATA[An interesting read that I think is spot-on. I don&#8217;t see any statement that clearly says &#8220;this rant is mainly because I chose the wrong license for Mongrel&#8221;, but beyond that his points about the GPL fostering contributions is 100% &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/07/why-i-use-the-gpl-by-zed-shaw/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p><a href="http://zedshaw.com/blog/2009-07-13.html">An interesting read</a> that I think is spot-on.</p>
+<p>I don&#8217;t see any statement that clearly says &#8220;this rant is mainly because I chose the wrong license for Mongrel&#8221;, but beyond that his points about the GPL fostering contributions is 100% correct.</p>
+<p>I dunno. I tend to choose the &#8220;default license&#8221; of the language / framework I&#8217;m building in: maybe I&#8217;ll need to rethink that.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/07/why-i-use-the-gpl-by-zed-shaw/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>mod_passenger error page includes external stylesheet.</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/03/mod_passenger-error-page-includes-external-stylesheet/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/03/mod_passenger-error-page-includes-external-stylesheet/#comments</comments>
+		<pubDate>Wed, 18 Mar 2009 18:26:26 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[infosec]]></category>
+		<category><![CDATA[rails]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=13</guid>
+		<description><![CDATA[No sir, I don&#8217;t like it. Not at all. The default mod_passenger &#8220;this app wouldn&#8217;t start&#8221; page includes an external CSS file: &#160;http://www.modrails.com/error_pages/1.0/&#8230; which is odd, considering there&#8217;s a bunch of inline CSS. I guess it&#8217;s to include the images. &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/03/mod_passenger-error-page-includes-external-stylesheet/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>No sir, I don&#8217;t like it. Not at all.</p>
+<p>The default mod_passenger &#8220;this app wouldn&#8217;t start&#8221; page includes an external CSS file:<br />
+&nbsp;<a href="http://www.modrails.com/error_pages/1.0/error_page.css" title="http://www.modrails.com/error_pages/1.0/error_page.css" target="_blank">http://www.modrails.com/error_pages/1.0/&#8230;</a></p>
+<p>which is odd, considering there&#8217;s a bunch of inline CSS. I guess it&#8217;s to include the images. . . but it also amounts to disclosing something unintentionally. Yuck.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/03/mod_passenger-error-page-includes-external-stylesheet/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>Difference between &#8220;count&#8221; and &#8220;length&#8221; in Rails.</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/03/difference-between-count-and-length-in-rails/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/03/difference-between-count-and-length-in-rails/#comments</comments>
+		<pubDate>Tue, 10 Mar 2009 01:34:31 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[rails]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=9</guid>
+		<description><![CDATA[I made an interesting discovery the other day between how &#8220;count&#8221; and &#8220;length&#8221; function with an ActiveRecord model, one that can be exploited effectively to speed up an app, as long as you understand the consequences. Invoking &#8220;count&#8221; on an &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/03/difference-between-count-and-length-in-rails/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>I made an interesting discovery the other day between how &#8220;count&#8221; and &#8220;length&#8221; function with an ActiveRecord model, one that can be exploited effectively to speed up an app, as long as you understand the consequences.</p>
+<ul>
+<li>Invoking &#8220;count&#8221; on an array (or dependent relationship) will <strong>always</strong> hit the database, and do something similar to <strong>select count(id) as count_all from contacts</strong> every time you invoke it.</li>
+<li>Invoking &#8220;length&#8221; on an array (or dependent relationship) will only hit the database once. If the relationship has already been populated (say by :include-ing the dependent objects in your Model.find method), the database won&#8217;t get hit at all.</li>
+</ul>
+<p>So &#8211; if you&#8217;re OK not getting a count that&#8217;s 100% accurate at the time of method invocation, &#8220;length&#8221; will do the right thing and run the necessary SQL statement the first time it&#8217;s run. Otherwise, it&#8217;ll give you the array count, which may be out of sync with the database.</p>
+<p>This can have significant performance benefits if you&#8217;re iterating through many records and emitting counts of dependent objects. :include-ing the dependent objects and using &#8220;length&#8221; decreased the SQL expense of a page view 40 fold in one case.</p>
+<p>Once again, it&#8217;s good to know your tools.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/03/difference-between-count-and-length-in-rails/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>Rails.vim</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/02/railsvim/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/02/railsvim/#comments</comments>
+		<pubDate>Tue, 10 Feb 2009 17:16:09 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[rails]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=8</guid>
+		<description><![CDATA[Frequently a tool crops up that makes me feel foolish for not using it &#8211; that tool today is Rails.vim. It rocks in so many ways I am seriously considering having Tim Pope&#8217;s babies &#8211; were such a thing possible. &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/02/railsvim/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>Frequently a tool crops up that makes me feel foolish for not using it &#8211; that tool today is <a href="http://rails.vim.tpope.net/" target="_blank">Rails.vim</a>. It rocks in so many ways I am seriously considering having Tim Pope&#8217;s babies &#8211; were such a thing possible.</p>
+<ul>
+<li>Automatic method completion!</li>
+<li>Automatic switching to fixtures, unit tests, and other context-sensitive actions!</li>
+<li>Excellent syntax highlighting!</li>
+<li>Hooks into your script/ directory!</li>
+</ul>
+<p>And really too much stuff to articulate here. Just use it! Yay for IDEs that don&#8217;t slow you down &#8211; I&#8217;m looking at you, <a href="http://www.aptana.com/rails" target="_blank">RadRails</a>.</p>
+<p>Getting it working under modern <a href="http://www.ubuntu.com" target="_blank">Ubuntus</a> (ubunti?) is stupid easy (as a normal user):</p>
+<pre> sudo aptitude install vim-rails
+ vim-rails-setup
+</pre>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/02/railsvim/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>Rails 2.2, postgres, and testing</title>
+		<link>https://blogs.law.harvard.edu/djcp/2009/01/rails-22-postgres-and-testing/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2009/01/rails-22-postgres-and-testing/#comments</comments>
+		<pubDate>Wed, 14 Jan 2009 20:14:48 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[rails]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=6</guid>
+		<description><![CDATA[If you&#8217;re using Postgresql with Rails 2.2, your testing database user needs to be a &#8220;superuser&#8221; for your tests to run. This is not a good thing. It&#8217;s the equivalent of running as root. But, if you&#8217;ve got a completely &#8230; <a href="https://blogs.law.harvard.edu/djcp/2009/01/rails-22-postgres-and-testing/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p>If you&#8217;re using <a href="http://www.postgresql.org">Postgresql</a> with Rails 2.2, your testing database user needs to be a &#8220;superuser&#8221; for your tests to run. <strong>This is not a good thing.</strong> It&#8217;s the equivalent of running as root. But, if you&#8217;ve got a completely separate development/testing server it&#8217;s better than not being able to test at all.</p>
+<p>If your postgres testing user isn&#8217;t a superuser, you&#8217;ll get errors like:</p>
+<pre>ActiveRecord::StatementInvalid: PGError: ERROR:  permission \
+denied: "RI_ConstraintTrigger_17866" is a system trigger</pre>
+<p>You can create a postgres superuser thusly:</p>
+<pre>&gt; su - postgres
+&gt; psql template1
+&gt; template1=# create user  <strong>your username</strong> superuser;</pre>
+<p>Update the testing stanza of your config/database.yml and you should be good to go.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2009/01/rails-22-postgres-and-testing/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+		<item>
+		<title>GitTorrent &#8211; git repos with distributed file storage.</title>
+		<link>https://blogs.law.harvard.edu/djcp/2008/12/gittorrent-git-repos-with-distributed-file-storage/</link>
+		<comments>https://blogs.law.harvard.edu/djcp/2008/12/gittorrent-git-repos-with-distributed-file-storage/#comments</comments>
+		<pubDate>Thu, 04 Dec 2008 19:35:13 +0000</pubDate>
+		<dc:creator>djcp</dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[code]]></category>
+		<category><![CDATA[freedom]]></category>
+		<category><![CDATA[git]]></category>
+
+		<guid isPermaLink="false">http://blogs.law.harvard.edu/djcp/?p=3</guid>
+		<description><![CDATA[My mind has been sufficiently blown. Free software source code hosting with political resiliency baked right in &#8211; I guess you&#8217;re already immune to political strife when your code is &#8220;free as in speech.&#8221;  This strikes me as fitting the &#8230; <a href="https://blogs.law.harvard.edu/djcp/2008/12/gittorrent-git-repos-with-distributed-file-storage/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+			<content:encoded><![CDATA[<p><a href="http://advogato.org/article/994.html">My mind has been sufficiently blown.</a></p>
+<p>Free software source code hosting with political resiliency baked right in &#8211; I guess you&#8217;re already immune to political strife when your code is &#8220;free as in speech.&#8221;  This strikes me as fitting the &#8220;trust but verify&#8221; adage quite nicely.</p>
+<p>The powers that be aren&#8217;t going to mess with my perfectly legal free software, but &lt;caveats status=&#8221;applied&#8221;&gt;restricting my ability to code what I want isn&#8217;t going to faze me when it&#8217;s replicated across a bajillion nodes. &lt;/caveats&gt;</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blogs.law.harvard.edu/djcp/2008/12/gittorrent-git-repos-with-distributed-file-storage/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<creativeCommons:license>http://creativecommons.org/licenses/by-sa/3.0/us/</creativeCommons:license>
+	</item>
+	</channel>
+</rss>

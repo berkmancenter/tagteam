@@ -18,6 +18,20 @@ namespace :taghub do
     results.each do|row|
       Feed.destroy(row['id'])
     end
+  end
+
+  desc 'Parser tests'
+  task :parser_tests => :environment do
+    ['djcp_code.rss','djcp.rss','doc.atom'].each do|rss_file|
+      puts "Feed is: #{rss_file}"
+      feed = FeedNormalizer::FeedNormalizer.parse(File.open("public/_tests/#{rss_file}"))
+      puts "Title is: #{feed.title}"
+
+      puts
+
+    end
+
 
   end
+
 end
