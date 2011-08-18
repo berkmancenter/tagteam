@@ -26,6 +26,7 @@ namespace :taghub do
       puts "Feed is: #{rss_file}"
       feed = FeedNormalizer::FeedNormalizer.parse(File.open("public/_tests/#{rss_file}"))
       puts "Title is: #{feed.title}"
+      puts "Parser is: #{feed.parser}"
 
       puts
 
