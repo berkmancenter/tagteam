@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/">
+  <channel>
+    <title>Delicious/djcp</title>
+    <link>http://www.delicious.com/djcp</link>
+    <description>bookmarks posted by djcp</description>
+    <atom:link rel="self" type="application/rss+xml" href="http://feeds.delicious.com/v2/rss/djcp?count=100"/>
+    <item>
+      <title>aspic and other delights</title>
+      <pubDate>Fri, 19 Aug 2011 00:56:26 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/6e0504ca698232809a0b5065e8b83031#djcp</guid>
+      <link>http://aspicandotherdelights.tumblr.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/6e0504ca698232809a0b5065e8b83031</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/6e0504ca698232809a0b5065e8b83031</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Solarized - Ethan Schoonover</title>
+      <pubDate>Mon, 15 Aug 2011 12:03:13 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/b2541c745b008224f639c265aa952cd2#djcp</guid>
+      <link>http://ethanschoonover.com/solarized</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/b2541c745b008224f639c265aa952cd2</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/b2541c745b008224f639c265aa952cd2</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">vim</category>
+      <category domain="http://www.delicious.com/djcp/">color</category>
+      <category domain="http://www.delicious.com/djcp/">development</category>
+    </item>
+    <item>
+      <title>sstephenson/rbenv - GitHub</title>
+      <pubDate>Fri, 12 Aug 2011 14:02:09 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/ec3edc04913aa5f6142f5364fbf2857e#djcp</guid>
+      <link>https://github.com/sstephenson/rbenv</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/ec3edc04913aa5f6142f5364fbf2857e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/ec3edc04913aa5f6142f5364fbf2857e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">ruby</category>
+      <category domain="http://www.delicious.com/djcp/">sysadmin</category>
+      <category domain="http://www.delicious.com/djcp/">gem</category>
+    </item>
+    <item>
+      <title>Data Validation « WordPress Codex</title>
+      <pubDate>Thu, 04 Aug 2011 13:20:19 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/3876c8a63c988869153426ef6de5c679#djcp</guid>
+      <link>http://codex.wordpress.org/Data_Validation</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/3876c8a63c988869153426ef6de5c679</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/3876c8a63c988869153426ef6de5c679</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">security</category>
+    </item>
+    <item>
+      <title>the noun project: icons for any object</title>
+      <pubDate>Thu, 04 Aug 2011 12:03:03 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2b98f3a2b0307c69e40297d0743b8a2d#djcp</guid>
+      <link>http://thenounproject.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2b98f3a2b0307c69e40297d0743b8a2d</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2b98f3a2b0307c69e40297d0743b8a2d</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">design</category>
+      <category domain="http://www.delicious.com/djcp/">graphics</category>
+      <category domain="http://www.delicious.com/djcp/">icons</category>
+    </item>
+    <item>
+      <title>One "zip" RUU-Back to stock-2.3 zip removed completely - xda-developers</title>
+      <pubDate>Tue, 02 Aug 2011 13:37:28 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/ae7c2ba4377b981d66f2427c67a45124#djcp</guid>
+      <link>http://forum.xda-developers.com/showthread.php?t=971550</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/ae7c2ba4377b981d66f2427c67a45124</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/ae7c2ba4377b981d66f2427c67a45124</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Ruby Cloud | Ruby Support | Engine Yard</title>
+      <pubDate>Sun, 31 Jul 2011 19:10:30 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/4d09ff70541b632239f83a1a36e5d6f2#djcp</guid>
+      <link>http://www.engineyard.com/podcast/s01e33-arthur-chiu-nathan-esquenazi</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/4d09ff70541b632239f83a1a36e5d6f2</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/4d09ff70541b632239f83a1a36e5d6f2</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>HTML5</title>
+      <pubDate>Thu, 28 Jul 2011 17:04:38 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/097f8f8f9c2eab8cdab5c460cc28244e#djcp</guid>
+      <link>http://dev.w3.org/html5/spec/Overview.html#the-header-element</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/097f8f8f9c2eab8cdab5c460cc28244e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/097f8f8f9c2eab8cdab5c460cc28244e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">html5</category>
+    </item>
+    <item>
+      <title>John Griffin: Run Capybara &amp; Cucumber Features In Internet Explorer On Remote Windows</title>
+      <pubDate>Fri, 22 Jul 2011 13:22:04 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2b9f4197944721dc17985c8d286b6fd5#djcp</guid>
+      <link>http://www.johng.co.uk/2010/10/13/run_capybara_and_cucumber_features_in_internet_explorer_on_remote_windows/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2b9f4197944721dc17985c8d286b6fd5</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2b9f4197944721dc17985c8d286b6fd5</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">rails</category>
+      <category domain="http://www.delicious.com/djcp/">development</category>
+      <category domain="http://www.delicious.com/djcp/">cucumber</category>
+    </item>
+    <item>
+      <title>‪Nature (PBS) - Shirley the Elephant (Part 2)‬‏ - YouTube</title>
+      <pubDate>Thu, 21 Jul 2011 13:07:54 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/999945cfe3b282d6207aa1078b6d79fe#djcp</guid>
+      <link>http://www.youtube.com/watch?v=ZXKxgLvIS6Y&amp;feature=youtu.be</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/999945cfe3b282d6207aa1078b6d79fe</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/999945cfe3b282d6207aa1078b6d79fe</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Connotea: Community Pages: WebAPI</title>
+      <pubDate>Tue, 19 Jul 2011 16:12:21 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/22af7eebe99a6da51b16e1c15c366e74#djcp</guid>
+      <link>http://www.connotea.org/wiki/WebAPI</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/22af7eebe99a6da51b16e1c15c366e74</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/22af7eebe99a6da51b16e1c15c366e74</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">api</category>
+    </item>
+    <item>
+      <title>Optimizing has_role? in acl9 | Pathfinder Software</title>
+      <pubDate>Fri, 15 Jul 2011 18:26:55 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/38ddf7de497155cb15326cb1d86df403#djcp</guid>
+      <link>http://pathfindersoftware.com/2010/03/optimizing-has_role-in-acl9-2/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/38ddf7de497155cb15326cb1d86df403</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/38ddf7de497155cb15326cb1d86df403</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Mos Dub | Max Tannone</title>
+      <pubDate>Thu, 14 Jul 2011 16:00:46 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f4874139efd1a52ceefd7a0b462fe07e#djcp</guid>
+      <link>http://www.maxtannone.com/projects/mosdub/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f4874139efd1a52ceefd7a0b462fe07e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f4874139efd1a52ceefd7a0b462fe07e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">music</category>
+      <category domain="http://www.delicious.com/djcp/">hiphop</category>
+    </item>
+    <item>
+      <title>AuthZProxy § Directory Services Product Team</title>
+      <pubDate>Mon, 11 Jul 2011 20:16:50 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/83e1f89519ea08f43eba7b5b5123496d#djcp</guid>
+      <link>http://isites.harvard.edu/icb/icb.do?keyword=k236&amp;pageid=icb.page14773</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/83e1f89519ea08f43eba7b5b5123496d</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/83e1f89519ea08f43eba7b5b5123496d</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>UserAgentString.com - List of User Agent Strings</title>
+      <pubDate>Mon, 11 Jul 2011 20:16:27 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/87809b31a2e04c1aab05e5bde075ddab#djcp</guid>
+      <link>http://www.useragentstring.com/pages/useragentstring.php</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/87809b31a2e04c1aab05e5bde075ddab</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/87809b31a2e04c1aab05e5bde075ddab</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>CSS1K</title>
+      <pubDate>Mon, 11 Jul 2011 12:47:24 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/df426ffd46b1a4b27f46a45455fd840d#djcp</guid>
+      <link>http://css1k.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/df426ffd46b1a4b27f46a45455fd840d</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/df426ffd46b1a4b27f46a45455fd840d</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">css</category>
+      <category domain="http://www.delicious.com/djcp/">design</category>
+    </item>
+    <item>
+      <title>joshk/devise_imapable - GitHub</title>
+      <pubDate>Fri, 08 Jul 2011 17:19:36 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/dc1ae9e145f582d5ebb0b46a51c3e97f#djcp</guid>
+      <link>https://github.com/joshk/devise_imapable</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/dc1ae9e145f582d5ebb0b46a51c3e97f</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/dc1ae9e145f582d5ebb0b46a51c3e97f</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Downloads | PIN Reference</title>
+      <pubDate>Fri, 08 Jul 2011 17:19:16 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0d93671b9257e5d14ea6314fe97e089d#djcp</guid>
+      <link>http://reference.pin.harvard.edu/dev-downloads</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0d93671b9257e5d14ea6314fe97e089d</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0d93671b9257e5d14ea6314fe97e089d</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>TMBG: FREE TUNES PAGE</title>
+      <pubDate>Thu, 07 Jul 2011 20:33:15 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/7950ee37a328087937799329b2f3ce5a#djcp</guid>
+      <link>http://www.tmbg.com/thanks.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/7950ee37a328087937799329b2f3ce5a</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/7950ee37a328087937799329b2f3ce5a</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">mp3</category>
+      <category domain="http://www.delicious.com/djcp/">free</category>
+      <category domain="http://www.delicious.com/djcp/">music</category>
+    </item>
+    <item>
+      <title>Mojolicious Web Framework - Join the Perl revolution!</title>
+      <pubDate>Thu, 07 Jul 2011 13:33:35 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/df2c89e83e8346c59a992d0f011c262c#djcp</guid>
+      <link>http://www.mojolicious.org/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/df2c89e83e8346c59a992d0f011c262c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/df2c89e83e8346c59a992d0f011c262c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">perl</category>
+      <category domain="http://www.delicious.com/djcp/">development</category>
+      <category domain="http://www.delicious.com/djcp/">web</category>
+      <category domain="http://www.delicious.com/djcp/">opensource</category>
+    </item>
+    <item>
+      <title>I actually tried learning Rails | Jeremy Zawodny's blog</title>
+      <pubDate>Thu, 07 Jul 2011 13:27:11 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/8968fe36d6dda4e20b8f4c4926c53e6c#djcp</guid>
+      <link>http://blog.zawodny.com/2011/06/13/i-actually-tried-learning-rails/?utm_source=rubyweekly&amp;utm_medium=email</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/8968fe36d6dda4e20b8f4c4926c53e6c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/8968fe36d6dda4e20b8f4c4926c53e6c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>The Chopped-Off Hands of Star Wars</title>
+      <pubDate>Sun, 03 Jul 2011 22:33:24 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/86b5ddedc691de2ba2c309e4463ff259#djcp</guid>
+      <link>http://www.runleiarun.com/choppedoffhands/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/86b5ddedc691de2ba2c309e4463ff259</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/86b5ddedc691de2ba2c309e4463ff259</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Paper.js — Paper.js</title>
+      <pubDate>Fri, 01 Jul 2011 17:12:20 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f1c04cea4cad67c7e173d95992e72d10#djcp</guid>
+      <link>http://paperjs.org/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f1c04cea4cad67c7e173d95992e72d10</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f1c04cea4cad67c7e173d95992e72d10</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">javascript</category>
+    </item>
+    <item>
+      <title>wpmu - wordpress wp_list_categories problem - Stack Overflow</title>
+      <pubDate>Thu, 30 Jun 2011 17:07:01 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/d3d25c36ab5c8bcb03d2d67114f8825b#djcp</guid>
+      <link>http://stackoverflow.com/questions/3287603/wordpress-wp-list-categories-problem</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/d3d25c36ab5c8bcb03d2d67114f8825b</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/d3d25c36ab5c8bcb03d2d67114f8825b</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>YouTube - ‪How-To: Bottle Cutting‬‏</title>
+      <pubDate>Thu, 30 Jun 2011 16:14:30 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/84c6e4bec51e73de0e3a72e9f88925fd#djcp</guid>
+      <link>http://www.youtube.com/watch?v=ODJYutJERe0&amp;feature=player_embedded#at=155</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/84c6e4bec51e73de0e3a72e9f88925fd</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/84c6e4bec51e73de0e3a72e9f88925fd</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Spritely.net</title>
+      <pubDate>Wed, 29 Jun 2011 16:24:26 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2c94fd2e57f4154fbd199537c0792b57#djcp</guid>
+      <link>http://www.spritely.net/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2c94fd2e57f4154fbd199537c0792b57</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2c94fd2e57f4154fbd199537c0792b57</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">javascript</category>
+      <category domain="http://www.delicious.com/djcp/">jquery</category>
+    </item>
+    <item>
+      <title>Dill Pickles Recipe : Alton Brown : Food Network</title>
+      <pubDate>Wed, 29 Jun 2011 01:31:31 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/45ee7b430e8f51153cfa5f45b66788ef#djcp</guid>
+      <link>http://www.foodnetwork.com/recipes/alton-brown/dill-pickles-recipe/index.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/45ee7b430e8f51153cfa5f45b66788ef</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/45ee7b430e8f51153cfa5f45b66788ef</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">pickles</category>
+      <category domain="http://www.delicious.com/djcp/">recipes</category>
+    </item>
+    <item>
+      <title>5 Movie Fan Theories That Make More Sense Than the Movie | Cracked.com</title>
+      <pubDate>Tue, 28 Jun 2011 12:11:24 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f850179c56707e04d93140d624545564#djcp</guid>
+      <link>http://www.cracked.com/article_19266_5-movie-fan-theories-that-make-more-sense-than-movie.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f850179c56707e04d93140d624545564</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f850179c56707e04d93140d624545564</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">funny</category>
+      <category domain="http://www.delicious.com/djcp/">movies</category>
+      <category domain="http://www.delicious.com/djcp/">article</category>
+    </item>
+    <item>
+      <title>Tabouli Recipe : : Food Network</title>
+      <pubDate>Mon, 27 Jun 2011 23:43:39 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/69377622ea8cd07c8e4dcca58c244dfd#djcp</guid>
+      <link>http://www.foodnetwork.com/recipes/diners-drive-ins-and-dives/tabouli-recipe/index.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/69377622ea8cd07c8e4dcca58c244dfd</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/69377622ea8cd07c8e4dcca58c244dfd</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">tabouli</category>
+      <category domain="http://www.delicious.com/djcp/">recipe</category>
+    </item>
+    <item>
+      <title>Scratch | Home | imagine, program, share</title>
+      <pubDate>Fri, 24 Jun 2011 19:30:11 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0f749be0317f7225485661e0d20aa4fb#djcp</guid>
+      <link>http://scratch.mit.edu/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0f749be0317f7225485661e0d20aa4fb</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0f749be0317f7225485661e0d20aa4fb</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Justice with Michael Sandel - Online Harvard Course Exploring Justice, Equality, Democracy, and Citizenship</title>
+      <pubDate>Wed, 22 Jun 2011 22:11:10 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f15db6ef92a08a2a9391d71bc55a00a8#djcp</guid>
+      <link>http://www.justiceharvard.org/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f15db6ef92a08a2a9391d71bc55a00a8</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f15db6ef92a08a2a9391d71bc55a00a8</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">philosophy</category>
+      <category domain="http://www.delicious.com/djcp/">harvard</category>
+      <category domain="http://www.delicious.com/djcp/">justice</category>
+    </item>
+    <item>
+      <title>cck not saving field values | DevHeads.net</title>
+      <pubDate>Tue, 21 Jun 2011 17:42:52 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/dce469bb0fcbd11f65028e71270567c1#djcp</guid>
+      <link>http://www.devheads.net/web/drupal/development/development-cck-not-saving-field-values.htm</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/dce469bb0fcbd11f65028e71270567c1</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/dce469bb0fcbd11f65028e71270567c1</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>UC Statewide Integrated Pest Management Program</title>
+      <pubDate>Thu, 16 Jun 2011 12:26:26 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/eb65ad6053e0335fb2e7aec9bc1a1f69#djcp</guid>
+      <link>http://www.ipm.ucdavis.edu/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/eb65ad6053e0335fb2e7aec9bc1a1f69</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/eb65ad6053e0335fb2e7aec9bc1a1f69</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">gardening</category>
+      <category domain="http://www.delicious.com/djcp/">ipm</category>
+    </item>
+    <item>
+      <title>GOG.com</title>
+      <pubDate>Wed, 15 Jun 2011 13:20:50 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/5ae3ab65c82aaca33a83e52cefacccc3#djcp</guid>
+      <link>http://www.gog.com/en/frontpage/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/5ae3ab65c82aaca33a83e52cefacccc3</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/5ae3ab65c82aaca33a83e52cefacccc3</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">gaming</category>
+      <category domain="http://www.delicious.com/djcp/">cheap</category>
+      <category domain="http://www.delicious.com/djcp/">retro</category>
+    </item>
+    <item>
+      <title>Pushing an existing git repository to SVN - Stack Overflow</title>
+      <pubDate>Wed, 15 Jun 2011 13:17:28 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2d46f2a74fdbafc1d02aacdbc52a5805#djcp</guid>
+      <link>http://stackoverflow.com/questions/661018/pushing-an-existing-git-repository-to-svn</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2d46f2a74fdbafc1d02aacdbc52a5805</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2d46f2a74fdbafc1d02aacdbc52a5805</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">git</category>
+      <category domain="http://www.delicious.com/djcp/">subversion</category>
+    </item>
+    <item>
+      <title>Dynamically Configured Mass Virtual Hosting - Apache HTTP Server</title>
+      <pubDate>Wed, 08 Jun 2011 00:29:04 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/427eecae475e24933dd799b93f50c3cc#djcp</guid>
+      <link>http://httpd.apache.org/docs/2.0/vhosts/mass.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/427eecae475e24933dd799b93f50c3cc</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/427eecae475e24933dd799b93f50c3cc</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">apache</category>
+      <category domain="http://www.delicious.com/djcp/">virtual</category>
+    </item>
+    <item>
+      <title>Using the theme layer (Drupal 6.x) | drupal.org</title>
+      <pubDate>Tue, 31 May 2011 13:47:11 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/1e9de1eb003d1771dee75bd668fecf6f#djcp</guid>
+      <link>http://drupal.org/node/165706</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/1e9de1eb003d1771dee75bd668fecf6f</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/1e9de1eb003d1771dee75bd668fecf6f</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal</category>
+    </item>
+    <item>
+      <title>Views help index | Views online help</title>
+      <pubDate>Tue, 31 May 2011 13:46:45 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0bae1097a89d099b8b0d42cdccc9f685#djcp</guid>
+      <link>http://views-help.doc.logrus.com/admin/advanced_help/views</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0bae1097a89d099b8b0d42cdccc9f685</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0bae1097a89d099b8b0d42cdccc9f685</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Programmatically handling a view in Drupal - Stack Overflow</title>
+      <pubDate>Tue, 31 May 2011 13:45:37 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/b7a9bd081ba89b65052625bb9acc8863#djcp</guid>
+      <link>http://stackoverflow.com/questions/3674273/programmatically-handling-a-view-in-drupal</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/b7a9bd081ba89b65052625bb9acc8863</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/b7a9bd081ba89b65052625bb9acc8863</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Products / Pangolin - Automatic SQL injec_Pangolin, automated SQL Injection, SQL Injection, Automatic SQL injection</title>
+      <pubDate>Tue, 31 May 2011 00:15:07 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/b497b7e2534dd80ea89b2b1bd45c46f6#djcp</guid>
+      <link>http://www.nosec-inc.com/en/products/pangolin/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/b497b7e2534dd80ea89b2b1bd45c46f6</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/b497b7e2534dd80ea89b2b1bd45c46f6</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Havij v1.14 Advanced SQL Injection</title>
+      <pubDate>Tue, 31 May 2011 00:13:18 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/9622d1c2630c58b154b7bd34f39548e7#djcp</guid>
+      <link>http://www.itsecteam.com/en/projects/project1.htm</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/9622d1c2630c58b154b7bd34f39548e7</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/9622d1c2630c58b154b7bd34f39548e7</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>How to Lay a Brick Walkway | Video | Driveway &amp; Walkway | Exteriors | This Old House</title>
+      <pubDate>Fri, 27 May 2011 01:38:40 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/393b48019df7b56980adf6652d7c7669#djcp</guid>
+      <link>http://www.thisoldhouse.com/toh/video/0,,20057405,00.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/393b48019df7b56980adf6652d7c7669</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/393b48019df7b56980adf6652d7c7669</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Growing Apple Trees In The Home Garden</title>
+      <pubDate>Thu, 26 May 2011 12:35:27 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/4d9f9a3d106abb8e7fe7001a93f3fa51#djcp</guid>
+      <link>http://www.ces.ncsu.edu/depts/hort/hil/hil-8301.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/4d9f9a3d106abb8e7fe7001a93f3fa51</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/4d9f9a3d106abb8e7fe7001a93f3fa51</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>growing peach trees</title>
+      <pubDate>Thu, 26 May 2011 12:30:09 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/96ca10226d014eeb18e8fcda124c16dc#djcp</guid>
+      <link>http://www.greenwoodnursery.com/page.cfm/5667</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/96ca10226d014eeb18e8fcda124c16dc</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/96ca10226d014eeb18e8fcda124c16dc</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>growing pear trees</title>
+      <pubDate>Thu, 26 May 2011 12:27:32 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/1f2fb8ccc8c381cfae2fe34991fe3ceb#djcp</guid>
+      <link>http://www.greenwoodnursery.com/page.cfm/5781</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/1f2fb8ccc8c381cfae2fe34991fe3ceb</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/1f2fb8ccc8c381cfae2fe34991fe3ceb</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Non-Toxic Apple Maggot Traps - Eartheasy.com Solutions for ...</title>
+      <pubDate>Sun, 22 May 2011 23:15:30 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/eca5ba605fba549cb84cbf066aed9616#djcp</guid>
+      <link>http://eartheasy.com/non-toxic-apple-maggot-traps</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/eca5ba605fba549cb84cbf066aed9616</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/eca5ba605fba549cb84cbf066aed9616</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">gardening</category>
+      <category domain="http://www.delicious.com/djcp/">apple</category>
+      <category domain="http://www.delicious.com/djcp/">pests</category>
+    </item>
+    <item>
+      <title>Optimize Your Links For Print Using CSS: Show The URL</title>
+      <pubDate>Sat, 21 May 2011 02:33:48 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/7e4cae29f16482707324646abd9e3d7f#djcp</guid>
+      <link>http://davidwalsh.name/optimize-your-links-for-print-using-css-show-url</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/7e4cae29f16482707324646abd9e3d7f</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/7e4cae29f16482707324646abd9e3d7f</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">css</category>
+    </item>
+    <item>
+      <title>Speed up Google Chrome by enabling hardware acceleration and pre-rendering</title>
+      <pubDate>Fri, 20 May 2011 18:46:37 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/29af2ce19327f5a4e50025af9dbbd375#djcp</guid>
+      <link>http://downloadsquad.switched.com/2011/03/03/speed-up-google-chrome-by-enabling-hardware-acceleration-and-pre/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/29af2ce19327f5a4e50025af9dbbd375</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/29af2ce19327f5a4e50025af9dbbd375</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>MrMEEE/bumblebee at master - GitHub</title>
+      <pubDate>Wed, 18 May 2011 15:19:20 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/b0e4b15d5c4151131f92580f1a1ced8c#djcp</guid>
+      <link>https://github.com/MrMEEE/bumblebee#readme</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/b0e4b15d5c4151131f92580f1a1ced8c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/b0e4b15d5c4151131f92580f1a1ced8c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Drupal 6 Views Templates | #! code</title>
+      <pubDate>Tue, 17 May 2011 19:36:02 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/d7f8f8678feee77f25c18205d8d8e9e5#djcp</guid>
+      <link>http://www.hashbangcode.com/blog/drupal-6-views-templates-544.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/d7f8f8678feee77f25c18205d8d8e9e5</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/d7f8f8678feee77f25c18205d8d8e9e5</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">views</category>
+      <category domain="http://www.delicious.com/djcp/">drupal6</category>
+    </item>
+    <item>
+      <title>Netcat Tar Pipe</title>
+      <pubDate>Tue, 17 May 2011 02:24:10 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/1f093c7eaf13a9458c515904d495d4cf#djcp</guid>
+      <link>http://compsoc.dur.ac.uk/~djw/tarpipe.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/1f093c7eaf13a9458c515904d495d4cf</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/1f093c7eaf13a9458c515904d495d4cf</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">netcat</category>
+    </item>
+    <item>
+      <title>Upgrading Drupal 5 to 6 | Ishmael Sanchez</title>
+      <pubDate>Mon, 16 May 2011 01:11:50 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/4fee5b5717525890ff4645865ce33186#djcp</guid>
+      <link>http://www.ishmaelsanchez.com/upgrading-drupal-5-6</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/4fee5b5717525890ff4645865ce33186</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/4fee5b5717525890ff4645865ce33186</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Converting Drupal 5 Themes to Drupal 6 | Ishmael Sanchez</title>
+      <pubDate>Mon, 16 May 2011 01:11:37 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f3562491f1860ec55208409a6f9313e4#djcp</guid>
+      <link>http://www.ishmaelsanchez.com/converting-drupal-5-themes-drupal-6</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f3562491f1860ec55208409a6f9313e4</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f3562491f1860ec55208409a6f9313e4</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Open source anti-theft solution for Mac, PCs &amp; Phones – Prey</title>
+      <pubDate>Sat, 14 May 2011 18:30:45 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/12d0c1e08f56b44241b7a6999b7e7dc0#djcp</guid>
+      <link>http://preyproject.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/12d0c1e08f56b44241b7a6999b7e7dc0</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/12d0c1e08f56b44241b7a6999b7e7dc0</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Custom post types in WordPress</title>
+      <pubDate>Sat, 14 May 2011 01:41:29 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/883922ae9511d6fb66f3705ad9cbf00f#djcp</guid>
+      <link>http://justintadlock.com/archives/2010/04/29/custom-post-types-in-wordpress</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/883922ae9511d6fb66f3705ad9cbf00f</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/883922ae9511d6fb66f3705ad9cbf00f</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">tutorial</category>
+    </item>
+    <item>
+      <title>Starting Views 2 Documentation | groups.drupal.org</title>
+      <pubDate>Fri, 13 May 2011 20:04:55 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/abcf03f3d9962de91760dcb756923139#djcp</guid>
+      <link>http://groups.drupal.org/node/10129</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/abcf03f3d9962de91760dcb756923139</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/abcf03f3d9962de91760dcb756923139</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>RSpec 2 – Loading All Fixtures Everytime in Rails</title>
+      <pubDate>Fri, 13 May 2011 19:53:22 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/066e987a0905d4fac8bb7cd66babd2a3#djcp</guid>
+      <link>http://code.prashantrajan.com/2010/12/rspec-2-loading-all-fixtures-everytime-in-rails.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/066e987a0905d4fac8bb7cd66babd2a3</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/066e987a0905d4fac8bb7cd66babd2a3</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Cats. Where they do not belong. - Page 1 of 162</title>
+      <pubDate>Fri, 13 May 2011 02:50:03 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/c550b40942f3ef5f0fc09c48c7ab1ead#djcp</guid>
+      <link>http://getoutoftherecat.tumblr.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/c550b40942f3ef5f0fc09c48c7ab1ead</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/c550b40942f3ef5f0fc09c48c7ab1ead</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Add $zebra class to li tags for ul.menu. | drupal.org</title>
+      <pubDate>Thu, 12 May 2011 17:49:35 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/62be8852e7a9631fac5e3136f029537f#djcp</guid>
+      <link>http://drupal.org/node/249598</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/62be8852e7a9631fac5e3136f029537f</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/62be8852e7a9631fac5e3136f029537f</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal</category>
+    </item>
+    <item>
+      <title>YouTube - Vegan Black Metal Chef Episode 1 Pad Thai</title>
+      <pubDate>Thu, 12 May 2011 17:36:25 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/d2f35b35445bb244a9195d2cd489ea2d#djcp</guid>
+      <link>http://www.youtube.com/watch?v=CeZlih4DDNg&amp;feature=youtu.be</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/d2f35b35445bb244a9195d2cd489ea2d</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/d2f35b35445bb244a9195d2cd489ea2d</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Setting up variables for use in a template (preprocess and process functions) | drupal.org</title>
+      <pubDate>Thu, 12 May 2011 16:54:35 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/3b485cdc773506cbf8100af9b78e6d4e#djcp</guid>
+      <link>http://drupal.org/node/223430</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/3b485cdc773506cbf8100af9b78e6d4e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/3b485cdc773506cbf8100af9b78e6d4e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal</category>
+      <category domain="http://www.delicious.com/djcp/">reference</category>
+    </item>
+    <item>
+      <title>Use taxonomy_vocabulary_load() instead of taxonomy_get_vocabulary() | drupal.org</title>
+      <pubDate>Wed, 11 May 2011 19:50:06 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/ea27dbe28e751853adac1c27be440b11#djcp</guid>
+      <link>http://drupal.org/node/347919</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/ea27dbe28e751853adac1c27be440b11</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/ea27dbe28e751853adac1c27be440b11</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">upgrade</category>
+      <category domain="http://www.delicious.com/djcp/">drupal5</category>
+    </item>
+    <item>
+      <title>Fatal error: Unsupported operand types in common.inc on line 1592</title>
+      <pubDate>Wed, 11 May 2011 19:49:03 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/b1aae9ff86d68e1beb7da2c3350a174c#djcp</guid>
+      <link>http://drupal.org/node/739158</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/b1aae9ff86d68e1beb7da2c3350a174c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/b1aae9ff86d68e1beb7da2c3350a174c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal5</category>
+      <category domain="http://www.delicious.com/djcp/">upgrade</category>
+    </item>
+    <item>
+      <title>JT Fridsma | The Fellowship</title>
+      <pubDate>Wed, 11 May 2011 12:25:19 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/1eade5bbef179f8b509412c41e02f0df#djcp</guid>
+      <link>http://www.jtfridsma.com/design/the-fellowship/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/1eade5bbef179f8b509412c41e02f0df</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/1eade5bbef179f8b509412c41e02f0df</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Upgrade Status | drupal.org</title>
+      <pubDate>Tue, 10 May 2011 21:59:57 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0a94476cbb36875d3064738fce5bc935#djcp</guid>
+      <link>http://drupal.org/project/upgrade_status</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0a94476cbb36875d3064738fce5bc935</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0a94476cbb36875d3064738fce5bc935</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal</category>
+      <category domain="http://www.delicious.com/djcp/">upgrade</category>
+    </item>
+    <item>
+      <title>How to Upgrade from Drupal 5 to Drupal 6 - Step 1: Planning | Be Circle</title>
+      <pubDate>Tue, 10 May 2011 21:55:24 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/a8ab67eb4e82054e6d30dd48c04b101b#djcp</guid>
+      <link>http://becircle.com/how_upgrade_drupal_5_drupal_6</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/a8ab67eb4e82054e6d30dd48c04b101b</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/a8ab67eb4e82054e6d30dd48c04b101b</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">drupal</category>
+      <category domain="http://www.delicious.com/djcp/">upgrade</category>
+    </item>
+    <item>
+      <title>DebianEeePC/Model/1215N - Debian Wiki</title>
+      <pubDate>Sat, 07 May 2011 20:33:05 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f8dd6c1c71beb90307b13892d059df7c#djcp</guid>
+      <link>http://wiki.debian.org/DebianEeePC/Model/1215N</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f8dd6c1c71beb90307b13892d059df7c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f8dd6c1c71beb90307b13892d059df7c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Microjs: Fantastic Micro-Frameworks and Micro-Libraries for Fun and Profit!</title>
+      <pubDate>Wed, 04 May 2011 03:24:49 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/3c7a6c76b4e62d79d07f41065b318369#djcp</guid>
+      <link>http://microjs.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/3c7a6c76b4e62d79d07f41065b318369</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/3c7a6c76b4e62d79d07f41065b318369</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">javascript</category>
+      <category domain="http://www.delicious.com/djcp/">framework</category>
+    </item>
+    <item>
+      <title>Roots WordPress Theme | Rapidly create sites with HTML5 Boilerplate and Blueprint CSS or 960.gs</title>
+      <pubDate>Wed, 04 May 2011 03:21:19 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f0028fe915c8ac599f2d23157f5025d2#djcp</guid>
+      <link>http://www.rootstheme.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f0028fe915c8ac599f2d23157f5025d2</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f0028fe915c8ac599f2d23157f5025d2</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">html5</category>
+      <category domain="http://www.delicious.com/djcp/">framework</category>
+    </item>
+    <item>
+      <title>Whisper Systems</title>
+      <pubDate>Tue, 03 May 2011 21:36:58 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/9940d91ea876a0e48bf1ec64f9b08a70#djcp</guid>
+      <link>http://www.whispersys.com/whispermonitor.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/9940d91ea876a0e48bf1ec64f9b08a70</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/9940d91ea876a0e48bf1ec64f9b08a70</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">android</category>
+      <category domain="http://www.delicious.com/djcp/">security</category>
+      <category domain="http://www.delicious.com/djcp/">network</category>
+    </item>
+    <item>
+      <title>Obama and the End of Al-Qaeda | Informed Comment</title>
+      <pubDate>Mon, 02 May 2011 21:17:36 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/70cd150ad998a0de828a74e715fa44cc#djcp</guid>
+      <link>http://www.juancole.com/2011/05/obama-and-the-end-of-al-qaeda.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/70cd150ad998a0de828a74e715fa44cc</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/70cd150ad998a0de828a74e715fa44cc</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">politics</category>
+      <category domain="http://www.delicious.com/djcp/">obama</category>
+    </item>
+    <item>
+      <title>Importing a Git tree into a Subversion repository – Ikke's blog</title>
+      <pubDate>Fri, 29 Apr 2011 18:57:35 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0dac6734f1f99f2215712518157121ca#djcp</guid>
+      <link>http://eikke.com/importing-a-git-tree-into-a-subversion-repository/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0dac6734f1f99f2215712518157121ca</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0dac6734f1f99f2215712518157121ca</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">git</category>
+    </item>
+    <item>
+      <title>WordPress › WordPress Plugins</title>
+      <pubDate>Fri, 29 Apr 2011 16:48:00 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/20c447f696e7aaee21e4c53b1a6988f9#djcp</guid>
+      <link>http://wordpress.org/extend/plugins/about/svn/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/20c447f696e7aaee21e4c53b1a6988f9</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/20c447f696e7aaee21e4c53b1a6988f9</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">development</category>
+    </item>
+    <item>
+      <title>jQuery.fn.each vs. jQuery.fn.quickEach Â· jsPerf</title>
+      <pubDate>Wed, 27 Apr 2011 23:54:34 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/c33b0fa15f698a758f176f326123239a#djcp</guid>
+      <link>http://jsperf.com/jquery-each-vs-quickeach#run</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/c33b0fa15f698a758f176f326123239a</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/c33b0fa15f698a758f176f326123239a</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">jquery</category>
+    </item>
+    <item>
+      <title>Fortean Times Magazine | Weird News | Strange Pictures | Videos</title>
+      <pubDate>Tue, 26 Apr 2011 02:36:04 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/9a9f47e6c7f6f5c4038f238b7e8f563b#djcp</guid>
+      <link>http://www.forteantimes.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/9a9f47e6c7f6f5c4038f238b7e8f563b</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/9a9f47e6c7f6f5c4038f238b7e8f563b</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">news</category>
+      <category domain="http://www.delicious.com/djcp/">culture</category>
+      <category domain="http://www.delicious.com/djcp/">paranormal</category>
+    </item>
+    <item>
+      <title>The complete guide to creating widgets in WordPress 2.8</title>
+      <pubDate>Thu, 21 Apr 2011 03:39:10 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/af0a584b41f99469ca3ede365b7b695e#djcp</guid>
+      <link>http://justintadlock.com/archives/2009/05/26/the-complete-guide-to-creating-widgets-in-wordpress-28</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/af0a584b41f99469ca3ede365b7b695e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/af0a584b41f99469ca3ede365b7b695e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">tutorial</category>
+    </item>
+    <item>
+      <title>PhantomJS: Headless WebKit with JavaScript API</title>
+      <pubDate>Wed, 20 Apr 2011 20:21:14 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/16c2d3b98336f4bcf342e968303f9ada#djcp</guid>
+      <link>http://www.phantomjs.org/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/16c2d3b98336f4bcf342e968303f9ada</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/16c2d3b98336f4bcf342e968303f9ada</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">javascript</category>
+      <category domain="http://www.delicious.com/djcp/">testing</category>
+      <category domain="http://www.delicious.com/djcp/">browser</category>
+    </item>
+    <item>
+      <title>[Win32 Tool]GUI Root with Check and Recovery! - xda-developers</title>
+      <pubDate>Wed, 20 Apr 2011 01:13:01 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/e3170b67e260f0599c7bb66a3db38b44#djcp</guid>
+      <link>http://forum.xda-developers.com/showthread.php?t=976605</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/e3170b67e260f0599c7bb66a3db38b44</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/e3170b67e260f0599c7bb66a3db38b44</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Rhomobile | Rhodes</title>
+      <pubDate>Tue, 19 Apr 2011 14:53:25 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2f7cb5e8bfe8c777a2a39027b3ff2971#djcp</guid>
+      <link>http://rhomobile.com/products/rhodes/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2f7cb5e8bfe8c777a2a39027b3ff2971</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2f7cb5e8bfe8c777a2a39027b3ff2971</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">mobile</category>
+      <category domain="http://www.delicious.com/djcp/">ruby</category>
+      <category domain="http://www.delicious.com/djcp/">framework</category>
+    </item>
+    <item>
+      <title>Brainman: Inside the Mind of an Autistic Savant | Brain Pickings</title>
+      <pubDate>Wed, 13 Apr 2011 17:58:40 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/7695dafcfa0ce15c1b8273930ed1d619#djcp</guid>
+      <link>http://www.brainpickings.org/index.php/2011/03/08/brainman-daniel-tammet-documentary/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/7695dafcfa0ce15c1b8273930ed1d619</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/7695dafcfa0ce15c1b8273930ed1d619</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>WordPress › JSON API « WordPress Plugins</title>
+      <pubDate>Mon, 11 Apr 2011 21:00:10 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/0412f1df9c78ea607bb7113e1c28bb2c#djcp</guid>
+      <link>http://wordpress.org/extend/plugins/json-api/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/0412f1df9c78ea607bb7113e1c28bb2c</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/0412f1df9c78ea607bb7113e1c28bb2c</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">wordpress</category>
+      <category domain="http://www.delicious.com/djcp/">ajax</category>
+      <category domain="http://www.delicious.com/djcp/">api</category>
+    </item>
+    <item>
+      <title>Sator Square - Wikipedia, the free encyclopedia</title>
+      <pubDate>Mon, 11 Apr 2011 19:30:17 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/30a5ca086d3ba4315620e9269f229803#djcp</guid>
+      <link>http://en.wikipedia.org/wiki/Sator_Square</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/30a5ca086d3ba4315620e9269f229803</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/30a5ca086d3ba4315620e9269f229803</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">design</category>
+      <category domain="http://www.delicious.com/djcp/">writing</category>
+    </item>
+    <item>
+      <title>Laura Noonan (Gordon) | LinkedIn</title>
+      <pubDate>Mon, 11 Apr 2011 17:54:39 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/9003e7978ee9f890d8ba79e480e4cd34#djcp</guid>
+      <link>http://www.linkedin.com/in/projectplay</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/9003e7978ee9f890d8ba79e480e4cd34</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/9003e7978ee9f890d8ba79e480e4cd34</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Sorting algorithms as dances</title>
+      <pubDate>Mon, 11 Apr 2011 03:33:36 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/f5254096701bca8dba70b8995ffeb94a#djcp</guid>
+      <link>http://www.i-programmer.info/news/150-training-a-education/2255-sorting-algorithms-as-dances.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/f5254096701bca8dba70b8995ffeb94a</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/f5254096701bca8dba70b8995ffeb94a</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">algorithms</category>
+      <category domain="http://www.delicious.com/djcp/">dances</category>
+    </item>
+    <item>
+      <title>PHP Call a instance method with call_user_func within the same class. - Stack Overflow</title>
+      <pubDate>Mon, 11 Apr 2011 00:33:50 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/1803f4078a85d6d388b9b028cee0ad19#djcp</guid>
+      <link>http://stackoverflow.com/questions/4288105/php-call-a-instance-method-with-call-user-func-within-the-same-class</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/1803f4078a85d6d388b9b028cee0ad19</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/1803f4078a85d6d388b9b028cee0ad19</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>The Cicada Principle and Why It Matters to Web Designers » HTML &amp; CSS, Layout » Design Festival</title>
+      <pubDate>Thu, 07 Apr 2011 19:24:46 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/02e106107a08faabc6b565de2f3cc9af#djcp</guid>
+      <link>http://designfestival.com/the-cicada-principle-and-why-it-matters-to-web-designers/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/02e106107a08faabc6b565de2f3cc9af</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/02e106107a08faabc6b565de2f3cc9af</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">css</category>
+      <category domain="http://www.delicious.com/djcp/">webdesign</category>
+    </item>
+    <item>
+      <title>Science fiction movie produced in 48 hours - Boing Boing</title>
+      <pubDate>Wed, 06 Apr 2011 13:25:32 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/c7f27f10740abc68d5c1d0bd658771f3#djcp</guid>
+      <link>http://www.boingboing.net/2011/04/06/science-fiction-movi-1.html?dlvrit=36761</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/c7f27f10740abc68d5c1d0bd658771f3</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/c7f27f10740abc68d5c1d0bd658771f3</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Sarah Activated: Bye-Bye Daddy Badges</title>
+      <pubDate>Mon, 04 Apr 2011 19:23:03 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/c69e3069595a61e5fe07e11babb3b0af#djcp</guid>
+      <link>http://sarahactivated.blogspot.com/2011/04/bye-bye-daddy-badges.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/c69e3069595a61e5fe07e11babb3b0af</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/c69e3069595a61e5fe07e11babb3b0af</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>why does the cat pee every where now when it never used to? - Q&amp;A</title>
+      <pubDate>Sun, 03 Apr 2011 13:36:21 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/44901b924cdfd00e70165d666965fd92#djcp</guid>
+      <link>http://www.faqs.org/qa/qa-13836.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/44901b924cdfd00e70165d666965fd92</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/44901b924cdfd00e70165d666965fd92</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Page Speed Online</title>
+      <pubDate>Sat, 02 Apr 2011 04:23:41 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/83b87c2c4c0195fc9f7f9c5d9b810dea#djcp</guid>
+      <link>http://pagespeed.googlelabs.com/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/83b87c2c4c0195fc9f7f9c5d9b810dea</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/83b87c2c4c0195fc9f7f9c5d9b810dea</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>JPEG Club</title>
+      <pubDate>Sat, 02 Apr 2011 04:22:58 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/c95c35334528254360e338a1486ed5a5#djcp</guid>
+      <link>http://jpegclub.org/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/c95c35334528254360e338a1486ed5a5</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/c95c35334528254360e338a1486ed5a5</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">compression</category>
+    </item>
+    <item>
+      <title>Home - GitHub</title>
+      <pubDate>Thu, 31 Mar 2011 14:56:58 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/66877b7d053658f23c4fdfc4561bb8dc#djcp</guid>
+      <link>https://github.com/aslakhellesoy/cucumber/wiki</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/66877b7d053658f23c4fdfc4561bb8dc</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/66877b7d053658f23c4fdfc4561bb8dc</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>Rodrigo Rosenberg’s Murder in Guatemala : The New Yorker</title>
+      <pubDate>Wed, 30 Mar 2011 14:41:48 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/29404369467524d0c11b8558fee8d593#djcp</guid>
+      <link>http://www.newyorker.com/reporting/2011/04/04/110404fa_fact_grann?currentPage=all</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/29404369467524d0c11b8558fee8d593</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/29404369467524d0c11b8558fee8d593</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">toread</category>
+    </item>
+    <item>
+      <title>auxesis/cucumber-nagios - GitHub</title>
+      <pubDate>Mon, 28 Mar 2011 20:27:04 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2f9e493956d508e00c6633bdcd849623#djcp</guid>
+      <link>https://github.com/auxesis/cucumber-nagios</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2f9e493956d508e00c6633bdcd849623</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2f9e493956d508e00c6633bdcd849623</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>EAT - 2011 Boston Bacon and Beer Festival</title>
+      <pubDate>Mon, 28 Mar 2011 14:02:41 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/d4b1f5fc9231df0814cb006683a7dee4#djcp</guid>
+      <link>http://wheretoeat.in/calendar/63/16-2011-Boston-Bacon-and-Beer-Festival/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/d4b1f5fc9231df0814cb006683a7dee4</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/d4b1f5fc9231df0814cb006683a7dee4</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>How to set up your own private Git server on Linux | Bradley Wright</title>
+      <pubDate>Mon, 28 Mar 2011 13:03:53 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/e48c6f7416ab51b2a497766961f65411#djcp</guid>
+      <link>http://tumblr.intranation.com/post/766290565/how-set-up-your-own-private-git-server-linux</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/e48c6f7416ab51b2a497766961f65411</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/e48c6f7416ab51b2a497766961f65411</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">git</category>
+      <category domain="http://www.delicious.com/djcp/">linux</category>
+      <category domain="http://www.delicious.com/djcp/">howto</category>
+    </item>
+    <item>
+      <title>Data Science Toolkit</title>
+      <pubDate>Fri, 25 Mar 2011 15:17:46 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/ac1a8779d1c8d207b82da8b9c43dfd60#djcp</guid>
+      <link>http://www.datasciencetoolkit.org/developerdocs#setup</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/ac1a8779d1c8d207b82da8b9c43dfd60</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/ac1a8779d1c8d207b82da8b9c43dfd60</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>An Introduction to Outside-in Development</title>
+      <pubDate>Fri, 25 Mar 2011 13:47:17 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/41aa1ebf456962e2cc8b75cfb3b75a7e#djcp</guid>
+      <link>http://rubylearning.com/blog/2010/10/05/outside-in-development/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/41aa1ebf456962e2cc8b75cfb3b75a7e</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/41aa1ebf456962e2cc8b75cfb3b75a7e</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+    <item>
+      <title>sitaramc/gitolite - GitHub</title>
+      <pubDate>Tue, 22 Mar 2011 19:40:52 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/675feab760cc73e1c5f1f34139993867#djcp</guid>
+      <link>https://github.com/sitaramc/gitolite/</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/675feab760cc73e1c5f1f34139993867</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/675feab760cc73e1c5f1f34139993867</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+      <category domain="http://www.delicious.com/djcp/">git</category>
+      <category domain="http://www.delicious.com/djcp/">server</category>
+    </item>
+    <item>
+      <title>The Richmond Review, Feature article, The Queen of Whale Cay by Kate Summerscale</title>
+      <pubDate>Fri, 18 Mar 2011 13:14:08 +0000</pubDate>
+      <guid isPermaLink="false">http://www.delicious.com/url/2eed3ac27febd09de77a54112d673ca5#djcp</guid>
+      <link>http://www.richmondreview.co.uk/features/summer01.html</link>
+      <dc:creator><![CDATA[djcp]]></dc:creator>
+      <comments>http://www.delicious.com/url/2eed3ac27febd09de77a54112d673ca5</comments>
+      <wfw:commentRss>http://feeds.delicious.com/v2/rss/url/2eed3ac27febd09de77a54112d673ca5</wfw:commentRss>
+      <source url="http://feeds.delicious.com/v2/rss/djcp">djcp's bookmarks</source>
+    </item>
+  </channel>
+</rss>

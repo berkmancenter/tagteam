@@ -5,7 +5,7 @@
   xml:base="http://blogs.law.harvard.edu/doc/wp-atom.php"
   xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
  >
-	<title type="text">Doc Searls Weblog</title>
+ <title type="text">Doc Searls Weblog</title> 
 	<subtitle type="text">Same old blog, brand new place</subtitle>
 
 	<updated>2011-07-29T12:33:29Z</updated>

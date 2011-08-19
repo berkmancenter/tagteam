@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:connotea="http://www.connotea.org/2005/01/schema#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+
+<channel rdf:about="http://www.connotea.org/rss/user/petersuber/tag/oa.africa">
+<title>Connotea: petersuber's bookmarks matching tag oa.africa</title>
+<link>http://www.connotea.org/user/petersuber/tag/oa.africa</link>
+<description>Connotea: petersuber's bookmarks matching tag oa.africa</description>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/924b97cee02e01888a93473ca6752213" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/645897af000d1ef6e1dfe58f0d168520" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/5b86573592864b1175cc00279da66ec5" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/10c298c0d0b8687fe40e4f11b49ec2af" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/377ab9c7c4fbbbd2f0ae41d1b010f52b" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/e02483b1febc3b0402d1c713c071d908" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/52abb910ad23f6176750ff467b8a374c" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/58d08f0c13411b61c22c049eca4f88a9" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/b4acadd8de6eb9ef03ed27b328171d35" />
+  <rdf:li rdf:resource="http://www.connotea.org/user/petersuber/uri/a06a5dacf749971113b88e73c8dc6d65" />
+ </rdf:Seq>
+</items>
+</channel>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/924b97cee02e01888a93473ca6752213">
+<title>Mali doctoral students learn about access to e-resources | EIFL</title>
+<link>http://www.eifl.net/news/mali-doctoral-students-learn-about-access-e-r</link>
+<description>""On August 13, 2011, Consortium Malien des Bibliothèques (COMBI)  organized a workshop on access and use of e-resources (both commercial and open access)....There was a special focus on resources made freely available through EIFL for Malian institutions and also on the various international initiatives working to improve access to scientific information in Mali. Digital libraries and portals for open access journals were also demonstrated...."" Posted by petersuber to oa.notes ru.no oa.event oa.africa oa.new on Thu Aug 18 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-08-18T21:14:38Z</dc:date>
+<dc:subject>oa.notes</dc:subject>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.event</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.eifl.net/news/mali-doctoral-students-learn-about-access-e-r" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.eifl.net%2Fnews%2Fmali-doctoral-students-learn-about-access-e-r'; return true;" title="Mali doctoral students learn about access to e-resources | EIFL" class="rssitem">Mali doctoral students learn about access to e-resources | EIFL</a><div class="actualurl">www.eifl.net</div><div class="description">&quot;On August 13, 2011, Consortium Malien des Biblioth&egrave;ques (COMBI)  organized a workshop on access and use of e-resources (both commercial and open access)....There was a special focus on resources made freely available through EIFL for Malian institutions and also on the various international initiatives working to improve access to scientific information in Mali. Digital libraries and portals for open access journals were also demonstrated....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/oa.notes" title="oa.notes" class="postedtag">oa.notes</a> <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.event" title="oa.event" class="postedtag">oa.event</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-08-18" title="Thu Aug 18 2011">Thu Aug 18 2011</a> at 21:14 UTC</span> | <a href="http://www.connotea.org/article/924b97cee02e01888a93473ca6752213">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.eifl.net/news/mali-doctoral-students-learn-about-access-e-r">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/924b97cee02e01888a93473ca6752213</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/924b97cee02e01888a93473ca6752213</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.eifl.net/news/mali-doctoral-students-learn-about-access-e-r">
+  <dc:title>Mali doctoral students learn about access to e-resources | EIFL</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/924b97cee02e01888a93473ca6752213" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/645897af000d1ef6e1dfe58f0d168520">
+<title>Toolkit | Institutional Repository Communication Platform</title>
+<link>http://www.ir-africa.info/toolkit</link>
+<description>""Please note that the toolkit is under construction. Texts are still being revised and not all sections have content yet. A consolidated version for comments will be online towards the end of July 2011...."" Posted by petersuber and 1 other to ru.no oa.green oa.south oa.africa oa.tools oa.repositories oa.ir oa.new on Wed Aug 10 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-08-10T19:19:45Z</dc:date>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.green</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.tools</dc:subject>
+<dc:subject>oa.repositories</dc:subject>
+<dc:subject>oa.ir</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.ir-africa.info/toolkit" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.ir-africa.info%2Ftoolkit'; return true;" title="Toolkit | Institutional Repository Communication Platform" class="rssitem">Toolkit | Institutional Repository Communication Platform</a><div class="actualurl">www.ir-africa.info</div><div class="description">&quot;Please note that the toolkit is under construction. Texts are still being revised and not all sections have content yet. A consolidated version for comments will be online towards the end of July 2011....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a> and <a href="http://www.connotea.org/article/645897af000d1ef6e1dfe58f0d168520">1 other</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.green" title="oa.green" class="postedtag">oa.green</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.tools" title="oa.tools" class="postedtag">oa.tools</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.repositories" title="oa.repositories" class="postedtag">oa.repositories</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.ir" title="oa.ir" class="postedtag">oa.ir</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-08-10" title="Wed Aug 10 2011">Wed Aug 10 2011</a> at 19:19 UTC</span> | <a href="http://www.connotea.org/article/645897af000d1ef6e1dfe58f0d168520">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.ir-africa.info/toolkit">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/645897af000d1ef6e1dfe58f0d168520</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/645897af000d1ef6e1dfe58f0d168520</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.ir-africa.info/toolkit">
+  <dc:title>Toolkit | Institutional Repository Communication Platform</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/645897af000d1ef6e1dfe58f0d168520" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/5b86573592864b1175cc00279da66ec5">
+<title>Bringing Open Access Africa publishing initiative to West Africa</title>
+<link>http://blogs.openaccesscentral.com/blogs/bmcblog/entry/bringing_open_access_africa_publishing</link>
+<description>""BioMed Central recently launched ‘Open Access Africa’, a collection of initiatives designed to increase the output and visibility of scientific research published by African learning institutes. Kwame Nkrumah University Of Science and Technology (KNUST), Kumasi, Ghana, has recently been announced as the first African Foundation Member to participate in the free scheme.
+
+KNUST sits in 13th position amongst African universities on the Webometrics World University Ranking and is the only university in Ghana with an open access institutional repository and fully supports open access research. In addition, BioMed Central and KNUST have partnered to host the Open Access Africa 2011 conference, in conjunction with Computer Aid International, from 25-26 October during International Open Access Week...."" Posted by petersuber to ru.no oa.bmc oa.event oa.africa oa.new on Sat Aug 06 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-08-06T02:31:01Z</dc:date>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.bmc</dc:subject>
+<dc:subject>oa.event</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://blogs.openaccesscentral.com/blogs/bmcblog/entry/bringing_open_access_africa_publishing" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fblogs.openaccesscentral.com%2Fblogs%2Fbmcblog%2Fentry%2Fbringing_open_access_africa_publishing'; return true;" title="Bringing Open Access Africa publishing initiative to West Africa" class="rssitem">Bringing Open Access Africa publishing initiative to West Africa</a><div class="citationline"><span class="journal">BioMed Central</span>, (<span class="date">04 Aug 2011</span>)</div><div class="description">&quot;BioMed Central recently launched &lsquo;Open Access Africa&rsquo;, a collection of initiatives designed to increase the output and visibility of scientific research published by African learning institutes. Kwame Nkrumah University Of Science and Technology (KNUST), Kumasi, Ghana, has recently been announced as the first African Foundation Member to participate in the free scheme.
+
+KNUST sits in 13th position amongst African universities on the Webometrics World University Ranking and is the only university in Ghana with an open access institutional repository and fully supports open access research. In addition, BioMed Central and KNUST have partnered to host the Open Access Africa 2011 conference, in conjunction with Computer Aid International, from 25-26 October during International Open Access Week....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.bmc" title="oa.bmc" class="postedtag">oa.bmc</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.event" title="oa.event" class="postedtag">oa.event</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-08-06" title="Sat Aug 06 2011">Sat Aug 06 2011</a> at 02:31 UTC</span> | <a href="http://www.connotea.org/article/5b86573592864b1175cc00279da66ec5">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://blogs.openaccesscentral.com/blogs/bmcblog/entry/bringing_open_access_africa_publishing">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/5b86573592864b1175cc00279da66ec5</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/5b86573592864b1175cc00279da66ec5</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://blogs.openaccesscentral.com/blogs/bmcblog/entry/bringing_open_access_africa_publishing">
+  <dc:title>Bringing Open Access Africa publishing initiative to West Africa</dc:title>
+  <dc:date>2011-08-04</dc:date>
+  <prism:publicationName>BioMed Central</prism:publicationName>
+  <prism:issn></prism:issn>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/5b86573592864b1175cc00279da66ec5" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/10c298c0d0b8687fe40e4f11b49ec2af">
+<title>SA politicians' assets made public in online database - News - Mail &#x26; Guardian Online</title>
+<link>http://mg.co.za/article/2011-08-05-sa-politicians-assets-made-public-in-online-database</link>
+<description>""The new online Who Owns What Database launched by the Institute of Security Studies in Cape Town on Friday is making the assets and private interests of all elected officials available to the public for the first time...."" Posted by petersuber to ru.no oa.psi oa.data oa.africa oa.south_africa oa.new on Sat Aug 06 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-08-06T02:00:37Z</dc:date>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.psi</dc:subject>
+<dc:subject>oa.data</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.south_africa</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://mg.co.za/article/2011-08-05-sa-politicians-assets-made-public-in-online-database" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fmg.co.za%2Farticle%2F2011-08-05-sa-politicians-assets-made-public-in-online-database'; return true;" title="SA politicians' assets made public in online database - News - Mail &amp; Guardian Online" class="rssitem">SA politicians&#39; assets made public in online database - News - Mail &amp; Guardian Online</a><div class="actualurl">mg.co.za</div><div class="description">&quot;The new online Who Owns What Database launched by the Institute of Security Studies in Cape Town on Friday is making the assets and private interests of all elected officials available to the public for the first time....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.psi" title="oa.psi" class="postedtag">oa.psi</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.data" title="oa.data" class="postedtag">oa.data</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south_africa" title="oa.south_africa" class="postedtag">oa.south_africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-08-06" title="Sat Aug 06 2011">Sat Aug 06 2011</a> at 02:00 UTC</span> | <a href="http://www.connotea.org/article/10c298c0d0b8687fe40e4f11b49ec2af">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://mg.co.za/article/2011-08-05-sa-politicians-assets-made-public-in-online-database">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/10c298c0d0b8687fe40e4f11b49ec2af</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/10c298c0d0b8687fe40e4f11b49ec2af</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://mg.co.za/article/2011-08-05-sa-politicians-assets-made-public-in-online-database">
+  <dc:title>SA politicians' assets made public in online database - News - Mail &amp; Guardian Online</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/10c298c0d0b8687fe40e4f11b49ec2af" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/377ab9c7c4fbbbd2f0ae41d1b010f52b">
+<title>AFRICA: The availability of academic journals</title>
+<link>http://www.universityworldnews.com/article.php?story=20110715164428279</link>
+<description>""The shift to electronic publishing, and the associated reductions in the costs of printing and shipping, has given rise to a number of initiatives for low-income countries.
+
+Notably, these include: the United Nations' managed schemes for health, agricultural and environmental journals - Health Inter-Network Access to Research Initiative (HINARI), Access to Global Online Research in Agriculture (AGORA) and Online Access to Research in the Environment (OARE); the International Network for the Availability of Scientific Publications' Program for the Enhancement of Information (PERii); in addition to the work of Electronic Information from Libraries; and a whole host of other smaller programmes.
+
+The scale of what is now available online is impressive.
+
+PERii alone has negotiated access to more than 23,000 full-text journals in all fields, while HINARI counts over 7,500, AGORA 1,900, and OARE more than 2,990. Additional features are the growing number of open access journals: the Directory of Open Access Journals lists some 6,317....Comparing journal collections at the universities of Nairobi, Dar es Salaam, Malawi and Rwanda revealed that there was remarkably good availability of some of the top Thomson Reuters (Institute for Scientific Information)-ranked journals. In fact, 79% of the top 20 journals, across 15 subject areas, were readily available.
+
+Perhaps unsurprisingly, in some fields the status quo was stronger than others. In agriculture, biology, materials science, anthropology and politics availability was over 90%, while in mathematics it was just 25%...."" Posted by petersuber to oa.access ru.ps oa.south oa.journals oa.africa oa.new on Fri Aug 05 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-08-05T13:27:19Z</dc:date>
+<dc:subject>oa.access</dc:subject>
+<dc:subject>ru.ps</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.journals</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.universityworldnews.com/article.php?story=20110715164428279" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.universityworldnews.com%2Farticle.php%3Fstory%3D20110715164428279'; return true;" title="AFRICA: The availability of academic journals" class="rssitem">AFRICA: The availability of academic journals</a><div class="actualurl">www.universityworldnews.com</div><div class="description">&quot;The shift to electronic publishing, and the associated reductions in the costs of printing and shipping, has given rise to a number of initiatives for low-income countries.
+
+Notably, these include: the United Nations&#39; managed schemes for health, agricultural and environmental journals - Health Inter-Network Access to Research Initiative (HINARI), Access to Global Online Research in Agriculture (AGORA) and Online Access to Research in the Environment (OARE); the International Network for the Availability of Scientific Publications&#39; Program for the Enhancement of Information (PERii); in addition to the work of Electronic Information from Libraries; and a whole host of other smaller programmes.
+
+The scale of what is now available online is impressive.
+
+PERii alone has negotiated access to more than 23,000 full-text journals in all fields, while HINARI counts over 7,500, AGORA 1,900, and OARE more than 2,990. Additional features are the growing number of open access journals: the Directory of Open Access Journals lists some 6,317....Comparing journal collections at the universities of Nairobi, Dar es Salaam, Malawi and Rwanda revealed that there was remarkably good availability of some of the top Thomson Reuters (Institute for Scientific Information)-ranked journals. In fact, 79% of the top 20 journals, across 15 subject areas, were readily available.
+
+Perhaps unsurprisingly, in some fields the status quo was stronger than others. In agriculture, biology, materials science, anthropology and politics availability was over 90%, while in mathematics it was just 25%....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/oa.access" title="oa.access" class="postedtag">oa.access</a> <a rel="nofollow" href="http://www.connotea.org/tag/ru.ps" title="ru.ps" class="postedtag">ru.ps</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.journals" title="oa.journals" class="postedtag">oa.journals</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-08-05" title="Fri Aug 05 2011">Fri Aug 05 2011</a> at 13:27 UTC</span> | <a href="http://www.connotea.org/article/377ab9c7c4fbbbd2f0ae41d1b010f52b">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.universityworldnews.com/article.php?story=20110715164428279">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/377ab9c7c4fbbbd2f0ae41d1b010f52b</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/377ab9c7c4fbbbd2f0ae41d1b010f52b</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.universityworldnews.com/article.php?story=20110715164428279">
+  <dc:title>University World News - AFRICA: The availability of academic journals</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/377ab9c7c4fbbbd2f0ae41d1b010f52b" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/e02483b1febc3b0402d1c713c071d908">
+<title>Training course on Open Access and DSpace@ScienceUofK for researchers</title>
+<link>http://uofkoascir.blogspot.com/2011/07/training-course-on-open-access-and.html</link>
+<description>Posted by petersuber to ru.no oa.green oa.repositories oa.south oa.africa oa.sudan oa.event oa.notes oa.new on Sat Jul 30 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-07-30T18:14:03Z</dc:date>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.green</dc:subject>
+<dc:subject>oa.repositories</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.sudan</dc:subject>
+<dc:subject>oa.event</dc:subject>
+<dc:subject>oa.notes</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://uofkoascir.blogspot.com/2011/07/training-course-on-open-access-and.html" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fuofkoascir.blogspot.com%2F2011%2F07%2Ftraining-course-on-open-access-and.html'; return true;" title="Training course on Open Access and DSpace@ScienceUofK for researchers" class="rssitem">Training course on Open Access and DSpace@ScienceUofK for researchers</a><div class="authors">Pablo de Castro</div><div class="citationline"><span class="journal">OASCIR: an IR for UofK Faculty of Science</span>, (<span class="date">28 Jul 2011</span>)</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.green" title="oa.green" class="postedtag">oa.green</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.repositories" title="oa.repositories" class="postedtag">oa.repositories</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.sudan" title="oa.sudan" class="postedtag">oa.sudan</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.event" title="oa.event" class="postedtag">oa.event</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.notes" title="oa.notes" class="postedtag">oa.notes</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-07-30" title="Sat Jul 30 2011">Sat Jul 30 2011</a> at 18:14 UTC</span> | <a href="http://www.connotea.org/article/e02483b1febc3b0402d1c713c071d908">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://uofkoascir.blogspot.com/2011/07/training-course-on-open-access-and.html">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/e02483b1febc3b0402d1c713c071d908</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/e02483b1febc3b0402d1c713c071d908</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://uofkoascir.blogspot.com/2011/07/training-course-on-open-access-and.html">
+  <dc:title>Training course on Open Access and DSpace@ScienceUofK for researchers</dc:title>
+  <dc:creator>Pablo de Castro</dc:creator>
+  <dc:date>2011-07-28</dc:date>
+  <prism:publicationName>OASCIR: an IR for UofK Faculty of Science</prism:publicationName>
+  <prism:issn></prism:issn>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/e02483b1febc3b0402d1c713c071d908" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/52abb910ad23f6176750ff467b8a374c">
+<title>Capacity building for OA repository administrators and managers: EIFL-OA – KIT – COAR online workshop | EIFL</title>
+<link>http://www.eifl.net/news/capacity-building-oa-repository-administrator</link>
+<description>"The slides and videos of the presentations from the EIFL-OA – KIT – COAR online workshop on Capacity building for open access repository administrators and managers (Online, July 27, 2011) are now online." Posted by petersuber to oa.slides oa.video oa.presentations ru.no oa.south oa.africa oa.green oa.repositories oa.notes oa.event oa.new on Thu Jul 28 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-07-28T20:53:42Z</dc:date>
+<dc:subject>oa.slides</dc:subject>
+<dc:subject>oa.video</dc:subject>
+<dc:subject>oa.presentations</dc:subject>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.green</dc:subject>
+<dc:subject>oa.repositories</dc:subject>
+<dc:subject>oa.notes</dc:subject>
+<dc:subject>oa.event</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.eifl.net/news/capacity-building-oa-repository-administrator" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.eifl.net%2Fnews%2Fcapacity-building-oa-repository-administrator'; return true;" title="Capacity building for OA repository administrators and managers: EIFL-OA – KIT – COAR online workshop | EIFL" class="rssitem">Capacity building for OA repository administrators and managers: EIFL-OA &ndash; KIT &ndash; COAR online workshop | EIFL</a><div class="actualurl">www.eifl.net</div><div class="description">The slides and videos of the presentations from the EIFL-OA &ndash; KIT &ndash; COAR online workshop on Capacity building for open access repository administrators and managers (Online, July 27, 2011) are now online.</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/oa.slides" title="oa.slides" class="postedtag">oa.slides</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.video" title="oa.video" class="postedtag">oa.video</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.presentations" title="oa.presentations" class="postedtag">oa.presentations</a> <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.green" title="oa.green" class="postedtag">oa.green</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.repositories" title="oa.repositories" class="postedtag">oa.repositories</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.notes" title="oa.notes" class="postedtag">oa.notes</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.event" title="oa.event" class="postedtag">oa.event</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-07-28" title="Thu Jul 28 2011">Thu Jul 28 2011</a> at 20:53 UTC</span> | <a href="http://www.connotea.org/article/52abb910ad23f6176750ff467b8a374c">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.eifl.net/news/capacity-building-oa-repository-administrator">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/52abb910ad23f6176750ff467b8a374c</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/52abb910ad23f6176750ff467b8a374c</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.eifl.net/news/capacity-building-oa-repository-administrator">
+  <dc:title>Capacity building for OA repository administrators and managers: EIFL-OA &#x2013; KIT &#x2013; COAR online workshop | EIFL</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/52abb910ad23f6176750ff467b8a374c" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/58d08f0c13411b61c22c049eca4f88a9">
+<title>ZubaBox connects African scientists to open access research</title>
+<link>http://blogs.openaccesscentral.com/blogs/bmcblog/entry/zubabox_connects_african_scientists_to</link>
+<description>""Computer Aid International highlighted its innovative ZubaBox at BioMed Central’s recent Research Awards. This unique solar powered Internet hub is a shipping container housing one computer and 11 monitors with access to the Internet provided via satellite link.
+
+The ZubaBox was created to allow Internet connectivity in the vast areas of Africa that do not have electricity. It has enabled Computer Aid International to reach the most rural, isolated and poor communities to provide low power computing solutions. This technology is vital to the development of scientific research in these regions as free access to open access research is now available in otherwise unconnected areas.
+
+So far Computer Aid International has sent two “Boxes” to Zambia and one to Kenya...."" Posted by petersuber to oa.kenya oa.zambia ru.ps oa.south oa.africa oa.hardware oa.new on Thu Jul 28 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-07-28T20:48:25Z</dc:date>
+<dc:subject>oa.kenya</dc:subject>
+<dc:subject>oa.zambia</dc:subject>
+<dc:subject>ru.ps</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.hardware</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://blogs.openaccesscentral.com/blogs/bmcblog/entry/zubabox_connects_african_scientists_to" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fblogs.openaccesscentral.com%2Fblogs%2Fbmcblog%2Fentry%2Fzubabox_connects_african_scientists_to'; return true;" title="ZubaBox connects African scientists to open access research" class="rssitem">ZubaBox connects African scientists to open access research</a><div class="authors">Guy Melzack</div><div class="citationline"><span class="journal">BioMed Central</span>, (<span class="date">26 Jul 2011</span>)</div><div class="description">&quot;Computer Aid International highlighted its innovative ZubaBox at BioMed Central&rsquo;s recent Research Awards. This unique solar powered Internet hub is a shipping container housing one computer and 11 monitors with access to the Internet provided via satellite link.
+
+The ZubaBox was created to allow Internet connectivity in the vast areas of Africa that do not have electricity. It has enabled Computer Aid International to reach the most rural, isolated and poor communities to provide low power computing solutions. This technology is vital to the development of scientific research in these regions as free access to open access research is now available in otherwise unconnected areas.
+
+So far Computer Aid International has sent two &ldquo;Boxes&rdquo; to Zambia and one to Kenya....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/oa.kenya" title="oa.kenya" class="postedtag">oa.kenya</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.zambia" title="oa.zambia" class="postedtag">oa.zambia</a> <a rel="nofollow" href="http://www.connotea.org/tag/ru.ps" title="ru.ps" class="postedtag">ru.ps</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.hardware" title="oa.hardware" class="postedtag">oa.hardware</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-07-28" title="Thu Jul 28 2011">Thu Jul 28 2011</a> at 20:48 UTC</span> | <a href="http://www.connotea.org/article/58d08f0c13411b61c22c049eca4f88a9">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://blogs.openaccesscentral.com/blogs/bmcblog/entry/zubabox_connects_african_scientists_to">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/58d08f0c13411b61c22c049eca4f88a9</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/58d08f0c13411b61c22c049eca4f88a9</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://blogs.openaccesscentral.com/blogs/bmcblog/entry/zubabox_connects_african_scientists_to">
+  <dc:title>ZubaBox connects African scientists to open access research</dc:title>
+  <dc:creator>Guy Melzack</dc:creator>
+  <dc:date>2011-07-26</dc:date>
+  <prism:publicationName>BioMed Central</prism:publicationName>
+  <prism:issn></prism:issn>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/58d08f0c13411b61c22c049eca4f88a9" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/b4acadd8de6eb9ef03ed27b328171d35">
+<title>Famine response needs better science communication - SciDev.Net</title>
+<link>http://www.scidev.net/en/agriculture-and-environment/famine-response-needs-better-science-communication-1.html?utm_source=link&#x26;utm_medium=rss&#x26;utm_campaign=en_agricultureandenvironment</link>
+<description>""The situation [the famine in the Horn of Africa] emphasises the gap between our rapidly increasing ability to predict disasters, thanks largely to advances in science and technology, and our capacity to generate the political will to carry out effective mitigation strategies. One important obstacle is that politicians often feel uncomfortable taking decisions when the science is uncertain. So the way that scientific evidence is communicated by researchers and journalists can make a big difference. But scientists desperately need better communication techniques to ensure that politicians are alerted to credible evidence of a looming humanitarian disaster...."" Posted by petersuber to ru.no oa.journalism oa.africa oa.south oa.humanitarian oa.new on Sat Jul 23 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-07-23T14:16:35Z</dc:date>
+<dc:subject>ru.no</dc:subject>
+<dc:subject>oa.journalism</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.humanitarian</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.scidev.net/en/agriculture-and-environment/famine-response-needs-better-science-communication-1.html?utm_source=link&amp;utm_medium=rss&amp;utm_campaign=en_agricultureandenvironment" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.scidev.net%2Fen%2Fagriculture-and-environment%2Ffamine-response-needs-better-science-communication-1.html%3Futm_source%3Dlink%26utm_medium%3Drss%26utm_campaign%3Den_agricultureandenvironment'; return true;" title="Famine response needs better science communication - SciDev.Net" class="rssitem">Famine response needs better science communication - SciDev.Net</a><div class="actualurl">www.scidev.net</div><div class="description">&quot;The situation [the famine in the Horn of Africa] emphasises the gap between our rapidly increasing ability to predict disasters, thanks largely to advances in science and technology, and our capacity to generate the political will to carry out effective mitigation strategies. One important obstacle is that politicians often feel uncomfortable taking decisions when the science is uncertain. So the way that scientific evidence is communicated by researchers and journalists can make a big difference. But scientists desperately need better communication techniques to ensure that politicians are alerted to credible evidence of a looming humanitarian disaster....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/ru.no" title="ru.no" class="postedtag">ru.no</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.journalism" title="oa.journalism" class="postedtag">oa.journalism</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.humanitarian" title="oa.humanitarian" class="postedtag">oa.humanitarian</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-07-23" title="Sat Jul 23 2011">Sat Jul 23 2011</a> at 14:16 UTC</span> | <a href="http://www.connotea.org/article/b4acadd8de6eb9ef03ed27b328171d35">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.scidev.net/en/agriculture-and-environment/famine-response-needs-better-science-communication-1.html?utm_source=link&utm_medium=rss&utm_campaign=en_agricultureandenvironment">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/b4acadd8de6eb9ef03ed27b328171d35</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/b4acadd8de6eb9ef03ed27b328171d35</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.scidev.net/en/agriculture-and-environment/famine-response-needs-better-science-communication-1.html?utm_source=link&amp;#x26;utm_medium=rss&amp;#x26;utm_campaign=en_agricultureandenvironment">
+  <dc:title>Famine response needs better science communication - SciDev.Net</dc:title>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/b4acadd8de6eb9ef03ed27b328171d35" />
+</item>
+<item rdf:about="http://www.connotea.org/user/petersuber/uri/a06a5dacf749971113b88e73c8dc6d65">
+<title>African can ensure sustainable development through knowledge sharing</title>
+<link>http://www.ghananewsagency.org/details/Education/African-can-ensure-sustainable-development-through-knowledge-sharing/?ci=9&#x26;ai=31346</link>
+<description>""Professor Olugbemiro Jegede, Secretary General of the Association of African Universities (AAU) on Tuesday stated that Africa cannot attain sustainable development without access to knowledge and information sharing....Prof. Jegede was speaking at a two-day workshop on Open Access....jointly organized by AAU and the Research Libraries in Ghana (CARLIGH) with support from the Royal Tropical Institute of the Netherlands...to help create awareness on Open Access Institutional Repositories and its benefits to researchers, institutions and the various countries. It also aims at boosting significantly the economic, social and educational benefits of making research output available without financial, legal and technical barriers to access...."" Posted by petersuber to oa.repositories oa.ghana oa.notes oa.event ru.do oa.south oa.africa oa.new on Fri Jul 22 2011</description>
+<dc:creator>petersuber</dc:creator>
+<dc:date>2011-07-22T11:53:46Z</dc:date>
+<dc:subject>oa.repositories</dc:subject>
+<dc:subject>oa.ghana</dc:subject>
+<dc:subject>oa.notes</dc:subject>
+<dc:subject>oa.event</dc:subject>
+<dc:subject>ru.do</dc:subject>
+<dc:subject>oa.south</dc:subject>
+<dc:subject>oa.africa</dc:subject>
+<dc:subject>oa.new</dc:subject>
+<slash:comments>0</slash:comments>
+<content:encoded><![CDATA[<link rel="stylesheet" href="http://www.connotea.org/global.css" type="text/css" title="styled"/><span class="internet"><div class="icons">&nbsp;</div></span><a rel="nofollow" href="http://www.ghananewsagency.org/details/Education/African-can-ensure-sustainable-development-through-knowledge-sharing/?ci=9&amp;ai=31346" onclick="this.href='http'+'://www.connotea.org/click?src=http%3A%2F%2Fwww.connotea.org%2Frss%2Ftag%2Foa.new%3Fnum%3D1000&amp;dest=http%3A%2F%2Fwww.ghananewsagency.org%2Fdetails%2FEducation%2FAfrican-can-ensure-sustainable-development-through-knowledge-sharing%2F%3Fci%3D9%26ai%3D31346'; return true;" title="African can ensure sustainable development through knowledge sharing" class="rssitem">African can ensure sustainable development through knowledge sharing</a><div class="citationline"><span class="journal">Ghana News Agency - Truthful and Reliable News</span></div><div class="description">&quot;Professor Olugbemiro Jegede, Secretary General of the Association of African Universities (AAU) on Tuesday stated that Africa cannot attain sustainable development without access to knowledge and information sharing....Prof. Jegede was speaking at a two-day workshop on Open Access....jointly organized by AAU and the Research Libraries in Ghana (CARLIGH) with support from the Royal Tropical Institute of the Netherlands...to help create awareness on Open Access Institutional Repositories and its benefits to researchers, institutions and the various countries. It also aims at boosting significantly the economic, social and educational benefits of making research output available without financial, legal and technical barriers to access....&quot;</div><div class="posted"><span class="postedby">Posted by <a rel="nofollow" href="http://www.connotea.org/user/petersuber" title="petersuber" class="postedby">petersuber</a></span> <span class="postedtags">to <a rel="nofollow" href="http://www.connotea.org/tag/oa.repositories" title="oa.repositories" class="postedtag">oa.repositories</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.ghana" title="oa.ghana" class="postedtag">oa.ghana</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.notes" title="oa.notes" class="postedtag">oa.notes</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.event" title="oa.event" class="postedtag">oa.event</a> <a rel="nofollow" href="http://www.connotea.org/tag/ru.do" title="ru.do" class="postedtag">ru.do</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.south" title="oa.south" class="postedtag">oa.south</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.africa" title="oa.africa" class="postedtag">oa.africa</a> <a rel="nofollow" href="http://www.connotea.org/tag/oa.new" title="oa.new" class="postedtag">oa.new</a></span> <span class="postedtime">on <a rel="nofollow" href="http://www.connotea.org/date/2011-07-22" title="Fri Jul 22 2011">Fri Jul 22 2011</a> at 11:53 UTC</span> | <a href="http://www.connotea.org/article/a06a5dacf749971113b88e73c8dc6d65">info</a> | <a title="Results powered by Proximic" onclick="return false;" id="proximic_proxit:aid=npg&channel_expand=MEDIA&query_url=http://www.ghananewsagency.org/details/Education/African-can-ensure-sustainable-development-through-knowledge-sharing/?ci=9&ai=31346">related</a></div>]]></content:encoded>
+<connotea:bookmark>http://www.connotea.org/uri/a06a5dacf749971113b88e73c8dc6d65</connotea:bookmark>
+<connotea:post>http://www.connotea.org/user/petersuber/uri/a06a5dacf749971113b88e73c8dc6d65</connotea:post>
+<connotea:uri>
+<dcterms:URI rdf:about="http://www.ghananewsagency.org/details/Education/African-can-ensure-sustainable-development-through-knowledge-sharing/?ci=9&amp;#x26;ai=31346">
+  <dc:title>African can ensure sustainable development through knowledge sharing</dc:title>
+  <prism:publicationName>Ghana News Agency - Truthful and Reliable News</prism:publicationName>
+  <prism:issn></prism:issn>
+</dcterms:URI>
+</connotea:uri>
+<annotate:reference rdf:resource="http://www.connotea.org/comments/uri/a06a5dacf749971113b88e73c8dc6d65" />
+</item>
+</rdf:RDF>
