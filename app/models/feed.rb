@@ -38,18 +38,15 @@ class Feed < ActiveRecord::Base
     fr.save
     
     self.raw_feed.items.each do|item|
-      fi = FeedItem.find_or_initialize_by_url(:url => item.url)
+      fi = FeedItem.find_or_initialize_by_url(:url => item.link)
       if fi.new_record?
         # Instantiate only for new records.
         fi.title = item.title
         fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
-        fi.description = item.description
+        fi.description = item.summary
         fi.content = item.content
-        fi.copyright = item.copyright
-        #Weird bug having to do with a timestamp that has invalid years.
-        unless item.date_published.year < 1969
-          fi.date_published = item.date_published
-        end
+        fi.copyright = item.rights
+        fi.date_published = item.published.to_datetime
       end
 
       fi.feed_retrieval_id = fr.id
@@ -57,6 +54,8 @@ class Feed < ActiveRecord::Base
 
       # Merge tags. . .
       fi.tags = item.categories
+
+      logger.warn("Feed item: #{fi.inspect}")
       fi.save
     end
   end

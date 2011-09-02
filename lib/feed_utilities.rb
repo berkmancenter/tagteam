@@ -18,14 +18,17 @@ module FeedUtilities
 			return false
 		end
 
-		parsed_feed = FeedNormalizer::FeedNormalizer.parse(response.body, :loose => true)
-		if parsed_feed.nil?
-			self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
-			return false
-		end
+    parsed_feed = ''
 
-    feed.title = parsed_feed.title
-		feed.description = parsed_feed.description
+    begin 
+      parsed_feed = FeedAbstract::Feed.new(response.body)
+    rescue
+      self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
+      return false
+    end
+
+    feed.title = parsed_feed.channel.title
+		feed.description = parsed_feed.channel.description
 		feed.raw_feed = parsed_feed
   end
 	
