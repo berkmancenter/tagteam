@@ -10,7 +10,7 @@ gem 'fastercsv','1.5.4'
 gem 'devise', '1.4.2'
 gem 'gravatar-ultimate', '1.0.2'
 gem 'acl9'
-gem 'feed-abstract', '0.0.3'
+gem 'feed-abstract', '0.0.4'
 gem "will_paginate"
 gem 'acts_as_list', '0.1.4'
 
