@@ -1,2 +1,7 @@
-<h1>HubFeeds#index</h1>
-<p>Find me in app/views/hub_feeds/index.html.erb</p>
+<h1>Feeds used in hubs</h1>
+
+<div id="hub_feed_list">
+  <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub_feeds, :locals => {:show_hubs => true} %>
+</div>
+
+<%= will_paginate %>

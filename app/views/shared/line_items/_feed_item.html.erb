@@ -1,0 +1,12 @@
+<div class="feed_item hover_row" id="feed_item_<%= feed_item.id %>">
+  <div class="grid_3 alpha date">
+    <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_feed_items_path(:date => feed_item.date_published.strftime('%Y/%m/%d')) ) %>
+  </div>
+  <div class="grid_8">
+    <%= link_to(feed_item.title, feed_item_path(feed_item)) %>
+  </div>
+  <div class="grid_5 omega">
+    <%= raw feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t))}.join(', ') %>
+  </div>
+  <div class="clear"></div>
+</div>

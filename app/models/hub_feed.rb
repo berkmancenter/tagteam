@@ -9,6 +9,7 @@ class HubFeed < ActiveRecord::Base
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
   end
+  alias :to_s display_title
   
   def display_description
     (self.description.blank?) ? self.feed.description : self.description
@@ -19,6 +20,13 @@ class HubFeed < ActiveRecord::Base
   rescue Exception => e
     logger.warn(e.inspect)
     []
+  end
+
+  def feed_item_count
+    res = self.connection.execute('select count(*) from feed_items_feeds where feed_id = ' + self.connection.quote(self.feed_id))
+    res.first['count']
+  rescue
+    0
   end
 
   def latest_feed_items

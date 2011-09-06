@@ -112,10 +112,17 @@ a.button:hover,
 	cursor: pointer;
 }
 
+a:hover{
+  color: red;
+}
+
 .hub_feed,
-.republished_feed
+.republished_feed,
+.feed_item
 {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
+  font-size: 10pt;
+  line-height: 1.2em;
 }
 
 .metadata{
@@ -130,6 +137,14 @@ a.button:hover,
 
 .metadata{
   display: none;
+}
+
+.smaller{
+  font-size: smaller;
+}
+
+.smaller, .smaller a{
+  color: #aaa;
 }
 
 input#feed_url{

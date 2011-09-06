@@ -1,8 +1,8 @@
 class CreateHubFeeds < ActiveRecord::Migration
   def self.up
     create_table :hub_feeds do |t|
-      t.references :feed
-      t.references :hub
+      t.integer :feed_id, :null => false
+      t.integer :hub_id, :null => false
       t.string :title
       t.string :description
 

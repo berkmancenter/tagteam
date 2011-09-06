@@ -18,4 +18,19 @@ $(document).ready(function(){
     }
   );
 
+  $('.more').live({
+    mouseover: function(){
+      $(this).css('cursor','pointer');
+    },
+    click: function(e){
+      e.preventDefault();
+      var id = $(this).attr('id').split('_')[3];
+      if($(this).attr('id').match(/republished/)){
+        $('#republished_feed_metadata_' + id).toggle('medium');
+      } else{
+        $('#hub_feed_metadata_' + id).toggle('medium');
+      }
+    }
+  });
+
 });

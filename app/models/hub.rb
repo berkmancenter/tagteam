@@ -9,8 +9,10 @@ class Hub < ActiveRecord::Base
   has_many :republished_feeds, :dependent => :destroy
   has_many :feeds, :through => :hub_feeds
 
-  def to_s
+  def display_title
     self.title
   end
+
+  alias :to_s :display_title
 
 end

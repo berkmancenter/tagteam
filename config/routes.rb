@@ -11,7 +11,11 @@ Taghub::Application.routes.draw do
 
   resources :hub_tag_filters
 
-  resources :feed_items
+  resources :feed_items do
+    collection do
+      get 'by_date'
+    end
+  end
 
 	resources :hub_feeds
 
