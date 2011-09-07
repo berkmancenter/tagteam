@@ -29,6 +29,15 @@ module FeedUtilities
 
     feed.title = parsed_feed.channel.title
 		feed.description = parsed_feed.channel.description
+    feed.guid = parsed_feed.channel.guid
+    if parsed_feed.channel.updated.respond_to?(:to_datetime)
+      feed.last_updated = parsed_feed.channel.updated.to_datetime
+    end
+    feed.rights = parsed_feed.channel.rights
+    feed.authors = parsed_feed.channel.author
+    feed.link = parsed_feed.channel.link
+    feed.generator = parsed_feed.channel.generator
+    feed.language = parsed_feed.channel.language
 		feed.raw_feed = parsed_feed
   end
 	

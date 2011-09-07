@@ -4,12 +4,16 @@ class CreateFeedItems < ActiveRecord::Migration
       t.integer :feed_retrieval_id
       t.string :title,              :limit => 500.bytes
       t.string :url,                :limit => 2.kilobytes
-      # Not going to work in mysql.
+      t.string :guid,               :limit => 1.kilobyte
       t.string :author,             :limit => 1.kilobyte
+      t.string :contributor,        :limit => 1.kilobyte
+
       t.string :description,        :limit => 5.kilobytes
+      # Not going to work in mysql.
       t.string :content,            :limit => 1.megabyte
-      t.string :copyright,          :limit => 500.bytes
+      t.string :rights,             :limit => 500.bytes
       t.datetime :date_published
+      t.datetime :last_updated
 
       t.timestamps
     end

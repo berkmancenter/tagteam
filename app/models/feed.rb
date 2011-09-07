@@ -42,11 +42,15 @@ class Feed < ActiveRecord::Base
       if fi.new_record?
         # Instantiate only for new records.
         fi.title = item.title
-        fi.author = (item.authors.blank?) ? '' : item.authors.join(',')
+        fi.guid = item.guid
+        fi.author = item.author
+        fi.contributor = item.contributor
+
         fi.description = item.summary
         fi.content = item.content
-        fi.copyright = item.rights
+        fi.rights = item.rights
         fi.date_published = item.published.to_datetime
+        fi.last_updated = item.updated.to_datetime
       end
 
       fi.feed_retrieval_id = fr.id

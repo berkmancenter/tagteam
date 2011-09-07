@@ -11,7 +11,7 @@ describe Feed do
 
 	context do
 		it "has basic attributes", :attributes => true do
-      should have_many(:feed_items)
+      should have_and_belong_to_many(:feed_items)
 			should have_many(:feed_retrievals) 
 			should have_and_belong_to_many(:hub_feeds) 
 			should validate_presence_of(:feed_url) 
@@ -19,12 +19,14 @@ describe Feed do
 
       should ensure_length_of(:title).is_at_most(500.bytes)
       should ensure_length_of(:description).is_at_most(2.kilobytes)
-      should ensure_length_of(:guid).is_at_most(500.bytes)
-      should ensure_length_of(:copyright).is_at_most(500.bytes)
+      should ensure_length_of(:guid).is_at_most(1.kilobyte)
+      should ensure_length_of(:rights).is_at_most(500.bytes)
       should ensure_length_of(:authors).is_at_most(1.kilobyte)
-      should ensure_length_of(:feed_url).is_at_most(500.bytes)
+      should ensure_length_of(:feed_url).is_at_most(1.kilobyte)
+      should ensure_length_of(:link).is_at_most(1.kilobyte)
       should ensure_length_of(:generator).is_at_most(500.bytes)
       should ensure_length_of(:flavor).is_at_most(25.bytes)
+      should ensure_length_of(:language).is_at_most(25.bytes)
 
       [:feed_url,:guid,:authors,:generator,:flavor].each do|col|
         should have_db_index(col)

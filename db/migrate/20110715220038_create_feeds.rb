@@ -3,13 +3,15 @@ class CreateFeeds < ActiveRecord::Migration
     create_table :feeds do |t|
       t.string :title,        :limit => 500.bytes
       t.string :description,  :limit => 2.kilobytes
-      t.string :guid,         :limit => 500.bytes
+      t.string :guid,         :limit => 1.kilobyte
       t.datetime :last_updated
-      t.string :copyright,    :limit => 500.bytes
+      t.string :rights,       :limit => 500.bytes
       t.string :authors,      :limit => 1.kilobyte
-      t.string :feed_url,     :null => false,       :limit => 500.bytes
+      t.string :feed_url,     :null => false,       :limit => 1.kilobyte
+      t.string :link,         :limit => 1.kilobyte
       t.string :generator,    :limit => 500.bytes
       t.string :flavor,       :limit => 25.bytes
+      t.string :language,     :limit => 25.bytes
 
       t.timestamps
     end
