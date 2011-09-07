@@ -4,7 +4,7 @@ class FeedItem < ActiveRecord::Base
   before_validation do
     auto_strip_tags(:description)
     auto_sanitize_html(:content)
-    auto_truncate_columns(:title,:url,:author,:description,:content,:copyright)
+    auto_truncate_columns(:title,:url,:guid,:author,:contributor,:description,:content,:rights)
   end
 
   validates_uniqueness_of :url

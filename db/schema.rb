@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110815182850) do
+ActiveRecord::Schema.define(:version => 20110815194631) do
 
   create_table "feed_item_tags", :force => true do |t|
     t.string   "tag",                         :null => false
@@ -33,11 +33,14 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
     t.integer  "feed_retrieval_id"
     t.string   "title",             :limit => 500
     t.string   "url",               :limit => 2048
+    t.string   "guid",              :limit => 1024
     t.string   "author",            :limit => 1024
+    t.string   "contributor",       :limit => 1024
     t.string   "description",       :limit => 5120
     t.string   "content",           :limit => 1048576
-    t.string   "copyright",         :limit => 500
+    t.string   "rights",            :limit => 500
     t.datetime "date_published"
+    t.datetime "last_updated"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,6 +67,18 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "feed_sources", :force => true do |t|
+    t.string   "title",       :limit => 500
+    t.string   "description", :limit => 5120
+    t.integer  "feed_id",                     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feed_sources", ["description"], :name => "index_feed_sources_on_description"
+  add_index "feed_sources", ["feed_id"], :name => "index_feed_sources_on_feed_id"
+  add_index "feed_sources", ["title"], :name => "index_feed_sources_on_title"
 
   create_table "feeds", :force => true do |t|
     t.string   "title",        :limit => 500

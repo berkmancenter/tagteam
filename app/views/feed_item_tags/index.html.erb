@@ -1,2 +1,38 @@
-<h1>FeedItemTags#index</h1>
-<p>Find me in app/views/feed_item_tags/index.html.erb</p>
+<h1>Tags</h1>
+
+<div style="margin-bottom: 1em;">
+  <input id="filter_by" size="15" /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">reset</a>
+</div>
+
+<div id="feed_item_tag_list">
+  <%= will_paginate @feed_item_tags %>
+
+  <%= raw @feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}.join(' ') %>
+  <div class="clear"></div>
+
+  <%= will_paginate @feed_item_tags %>
+</div>
+
+<%= javascript_tag do
+  %q"$().ready(function(){
+    $('#reset_filter').click(function(e){
+      $('#feed_item_tag_list').find('a').show();
+    });
+    var filterStuff = function(e){
+      if(e != ''){
+        e.preventDefault();
+      }
+      $('#feed_item_tag_list').find('a').show();
+      var filterVal = $('#filter_by').val();
+      var filterregex = new RegExp(filterVal,'i');
+      $('#feed_item_tag_list').find('a').each(function(){
+        if(! $(this).html().match(filterregex)){
+          $(this).hide();
+        }
+      });
+    };
+    $('#filter_button').click(filterStuff);
+    $('#filter_by').observe_field(1,filterStuff);
+  });"
+end
+%>

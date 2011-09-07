@@ -6,7 +6,7 @@
     <%= link_to(feed_item.title, feed_item_path(feed_item)) %>
   </div>
   <div class="grid_5 omega">
-    <%= raw feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t))}.join(', ') %>
+    <%= raw feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}.join(' ') %>
   </div>
   <div class="clear"></div>
 </div>

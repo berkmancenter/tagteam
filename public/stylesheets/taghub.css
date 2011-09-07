@@ -139,6 +139,30 @@ a:hover{
   display: none;
 }
 
+.tag{
+  font-size: 8pt;
+  height: 15px;
+  background: #ccc top left url('/images/bg_dot.png') no-repeat;
+  background-position:5px 7px;
+  border: 1px solid #aaa;
+  padding: 1px 5px 1px 15px;
+  float: left;
+  display: block;
+  margin: 0px 8px 4px 0px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  line-height: 12px;
+  text-decoration: none;
+}
+
+.tag{
+  color: black;
+}
+
+.tag:hover{
+  background-color: #e4e4e4;
+}
+
 .smaller{
   font-size: smaller;
 }
@@ -147,11 +171,15 @@ a:hover{
   color: #aaa;
 }
 
-input#feed_url{
+input#feed_url, input#filter_by{
   width: 30em;
   font-size: 14pt;
   padding: 5px;
 	color: #7a000d;
+}
+
+input#filter_by{
+  width: 15em;
 }
 
 .over{

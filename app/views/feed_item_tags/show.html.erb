@@ -1,2 +1,6 @@
-<h1>FeedItemTags#show</h1>
-<p>Find me in app/views/feed_item_tags/show.html.erb</p>
+<h1>Tag: <%= @feed_item_tag %></h1>
+
+<h2>Items tagged with <%= @feed_item_tag %></h2>
+<div class="hub_feed feed_items">
+  <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+</div>
