@@ -12,7 +12,7 @@ xml.rss :version => "2.0" do
         xml.description item.content
         xml.pubDate item.date_published.to_s(:rfc822)
         xml.link item.url
-        xml.guid item.url
+        xml.guid item.guid
         item.feed_item_tags.each do|fit|
           xml.category fit.tag
         end
