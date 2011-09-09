@@ -21,7 +21,7 @@ module ModelExtensions
       end
 
       def auto_truncate_columns(*columns_to_truncate)
-        logger.warn('auto truncating these columns: ' + columns_to_truncate.inspect)
+        # logger.warn('auto truncating these columns: ' + columns_to_truncate.inspect)
         columns_to_truncate.each do|col|
           column_def = self.class.columns.reject{|coldef| coldef.name != col.to_s}.first
           self.send("#{col}=", self.send("#{col}").to_s[0,column_def.limit])
@@ -41,6 +41,27 @@ module ModelExtensions
           valid_output += "validates_presence_of :#{val_col.name}\n"
         end
         valid_output += "validates_length_of :#{val_col.name}, :maximum => #{val_col.limit}, :allow_blank => #{val_col.null}\n"
+      end
+
+      after_initialize_content = ''
+      self.columns.each do|col|
+        unless col.default.blank?
+          if [Fixnum,String,DateTime].include?(col.default.class)
+            val = ''
+            if col.default.class == Fixnum
+              val = col.default
+            else
+              val = %Q|"#{col.default}"|
+            end
+            after_initialize_content += "self.#{col.name} = #{val}\n"
+          end
+        end
+      end
+
+      unless after_initialize_content.blank?
+        valid_output += "after_initialize do
+  #{after_initialize_content}
+end"
       end
 #      logger.warn('Autovalidations:' + valid_output)
 

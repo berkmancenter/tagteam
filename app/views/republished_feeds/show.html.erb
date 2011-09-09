@@ -1,2 +1,33 @@
-<h1>RepublishedFeeds#show</h1>
-<p>Find me in app/views/republished_feeds/show.html.erb</p>
+<div class="republished_feed detailed" id="republished_feed_<%= @republished_feed.id %>">
+  <h1><%= @republished_feed %> <sup><%= link_to('rss', rss_republished_feed_path(@republished_feed)) %> <%= link_to('atom', atom_republished_feed_path(@republished_feed)) %></sup></h1>
+
+  <div class="grid_8 alpha">
+    <div class="meta">
+      <h2>Meta</h2>
+      <dl>
+        <dt>Default sort:</dt>
+        <dd><%= @republished_feed.default_sort %></dd>
+        <dt>Mixing strategy:</dt>
+        <dd><%= @republished_feed.mixing_strategy %></dd>
+        <dt>Owners:</dt>
+        <dd><%= @republished_feed.owners.collect{|o| o.email}.join(', ') %></dd>
+      </dl>
+    </div>
+  </div>
+  <div class="grid_8 omega">
+    <h2>Feed Sources:</h2>
+    <div class="input_sources">
+      <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources %>
+    </div>
+    <% if @owners.include?(current_user) %>
+      <%= link_to('Add new input source', new_input_source_path(:republished_feed_id => @republished_feed)) %>
+    <% end %>
+
+  </div>
+  <div class="clear"></div>
+  <h2>Item preview:<div class="more" id="republished_feed_more_<%= @republished_feed.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div></h2>
+  <div class="republished_feed feed_items" id="republished_feed_metadata_<%= @republished_feed.id %>" style="display:none;">
+    <%= render :partial => 'shared/line_items/feed_item', :collection => @republished_feed.items %>
+  </div>
+
+</div>

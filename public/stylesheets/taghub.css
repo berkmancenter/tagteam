@@ -7,6 +7,11 @@ body{
   font-family: Verdana;
 }
 
+sup{
+  vertical-align: super;
+  font-size: smaller;
+}
+
 header{
   margin-top: 10px;
   background: #ccc;
@@ -27,6 +32,7 @@ h1, h2, h3, h4{
   font-family: Carme, serif;
   color: #222;
   margin-bottom: .5em;
+  line-height: 1.4em;
 }
 
 h1{
@@ -137,6 +143,14 @@ a:hover{
 
 .metadata{
   display: none;
+}
+
+.meta dt{
+  font-weight:bold;
+
+}
+.meta dd{
+  margin-bottom: .5em;
 }
 
 .tag{

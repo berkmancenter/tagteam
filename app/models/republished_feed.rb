@@ -1,7 +1,9 @@
 class RepublishedFeed < ActiveRecord::Base
 
+  include AuthUtilities
   include ModelExtensions
 
+  acts_as_authorization_object
   SORTS = ['date_published', 'title']
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]
   MIXING_STRATEGIES = ['interlaced','date']
@@ -14,6 +16,7 @@ class RepublishedFeed < ActiveRecord::Base
 
   def items
     #here's where we'll iterate through input_sources, add or subtract them and come to a final list of items.
+    # This is currently VERY inefficient and will not scale well when there are many input sources and/or feed items
     items = []
     self.input_sources.each do|input_source|
       if input_source.effect == 'add'
@@ -22,7 +25,16 @@ class RepublishedFeed < ActiveRecord::Base
         items = items - input_source.item_source.items
       end
     end
-    items.flatten.uniq.compact
+    output_items = items.flatten.uniq.compact.sort_by{|i| (self.default_sort == 'date_published') ? i.date_published : i.title}
+    if self.default_sort == 'date_published'
+      output_items.reverse!
+    end
+    # DANGER, WILL ROBINSON! Inefficient. 
+    output_items[0..50]
+  end
+
+  def to_s
+    "#{title}"
   end
 
 end

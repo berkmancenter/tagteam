@@ -45,7 +45,6 @@ class HubFeed < ActiveRecord::Base
 
   def auto_create_republished_feed
 
-    logger.warn('Feed info:' + self.feed.inspect)
     rf = RepublishedFeed.new(
       :hub_id => self.hub_id, 
       :title => self.feed.title, 

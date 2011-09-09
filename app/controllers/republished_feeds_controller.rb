@@ -4,13 +4,14 @@ class RepublishedFeedsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:show, :feeds, :rss, :atom]
+    allow all, :to => [:show, :rss, :atom]
     allow :owner, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :republished_feed_admin
   end
 
   def show
+    @owners = @republished_feed.owners
   end
 
   def new

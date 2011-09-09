@@ -5,6 +5,7 @@
     <%= f.input :description %>
     <%= f.input :default_sort, :collection => RepublishedFeed::SORTS_FOR_SELECT %>
     <%= f.input :mixing_strategy, :collection => RepublishedFeed::MIXING_STRATEGIES_FOR_SELECT  %>
+    <%= f.input :limit, :hint => 'How many items to show in this feed?'  %>
   <% end %>
   <%= f.buttons %>
 <% end %>

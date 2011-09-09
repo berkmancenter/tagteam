@@ -37,5 +37,8 @@
     <div id="republished_feed_list_<%= @hub.id %>">
       <%= render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds %>
     </div>
+    <% if @owners.include?(current_user) %>
+      <%= link_to('New Republished Feed', new_republished_feed_path(:hub_id => @hub)) %>
+    <% end %>
   </div>
 </div>

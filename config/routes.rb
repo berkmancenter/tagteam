@@ -1,6 +1,9 @@
 Taghub::Application.routes.draw do
 
+  resources :input_sources
+
   resources :feed_item_tags
+  resources :input_source
 
   resources :republished_feeds do
     member do
