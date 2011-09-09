@@ -23,8 +23,8 @@ atom_feed :language => 'en-US' do |atom|
       end
       entry.rights item.rights
       entry.summary item.description, :type => 'html'
-      entry.updated(item.last_updated.strftime("%Y-%m-%dT%H:%M:%SZ")) 
-      entry.published(item.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")) 
+#      entry.updated(item.last_updated.strftime("%Y-%m-%dT%H:%M:%SZ")) 
+#      entry.published(item.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")) 
     end
   end
 end

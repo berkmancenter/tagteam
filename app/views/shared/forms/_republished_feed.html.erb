@@ -1,0 +1,10 @@
+<%= semantic_form_for(@republished_feed) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :hub_id, :as => :hidden %>
+    <%= f.input :title %>
+    <%= f.input :description %>
+    <%= f.input :default_sort, :collection => RepublishedFeed::SORTS_FOR_SELECT %>
+    <%= f.input :mixing_strategy, :collection => RepublishedFeed::MIXING_STRATEGIES_FOR_SELECT  %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>
