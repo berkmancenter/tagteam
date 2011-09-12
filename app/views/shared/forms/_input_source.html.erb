@@ -1,0 +1,9 @@
+<%= semantic_form_for(@input_source) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :republished_feed_id, :as => :hidden %>
+    <% # TODO - Create a keyword matching feed / item / tag matching ajax thingy %>
+    <%= f.input :effect, :collection => InputSource::EFFECTS, :hint => '"Add" means this input source adds its items to this republished feed. "Remove" means this input source is used to remove items it matches.' %>
+    <%= f.input :limit, :hint => 'How many maximum items to pull from this source?'  %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>

@@ -1,6 +1,10 @@
 Taghub::Application.routes.draw do
 
-  resources :input_sources
+  resources :input_sources do
+    collection do
+      get :find
+    end
+  end
 
   resources :feed_item_tags
   resources :input_source

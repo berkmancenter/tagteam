@@ -23,6 +23,20 @@ class Feed < ActiveRecord::Base
 	has_many :hub_feeds, :dependent => :destroy
   has_many :feed_retrievals, :order => :created_at, :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
+
+  searchable do
+    string :title
+    text :description
+    string :guid
+    time :last_updated
+    string :rights
+    string :authors
+    string :feed_url
+    string :link
+    string :generator
+    string :flavor
+    string :language
+  end
   
   validates_uniqueness_of :feed_url
 

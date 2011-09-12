@@ -13,6 +13,8 @@ gem 'acl9'
 gem 'feed-abstract', '0.0.5'
 gem "will_paginate"
 gem 'acts_as_list', '0.1.4'
+gem 'sunspot'
+gem 'sunspot_rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
