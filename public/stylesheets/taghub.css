@@ -122,13 +122,23 @@ a:hover{
   color: red;
 }
 
+.feed,
 .hub_feed,
 .republished_feed,
-.feed_item
+.feed_item,
+.feed_item_tag
 {
   margin-bottom: .5em;
   font-size: 10pt;
   line-height: 1.2em;
+}
+
+
+.search_result{
+  font-size: 8pt;
+  line-height: 12px;
+  margin-bottom: 4px;
+  float: left;
 }
 
 .metadata{
@@ -198,6 +208,10 @@ input#filter_by{
 
 .over{
   background-color: #e4e4e4;
+}
+
+.formtastic{
+  font-size: 9pt;
 }
 
 footer{

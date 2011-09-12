@@ -1,0 +1,9 @@
+<div class="feed_item_tag hover_row" id="feed_item_tag_<%= feed_item_tag.id %>">
+  <div class="grid_3 alpha">
+    <strong>tag:</strong>
+  </div>
+  <div class="grid_13 omega">
+    <%= link_to(feed_item_tag.tag, feed_item_tag_path(feed_item_tag), :class => 'tag') %>
+  </div>
+  <div class="clear"></div>
+</div>

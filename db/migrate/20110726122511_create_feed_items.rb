@@ -5,8 +5,8 @@ class CreateFeedItems < ActiveRecord::Migration
       t.string :title,              :limit => 500.bytes
       t.string :url,                :limit => 2.kilobytes
       t.string :guid,               :limit => 1.kilobyte
-      t.string :author,             :limit => 1.kilobyte
-      t.string :contributor,        :limit => 1.kilobyte
+      t.string :authors,             :limit => 1.kilobyte
+      t.string :contributors,        :limit => 1.kilobyte
 
       t.string :description,        :limit => 5.kilobytes
       # Not going to work in mysql.
@@ -18,7 +18,7 @@ class CreateFeedItems < ActiveRecord::Migration
       t.timestamps
     end
 
-    [:feed_retrieval_id, :date_published, :author].each do|col|
+    [:feed_retrieval_id, :date_published, :authors, :contributors].each do|col|
       add_index :feed_items, col
     end
 

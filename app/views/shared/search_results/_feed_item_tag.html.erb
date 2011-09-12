@@ -1,0 +1,5 @@
+<div class="feed_item_tag search_result" id="feed_item_tag<%= feed_item_tag.id %>">
+  <div class="grid_1 alpha">select</div>
+  <div class="grid_2">Tag:</div>
+  <div class="grid_5 omega"><%= link_to(raw(strip_tags(feed_item_tag.to_s)), feed_item_tag_path(feed_item_tag), :class => 'tag') %></div>
+</div>

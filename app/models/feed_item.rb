@@ -4,7 +4,21 @@ class FeedItem < ActiveRecord::Base
   before_validation do
     auto_strip_tags(:description)
     auto_sanitize_html(:content)
-    auto_truncate_columns(:title,:url,:guid,:author,:contributor,:description,:content,:rights)
+    auto_truncate_columns(:title,:url,:guid,:authors,:contributors,:description,:content,:rights)
+  end
+
+  searchable do
+    text :title, :content, :url, :guid, :authors, :contributors, :rights
+
+    string :title
+    string :url
+    string :guid
+    string :authors
+    string :contributors
+    string :description
+    string :rights
+    time :date_published
+    time :last_updated
   end
 
   validates_uniqueness_of :url
@@ -20,5 +34,11 @@ class FeedItem < ActiveRecord::Base
     end
     self.feed_item_tags = [self.feed_item_tags, new_tags].flatten.uniq.compact
   end
+
+  def to_s
+    "#{title}"
+  end
+
+  alias :display_title :to_s
 
 end

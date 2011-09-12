@@ -25,8 +25,9 @@ class Feed < ActiveRecord::Base
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
 
   searchable do
+    text :title, :description, :link, :guid, :rights, :authors, :feed_url, :generator
+
     string :title
-    text :description
     string :guid
     time :last_updated
     string :rights
@@ -57,8 +58,8 @@ class Feed < ActiveRecord::Base
         # Instantiate only for new records.
         fi.title = item.title
         fi.guid = item.guid
-        fi.author = item.author
-        fi.contributor = item.contributor
+        fi.authors = item.author
+        fi.contributors = item.contributor
 
         fi.description = item.summary
         fi.content = item.content
@@ -77,4 +78,10 @@ class Feed < ActiveRecord::Base
       fi.save
     end
   end
+
+  def to_s
+    "#{title}"
+  end
+
+  alias :display_title :to_s
 end

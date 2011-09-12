@@ -9,7 +9,7 @@ class HubFeed < ActiveRecord::Base
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
   end
-  alias :to_s display_title
+  alias :to_s :display_title
   
   def display_description
     (self.description.blank?) ? self.feed.description : self.description

@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(:version => 20110815194631) do
     t.string   "title",             :limit => 500
     t.string   "url",               :limit => 2048
     t.string   "guid",              :limit => 1024
-    t.string   "author",            :limit => 1024
-    t.string   "contributor",       :limit => 1024
+    t.string   "authors",           :limit => 1024
+    t.string   "contributors",      :limit => 1024
     t.string   "description",       :limit => 5120
     t.string   "content",           :limit => 1048576
     t.string   "rights",            :limit => 500
@@ -45,7 +45,8 @@ ActiveRecord::Schema.define(:version => 20110815194631) do
     t.datetime "updated_at"
   end
 
-  add_index "feed_items", ["author"], :name => "index_feed_items_on_author"
+  add_index "feed_items", ["authors"], :name => "index_feed_items_on_authors"
+  add_index "feed_items", ["contributors"], :name => "index_feed_items_on_contributors"
   add_index "feed_items", ["date_published"], :name => "index_feed_items_on_date_published"
   add_index "feed_items", ["feed_retrieval_id"], :name => "index_feed_items_on_feed_retrieval_id"
   add_index "feed_items", ["url"], :name => "index_feed_items_on_url", :unique => true

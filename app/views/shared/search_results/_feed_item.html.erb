@@ -1,0 +1,5 @@
+<div class="feed_item search_result" id="feed_item_<%= feed_item.id %>">
+  <div class="grid_1 alpha">select</div>
+  <div class="grid_2"><span class="ui-silk inline ui-silk-application-view-list"></span> Item:</div>
+  <div class="grid_5 omega"><%= link_to(raw(strip_tags(feed_item.to_s)), feed_item_path(feed_item)) %></div>
+</div>

@@ -1,0 +1,12 @@
+<% list.results.each do|r| %>
+  <% if r.class == Feed %>
+    <%= render :partial => 'shared/search_results/feed', :object => r %>
+  <% end %>
+  <% if r.class == FeedItem %>
+    <%= render :partial => 'shared/search_results/feed_item', :object => r %>
+  <% end %>
+  <% if r.class == FeedItemTag %>
+    <%= render :partial => 'shared/search_results/feed_item_tag', :object => r %>
+  <% end %>
+  <div class="clear"></div>
+<% end %>

@@ -1,6 +1,6 @@
 class InputSourcesController < ApplicationController
   before_filter :load_input_source, :except => [:new, :create, :find]
-  before_filter :load_republished_feed, :only => [:new, :create, :find]
+  before_filter :load_republished_feed, :only => [:new, :create]
 
   access_control do
     allow all, :to => [:show, :find]
@@ -31,14 +31,34 @@ class InputSourcesController < ApplicationController
 
   def find
     #Here's where we'll return a json object of possible feed sources.
-    if params[:feeds]
+
+    @search = Sunspot.new_search Feed, FeedItem, FeedItemTag
+
+    @search.build do
+      text_fields do
+        any_of do
+          with(:description).starting_with(params[:q])
+          with(:content).starting_with(params[:q])
+          with(:title).starting_with(params[:q])
+          with(:tag).starting_with(params[:q])
+          with(:authors).starting_with(params[:q])
+        end
+      end
     end
-    if params[:items]
+
+    @search.execute
+
+    respond_to do|format|
+      format.html{
+        if request.xhr?
+          render :partial => 'shared/search_results/list', :object => @search, :layout => false
+        else
+          render
+        end
+      }
+      format.json{ render :json => @search }
     end
-    if params[:feed_item_tags]
-    end
-    if params[:republished_feeds]
-    end
+    
 
   end
 

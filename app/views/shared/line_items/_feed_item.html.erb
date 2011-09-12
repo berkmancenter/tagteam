@@ -3,7 +3,7 @@
     <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_feed_items_path(:date => feed_item.date_published.strftime('%Y/%m/%d')) ) %>
   </div>
   <div class="grid_8">
-    <%= link_to(feed_item.title, feed_item_path(feed_item)) %>
+    <%= link_to(raw(strip_tags(feed_item.title)), feed_item_path(feed_item)) %>
   </div>
   <div class="grid_5 omega">
     <%= raw feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}.join(' ') %>
