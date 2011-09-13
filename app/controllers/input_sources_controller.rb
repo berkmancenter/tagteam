@@ -14,16 +14,16 @@ class InputSourcesController < ApplicationController
   end
 
   def create
-    @input_source = InputSource.new(:republished_feed_id => @hub.id)
-    @republished_feed.attributes = params[:republished_feed]
+    @input_source = InputSource.new(:republished_feed_id => @republished_feed.id)
+    @input_source.attributes = params[:input_source]
     respond_to do|format|
-      if @republished_feed.save
-        current_user.has_role!(:owner, @republished_feed)
-        current_user.has_role!(:creator, @republished_feed)
-        flash[:notice] = 'Created a new republished feed'
-        format.html{redirect_to :action => :show, :id => @republished_feed.id}
+      if @input_source.save
+        current_user.has_role!(:owner, @input_source)
+        current_user.has_role!(:creator, @input_source)
+        flash[:notice] = 'Add that input source'
+        format.html{redirect_to republished_feed_url(@republished_feed)}
       else
-        flash[:error] = 'Could not add that republished feed'
+        flash[:error] = 'Could not add that input source'
         format.html {render :action => :new}
       end
     end

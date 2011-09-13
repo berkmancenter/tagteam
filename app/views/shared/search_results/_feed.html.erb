@@ -1,5 +1,4 @@
 <div class="feed search_result" id="feed_<%= feed.id %>">
-  <div class="grid_1 alpha">select</div>
-  <div class="grid_2"><span class="ui-silk inline ui-silk-feed"></span> Feed:</div>
-  <div class="grid_5 omega"><%= link_to(raw(strip_tags(feed.to_s)), feed_path(feed)) %></div>
+  <div class="grid_2 alpha"><span class="ui-silk inline ui-silk-add add_item_source" title="Add this feed as an input source" id="Feed-<%= feed.id %>"></span> Feed:</div>
+  <div class="grid_6 omega"><span id="Feed-<%= feed.id %>-link"><span class="ui-silk inline ui-silk-feed"></span> <%= link_to(raw(strip_tags(feed.to_s)), feed_path(feed)) %></span></div>
 </div>

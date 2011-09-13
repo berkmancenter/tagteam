@@ -13,4 +13,10 @@ class FeedItemTag < ActiveRecord::Base
     "#{tag}"
   end
 
+  def items
+    feed_items
+  end
+
+  alias :display_title :to_s
+
 end

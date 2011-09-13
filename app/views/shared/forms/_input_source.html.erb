@@ -3,11 +3,14 @@
   <%= f.inputs do %>
     <%= f.input :republished_feed_id, :as => :hidden %>
 
-    <li class="string optional">
+    <li class="string optional" id="ajax_item_source_container">
       <label for="ajax_item_source">Source</label>
       <input type="text" id="ajax_item_source" name="ajax_item_source" />
       <p class="inline-hints">Start typing to find the Feed, Item, or Tag you'd like to be the input source.</p>
+      <p class="inline-hints"><span class="ui-silk inline ui-silk-delete" style="display: none;" id="item_source_remove"></span> <span id="ajax_item_source_selection"></span></p>
+
     </li>
+
     <%= f.input :item_source_id, :as => :hidden %>
     <%= f.input :item_source_type, :as => :hidden %>
     <%= f.input :effect, :collection => InputSource::EFFECTS, :hint => '"Add" means this input source adds its items to this republished feed. "Remove" means this input source is used to remove items it matches.' %>
@@ -27,6 +30,7 @@
   $().ready(function(){
     var observeItemSource = function(){
      $.ajax({
+      cache: false,
       type: 'GET',
       url: $.rootPath() + 'input_sources/find',
       data: {q:  $('#ajax_item_source').val()},
@@ -37,6 +41,29 @@
      });
     };
     $('#ajax_item_source').observe_field(2, observeItemSource);
+    $('#item_source_remove').bind({
+      mouseover: function(){
+        $(this).css('cursor', 'pointer');
+      },
+      click: function(){
+        $('#input_source_item_source_type').val('');
+        $('#input_source_item_source_id').val('');
+        $('#ajax_item_source_selection').html('');
+        $('#item_source_remove').hide();
+      }
+    });
+    $('.add_item_source').live({
+      mouseover: function(){
+        $(this).css('cursor', 'pointer');
+      },
+      click: function(){
+        var itemSource = $(this).attr('id').split('-');
+        $('#input_source_item_source_type').val(itemSource[0]);
+        $('#input_source_item_source_id').val(itemSource[1]);
+        $('#ajax_item_source_selection').html($('#' + $(this).attr('id') + '-link').clone());
+        $('#item_source_remove').show();
+      }
+    });
   });
   @;
 end %>
