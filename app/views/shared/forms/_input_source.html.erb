@@ -4,10 +4,10 @@
     <%= f.input :republished_feed_id, :as => :hidden %>
 
     <li class="string optional" id="ajax_item_source_container">
-      <label for="ajax_item_source">Source</label>
+    <label for="ajax_item_source">Source <span id="spinner"></span></label>
       <input type="text" id="ajax_item_source" name="ajax_item_source" />
       <p class="inline-hints">Start typing to find the Feed, Item, or Tag you'd like to be the input source.</p>
-      <p class="inline-hints"><span class="ui-silk inline ui-silk-delete" style="display: none;" id="item_source_remove"></span> <span id="ajax_item_source_selection"></span></p>
+    <p class="inline-hints"><span class="ui-silk inline ui-silk-delete"<% if @input_source.new_record? %> style="display: none;"<% end %> id="item_source_remove"></span> <span id="ajax_item_source_selection"><% unless @input_source.new_record? %><%= raw @input_source.item_source.mini_icon %> <%= link_to(raw(strip_tags(@input_source.item_source.to_s)), @input_source) %><% end %></span></p>
 
     </li>
 
@@ -34,8 +34,14 @@
       type: 'GET',
       url: $.rootPath() + 'input_sources/find',
       data: {q:  $('#ajax_item_source').val()},
+      beforeSend: function(){
+        $.showSpinner('#spinner');
+      },
       success: function(html){
         $('#ajax_item_source_results').html(html);
+      },
+      complete: function(){
+        $.hideSpinner('#spinner');
       }
       
      });

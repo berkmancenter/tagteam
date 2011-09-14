@@ -1,2 +1,15 @@
-<h1>FeedItems#show</h1>
-<p>Find me in app/views/feed_items/show.html.erb</p>
+<h1><%= @feed_item.title %></h1>
+<div class="grid_12 alpha">
+  <h3>Summary</h3>
+  <div class="description">
+    <%= raw @feed_item.description %>
+  </div>
+  <% unless @feed_item.content.blank? %>
+    <h3 class="toggler" id="toggler-feeditem-<%= @feed_item.id %>">Full content <span class="toggler-indicator ui-silk ui-silk-arrow-right inline"></span></h3>
+    <div class="content" id="toggler-feeditem-<%= @feed_item.id %>-target" style="display: none;">
+      <%= raw @feed_item.content %>
+    </div>
+  <% end %>
+</div>
+<div class="grid_4 omega">
+</div>

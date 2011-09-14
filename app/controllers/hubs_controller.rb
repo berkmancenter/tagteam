@@ -125,6 +125,7 @@ class HubsController < ApplicationController
   def load_hub
     @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_retrievals => [:feed_items => [:feed_item_tags]]]]])
     @owners = @hub.owners
+    @is_owner = @owners.include?(current_user)
   end
 
   def prep_resources

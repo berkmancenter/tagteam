@@ -64,7 +64,7 @@ class Feed < ActiveRecord::Base
         fi.description = item.summary
         fi.content = item.content
         fi.rights = item.rights
-        fi.date_published = item.published.to_datetime
+        fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
         fi.last_updated = item.updated.to_datetime
       end
 

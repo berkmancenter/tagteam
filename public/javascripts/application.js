@@ -3,7 +3,15 @@
 	$.extend({
 		rootPath: function(){
 			return '/';
-		}
+    },
+    showSpinner: function(spinnerId){
+      var spinnerNode = $(spinnerId);
+      $(spinnerNode).html('<img src="' + $.rootPath() + 'images/spinner.gif" />').show();
+    },
+    hideSpinner: function(spinnerId){
+      var spinnerNode = $(spinnerId);
+      $(spinnerNode).hide();
+    }
 	});
 
 })(jQuery);
@@ -17,6 +25,25 @@ $(document).ready(function(){
       $(this).removeClass('over');
     }
   );
+
+  $('.toggler').bind({
+    mouseover: function(){
+      $(this).css({cursor: 'pointer', textDecoration: 'underline'})
+    },
+    mouseout: function(){
+      $(this).css({textDecoration: 'none'})
+    },
+    click: function(){
+      var targetId = '#' + $(this).attr('id') + '-target';
+      if($(targetId).is(':visible')){
+        $(targetId).hide('medium');
+        $(this).find('.toggler-indicator').attr('class', 'toggler-indicator ui-silk ui-silk-arrow-right inline');
+      } else {
+        $(this).find('.toggler-indicator').attr('class', 'toggler-indicator ui-silk ui-silk-arrow-down inline');
+        $(targetId).show('medium');
+      }
+    }
+  });
 
   $('.more').live({
     mouseover: function(){

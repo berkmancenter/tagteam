@@ -12,6 +12,8 @@ class RepublishedFeedsController < ApplicationController
 
   def show
     @owners = @republished_feed.owners
+    @is_owner = @owners.include?(current_user)
+    @republished_feed.items.find(:all)
   end
 
   def new
@@ -35,6 +37,17 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def update
+    @republished_feed.attributes = params[:republished_feed]
+    respond_to do|format|
+      if @republished_feed.save
+        current_user.has_role!(:editor, @republished_feed)
+        flash[:notice] = 'Edited that republished feed'
+        format.html{redirect_to :action => :show, :id => @republished_feed.id}
+      else
+        flash[:error] = 'Could not edit that republished feed'
+        format.html {render :action => :update}
+      end
+    end
   end
 
   def edit

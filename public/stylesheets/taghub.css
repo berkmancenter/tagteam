@@ -48,6 +48,12 @@ h3{
   margin-top: .5em;
 }
 
+blockquote{
+  margin: .5em 1.5em .5em 1.5em;
+  color: #666;
+  font-size:8pt;
+}
+
 #wrapper{
   float: left;
   background: #333;
@@ -61,6 +67,14 @@ section#content{
   background: white;
   border-radius: 5px;
   line-height: 1.4em;
+}
+
+.content, .description{
+  padding: 10px;
+  background: #f4f4f4;
+  border: 4px solid #ccc;
+  border-radius: 10px;
+  font-size: 10pt;
 }
 
 header h1{
@@ -98,6 +112,7 @@ div.error, div.notice{
 
 .formtastic .create, 
 .formtastic .edit,
+.formtastic .update,
 a.button, 
 #feed_feed_url_input p.inline-hints{
 	background: #7a000d;
@@ -105,6 +120,11 @@ a.button,
 	padding: 5px;
 	border-radius: 10px;
 	border: 3px outset #ccc;
+}
+
+.new_object{
+  margin-top: .5em;
+  font-weight: bold;
 }
 
 #feed_feed_url_input p.inline-hints{

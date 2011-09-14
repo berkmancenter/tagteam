@@ -3,15 +3,14 @@
   <%= @feed.description %>
 </div>
 <div class="meta">
-    <dl>
-      <dt>Feed URL:</dt>
-      <dd><%= link_to @feed.feed_url, @feed.feed_url %></dd>
+  <dl>
+    <dt>Feed URL:</dt>
+    <dd><%= link_to @feed.feed_url, @feed.feed_url %></dd>
 
-      <dt>Flavor:</dt>
-      <dd><%= @feed.flavor %></dd>
+    <dt>Flavor:</dt>
+    <dd><%= @feed.flavor %></dd>
 
-      <dt>Owners:</dt>
-      <dd><%= @feed.owners.collect{|o| o.email}.join(', ') %></dd>
-    </dl>
-  </div>
+    <dt>Owners:</dt>
+    <dd><%= @feed.owners.collect{|o| o.email}.join(', ') %></dd>
+  </dl>
 </div>

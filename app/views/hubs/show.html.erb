@@ -1,6 +1,6 @@
 <div class="hub detailed" id="hub_<%= @hub.id %>">
   <h1><%= @hub.title %>
-    <% if @owners.include?(current_user) %> 
+    <% if @is_owner %> 
       <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
       <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
     <% end %>
@@ -24,7 +24,7 @@
     <div id="hub_feed_list_<%= @hub.id %>">
       <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
     </div>
-    <% if @owners.include?(current_user) %>
+    <% if @is_owner %>
       <div class="add_feed_container">
         <div class="messages"></div>
         <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Watch a new feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
@@ -37,8 +37,8 @@
     <div id="republished_feed_list_<%= @hub.id %>">
       <%= render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds %>
     </div>
-    <% if @owners.include?(current_user) %>
-      <%= link_to('New Republished Feed', new_republished_feed_path(:hub_id => @hub)) %>
+    <% if @is_owner %>
+      <%= link_to(raw('<span class="ui-silk inline ui-silk-rss-go"></span> New Republished Feed'), new_republished_feed_path(:hub_id => @hub), :class=> "new_object") %>
     <% end %>
   </div>
 </div>

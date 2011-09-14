@@ -1,7 +1,16 @@
 <div class="input_source">
-  <% if [Feed,FeedItem].include?(input_source.item_source.class) %>
-    <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => input_source.item_source.class.to_s.tableize.singularize) %>
-  <% else %>
-    <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => 'tag') %>
-  <% end %>
+  <div class="grid_1 alpha">
+    <% if @is_owner %>
+      <%= link_to('delete', input_source_path(input_source), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+      <%= link_to('edit', edit_input_source_path(input_source), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+    <% end %>
+  </div>
+  <div class="grid_10 omega">
+    <% if [Feed,FeedItem].include?(input_source.item_source.class) %>
+      <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => input_source.item_source.class.to_s.tableize.singularize) %>
+    <% else %>
+      <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => 'tag') %>
+    <% end %>
+  </div>
+  <div class="clear"></div>
 </div>

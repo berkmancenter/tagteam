@@ -4,18 +4,24 @@ class InputSourcesController < ApplicationController
 
   access_control do
     allow all, :to => [:show, :find]
-    allow :owner, :of => :republished_feed, :to => [:new, :create]
+    allow :owner, :of => :republished_feed, :to => [:new, :create, :edit, :update]
     allow :owner, :of => :input_source, :to => [:edit, :update, :destroy]
     allow :superadmin, :input_source_admin
   end
 
   def new
-    @input_source = InputSource.new(:republished_feed_id => @republished_feed.id)
+    @input_source = InputSource.new(:effect => params[:effect])
+    #ok because we're using ACL9 to protect this method.
+    @input_source.republished_feed_id = params[:republished_feed_id]
   end
 
   def create
-    @input_source = InputSource.new(:republished_feed_id => @republished_feed.id)
+    @input_source = InputSource.new()
     @input_source.attributes = params[:input_source]
+
+    #ok because we're using ACL9 to protect this method.
+    @input_source.republished_feed_id = params[:input_source][:republished_feed_id]
+
     respond_to do|format|
       if @input_source.save
         current_user.has_role!(:owner, @input_source)
@@ -25,6 +31,20 @@ class InputSourcesController < ApplicationController
       else
         flash[:error] = 'Could not add that input source'
         format.html {render :action => :new}
+      end
+    end
+  end
+
+  def update
+    @input_source.attributes = params[:input_source]
+    respond_to do|format|
+      if @input_source.save
+        current_user.has_role!(:editor, @input_source)
+        flash[:notice] = 'Updated that input source'
+        format.html{redirect_to republished_feed_url(@input_source.republished_feed)}
+      else
+        flash[:error] = 'Could not update that input source'
+        format.html {render :action => :edit}
       end
     end
   end
@@ -58,14 +78,20 @@ class InputSourcesController < ApplicationController
       }
       format.json{ render :json => @search }
     end
-    
-
   end
 
   def edit
   end
 
   def destroy
+    begin
+      @republished_feed = @input_source.republished_feed
+      @input_source.destroy
+      flash[:notice] = 'Removed that item'
+    rescue
+      flash[:notice] = 'Could not remove that item'
+    end
+    redirect_to republished_feed_url(@republished_feed)
   end
 
   def show

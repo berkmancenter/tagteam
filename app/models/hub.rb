@@ -6,7 +6,7 @@ class Hub < ActiveRecord::Base
   acts_as_authorization_object
   has_many :hub_feeds, :dependent => :destroy
   has_many :hub_tag_filters, :dependent => :destroy
-  has_many :republished_feeds, :dependent => :destroy
+  has_many :republished_feeds, :dependent => :destroy, :order => 'created_at desc'
   has_many :feeds, :through => :hub_feeds
 
   def display_title

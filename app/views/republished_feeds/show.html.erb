@@ -17,14 +17,17 @@
   <div class="grid_11 omega">
     <h2>Feed Sources:</h2>
     <div class="input_sources">
-      <h3>Additive</h3>
+      <h3>Add</h3>
       <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
-      <h3>Removals</h3>
+      <% if @is_owner %>
+        <%= link_to(raw('Add items to this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'add'), :class => 'new_object') %>
+      <% end %>
+      <h3>Remove</h3>
       <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'}, :locals => {:effect => 'add'} %>
+      <% if @is_owner %>
+        <%= link_to(raw('Remove items from this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'remove'), :class => 'new_object') %>
+      <% end %>
     </div>
-    <% if @owners.include?(current_user) %>
-      <%= link_to('Add new input source', new_input_source_path(:republished_feed_id => @republished_feed)) %>
-    <% end %>
 
   </div>
   <div class="clear"></div>
