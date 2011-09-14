@@ -170,8 +170,10 @@ a:hover{
   background-position:5px 7px;
   border: 1px solid #aaa;
   padding: 1px 5px 1px 15px;
-  float: left;
-  display: block;
+
+  /* Will probably cause problems with some versions of ie */
+  display: inline-block;
+
   margin: 0px 8px 4px 0px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -212,6 +214,10 @@ input#filter_by{
 
 .formtastic{
   font-size: 9pt;
+}
+
+.input_source{
+  margin-bottom: 4px;
 }
 
 footer{

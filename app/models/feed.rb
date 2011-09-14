@@ -84,4 +84,8 @@ class Feed < ActiveRecord::Base
   end
 
   alias :display_title :to_s
+
+  def mini_icon
+    %q|<span class="ui-silk inline ui-silk-feed"></span>|
+  end
 end

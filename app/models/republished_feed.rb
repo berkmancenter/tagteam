@@ -21,11 +21,17 @@ class RepublishedFeed < ActiveRecord::Base
     self.input_sources.each do|input_source|
       if input_source.effect == 'add'
         items << input_source.item_source.items
-      elsif input_source.effect == 'remove'
-        items = items - input_source.item_source.items
       end
     end
-    output_items = items.flatten.uniq.compact.sort_by{|i| (self.default_sort == 'date_published') ? i.date_published : i.title}
+    output_items = items.flatten.uniq.compact
+
+    self.input_sources.each do|input_source|
+      if input_source.effect == 'remove'
+        output_items = output_items - input_source.item_source.items
+      end
+    end
+
+    output_items = output_items.sort_by{|i| (self.default_sort == 'date_published') ? i.date_published : i.title}
     if self.default_sort == 'date_published'
       output_items.reverse!
     end

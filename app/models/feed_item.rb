@@ -41,4 +41,12 @@ class FeedItem < ActiveRecord::Base
 
   alias :display_title :to_s
 
+  def items
+    [self]
+  end
+
+  def mini_icon
+    %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
+  end
+
 end

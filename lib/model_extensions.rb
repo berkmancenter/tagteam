@@ -43,7 +43,7 @@ module ModelExtensions
         valid_output += "validates_length_of :#{val_col.name}, :maximum => #{val_col.limit}, :allow_blank => #{val_col.null}\n"
       end
 
-      after_initialize_content = ''
+      before_create_content = ''
       self.columns.each do|col|
         unless col.default.blank?
           if [Fixnum,String,DateTime].include?(col.default.class)
@@ -53,14 +53,14 @@ module ModelExtensions
             else
               val = %Q|"#{col.default}"|
             end
-            after_initialize_content += "self.#{col.name} = #{val}\n"
+            before_create_content += "self.#{col.name} = #{val}\n"
           end
         end
       end
 
-      unless after_initialize_content.blank?
-        valid_output += "after_initialize do
-  #{after_initialize_content}
+      unless before_create_content.blank?
+        valid_output += "before_create do
+  #{before_create_content}
 end"
       end
 #      logger.warn('Autovalidations:' + valid_output)
