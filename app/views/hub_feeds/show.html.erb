@@ -1,15 +1,17 @@
-<h1><%= @hub_feed %></h1>
-<dl>
-  <dt>Last successful retrieval:</dt>
-  <dd><%= @hub_feed.latest_feed_retrieval.created_at.to_s(:long) %></dd>
-</dl>
+<div class="hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">
+  <h1><%= @hub_feed %></h1>
+  <dl>
+    <dt>Last successful retrieval:</dt>
+    <dd><%= @hub_feed.latest_feed_retrieval.created_at.to_s(:long) %></dd>
+  </dl>
 
-<h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
+  <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
 
-<%= will_paginate @feed_items %>
+  <%= will_paginate @feed_items %>
 
-<div class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
-  <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+  <div class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
+    <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+  </div>
+
+  <%= will_paginate @feed_items %>
 </div>
-
-<%= will_paginate @feed_items %>

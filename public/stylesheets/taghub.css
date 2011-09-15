@@ -39,6 +39,10 @@ h1{
   font-size:2em;
 }
 
+h1 sup{
+  font-size: 8pt;
+}
+
 h2{
   font-size:1.5em;
 }
@@ -69,7 +73,7 @@ section#content{
   line-height: 1.4em;
 }
 
-.content, .description{
+.feed_item .content, .feed_item .description{
   padding: 10px;
   background: #f4f4f4;
   border: 4px solid #ccc;
@@ -171,16 +175,16 @@ a:hover{
   font-size: .9em;
 }
 
-.metadata{
-  display: none;
-}
-
-.meta dt{
+.metadata dt{
   font-weight:bold;
 
 }
-.meta dd{
+.metadata dd{
   margin-bottom: .5em;
+}
+
+.hub_feeds .metadata{
+  display: none;
 }
 
 .tag{

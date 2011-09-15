@@ -1,15 +1,44 @@
-<h1><%= @feed_item.title %></h1>
-<div class="grid_12 alpha">
-  <h3>Summary</h3>
-  <div class="description">
-    <%= raw @feed_item.description %>
-  </div>
-  <% unless @feed_item.content.blank? %>
-    <h3 class="toggler" id="toggler-feeditem-<%= @feed_item.id %>">Full content <span class="toggler-indicator ui-silk ui-silk-arrow-right inline"></span></h3>
-    <div class="content" id="toggler-feeditem-<%= @feed_item.id %>-target" style="display: none;">
-      <%= raw @feed_item.content %>
+<div class="feed_item" id="feed_item_<%= @feed_item.id %>">
+  <h1><%= @feed_item.title %> <sup><%= link_to('link', @feed_item.url, :target => '_blank') %></sup></h1>
+  <div class="grid_12 alpha">
+    <h3>Summary</h3>
+    <div class="description">
+      <%= raw @feed_item.description %>
     </div>
-  <% end %>
-</div>
-<div class="grid_4 omega">
+    <% unless @feed_item.content.blank? %>
+      <h3 class="toggler" id="toggler-feeditem-<%= @feed_item.id %>">Full content <span class="toggler-indicator ui-silk ui-silk-arrow-right inline"></span></h3>
+      <div class="content" id="toggler-feeditem-<%= @feed_item.id %>-target" style="display: none;">
+        <%= raw @feed_item.content %>
+      </div>
+    <% end %>
+  </div>
+  <div class="grid_4 omega">
+    <dl class="metadata">
+      <% unless @feed_item.date_published.blank? %>
+        <dt>Published:</dt>
+        <dd><%= l(@feed_item.date_published, :format => :date_and_time_short)  %></dd>
+      <% end %>
+      <% unless @feed_item.last_updated.blank? || @feed_item.last_updated == @feed_item.date_published %>
+        <dt>Updated:</dt>
+        <dd><%= l(@feed_item.last_updated, :format => :date_and_time_short)  %></dd>
+      <% end %>
+      <dt>From:</dt>
+      <% #TODO - Make this resolve to the hub feed. %>
+      <dd><%= raw @feed_item.feeds.collect{|feed| link_to(feed, feed)}.join(', ') %></dd>
+      <dt>Tags:</dt>
+      <dd><%= raw @feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}.join(' ') %></dd>
+      <% unless @feed_item.authors.blank? %>
+        <dt>Authors:</dt>
+        <dd><%= @feed_item.authors %></dd>
+      <% end %>
+      <% unless @feed_item.contributors.blank? %>
+        <dt>Contributors:</dt>
+        <dd><%= @feed_item.contributors %></dd>
+      <% end %>
+      <% unless @feed_item.rights.blank? %>
+        <dt>Copyright info:</dt>
+        <dd><%= @feed_item.rights %></dd>
+      <% end %>
+    </dl>
+  </div>
 </div>
