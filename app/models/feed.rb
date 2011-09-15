@@ -54,6 +54,7 @@ class Feed < ActiveRecord::Base
     
     self.raw_feed.items.each do|item|
       fi = FeedItem.find_or_initialize_by_url(:url => item.link)
+      logger.warn("Raw Item: " + item.inspect)
       if fi.new_record?
         # Instantiate only for new records.
         fi.title = item.title
@@ -75,7 +76,11 @@ class Feed < ActiveRecord::Base
       fi.tags = item.categories
 
       logger.warn("Feed item: #{fi.inspect}")
-      fi.save
+      if fi.valid?
+        fi.save
+      else
+        logger.warn("Feed item errors: #{fi.errors.inspect}")
+      end
     end
   end
 

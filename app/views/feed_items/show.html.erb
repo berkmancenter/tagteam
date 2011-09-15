@@ -1,10 +1,12 @@
 <div class="feed_item" id="feed_item_<%= @feed_item.id %>">
   <h1><%= @feed_item.title %> <sup><%= link_to('link', @feed_item.url, :target => '_blank') %></sup></h1>
   <div class="grid_12 alpha">
-    <h3>Summary</h3>
-    <div class="description">
-      <%= raw @feed_item.description %>
-    </div>
+    <% unless @feed_item.description.blank? %>
+      <h3>Summary</h3>
+      <div class="description">
+        <%= raw @feed_item.description %>
+      </div>
+    <% end %>
     <% unless @feed_item.content.blank? %>
       <h3 class="toggler" id="toggler-feeditem-<%= @feed_item.id %>">Full content <span class="toggler-indicator ui-silk ui-silk-arrow-right inline"></span></h3>
       <div class="content" id="toggler-feeditem-<%= @feed_item.id %>-target" style="display: none;">
