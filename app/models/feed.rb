@@ -54,7 +54,6 @@ class Feed < ActiveRecord::Base
     
     self.raw_feed.items.each do|item|
       fi = FeedItem.find_or_initialize_by_url(:url => item.link)
-      logger.warn("Raw Item: " + item.inspect)
       if fi.new_record?
         # Instantiate only for new records.
         fi.title = item.title
@@ -75,11 +74,10 @@ class Feed < ActiveRecord::Base
       # Merge tags. . .
       fi.tags = item.categories
 
-      logger.warn("Feed item: #{fi.inspect}")
       if fi.valid?
         fi.save
       else
-        logger.warn("Feed item errors: #{fi.errors.inspect}")
+        logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
       end
     end
   end

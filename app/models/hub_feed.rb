@@ -4,6 +4,7 @@ class HubFeed < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed
   after_create :auto_create_republished_feed
+  before_destroy :auto_delete_republished_feed
   validates_uniqueness_of :feed_id, :scope => :hub_id
 
   def display_title
@@ -43,6 +44,25 @@ class HubFeed < ActiveRecord::Base
     return []
   end
 
+  private
+
+  def auto_delete_republished_feed
+    # So. . . we need to find republished feeds that have this feed as a single input source and that belong to this hub.
+    # We can do a bunch of tortured ruby, or just run the sql directly.
+
+    rps = RepublishedFeed.execute(
+      ['select * from 
+        republished_feeds, input_sources 
+        where input_sources.republished_feed_id = republished_feeds.id 
+        and republished_feeds.hub_id = ? 
+        and input_sources.item_source_type = ? 
+        and input_sources.item_source_id = ?',
+        self.hub_id,
+        'Feed',
+        self.feed_id
+    ])
+  end
+
   def auto_create_republished_feed
 
     rf = RepublishedFeed.new(
@@ -57,7 +77,7 @@ class HubFeed < ActiveRecord::Base
     if rf.valid?
       rf.save
     else
-      logger.warn(rf.errors.inspect)
+      logger.warn("Couldn't auto create republished feed: " + rf.errors.inspect)
     end
 
     input_source = InputSource.new(
@@ -67,7 +87,12 @@ class HubFeed < ActiveRecord::Base
       :position => 1,
       :limit => 50
     )
-    input_source.save
+
+    if input_source.valid?
+      logger.warn("Couldn't auto create input source: " + input_source.errors.inspect)
+      input_source.save
+    else
+    end
   end
 
 end
