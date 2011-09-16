@@ -1,6 +1,20 @@
 <% rp = republished_feed %>
 <div class="republished_feed hover_row" id="republished_feed_<%= rp.id %>">
-<span class="ui-silk inline ui-silk-rss-go"></span> <% if rp.owners.include?(current_user) %><%= link_to(raw('<span class="ui-silk gray hover inline ui-silk-application-edit"></span>'), edit_republished_feed_path(rp)) %><% end %> <%= link_to(rp.title,republished_feed_path(rp)) %> <sup><%= link_to('rss', rss_republished_feed_path(rp)) %> <%= link_to('atom', atom_republished_feed_path(rp)) %></sup> <div class="more" id="republished_feed_more_<%= rp.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div>
+  <div class="grid_1 alpha">
+    <% if rp.owners.include?(current_user) %>
+      <%= link_to('delete', republished_feed_path(republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+      <%= link_to('edit', edit_republished_feed_path(republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+    <% else %>
+      &nbsp;
+    <% end %>
+  </div>
+  <div class="grid_13"> 
+  <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(rp.title,republished_feed_path(rp)) %> <sup><%= link_to('rss', rss_republished_feed_path(rp)) %> <%= link_to('atom', atom_republished_feed_path(rp)) %></sup>
+  </div>
+  <div class="grid_2 omega">
+    <div class="more" id="republished_feed_more_<%= rp.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div>
+  </div>
+  <div class="clear"></div>
   <div class="metadata" id="republished_feed_metadata_<%= rp.id %>">
     <div class="grid_4 alpha">
     </div>

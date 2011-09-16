@@ -1,6 +1,8 @@
 class HubFeed < ActiveRecord::Base
   include ModelExtensions
+  include AuthUtilities
 
+  acts_as_authorization_object
   belongs_to :hub
   belongs_to :feed
   after_create :auto_create_republished_feed
@@ -44,23 +46,30 @@ class HubFeed < ActiveRecord::Base
     return []
   end
 
+  def get_completely_dependent_republished_feeds
+    # So. . . we need to find republished feeds that have this feed as a single input source and that belong to this hub.
+    # We can do a bunch of tortured ruby, or just run the sql directly.
+    rps = RepublishedFeed.connection.execute('select republished_feeds.id from 
+        republished_feeds, input_sources 
+        where input_sources.republished_feed_id = republished_feeds.id 
+        and republished_feeds.hub_id = ' + self.connection.quote(self.hub_id) +  
+        ' and input_sources.item_source_type = ' + self.connection.quote('Feed') + 
+        ' and input_sources.item_source_id = ' + self.connection.quote(self.feed_id)
+    )
+  end
+
   private
 
   def auto_delete_republished_feed
-    # So. . . we need to find republished feeds that have this feed as a single input source and that belong to this hub.
-    # We can do a bunch of tortured ruby, or just run the sql directly.
-
-    rps = RepublishedFeed.execute(
-      ['select * from 
-        republished_feeds, input_sources 
-        where input_sources.republished_feed_id = republished_feeds.id 
-        and republished_feeds.hub_id = ? 
-        and input_sources.item_source_type = ? 
-        and input_sources.item_source_id = ?',
-        self.hub_id,
-        'Feed',
-        self.feed_id
-    ])
+    rps = RepublishedFeed.find(:all, :conditions => {:id => self.get_completely_dependent_republished_feeds.collect{|r| r['id']}})
+    rps.each do|rp|
+      if rp.input_sources.length == 1
+        rp.destroy
+      else
+        # More than one input source. Clear it out anyway.
+        InputSource.destroy_all(:republished_feed_id => rp.id, :item_source_type => 'Feed', :item_source_id => self.feed.id)
+      end
+    end
   end
 
   def auto_create_republished_feed
@@ -89,9 +98,9 @@ class HubFeed < ActiveRecord::Base
     )
 
     if input_source.valid?
-      logger.warn("Couldn't auto create input source: " + input_source.errors.inspect)
       input_source.save
     else
+      logger.warn("Couldn't auto create input source: " + input_source.errors.inspect)
     end
   end
 

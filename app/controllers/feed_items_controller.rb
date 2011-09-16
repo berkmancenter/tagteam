@@ -1,5 +1,6 @@
 class FeedItemsController < ApplicationController
   before_filter :load_feed_item, :except => [:index, :by_date]
+  before_filter :add_breadcrumbs, :except => [:index, :by_date]
 
   access_control do
     allow all
@@ -34,6 +35,14 @@ class FeedItemsController < ApplicationController
 
   def load_feed_item
     @feed_item = FeedItem.find(params[:id])
+  end
+
+  def add_breadcrumbs
+
+    hub_feed = @feed_item.feeds.first.hub_feeds.first
+    unless hub_feed.blank?
+      breadcrumbs.add hub_feed.to_s, hub_feed_path(hub_feed) 
+    end
   end
 
 end

@@ -1,5 +1,6 @@
 class HubFeedsController < ApplicationController
   before_filter :load_hub_feed, :except => [:index, :new, :create]
+  before_filter :add_breadcrumbs, :except => [:index, :new, :create]
   before_filter :prep_resources
 
   access_control do
@@ -31,17 +32,26 @@ class HubFeedsController < ApplicationController
   end
 
   def destroy
+    @hub_feed.destroy
+    flash[:notice] = 'Removed that feed.'
+    redirect_to(hub_path(@hub))
+  rescue
+    flash[:error] = "Couldn't remove that feed."
+    redirect_to(hub_path(@hub))
   end
 
   private
 
   def load_hub_feed
-    # Yes, on purpose to avoid the error. There are some actions in here that don't have to run in hub context.
-    @hub = Hub.find_by_id(params[:hub_id])
     @hub_feed = HubFeed.find_by_id(params[:id])
+    @hub = @hub_feed.hub
   end
 
   def prep_resources
+  end
+
+  def add_breadcrumbs
+    breadcrumbs.add @hub.title, hub_path(@hub)
   end
 
 end

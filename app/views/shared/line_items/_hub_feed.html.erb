@@ -1,9 +1,22 @@
 <div class="hub_feed hover_row" id="hub_feed_<%= hub_feed.id %>">
-  <span class="ui-silk inline ui-silk-feed"></span> <%= link_to(raw(strip_tags(hub_feed.to_s)), hub_feed_path(hub_feed)) %>
-  <% if defined?(show_hubs) && show_hubs == true %>
-    <span class="smaller">in <%= link_to(hub_feed.hub, hub_path(hub_feed.hub) )%></span>
-  <% end %>
-  <div class="more" id="hub_feed_more_<%= hub_feed.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div> 
+  <div class="grid_1 alpha">
+    <% if hub_feed.owners.include?(current_user) %>
+      <%= link_to('delete', hub_feed_path(hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+      <%= link_to('edit', edit_hub_feed_path(hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+    <% else %>
+      &nbsp;
+    <% end %>
+  </div>
+  <div class="grid_13">
+    <span class="ui-silk inline ui-silk-feed"></span> <%= link_to(raw(strip_tags(hub_feed.to_s)), hub_feed_path(hub_feed)) %>
+    <% if defined?(show_hubs) && show_hubs == true %>
+      <span class="smaller">in <%= link_to(hub_feed.hub, hub_path(hub_feed.hub) )%></span>
+    <% end %>
+  </div>
+  <div class="grid_2 omega">
+    <div class="more" id="hub_feed_more_<%= hub_feed.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div> 
+  </div>
+  <div class="clear"></div>
   <div class="metadata" id="hub_feed_metadata_<%= hub_feed.id %>">
     <div class="grid_4 alpha">
       <span class="updated"> <%= hub_feed.feed.updated_at.to_s(:long) %></span>

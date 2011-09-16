@@ -58,6 +58,24 @@ blockquote{
   font-size:8pt;
 }
 
+.breadcrumbs{
+  font-size: 8pt;
+  opacity: 0.5;
+}
+
+.breadcrumbs:hover{
+  opacity: 1;
+}
+
+.breadcrumbs a{
+  text-decoration: none;
+  color: black;
+}
+
+.breadcrumbs a:hover{
+  text-decoration: underline;
+}
+
 #wrapper{
   float: left;
   background: #333;
@@ -157,7 +175,6 @@ a:hover{
   line-height: 1.2em;
 }
 
-
 .search_result{
   font-size: 8pt;
   line-height: 12px;
@@ -171,8 +188,8 @@ a:hover{
 }
 
 .more{
-  float: right;
   font-size: .9em;
+  text-align: right;
 }
 
 .metadata dt{

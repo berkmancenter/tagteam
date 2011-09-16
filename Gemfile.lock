@@ -32,6 +32,8 @@ GEM
     acts_as_list (0.1.4)
     arel (2.0.10)
     bcrypt-ruby (2.1.4)
+    breadcrumbs (0.1.6)
+      i18n
     builder (2.1.2)
     capybara (0.4.1.2)
       celerity (>= 0.7.9)
@@ -182,6 +184,7 @@ PLATFORMS
 DEPENDENCIES
   acl9
   acts_as_list (= 0.1.4)
+  breadcrumbs
   capybara (= 0.4.1.2)
   carrierwave (= 0.5.6)
   cucumber-rails (= 0.4.1)

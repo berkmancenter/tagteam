@@ -2,6 +2,7 @@ class RepublishedFeedsController < ApplicationController
   before_filter :load_republished_feed, :except => [:new, :create]
   before_filter :load_hub, :only => [:new, :create]
   before_filter :prep_resources
+  before_filter :register_breadcrumb
 
   access_control do
     allow all, :to => [:show, :rss, :atom]
@@ -71,10 +72,15 @@ class RepublishedFeedsController < ApplicationController
 
   def load_republished_feed
     @republished_feed = RepublishedFeed.find(params[:id])
+    @hub = @republished_feed.hub
   end
 
   def prep_resources
 #    @javascripts_extras = ['republished_feeds']
+  end
+
+  def register_breadcrumb
+    breadcrumbs.add @hub.title, hub_path(@hub)
   end
 
 end

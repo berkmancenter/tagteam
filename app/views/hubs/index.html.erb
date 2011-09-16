@@ -2,7 +2,7 @@
   <div class="my grid_8 alpha"> 
   <h2>My hubs</h2>
     <%= render :partial => 'shared/line_items/hub', :collection => @my_hubs %>
-    <%= link_to('New Hub', new_hub_path) %>
+    <%= link_to(raw('<span class="inline ui-silk ui-silk-plugin-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
   </div>
 <% end %>
 

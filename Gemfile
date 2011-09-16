@@ -15,6 +15,7 @@ gem "will_paginate"
 gem 'acts_as_list', '0.1.4'
 gem 'sunspot'
 gem 'sunspot_rails'
+gem 'breadcrumbs'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.6.1'

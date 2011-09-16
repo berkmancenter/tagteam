@@ -45,6 +45,7 @@
         <% end %>
 
         <section class="grid_16" id="content">
+          <div class="breadcrumbs"><%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %></div>
           <%= yield %>
         </section>
         <div class="clear"></div>
