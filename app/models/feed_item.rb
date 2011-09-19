@@ -26,6 +26,12 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feed_item_tags
   has_and_belongs_to_many :feeds
 
+  def hubs
+    # TODO Optimize via find and includes
+    hf = self.feeds.find(:all, :include => [:hub_feeds]).collect{|f| f.hub_feeds}.flatten.uniq
+    (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
+  end
+
   def tags=(tag_inputs)
     #FIXME - merge tags
     new_tags = []

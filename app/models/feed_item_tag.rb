@@ -9,6 +9,13 @@ class FeedItemTag < ActiveRecord::Base
     string :tag
   end
 
+  def hubs
+    # TODO - optimize via find and includes
+    feeds = self.feed_items.find(:all, :include => {:feeds => [:hub_feeds]}).collect{|fi| fi.feeds}.flatten.uniq
+    hf =  feeds.collect{|f| f.hub_feeds}.flatten.uniq
+    (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
+  end
+
   def to_s
     "#{tag}"
   end
