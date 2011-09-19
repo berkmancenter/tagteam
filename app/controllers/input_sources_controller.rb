@@ -1,6 +1,6 @@
 class InputSourcesController < ApplicationController
   before_filter :load_input_source, :except => [:new, :create, :find]
-  before_filter :load_republished_feed, :only => [:new, :create]
+  before_filter :load_republished_feed, :only => [:new, :create, :find]
 
   access_control do
     allow all, :to => [:show, :find]
@@ -50,9 +50,8 @@ class InputSourcesController < ApplicationController
   end
 
   def find
-    #Here's where we'll return a json object of possible feed sources.
-
     @search = Sunspot.new_search Feed, FeedItem, FeedItemTag
+    params[:hub_id] = @republished_feed.hub_id  
 
     @search.build do
       text_fields do
@@ -64,6 +63,7 @@ class InputSourcesController < ApplicationController
           with(:authors).starting_with(params[:q])
         end
       end
+      with :hub_ids, params[:hub_id]
     end
 
     @search.execute

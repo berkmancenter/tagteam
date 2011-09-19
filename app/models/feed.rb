@@ -21,11 +21,13 @@ class Feed < ActiveRecord::Base
 	attr_accessor :raw_feed
 
 	has_many :hub_feeds, :dependent => :destroy
+  has_many :hubs, :through => :hub_feeds
   has_many :feed_retrievals, :order => :created_at, :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
 
   searchable do
     text :title, :description, :link, :guid, :rights, :authors, :feed_url, :generator
+    integer :hub_ids, :multiple => true
 
     string :title
     string :guid
@@ -43,6 +45,10 @@ class Feed < ActiveRecord::Base
 
   def items
     self.feed_items
+  end
+
+  def feed_item_tags
+    self.feed_items.collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
   end
   
   def save_feed_items_on_create

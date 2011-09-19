@@ -7,6 +7,8 @@ class FeedItemTag < ActiveRecord::Base
   searchable do
     text :tag, :description
     string :tag
+    integer :hub_ids, :multiple => true
+
   end
 
   def hubs
@@ -14,6 +16,10 @@ class FeedItemTag < ActiveRecord::Base
     feeds = self.feed_items.find(:all, :include => {:feeds => [:hub_feeds]}).collect{|fi| fi.feeds}.flatten.uniq
     hf =  feeds.collect{|f| f.hub_feeds}.flatten.uniq
     (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
+  end
+
+  def hub_ids
+    (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
   end
 
   def to_s

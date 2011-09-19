@@ -33,7 +33,7 @@
       cache: false,
       type: 'GET',
       url: $.rootPath() + 'input_sources/find',
-      data: {q:  $('#ajax_item_source').val()},
+      data: {q:  $('#ajax_item_source').val(), republished_feed_id: $('#input_source_republished_feed_id').val()},
       beforeSend: function(){
         $.showSpinner('#spinner');
       },

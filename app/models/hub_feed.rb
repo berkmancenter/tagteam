@@ -5,9 +5,24 @@ class HubFeed < ActiveRecord::Base
   acts_as_authorization_object
   belongs_to :hub
   belongs_to :feed
-  after_create :auto_create_republished_feed
-  before_destroy :auto_delete_republished_feed
+#  after_create :auto_create_republished_feed
+#  before_destroy :auto_delete_republished_feed
   validates_uniqueness_of :feed_id, :scope => :hub_id
+
+#  after_update do
+#    logger.warn('reindexing everything')
+#    reindex_relevant_items
+#  end
+  
+  after_create do
+    auto_create_republished_feed
+    reindex_items_of_concern
+  end
+
+  after_destroy do
+    auto_delete_republished_feed
+    reindex_items_of_concern
+  end
 
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
@@ -102,6 +117,13 @@ class HubFeed < ActiveRecord::Base
     else
       logger.warn("Couldn't auto create input source: " + input_source.errors.inspect)
     end
+  end
+
+  def reindex_items_of_concern
+    logger.warn('reindexing everything')
+    self.feed.solr_index
+    self.feed.feed_items.collect{|fi| fi.solr_index}
+    self.feed.feed_item_tags{|ft| ft.solr_index}
   end
 
 end

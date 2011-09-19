@@ -9,6 +9,7 @@ class FeedItem < ActiveRecord::Base
 
   searchable do
     text :title, :content, :url, :guid, :authors, :contributors, :rights
+    integer :hub_ids, :multiple => true
 
     string :title
     string :url
@@ -30,6 +31,10 @@ class FeedItem < ActiveRecord::Base
     # TODO Optimize via find and includes
     hf = self.feeds.find(:all, :include => [:hub_feeds]).collect{|f| f.hub_feeds}.flatten.uniq
     (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
+  end
+
+  def hub_ids
+    (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
   end
 
   def tags=(tag_inputs)
