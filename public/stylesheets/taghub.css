@@ -52,6 +52,13 @@ h3{
   margin-top: .5em;
 }
 
+table {
+  width: 100%;
+}
+table td{
+  padding: 3px;
+}
+
 blockquote{
   margin: .5em 1.5em .5em 1.5em;
   color: #666;

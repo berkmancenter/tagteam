@@ -8,8 +8,8 @@
       &nbsp;
     <% end %>
   </div>
-  <div class="grid_13"> 
-  <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(rp.title,republished_feed_path(rp)) %> <sup><%= link_to('rss', rss_republished_feed_path(rp)) %> <%= link_to('atom', atom_republished_feed_path(rp)) %></sup>
+  <div class="grid_12"> 
+    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(rp.title,republished_feed_path(rp)) %> <sup><%= link_to('rss', rss_republished_feed_path(rp)) %> <%= link_to('atom', atom_republished_feed_path(rp)) %></sup>
   </div>
   <div class="grid_2 omega">
     <div class="more" id="republished_feed_more_<%= rp.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div>
