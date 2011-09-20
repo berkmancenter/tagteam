@@ -1,6 +1,6 @@
 <div class="input_source">
   <div class="grid_1 alpha">
-    <% if @is_owner %>
+    <% if current_user.is?(:owner, input_source) %>
       <%= link_to('delete', input_source_path(input_source), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
       <%= link_to('edit', edit_input_source_path(input_source), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
     <% end %>

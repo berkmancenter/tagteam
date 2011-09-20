@@ -1,15 +1,15 @@
 <div class="hub detailed" id="hub_<%= @hub.id %>">
   <h1><%= @hub.title %>
-    <% if @is_owner %> 
+    <% if current_user.is?(:owner, @hub) %> 
       <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
       <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
     <% end %>
   </h1>
-  <div class="tabs">
+  <div id="hub_tabs">
     <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#watching">Watching</a></li>
-      <li><a href="#publishing">Publishing</a></li>
+      <li><a href="#about">About</a><span id="spinner"></span></li>
+      <li><%= link_to('Watching', watching_hub_path(@hub))%></li>
+      <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
     </ul>
 
     <div id="about">
@@ -28,33 +28,22 @@
         </dl>
       </div>
     </div>
-
-    <div id="watching">
-      <div class="hub_feeds">
-        <h3>Feeds this hub is watching:</h3>
-        <table id="hub_feed_list_<%= @hub.id %>">
-          <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
-        </table>
-        <% if @is_owner %>
-          <div class="add_feed_container">
-            <div class="messages"></div>
-            <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Watch a new feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
-          </div> 
-        <% end %>
-      </div>
-    </div>
-
-    <div id="publishing">
-      <div class="republished_feeds">
-        <h3>Feeds this hub is publishing:</h3>
-        <div id="republished_feed_list_<%= @hub.id %>">
-          <%= render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds %>
-        </div>
-        <% if @is_owner %>
-          <%= link_to(raw('<span class="ui-silk inline ui-silk-rss-go"></span> New Republished Feed'), new_republished_feed_path(:hub_id => @hub), :class=> "new_object") %>
-        <% end %>
-      </div>
-    </div>
-
   </div>
 </div>
+
+<%= javascript_tag do
+  %q|$(function(){
+  $('#hub_tabs').tabs({
+    ajaxOptions: {
+      beforeSend: function(){
+        $.showSpinner('#spinner');
+      },
+      complete: function(){
+        $.hideSpinner('#spinner');
+      }
+    }
+  });
+  }
+  );|
+end
+%>

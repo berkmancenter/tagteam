@@ -59,6 +59,7 @@ $(document).ready(function(){
       }
     }
   });
+  // For tabs that don't need options.
   $('.tabs').tabs();
 
 });

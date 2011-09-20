@@ -1,6 +1,6 @@
 <tr class="hub_feed hover_row" id="hub_feed_<%= hub_feed.id %>">
   <td width="60%">
-    <% if hub_feed.owners.include?(current_user) %>
+    <% if current_user && current_user.is?(:owner,hub_feed) %>
       <%= link_to('delete', hub_feed_path(hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
       <%= link_to('edit', edit_hub_feed_path(hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
     <% else %>
@@ -21,6 +21,6 @@
     <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= hub_feed.feed.feed_items.length %> items</span>
   </td>
   <td>
-    <span class="feed_item_tags"><%= raw hub_feed.latest_feed_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}[0,10].join(' ') %></span> 
+    <span class="feed_item_tags"><%= raw hub_feed.feed.feed_items.collect{|fi| fi.feed_item_tags}.flatten.uniq.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}[0,10].join(' ') %></span> 
   </td>
 </tr>

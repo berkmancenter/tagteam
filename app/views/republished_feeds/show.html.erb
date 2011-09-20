@@ -19,12 +19,12 @@
     <div class="input_sources">
       <h3>Add</h3>
       <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
-      <% if @is_owner %>
+      <% if current_user && current_user.is?(:owner, @republished_feed) %>
         <%= link_to(raw('Add items to this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'add'), :class => 'new_object') %>
       <% end %>
       <h3>Remove</h3>
       <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'}, :locals => {:effect => 'add'} %>
-      <% if @is_owner %>
+      <% if current_user && current_user.is?(:owner, @republished_feed) %>
         <%= link_to(raw('Remove items from this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'remove'), :class => 'new_object') %>
       <% end %>
     </div>

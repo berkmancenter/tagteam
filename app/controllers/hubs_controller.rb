@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :republished_feeds]
+    allow all, :to => [:index, :show, :feeds, :republished_feeds, :watching, :republishing]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -120,12 +120,29 @@ class HubsController < ApplicationController
     end
   end
 
+  def watching
+    @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_items => [:feed_item_tags]]]])
+    respond_to do|format|
+      format.html{
+        render :partial => 'watching', :layout => ! request.xhr? 
+      }
+    end
+  end
+
+  def republishing
+    @hub = Hub.find(params[:id], :include => [:accepted_roles => [:users], :republished_feeds => []])
+    respond_to do|format|
+      format.html{
+        render :partial => 'republishing', :layout => ! request.xhr? 
+      }
+    end
+  end
+
   private
 
   def load_hub
-    @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_retrievals => [:feed_items => [:feed_item_tags]]]]])
+    @hub = Hub.find(params[:id])
     @owners = @hub.owners
-    @is_owner = @owners.include?(current_user)
   end
 
   def prep_resources

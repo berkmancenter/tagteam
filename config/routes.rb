@@ -37,6 +37,9 @@ Taghub::Application.routes.draw do
       post 'add_feed'
       get 'feeds'
       get 'republished_feeds'
+      get 'watching'
+      get 'republishing'
+
     end
   end
 

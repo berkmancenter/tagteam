@@ -13,7 +13,6 @@ class RepublishedFeedsController < ApplicationController
 
   def show
     @owners = @republished_feed.owners
-    @is_owner = @owners.include?(current_user)
     @republished_feed.items.find(:all)
   end
 

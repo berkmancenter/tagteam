@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
-  $('#add_feed_button').click(function(e){
+  $('#add_feed_button').live({
+    click: function(e){
     e.preventDefault();
 
     var hubId = $('.hub.detailed').first().attr('id').split('_')[1];
@@ -42,5 +43,6 @@ $(document).ready(function(){
       }
 
     });
+  }
   });
 });
