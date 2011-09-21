@@ -12,7 +12,6 @@ class HubFeedsController < ApplicationController
 
   def index
     @hub_feeds = HubFeed.paginate(:order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page]) 
-
   end
 
   def show
@@ -26,6 +25,17 @@ class HubFeedsController < ApplicationController
   end
 
   def update
+    @hub_feed.attributes = params[:hub_feed]
+    respond_to do|format|
+      if @hub_feed.save
+        current_user.has_role!(:editor, @hub_feed)
+        flash[:notice] = 'Updated that feed.'
+        format.html {redirect_to hub_path(@hub)}
+      else
+        flash[:error] = 'Couldn\'t update that feed!'
+        format.html {render :action => :new}
+      end
+    end
   end
 
   def edit

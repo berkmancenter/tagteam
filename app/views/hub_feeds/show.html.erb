@@ -1,17 +1,41 @@
-<div class="hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">
-  <h1><%= @hub_feed %></h1>
-  <dl>
-    <dt>Last successful retrieval:</dt>
-    <dd><%= @hub_feed.latest_feed_retrieval.created_at.to_s(:long) %></dd>
-  </dl>
+<h1>
+  <% if current_user && current_user.is?(:owner,@hub_feed) %>
+    <%= link_to('delete', hub_feed_path(@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+    <%= link_to('edit', edit_hub_feed_path(@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+  <% end %>
+  <%= @hub_feed %>
+</h1>
 
-  <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
+<div class="tabs hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">
+  <ul>
+    <li><a href="#items">Items</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#filters">Filters</a></li>
+  </ul>
 
-  <%= will_paginate @feed_items %>
+  <div id="about"> 
+    <dl class="metadata">
+      <dt>Feed URL:</dt>
+      <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
+      <dt>Last successful retrieval:</dt>
+      <dd><%= @hub_feed.latest_feed_retrieval.created_at.to_s(:long) %></dd>
+    </dl>
+  </div>
 
-  <table class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
-    <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
-  </table>
 
-  <%= will_paginate @feed_items %>
+  <div id="items">
+    <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
+
+    <%= will_paginate @feed_items %>
+
+    <table class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
+      <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+    </table>
+
+    <%= will_paginate @feed_items %>
+  </div>
+
+  <div id="filters">
+    <h2>Coming soon.</h2>
+  </div>
 </div>

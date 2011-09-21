@@ -1,2 +1,6 @@
-<h1>HubFeeds#edit</h1>
-<p>Find me in app/views/hub_feeds/edit.html.erb</p>
+<h1>Edit the feed: "<%= @hub_feed %>"</h1>
+<dl class="metadata">
+  <dt>Feed URL:</dt>
+  <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
+</dl>
+<%= render :partial => 'shared/forms/hub_feed' %>

@@ -1,8 +1,9 @@
-<h1><%= @hub.title %>
-  <% if current_user.is?(:owner, @hub) %> 
+<h1>  
+  <% if current_user && current_user.is?(:owner, @hub) %> 
     <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
     <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
-  <% end %><span id="spinner"></span>
+  <% end %>
+  <%= @hub.title %> <span id="spinner"></span>
 </h1>
 
 <div class="description">
@@ -15,6 +16,7 @@
     <li><a href="#about">About</a></li>
     <li><%= link_to('Watching', watching_hub_path(@hub))%></li>
     <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
+    <li><a href="#filters">Filters</a></li>
   </ul>
 
   <div id="about">
@@ -28,6 +30,10 @@
         <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
       </dl>
     </div>
+  </div>
+
+  <div id="filters">
+    <h2>Coming soon.</h2>
   </div>
 
 </div>

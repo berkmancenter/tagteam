@@ -26,7 +26,9 @@ class HubsController < ApplicationController
       end
     end
 
-    @hub_feed = HubFeed.new(:hub => @hub, :feed => @feed)
+    @hub_feed = HubFeed.new
+    @hub_feed.hub = @hub
+    @hub_feed.feed = @feed
 
     respond_to do |format|
       if @hub_feed.save

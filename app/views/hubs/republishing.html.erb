@@ -1,5 +1,5 @@
 <div class="republished_feeds">
-  <% if current_user.is?(:owner, @hub) %>
+  <% if current_user && current_user.is?(:owner, @hub) %>
     <%= link_to(raw('<span class="ui-silk inline ui-silk-rss-go"></span> New Republished Feed'), new_republished_feed_path(:hub_id => @hub), :class=> "new_object") %>
   <% end %>
   <h3>Feeds this hub is publishing:</h3>

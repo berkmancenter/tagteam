@@ -5,14 +5,9 @@ class HubFeed < ActiveRecord::Base
   acts_as_authorization_object
   belongs_to :hub
   belongs_to :feed
-#  after_create :auto_create_republished_feed
-#  before_destroy :auto_delete_republished_feed
   validates_uniqueness_of :feed_id, :scope => :hub_id
 
-#  after_update do
-#    logger.warn('reindexing everything')
-#    reindex_relevant_items
-#  end
+  attr_accessible :title, :description
   
   after_create do
     auto_create_republished_feed

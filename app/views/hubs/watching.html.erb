@@ -1,5 +1,5 @@
 <div class="hub_feeds">
-  <% if current_user.is?(:owner, @hub) %>
+  <% if current_user && current_user.is?(:owner, @hub) %>
     <div class="add_feed_container">
       <div class="messages"></div>
       <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Watch a new feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
