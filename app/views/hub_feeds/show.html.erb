@@ -9,9 +9,9 @@
 
   <%= will_paginate @feed_items %>
 
-  <div class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
+  <table class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
     <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
-  </div>
+  </table>
 
   <%= will_paginate @feed_items %>
 </div>

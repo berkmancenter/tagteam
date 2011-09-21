@@ -1,6 +1,6 @@
 <div class="republished_feed hover_row" id="republished_feed_<%= republished_feed.id %>">
   <div class="grid_1 alpha">
-    <% if current_user && current_user.is?(:owner,@hub) %>
+    <% if current_user && current_user.is?(:owner,republished_feed) %>
       <%= link_to('delete', republished_feed_path(republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
       <%= link_to('edit', edit_republished_feed_path(republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
     <% else %>

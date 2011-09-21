@@ -13,7 +13,7 @@ class RepublishedFeedsController < ApplicationController
 
   def show
     @owners = @republished_feed.owners
-    @republished_feed.items.find(:all)
+#    @republished_feed.items
   end
 
   def new
@@ -27,7 +27,7 @@ class RepublishedFeedsController < ApplicationController
       if @republished_feed.save
         current_user.has_role!(:owner, @republished_feed)
         current_user.has_role!(:creator, @republished_feed)
-        flash[:notice] = 'Created a new republished feed'
+        flash[:notice] = 'Created a new republished feed. You should switch to the "inputs" tab and add items for publishing.'
         format.html{redirect_to :action => :show, :id => @republished_feed.id}
       else
         flash[:error] = 'Could not add that republished feed'
@@ -54,6 +54,12 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def destroy
+    @republished_feed.destroy
+    flash[:notice] = 'Removed that feed.'
+    redirect_to(hub_path(@hub))
+  rescue
+    flash[:error] = "Couldn't remove that feed."
+    redirect_to(hub_path(@hub))
   end
 
   def rss

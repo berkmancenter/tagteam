@@ -1,39 +1,40 @@
-<div class="hub detailed" id="hub_<%= @hub.id %>">
-  <h1><%= @hub.title %>
-    <% if current_user.is?(:owner, @hub) %> 
-      <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
-      <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
-    <% end %>
-  </h1>
-  <div id="hub_tabs">
-    <ul>
-      <li><a href="#about">About</a><span id="spinner"></span></li>
-      <li><%= link_to('Watching', watching_hub_path(@hub))%></li>
-      <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
-    </ul>
+<h1><%= @hub.title %>
+  <% if current_user.is?(:owner, @hub) %> 
+    <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
+    <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
+  <% end %><span id="spinner"></span>
+</h1>
 
-    <div id="about">
-      <div class="description">
-        <%= @hub.description %>
-      </div>
-      <% unless @hub.tag_prefix.blank? %>
-        <div class="tag_prefix">
-          Prefix all tags emitted from the hub with "<%= @hub.tag_prefix %>"
-        </div>
-      <% end %>
-      <div class="meta">
-        <dl>
-          <dt>Owners:</dt>
-          <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
-        </dl>
-      </div>
+<div class="description">
+  <%= @hub.description %>
+</div>
+
+<div class="hub detailed hub_tabs" id="hub_<%= @hub.id %>">
+
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><%= link_to('Watching', watching_hub_path(@hub))%></li>
+    <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
+  </ul>
+
+  <div id="about">
+    <div class="metadata">
+      <dl>
+        <% unless @hub.tag_prefix.blank? %>
+          <dt>Prefix all tags emitted from the hub with</dt>
+          <dd><%= @hub.tag_prefix %></dd>
+        <% end %>
+        <dt>Owners:</dt>
+        <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
+      </dl>
     </div>
   </div>
+
 </div>
 
 <%= javascript_tag do
   %q|$(function(){
-  $('#hub_tabs').tabs({
+  $('.hub_tabs').tabs({
     ajaxOptions: {
       beforeSend: function(){
         $.showSpinner('#spinner');

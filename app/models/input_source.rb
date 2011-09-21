@@ -10,5 +10,10 @@ class InputSource < ActiveRecord::Base
   validates_inclusion_of :effect, :in => EFFECTS
 
   attr_accessible :item_source, :republished_feed_id, :item_source_id, :item_source_type, :effect, :position, :limit
+  attr_accessor :search_in
+
+  def search_in
+    'Feed'
+  end
   
 end

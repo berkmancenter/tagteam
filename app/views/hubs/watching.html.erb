@@ -1,12 +1,12 @@
 <div class="hub_feeds">
-  <h3>Feeds this hub is watching:</h3>
-  <table id="hub_feed_list_<%= @hub.id %>">
-    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
-  </table>
   <% if current_user.is?(:owner, @hub) %>
     <div class="add_feed_container">
       <div class="messages"></div>
       <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Watch a new feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
     </div> 
   <% end %>
+  <h3>Feeds this hub is watching:</h3>
+  <table id="hub_feed_list_<%= @hub.id %>">
+    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
+  </table>
 </div>

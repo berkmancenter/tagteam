@@ -36,7 +36,7 @@ class RepublishedFeed < ActiveRecord::Base
       output_items.reverse!
     end
     # DANGER, WILL ROBINSON! Inefficient. 
-    output_items[0..50]
+    output_items[0..self.limit]
   end
 
   def to_s

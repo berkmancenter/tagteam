@@ -27,7 +27,7 @@ class FeedItemTag < ActiveRecord::Base
   end
 
   def items
-    feed_items
+    feed_items.find(:all, :include => [:feed_item_tags])
   end
 
   alias :display_title :to_s

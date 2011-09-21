@@ -1,9 +1,15 @@
 class FeedItemsController < ApplicationController
   before_filter :load_feed_item, :except => [:index, :by_date]
-  before_filter :add_breadcrumbs, :except => [:index, :by_date]
+  before_filter :add_breadcrumbs, :except => [:index, :by_date, :content]
 
   access_control do
     allow all
+  end
+
+  def content
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr?}
+    end
   end
 
   def index
@@ -14,8 +20,18 @@ class FeedItemsController < ApplicationController
   end
 
   def by_date
-    date = (params[:date].blank?) ? Time.now.strftime('%Y-%m-%d') : params[:date]
-    dates = date.split(/\D/)
+    params[:date] = (params[:date].blank?) ? Time.now.strftime('%Y-%m-%d') : params[:date]
+    dates = params[:date].split(/\D/).collect{|d| d.to_i}
+    if dates.length > 0
+      breadcrumbs.add dates[0], by_date_feed_items_path(:date => dates[0])
+    end
+    if dates.length > 1
+      breadcrumbs.add dates[1], by_date_feed_items_path(:date => "#{dates[0]}-#{dates[1]}")
+    end
+    if dates.length > 2
+      breadcrumbs.add dates[2], by_date_feed_items_path(:date => "#{dates[0]}-#{dates[1]}-#{dates[2]}")
+    end
+
     conditions = [
       'extract(year from date_published) = ?',
       ((dates[1].blank?) ? nil : 'extract(month from date_published) = ?'),

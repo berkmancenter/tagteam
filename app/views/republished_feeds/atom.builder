@@ -5,14 +5,14 @@ atom_feed :language => 'en-US' do |atom|
 
   @republished_feed.items.each do |item|
     atom.entry( item ) do |entry|
-      unless item.author.blank?
+      unless item.authors.blank?
         entry.author do |author|
-          author.name item.author
+          author.name item.authors
         end
       end
-      unless item.contributor.blank?
+      unless item.contributors.blank?
         entry.contributor do |contributor|
-          contributor.name item.contributor
+          contributor.name item.contributors
         end
       end
       entry.content item.content, :type => 'html'
@@ -23,8 +23,6 @@ atom_feed :language => 'en-US' do |atom|
       end
       entry.rights item.rights
       entry.summary item.description, :type => 'html'
-#      entry.updated(item.last_updated.strftime("%Y-%m-%dT%H:%M:%SZ")) 
-#      entry.published(item.date_published.strftime("%Y-%m-%dT%H:%M:%SZ")) 
     end
   end
 end

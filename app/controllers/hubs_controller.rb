@@ -124,7 +124,7 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_items => [:feed_item_tags]]]])
     respond_to do|format|
       format.html{
-        render :partial => 'watching', :layout => ! request.xhr? 
+        render :layout => ! request.xhr? 
       }
     end
   end
@@ -133,7 +133,7 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id], :include => [:accepted_roles => [:users], :republished_feeds => []])
     respond_to do|format|
       format.html{
-        render :partial => 'republishing', :layout => ! request.xhr? 
+        render :layout => ! request.xhr? 
       }
     end
   end

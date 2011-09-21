@@ -49,21 +49,69 @@ class InputSourcesController < ApplicationController
     end
   end
 
+  def find_tmp
+    @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
+    params[:hub_id] = @republished_feed.hub_id  
+    @search.build do
+      keywords params[:q]
+      with :hub_ids, params[:hub_id]
+    end
+
+    @search.execute
+
+    respond_to do|format|
+      format.html{
+        if request.xhr?
+          render :partial => 'shared/search_results/list', :object => @search, :layout => false
+        else
+          render
+        end
+      }
+      format.json{ render :json => @search }
+    end
+
+  end
+
   def find
-    @search = Sunspot.new_search Feed, FeedItem, FeedItemTag
+    @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
     params[:hub_id] = @republished_feed.hub_id  
 
-    @search.build do
-      text_fields do
-        any_of do
-          with(:description).starting_with(params[:q])
-          with(:content).starting_with(params[:q])
-          with(:title).starting_with(params[:q])
-          with(:tag).starting_with(params[:q])
-          with(:authors).starting_with(params[:q])
+    if params[:search_in].include?('Feed')
+      @search.build do
+        text_fields do
+          any_of do
+            with(:description).starting_with(params[:q])
+            with(:title).starting_with(params[:q])
+            with(:feed_url).starting_with(params[:q])
+          end
         end
+        with :hub_ids, params[:hub_id]
       end
-      with :hub_ids, params[:hub_id]
+    end
+
+    if params[:search_in].include?('FeedItem')
+      @search.build do
+        text_fields do
+          any_of do
+            with(:title).starting_with(params[:q])
+            with(:content).starting_with(params[:q])
+            with(:url).starting_with(params[:q])
+          end
+        end
+        with :hub_ids, params[:hub_id]
+      end
+    end
+
+    if params[:search_in].include?('FeedItemTag')
+      @search.build do
+        text_fields do
+          any_of do
+            with(:tag).starting_with(params[:q])
+            with(:description).starting_with(params[:q])
+          end
+        end
+        with :hub_ids, params[:hub_id]
+      end
     end
 
     @search.execute

@@ -33,7 +33,8 @@ $(document).ready(function(){
     mouseout: function(){
       $(this).css({textDecoration: 'none'})
     },
-    click: function(){
+    click: function(e){
+      e.preventDefault();
       var targetId = '#' + $(this).attr('id') + '-target';
       if($(targetId).is(':visible')){
         $(targetId).hide('medium');
@@ -41,6 +42,10 @@ $(document).ready(function(){
       } else {
         $(this).find('.toggler-indicator').attr('class', 'toggler-indicator ui-silk ui-silk-arrow-down inline');
         $(targetId).show('medium');
+        if($(this).hasClass('remove_after_toggling')){
+          $(this).remove();
+        }
+        
       }
     }
   });

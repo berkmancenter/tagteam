@@ -1,21 +1,26 @@
-<div class="feed_item" id="feed_item_<%= @feed_item.id %>">
-  <h1><%= @feed_item.title %> <sup><%= link_to('link', @feed_item.url, :target => '_blank') %></sup></h1>
-  <div class="grid_12 alpha">
+<h1><%= @feed_item.title %></h1>
+
+<div class="feed_item feed_item_tabs" id="feed_item_<%= @feed_item.id %>">
+
+  <ul>
+    <li><a href="#about">About</a> <span id="spinner"></span></li>
+    <% unless @feed_item.content.blank? %>
+      <li><%= link_to('Full Content',content_feed_item_path(@feed_item)) %></li>
+    <% end %>
+  </ul>
+
+  <div id="about">
     <% unless @feed_item.description.blank? %>
       <h3>Summary</h3>
       <div class="description">
         <%= raw @feed_item.description %>
       </div>
     <% end %>
-    <% unless @feed_item.content.blank? %>
-      <h3 class="toggler" id="toggler-feeditem-<%= @feed_item.id %>">Full content <span class="toggler-indicator ui-silk ui-silk-arrow-right inline"></span></h3>
-      <div class="content" id="toggler-feeditem-<%= @feed_item.id %>-target" style="display: none;">
-        <%= raw @feed_item.content %>
-      </div>
-    <% end %>
-  </div>
-  <div class="grid_4 omega">
     <dl class="metadata">
+      <dt>Link:</dt>
+      <dd>
+      <%= link_to(@feed_item.url, @feed_item.url, :target => '_blank') %>
+      </dd>
       <% unless @feed_item.date_published.blank? %>
         <dt>Published:</dt>
         <dd><%= l(@feed_item.date_published, :format => :date_and_time_short)  %></dd>
@@ -44,3 +49,19 @@
     </dl>
   </div>
 </div>
+<%= javascript_tag do
+  %q|$(function(){
+  $('.feed_item_tabs').tabs({
+    ajaxOptions: {
+      beforeSend: function(){
+        $.showSpinner('#spinner');
+      },
+      complete: function(){
+        $.hideSpinner('#spinner');
+      }
+    }
+  });
+  }
+  );|
+end
+%>

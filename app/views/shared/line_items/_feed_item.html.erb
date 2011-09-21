@@ -1,14 +1,25 @@
-<div class="feed_item hover_row" id="feed_item_<%= feed_item.id %>">
-  <div class="grid_3 alpha date">
+<tr class="feed_item hover_row" id="feed_item_<%= feed_item.id %>">
+  <td class="date">
     <% unless feed_item.date_published.blank? %>
       <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_feed_items_path(:date => feed_item.date_published.strftime('%Y/%m/%d')) ) %>
     <% end %>
-  </div>
-  <div class="grid_8">
+  </td>
+  <td width="80%">
     <%= link_to(raw(strip_tags(feed_item.title)), feed_item_path(feed_item)) %>
-  </div>
-  <div class="grid_5 omega">
-    <%= raw feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}.join(' ') %>
-  </div>
-  <div class="clear"></div>
-</div>
+  </td>
+</tr>
+<% 
+  fit = feed_item.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}
+  fit_preview = [fit.pop, fit.pop].compact
+%>
+<% unless fit_preview.empty? %>
+  <tr>
+    <td></td>
+    <td>
+      <%= raw fit_preview.join(' ') %>
+      <% unless fit.empty? %>
+        <span id="more_tags_<%= feed_item.id %>-target" style="display:none"><%= raw fit.join(' ') %></span><a href="#" id="more_tags_<%= feed_item.id %>" class="toggler remove_after_toggling">more. . .</a>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

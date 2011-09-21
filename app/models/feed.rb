@@ -44,7 +44,7 @@ class Feed < ActiveRecord::Base
   validates_uniqueness_of :feed_url
 
   def items
-    self.feed_items
+    self.feed_items.find(:all, :include => [:feed_item_tags])
   end
 
   def feed_item_tags
