@@ -95,7 +95,10 @@ http://metalab.harvard.edu/feed/|
       u.has_role!(:owner, f)
       u.has_role!(:creator, f)
 
-      hf = HubFeed.new(:hub => h, :feed => f)
+      hf = HubFeed.new
+      hf.hub = h
+      hf.feed = f
+
       if hf.valid?
         hf.save
         u.has_role!(:owner, hf)
