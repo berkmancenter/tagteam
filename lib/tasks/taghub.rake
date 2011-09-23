@@ -1,5 +1,10 @@
 namespace :taghub do
 
+  desc 'update feeds'
+  task :update_feeds => :environment do
+    @feeds = Feed.need_updating
+  end
+
   desc 'clean up orphaned items'
   task :clean_orphan_items => :environment do
     conn = ActiveRecord::Base.connection

@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
     t.string   "language",     :limit => 25
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "next_scheduled_retrieval"
   end
 
   add_index "feeds", ["authors"], :name => "index_feeds_on_authors"

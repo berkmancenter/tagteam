@@ -40,6 +40,11 @@ module FeedUtilities
     feed.language = parsed_feed.channel.language
 		feed.raw_feed = parsed_feed
   end
+  
+  def update_feed
+  
+    
+  end
 	
 	# Downloads a URL
 	# === Parameters

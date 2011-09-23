@@ -12,10 +12,11 @@ class CreateFeeds < ActiveRecord::Migration
       t.string :generator,    :limit => 500.bytes
       t.string :flavor,       :limit => 25.bytes
       t.string :language,     :limit => 25.bytes
+      t.datetime :next_scheduled_retrieval
 
       t.timestamps
     end
-    [:guid,:authors,:generator,:flavor].each do|col|
+    [:guid,:authors,:generator,:flavor, :next_scheduled_retrieval].each do|col|
       add_index :feeds, col
     end
     add_index :feeds, :feed_url, :unique => true

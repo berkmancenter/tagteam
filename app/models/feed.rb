@@ -6,8 +6,13 @@ class Feed < ActiveRecord::Base
       self.errors.add(:feed_url, "doesn't look like a url")
       return false
     end
-    rss_feed = test_single_feed(self)
-    return false unless rss_feed
+
+    if self.new_record?
+      # Only validate the actual RSS when the feed is created.
+      rss_feed = test_single_feed(self)
+      return false unless rss_feed
+    end
+
   end
 
   include FeedUtilities
@@ -15,6 +20,7 @@ class Feed < ActiveRecord::Base
   include ModelExtensions
   acts_as_authorization_object
 
+  before_create :set_next_scheduled_retrieval_on_create
   after_create :save_feed_items_on_create
 
 	attr_accessible :feed_url, :title, :description
@@ -42,6 +48,15 @@ class Feed < ActiveRecord::Base
   end
   
   validates_uniqueness_of :feed_url
+
+  def self.need_updating
+    self.find(:all, :conditions => ['next_scheduled_retrieval <= ?',Time.now])
+  end
+
+  def update_feed_items
+    #So here is where we'll re-spider feed contents.
+    
+  end
 
   def items
     self.feed_items.find(:all, :include => [:feed_item_tags])
@@ -96,5 +111,10 @@ class Feed < ActiveRecord::Base
 
   def mini_icon
     %q|<span class="ui-silk inline ui-silk-feed"></span>|
+  end
+
+  def set_next_scheduled_retrieval_on_create
+    # Not going to bother checking to see if it's changed as this is a new feed.
+    self.next_scheduled_retrieval = Time.now() + 1.hour
   end
 end
