@@ -30,15 +30,14 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   add_index "feed_item_tags_feed_items", ["feed_item_tag_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_tag_id"
 
   create_table "feed_items", :force => true do |t|
-    t.integer  "feed_retrieval_id"
-    t.string   "title",             :limit => 500
-    t.string   "url",               :limit => 2048
-    t.string   "guid",              :limit => 1024
-    t.string   "authors",           :limit => 1024
-    t.string   "contributors",      :limit => 1024
-    t.string   "description",       :limit => 5120
-    t.string   "content",           :limit => 1048576
-    t.string   "rights",            :limit => 500
+    t.string   "title",          :limit => 500
+    t.string   "url",            :limit => 2048
+    t.string   "guid",           :limit => 1024
+    t.string   "authors",        :limit => 1024
+    t.string   "contributors",   :limit => 1024
+    t.string   "description",    :limit => 5120
+    t.string   "content",        :limit => 1048576
+    t.string   "rights",         :limit => 500
     t.datetime "date_published"
     t.datetime "last_updated"
     t.datetime "created_at"
@@ -48,8 +47,15 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   add_index "feed_items", ["authors"], :name => "index_feed_items_on_authors"
   add_index "feed_items", ["contributors"], :name => "index_feed_items_on_contributors"
   add_index "feed_items", ["date_published"], :name => "index_feed_items_on_date_published"
-  add_index "feed_items", ["feed_retrieval_id"], :name => "index_feed_items_on_feed_retrieval_id"
   add_index "feed_items", ["url"], :name => "index_feed_items_on_url", :unique => true
+
+  create_table "feed_items_feed_retrievals", :id => false, :force => true do |t|
+    t.integer "feed_item_id"
+    t.integer "feed_retrieval_id"
+  end
+
+  add_index "feed_items_feed_retrievals", ["feed_item_id"], :name => "index_feed_items_feed_retrievals_on_feed_item_id"
+  add_index "feed_items_feed_retrievals", ["feed_retrieval_id"], :name => "index_feed_items_feed_retrievals_on_feed_retrieval_id"
 
   create_table "feed_items_feeds", :id => false, :force => true do |t|
     t.integer "feed_id"
@@ -70,20 +76,20 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   end
 
   create_table "feeds", :force => true do |t|
-    t.string   "title",        :limit => 500
-    t.string   "description",  :limit => 2048
-    t.string   "guid",         :limit => 1024
+    t.string   "title",                    :limit => 500
+    t.string   "description",              :limit => 2048
+    t.string   "guid",                     :limit => 1024
     t.datetime "last_updated"
-    t.string   "rights",       :limit => 500
-    t.string   "authors",      :limit => 1024
-    t.string   "feed_url",     :limit => 1024, :null => false
-    t.string   "link",         :limit => 1024
-    t.string   "generator",    :limit => 500
-    t.string   "flavor",       :limit => 25
-    t.string   "language",     :limit => 25
+    t.string   "rights",                   :limit => 500
+    t.string   "authors",                  :limit => 1024
+    t.string   "feed_url",                 :limit => 1024, :null => false
+    t.string   "link",                     :limit => 1024
+    t.string   "generator",                :limit => 500
+    t.string   "flavor",                   :limit => 25
+    t.string   "language",                 :limit => 25
+    t.datetime "next_scheduled_retrieval"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "next_scheduled_retrieval"
   end
 
   add_index "feeds", ["authors"], :name => "index_feeds_on_authors"
@@ -91,6 +97,7 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   add_index "feeds", ["flavor"], :name => "index_feeds_on_flavor"
   add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
+  add_index "feeds", ["next_scheduled_retrieval"], :name => "index_feeds_on_next_scheduled_retrieval"
 
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id",     :null => false

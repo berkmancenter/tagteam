@@ -24,14 +24,14 @@ class Feed < ActiveRecord::Base
   after_create :save_feed_items_on_create
 
 	attr_accessible :feed_url, :title, :description
-	attr_accessor :raw_feed
+	attr_accessor :raw_feed, :status_code
 
 	has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
   has_many :feed_retrievals, :order => :created_at, :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
 
-  searchable do
+  searchable(:include => [:hubs, :hub_feeds]) do
     text :title, :description, :link, :guid, :rights, :authors, :feed_url, :generator
     integer :hub_ids, :multiple => true
 
@@ -49,12 +49,27 @@ class Feed < ActiveRecord::Base
   
   validates_uniqueness_of :feed_url
 
-  def self.need_updating
-    self.find(:all, :conditions => ['next_scheduled_retrieval <= ?',Time.now])
+  scope :need_updating, where(['next_scheduled_retrieval <= ?',Time.now]) 
+
+  def set_next_scheduled_retrieval
+    # So if a feed has changed in the last SPIDER_UPDATE_DECAY, set it to be spidered in the next MINIMUM_FEED_SPIDER_INTERVAL
+    last_feed_change = Time.now - self.feed_retrievals.successful.last.created_at
+
+    if last_feed_change > SPIDER_UPDATE_DECAY
+      self.next_scheduled_retrieval = Time.now + SPIDER_DECAY_INTERVAL
+    elsif last_feed_change > SPIDER_UPDATE_DECAY 
+      self.next_scheduled_retrieval = MINIMUM_FEED_SPIDER_INTERVAL
+    end
   end
 
-  def update_feed_items
+  def update_feed
     #So here is where we'll re-spider feed contents.
+    parsed_feed = fetch_and_parse_feed(self)
+    if ! parsed_feed 
+      FeedRetrieval.create(:feed_id => self.id, :success => false, :status_code => self.status_code) 
+      self.set_next_scheduled_retrieval
+      return false
+    end
     
   end
 
@@ -89,7 +104,7 @@ class Feed < ActiveRecord::Base
         fi.last_updated = item.updated.to_datetime
       end
 
-      fi.feed_retrieval_id = fr.id
+      fi.feed_retrieval_ids << fr.id
       fi.feeds << self unless fi.feeds.include?(self)
 
       # Merge tags. . .
@@ -114,7 +129,16 @@ class Feed < ActiveRecord::Base
   end
 
   def set_next_scheduled_retrieval_on_create
-    # Not going to bother checking to see if it's changed as this is a new feed.
-    self.next_scheduled_retrieval = Time.now() + 1.hour
+    # Not going to bother checking to see if it's changed as this is a new feed. Let's assume the best!
+    self.next_scheduled_retrieval = Time.now + MINIMUM_FEED_SPIDER_INTERVAL
   end
+
+  def set_next_scheduled_retrieval_on_update
+
+    # The goal here: if a feed has changed in the last 2 hours, reschedule it to be re-spidered in the next MINIMUM_FEED_SPIDER_INTERVAL - by default 15 minutes.
+    # If a feed hasn't changed in SPIDER_UPDATE_DECAY (default of 2 hours), increase the next spider interval by SPIDER_DECAY_INTERVAL
+    # Never allow a feed to be spidered less than day.
+
+  end
+
 end

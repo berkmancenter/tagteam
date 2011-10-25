@@ -3,8 +3,8 @@ class CreateHubFeeds < ActiveRecord::Migration
     create_table :hub_feeds do |t|
       t.integer :feed_id, :null => false
       t.integer :hub_id, :null => false
-      t.string :title
-      t.string :description
+      t.string :title, :limit => 500.bytes 
+      t.string :description, :limit => 2.kilobytes
 
       t.timestamps
     end

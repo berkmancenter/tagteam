@@ -17,9 +17,7 @@ module FeedUtilities
 			self.errors.add(:feed_url, "couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
 			return false
 		end
-
     parsed_feed = ''
-
     begin 
       parsed_feed = FeedAbstract::Feed.new(response.body)
     rescue
@@ -41,9 +39,23 @@ module FeedUtilities
 		feed.raw_feed = parsed_feed
   end
   
-  def update_feed
-  
-    
+  def fetch_and_parse_feed(feed)
+    begin
+      response = fetch(feed.feed_url)
+    rescue
+      self.errors.add(:feed_url, "couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
+      feed.status_code = "couldn't download"
+      return false
+    end
+    parsed_feed = ''
+    begin 
+      parsed_feed = FeedAbstract::Feed.new(response.body)
+    rescue
+      feed.status_code = "couldn't parse"
+      self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
+      return false
+    end
+		feed.raw_feed = parsed_feed
   end
 	
 	# Downloads a URL
@@ -80,7 +92,7 @@ module FeedUtilities
 		when Net::HTTPSuccess     then response
 		when Net::HTTPRedirection then fetch(response['location'], redirect_limit - 1)
 		else
-			response.error!
+			raise "Couldn't retrieve feed."
 		end
 	end
 

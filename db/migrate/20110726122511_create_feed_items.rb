@@ -1,7 +1,6 @@
 class CreateFeedItems < ActiveRecord::Migration
   def self.up
     create_table :feed_items do |t|
-      t.integer :feed_retrieval_id
       t.string :title,              :limit => 500.bytes
       t.string :url,                :limit => 2.kilobytes
       t.string :guid,               :limit => 1.kilobyte
@@ -18,7 +17,7 @@ class CreateFeedItems < ActiveRecord::Migration
       t.timestamps
     end
 
-    [:feed_retrieval_id, :date_published, :authors, :contributors].each do|col|
+    [:date_published, :authors, :contributors].each do|col|
       add_index :feed_items, col
     end
 
@@ -32,10 +31,19 @@ class CreateFeedItems < ActiveRecord::Migration
     add_index :feed_items_feeds, :feed_id
     add_index :feed_items_feeds, :feed_item_id
 
+    create_table :feed_items_feed_retrievals, :id => false, :force => true do |t|
+      t.references :feed_item
+      t.references :feed_retrieval
+    end
+
+    add_index :feed_items_feed_retrievals, :feed_item_id
+    add_index :feed_items_feed_retrievals, :feed_retrieval_id
+
   end
 
   def self.down
     drop_table :feed_items
     drop_table :feed_items_feeds
+    drop_table :feed_items_feed_retrievals
   end
 end

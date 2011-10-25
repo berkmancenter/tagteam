@@ -2,10 +2,9 @@ class CreateFeedRetrievals < ActiveRecord::Migration
   def self.up
     create_table :feed_retrievals do |t|
       t.integer :feed_id
-      t.string :url
-      t.string :content
       t.boolean :success
-      t.string :status_code
+      t.string :info, :limit => 5.kilobytes
+      t.string :status_code, :limit => 25.bytes
 
       t.timestamps
     end

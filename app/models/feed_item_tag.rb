@@ -4,7 +4,7 @@ class FeedItemTag < ActiveRecord::Base
   has_and_belongs_to_many :feed_items
   validates_uniqueness_of :tag
 
-  searchable do
+  searchable(:include => {:feeds => [:hub_feeds]}) do
     text :tag, :description
     string :tag
     integer :hub_ids, :multiple => true

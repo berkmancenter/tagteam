@@ -25,6 +25,7 @@ class FeedItem < ActiveRecord::Base
   validates_uniqueness_of :url
 
   has_and_belongs_to_many :feed_item_tags
+  has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
 
   def hubs

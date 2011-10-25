@@ -1,6 +1,8 @@
 class FeedRetrieval < ActiveRecord::Base
   belongs_to :feed
-  has_many :feed_items 
+  has_and_belongs_to_many :feed_items 
+
+  scope :successful, where(['success is true'])
 
   after_save :update_feed_updated_at
 
