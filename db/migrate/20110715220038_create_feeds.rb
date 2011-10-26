@@ -5,6 +5,7 @@ class CreateFeeds < ActiveRecord::Migration
       t.string :description,  :limit => 2.kilobytes
       t.string :guid,         :limit => 1.kilobyte
       t.datetime :last_updated
+      t.datetime :items_changed_at
       t.string :rights,       :limit => 500.bytes
       t.string :authors,      :limit => 1.kilobyte
       t.string :feed_url,     :null => false,       :limit => 1.kilobyte

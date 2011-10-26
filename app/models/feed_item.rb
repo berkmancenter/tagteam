@@ -39,12 +39,16 @@ class FeedItem < ActiveRecord::Base
   end
 
   def tags=(tag_inputs)
-    #FIXME - merge tags
     new_tags = []
     tag_inputs.each do|t|
       new_tags << FeedItemTag.find_or_initialize_by_tag(t.downcase)
     end
     self.feed_item_tags = [self.feed_item_tags, new_tags].flatten.uniq.compact
+  end
+
+  def tags
+    return [] if self.feed_item_tags.empty?
+    self.feed_item_tags.collect{|fit| fit.tag}.sort
   end
 
   def to_s

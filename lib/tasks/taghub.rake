@@ -2,7 +2,10 @@ namespace :taghub do
 
   desc 'update feeds'
   task :update_feeds => :environment do
-    @feeds = Feed.need_updating
+    feeds = Feed.need_updating
+    feeds.each do|f|
+      f.update_feed
+    end
   end
 
   desc 'clean up orphaned items'

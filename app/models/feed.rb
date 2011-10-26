@@ -1,18 +1,15 @@
 class Feed < ActiveRecord::Base
-
   # Needs to run early to populate the title off the RSS feed.
   validate :feed_url do
     if self.feed_url.blank? || ! self.feed_url.match(/https?:\/\/.+/i)
       self.errors.add(:feed_url, "doesn't look like a url")
       return false
     end
-
     if self.new_record?
       # Only validate the actual RSS when the feed is created.
       rss_feed = test_single_feed(self)
       return false unless rss_feed
     end
-
   end
 
   include FeedUtilities
@@ -24,7 +21,7 @@ class Feed < ActiveRecord::Base
   after_create :save_feed_items_on_create
 
 	attr_accessible :feed_url, :title, :description
-	attr_accessor :raw_feed, :status_code
+	attr_accessor :raw_feed, :status_code, :dirty
 
 	has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
@@ -49,16 +46,23 @@ class Feed < ActiveRecord::Base
   
   validates_uniqueness_of :feed_url
 
-  scope :need_updating, where(['next_scheduled_retrieval <= ?',Time.now]) 
+  scope :need_updating, lambda { where(['next_scheduled_retrieval <= ?', Time.now]) }
 
   def set_next_scheduled_retrieval
-    # So if a feed has changed in the last SPIDER_UPDATE_DECAY, set it to be spidered in the next MINIMUM_FEED_SPIDER_INTERVAL
-    last_feed_change = Time.now - self.feed_retrievals.successful.last.created_at
 
-    if last_feed_change > SPIDER_UPDATE_DECAY
-      self.next_scheduled_retrieval = Time.now + SPIDER_DECAY_INTERVAL
-    elsif last_feed_change > SPIDER_UPDATE_DECAY 
-      self.next_scheduled_retrieval = MINIMUM_FEED_SPIDER_INTERVAL
+    feed_last_changed_at = self.items_changed_at 
+    feed_changed_this_long_ago = Time.now - feed_last_changed_at
+    max_next_scheduled_retrieval_time = Time.now + MAXIMUM_FEED_SPIDER_INTERVAL 
+
+    if feed_changed_this_long_ago > SPIDER_UPDATE_DECAY
+      logger.warn('Feed looks old, pushing out next spidering event by SPIDER_DECAY_INTERVAL')
+      last_interval_was = self.next_scheduled_retrieval - self.updated_at 
+      next_spider_time = Time.now + last_interval_was + SPIDER_DECAY_INTERVAL
+      self.next_scheduled_retrieval = (next_spider_time > max_next_scheduled_retrieval_time) ? max_next_scheduled_retrieval_time : next_spider_time
+    else
+      #Changed in the last two hours.
+      logger.warn('Feed JUST changed.')
+      self.next_scheduled_retrieval = Time.now + MINIMUM_FEED_SPIDER_INTERVAL
     end
   end
 
@@ -66,11 +70,66 @@ class Feed < ActiveRecord::Base
     #So here is where we'll re-spider feed contents.
     parsed_feed = fetch_and_parse_feed(self)
     if ! parsed_feed 
+      logger.warn('we could not update this feed: ' + self.inspect)
       FeedRetrieval.create(:feed_id => self.id, :success => false, :status_code => self.status_code) 
       self.set_next_scheduled_retrieval
+      self.save
       return false
     end
-    
+    fr = FeedRetrieval.new(:feed_id => self.id)
+    fr.success = true
+    fr.status_code = '200'
+    fr.save
+    self.raw_feed.items.each do|item|
+      self.update_feed_item(item,fr)
+    end
+    self.set_next_scheduled_retrieval
+
+    if self.dirty == true
+      logger.warn('dirty Feed and/or feed items have changed.')
+      self.items_changed_at = Time.now
+    end
+    self.save
+  end
+
+  def update_feed_item(item, fr)
+    fi = FeedItem.find_or_initialize_by_url(:url => item.link)
+
+    fi.title = item.title
+    fi.description = item.summary
+
+    if fi.new_record?
+      # Instantiate only for new records.
+      fi.guid = item.guid
+      fi.authors = item.author
+      fi.contributors = item.contributor
+
+      fi.description = item.summary
+      fi.content = item.content
+      fi.rights = item.rights
+      fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
+      fi.last_updated = item.updated.to_datetime
+      logger.warn('dirty because there is a new feed_item')
+      self.dirty = true
+    end
+    fi.feed_retrievals << fr
+    fi.feeds << self unless fi.feeds.include?(self)
+    # Merge tags. . .
+    pre_update_tags = fi.tags
+    fi.tags = item.categories
+#    if pre_update_tags != fi.tags
+#      self.dirty = true
+#    end
+    if fi.changed?
+      logger.warn('dirty because a feed item changed')
+      logger.warn('dirty Changes: ' + fi.changes.inspect)
+      self.dirty = true
+    end
+    if fi.valid?
+      fi.save
+    else
+      logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
+    end
   end
 
   def items
@@ -87,34 +146,8 @@ class Feed < ActiveRecord::Base
     fr.success = true
     fr.status_code = '200'
     fr.save
-    
     self.raw_feed.items.each do|item|
-      fi = FeedItem.find_or_initialize_by_url(:url => item.link)
-      if fi.new_record?
-        # Instantiate only for new records.
-        fi.title = item.title
-        fi.guid = item.guid
-        fi.authors = item.author
-        fi.contributors = item.contributor
-
-        fi.description = item.summary
-        fi.content = item.content
-        fi.rights = item.rights
-        fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
-        fi.last_updated = item.updated.to_datetime
-      end
-
-      fi.feed_retrieval_ids << fr.id
-      fi.feeds << self unless fi.feeds.include?(self)
-
-      # Merge tags. . .
-      fi.tags = item.categories
-
-      if fi.valid?
-        fi.save
-      else
-        logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
-      end
+      self.update_feed_item(item,fr)
     end
   end
 
@@ -130,15 +163,9 @@ class Feed < ActiveRecord::Base
 
   def set_next_scheduled_retrieval_on_create
     # Not going to bother checking to see if it's changed as this is a new feed. Let's assume the best!
+    if self.items_changed_at.nil?
+      self.items_changed_at = Time.now 
+    end
     self.next_scheduled_retrieval = Time.now + MINIMUM_FEED_SPIDER_INTERVAL
   end
-
-  def set_next_scheduled_retrieval_on_update
-
-    # The goal here: if a feed has changed in the last 2 hours, reschedule it to be re-spidered in the next MINIMUM_FEED_SPIDER_INTERVAL - by default 15 minutes.
-    # If a feed hasn't changed in SPIDER_UPDATE_DECAY (default of 2 hours), increase the next spider interval by SPIDER_DECAY_INTERVAL
-    # Never allow a feed to be spidered less than day.
-
-  end
-
 end

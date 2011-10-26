@@ -67,10 +67,9 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
 
   create_table "feed_retrievals", :force => true do |t|
     t.integer  "feed_id"
-    t.string   "url"
-    t.string   "content"
     t.boolean  "success"
-    t.string   "status_code"
+    t.string   "info",        :limit => 5120
+    t.string   "status_code", :limit => 25
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -80,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
     t.string   "description",              :limit => 2048
     t.string   "guid",                     :limit => 1024
     t.datetime "last_updated"
+    t.datetime "items_changed_at"
     t.string   "rights",                   :limit => 500
     t.string   "authors",                  :limit => 1024
     t.string   "feed_url",                 :limit => 1024, :null => false
@@ -100,10 +100,10 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   add_index "feeds", ["next_scheduled_retrieval"], :name => "index_feeds_on_next_scheduled_retrieval"
 
   create_table "hub_feeds", :force => true do |t|
-    t.integer  "feed_id",     :null => false
-    t.integer  "hub_id",      :null => false
-    t.string   "title"
-    t.string   "description"
+    t.integer  "feed_id",                     :null => false
+    t.integer  "hub_id",                      :null => false
+    t.string   "title",       :limit => 500
+    t.string   "description", :limit => 2048
     t.datetime "created_at"
     t.datetime "updated_at"
   end
