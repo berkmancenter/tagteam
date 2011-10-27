@@ -4,6 +4,7 @@ namespace :taghub do
   task :update_feeds => :environment do
     feeds = Feed.need_updating
     feeds.each do|f|
+      puts "Updating #{f.feed_url} "
       f.update_feed
     end
   end

@@ -17,8 +17,10 @@
     <dl class="metadata">
       <dt>Feed URL:</dt>
       <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
-      <dt>Last successful retrieval:</dt>
-      <dd><%= @hub_feed.latest_feed_retrieval.created_at.to_s(:long) %></dd>
+      <dt>Last successful download:</dt>
+      <dd><%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %></dd>
+      <dt>Feed last changed at:</dt>
+      <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
     </dl>
   </div>
 

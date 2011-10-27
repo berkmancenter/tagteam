@@ -28,6 +28,10 @@ class HubFeed < ActiveRecord::Base
     (self.description.blank?) ? self.feed.description : self.description
   end
 
+  def latest_successful_feed_retrieval
+    feed.feed_retrievals.successful.last
+  end
+
   def latest_feed_retrieval
     feed.feed_retrievals.last
   rescue Exception => e
