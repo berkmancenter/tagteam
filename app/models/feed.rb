@@ -21,7 +21,7 @@ class Feed < ActiveRecord::Base
   after_create :save_feed_items_on_create
 
 	attr_accessible :feed_url, :title, :description
-	attr_accessor :raw_feed, :status_code, :dirty
+	attr_accessor :raw_feed, :status_code, :dirty, :changelog
 
 	has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
@@ -67,7 +67,8 @@ class Feed < ActiveRecord::Base
   end
 
   def update_feed
-    #So here is where we'll re-spider feed contents.
+    self.dirty = false
+    self.changelog = {}
     parsed_feed = fetch_and_parse_feed(self)
     if ! parsed_feed 
       logger.warn('we could not update this feed: ' + self.inspect)
@@ -84,6 +85,8 @@ class Feed < ActiveRecord::Base
       self.update_feed_item(item,fr)
     end
     self.set_next_scheduled_retrieval
+    fr.changelog = self.changelog.to_yaml
+    fr.save
 
     if self.dirty == true
       logger.warn('dirty Feed and/or feed items have changed.')
@@ -94,6 +97,7 @@ class Feed < ActiveRecord::Base
 
   def update_feed_item(item, fr)
     fi = FeedItem.find_or_initialize_by_url(:url => item.link)
+    item_changelog = {}
 
     fi.title = item.title
     fi.description = item.summary
@@ -110,6 +114,7 @@ class Feed < ActiveRecord::Base
       fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
       fi.last_updated = item.updated.to_datetime
       logger.warn('dirty because there is a new feed_item')
+      item_changelog[:new_record] = true
       self.dirty = true
     end
     fi.feed_retrievals << fr
@@ -117,16 +122,30 @@ class Feed < ActiveRecord::Base
     # Merge tags. . .
     pre_update_tags = fi.tags
     fi.tags = item.categories
-#    if pre_update_tags != fi.tags
-#      self.dirty = true
-#    end
-    if fi.changed?
-      logger.warn('dirty because a feed item changed')
-      logger.warn('dirty Changes: ' + fi.changes.inspect)
+    if pre_update_tags != fi.tags
+      logger.warn('dirty because tags have changed')
       self.dirty = true
+      unless fi.new_record?
+        # Be sure to update the feed changelog here in case
+        # an item only has tag changes.
+        item_changelog[:tags] = [pre_update_tags, fi.tags]
+        self.changelog[fi.id] = item_changelog
+      end
     end
     if fi.valid?
-      fi.save
+      if fi.changed? or fi.new_record?
+        # This runs here because we're auto stripping and auto-truncating columns and
+        # want the change tracking to be relative to these fixed values.
+        logger.warn('dirty because a feed item changed or was created.')
+        logger.warn('dirty Changes: ' + fi.changes.inspect)
+        unless fi.new_record?
+          item_changelog.merge!(fi.changes)
+        end
+        logger.warn('dirty item_changelog: ' + item_changelog.inspect)
+        self.dirty = true
+        fi.save
+        self.changelog[fi.id] = item_changelog
+      end
     else
       logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
     end
@@ -141,6 +160,8 @@ class Feed < ActiveRecord::Base
   end
   
   def save_feed_items_on_create
+    self.dirty = false
+    self.changelog = {}
     fr = FeedRetrieval.new(:feed_id => self.id)
     #We wouldn't have gotten here if the feed weren't valid on create.
     fr.success = true
@@ -149,6 +170,8 @@ class Feed < ActiveRecord::Base
     self.raw_feed.items.each do|item|
       self.update_feed_item(item,fr)
     end
+    fr.changelog = self.changelog.to_yaml
+    fr.save
   end
 
   def to_s

@@ -5,6 +5,7 @@ class CreateFeedRetrievals < ActiveRecord::Migration
       t.boolean :success
       t.string :info, :limit => 5.kilobytes
       t.string :status_code, :limit => 25.bytes
+      t.string :changelog, :limit => 1.megabyte
 
       t.timestamps
     end

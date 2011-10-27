@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
     t.boolean  "success"
     t.string   "info",        :limit => 5120
     t.string   "status_code", :limit => 25
+    t.string   "changelog",   :limit => 1048576
     t.datetime "created_at"
     t.datetime "updated_at"
   end
