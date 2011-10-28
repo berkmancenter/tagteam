@@ -67,4 +67,20 @@ $(document).ready(function(){
   // For tabs that don't need options.
   $('.tabs').tabs();
 
+  $('.control').live({
+    click: function(e){
+      e.preventDefault();
+      var id = $(this).attr('id');
+      $(this).bt({
+        trigger: 'none',
+        contentSelector: $('#' + id + '-target'),
+        textzIndex: 101,
+        boxzIndex: 100,
+        wrapperzIndex: 99,
+        closeWhenOthersOpen: true
+      });
+      $(this).btOn();
+    }
+  });
+
 });

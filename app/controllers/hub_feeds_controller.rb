@@ -1,13 +1,24 @@
 class HubFeedsController < ApplicationController
   before_filter :load_hub_feed, :except => [:index, :new, :create]
-  before_filter :add_breadcrumbs, :except => [:index, :new, :create]
+  before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately]
   before_filter :prep_resources
 
   access_control do
     allow all, :to => [:index, :show]
-    allow :owner, :of => :hub, :to => [:new, :create]
+    allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :hub_feed_admin
+  end
+
+  def reschedule_immediately
+    feed = @hub_feed.feed
+    feed.next_scheduled_retrieval = Time.now
+    feed.save
+    flash[:notice] = 'Rescheduled that feed to be re-indexed at the next available opportunity.'
+    redirect_to @hub_feed
+  rescue
+    flash[:notice] = "We couldn't reschedule that feed."
+    redirect_to @hub_feed
   end
 
   def index

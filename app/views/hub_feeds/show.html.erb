@@ -21,9 +21,14 @@
       <dd><%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %></dd>
       <dt>Feed last changed at:</dt>
       <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
+      <dt>Feed will be downloaded again  at:</dt>
+      <dd><%= @hub_feed.feed.next_scheduled_retrieval.to_s(:long) %> 
+      <% if current_user && current_user.is?(:owner, @hub) %>
+        <%= link_to('Schedule for immediate download', reschedule_immediately_hub_feed_path(@hub_feed)) %>
+      <% end %>
+      </dd>
     </dl>
   </div>
-
 
   <div id="items">
     <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>

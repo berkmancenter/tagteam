@@ -268,6 +268,16 @@ input#filter_by{
   margin-bottom: 4px;
 }
 
+.controls a{
+  line-height: 1.2em;
+  font-size: 8pt;
+  text-decoration: none;
+}
+
+a:hover{
+  text-decoration: underline;
+}
+
 footer{
   text-align: right;
   padding: 10px;
