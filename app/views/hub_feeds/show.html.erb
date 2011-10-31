@@ -18,7 +18,10 @@
       <dt>Feed URL:</dt>
       <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
       <dt>Last successful download:</dt>
-      <dd><%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %></dd>
+      <dd>
+      <%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %><br/>
+      <%= link_to('See all retrievals', retrievals_hub_feed_path(@hub_feed)) %>
+      </dd>
       <dt>Feed last changed at:</dt>
       <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
       <dt>Feed will be downloaded again  at:</dt>

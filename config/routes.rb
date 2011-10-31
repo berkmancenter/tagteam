@@ -30,6 +30,7 @@ Taghub::Application.routes.draw do
 	resources :hub_feeds do
     member do
       get 'reschedule_immediately'
+      get 'retrievals'
     end
   end
 
