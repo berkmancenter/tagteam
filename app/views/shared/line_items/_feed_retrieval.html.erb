@@ -1,3 +1,8 @@
-<li class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : '' %>">
-at <%= feed_retrieval.created_at %>, status code: <%= feed_retrieval.status_code %>, changelog: <%= feed_retrieval.changelog %>
-</li>
+<tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'failure' %>">
+  <td>
+    <%= l(feed_retrieval.created_at, :format => :date_and_time_short) %>
+  </td>
+  <td>
+    <%= feed_retrieval.changelog %>
+  </td>
+</tr>

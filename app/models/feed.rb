@@ -25,7 +25,7 @@ class Feed < ActiveRecord::Base
 
 	has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
-  has_many :feed_retrievals, :order => :created_at, :dependent => :destroy
+  has_many :feed_retrievals, :order => 'created_at desc', :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
 
   searchable(:include => [:hubs, :hub_feeds]) do

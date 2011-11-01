@@ -11,4 +11,8 @@ class FeedRetrieval < ActiveRecord::Base
     self.feed.save
   end
 
+  def parsed_changelog
+   # TODO - parse the changelog and come up with a list of changes. 
+  end
+
 end

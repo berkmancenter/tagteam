@@ -2,8 +2,12 @@
   <% if @feed_retrievals.blank? %>
     <h2>None found.</h2>
   <% else %>
-    <ul>
+    <table>
+      <tr>
+        <th>At:</th>
+        <th>Changes:</th>
+      </tr>
       <%= render :partial => 'shared/line_items/feed_retrieval', :collection => @feed_retrievals %>
-    </ul>
+    </table>
   <% end %>
 </div>
