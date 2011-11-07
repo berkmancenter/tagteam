@@ -12,7 +12,31 @@ class FeedRetrieval < ActiveRecord::Base
   end
 
   def parsed_changelog
-   # TODO - parse the changelog and come up with a list of changes. 
+    # So here's where we'll parse the changelog to come up with a datastructure that makes sense. 
+    changes = YAML.load(self.changelog)
+  end
+
+  def changelog_summary
+    changelog_yaml = parsed_changelog
+    return nil if changelog_yaml.empty?
+
+    changes = {
+      :new_records => 0,
+      :changed_fields => []
+    }
+
+    changelog_yaml.keys.each do|ch|
+      if changelog_yaml[ch].include?(:new_record)
+        changes[:new_records] = changes[:new_records] + 1
+      else
+        # Something happened to this item
+        # FIXME
+        changelog_yaml[ch].keys.each do|change|
+          changes[:changed_fields] << change.to_s.titleize
+        end
+      end
+    end
+    return changes
   end
 
 end

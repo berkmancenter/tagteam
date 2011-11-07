@@ -18,6 +18,8 @@ Taghub::Application.routes.draw do
 
   resources :hub_tag_filters
 
+  resources :feed_retrievals
+
   resources :feed_items do
     member do
       get 'content'

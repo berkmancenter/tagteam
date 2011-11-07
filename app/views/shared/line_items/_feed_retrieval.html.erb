@@ -1,6 +1,6 @@
 <tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'failure' %>">
   <td>
-    <%= l(feed_retrieval.created_at, :format => :date_and_time_short) %>
+    <%= link_to(l(feed_retrieval.created_at, :format => :date_and_time_short), feed_retrieval_path(feed_retrieval)) %>
   </td>
   <td>
     <%= feed_retrieval.changelog %>
