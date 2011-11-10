@@ -3,6 +3,9 @@
     <%= link_to(l(feed_retrieval.created_at, :format => :date_and_time_short), feed_retrieval_path(feed_retrieval)) %>
   </td>
   <td>
-    <%= feed_retrieval.changelog %>
+    <% # FIXME %>
+    <% unless feed_retrieval.new_feed_items.empty? %>
+      <%= feed_retrieval.new_feed_items.length %>
+    <% end %>
   </td>
 </tr>
