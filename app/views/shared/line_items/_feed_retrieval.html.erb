@@ -3,9 +3,13 @@
     <%= link_to(l(feed_retrieval.created_at, :format => :date_and_time_short), feed_retrieval_path(feed_retrieval)) %>
   </td>
   <td>
-    <% # FIXME %>
     <% unless feed_retrieval.new_feed_items.empty? %>
-      <%= feed_retrieval.new_feed_items.length %>
+      <%= feed_retrieval.new_feed_items.length %> new items<br/>
+    <% end %>
+  </td>
+  <td>
+    <% unless feed_retrieval.changed_feed_items.empty? %>
+      <%= feed_retrieval.changed_feed_items.length %> updated items<br/>
     <% end %>
   </td>
 </tr>

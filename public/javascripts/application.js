@@ -11,7 +11,50 @@
     hideSpinner: function(spinnerId){
       var spinnerNode = $(spinnerId);
       $(spinnerNode).hide();
-    }
+    }, 
+    observeDialogShow: function(rootClass){
+      $(rootClass).live('click',function(e){
+        e.preventDefault();
+        $.ajax({
+          cache: false,
+          dataType: 'html',
+          url: $(this).attr('href'),
+          beforeSend: function(){
+            $.showSpinner();
+          },
+          complete: function(){
+            $.hideSpinner();
+          },
+          error: function(xhr){
+            $.showMajorError(xhr);
+          },
+          success: function(html){
+            var dialogNode = $('<div></div>');
+            $(dialogNode).append(html);
+            $(dialogNode).dialog({
+              modal: true,
+              width: 600,
+              minWidth: 400,
+              height: 'auto',
+              position: 'top',
+              buttons: {
+                Close: function(){
+                  $(dialogNode).dialog('close');
+                  $(dialogNode).remove();
+                },
+              }
+            });
+            $('.tabs').tabs({
+              ajaxOptions: {
+                cache: false,
+                dataType: 'html'
+              }
+            });
+          }
+        });
+      });
+
+    },
 	});
 
 })(jQuery);
@@ -50,6 +93,7 @@ $(document).ready(function(){
     }
   });
 
+
   $('.more').live({
     mouseover: function(){
       $(this).css('cursor','pointer');
@@ -82,5 +126,7 @@ $(document).ready(function(){
       $(this).btOn();
     }
   });
+
+  $.observeDialogShow('.dialog-show');
 
 });

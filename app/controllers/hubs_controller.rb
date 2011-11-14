@@ -57,7 +57,8 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         if request.xhr?
-          render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds
+          # FIXME
+          render :partial => 'shared/line_items/republished_feed_choice', :collection => @hub.republished_feeds
         else
           render
         end

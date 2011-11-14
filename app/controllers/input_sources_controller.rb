@@ -49,29 +49,6 @@ class InputSourcesController < ApplicationController
     end
   end
 
-  def find_tmp
-    @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
-    params[:hub_id] = @republished_feed.hub_id  
-    @search.build do
-      keywords params[:q]
-      with :hub_ids, params[:hub_id]
-    end
-
-    @search.execute
-
-    respond_to do|format|
-      format.html{
-        if request.xhr?
-          render :partial => 'shared/search_results/list', :object => @search, :layout => false
-        else
-          render
-        end
-      }
-      format.json{ render :json => @search }
-    end
-
-  end
-
   def find
     @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
     params[:hub_id] = @republished_feed.hub_id  
