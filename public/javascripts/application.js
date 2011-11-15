@@ -15,6 +15,7 @@
     observeDialogShow: function(rootClass){
       $(rootClass).live('click',function(e){
         e.preventDefault();
+        var windowTitle = $(this).attr('title');
         $.ajax({
           cache: false,
           dataType: 'html',
@@ -37,6 +38,7 @@
               minWidth: 400,
               height: 'auto',
               position: 'top',
+              title: windowTitle,
               buttons: {
                 Close: function(){
                   $(dialogNode).dialog('close');
