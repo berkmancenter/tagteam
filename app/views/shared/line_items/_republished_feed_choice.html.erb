@@ -2,7 +2,7 @@
   <div class="grid_1 alpha">
   </div>
   <div class="grid_12"> 
-    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed_choice.title,republished_feed_path(republished_feed_choice)) %>
+    <a title="Add to <%= republished_feed_choice.title %>" id="republished_feed-<%= republished_feed_choice.id %>" class="ui-silk inline ui-silk-accept gray hover choose_republished_feed"></a> <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed_choice.title,republished_feed_path(republished_feed_choice), :target => '_blank') %>
   </div>
   <div class="clear"></div>
 </div>

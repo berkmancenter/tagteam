@@ -130,5 +130,32 @@ $(document).ready(function(){
   });
 
   $.observeDialogShow('.dialog-show');
+  $('a.add_item_source_to_custom_republished_feed').live({
+    click: function(e){
+      var item_source = $(this).attr('id').split('-');
+      $('body').data('item_source_id_for_republishing', item_source[1]);
+      $('body').data('item_source_type_for_republishing', item_source[0]);
+    }
+  });
+
+  $('a.choose_republished_feed').live({
+    click: function(e){
+      e.preventDefault();
+      var republished_feed_id = $(this).attr('id').split('-')[1];
+      var item_source_id = $('body').data('item_source_id_for_republishing');
+      var item_source_type = $('body').data('item_source_type_for_republishing');
+      // TODO - make this emit when it's been added.
+      $.ajax({
+        cache: false,
+        dataType: 'html',
+        url: $.rootPath() + 'input_sources',
+        type: 'post',
+        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: 'add'}},
+        beforeSend: function(){ $.showSpinner();},
+        complete: function(){ $.hideSpinner();}
+      });
+
+    }
+  });
 
 });

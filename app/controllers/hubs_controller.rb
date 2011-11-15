@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :republished_feeds, :watching, :republishing]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :watching, :republishing]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -53,12 +53,13 @@ class HubsController < ApplicationController
     end
   end
 
-  def republished_feeds
+  def custom_republished_feeds
+    @republished_feeds =  RepublishedFeed.select('DISTINCT republished_feeds.*').joins(:accepted_roles => [:users]).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_id = ?','owner','RepublishedFeed', ((current_user.blank?) ? nil : current_user.id), @hub.id ]).order('updated_at')
+ 
     respond_to do|format|
       format.html{
         if request.xhr?
-          # FIXME
-          render :partial => 'shared/line_items/republished_feed_choice', :collection => @hub.republished_feeds
+          render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
         else
           render
         end

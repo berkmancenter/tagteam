@@ -46,7 +46,7 @@ Taghub::Application.routes.draw do
     member do
       post 'add_feed'
       get 'feeds'
-      get 'republished_feeds'
+      get 'custom_republished_feeds'
       get 'watching'
       get 'republishing'
 
