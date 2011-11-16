@@ -1,6 +1,8 @@
 class InputSource < ActiveRecord::Base
   include ModelExtensions
 
+  validates_uniqueness_of :item_source_type, :scope => [:item_source_id, :effect]
+
   EFFECTS = ['add','remove']
 
   belongs_to :republished_feed

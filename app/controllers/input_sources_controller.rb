@@ -27,10 +27,22 @@ class InputSourcesController < ApplicationController
         current_user.has_role!(:owner, @input_source)
         current_user.has_role!(:creator, @input_source)
         flash[:notice] = 'Add that input source'
-        format.html{redirect_to republished_feed_url(@republished_feed)}
+        format.html{
+          unless request.xhr?
+            redirect_to republished_feed_url(@republished_feed)
+          else
+            render :text => %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"|
+          end
+        }
       else
         flash[:error] = 'Could not add that input source'
-        format.html {render :action => :new}
+        format.html {
+          unless request.xhr?
+            render :action => :new
+          else 
+            render :text => %Q|Could not add that input source. <br />#{@input_source.errors.full_messages.join('<br/>')} Sorry!|, :status => :unprocessable_entity
+          end
+        }
       end
     end
   end

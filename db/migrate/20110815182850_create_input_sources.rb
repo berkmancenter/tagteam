@@ -11,9 +11,13 @@ class CreateInputSources < ActiveRecord::Migration
       t.timestamps
     end
 
-    [:republished_feed_id, :item_source_id, :item_source_type, :effect, :position].each do |col|
+    # Index for item_source_type is in the unique index below.
+    #
+    [:republished_feed_id, :item_source_id, :effect, :position].each do |col|
       add_index :input_sources, col
     end
+
+    add_index :input_sources, [:item_source_type, :item_source_id, :effect], :unique => true
 
   end
 

@@ -30,7 +30,7 @@
             $.showMajorError(xhr);
           },
           success: function(html){
-            var dialogNode = $('<div></div>');
+            var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
             $(dialogNode).append(html);
             $(dialogNode).dialog({
               modal: true,
@@ -151,8 +151,19 @@ $(document).ready(function(){
         url: $.rootPath() + 'input_sources',
         type: 'post',
         data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: 'add'}},
-        beforeSend: function(){ $.showSpinner();},
-        complete: function(){ $.hideSpinner();}
+        beforeSend: function(){ 
+          $.showSpinner();
+          $('#dialog-error,#dialog-notice').html('').hide();
+        },
+        complete: function(){ $.hideSpinner();},
+        success: function(html){
+          $('#dialog-notice').show().html(html);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          // FIXME. Get the actual error message to display.
+          $('#dialog-error').show().html(errorThrown);
+        }
+
       });
 
     }

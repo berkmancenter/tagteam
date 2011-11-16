@@ -1,6 +1,12 @@
-<h1>Tag: <%= @feed_item_tag %></h1>
+<h1>Tagged with "<%= @feed_item_tag %>"</h1>
 
-<h2>Items tagged with <%= @feed_item_tag %></h2>
-<table class="hub_feed feed_items">
-  <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
-</table>
+<div class="tabs">
+  <ul>
+    <li><a href="#tagged_items">Items</a></li>
+  </ul>
+  <div id="tagged_items">
+    <table class="hub_feed feed_items">
+      <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+    </table>
+  </div>
+</div>
