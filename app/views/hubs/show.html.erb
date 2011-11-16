@@ -41,6 +41,9 @@
 <%= javascript_tag do
   %q|$(function(){
   $('.hub_tabs').tabs({
+    cookie: {
+      expires: 3 
+    },
     ajaxOptions: {
       beforeSend: function(){
         $.showSpinner('#spinner');

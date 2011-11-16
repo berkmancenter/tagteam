@@ -1,7 +1,7 @@
 class InputSource < ActiveRecord::Base
   include ModelExtensions
 
-  validates_uniqueness_of :item_source_type, :scope => [:item_source_id, :effect]
+  validates_uniqueness_of :item_source_type, :scope => [:item_source_id, :effect, :republished_feed_id]
 
   EFFECTS = ['add','remove']
 

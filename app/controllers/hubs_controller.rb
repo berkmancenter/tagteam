@@ -59,7 +59,11 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         if request.xhr?
-          render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
+          unless @republished_feeds.empty?
+            render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
+          else 
+            render :text => 'None yet. You should create a new republished feed from the "publishing" tab on the hub page.'
+          end
         else
           render
         end
@@ -125,7 +129,8 @@ class HubsController < ApplicationController
   end
 
   def watching
-    @hub = Hub.find(params[:id], :include => [:hub_feeds => [:feed => [:feed_items => [:feed_item_tags]]]])
+    @hub = Hub.find(params[:id])
+    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:feed_item_tags]]], :page => params[:page], :per_page => HubFeed.per_page )
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 

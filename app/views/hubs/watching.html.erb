@@ -7,6 +7,7 @@
   <% end %>
   <h3>Feeds this hub is watching:</h3>
   <table id="hub_feed_list_<%= @hub.id %>">
-    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds %>
+    <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub_feeds %>
   </table>
+  <%= will_paginate @hub_feeds %>
 </div>

@@ -23,20 +23,7 @@ $(document).ready(function(){
       success: function(json){
         $('.add_feed_container .messages').append('<div class="notice">' + json.message + '</div>');
         // Update the feed list.
-        $.ajax({
-          dataType: 'html',
-          url: $.rootPath() + 'hubs/' + hubId + '/feeds',
-          success: function(data){
-            $('#hub_feed_list_' + hubId).html(data);
-          }
-        });
-        $.ajax({
-          dataType: 'html',
-          url: $.rootPath() + 'hubs/' + hubId + '/republished_feeds',
-          success: function(data){
-            $('#republished_feed_list_' + hubId).html(data);
-          }
-        });
+        window.location.reload();
       },
       error: function(jqXHR){
         $('.add_feed_container .messages').append('<div class="error">' + jqXHR.responseText + '</div>');

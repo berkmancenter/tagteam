@@ -25,16 +25,22 @@ class FeedRetrieval < ActiveRecord::Base
     self.changelog_summary[:changed_records]
   end
 
+  def changed?
+    return (new_feed_items.blank? && changed_feed_items.blank?) ? false : true
+  end
+
   def changelog_summary
 
     return self.changelog_summary_cache unless self.changelog_summary_cache.nil?
 
     changelog_yaml = parsed_changelog
-    return nil if changelog_yaml.empty?
     changes = {
       :new_records => [],
       :changed_records => []
     }
+
+    return changes if changelog_yaml.empty?
+
     changelog_yaml.keys.each do|ch|
       if changelog_yaml[ch].include?(:new_record)
         changes[:new_records] << ch

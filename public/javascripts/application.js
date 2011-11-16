@@ -12,6 +12,35 @@
       var spinnerNode = $(spinnerId);
       $(spinnerNode).hide();
     }, 
+    showMajorError: function(error){
+        $('<div></div>').html("We're sorry, there appears to have been an error.<br/>" + error).dialog({
+            modal: true
+        }).dialog('open');
+    },
+    observeListPagination: function(){
+      $('.pagination a').live('click',function(e){
+        var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
+        e.preventDefault();
+        $.ajax({
+          type: 'GET',
+          cache: false,
+          url: $(this).attr('href'),
+          dataType: 'html',
+          beforeSend: function(){
+            $.showSpinner();
+          },
+          error: function(xhr){
+            $.showMajorError(xhr);
+          },
+          complete: function(){
+            $.hideSpinner();
+          },
+          success: function(html){
+            $(paginationTarget).html(html);
+          }
+        });
+      });
+    },
     observeDialogShow: function(rootClass){
       $(rootClass).live('click',function(e){
         e.preventDefault();
@@ -47,6 +76,9 @@
               }
             });
             $('.tabs').tabs({
+              cookie: {
+                expires: 3
+              },
               ajaxOptions: {
                 cache: false,
                 dataType: 'html'
@@ -110,8 +142,16 @@ $(document).ready(function(){
       }
     }
   });
-  // For tabs that don't need options.
-  $('.tabs').tabs();
+  // For tabs that need minimal options.
+  $('.tabs').tabs({
+    cookie: {
+      expires: 3
+    },
+    ajaxOptions: {
+      cache: false,
+      dataType: 'html'
+    }
+  });
 
   $('.control').live({
     click: function(e){
@@ -160,13 +200,16 @@ $(document).ready(function(){
           $('#dialog-notice').show().html(html);
         },
         error: function(jqXHR, textStatus, errorThrown){
-          // FIXME. Get the actual error message to display.
-          $('#dialog-error').show().html(errorThrown);
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          $('#dialog-error').show().html(jqXHR.responseText);
         }
 
       });
 
     }
   });
+  $.observeListPagination();
 
 });

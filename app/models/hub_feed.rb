@@ -19,6 +19,10 @@ class HubFeed < ActiveRecord::Base
     reindex_items_of_concern
   end
 
+  def self.per_page
+    25
+  end
+
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
   end

@@ -56,6 +56,9 @@
 <%= javascript_tag do
   %q|$(function(){
   $('.feed_item_tabs').tabs({
+    cookie: {
+      expires: 3
+    },
     ajaxOptions: {
       beforeSend: function(){
         $.showSpinner('#spinner');

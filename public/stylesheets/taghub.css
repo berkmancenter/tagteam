@@ -53,7 +53,7 @@ h3{
 }
 
 table {
-  width: 100%;
+//  width: 100%;
 }
 table td{
   padding: 3px;
@@ -280,6 +280,10 @@ input#filter_by{
 
 .feed_retrieval.failure{
  color: #550000;
+}
+
+.no_changes{
+  background-color: #e4e4e4;
 }
 
 a:hover{

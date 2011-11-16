@@ -13,6 +13,7 @@ class RepublishedFeedsController < ApplicationController
 
   def show
     @owners = @republished_feed.owners
+    @hub = @republished_feed.hub
 #    @republished_feed.items
   end
 

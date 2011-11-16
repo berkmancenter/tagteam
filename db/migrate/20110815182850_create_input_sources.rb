@@ -17,7 +17,7 @@ class CreateInputSources < ActiveRecord::Migration
       add_index :input_sources, col
     end
 
-    add_index :input_sources, [:item_source_type, :item_source_id, :effect], :unique => true
+    add_index :input_sources, [:item_source_type, :item_source_id, :effect, :republished_feed_id], :unique => true, :name => 'bob_the_index'
 
   end
 

@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
 
   add_index "input_sources", ["effect"], :name => "index_input_sources_on_effect"
   add_index "input_sources", ["item_source_id"], :name => "index_input_sources_on_item_source_id"
-  add_index "input_sources", ["item_source_type"], :name => "index_input_sources_on_item_source_type"
+  add_index "input_sources", ["item_source_type", "item_source_id", "effect", "republished_feed_id"], :name => "bob_the_index", :unique => true
   add_index "input_sources", ["position"], :name => "index_input_sources_on_position"
   add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
 
