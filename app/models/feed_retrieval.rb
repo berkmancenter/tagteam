@@ -13,8 +13,8 @@ class FeedRetrieval < ActiveRecord::Base
   end
 
   def parsed_changelog
-    # So here's where we'll parse the changelog to come up with a datastructure that makes sense. 
-    changes = YAML.load(self.changelog)
+    return nil if changelog.nil?
+    YAML.load(self.changelog)
   end
 
   def new_feed_items
@@ -25,7 +25,7 @@ class FeedRetrieval < ActiveRecord::Base
     self.changelog_summary[:changed_records]
   end
 
-  def changed?
+  def has_changes?
     return (new_feed_items.blank? && changed_feed_items.blank?) ? false : true
   end
 
@@ -33,13 +33,13 @@ class FeedRetrieval < ActiveRecord::Base
 
     return self.changelog_summary_cache unless self.changelog_summary_cache.nil?
 
-    changelog_yaml = parsed_changelog
+    changelog_yaml = self.parsed_changelog
     changes = {
       :new_records => [],
       :changed_records => []
     }
 
-    return changes if changelog_yaml.empty?
+    return changes if changelog_yaml.nil?
 
     changelog_yaml.keys.each do|ch|
       if changelog_yaml[ch].include?(:new_record)

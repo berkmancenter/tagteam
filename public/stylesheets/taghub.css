@@ -279,7 +279,7 @@ input#filter_by{
 }
 
 .feed_retrieval.failure{
- color: #550000;
+ background-color: #990000;
 }
 
 .no_changes{

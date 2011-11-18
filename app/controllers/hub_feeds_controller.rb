@@ -12,7 +12,7 @@ class HubFeedsController < ApplicationController
 
   def retrievals
     breadcrumbs.add @hub_feed, hub_feed_path(@hub_feed)
-    @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page])
+    @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => params[:per_page])
   end
 
   def reschedule_immediately
