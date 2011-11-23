@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-  acts_as_authorization_subject  :association_name => :roles
+  acts_as_authorization_subject :association_name => :roles, :join_table_name => :roles_users
 
   def my(class_of_interest = Hub)
     roles.includes(:authorizable).find(:all, :conditions => {:authorizable_type => class_of_interest.name, :name => 'owner'}).collect{|r| r.authorizable}

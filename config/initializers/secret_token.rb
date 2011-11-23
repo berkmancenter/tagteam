@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Taghub::Application.config.secret_token = 'bd0e4ccfb5f7f609d3174af2eedf2021419321bde3e8326da28d8d43cc020252f67c966eaaac390c4d5949ed41981217eea5bff144db3fc3b86de5b203d66b11'
+Taghub::Application.config.secret_token = '074d7d97177e676618e6f2c02bc99346bce0d8bcd16d3cf6d14268f85d4e6433dde58bd52812657fd7575878ef7312eb195eab8ed2b666a030665c32c9d005d6'
