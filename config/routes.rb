@@ -1,5 +1,7 @@
 Taghub::Application.routes.draw do
 
+  resources :modify_tag_filters
+
   resources :input_sources do
     collection do
       get :find

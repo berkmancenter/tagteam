@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails'
+gem 'rails', '~> 3.1.0'
 gem 'pg'
 gem 'formtastic'
 gem 'jquery-rails'
@@ -14,6 +14,7 @@ gem "will_paginate"
 gem 'acts_as_list'
 gem 'sunspot'
 gem 'sunspot_rails'
+gem 'sunspot_solr'
 gem 'breadcrumbs'
 
 group :development, :test do

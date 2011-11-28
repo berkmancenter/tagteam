@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110815182850) do
+ActiveRecord::Schema.define(:version => 20111128202414) do
 
   create_table "feed_item_tags", :force => true do |t|
     t.string   "tag",                         :null => false
@@ -115,7 +116,8 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
 
   create_table "hub_tag_filters", :force => true do |t|
     t.integer  "hub_id"
-    t.integer  "tag_filter_id"
+    t.integer  "filter_type"
+    t.integer  "filter_id"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -148,6 +150,16 @@ ActiveRecord::Schema.define(:version => 20110815182850) do
   add_index "input_sources", ["item_source_type", "item_source_id", "effect", "republished_feed_id"], :name => "bob_the_index", :unique => true
   add_index "input_sources", ["position"], :name => "index_input_sources_on_position"
   add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
+
+  create_table "modify_tag_filters", :force => true do |t|
+    t.integer  "feed_item_tag_id"
+    t.integer  "new_feed_item_tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "modify_tag_filters", ["feed_item_tag_id"], :name => "index_modify_tag_filters_on_feed_item_tag_id"
+  add_index "modify_tag_filters", ["new_feed_item_tag_id"], :name => "index_modify_tag_filters_on_new_feed_item_tag_id"
 
   create_table "republished_feeds", :force => true do |t|
     t.integer  "hub_id"
