@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111128202414) do
+ActiveRecord::Schema.define(:version => 20111128233117) do
+
+  create_table "add_tag_filters", :force => true do |t|
+    t.integer  "feed_item_tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "add_tag_filters", ["feed_item_tag_id"], :name => "index_add_tag_filters_on_feed_item_tag_id"
+
+  create_table "delete_tag_filters", :force => true do |t|
+    t.integer  "feed_item_tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delete_tag_filters", ["feed_item_tag_id"], :name => "index_delete_tag_filters_on_feed_item_tag_id"
 
   create_table "feed_item_tags", :force => true do |t|
     t.string   "tag",                         :null => false

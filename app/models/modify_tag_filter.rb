@@ -8,4 +8,8 @@ class ModifyTagFilter < ActiveRecord::Base
   belongs_to :new_feed_item_tag, :class_name => FeedItemTag
   validates_presence_of :feed_item_tag_id, :new_feed_item_tag_id
 
+  def css_class
+    'modify'
+  end
+
 end

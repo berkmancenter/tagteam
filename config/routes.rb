@@ -55,7 +55,7 @@ Taghub::Application.routes.draw do
       get 'custom_republished_feeds'
       get 'watching'
       get 'republishing'
-
+      get 'filters'
     end
   end
 

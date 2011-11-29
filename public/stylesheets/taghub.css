@@ -279,11 +279,27 @@ input#filter_by{
 }
 
 .feed_retrieval.failure{
- background-color: #990000;
+ background-color: #ee0000;
 }
 
 .no_changes{
   background-color: #e4e4e4;
+}
+
+.tag_filter{
+  margin-bottom: 2px;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+.tag_filter.delete{
+  background-color: #990000;
+  color: white;
+}
+
+.tag_filter.add{
+  background-color: #009900;
+  color: white;
 }
 
 a:hover{

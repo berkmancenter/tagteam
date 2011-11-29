@@ -16,7 +16,7 @@
     <li><a href="#about">About</a></li>
     <li><%= link_to('Watching', watching_hub_path(@hub))%></li>
     <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
-    <li><a href="#filters">Filters</a></li>
+    <li><%= link_to('Filters', filters_hub_path(@hub) )%></li>
   </ul>
 
   <div id="about">
@@ -30,10 +30,6 @@
         <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
       </dl>
     </div>
-  </div>
-
-  <div id="filters">
-    <h2>Coming soon.</h2>
   </div>
 
 </div>

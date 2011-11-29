@@ -7,4 +7,8 @@ class DeleteTagFilter < ActiveRecord::Base
   belongs_to :feed_item_tag
   validates_presence_of :feed_item_tag_id
 
+  def css_class
+    'delete'
+  end
+
 end
