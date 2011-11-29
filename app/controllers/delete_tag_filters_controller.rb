@@ -1,0 +1,2 @@
+class DeleteTagFiltersController < ApplicationController
+end

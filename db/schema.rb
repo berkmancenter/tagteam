@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(:version => 20111128202414) do
 
   create_table "hub_tag_filters", :force => true do |t|
     t.integer  "hub_id"
-    t.integer  "filter_type"
-    t.integer  "filter_id"
+    t.string   "filter_type", :limit => 100, :null => false
+    t.integer  "filter_id",                  :null => false
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"

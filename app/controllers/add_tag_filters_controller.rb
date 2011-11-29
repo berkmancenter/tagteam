@@ -1,0 +1,2 @@
+class AddTagFiltersController < ApplicationController
+end

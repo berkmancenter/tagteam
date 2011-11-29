@@ -1,0 +1,2 @@
+module DeleteTagFiltersHelper
+end
