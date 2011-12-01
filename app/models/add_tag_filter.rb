@@ -11,4 +11,8 @@ class AddTagFilter < ActiveRecord::Base
     'add'
   end
 
+  def act(filtered_tags)
+    filtered_tags << self.feed_item_tag
+  end
+
 end

@@ -38,6 +38,17 @@ class FeedItem < ActiveRecord::Base
     (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
   end
 
+  def filtered_tags(hub = Hub.first)
+    tags = self.feed_item_tags.dup
+    if ! hub.hub_tag_filters.blank?
+      hub.hub_tag_filters.each do|htf|
+        htf.filter.act(tags)
+      end
+    end
+
+    tags
+  end
+
   def tags=(tag_inputs)
     new_tags = []
     tag_inputs.each do|t|

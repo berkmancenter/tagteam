@@ -11,4 +11,8 @@ class DeleteTagFilter < ActiveRecord::Base
     'delete'
   end
 
+  def act(filtered_tags)
+    filtered_tags.delete(self.feed_item_tag)
+  end
+
 end

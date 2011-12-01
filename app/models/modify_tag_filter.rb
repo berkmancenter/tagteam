@@ -12,4 +12,9 @@ class ModifyTagFilter < ActiveRecord::Base
     'modify'
   end
 
+  def act(filtered_tags)
+    filtered_tags.delete(self.feed_item_tag)
+    filtered_tags << self.new_feed_item_tag
+  end
+
 end
