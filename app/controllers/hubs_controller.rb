@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :watching, :republishing, :filters]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :filters]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -135,16 +135,6 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         redirect_to :action => :index
-      }
-    end
-  end
-
-  def watching
-    @hub = Hub.find(params[:id])
-    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:feed_item_tags]]], :page => params[:page], :per_page => HubFeed.per_page )
-    respond_to do|format|
-      format.html{
-        render :layout => ! request.xhr? 
       }
     end
   end

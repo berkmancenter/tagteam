@@ -1,5 +1,6 @@
 class HubFeedsController < ApplicationController
   before_filter :load_hub_feed, :except => [:index, :new, :create]
+  before_filter :load_hub
   before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately]
   before_filter :prep_resources
 
@@ -11,7 +12,7 @@ class HubFeedsController < ApplicationController
   end
 
   def retrievals
-    breadcrumbs.add @hub_feed, hub_feed_path(@hub_feed)
+    breadcrumbs.add @hub_feed, hub_hub_feed_path(:hub_id => @hub, :id => @hub_feed)
     @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => params[:per_page])
   end
 
@@ -20,14 +21,19 @@ class HubFeedsController < ApplicationController
     feed.next_scheduled_retrieval = Time.now
     feed.save
     flash[:notice] = 'Rescheduled that feed to be re-indexed at the next available opportunity.'
-    redirect_to @hub_feed
+    redirect_to hub_hub_feed_path(@hub,@hub_feed)
   rescue
     flash[:notice] = "We couldn't reschedule that feed."
-    redirect_to @hub_feed
+    redirect_to hub_hub_feed_path(@hub,@hub_feed)
   end
 
   def index
-    @hub_feeds = HubFeed.paginate(:order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page]) 
+    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:feed_item_tags]]], :page => params[:page], :per_page => HubFeed.per_page )
+    respond_to do|format|
+      format.html{
+        render :layout => ! request.xhr? 
+      }
+    end
   end
 
   def show
@@ -70,7 +76,10 @@ class HubFeedsController < ApplicationController
 
   def load_hub_feed
     @hub_feed = HubFeed.find_by_id(params[:id])
-    @hub = @hub_feed.hub
+  end
+
+  def load_hub
+    @hub = Hub.find(params[:hub_id])
   end
 
   def prep_resources

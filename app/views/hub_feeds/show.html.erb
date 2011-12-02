@@ -1,7 +1,7 @@
 <h1>
   <% if current_user && current_user.is?(:owner,@hub_feed) %>
-    <%= link_to('delete', hub_feed_path(@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
-    <%= link_to('edit', edit_hub_feed_path(@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+    <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+    <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
   <% end %>
   <%= @hub_feed %>
 </h1>
@@ -20,14 +20,14 @@
       <dt>Last successful download:</dt>
       <dd>
       <%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %><br/>
-      <%= link_to('See all retrievals', retrievals_hub_feed_path(@hub_feed)) %>
+      <%= link_to('See all retrievals', retrievals_hub_hub_feed_path(:id => @hub_feed, :hub_id => @hub)) %>
       </dd>
       <dt>Feed last changed at:</dt>
       <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
       <dt>Feed will be downloaded again  at:</dt>
       <dd><%= @hub_feed.feed.next_scheduled_retrieval.to_s(:long) %> 
       <% if current_user && current_user.is?(:owner, @hub) %>
-        <%= link_to('Schedule for immediate download', reschedule_immediately_hub_feed_path(@hub_feed)) %>
+        <%= link_to('Schedule for immediate download', reschedule_immediately_hub_hub_feed_path(@hub,@hub_feed)) %>
       <% end %>
       </dd>
     </dl>

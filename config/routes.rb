@@ -35,13 +35,6 @@ Taghub::Application.routes.draw do
     end
   end
 
-	resources :hub_feeds do
-    member do
-      get 'reschedule_immediately'
-      get 'retrievals'
-    end
-  end
-
 	resources :feeds do
 		collection do
 			post 'check_feed'
@@ -53,9 +46,14 @@ Taghub::Application.routes.draw do
       post 'add_feed'
       get 'feeds'
       get 'custom_republished_feeds'
-      get 'watching'
       get 'republishing'
       get 'filters'
+    end
+    resources :hub_feeds do
+      member do
+        get 'reschedule_immediately'
+        get 'retrievals'
+      end
     end
   end
 

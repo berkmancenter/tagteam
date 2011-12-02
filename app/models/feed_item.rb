@@ -29,13 +29,16 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feeds
 
   def hubs
-    # TODO Optimize via find and includes
+    # TODO Optimize via multi-table joins
     hf = self.feeds.find(:all, :include => [:hub_feeds]).collect{|f| f.hub_feeds}.flatten.uniq
     (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
   end
 
   def hub_ids
     (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
+  end
+
+  def updated_filtered_tags(hub = Hub.first)
   end
 
   def filtered_tags(hub = Hub.first)
@@ -45,7 +48,6 @@ class FeedItem < ActiveRecord::Base
         htf.filter.act(tags)
       end
     end
-
     tags
   end
 
