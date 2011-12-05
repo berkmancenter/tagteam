@@ -120,15 +120,15 @@ class Feed < ActiveRecord::Base
     fi.feed_retrievals << fr
     fi.feeds << self unless fi.feeds.include?(self)
     # Merge tags. . .
-    pre_update_tags = fi.tags
-    fi.tags = item.categories
-    if pre_update_tags != fi.tags
+    pre_update_tags = fi.tag_list
+    fi.tag_list = item.categories.join(',')
+    if pre_update_tags != fi.tag_list
       logger.warn('dirty because tags have changed')
       self.dirty = true
       unless fi.new_record?
         # Be sure to update the feed changelog here in case
         # an item only has tag changes.
-        item_changelog[:tags] = [pre_update_tags, fi.tags]
+        item_changelog[:tags] = [pre_update_tags, fi.tag_list]
         self.changelog[fi.id] = item_changelog
       end
     end
@@ -152,11 +152,13 @@ class Feed < ActiveRecord::Base
   end
 
   def items
-    self.feed_items.find(:all, :include => [:feed_item_tags])
+    # TODO - tweak the include?
+    self.feed_items.find(:all)
   end
 
   def feed_item_tags
-    self.feed_items.collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
+    # TODO - make work with aato
+    []
   end
   
   def save_feed_items_on_create

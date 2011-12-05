@@ -16,6 +16,7 @@ gem 'sunspot'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'breadcrumbs'
+gem 'acts-as-taggable-on'
 
 group :development, :test do
   gem 'rspec-rails'

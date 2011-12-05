@@ -1,4 +1,5 @@
 class FeedItem < ActiveRecord::Base
+  acts_as_taggable
 
   include ModelExtensions
   before_validation do
@@ -18,13 +19,13 @@ class FeedItem < ActiveRecord::Base
     string :contributors
     string :description
     string :rights
+    string :tag_list, :multiple => true
     time :date_published
     time :last_updated
   end
 
   validates_uniqueness_of :url
 
-  has_and_belongs_to_many :feed_item_tags
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
 
@@ -41,28 +42,15 @@ class FeedItem < ActiveRecord::Base
   def updated_filtered_tags(hub = Hub.first)
   end
 
-  def filtered_tags(hub = Hub.first)
-    tags = self.feed_item_tags.dup
-    if ! hub.hub_tag_filters.blank?
-      hub.hub_tag_filters.each do|htf|
-        htf.filter.act(tags)
-      end
-    end
-    tags
-  end
-
-  def tags=(tag_inputs)
-    new_tags = []
-    tag_inputs.each do|t|
-      new_tags << FeedItemTag.find_or_initialize_by_tag(t.downcase)
-    end
-    self.feed_item_tags = [self.feed_item_tags, new_tags].flatten.uniq.compact
-  end
-
-  def tags
-    return [] if self.feed_item_tags.empty?
-    self.feed_item_tags.collect{|fit| fit.tag}.sort
-  end
+#  def filtered_tags(hub = Hub.first)
+#    tags = self.feed_item_tags.dup
+#    if ! hub.hub_tag_filters.blank?
+#      hub.hub_tag_filters.each do|htf|
+#        htf.filter.act(tags)
+#      end
+#    end
+#    tags
+#  end
 
   def to_s
     "#{title}"
