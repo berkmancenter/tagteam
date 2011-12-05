@@ -11,8 +11,6 @@ Taghub::Application.routes.draw do
       get :find
     end
   end
-
-  resources :feed_item_tags
   resources :input_source
 
   resources :republished_feeds do

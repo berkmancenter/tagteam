@@ -14,37 +14,20 @@
 ActiveRecord::Schema.define(:version => 20111205190441) do
 
   create_table "add_tag_filters", :force => true do |t|
-    t.integer  "feed_item_tag_id"
+    t.integer  "tag_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "add_tag_filters", ["feed_item_tag_id"], :name => "index_add_tag_filters_on_feed_item_tag_id"
+  add_index "add_tag_filters", ["tag_id"], :name => "index_add_tag_filters_on_tag_id"
 
   create_table "delete_tag_filters", :force => true do |t|
-    t.integer  "feed_item_tag_id"
+    t.integer  "tag_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "delete_tag_filters", ["feed_item_tag_id"], :name => "index_delete_tag_filters_on_feed_item_tag_id"
-
-  create_table "feed_item_tags", :force => true do |t|
-    t.string   "tag",                         :null => false
-    t.string   "description", :limit => 5120
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "feed_item_tags", ["tag"], :name => "index_feed_item_tags_on_tag", :unique => true
-
-  create_table "feed_item_tags_feed_items", :id => false, :force => true do |t|
-    t.integer "feed_item_id"
-    t.integer "feed_item_tag_id"
-  end
-
-  add_index "feed_item_tags_feed_items", ["feed_item_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_id"
-  add_index "feed_item_tags_feed_items", ["feed_item_tag_id"], :name => "index_feed_item_tags_feed_items_on_feed_item_tag_id"
+  add_index "delete_tag_filters", ["tag_id"], :name => "index_delete_tag_filters_on_tag_id"
 
   create_table "feed_items", :force => true do |t|
     t.string   "title",          :limit => 500
@@ -168,14 +151,14 @@ ActiveRecord::Schema.define(:version => 20111205190441) do
   add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
 
   create_table "modify_tag_filters", :force => true do |t|
-    t.integer  "feed_item_tag_id"
-    t.integer  "new_feed_item_tag_id"
+    t.integer  "tag_id"
+    t.integer  "new_tag_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "modify_tag_filters", ["feed_item_tag_id"], :name => "index_modify_tag_filters_on_feed_item_tag_id"
-  add_index "modify_tag_filters", ["new_feed_item_tag_id"], :name => "index_modify_tag_filters_on_new_feed_item_tag_id"
+  add_index "modify_tag_filters", ["new_tag_id"], :name => "index_modify_tag_filters_on_new_tag_id"
+  add_index "modify_tag_filters", ["tag_id"], :name => "index_modify_tag_filters_on_tag_id"
 
   create_table "republished_feeds", :force => true do |t|
     t.integer  "hub_id"

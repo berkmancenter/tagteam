@@ -1,9 +1,9 @@
 class CreateDeleteTagFilters < ActiveRecord::Migration
   def change
     create_table :delete_tag_filters do |t|
-      t.references :feed_item_tag
+      t.references :tag
       t.timestamps
     end
-    add_index :delete_tag_filters, :feed_item_tag_id
+    add_index :delete_tag_filters, :tag_id
   end
 end
