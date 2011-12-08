@@ -28,7 +28,7 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:feed_item_tags]]], :page => params[:page], :per_page => HubFeed.per_page )
+    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:tags]]], :page => params[:page], :per_page => HubFeed.per_page, :order => 'created_at desc' )
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 

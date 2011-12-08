@@ -1,0 +1,19 @@
+<h1>Tags</h1>
+
+<p><b>Filter tags by:</b></p>
+<div id="slider_controls">
+  <div style="float: left">less frequent</div>
+  <div style="float: right;">more frequent</div>
+</div>
+<div class="clear"></div>
+
+<div id="tag_slider"></div>
+
+<div style="margin-bottom: 1em;">
+  Keyword: <input id="filter_by" size="15" /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">reset</a>
+</div>
+
+
+<% tag_cloud(@tags, %w(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10)) do |tag, css_class| %>
+  <%= link_to tag.name, tag_path(tag), :class => "#{css_class} tag" %>
+<% end %>

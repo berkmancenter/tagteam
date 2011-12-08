@@ -2,8 +2,8 @@
   <% if current_user && current_user.is?(:owner, @hub) %>
     <div class="add_feed_container">
       <div class="messages"></div>
-      <%= form_for(@hub, :url => add_feed_hub_path(@hub)) do %>
-        <input type="text" name="add_feed" id="feed_url" /> <a href="#" id="add_feed_button" class="button">Watch a new feed <span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
+      <%= form_for(:hub, :url => add_feed_hub_path(@hub), :method => :post, :html => {:id => 'add_feed_to_hub'}) do |f| %>
+        <input placeholder="enter the URL to your rss feed here. . . " type="text" name="feed_url" id="feed_url" /> <input type="submit" class="button" value="Watch a new feed"><span class="ui-silk ui-silk-feed-add inline gray hover"></span></a>
       <% end %>
     </div> 
 <% end %>

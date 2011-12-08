@@ -94,6 +94,40 @@
 })(jQuery);
 
 $(document).ready(function(){
+  if($('#reset_filter').length > 0){
+
+    $('#reset_filter').click(function(e){
+      $('.tag').show();
+    });
+    var filterStuff = function(e){
+      if(e != ''){
+        e.preventDefault();
+      }
+      $('a.tag').show();
+      var filterVal = $('#filter_by').val();
+      var filterregex = new RegExp(filterVal,'i');
+      $('a.tag').each(function(){
+        if(! $(this).html().match(filterregex)){
+          $(this).hide();
+        }
+      });
+    };
+    $('#filter_button').click(filterStuff);
+    $('#filter_by').observe_field(1,filterStuff);
+
+    $('#tag_slider').slider({
+      value: 0,
+      min: 0,
+      max: 9,
+      step: 1,
+      slide: function(event, ui){
+        $('.tag').show();
+        for(var i = 1; i <= ui.value; i=i+1){
+          $('.s' + i).hide();
+        }
+      }
+    });
+  }
   $('.hover_row').hoverIntent(
     function(){
       $(this).addClass('over');

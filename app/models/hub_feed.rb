@@ -6,6 +6,7 @@ class HubFeed < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed
   validates_uniqueness_of :feed_id, :scope => :hub_id
+  validates_presence_of :feed_id, :hub_id
 
   attr_accessible :title, :description
   

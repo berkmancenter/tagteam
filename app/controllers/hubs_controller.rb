@@ -45,9 +45,13 @@ class HubsController < ApplicationController
       if @hub_feed.save
         current_user.has_role!(:owner, @hub_feed)
         current_user.has_role!(:creator, @hub_feed)
-        format.json{ render(:json => {:message => 'Added that feed'}) and return }
+        format.html{ 
+          render :text => 'Added that feed'
+        }
       else
-        format.json{ render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable) and return }
+        format.html{ 
+          render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable)
+        }
       end
     end
   end
