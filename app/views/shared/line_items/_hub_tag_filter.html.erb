@@ -1,3 +1,3 @@
 <div class="tag_filter hub_tag_filter <%= hub_tag_filter.filter.css_class %>">
-  Delete <%= link_to(hub_tag_filter.filter.feed_item_tag.tag, feed_item_tag_path(hub_tag_filter.filter.feed_item_tag), :class => 'tag') %>
+  Delete <%= link_to(hub_tag_filter.filter.tag.name, tag_path(hub_tag_filter.filter.tag), :class => 'tag') %>
 </div>

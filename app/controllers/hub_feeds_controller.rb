@@ -37,7 +37,7 @@ class HubFeedsController < ApplicationController
   end
 
   def show
-    @feed_items = @hub_feed.feed.feed_items.paginate(:order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page])
+    @feed_items = @hub_feed.feed.feed_items.paginate(:include => [:tags], :order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page])
   end
 
   def new

@@ -31,7 +31,7 @@ class FeedItem < ActiveRecord::Base
 
   def hubs
     # TODO Optimize via multi-table joins
-    hf = self.feeds.find(:all, :include => [:hub_feeds]).collect{|f| f.hub_feeds}.flatten.uniq
+    hf = self.feeds.find(:all, :include => [:hub_feeds => [:hub]]).collect{|f| f.hub_feeds}.flatten.uniq
     (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
   end
 
@@ -42,15 +42,15 @@ class FeedItem < ActiveRecord::Base
   def updated_filtered_tags(hub = Hub.first)
   end
 
-#  def filtered_tags(hub = Hub.first)
-#    tags = self.feed_item_tags.dup
-#    if ! hub.hub_tag_filters.blank?
-#      hub.hub_tag_filters.each do|htf|
-#        htf.filter.act(tags)
-#      end
-#    end
-#    tags
-#  end
+  def filtered_tags(hub = Hub.first)
+    tags = self.tags.dup
+    if ! hub.hub_tag_filters.blank?
+      hub.hub_tag_filters.each do|htf|
+        htf.filter.act(tags)
+      end
+    end
+    tags
+  end
 
   def to_s
     "#{title}"
