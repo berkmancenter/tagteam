@@ -1,5 +1,9 @@
 Taghub::Application.routes.draw do
 
+  resources :hub_feed_tag_filters
+
+  resources :hub_feed_item_tag_filters
+
   resources :tags
 
   resources :add_tag_filters

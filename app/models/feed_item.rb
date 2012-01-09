@@ -28,6 +28,7 @@ class FeedItem < ActiveRecord::Base
 
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
+  has_many :feed_item_tag_filters, :dependent => :destroy, :order => :position
 
   def hubs
     # TODO Optimize via multi-table joins

@@ -8,6 +8,9 @@ class CreateHubTagFilters < ActiveRecord::Migration
 
       t.timestamps
     end
+    [:hub_id, :filter_type, :filter_id, :position].each do|col|
+      add_index :hub_tag_filters, col
+    end
   end
 
   def self.down
