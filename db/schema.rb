@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111205190441) do
+ActiveRecord::Schema.define(:version => 20120109130927) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -99,6 +99,38 @@ ActiveRecord::Schema.define(:version => 20111205190441) do
   add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
   add_index "feeds", ["next_scheduled_retrieval"], :name => "index_feeds_on_next_scheduled_retrieval"
+
+  create_table "hub_feed_item_tag_filters", :force => true do |t|
+    t.integer  "hub_id"
+    t.integer  "feed_item_id"
+    t.string   "filter_type",  :limit => 100, :null => false
+    t.integer  "filter_id",                   :null => false
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hub_feed_item_tag_filters", ["feed_item_id"], :name => "index_hub_feed_item_tag_filters_on_feed_item_id"
+  add_index "hub_feed_item_tag_filters", ["filter_id"], :name => "index_hub_feed_item_tag_filters_on_filter_id"
+  add_index "hub_feed_item_tag_filters", ["filter_type"], :name => "index_hub_feed_item_tag_filters_on_filter_type"
+  add_index "hub_feed_item_tag_filters", ["hub_id"], :name => "index_hub_feed_item_tag_filters_on_hub_id"
+  add_index "hub_feed_item_tag_filters", ["position"], :name => "index_hub_feed_item_tag_filters_on_position"
+
+  create_table "hub_feed_tag_filters", :force => true do |t|
+    t.integer  "hub_id"
+    t.integer  "hub_feed_id"
+    t.string   "filter_type", :limit => 100, :null => false
+    t.integer  "filter_id",                  :null => false
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hub_feed_tag_filters", ["filter_id"], :name => "index_hub_feed_tag_filters_on_filter_id"
+  add_index "hub_feed_tag_filters", ["filter_type"], :name => "index_hub_feed_tag_filters_on_filter_type"
+  add_index "hub_feed_tag_filters", ["hub_feed_id"], :name => "index_hub_feed_tag_filters_on_hub_feed_id"
+  add_index "hub_feed_tag_filters", ["hub_id"], :name => "index_hub_feed_tag_filters_on_hub_id"
+  add_index "hub_feed_tag_filters", ["position"], :name => "index_hub_feed_tag_filters_on_position"
 
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id",                     :null => false

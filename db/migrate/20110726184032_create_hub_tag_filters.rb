@@ -1,5 +1,5 @@
 class CreateHubTagFilters < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :hub_tag_filters do |t|
       t.references :hub
       t.string :filter_type, :limit => 100, :null => false
@@ -13,7 +13,4 @@ class CreateHubTagFilters < ActiveRecord::Migration
     end
   end
 
-  def self.down
-    drop_table :hub_tag_filters
-  end
 end
