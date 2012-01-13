@@ -12,7 +12,7 @@ class DeleteTagFilter < ActiveRecord::Base
   end
 
   def act(filtered_tags)
-    filtered_tags.delete(self.tag)
+    filtered_tags.delete(self.tag.name)
   end
 
 end

@@ -13,8 +13,8 @@ class ModifyTagFilter < ActiveRecord::Base
   end
 
   def act(filtered_tags)
-    filtered_tags.delete(self.tag)
-    filtered_tags << self.new_tag
+    filtered_tags.delete(self.tag.name)
+    filtered_tags << self.new_tag.name
   end
 
 end

@@ -17,6 +17,7 @@ gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'breadcrumbs'
 gem 'acts-as-taggable-on'
+gem 'resque', :require => 'resque/server'
 
 group :development, :test do
   gem 'rspec-rails'

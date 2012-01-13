@@ -28,11 +28,16 @@ class FeedItem < ActiveRecord::Base
 
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
-  has_many :feed_item_tag_filters, :dependent => :destroy, :order => :position
+  has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
+
+  def hub_feeds(hub = Hub.first)
+    # TODO Optimize via multi-table joins
+    self.feeds.find(:all, :include => [:hub_feeds => [:hub]]).collect{|f| f.hub_feeds}.flatten.uniq
+  end
 
   def hubs
     # TODO Optimize via multi-table joins
-    hf = self.feeds.find(:all, :include => [:hub_feeds => [:hub]]).collect{|f| f.hub_feeds}.flatten.uniq
+    hf = self.hub_feeds
     (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
   end
 
@@ -40,17 +45,40 @@ class FeedItem < ActiveRecord::Base
     (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
   end
 
-  def updated_filtered_tags(hub = Hub.first)
+  def update_filtered_tags
+    hs = self.hubs
+    hs.each do |h|
+      self.render_filtered_tags_for_hub(h)
+    end
   end
 
-  def filtered_tags(hub = Hub.first)
-    tags = self.tags.dup
+  def render_filtered_tags_for_hub(hub = Hub.first)
+    #"tag_list" is the source list of tags from RSS/Atom feeds.
+    tag_list_for_filtering = self.tag_list
+
+    #Hub tags
     if ! hub.hub_tag_filters.blank?
       hub.hub_tag_filters.each do|htf|
-        htf.filter.act(tags)
+        htf.filter.act(tag_list_for_filtering)
       end
     end
-    tags
+
+    #Hub feed tags
+    hfs = self.hub_feeds(hub)
+    hfs.each do|hf|
+      if ! hf.hub_feed_tag_filters.blank?
+        hf.hub_feed_tag_filters.each do |hftf|
+          hftf.filter.act(tag_list_for_filtering)
+        end
+      end
+    end
+    #Hub feed item filters
+    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id}).each do|hfitf|
+      hfitf.filter.act(tag_list_for_filtering)
+    end
+    self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))
+    self.save
+    tag_list_for_filtering
   end
 
   def to_s

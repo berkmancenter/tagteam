@@ -12,7 +12,7 @@ class AddTagFilter < ActiveRecord::Base
   end
 
   def act(filtered_tags)
-    filtered_tags << self.tag
+    filtered_tags << self.tag.name
   end
 
 end

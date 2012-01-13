@@ -5,6 +5,8 @@ class HubFeed < ActiveRecord::Base
   acts_as_authorization_object
   belongs_to :hub
   belongs_to :feed
+  has_many :feed_items, :through => :feed
+  has_many :hub_feed_tag_filters, :dependent => :destroy, :order => :position
   validates_uniqueness_of :feed_id, :scope => :hub_id
   validates_presence_of :feed_id, :hub_id
 
