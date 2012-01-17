@@ -4,7 +4,6 @@ Taghub::Application.routes.draw do
 
   resources :hub_feed_item_tag_filters
 
-  resources :tags
 
   resources :add_tag_filters
 
@@ -45,6 +44,8 @@ Taghub::Application.routes.draw do
 		end
 	end
 
+  resources :tags
+
   resources :hubs do
     member do
       post 'add_feed'
@@ -58,6 +59,9 @@ Taghub::Application.routes.draw do
         get 'reschedule_immediately'
         get 'retrievals'
       end
+    end
+    resources :tags do
+
     end
   end
 

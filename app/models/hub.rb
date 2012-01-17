@@ -15,4 +15,8 @@ class Hub < ActiveRecord::Base
 
   alias :to_s :display_title
 
+  def tagging_key
+    "hub_#{self.id}".to_sym
+  end
+
 end

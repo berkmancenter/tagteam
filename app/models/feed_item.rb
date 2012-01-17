@@ -31,8 +31,8 @@ class FeedItem < ActiveRecord::Base
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
 
   def hub_feeds(hub = Hub.first)
-    # TODO Optimize via multi-table joins
-    self.feeds.find(:all, :include => [:hub_feeds => [:hub]]).collect{|f| f.hub_feeds}.flatten.uniq
+    # TODO Optimize via multi-table joins?
+    hf = HubFeed.find(:all, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
   end
 
   def hubs
@@ -53,8 +53,8 @@ class FeedItem < ActiveRecord::Base
   end
 
   def render_filtered_tags_for_hub(hub = Hub.first)
-    #"tag_list" is the source list of tags from RSS/Atom feeds.
-    tag_list_for_filtering = self.tag_list
+    #"tag_list" is the source list of tags directly from RSS/Atom feeds.
+    tag_list_for_filtering = self.tag_list.dup
 
     #Hub tags
     if ! hub.hub_tag_filters.blank?

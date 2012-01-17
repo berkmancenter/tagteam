@@ -21,7 +21,7 @@
   <td></td>
   <td>
     <% unless feed_item.tags.empty? %>
-      <%= raw feed_item.tags.collect{|t| link_to(t.name, tag_path(t), :class => 'tag')}.join(' ') %>
+      <%= raw feed_item.tags_on(@hub.tagging_key || @hub_feed.hub.tagging_key).collect{|t| link_to(t.name, hub_tag_path(@hub,t.id), :class => 'tag')}.join(' ') %>
     <% end %>
   </td>
 </tr>

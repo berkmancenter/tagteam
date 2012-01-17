@@ -16,11 +16,13 @@ class Feed < ActiveRecord::Base
   include ModelExtensions
   acts_as_authorization_object
 
+  @dirty_feed_items = []
+
   before_create :set_next_scheduled_retrieval_on_create
   after_create :save_feed_items_on_create
 
 	attr_accessible :feed_url, :title, :description
-	attr_accessor :raw_feed, :status_code, :dirty, :changelog
+	attr_accessor :raw_feed, :status_code, :dirty, :changelog, :dirty_feed_items
 
 	has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
@@ -120,7 +122,8 @@ class Feed < ActiveRecord::Base
     fi.feeds << self unless fi.feeds.include?(self)
     # Merge tags. . .
     pre_update_tags = fi.tag_list
-    fi.tag_list = item.categories.join(',')
+    # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
+    fi.tag_list = item.categories.collect{|t| t[0,255]}.join(',')
     if pre_update_tags != fi.tag_list
       logger.warn('dirty because tags have changed')
       self.dirty = true
@@ -144,6 +147,9 @@ class Feed < ActiveRecord::Base
         self.dirty = true
         fi.save
         self.changelog[fi.id] = item_changelog
+
+        # Changed and/or new, so recalculate tag filtering.
+        Resque.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
       logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
