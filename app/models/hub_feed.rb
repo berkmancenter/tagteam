@@ -53,15 +53,15 @@ class HubFeed < ActiveRecord::Base
     0
   end
 
-  def latest_feed_items
-    self.feed.feed_items.limit(15)
+  def latest_feed_items(limit = 15)
+    self.feed.feed_items.limit(limit)
   rescue Exception => e
     logger.warn(e.inspect)
     []
   end
 
-  def latest_feed_tags
-    self.latest_feed_items.includes(:feed_item_tags).collect{|fi| fi.feed_item_tags}.flatten.uniq.compact
+  def latest_tags(limit = 15)
+    self.latest_feed_items.includes(:taggings).collect{|fi| fi.taggings.reject{|tg| tg.context != self.hub.tagging_key.to_s}.collect{|tg| tg.tag} }.flatten.uniq[0,limit]
   rescue Exception => e
     logger.warn(e.inspect)
     return []
