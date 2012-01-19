@@ -121,10 +121,10 @@ class Feed < ActiveRecord::Base
     fi.feed_retrievals << fr
     fi.feeds << self unless fi.feeds.include?(self)
     # Merge tags. . .
-    pre_update_tags = fi.tag_list
+    pre_update_tags = fi.tag_list.dup.sort
     # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
     fi.tag_list = item.categories.collect{|t| t.downcase[0,255]}.join(',')
-    if pre_update_tags != fi.tag_list
+    if pre_update_tags != fi.tag_list.sort
       logger.warn('dirty because tags have changed')
       self.dirty = true
       unless fi.new_record?
@@ -149,6 +149,7 @@ class Feed < ActiveRecord::Base
         self.changelog[fi.id] = item_changelog
 
         # Changed and/or new, so recalculate tag filtering.
+        logger.warn('Enqueueing resque jobs')
         Resque.enqueue(FeedItemTagRenderer, fi.id)
       end
     else

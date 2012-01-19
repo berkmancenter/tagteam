@@ -25,8 +25,8 @@ xml.rss(
         xml.link item.url
         xml.guid item.guid
         xml.author item.authors
-        item.feed_item_tags.each do|fit|
-          xml.category fit.tag
+        item.tag_list_on(@republished_feed.hub.tagging_key).each do|tag|
+          xml.category tag
         end
         unless item.rights.blank?
           xml.send('dc:rights', item.rights)

@@ -18,7 +18,7 @@ atom_feed :language => 'en-US' do |atom|
       entry.content item.content, :type => 'html'
       entry.link item.url 
       entry.title item.title
-      item.feed_item_tags.each do |icat|
+      item.tag_list_on(@republished_feed.hub.tagging_key).each do |icat|
         entry.category(:term => icat, :scheme => republished_feed_url(@republished_feed))
       end
       entry.rights item.rights
