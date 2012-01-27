@@ -10,7 +10,7 @@
     <p class="inline-hints"><span class="ui-silk inline ui-silk-delete"<% if @input_source.new_record? %> style="display: none;"<% end %> id="item_source_remove"></span> <span id="ajax_item_source_selection"><% unless @input_source.new_record? %><%= raw @input_source.item_source.mini_icon %> <%= link_to(raw(strip_tags(@input_source.item_source.to_s)), @input_source) %><% end %></span></p>
 
     </li>
-    <%= f.input :search_in, :as => :radio, :collection => [['Feeds','Feed'],['Items','FeedItem'],['Tags','FeedItemTag']] %>
+    <%= f.input :search_in, :as => :radio, :collection => [['Feeds','Feed'],['Items','FeedItem'],['Tags','ActsAsTaggableOn::Tag']] %>
     <%= f.input :item_source_id, :as => :hidden %>
     <%= f.input :item_source_type, :as => :hidden %>
     <%= f.input :effect, :collection => InputSource::EFFECTS, :hint => '"Add" means this input source adds its items to this republished feed. "Remove" means this input source is used to remove items it matches.' %>

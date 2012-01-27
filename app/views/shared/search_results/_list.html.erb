@@ -5,8 +5,8 @@
   <% if r.class == FeedItem %>
     <%= render :partial => 'shared/search_results/feed_item', :object => r %>
   <% end %>
-  <% if r.class == FeedItemTag %>
-    <%= render :partial => 'shared/search_results/feed_item_tag', :object => r %>
+  <% if r.class == ActsAsTaggableOn::Tag %>
+    <%= render :partial => 'shared/search_results/tag', :object => r %>
   <% end %>
   <div class="clear"></div>
 <% end %>

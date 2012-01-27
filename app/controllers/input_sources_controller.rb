@@ -63,6 +63,7 @@ class InputSourcesController < ApplicationController
 
   def find
     @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
+#k    @search = Sunspot.new_search ActsAsTaggableOn::Tag
     params[:hub_id] = @republished_feed.hub_id  
 
     if params[:search_in].include?('Feed')
@@ -91,15 +92,12 @@ class InputSourcesController < ApplicationController
       end
     end
 
-    if params[:search_in].include?('FeedItemTag')
+    if params[:search_in].include?('ActsAsTaggableOn::Tag')
       @search.build do
         text_fields do
-          any_of do
-            with(:tag).starting_with(params[:q])
-            with(:description).starting_with(params[:q])
-          end
+          with(:name).starting_with(params[:q])
         end
-        with :hub_ids, params[:hub_id]
+        with :contexts, "hub_#{params[:hub_id]}"
       end
     end
 
