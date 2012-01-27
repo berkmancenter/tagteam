@@ -1,4 +1,5 @@
 class FeedItemsController < ApplicationController
+  before_filter :load_hub_feed
   before_filter :load_feed_item, :except => [:index, :by_date]
   before_filter :add_breadcrumbs, :except => [:index, :by_date, :content]
 
@@ -49,15 +50,19 @@ class FeedItemsController < ApplicationController
 
   private
 
+  def load_hub_feed
+    @hub_feed = HubFeed.find(params[:hub_feed_id])
+    @hub = @hub_feed.hub
+  end
+
   def load_feed_item
     @feed_item = FeedItem.find(params[:id])
   end
 
   def add_breadcrumbs
-
-    hub_feed = @feed_item.feeds.first.hub_feeds.first
-    unless hub_feed.blank?
-      breadcrumbs.add hub_feed.to_s, hub_feed_path(hub_feed) 
+    unless @hub_feed.blank?
+      breadcrumbs.add @hub.to_s, hub_path(@hub) 
+      breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub,@hub_feed) 
     end
   end
 

@@ -215,9 +215,10 @@ a:hover{
   background: #ccc top left url('/images/bg_dot.png') no-repeat;
   background-position:5px 7px;
   border: 1px solid #aaa;
-  padding: 1px 5px 1px 15px;
+  padding: 0px 5px 0px 15px;
 
   /* Will probably cause problems with some versions of ie */
+  display: inline-block;
 
   margin: 0px 8px 4px 0px;
   border-top-left-radius: 5px;

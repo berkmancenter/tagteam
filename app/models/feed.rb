@@ -161,11 +161,6 @@ class Feed < ActiveRecord::Base
     # TODO - tweak the include?
     self.feed_items.find(:all)
   end
-
-  def feed_item_tags
-    # TODO - make work with aato
-    []
-  end
   
   def save_feed_items_on_create
     self.dirty = false

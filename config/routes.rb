@@ -4,7 +4,6 @@ Taghub::Application.routes.draw do
 
   resources :hub_feed_item_tag_filters
 
-
   resources :add_tag_filters
 
   resources :delete_tag_filters
@@ -46,6 +45,18 @@ Taghub::Application.routes.draw do
 
   resources :tags
 
+  resources :hub_feeds do
+    resources :feed_items do
+      member do
+        get 'content'
+      end
+      collection do
+        get 'by_date'
+      end
+    end
+    resources :tags
+  end
+
   resources :hubs do
     member do
       post 'add_feed'
@@ -53,6 +64,7 @@ Taghub::Application.routes.draw do
       get 'custom_republished_feeds'
       get 'republishing'
       get 'filters'
+      get 'tag_controls'
     end
     resources :hub_feeds do
       member do
@@ -60,9 +72,7 @@ Taghub::Application.routes.draw do
         get 'retrievals'
       end
     end
-    resources :tags do
-
-    end
+    resources :tags
   end
 
   devise_for :users

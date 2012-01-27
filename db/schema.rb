@@ -154,6 +154,11 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.datetime "updated_at"
   end
 
+  add_index "hub_tag_filters", ["filter_id"], :name => "index_hub_tag_filters_on_filter_id"
+  add_index "hub_tag_filters", ["filter_type"], :name => "index_hub_tag_filters_on_filter_type"
+  add_index "hub_tag_filters", ["hub_id"], :name => "index_hub_tag_filters_on_hub_id"
+  add_index "hub_tag_filters", ["position"], :name => "index_hub_tag_filters_on_position"
+
   create_table "hubs", :force => true do |t|
     t.string   "title",       :limit => 500,  :null => false
     t.string   "description", :limit => 2048

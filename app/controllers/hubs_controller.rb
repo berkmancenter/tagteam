@@ -3,10 +3,19 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :filters]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :filters, :tag_controls]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
+  end
+
+  def tag_controls
+    @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+    respond_to do|format|
+      format.html{
+        render :layout => ! request.xhr?
+      }
+    end
   end
 
   def filters
@@ -157,6 +166,7 @@ class HubsController < ApplicationController
   def load_hub
     @hub = Hub.find(params[:id])
     @owners = @hub.owners
+    @is_owner = @owners.include?(current_user)
   end
 
   def prep_resources

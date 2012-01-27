@@ -129,7 +129,7 @@ class HubFeed < ActiveRecord::Base
     logger.warn('reindexing everything')
     self.feed.solr_index
     self.feed.feed_items.collect{|fi| fi.solr_index}
-    self.feed.feed_item_tags{|ft| ft.solr_index}
+    # TODO - index hub feed tags?
   end
 
 end

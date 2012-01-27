@@ -187,6 +187,23 @@ $(document).ready(function(){
     }
   });
 
+  $('.tag').live({
+    click: function(e){
+      if($('#logged_in').length == 0){
+        return true;
+      }
+      e.preventDefault();
+      var tag_id = $(this).attr('data_tag_id');
+      var hub_id = $(this).attr('data_hub_id');
+      $(this).bt({
+        ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id,
+        trigger: 'none',
+        closeWhenOthersOpen: true
+      });
+      $(this).btOn();
+    }
+  });
+
   $('.control').live({
     click: function(e){
       e.preventDefault();
@@ -194,9 +211,6 @@ $(document).ready(function(){
       $(this).bt({
         trigger: 'none',
         contentSelector: $('#' + id + '-target'),
-        textzIndex: 101,
-        boxzIndex: 100,
-        wrapperzIndex: 99,
         closeWhenOthersOpen: true
       });
       $(this).btOn();

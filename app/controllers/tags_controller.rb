@@ -1,6 +1,7 @@
 class TagsController < ApplicationController
 
   before_filter :load_hub
+  before_filter :add_breadcrumbs
 
   access_control do
     allow all
@@ -18,6 +19,12 @@ class TagsController < ApplicationController
 
   def load_hub
     @hub = Hub.find(params[:hub_id])
+  end
+
+  private
+
+  def add_breadcrumbs
+    breadcrumbs.add @hub.to_s, hub_path(@hub) 
   end
 
 end
