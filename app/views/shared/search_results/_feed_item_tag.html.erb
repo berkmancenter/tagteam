@@ -1,4 +1,0 @@
-<div class="feed_item_tag search_result" id="feed_item_tag<%= feed_item_tag.id %>">
-  <div class="grid_2 alpha"><span class="ui-silk inline ui-silk-add add_item_source" title="add this tag as an input source" id="FeedItemTag-<%= feed_item_tag.id %>"></span> Tag:</div>
-  <div class="grid_6 omega"><%= link_to(raw(strip_tags(feed_item_tag.to_s)), feed_item_tag_path(feed_item_tag), :class => 'tag', :id => "FeedItemTag-#{feed_item_tag.id}-link") %></div>
-</div>

@@ -18,6 +18,9 @@ class InputSourcesController < ApplicationController
   def create
     @input_source = InputSource.new()
     @input_source.attributes = params[:input_source]
+    if @input_source.item_source_type == 'Tag'
+      @input_source.item_source_type = 'ActsAsTaggableOn::Tag'
+    end
 
     #ok because we're using ACL9 to protect this method.
     @input_source.republished_feed_id = params[:input_source][:republished_feed_id]
@@ -49,6 +52,9 @@ class InputSourcesController < ApplicationController
 
   def update
     @input_source.attributes = params[:input_source]
+    if @input_source.item_source_type == 'Tag'
+      @input_source.item_source_type = 'ActsAsTaggableOn::Tag'
+    end
     respond_to do|format|
       if @input_source.save
         current_user.has_role!(:editor, @input_source)
@@ -64,6 +70,7 @@ class InputSourcesController < ApplicationController
   def find
     @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
     params[:hub_id] = @republished_feed.hub_id  
+    @hub = Hub.find(@republished_feed.hub_id)
 
     if params[:search_in].include?('Feed')
       @search.build do

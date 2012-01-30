@@ -159,7 +159,7 @@ class Feed < ActiveRecord::Base
 
   def items
     # TODO - tweak the include?
-    self.feed_items.find(:all)
+    self.feed_items.find(:all, :include => [:taggings, :tags], :order => 'id desc')
   end
   
   def save_feed_items_on_create

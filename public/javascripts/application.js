@@ -94,6 +94,9 @@
 })(jQuery);
 
 $(document).ready(function(){
+
+  jQuery.bt.options.ajaxCache = false;
+
   if($('#reset_filter').length > 0){
 
     $('#reset_filter').click(function(e){

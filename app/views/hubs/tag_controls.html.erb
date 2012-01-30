@@ -1,13 +1,16 @@
-<ul>
-  <li><%= link_to("View items tagged with #{@tag.name}", hub_tag_path(@hub,@tag)) %></li>
-</ul>
-<h2>Filters:</h2>
-<ul>
-  <li>Hub level</li>
-  <li>Feed level</li>
-  <li>Item level</li>
-</ul>
-<h2>Publishing:</h2>
-<ul>
-  <li>Add to a republished feed</li>
-</ul>
+<div class="controls">
+  <ul>
+    <li><%= link_to("View items tagged with #{@tag.name}", hub_tag_path(@hub,@tag)) %></li>
+  </ul>
+  <h3>Filters:</h3>
+  <ul>
+    <li>Hub:<br/>
+      Add to all items in a hub</li>
+    <li>Feed level</li>
+    <li>Item level</li>
+  </ul>
+  <h3>Publishing:</h3>
+  <ul>
+    <li>Add to a republished feed</li>
+  </ul>
+</div>

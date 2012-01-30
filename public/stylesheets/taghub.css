@@ -282,9 +282,9 @@ input#filter_by{
   margin-bottom: 4px;
 }
 
-.controls a{
+.controls, .controls a{
   line-height: 1.2em;
-  font-size: 8pt;
+  font-size: 9pt;
   text-decoration: none;
 }
 

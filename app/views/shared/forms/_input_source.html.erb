@@ -69,6 +69,7 @@
         $(this).css('cursor', 'pointer');
       },
       click: function(){
+        console.log('EL: ' + $(this).attr('id'));
         var itemSource = $(this).attr('id').split('-');
         $('#input_source_item_source_type').val(itemSource[0]);
         $('#input_source_item_source_id').val(itemSource[1]);
