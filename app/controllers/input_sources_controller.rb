@@ -63,7 +63,6 @@ class InputSourcesController < ApplicationController
 
   def find
     @search = Sunspot.new_search params[:search_in].collect{|f| f.constantize}
-#k    @search = Sunspot.new_search ActsAsTaggableOn::Tag
     params[:hub_id] = @republished_feed.hub_id  
 
     if params[:search_in].include?('Feed')
