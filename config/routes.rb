@@ -24,7 +24,6 @@ Taghub::Application.routes.draw do
     end
   end
 
-  resources :hub_tag_filters
 
   resources :feed_retrievals
 
@@ -63,16 +62,24 @@ Taghub::Application.routes.draw do
       get 'feeds'
       get 'custom_republished_feeds'
       get 'republishing'
-      get 'filters'
       get 'tag_controls'
     end
+
     resources :hub_feeds do
       member do
         get 'reschedule_immediately'
         get 'retrievals'
       end
     end
+
     resources :tags
+
+    resources :hub_tag_filters do
+      member do
+        post 'move_higher'
+        post 'move_lower'
+      end
+    end
   end
 
   devise_for :users

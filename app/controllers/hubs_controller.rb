@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :filters, :tag_controls]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :tag_controls]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -16,17 +16,6 @@ class HubsController < ApplicationController
         render :layout => ! request.xhr?
       }
     end
-  end
-
-  def filters
-    @hub_tag_filters = @hub.hub_tag_filters
-
-    respond_to do |format|
-      format.html{
-        render :layout => ! request.xhr?
-      }
-    end
-
   end
 
   def add_feed
