@@ -5,12 +5,16 @@
   <h3>Filters:</h3>
   <ul>
     <li><strong>Hub:</strong><br/>
-    Add
-    Modify
-    Delete
+    <%= link_to 'Add', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+    <%= link_to 'Modify', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+    <%= link_to 'Delete', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
     </li>
-    <li>Feed level</li>
-    <li>Item level</li>
+    <li><strong>Feed level</strong><br/>
+Add | Modify | Delete
+    </li>
+    <li><strong>Item level</strong><br/>
+    Add | Modify | Delete
+    </li>
   </ul>
   <h3>Publishing:</h3>
   <ul>

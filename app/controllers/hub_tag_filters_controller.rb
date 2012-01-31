@@ -19,7 +19,6 @@ class HubTagFiltersController < ApplicationController
 
   def new
     @hub_tag_filter = HubTagFilter.new
-
   end
 
   def move_higher
@@ -39,15 +38,17 @@ class HubTagFiltersController < ApplicationController
     @hub_tag_filter = HubTagFilter.new
     @hub_tag_filter.attributes = params[:hub_tag_filter]
     @hub_tag_filter.hub_id = @hub.id
+
     respond_to do|format|
       if @hub_tag_filter.save
         current_user.has_role!(:owner, @hub_tag_filter)
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'
-        format.html {redirect_to hub_path(@hub)}
+        format.html { render :text => "Added that tag to #{@hub.title}" }
       else
         flash[:error] = 'Could not add that hub tag filter'
         format.html {render :action => :new}
+        format.json { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable) and return }
       end
     end
   end

@@ -190,22 +190,35 @@ $(document).ready(function(){
     }
   });
 
-  $('.tag').live({
-    click: function(e){
-      if($('#logged_in').length == 0){
-        return true;
+  if($('#logged_in').length > 0){
+    $('.tag').live({
+      click: function(e){
+        e.preventDefault();
+        var tag_id = $(this).attr('data_tag_id');
+        var hub_id = $(this).attr('data_hub_id');
+        $(this).bt({
+          ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id,
+          trigger: 'none',
+          closeWhenOthersOpen: true
+        });
+        $(this).btOn();
       }
-      e.preventDefault();
-      var tag_id = $(this).attr('data_tag_id');
-      var hub_id = $(this).attr('data_hub_id');
-      $(this).bt({
-        ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id,
-        trigger: 'none',
-        closeWhenOthersOpen: true
-      });
-      $(this).btOn();
-    }
-  });
+    });
+    $('.add_filter_control').live({
+      click: function(e){
+        e.preventDefault();
+        $.ajax({
+          dataType: 'html',
+          cache: false,
+          url: $(this).attr('href'),
+          type: 'post',
+          data: {filter_type: $(this).attr('data_type')}
+        });
+
+      }
+    });
+  }
+
 
   $('.control').live({
     click: function(e){
