@@ -5,9 +5,9 @@
   <h3>Filters:</h3>
   <ul>
     <li><strong>Hub:</strong><br/>
-    <%= link_to 'Add', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-    <%= link_to 'Modify', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-    <%= link_to 'Delete', new_hub_hub_tag_filter_path(@hub, :tag_id => @tag), :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
+    <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+    <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+    <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
     </li>
     <li><strong>Feed level</strong><br/>
 Add | Modify | Delete

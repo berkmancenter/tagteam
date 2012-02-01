@@ -206,13 +206,14 @@ $(document).ready(function(){
     });
     $('.add_filter_control').live({
       click: function(e){
+        var tag_id = $(this).attr('data_id');
         e.preventDefault();
         $.ajax({
           dataType: 'html',
           cache: false,
           url: $(this).attr('href'),
           type: 'post',
-          data: {filter_type: $(this).attr('data_type')}
+          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id}
         });
 
       }

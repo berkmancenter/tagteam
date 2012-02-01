@@ -1,5 +1,5 @@
 class HubTagFiltersController < ApplicationController
-  before_filter :load_hub, :except => [:new, :create]
+  before_filter :load_hub, :except => [:new]
   before_filter :load_hub_tag_filter, :except => [:index, :new, :create]
 
   access_control do
@@ -35,12 +35,17 @@ class HubTagFiltersController < ApplicationController
     # DeleteTagFilter
     # ModifyTagFilter
 
-    @hub_tag_filter = HubTagFilter.new
-    @hub_tag_filter.attributes = params[:hub_tag_filter]
-    @hub_tag_filter.hub_id = @hub.id
+    filter_type_model = params[:filter_type].constantize
+
+    @hub_tag_filter = HubTagFilter.new(
+      :hub_id => @hub.id, 
+      :filter => filter_type_model.new(:tag_id => params[:tag_id])
+    )
+    logger.warn("Hub tag filter: #{@hub_tag_filter.inspect}")
 
     respond_to do|format|
       if @hub_tag_filter.save
+        logger.warn("Hub tag filter: #{@hub_tag_filter.inspect}")
         current_user.has_role!(:owner, @hub_tag_filter)
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'
