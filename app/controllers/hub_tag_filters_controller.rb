@@ -23,10 +23,12 @@ class HubTagFiltersController < ApplicationController
 
   def move_higher
     @hub_tag_filter.move_higher unless @hub_tag_filter.first?
+    redirect_to hub_path(@hub) 
   end
 
   def move_lower
     @hub_tag_filter.move_lower unless @hub_tag_filter.last?
+    redirect_to hub_path(@hub) 
   end
 
   def create
@@ -37,11 +39,11 @@ class HubTagFiltersController < ApplicationController
 
     filter_type_model = params[:filter_type].constantize
 
-    @hub_tag_filter = HubTagFilter.new(
-      :hub_id => @hub.id, 
-      :filter => filter_type_model.new(:tag_id => params[:tag_id])
-    )
-    logger.warn("Hub tag filter: #{@hub_tag_filter.inspect}")
+    logger.warn("Filter type model: #{filter_type_model.inspect}")
+
+    @hub_tag_filter = HubTagFilter.new()
+    @hub_tag_filter.hub_id = @hub.id
+    @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
 
     respond_to do|format|
       if @hub_tag_filter.save
@@ -63,7 +65,7 @@ class HubTagFiltersController < ApplicationController
     flash[:notice] = 'Deleted that hub tag filter'
     respond_to do|format|
       format.html{
-        redirect_to :action => :index
+        redirect_to hub_path(@hub)
       }
     end
   end

@@ -11,6 +11,10 @@ class DeleteTagFilter < ActiveRecord::Base
     'delete'
   end
 
+  def description
+    'Delete tag: '
+  end
+
   def act(filtered_tags)
     filtered_tags.delete(self.tag.name)
   end

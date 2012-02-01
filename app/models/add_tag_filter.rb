@@ -7,6 +7,10 @@ class AddTagFilter < ActiveRecord::Base
   belongs_to :tag, :class_name => 'ActsAsTaggableOn::Tag'
   validates_presence_of :tag_id
 
+  def description
+    'Add tag: '
+  end
+
   def css_class
     'add'
   end

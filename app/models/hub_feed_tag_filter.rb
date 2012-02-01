@@ -5,4 +5,5 @@ class HubFeedTagFilter < ActiveRecord::Base
   belongs_to :hub_feed
   belongs_to :filter, :polymorphic => true
   attr_accessible :filter_type, :filter_id
+
 end
