@@ -48,11 +48,10 @@ class HubTagFiltersController < ApplicationController
         current_user.has_role!(:owner, @hub_tag_filter)
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'
-        format.html { render :text => "Added that tag to #{@hub.title}" }
+        format.html { render :text => "Added a filter for that tag to \"#{@hub.title}\"", :layout => ! request.xhr? }
       else
         flash[:error] = 'Could not add that hub tag filter'
-        format.html {render :action => :new}
-        format.json { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable) and return }
+        format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
       end
     end
   end

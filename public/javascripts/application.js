@@ -11,7 +11,8 @@
       $('#spinner').hide();
     }, 
     showMajorError: function(error){
-        $('<div></div>').html("We're sorry, there appears to have been an error.<br/>" + error).dialog({
+      console.log(error);
+        $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + error.responseText + '</p>').dialog({
             modal: true
         }).dialog('open');
     },
@@ -92,6 +93,12 @@ $(document).ready(function(){
   jQuery.bt.options.fill = '#ffffff';
   jQuery.bt.options.strokeWidth = 2;
   jQuery.bt.options.strokeStyle = '#ccc';
+  jQuery.bt.options.textzIndex = 999;
+  jQuery.bt.options.boxzIndex = 998;
+  jQuery.bt.options.wrapperzIndex = 997;
+  jQuery.bt.options.postShow = function(){
+    $.hideSpinner();
+  };
 
   if($('#reset_filter').length > 0){
 
@@ -195,7 +202,8 @@ $(document).ready(function(){
         $(this).bt({
           ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id,
           trigger: 'none',
-          closeWhenOthersOpen: true
+          closeWhenOthersOpen: true,
+          clickAnywhereToClose: true
         });
         $(this).btOn();
       }
@@ -209,18 +217,14 @@ $(document).ready(function(){
           cache: false,
           url: $(this).attr('href'),
           type: 'post',
-          complete: function(){
-            $.hideSpinner();
-            // TODO - figure out how to close all beautytip
-            // dialogs.
-
-          },
-          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id}
+          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id},
+          success: function(html){
+            alert(html);
+          }
     });
   }
 });
   }
-
 
   $('.control').live({
     click: function(e){
