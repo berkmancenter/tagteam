@@ -4,13 +4,11 @@
 		rootPath: function(){
 			return '/';
     },
-    showSpinner: function(spinnerId){
-      var spinnerNode = $(spinnerId);
-      $(spinnerNode).html('<img src="' + $.rootPath() + 'images/spinner.gif" />').show();
+    showSpinner: function(){
+      $('#spinner').show();
     },
     hideSpinner: function(spinnerId){
-      var spinnerNode = $(spinnerId);
-      $(spinnerNode).hide();
+      $('#spinner').hide();
     }, 
     showMajorError: function(error){
         $('<div></div>').html("We're sorry, there appears to have been an error.<br/>" + error).dialog({
@@ -26,15 +24,6 @@
           cache: false,
           url: $(this).attr('href'),
           dataType: 'html',
-          beforeSend: function(){
-            $.showSpinner();
-          },
-          error: function(xhr){
-            $.showMajorError(xhr);
-          },
-          complete: function(){
-            $.hideSpinner();
-          },
           success: function(html){
             $(paginationTarget).html(html);
           }
@@ -49,15 +38,6 @@
           cache: false,
           dataType: 'html',
           url: $(this).attr('href'),
-          beforeSend: function(){
-            $.showSpinner();
-          },
-          complete: function(){
-            $.hideSpinner();
-          },
-          error: function(xhr){
-            $.showMajorError(xhr);
-          },
           success: function(html){
             var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
             $(dialogNode).append(html);
@@ -95,7 +75,23 @@
 
 $(document).ready(function(){
 
+  $.ajaxSetup({
+    cache: false,
+    beforeSend: function(){
+      $.showSpinner();
+    },
+    complete: function(){
+      $.hideSpinner();
+    },
+    error: function(error){
+      $.showMajorError(error);
+    },
+  });
+
   jQuery.bt.options.ajaxCache = false;
+  jQuery.bt.options.fill = '#ffffff';
+  jQuery.bt.options.strokeWidth = 2;
+  jQuery.bt.options.strokeStyle = '#ccc';
 
   if($('#reset_filter').length > 0){
 
@@ -213,11 +209,16 @@ $(document).ready(function(){
           cache: false,
           url: $(this).attr('href'),
           type: 'post',
-          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id}
-        });
+          complete: function(){
+            $.hideSpinner();
+            // TODO - figure out how to close all beautytip
+            // dialogs.
 
-      }
+          },
+          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id}
     });
+  }
+});
   }
 
 

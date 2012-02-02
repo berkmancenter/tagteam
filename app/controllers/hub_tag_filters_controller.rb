@@ -39,15 +39,12 @@ class HubTagFiltersController < ApplicationController
 
     filter_type_model = params[:filter_type].constantize
 
-    logger.warn("Filter type model: #{filter_type_model.inspect}")
-
     @hub_tag_filter = HubTagFilter.new()
     @hub_tag_filter.hub_id = @hub.id
     @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
 
     respond_to do|format|
       if @hub_tag_filter.save
-        logger.warn("Hub tag filter: #{@hub_tag_filter.inspect}")
         current_user.has_role!(:owner, @hub_tag_filter)
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'

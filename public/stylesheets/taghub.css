@@ -7,6 +7,12 @@ body{
   font-family: Verdana;
 }
 
+#spinner{
+  position: fixed;
+  top: 15px; 
+  right: 15px;
+}
+
 sup{
   vertical-align: super;
   font-size: smaller;
