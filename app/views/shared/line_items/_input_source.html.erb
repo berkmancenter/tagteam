@@ -9,7 +9,7 @@
     <% if [Feed,FeedItem].include?(input_source.item_source.class) %>
       <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => input_source.item_source.class.to_s.tableize.singularize) %>
     <% else %>
-      <%= raw input_source.item_source.mini_icon %> <%= tag_display(@hub,input_source.item_source) %>
+      <%= raw input_source.item_source.mini_icon %> <%= tag_display(input_source.item_source, :hub => @hub) %>
     <% end %>
   </div>
   <div class="clear"></div>

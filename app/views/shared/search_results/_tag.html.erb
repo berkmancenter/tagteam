@@ -1,4 +1,4 @@
 <div class="search_result" id="tag<%= tag.id %>">
   <div class="grid_2 alpha"><span class="ui-silk inline ui-silk-add add_item_source" title="add this tag as an input source" id="Tag-<%= tag.id %>"></span> Tag:</div>
-  <div class="grid_6 omega"><%= tag_display(@hub, tag, :id => "Tag-#{tag.id}-link") %></div>
+  <div class="grid_6 omega"><%= tag_display(tag, :hub => @hub, :id => "Tag-#{tag.id}-link") %></div>
 </div>

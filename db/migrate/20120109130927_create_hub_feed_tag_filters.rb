@@ -1,7 +1,6 @@
 class CreateHubFeedTagFilters < ActiveRecord::Migration
   def change
     create_table :hub_feed_tag_filters do |t|
-      t.references :hub
       t.references :hub_feed
       t.string :filter_type, :limit => 100, :null => false
       t.integer :filter_id, :null => false

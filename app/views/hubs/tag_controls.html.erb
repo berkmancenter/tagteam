@@ -4,7 +4,7 @@
   </ul>
   <h3>Filters:</h3>
   <ul>
-    <li><strong>Hub:</strong>
+    <li><strong>For all items in this hub:</strong>
     <% if @already_filtered %>
     <p>This tag has already been used in a tag-wide filter.</p>
   <% else %>
@@ -14,10 +14,10 @@
     <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
   <% end %>
     </li>
-    <li><strong>Feed level</strong><br/>
+    <li><strong>For all items in this feed:</strong><br/>
 Add | Modify | Delete
     </li>
-    <li><strong>Item level</strong><br/>
+    <li><strong>For only this item:</strong><br/>
     Add | Modify | Delete
     </li>
   </ul>

@@ -16,7 +16,6 @@ class HubTagFilter < ActiveRecord::Base
     
     if filters_with_this_tag.include?(true)
       self.errors.add(:base, 'This tag is already being filtered for this hub.')
-      logger.warn('You fail it!')
     end
   end
 
