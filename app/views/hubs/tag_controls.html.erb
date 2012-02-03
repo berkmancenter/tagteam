@@ -4,10 +4,15 @@
   </ul>
   <h3>Filters:</h3>
   <ul>
-    <li><strong>Hub:</strong><br/>
+    <li><strong>Hub:</strong>
+    <% if @already_filtered %>
+    <p>This tag has already been used in a tag-wide filter.</p>
+  <% else %>
+    <br/>
     <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
     <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
     <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
+  <% end %>
     </li>
     <li><strong>Feed level</strong><br/>
 Add | Modify | Delete

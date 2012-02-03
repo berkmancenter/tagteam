@@ -10,6 +10,8 @@ class HubsController < ApplicationController
   end
 
   def tag_controls
+    # So the goal is to see if this tag has been used in a hub-level filter before.
+    @already_filtered = HubTagFilter.where(:hub_id => @hub.id).includes(:filter).collect{|htf| htf.filter.tag_id == params[:tag_id].to_i}.flatten.uniq.first
     @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
     respond_to do|format|
       format.html{
