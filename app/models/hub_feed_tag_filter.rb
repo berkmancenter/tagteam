@@ -1,8 +1,8 @@
 class HubFeedTagFilter < ActiveRecord::Base
   acts_as_list
 
-  belongs_to :hub, :through => :hub_feed
   belongs_to :hub_feed
+  has_one :hub, :through => :hub_feed
   belongs_to :filter, :polymorphic => true
   attr_accessible :filter_type, :filter_id
   after_save :update_filtered_items
