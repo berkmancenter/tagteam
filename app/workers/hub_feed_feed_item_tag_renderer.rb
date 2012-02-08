@@ -2,7 +2,7 @@ class HubFeedFeedItemTagRenderer
   @queue = :hub_feed
 
   def self.perform(hub_feed_id, tag_id = nil)
-    hub_feed = HubFeed.find(hub_id)
+    hub_feed = HubFeed.find(hub_feed_id)
     feed_items = []
     if tag_id.nil?
       # Act on all items
@@ -13,7 +13,7 @@ class HubFeedFeedItemTagRenderer
     end
 
     feed_items.each do |fi|
-      fi.render_filtered_tags_for_hub(hub)
+      fi.render_filtered_tags_for_hub(hub_feed.hub)
     end
   end
 

@@ -54,6 +54,12 @@ Taghub::Application.routes.draw do
       end
     end
     resources :tags
+    resources :hub_feed_tag_filters do
+      member do
+        post 'move_higher'
+        post 'move_lower'
+      end
+    end
   end
 
   resources :hubs do

@@ -16,9 +16,9 @@ module ApplicationHelper
       options.delete(:hub_feed)
     end
 
-    if ! options[:feed_item].blank?
-      options.merge!({:data_feed_item_id => options[:feed_item].id})
-      options.delete(:feed_item)
+    if ! options[:hub_feed_item].blank?
+      options.merge!({:data_hub_feed_item_id => options[:hub_feed_item].id})
+      options.delete(:hub_feed_item)
     end
 
     link_to(tag.name, hub_tag_path(hub_id,tag), options) 

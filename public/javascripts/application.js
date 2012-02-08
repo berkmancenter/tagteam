@@ -90,9 +90,9 @@ $(document).ready(function(){
   });
 
   jQuery.bt.options.ajaxCache = false;
-  jQuery.bt.options.fill = '#ffffff';
+  jQuery.bt.options.fill = '#dddddd';
   jQuery.bt.options.strokeWidth = 2;
-  jQuery.bt.options.strokeStyle = '#ccc';
+  jQuery.bt.options.strokeStyle = '#333';
   jQuery.bt.options.textzIndex = 999;
   jQuery.bt.options.boxzIndex = 998;
   jQuery.bt.options.wrapperzIndex = 997;
@@ -197,10 +197,14 @@ $(document).ready(function(){
     $('.tag').live({
       click: function(e){
         e.preventDefault();
-        var tag_id = $(this).attr('data_tag_id');
-        var hub_id = $(this).attr('data_hub_id');
+
+        var tag_id = $(this).attr('data_tag_id') || 0;
+        var hub_id = $(this).attr('data_hub_id') || 0;
+        var hub_feed_id = $(this).attr('data_hub_feed_id') || 0;
+        var hub_feed_item_id = $(this).attr('data_hub_feed_item_id') || 0;
+        
         $(this).bt({
-          ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id,
+          ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id + '&hub_feed_id=' + hub_feed_id + '&hub_feed_item_id=' + hub_feed_item_id,
           trigger: 'none',
           closeWhenOthersOpen: true,
           clickAnywhereToClose: true

@@ -1,25 +1,38 @@
 <div class="controls">
   <ul>
-    <li><%= link_to("View items tagged with #{@tag.name}", hub_tag_path(@hub,@tag)) %></li>
+    <li><%= link_to(%Q|View items tagged with "#{@tag.name}"|, hub_tag_path(@hub,@tag)) %></li>
   </ul>
   <h3>Filters:</h3>
   <ul>
     <li><strong>For all items in this hub:</strong>
-    <% if @already_filtered %>
-    <p>This tag has already been used in a tag-wide filter.</p>
-  <% else %>
-    <br/>
-    <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-    <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-    <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
-  <% end %>
+    <% if @already_filtered_for_hub %>
+      <p>This tag has already been used in a tag-wide filter.</p>
+    <% else %>
+      <br/>
+      <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+      <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+      <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
+    <% end %>
     </li>
-    <li><strong>For all items in this feed:</strong><br/>
-Add | Modify | Delete
-    </li>
-    <li><strong>For only this item:</strong><br/>
-    Add | Modify | Delete
-    </li>
+
+    <% if params[:hub_feed_id].to_i != 0 %>
+      <li><strong>For all items in this feed:</strong><br/>
+      <% if @already_filtered_for_hub_feed %>
+        <p>This tag has already been used in a filter for this feed.</p>
+      <% else %>
+        <%= link_to 'Add', hub_feed_hub_feed_tag_filters_path(@hub_feed), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_tag_filter' %> | 
+        <%= link_to 'Modify', hub_feed_hub_feed_tag_filters_path(@hub_feed), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_feed_tag_filter' %> | 
+        <%= link_to 'Delete', hub_feed_hub_feed_tag_filters_path(@hub_feed), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_feed_tag_filter' %>
+      <% end %>
+      </li>
+    <% end %>
+
+    <% if params[:hub_feed_item_id].to_i != 0 %>
+      <li><strong>For only this item:</strong><br/>
+      Add | Modify | Delete
+      </li>
+    <% end %>
+
   </ul>
   <h3>Publishing:</h3>
   <ul>

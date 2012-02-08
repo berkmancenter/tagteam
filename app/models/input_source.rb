@@ -11,7 +11,7 @@ class InputSource < ActiveRecord::Base
   acts_as_list :scope => :republished_feed_id
   validates_inclusion_of :effect, :in => EFFECTS
 
-  attr_accessible :item_source, :republished_feed_id, :item_source_id, :item_source_type, :effect, :position, :limit
+  attr_accessible :item_source, :republished_feed_id, :item_source_id, :item_source_type, :effect, :position, :limit, :search_in
   attr_accessor :search_in
 
   def search_in

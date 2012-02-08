@@ -10,7 +10,7 @@
   <ul>
     <li><a href="#items">Items</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#filters">Filters</a></li>
+    <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
   </ul>
 
   <div id="about"> 
@@ -45,7 +45,4 @@
     <%= will_paginate @feed_items %>
   </div>
 
-  <div id="filters">
-    <h2>Coming soon.</h2>
-  </div>
 </div>

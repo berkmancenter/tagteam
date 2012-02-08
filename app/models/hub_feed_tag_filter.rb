@@ -3,7 +3,7 @@ class HubFeedTagFilter < ActiveRecord::Base
 
   belongs_to :hub_feed
   has_one :hub, :through => :hub_feed
-  belongs_to :filter, :polymorphic => true
+  belongs_to :filter, :polymorphic => true, :dependent => :destroy
   attr_accessible :filter_type, :filter_id
   after_save :update_filtered_items
   before_destroy :update_filtered_items
@@ -19,8 +19,8 @@ class HubFeedTagFilter < ActiveRecord::Base
     end
   end
 
-
   def update_filtered_items
+    logger.warn('Update filtered items')
     if self.filter.class == AddTagFilter
       #act on all items
       Resque.enqueue(HubFeedFeedItemTagRenderer, self.hub_feed.id)

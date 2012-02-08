@@ -6,7 +6,6 @@ class HubTagFilter < ActiveRecord::Base
   attr_accessible :filter_type, :filter_id
   after_save :update_filtered_items
   before_destroy :update_filtered_items
-
   before_validation :validate_filter_uniqueness
 
   def validate_filter_uniqueness
