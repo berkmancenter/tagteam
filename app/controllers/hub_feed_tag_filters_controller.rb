@@ -43,7 +43,19 @@ class HubFeedTagFiltersController < ApplicationController
     @hub_feed_tag_filter.hub_id = @hub.id
     @hub_feed_tag_filter.hub_feed_id = @hub_feed.id
 
-    @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
+    if filter_type_model == ModifyTagFilter
+      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+
+      @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
+
+    elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
+      # It's a new tag but we didn't get a tag id. Grab the tag manually.
+      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+      @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
+
+    else
+      @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
+    end
 
     respond_to do|format|
       if @hub_feed_tag_filter.save

@@ -53,6 +53,9 @@ class FeedItem < ActiveRecord::Base
   end
 
   def render_filtered_tags_for_hub(hub = Hub.first)
+
+    # FIXME REVIEW FILTERS TO ENSURE THEY ARE BEING APPLIED IN THE CORRECT CIRCUMSTANCES.
+    #
     #"tag_list" is the source list of tags directly from RSS/Atom feeds.
     tag_list_for_filtering = self.tag_list.dup
 
@@ -73,7 +76,7 @@ class FeedItem < ActiveRecord::Base
       end
     end
     #Hub feed item filters
-    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id}).each do|hfitf|
+    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}).each do|hfitf|
       hfitf.filter.act(tag_list_for_filtering)
     end
     self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))

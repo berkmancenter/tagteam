@@ -68,9 +68,20 @@
           }
         });
       });
-
     },
-	});
+    submitTagFilter: function(href,filter_type,tag_id,new_tag){
+      $.ajax({
+        dataType: 'html',
+        cache: false,
+        url: href,
+        type: 'post',
+        data: {filter_type: filter_type, tag_id: tag_id, new_tag: new_tag},
+        success: function(html){
+         alert(html);
+        }
+      });
+    }
+});
 
 })(jQuery);
 
@@ -214,20 +225,37 @@ $(document).ready(function(){
     });
     $('.add_filter_control').live({
       click: function(e){
-        var tag_id = $(this).attr('data_id');
         e.preventDefault();
-        $.ajax({
-          dataType: 'html',
-          cache: false,
-          url: $(this).attr('href'),
-          type: 'post',
-          data: {filter_type: $(this).attr('data_type'), tag_id: tag_id},
-          success: function(html){
-            alert(html);
-          }
+        var tag_id = $(this).attr('data_id');
+        var filter_type = $(this).attr('data_type');
+        var filter_href = $(this).attr('href');
+        if(filter_type == 'ModifyTagFilter'){
+          var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+          $(dialogNode).append('<h2>Please enter the replacement tag</h2><input type="text" id="new_tag_for_filter" size="40" />');
+          $(dialogNode).dialog({
+            modal: true,
+            width: 600,
+            minWidth: 400,
+            height: 'auto',
+            position: 'top',
+            title: '',
+            buttons: {
+              Submit: function(){
+                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val());
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+              Close: function(){
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+            }
+          });
+          return false;
+        }
+        $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'');
+      }
     });
-  }
-});
   }
 
   $('.control').live({

@@ -5,4 +5,7 @@
     <%= link_to('move down', move_lower_hub_feed_item_hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter), :method => :post, :class => 'ui-silk inline ui-silk-arrow-up hover gray') unless hub_feed_item_tag_filter.last? %>
   <% end %>
   <%= hub_feed_item_tag_filter.filter.description %> <%= tag_display(hub_feed_item_tag_filter.filter.tag, :hub => hub_feed_item_tag_filter.hub, :feed_item => hub_feed_item_tag_filter.feed_item) %>
+  <% if hub_feed_item_tag_filter.filter.class == ModifyTagFilter %>
+    to <%= tag_display(hub_feed_item_tag_filter.filter.new_tag, :hub => hub_feed_item_tag_filter.hub, :feed_item => hub_feed_item_tag_filter.feed_item) %>
+  <% end %>
 </div>

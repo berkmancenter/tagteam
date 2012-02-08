@@ -4,7 +4,7 @@
   </ul>
   <h3>Filters:</h3>
   <ul>
-    <li><strong>For all items in this hub:</strong>
+    <li><strong>For all items in this entire hub:</strong>
     <% if @already_filtered_for_hub %>
       <p>This tag has already been used in a hub-wide filter.</p>
     <% else %>
@@ -28,7 +28,7 @@
     <% end %>
 
     <% if params[:hub_feed_item_id].to_i != 0 %>
-      <li><strong>For this feed item only:</strong><br/>
+      <li><strong>For this item only:</strong><br/>
       <% if @already_filtered_for_hub_feed_item %>
         <p>This tag has already been used in a filter for this item.</p>
       <% else %>
