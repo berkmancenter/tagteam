@@ -6,7 +6,7 @@
   <ul>
     <li><strong>For all items in this hub:</strong>
     <% if @already_filtered_for_hub %>
-      <p>This tag has already been used in a tag-wide filter.</p>
+      <p>This tag has already been used in a hub-wide filter.</p>
     <% else %>
       <br/>
       <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
@@ -28,8 +28,14 @@
     <% end %>
 
     <% if params[:hub_feed_item_id].to_i != 0 %>
-      <li><strong>For only this item:</strong><br/>
-      Add | Modify | Delete
+      <li><strong>For this feed item only:</strong><br/>
+      <% if @already_filtered_for_hub_feed_item %>
+        <p>This tag has already been used in a filter for this item.</p>
+      <% else %>
+        <%= link_to 'Add', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %> | 
+        <%= link_to 'Modify', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %> | 
+        <%= link_to 'Delete', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %>
+      <% end %>
       </li>
     <% end %>
 

@@ -5,9 +5,11 @@ class HubFeedItemTagFilter < ActiveRecord::Base
   belongs_to :feed_item
   belongs_to :filter, :polymorphic => true
   attr_accessible :filter_type, :filter_id
+
   after_save :update_feed_item_tags
   before_destroy :update_feed_item_tags
 
+  validates_presence_of :hub_id, :feed_item_id
   before_validation :validate_filter_uniqueness
 
   def validate_filter_uniqueness

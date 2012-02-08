@@ -1,14 +1,12 @@
 Taghub::Application.routes.draw do
 
-  resources :hub_feed_tag_filters
+#  resources :hub_feed_tag_filters
 
-  resources :hub_feed_item_tag_filters
+#  resources :add_tag_filters
 
-  resources :add_tag_filters
+#  resources :delete_tag_filters
 
-  resources :delete_tag_filters
-
-  resources :modify_tag_filters
+#  resources :modify_tag_filters
 
   resources :input_sources do
     collection do
@@ -23,7 +21,6 @@ Taghub::Application.routes.draw do
       get 'atom'
     end
   end
-
 
   resources :feed_retrievals
 
@@ -63,6 +60,7 @@ Taghub::Application.routes.draw do
   end
 
   resources :hubs do
+
     member do
       post 'add_feed'
       get 'feeds'
@@ -86,6 +84,22 @@ Taghub::Application.routes.draw do
         post 'move_lower'
       end
     end
+
+    resources :feed_items do
+      resources :hub_feed_item_tag_filters do
+        member do
+          post 'move_higher'
+          post 'move_lower'
+        end
+      end
+      member do
+        get 'content'
+      end
+      collection do
+        get 'by_date'
+      end
+    end
+
   end
 
   devise_for :users

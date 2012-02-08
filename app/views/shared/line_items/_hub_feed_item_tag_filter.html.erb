@@ -1,0 +1,8 @@
+<div class="tag_filter hub_feed_item_tag_filter <%= hub_feed_item_tag_filter.filter.css_class %>">
+  <% if @is_owner %>
+    <%= link_to('Delete', hub_feed_item_hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter), :method => :delete, :title => 'Remove this filter', :confirm => 'Are you sure you want to remove this filter?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
+    <%= link_to('move up', move_higher_hub_feed_item_hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter), :method => :post, :class => 'ui-silk inline ui-silk-arrow-up hover gray') unless hub_feed_item_tag_filter.first? %>
+    <%= link_to('move down', move_lower_hub_feed_item_hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter), :method => :post, :class => 'ui-silk inline ui-silk-arrow-up hover gray') unless hub_feed_item_tag_filter.last? %>
+  <% end %>
+  <%= hub_feed_item_tag_filter.filter.description %> <%= tag_display(hub_feed_item_tag_filter.filter.tag, :hub => hub_feed_item_tag_filter.hub, :feed_item => hub_feed_item_tag_filter.feed_item) %>
+</div>

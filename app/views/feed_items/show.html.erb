@@ -7,7 +7,7 @@
     <% unless @feed_item.content.blank? %>
       <li><%= link_to('Full Content',content_hub_feed_feed_item_path(@hub_feed,@feed_item)) %></li>
     <% end %>
-    <li><a href="#filters">Filters</a></li>
+    <li><%= link_to('Filters', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item) )%></li>
   </ul>
 
   <div id="about">
@@ -48,9 +48,6 @@
         <dd><%= @feed_item.rights %></dd>
       <% end %>
     </dl>
-  </div>
-  <div id="filters">
-    <h2>Coming soon.</h2>
   </div>
 </div>
 <%= javascript_tag do
