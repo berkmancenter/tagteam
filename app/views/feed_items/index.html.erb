@@ -1,2 +1,11 @@
-<h1>FeedItems#index</h1>
-<p>Find me in app/views/feed_items/index.html.erb</p>
+<div id="items">
+  <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
+
+  <%= will_paginate @feed_items %>
+
+  <table class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
+    <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+  </table>
+
+  <%= will_paginate @feed_items %>
+</div>

@@ -8,7 +8,7 @@
 
 <div class="tabs hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">
   <ul>
-    <li><a href="#items">Items</a></li>
+    <li><%= link_to('Items', hub_feed_feed_items_path(@hub_feed)) %></li>
     <li><a href="#about">About</a></li>
     <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
   </ul>
@@ -33,16 +33,5 @@
     </dl>
   </div>
 
-  <div id="items">
-    <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
-
-    <%= will_paginate @feed_items %>
-
-    <table class="hub_feed feed_items" id="hub_feed_<%= @hub_feed.id %>">
-      <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
-    </table>
-
-    <%= will_paginate @feed_items %>
-  </div>
 
 </div>
