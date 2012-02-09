@@ -15,6 +15,7 @@ class HubFeed < ActiveRecord::Base
   after_create do
     auto_create_republished_feed
     reindex_items_of_concern
+    Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
   after_destroy do
