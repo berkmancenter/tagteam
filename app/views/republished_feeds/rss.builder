@@ -27,7 +27,7 @@ xml.rss(
         xml.guid item.guid
         xml.author item.authors
         item.tag_list_on(@republished_feed.hub.tagging_key).each do|tag|
-          xml.category tag
+          xml.category (@republished_feed.hub.tag_prefix.blank?) ? tag : "#{@republished_feed.hub.tag_prefix}#{tag}"
         end
         unless item.rights.blank?
           xml.send('dc:rights', item.rights)
