@@ -1,3 +1,4 @@
+<% unless request.xhr? %>
 <h1>Tagged with "<%= @tag %>"</h1>
 
 <div class="tabs">
@@ -5,10 +6,13 @@
     <li><a href="#tagged_items">Items</a></li>
   </ul>
   <div id="tagged_items">
+  <% end %>
     <%= will_paginate(@feed_items) %>
     <table class="hub_feed feed_items">
       <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
     </table>
     <%= will_paginate(@feed_items) %>
+<% unless request.xhr? %>
   </div>
 </div>
+<% end %>
