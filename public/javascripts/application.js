@@ -229,7 +229,7 @@ $(document).ready(function(){
         var tag_id = $(this).attr('data_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
-        if(filter_type == 'ModifyTagFilter'){
+        if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           $(dialogNode).append('<h2>Please enter the replacement tag</h2><input type="text" id="new_tag_for_filter" size="40" />');
           $(dialogNode).dialog({
@@ -240,15 +240,15 @@ $(document).ready(function(){
             position: 'top',
             title: '',
             buttons: {
-              Submit: function(){
-                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val());
-                $(dialogNode).dialog('close');
-                $(dialogNode).remove();
-              },
               Close: function(){
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               },
+              Submit: function(){
+                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val());
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              }
             }
           });
           return false;

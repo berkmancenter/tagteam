@@ -1,4 +1,5 @@
 <h3>Hub-wide filters</h3>
+<%= link_to 'Add a new tag to this entire hub', hub_hub_tag_filters_path(@hub), :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> 
 <div class="hub_tag_filters">
   <%= render :partial => 'shared/line_items/hub_tag_filter', :collection => @hub_tag_filters %>
 </div>
