@@ -76,7 +76,7 @@ class FeedItem < ActiveRecord::Base
       end
     end
     #Hub feed item filters
-    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}).each do|hfitf|
+    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}, :order => :position).each do|hfitf|
       hfitf.filter.act(tag_list_for_filtering)
     end
     self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))

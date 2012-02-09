@@ -34,7 +34,8 @@ class InputSourcesController < ApplicationController
           unless request.xhr?
             redirect_to republished_feed_url(@republished_feed)
           else
-            render :text => %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"|
+            message = (@input_source.effect == 'add') ? %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"| : %Q|Removed "#{@input_source.item_source}" from "#{@republished_feed}"|
+            render :text => message 
           end
         }
       else

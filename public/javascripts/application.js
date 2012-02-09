@@ -272,11 +272,16 @@ $(document).ready(function(){
   });
 
   $.observeDialogShow('.dialog-show');
-  $('a.add_item_source_to_custom_republished_feed').live({
+
+  $('a.add_item_source_to_custom_republished_feed,a.remove_item_source_from_custom_republished_feed').live({
     click: function(e){
-      var item_source = $(this).attr('id').split('-');
-      $('body').data('item_source_id_for_republishing', item_source[1]);
-      $('body').data('item_source_type_for_republishing', item_source[0]);
+      $('body').data('item_source_id_for_republishing', $(this).attr('data_item_id'));
+      $('body').data('item_source_type_for_republishing', $(this).attr('data_item_type'));
+      if($(this).hasClass('add_item_source_to_custom_republished_feed')){
+        $('body').data('item_effect_for_republishing', 'add');
+      } else {
+        $('body').data('item_effect_for_republishing', 'remove');
+      }
     }
   });
 
@@ -286,13 +291,14 @@ $(document).ready(function(){
       var republished_feed_id = $(this).attr('id').split('-')[1];
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
+      var item_effect = $('body').data('item_effect_for_republishing');
       // TODO - make this emit when it's been added.
       $.ajax({
         cache: false,
         dataType: 'html',
         url: $.rootPath() + 'input_sources',
         type: 'post',
-        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: 'add'}},
+        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: item_effect}},
         beforeSend: function(){ 
           $.showSpinner();
           $('#dialog-error,#dialog-notice').html('').hide();

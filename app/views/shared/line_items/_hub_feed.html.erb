@@ -4,7 +4,8 @@
       <span class="controls" id="hub_feed_control-<%= hub_feed.id %>-target" style="display: none;">
         <%= link_to(raw('<span class="ui-silk ui-silk-delete inline hover gray "></span> Remove from hub'), hub_hub_feed_path(@hub,hub_feed), :method => :delete, :confirm => "Are you sure?", :title => "Delete this item") %><br/>
         <%= link_to(raw('<span class="ui-silk ui-silk-application-edit inline hover gray"> </span> Edit this feed'), edit_hub_hub_feed_path(@hub,hub_feed), :title => "Edit this item") %><br/>
-        <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a republished feed'), custom_republished_feeds_hub_path(@hub), :title => "Add #{hub_feed} to a republished feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :id => "Feed-#{hub_feed.feed_id}") %><br/>
+        <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a republished feed'), custom_republished_feeds_hub_path(@hub), :title => "Add #{hub_feed} to a republished feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => hub_feed.feed_id) %><br/>
+        <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a republished feed'), custom_republished_feeds_hub_path(@hub), :title => "Remove #{hub_feed} from a republished feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => hub_feed.feed_id) %><br/>
       </span>
       <a href="#" class="ui-silk ui-silk-add inline hover gray control" id="hub_feed_control-<%= hub_feed.id %>">controls</a>
     <% else %>
