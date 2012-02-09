@@ -30,9 +30,14 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
 
-  def hub_feeds(hub = Hub.first)
+  def hub_feeds(hub = nil)
     # TODO Optimize via multi-table joins?
-    hf = HubFeed.find(:all, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
+    if hub.blank?
+      hf = HubFeed.find(:all, :conditions => {:feed_id => self.feeds.collect{|f| f.id}})
+    else
+      hf = HubFeed.find(:all, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
+    end
+    hf
   end
 
   def hubs

@@ -1,4 +1,7 @@
 <h3>Filters on this item</h3>
+<% if @is_owner %>
+  <%= link_to 'Add a new tag to this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %> <br/> 
+<% end %>
 <div class="hub_feed_item_tag_filters">
   <%= render :partial => 'shared/line_items/hub_feed_item_tag_filter', :collection => @hub_feed_item_tag_filters %>
 </div>
