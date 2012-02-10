@@ -278,11 +278,15 @@ $(document).ready(function(){
   $('.hub_feed_more_control').live({
     click: function(e){
       e.preventDefault();
+      if($(this).hasClass('more_details_included')){
+        return;
+      }
       var elem = this;
       $.ajax({
         cache: false,
         url: $(this).attr('href'),
         success: function(html){
+          $(elem).addClass('more_details_included');
           $(elem).closest('tr').after(html);
         }
       });
