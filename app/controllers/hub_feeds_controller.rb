@@ -5,10 +5,14 @@ class HubFeedsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :retrievals]
+    allow all, :to => [:index, :show, :retrievals,:more_details]
     allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :hub_feed_admin
+  end
+
+  def more_details
+    render :layout => ! request.xhr?
   end
 
   def retrievals

@@ -20,7 +20,7 @@ class RepublishedFeed < ActiveRecord::Base
     items = []
     self.input_sources.each do|input_source|
       if input_source.effect == 'add'
-        items << input_source.item_source.items
+        items << input_source.item_source.items(self.hub)
       end
     end
     output_items = items.flatten.uniq.compact

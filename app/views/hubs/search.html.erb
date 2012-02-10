@@ -12,16 +12,18 @@
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
-  <% @search.results.each do|r| %>
-    <% if r.class == HubFeed %>
-      <%= render :partial => 'shared/line_items/hub_feed', :object => r %>
+  <table>
+    <% @search.results.each do|r| %>
+      <% if r.class == HubFeed %>
+        <%= render :partial => 'shared/line_items/hub_feed', :object => r %>
+      <% end %>
+      <% if r.class == FeedItem %>
+        <%= render :partial => 'shared/line_items/feed_item', :object => r %>
+      <% end %>
+      <% if r.class == ActsAsTaggableOn::Tag %>
+        <%= render :partial => 'shared/line_items/tag', :object => r %>
+      <% end %>
+      <div class="clear"></div>
     <% end %>
-    <% if r.class == FeedItem %>
-      <%= render :partial => 'shared/line_items/feed_item', :object => r %>
-    <% end %>
-    <% if r.class == ActsAsTaggableOn::Tag %>
-      <%= render :partial => 'shared/search_results/tag', :object => r %>
-    <% end %>
-    <div class="clear"></div>
-  <% end %>
+  </table>
 <% end %>

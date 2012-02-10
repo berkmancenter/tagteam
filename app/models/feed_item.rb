@@ -99,7 +99,7 @@ class FeedItem < ActiveRecord::Base
 
   alias :display_title :to_s
 
-  def items
+  def items(not_needed)
     [self]
   end
 

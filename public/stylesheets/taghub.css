@@ -213,10 +213,6 @@ a:hover{
   margin-bottom: .5em;
 }
 
-.hub_feeds .metadata{
-  display: none;
-}
-
 .tag{
   background: #ccc top left url('/images/bg_dot.png') no-repeat;
   background-position:5px 7px;

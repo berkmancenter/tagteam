@@ -161,7 +161,7 @@ class Feed < ActiveRecord::Base
     end
   end
 
-  def items
+  def items(not_needed)
     # TODO - tweak the include?
     self.feed_items.find(:all, :include => [:taggings, :tags], :order => 'id desc')
   end
