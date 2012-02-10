@@ -29,6 +29,10 @@ class Feed < ActiveRecord::Base
   has_many :feed_retrievals, :order => 'created_at desc', :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
 
+  def self.descriptive_name
+    'Feed'
+  end
+
   searchable(:include => [:hubs, :hub_feeds]) do
     text :title, :description, :link, :guid, :rights, :authors, :feed_url, :generator
     integer :hub_ids, :multiple => true

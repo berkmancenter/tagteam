@@ -1,9 +1,10 @@
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create]
+  before_filter :add_breadcrumb, :except => [:index]
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :tag_controls]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :tag_controls, :search]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -163,12 +164,38 @@ class HubsController < ApplicationController
     end
   end
 
+  def search
+    unless params[:q].blank?
+      @search = Sunspot.new_search ((params[:search_in].blank?) ? [Feed,FeedItem,ActsAsTaggableOn::Tag] : params[:search_in].collect{|si| si.constantize})
+      hub_id = @hub.id
+      @search.build do
+        fulltext params[:q]
+        with :hub_ids, hub_id
+        paginate :page => params[:page], :per_page => cookies[:per_page]
+      end
+
+      @search.execute!
+    end
+
+    respond_to do|format|
+      format.html{
+        render :layout => ! request.xhr?
+      }
+      format.json{ render :json => @search }
+    end
+
+  end
+
   private
 
   def load_hub
     @hub = Hub.find(params[:id])
     @owners = @hub.owners
     @is_owner = @owners.include?(current_user)
+  end
+
+  def add_breadcrumb
+    breadcrumbs.add @hub, hub_path(@hub)
   end
 
   def prep_resources

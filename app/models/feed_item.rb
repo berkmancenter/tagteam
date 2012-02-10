@@ -9,7 +9,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   searchable do
-    text :title, :content, :url, :guid, :authors, :contributors, :rights
+    text :title, :description, :content, :url, :guid, :authors, :contributors, :rights
     integer :hub_ids, :multiple => true
 
     string :title
@@ -29,6 +29,10 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
+
+  def self.descriptive_name
+    'Feed Item'
+  end
 
   def hub_feeds(hub = nil)
     # TODO Optimize via multi-table joins?

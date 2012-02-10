@@ -1,5 +1,6 @@
 Taghub::Application.routes.draw do
 
+
 #  resources :hub_feed_tag_filters
 
 #  resources :add_tag_filters
@@ -62,6 +63,7 @@ Taghub::Application.routes.draw do
   resources :hubs do
 
     member do
+      get 'search'
       post 'add_feed'
       get 'feeds'
       get 'custom_republished_feeds'
