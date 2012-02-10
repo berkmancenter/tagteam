@@ -11,9 +11,9 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: taghub_development
+  database: tagteam_development
   pool: 5
-  username: taghub
+  username: tagteam
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -37,15 +37,15 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: taghub_test
+  database: tagteam_test
   pool: 5
-  username: taghub
+  username: tagteam
   password:
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: taghub_production
+  database: tagteam_production
   pool: 5
-  username: taghub
+  username: tagteam
   password:

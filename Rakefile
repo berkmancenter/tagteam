@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Taghub::Application.load_tasks
+Tagteam::Application.load_tasks

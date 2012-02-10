@@ -1,4 +1,4 @@
-namespace :taghub do
+namespace :tagteam do
 
   desc 'update feeds'
   task :update_feeds => :environment do

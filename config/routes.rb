@@ -1,4 +1,4 @@
-Taghub::Application.routes.draw do
+Tagteam::Application.routes.draw do
 
   resources :input_sources do
     collection do

@@ -3,7 +3,7 @@
 Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in DeviseMailer.
-  config.mailer_sender = "djcp+taghub@cyber.law.harvard.edu"
+  config.mailer_sender = "djcp+tagteam@cyber.law.harvard.edu"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
