@@ -23,8 +23,32 @@ class HubFeed < ActiveRecord::Base
     reindex_items_of_concern
   end
 
+  def hub_ids
+    [self.hub_id]
+  end
+
+  searchable(:include => [:hub]) do
+    text :display_title, :display_description, :link, :guid, :rights, :authors, :feed_url, :generator
+    integer :hub_ids, :multiple => true
+
+    string :title
+    string :guid
+    time :last_updated
+    string :rights
+    string :authors
+    string :feed_url
+    string :link
+    string :generator
+    string :flavor
+    string :language
+  end
+
   def self.per_page
     25
+  end
+
+  def self.descriptive_name
+    'Feed'
   end
 
   def display_title
@@ -34,6 +58,42 @@ class HubFeed < ActiveRecord::Base
   
   def display_description
     (self.description.blank?) ? self.feed.description : self.description
+  end
+
+  def link
+    self.feed.link
+  end
+
+  def guid
+    self.feed.guid
+  end
+
+  def rights
+    self.feed.rights
+  end
+
+  def authors
+    self.feed.authors
+  end
+
+  def feed_url
+    self.feed.feed_url
+  end
+  
+  def generator
+    self.feed.generator
+  end
+
+  def last_updated
+    self.feed.last_updated
+  end
+
+  def flavor
+    self.feed.flavor
+  end
+
+  def language
+    self.feed.language
   end
 
   def latest_successful_feed_retrieval

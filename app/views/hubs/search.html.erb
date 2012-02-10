@@ -2,7 +2,7 @@
   <%= form_tag(search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
     <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search here. . .' %>
     <strong>Search in:</strong>
-    <% [Feed,FeedItem,ActsAsTaggableOn::Tag].each_with_index do |search_in,i| %>
+    <% [HubFeed,FeedItem,ActsAsTaggableOn::Tag].each_with_index do |search_in,i| %>
       <%= check_box_tag('search_in[]', search_in, ((params[:search_in].blank?) ? true : params[:search_in].include?(search_in.to_s)), :id => "search_in_#{i}") %><%= label_tag("search_in_#{i}", search_in.descriptive_name) %>
     <% end %>
     <%= submit_tag('Search', :class => 'button') %>
@@ -12,5 +12,16 @@
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
-  <%= render :partial => 'shared/search_results/list', :object => @search %>
+  <% @search.results.each do|r| %>
+    <% if r.class == HubFeed %>
+      <%= render :partial => 'shared/line_items/hub_feed', :object => r %>
+    <% end %>
+    <% if r.class == FeedItem %>
+      <%= render :partial => 'shared/line_items/feed_item', :object => r %>
+    <% end %>
+    <% if r.class == ActsAsTaggableOn::Tag %>
+      <%= render :partial => 'shared/search_results/tag', :object => r %>
+    <% end %>
+    <div class="clear"></div>
+  <% end %>
 <% end %>

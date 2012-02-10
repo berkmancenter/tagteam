@@ -166,7 +166,7 @@ class HubsController < ApplicationController
 
   def search
     unless params[:q].blank?
-      @search = Sunspot.new_search ((params[:search_in].blank?) ? [Feed,FeedItem,ActsAsTaggableOn::Tag] : params[:search_in].collect{|si| si.constantize})
+      @search = Sunspot.new_search ((params[:search_in].blank?) ? [HubFeed,FeedItem,ActsAsTaggableOn::Tag] : params[:search_in].collect{|si| si.constantize})
       hub_id = @hub.id
       @search.build do
         fulltext params[:q]
