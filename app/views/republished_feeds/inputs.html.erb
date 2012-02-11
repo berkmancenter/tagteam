@@ -1,0 +1,6 @@
+<h3>Inputs</h3>
+<p>The feeds, tags, searches, and items below serve as the sources used to create this feed.</p>
+<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
+<% if current_user && current_user.is?(:owner, @republished_feed) %>
+  <%= link_to(raw('Add items to this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'add'), :class => 'new_object') %>
+<% end %>

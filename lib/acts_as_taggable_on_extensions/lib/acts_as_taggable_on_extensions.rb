@@ -23,12 +23,14 @@ ActsAsTaggableOn::Tag.instance_eval do
   has_many :add_tag_filters
   has_many :modify_tag_filters
   has_many :delete_tag_filters
+
   searchable do
     text :name
     integer :hub_ids, :multiple => true
     string :contexts, :multiple => true
     string :name
   end
+
   def descriptive_name
     'Tag'
   end

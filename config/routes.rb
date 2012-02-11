@@ -11,6 +11,9 @@ Tagteam::Application.routes.draw do
     member do
       get 'rss'
       get 'atom'
+      get 'items'
+      get 'inputs'
+      get 'removals'
     end
   end
 

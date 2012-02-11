@@ -7,9 +7,9 @@
 <div class="republished_feed detailed tabs" id="republished_feed_<%= @republished_feed.id %>">
   <ul>
     <li><a href="#about">About</a></li>
-    <li><a href="#items">Items</a></li>
-    <li><a href="#inputs">Inputs</a></li>
-    <li><a href="#removals">Removals</a></li>
+    <li><%= link_to 'Items', items_republished_feed_path(@republished_feed) %></li>
+    <li><%= link_to 'Inputs', inputs_republished_feed_path(@republished_feed) %></li>
+    <li><%= link_to 'Removals', removals_republished_feed_path(@republished_feed) %></li>
   </ul>
 
   <div id="about">
@@ -24,31 +24,6 @@
         <dd><%= @republished_feed.owners.collect{|o| o.email}.join(', ') %></dd>
       </dl>
     </div>
-  </div>
-
-  <div id="inputs">
-    <h3>Inputs</h3>
-    <p>The feeds, tags, searches, and items below serve as the sources used to create this feed.</p>
-    <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
-    <% if current_user && current_user.is?(:owner, @republished_feed) %>
-      <%= link_to(raw('Add items to this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'add'), :class => 'new_object') %>
-    <% end %>
-  </div>
-
-  <div id="removals">
-    <h3>Remove</h3>
-    <p>The feeds, tags, searches and items below are removed from this feed before publishing.</p>
-    <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'}, :locals => {:effect => 'add'} %>
-    <% if current_user && current_user.is?(:owner, @republished_feed) %>
-      <%= link_to(raw('Remove items from this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'remove'), :class => 'new_object') %>
-    <% end %>
-  </div>
-
-  <div id="items">
-    <h2>Item preview:</h2>
-    <table class="republished_feed feed_items" id="republished_feed_metadata_<%= @republished_feed.id %>">
-      <%= render :partial => 'shared/line_items/feed_item', :collection => @republished_feed.items %>
-    </table>
   </div>
 
 </div>

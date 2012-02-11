@@ -31,6 +31,8 @@ class HubFeed < ActiveRecord::Base
     text :display_title, :display_description, :link, :guid, :rights, :authors, :feed_url, :generator
     integer :hub_ids, :multiple => true
 
+    integer :feed_item_ids, :multiple => true
+
     string :title
     string :guid
     time :last_updated

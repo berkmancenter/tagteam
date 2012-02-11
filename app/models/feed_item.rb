@@ -11,6 +11,11 @@ class FeedItem < ActiveRecord::Base
   searchable do
     text :title, :description, :content, :url, :guid, :authors, :contributors, :rights
     integer :hub_ids, :multiple => true
+    integer :id
+
+    integer :feed_ids, :multiple => true
+    string :tag_list, :multiple => true
+    string :tag_contexts, :multiple => true
 
     string :title
     string :url
@@ -19,9 +24,12 @@ class FeedItem < ActiveRecord::Base
     string :contributors
     string :description
     string :rights
-    string :tag_list, :multiple => true
     time :date_published
     time :last_updated
+  end
+
+  def tag_contexts
+    self.taggings.collect{|tg| "#{tg.context}-#{tg.tag_id}"}
   end
 
   validates_uniqueness_of :url

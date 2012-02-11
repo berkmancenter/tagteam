@@ -5,7 +5,7 @@ class RepublishedFeedsController < ApplicationController
   before_filter :register_breadcrumb
 
   access_control do
-    allow all, :to => [:show, :rss, :atom]
+    allow all, :to => [:show, :rss, :atom, :items, :inputs, :removals]
     allow :owner, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :republished_feed_admin
@@ -15,6 +15,23 @@ class RepublishedFeedsController < ApplicationController
     @owners = @republished_feed.owners
     @hub = @republished_feed.hub
 #    @republished_feed.items
+  end
+
+  def items
+    @search = @republished_feed.item_search
+    @search.build do
+      paginate :page => params[:page], :per_page => params[:per_page]
+    end
+    @search.execute!
+    render :layout => ! request.xhr?
+  end
+
+  def inputs
+    render :layout => ! request.xhr?
+  end
+
+  def removals
+    render :layout => ! request.xhr?
   end
 
   def new

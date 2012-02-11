@@ -1,0 +1,8 @@
+<div id="items">
+  <h2>Items:</h2>
+  <%= will_paginate @search.results %>
+  <table class="republished_feed feed_items" id="republished_feed_metadata_<%= @republished_feed.id %>">
+    <%= render :partial => 'shared/line_items/feed_item', :collection => @search.results %>
+  </table>
+  <%= will_paginate @search.results %>
+</div>
