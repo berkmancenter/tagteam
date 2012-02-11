@@ -15,7 +15,7 @@
   <ul>
     <li><a href="#about">About</a></li>
     <li><%= link_to('Watching', hub_hub_feeds_path(@hub))%></li>
-    <li><%= link_to('Publishing', republishing_hub_path(@hub))%></li>
+    <li><%= link_to('Publishing', hub_republished_feeds_path(@hub))%></li>
     <li><%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%></li>
     <li><%= link_to('Search', search_hub_path(@hub) )%></li>
   </ul>

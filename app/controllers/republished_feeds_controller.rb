@@ -1,14 +1,23 @@
 class RepublishedFeedsController < ApplicationController
-  before_filter :load_republished_feed, :except => [:new, :create]
-  before_filter :load_hub, :only => [:new, :create]
+  before_filter :load_republished_feed, :except => [:new, :create, :index]
+  before_filter :load_hub, :only => [:new, :create, :index]
   before_filter :prep_resources
   before_filter :register_breadcrumb
 
   access_control do
-    allow all, :to => [:show, :rss, :atom, :items, :inputs, :removals]
+    allow all, :to => [:index, :show, :rss, :atom, :items, :inputs, :removals]
     allow :owner, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :republished_feed_admin
+  end
+
+  def index
+    @republished_feeds = @hub.republished_feeds
+    respond_to do|format|
+      format.html{
+        render :layout => ! request.xhr? 
+      }
+    end
   end
 
   def show
@@ -19,10 +28,12 @@ class RepublishedFeedsController < ApplicationController
 
   def items
     @search = @republished_feed.item_search
-    @search.build do
-      paginate :page => params[:page], :per_page => params[:per_page]
+    unless @search.blank?
+      @search.build do
+        paginate :page => params[:page], :per_page => params[:per_page]
+      end
+      @search.execute!
     end
-    @search.execute!
     render :layout => ! request.xhr?
   end
 

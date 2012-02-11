@@ -36,21 +36,26 @@ class FeedItem < ActiveRecord::Base
 
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
+  has_many :hub_feeds, :through => :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
 
   def self.descriptive_name
     'Feed Item'
   end
 
-  def hub_feeds(hub = nil)
-    # TODO Optimize via multi-table joins?
-    if hub.blank?
-      hf = HubFeed.find(:all, :conditions => {:feed_id => self.feeds.collect{|f| f.id}})
-    else
-      hf = HubFeed.find(:all, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
-    end
-    hf
+  def hub_feed_for_hub(hub_id)
+    hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
   end
+
+  #def hub_feeds(hub = nil)
+  #  # TODO Optimize via multi-table joins?
+  #  if hub.blank?
+  #    hf = HubFeed.find(:first, :conditions => {:feed_id => self.feeds.collect{|f| f.id}})
+  #  else
+  #    hf = HubFeed.find(:first, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
+  #  end
+  #  hf
+  #end
 
   def hubs
     # TODO Optimize via multi-table joins

@@ -1,2 +1,9 @@
-<h1>RepublishedFeeds#index</h1>
-<p>Find me in app/views/republished_feeds/index.html.erb</p>
+<div class="republished_feeds">
+  <% if current_user && current_user.is?(:owner, @hub) %>
+    <%= link_to(raw('<span class="ui-silk inline ui-silk-rss-go"></span> New Republished Feed'), new_hub_republished_feed_path(@hub), :class=> "new_object") %>
+  <% end %>
+  <h3>Feeds this hub is publishing:</h3>
+  <div id="republished_feed_list_<%= @hub.id %>">
+    <%= render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds %>
+  </div>
+</div>

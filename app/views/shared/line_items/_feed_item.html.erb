@@ -14,7 +14,7 @@
     <% end %>
   </td>
   <td width="80%">
-    <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(feed_item.hub_feeds(@hub),feed_item)) %>
+    <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(@hub_feed || feed_item.hub_feed_for_hub(@hub.id),feed_item)) %>
   </td>
 </tr>
 

@@ -1,14 +1,14 @@
 <div class="republished_feed hover_row" id="republished_feed_<%= republished_feed.id %>">
   <div class="grid_1 alpha">
     <% if current_user && current_user.is?(:owner,republished_feed) %>
-      <%= link_to('delete', republished_feed_path(republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
-      <%= link_to('edit', edit_republished_feed_path(republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+      <%= link_to('delete', hub_republished_feed_path(@hub,republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+      <%= link_to('edit', edit_hub_republished_feed_path(@hub, republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
     <% else %>
       &nbsp;
     <% end %>
   </div>
   <div class="grid_12"> 
-    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed.title,republished_feed_path(republished_feed)) %> <sup><%= link_to('rss', rss_republished_feed_path(republished_feed)) %> <%= link_to('atom', atom_republished_feed_path(republished_feed)) %></sup>
+    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed.title,hub_republished_feed_path(@hub,republished_feed)) %> <sup><%= link_to('rss', rss_hub_republished_feed_path(@hub,republished_feed)) %> <%= link_to('atom', atom_hub_republished_feed_path(@hub,republished_feed)) %></sup>
   </div>
   <div class="grid_2 omega">
     <div class="more" id="republished_feed_more_<%= republished_feed.id %>"><span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more</div>

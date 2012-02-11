@@ -15,12 +15,19 @@ class RepublishedFeed < ActiveRecord::Base
   attr_accessible :title, :hub_id, :description, :default_sort, :mixing_strategy, :limit
 
   def item_search
+
     add_feeds = []
     add_feed_items = []
     add_tags = []
+
     remove_feeds = []
     remove_feed_items = []
     remove_tags = []
+
+    if self.input_sources.blank?
+      return nil
+    end
+
     self.input_sources.each do|input_source|
       if input_source.effect == 'add'
         if input_source.item_source_type == 'Feed'
@@ -74,6 +81,8 @@ class RepublishedFeed < ActiveRecord::Base
       end
       order_by(sort_column, order)
     end
+
+    search
 
   end
 

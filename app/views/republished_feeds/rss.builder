@@ -11,7 +11,7 @@ xml.rss(
     xml.link republished_feed_url(@republished_feed)
     xml.generator RSS_GENERATOR
 
-    @republished_feed.items.each do |item|
+    @republished_feed.item_search.results.each do |item|
       xml.item do
         xml.title item.title
         unless item.description.blank?

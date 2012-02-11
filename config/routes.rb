@@ -7,16 +7,6 @@ Tagteam::Application.routes.draw do
   end
   resources :input_source
 
-  resources :republished_feeds do
-    member do
-      get 'rss'
-      get 'atom'
-      get 'items'
-      get 'inputs'
-      get 'removals'
-    end
-  end
-
   resources :feed_retrievals
 
   resources :feed_items do
@@ -75,6 +65,16 @@ Tagteam::Application.routes.draw do
         get 'reschedule_immediately'
         get 'retrievals'
         get 'more_details'
+      end
+    end
+
+    resources :republished_feeds do
+      member do
+        get 'rss'
+        get 'atom'
+        get 'items'
+        get 'inputs'
+        get 'removals'
       end
     end
 

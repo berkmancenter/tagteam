@@ -4,7 +4,7 @@ class HubsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :republishing, :tag_controls, :search]
+    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :tag_controls, :search]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -151,15 +151,6 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         redirect_to :action => :index
-      }
-    end
-  end
-
-  def republishing
-    @hub = Hub.find(params[:id], :include => [:accepted_roles => [:users], :republished_feeds => []])
-    respond_to do|format|
-      format.html{
-        render :layout => ! request.xhr? 
       }
     end
   end

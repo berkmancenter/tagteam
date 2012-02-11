@@ -3,7 +3,7 @@ atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'te
   atom.updated @republished_feed.updated_at
   atom.generator RSS_GENERATOR
 
-  @republished_feed.items.each do |item|
+  @republished_feed.item_search.results.each do |item|
     atom.entry( item ) do |entry|
       unless item.authors.blank?
         entry.author do |author|

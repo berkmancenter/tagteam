@@ -1,9 +1,0 @@
-<h1>Feeds that <%= @hub %> is publishing</h1>
-
-<div class="republished_feeds">
-  <div id="republished_feed_list_<%= @hub.id %>">
-    <%= render :partial => 'shared/line_items/republished_feed', :collection => @hub.republished_feeds %>
-  </div>
-</div>
-
-<%= link_to('New republished feed', new_republished_feed_path(:hub_id => @hub.id)) %>

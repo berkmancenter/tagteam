@@ -5,7 +5,7 @@ class HubFeedsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :retrievals,:more_details]
+    allow all, :to => [:index, :show, :retrievals, :more_details]
     allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :hub_feed_admin
@@ -32,7 +32,7 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:tags]]], :page => params[:page], :per_page => HubFeed.per_page, :order => 'created_at desc' )
+    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:tags,:taggings]]], :page => params[:page], :per_page => HubFeed.per_page, :order => 'created_at desc' )
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 
