@@ -15,7 +15,7 @@ class FeedItemsController < ApplicationController
   end
 
   def index
-    @feed_items = @hub_feed.feed_items.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page])
+    @feed_items = @hub_feed.feed_items.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => params[:per_page])
     render :layout => ! request.xhr?
   end
 

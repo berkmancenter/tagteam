@@ -231,6 +231,10 @@ a:hover{
   font-size: 11px;
 }
 
+a.tag {
+  color: black;
+}
+
 #tag_slider{
   margin-bottom: 1em;
 }

@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def tag_display(tag, options = {})
-    options.merge!({:class => 'tag', :data_tag_id => tag.id})
+    options.merge!({:class => ['tag', options[:class]].compact.join(' '), :data_tag_id => tag.id})
 
     hub_id = nil
     if ! options[:hub].blank?

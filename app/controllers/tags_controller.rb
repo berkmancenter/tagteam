@@ -8,7 +8,12 @@ class TagsController < ApplicationController
   end
 
   def index
-    @tags = FeedItem.tag_counts_on(:tags)
+    if @hub_feed.blank?
+      @tags = FeedItem.tag_counts_on(@hub.tagging_key)
+    else
+      @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
+    end
+    render :layout => ! request.xhr?
   end
 
   def show
@@ -18,7 +23,12 @@ class TagsController < ApplicationController
   end
 
   def load_hub
-    @hub = Hub.find(params[:hub_id])
+    if ! params[:hub_feed_id].blank?
+      @hub_feed = HubFeed.find(params[:hub_feed_id])
+      @hub = @hub_feed.hub
+    else 
+      @hub = Hub.find(params[:hub_id])
+    end
   end
 
   private
