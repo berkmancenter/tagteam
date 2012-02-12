@@ -227,10 +227,8 @@ a:hover{
   border-bottom-left-radius: 5px;
   text-decoration: none;
   line-height: 1.6em;
-}
-
-.tag{
   color: black;
+  font-size: 11px;
 }
 
 #tag_slider{
