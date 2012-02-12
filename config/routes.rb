@@ -18,12 +18,6 @@ Tagteam::Application.routes.draw do
     end
   end
 
-	resources :feeds do
-		collection do
-			post 'check_feed'
-		end
-	end
-
   resources :tags
 
   resources :hub_feeds do
@@ -54,7 +48,6 @@ Tagteam::Application.routes.draw do
     member do
       get 'search'
       post 'add_feed'
-      get 'feeds'
       get 'custom_republished_feeds'
       get 'republishing'
       get 'tag_controls'

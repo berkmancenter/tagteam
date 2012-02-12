@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  def page_title
+    if breadcrumbs.items.length == 0
+      'Tagteam'
+    else
+      breadcrumbs.items.collect{|i| i[0]}.reject{|i| i == 'Home'}.reverse.join(' :: ') + ' :: TagTeam'
+    end
+  end
+
   def tag_display(tag, options = {})
     options.merge!({:class => 'tag', :data_tag_id => tag.id})
 

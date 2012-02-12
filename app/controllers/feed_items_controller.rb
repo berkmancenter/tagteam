@@ -8,6 +8,7 @@ class FeedItemsController < ApplicationController
   end
 
   def content
+    breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
     end
@@ -19,19 +20,20 @@ class FeedItemsController < ApplicationController
   end
 
   def show
+    breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
   end
 
   def by_date
     params[:date] = (params[:date].blank?) ? Time.now.strftime('%Y-%m-%d') : params[:date]
     dates = params[:date].split(/\D/).collect{|d| d.to_i}
     if dates.length > 0
-      breadcrumbs.add dates[0], by_date_feed_items_path(:date => dates[0])
+      breadcrumbs.add dates[0], by_date_hub_feed_feed_items_path(@hub_feed,:date => dates[0])
     end
     if dates.length > 1
-      breadcrumbs.add dates[1], by_date_feed_items_path(:date => "#{dates[0]}-#{dates[1]}")
+      breadcrumbs.add dates[1], by_date_hub_feed_feed_items_path(@hub_feed,:date => "#{dates[0]}-#{dates[1]}")
     end
     if dates.length > 2
-      breadcrumbs.add dates[2], by_date_feed_items_path(:date => "#{dates[0]}-#{dates[1]}-#{dates[2]}")
+      breadcrumbs.add dates[2], by_date_hub_feed_feed_items_path(@hub_feed,:date => "#{dates[0]}-#{dates[1]}-#{dates[2]}")
     end
 
     conditions = [

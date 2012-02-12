@@ -41,6 +41,7 @@ class HubFeedsController < ApplicationController
   end
 
   def show
+    breadcrumbs.add @hub_feed.display_title, hub_hub_feed_path(@hub,@hub_feed)
     @feed_items = @hub_feed.feed.feed_items.paginate(:include => [:tags], :order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page])
   end
 

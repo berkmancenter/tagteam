@@ -1,10 +1,9 @@
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create]
-  before_filter :add_breadcrumb, :except => [:index]
-  before_filter :prep_resources
+  before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :show, :feeds, :custom_republished_feeds, :tag_controls, :search]
+    allow all, :to => [:index, :show, :custom_republished_feeds, :tag_controls, :search]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -65,18 +64,6 @@ class HubsController < ApplicationController
           render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable)
         }
       end
-    end
-  end
-  
-  def feeds
-    respond_to do|format|
-      format.html{
-        if request.xhr?
-          render :partial => 'shared/line_items/hub_feed', :collection => @hub.hub_feeds
-        else
-          render
-        end
-      }
     end
   end
 
@@ -187,10 +174,6 @@ class HubsController < ApplicationController
 
   def add_breadcrumb
     breadcrumbs.add @hub, hub_path(@hub)
-  end
-
-  def prep_resources
-    @javascripts_extras = ['hubs']
   end
 
 end

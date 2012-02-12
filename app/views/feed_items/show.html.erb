@@ -32,7 +32,7 @@
       <% end %>
       <dt>From:</dt>
       <% #TODO - Make this resolve to the hub feed. %>
-      <dd><%= raw @feed_item.feeds.collect{|feed| link_to(feed, feed)}.join(', ') %></dd>
+      <dd><%= raw @feed_item.hub_feeds.collect{|feed| link_to(feed, [@hub,feed])}.join(', ') %></dd>
       <dt>Tags:</dt>
       <dd><%= raw @feed_item.tags_on(@hub_feed.hub.tagging_key).collect{|t| tag_display(t, :hub => @hub_feed.hub, :hub_feed_item => @feed_item) }.join(' ') %></dd>
       <% unless @feed_item.authors.blank? %>
