@@ -12,17 +12,13 @@
     <li><a href="#about">About</a></li>
     <li><%= link_to('Tags', hub_feed_tags_path(@hub_feed)) %></li>
     <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
+    <li><%= link_to('Retrievals', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
   </ul>
 
   <div id="about"> 
     <dl class="metadata">
       <dt>Feed URL:</dt>
       <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
-      <dt>Last successful download:</dt>
-      <dd>
-      <%= @hub_feed.latest_successful_feed_retrieval.created_at.to_s(:long) %><br/>
-      <%= link_to('See all retrievals', retrievals_hub_hub_feed_path(:id => @hub_feed, :hub_id => @hub)) %>
-      </dd>
       <dt>Feed last changed at:</dt>
       <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
       <dt>Feed will be downloaded again  at:</dt>

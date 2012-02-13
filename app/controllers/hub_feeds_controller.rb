@@ -5,7 +5,7 @@ class HubFeedsController < ApplicationController
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :retrievals, :more_details]
+    allow all, :to => [:index, :show, :more_details]
     allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :hub_feed_admin
@@ -13,11 +13,6 @@ class HubFeedsController < ApplicationController
 
   def more_details
     render :layout => ! request.xhr?
-  end
-
-  def retrievals
-    breadcrumbs.add @hub_feed, hub_hub_feed_path(:hub_id => @hub, :id => @hub_feed)
-    @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => params[:per_page])
   end
 
   def reschedule_immediately

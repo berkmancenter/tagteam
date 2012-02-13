@@ -7,7 +7,6 @@ Tagteam::Application.routes.draw do
   end
   resources :input_source
 
-  resources :feed_retrievals
 
   resources :feed_items do
     member do
@@ -23,9 +22,11 @@ Tagteam::Application.routes.draw do
   resources :hub_feeds do
     member do
       get 'reschedule_immediately'
-      get 'retrievals'
       get 'more_details'
     end
+
+    resources :feed_retrievals
+
     resources :feed_items do
       member do
         get 'content'
@@ -56,7 +57,6 @@ Tagteam::Application.routes.draw do
     resources :hub_feeds do
       member do
         get 'reschedule_immediately'
-        get 'retrievals'
         get 'more_details'
       end
     end

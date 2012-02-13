@@ -62,7 +62,16 @@
               },
               ajaxOptions: {
                 cache: false,
-                dataType: 'html'
+                dataType: 'html',
+                beforeSend: function(){
+                  $.showSpinner();
+                },
+                complete: function(){
+                  $.hideSpinner();
+                },
+                error: function(error){
+                  $.showMajorError(error);
+                }
               }
             });
           }
@@ -238,7 +247,16 @@ $(document).ready(function(){
     },
     ajaxOptions: {
       cache: false,
-      dataType: 'html'
+      dataType: 'html',
+      beforeSend: function(){
+        $.showSpinner();
+      },
+      complete: function(){
+        $.hideSpinner();
+      },
+      error: function(error){
+        $.showMajorError(error);
+      }
     }
   });
 
