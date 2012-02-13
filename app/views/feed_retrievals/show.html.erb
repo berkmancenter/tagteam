@@ -1,2 +1,9 @@
-<h1>FeedRetrievals#show</h1>
-<p>Find me in app/views/feed_retrievals/show.html.erb</p>
+<h2>Feed Retrieval on <%= l(@feed_retrieval.created_at, :format => :date_and_time_short) %> for "<%= @hub_feed %>"</h2>
+
+<% if @feed_retrieval.has_changes? %>
+      <% unless @feed_retrieval.new_feed_items.empty? %>
+      <% end %>
+<% else %>
+  <h3>No changes this time.</h3>
+<% end %>
+
