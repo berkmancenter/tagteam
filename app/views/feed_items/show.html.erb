@@ -1,6 +1,6 @@
 <h1>Feed Item: <%= @feed_item.title %></h1>
 
-<div class="feed_item feed_item_tabs" id="feed_item_<%= @feed_item.id %>">
+<div class="feed_item tabs" id="feed_item_<%= @feed_item.id %>">
 
   <ul>
     <li><a href="#about">About</a> <span id="spinner"></span></li>
@@ -11,6 +11,7 @@
   </ul>
 
   <div id="about">
+    <%= documentation('feed-item-about-tab') %>
     <% unless @feed_item.description.blank? %>
       <h3>Summary</h3>
       <div class="description">
@@ -50,22 +51,3 @@
     </dl>
   </div>
 </div>
-<%= javascript_tag do
-  %q|$(function(){
-  $('.feed_item_tabs').tabs({
-    cookie: {
-      expires: 3
-    },
-    ajaxOptions: {
-      beforeSend: function(){
-        $.showSpinner('#spinner');
-      },
-      complete: function(){
-        $.hideSpinner('#spinner');
-      }
-    }
-  });
-  }
-  );|
-end
-%>

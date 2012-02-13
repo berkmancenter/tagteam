@@ -1,5 +1,7 @@
 Tagteam::Application.routes.draw do
 
+  resources :documentations
+
   resources :input_sources do
     collection do
       get :find

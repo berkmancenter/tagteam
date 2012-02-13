@@ -1,5 +1,6 @@
+<%= documentation('hub-feed-feed-item-list') %>
 <div id="items">
-  <h2>Items - <%= @hub_feed.feed_item_count %> total</h2>
+  <h2>Items - <%= @feed_items.length %> total</h2>
 
   <%= will_paginate @feed_items %>
 

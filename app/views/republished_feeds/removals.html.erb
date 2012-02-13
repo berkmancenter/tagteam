@@ -1,3 +1,4 @@
+<%= documentation('republished-feed-removals-tab') %>
 <h3>Remove</h3>
 <p>The feeds, tags, searches and items below are removed from this feed before publishing.</p>
 <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'}, :locals => {:effect => 'add'} %>

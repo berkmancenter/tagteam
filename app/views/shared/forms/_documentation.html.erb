@@ -1,0 +1,9 @@
+<%= semantic_form_for(@documentation) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :match_key, :hint => "This links this bit of documentation to a place in the TagTeam application. You probably shouldn't change it." %>
+    <%= f.input :title, :hint => "The descriptive title." %>
+    <%= f.input :description, :as => :text %>
+    <%= f.input :lang %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>

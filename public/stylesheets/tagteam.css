@@ -90,10 +90,28 @@ blockquote{
 }
 
 .pagination{
-  text-align: right;
+  text-align: center;
   font-size: 12px;
   padding: .25em 0em .25em 0em;
 }
+
+.documentation_control{
+  float: right;
+  font-size: 11px;
+  border: 1px #ccc;
+  border-style: none none dotted dotted;
+  padding: 0px 0px 3px 3px;
+  margin: 0px 0px 3px 3px;
+}
+
+a.documentation_control{
+  text-decoration: none;
+}
+
+a.documentation_control:hover{
+  text-decoration: underline;
+}
+
 
 #wrapper{
   float: left;

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120109130927) do
+ActiveRecord::Schema.define(:version => 20120213151834) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -28,6 +28,19 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
   end
 
   add_index "delete_tag_filters", ["tag_id"], :name => "index_delete_tag_filters_on_tag_id"
+
+  create_table "documentations", :force => true do |t|
+    t.string   "match_key",   :limit => 100,                       :null => false
+    t.string   "title",       :limit => 500,                       :null => false
+    t.string   "description", :limit => 1048576
+    t.string   "lang",        :limit => 2,       :default => "en"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+  end
+
+  add_index "documentations", ["lang"], :name => "index_documentations_on_lang"
+  add_index "documentations", ["match_key"], :name => "index_documentations_on_match_key", :unique => true
+  add_index "documentations", ["title"], :name => "index_documentations_on_title"
 
   create_table "feed_items", :force => true do |t|
     t.string   "title",          :limit => 500

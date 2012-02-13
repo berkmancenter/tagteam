@@ -1,3 +1,8 @@
+<% if ! @hub_feed.blank? %>
+  <%= documentation('hub-feed-tag-cloud') %>
+<% else %>
+  <%= documentation('hub-tag-cloud') %>
+<% end %>
 <p><b>Filter tags by:</b></p>
 <div id="slider_controls">
   <div style="float: left">less frequent</div>

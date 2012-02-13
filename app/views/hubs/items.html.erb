@@ -1,5 +1,7 @@
+<%= documentation('hub-wide-item-list') %>
 <div id="items">
   <% unless @search.blank? %>
+    <h2>Items - <%= @search.total %> total</h2>
     <%= will_paginate @search.results %>
     <table class="hub feed_items" id="hub_<%= @hub.id %>">
       <%= render :partial => 'shared/line_items/feed_item', :collection => @search.results %>

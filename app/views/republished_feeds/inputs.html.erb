@@ -1,3 +1,4 @@
+<%= documentation('republished-feed-inputs-tab') %>
 <h3>Inputs</h3>
 <p>The feeds, tags, searches, and items below serve as the sources used to create this feed.</p>
 <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>

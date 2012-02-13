@@ -1,5 +1,16 @@
 module ApplicationHelper
 
+  def documentation(match_key, title = match_key)
+    doc_object = Documentation.find_or_initialize_by_match_key(match_key)
+    if doc_object.new_record?
+      doc_object.title = title || match_key
+      doc_object.save
+    end
+    if ! doc_object.description.blank? || (current_user && current_user.has_role?(:superadmin))
+      link_to(raw('<span class="inline ui-silk ui-silk-information"></span> Help!'), documentation_path(doc_object), :class => 'documentation_control dialog-show')
+    end
+  end
+
   def page_title
     if breadcrumbs.items.length == 0
       'Tagteam'

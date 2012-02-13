@@ -1,3 +1,4 @@
+<%= documentation('hub-wide-search') %>
 <div style="margin-bottom: 1em;">
   <%= form_tag(search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
     <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search here. . .' %>
