@@ -6,10 +6,15 @@
     <% end %>
   </div>
   <div class="grid_10 omega">
-    <% if [Feed,FeedItem].include?(input_source.item_source.class) %>
+    <% if input_source.item_source.class == FeedItem %>
       <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, input_source.item_source, :class => input_source.item_source.class.to_s.tableize.singularize) %>
+
+    <% elsif input_source.item_source.class == Feed %>
+      <%= raw input_source.item_source.mini_icon %> <%= link_to(input_source.item_source.to_s, hub_hub_feed_path(@hub,input_source.item_source.hub_feeds.where(:hub_id => @hub.id).first), :class => input_source.item_source.class.to_s.tableize.singularize) %>
+
     <% else %>
       <%= raw input_source.item_source.mini_icon %> <%= tag_display(input_source.item_source, :hub => @hub) %>
+
     <% end %>
   </div>
   <div class="clear"></div>

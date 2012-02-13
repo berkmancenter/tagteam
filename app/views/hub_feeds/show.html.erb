@@ -3,7 +3,7 @@
     <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
     <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
   <% end %>
-  <%= @hub_feed %>
+  Feed: <%= @hub_feed %>
 </h1>
 
 <div class="tabs hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">

@@ -190,7 +190,6 @@ $(document).ready(function(){
     }
   });
 
-
   $.bindHoverRows();
 
   $('.toggler').bind({

@@ -49,8 +49,8 @@ Tagteam::Application.routes.draw do
       get 'search'
       post 'add_feed'
       get 'custom_republished_feeds'
-      get 'republishing'
       get 'tag_controls'
+      get 'items'
     end
 
     resources :hub_feeds do

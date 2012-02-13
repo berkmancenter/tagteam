@@ -2,7 +2,7 @@
     <%= link_to('delete', hub_republished_feed_path(@republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
     <%= link_to('edit', edit_hub_republished_feed_path(@republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
   <% end %>
-  <%= @republished_feed %> <sup><%= link_to('rss', rss_hub_republished_feed_path(@hub,@republished_feed)) %> <%= link_to('atom', atom_hub_republished_feed_path(@hub,@republished_feed)) %></sup>
+  Republished Feed: <%= @republished_feed %> <sup><%= link_to('rss', rss_hub_republished_feed_path(@hub,@republished_feed)) %> <%= link_to('atom', atom_hub_republished_feed_path(@hub,@republished_feed)) %></sup>
 </h1>
 <div class="republished_feed detailed tabs" id="republished_feed_<%= @republished_feed.id %>">
   <ul>

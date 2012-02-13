@@ -13,7 +13,7 @@ class CreateRoles < ActiveRecord::Migration
     create_table :roles_users, :id => false, :force => true do |t|
       t.references  :user
       t.references  :role
-      t.timestamps
+#      t.timestamps
     end
     [:user_id, :role_id].each do|col|
       add_index :roles_users, col

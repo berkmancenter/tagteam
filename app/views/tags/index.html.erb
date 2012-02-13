@@ -13,7 +13,7 @@
 
 
 <% tag_cloud(@tags, %w(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10)) do |tag, css_class| %>
-  <%= tag_display(tag,:hub => @hub, :class => css_class) %>
+  <%= tag_display(tag,:hub => @hub, :hub_feed => @hub_feed, :class => css_class) %>
 <% end %>
 
 <%= javascript_tag "$(document).ready(function(){$.observeTagCloudControls()});" %>

@@ -1,0 +1,11 @@
+<div id="items">
+  <% unless @search.blank? %>
+    <%= will_paginate @search.results %>
+    <table class="hub feed_items" id="hub_<%= @hub.id %>">
+      <%= render :partial => 'shared/line_items/feed_item', :collection => @search.results %>
+    </table>
+    <%= will_paginate @search.results %>
+  <% else %>
+    <p>None yet. Please add some feeds from the "watching" tab.</p>
+  <% end %>
+</div>

@@ -15,16 +15,16 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "add_tag_filters", ["tag_id"], :name => "index_add_tag_filters_on_tag_id"
 
   create_table "delete_tag_filters", :force => true do |t|
     t.integer  "tag_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "delete_tag_filters", ["tag_id"], :name => "index_delete_tag_filters_on_tag_id"
@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "rights",         :limit => 500
     t.datetime "date_published"
     t.datetime "last_updated"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   add_index "feed_items", ["authors"], :name => "index_feed_items_on_authors"
@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "info",        :limit => 5120
     t.string   "status_code", :limit => 25
     t.string   "changelog",   :limit => 1048576
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "feeds", :force => true do |t|
@@ -89,8 +89,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "flavor",                   :limit => 25
     t.string   "language",                 :limit => 25
     t.datetime "next_scheduled_retrieval"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
   add_index "feeds", ["authors"], :name => "index_feeds_on_authors"
@@ -106,8 +106,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "filter_type",  :limit => 100, :null => false
     t.integer  "filter_id",                   :null => false
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   add_index "hub_feed_item_tag_filters", ["feed_item_id"], :name => "index_hub_feed_item_tag_filters_on_feed_item_id"
@@ -117,19 +117,17 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
   add_index "hub_feed_item_tag_filters", ["position"], :name => "index_hub_feed_item_tag_filters_on_position"
 
   create_table "hub_feed_tag_filters", :force => true do |t|
-    t.integer  "hub_id"
     t.integer  "hub_feed_id"
     t.string   "filter_type", :limit => 100, :null => false
     t.integer  "filter_id",                  :null => false
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   add_index "hub_feed_tag_filters", ["filter_id"], :name => "index_hub_feed_tag_filters_on_filter_id"
   add_index "hub_feed_tag_filters", ["filter_type"], :name => "index_hub_feed_tag_filters_on_filter_type"
   add_index "hub_feed_tag_filters", ["hub_feed_id"], :name => "index_hub_feed_tag_filters_on_hub_feed_id"
-  add_index "hub_feed_tag_filters", ["hub_id"], :name => "index_hub_feed_tag_filters_on_hub_id"
   add_index "hub_feed_tag_filters", ["position"], :name => "index_hub_feed_tag_filters_on_position"
 
   create_table "hub_feeds", :force => true do |t|
@@ -137,8 +135,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.integer  "hub_id",                      :null => false
     t.string   "title",       :limit => 500
     t.string   "description", :limit => 2048
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   add_index "hub_feeds", ["feed_id"], :name => "index_hub_feeds_on_feed_id"
@@ -150,8 +148,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "filter_type", :limit => 100, :null => false
     t.integer  "filter_id",                  :null => false
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   add_index "hub_tag_filters", ["filter_id"], :name => "index_hub_tag_filters_on_filter_id"
@@ -163,8 +161,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "title",       :limit => 500,  :null => false
     t.string   "description", :limit => 2048
     t.string   "tag_prefix",  :limit => 25
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   add_index "hubs", ["tag_prefix"], :name => "index_hubs_on_tag_prefix"
@@ -177,8 +175,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "effect",              :limit => 25,  :default => "add", :null => false
     t.integer  "position"
     t.integer  "limit"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
   end
 
   add_index "input_sources", ["effect"], :name => "index_input_sources_on_effect"
@@ -190,8 +188,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
   create_table "modify_tag_filters", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "new_tag_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "modify_tag_filters", ["new_tag_id"], :name => "index_modify_tag_filters_on_new_tag_id"
@@ -204,8 +202,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "default_sort",    :limit => 100,  :default => "date_published"
     t.string   "mixing_strategy", :limit => 25,   :default => "interlaced"
     t.integer  "limit",                           :default => 50
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
   end
 
   add_index "republished_feeds", ["hub_id"], :name => "index_republished_feeds_on_hub_id"
@@ -215,8 +213,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.string   "name",              :limit => 40
     t.string   "authorizable_type", :limit => 40
     t.integer  "authorizable_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   add_index "roles", ["authorizable_id"], :name => "index_roles_on_authorizable_id"
@@ -224,10 +222,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
   add_index "roles", ["name"], :name => "index_roles_on_name"
 
   create_table "roles_users", :id => false, :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "user_id"
+    t.integer "role_id"
   end
 
   add_index "roles_users", ["role_id"], :name => "index_roles_users_on_role_id"
@@ -272,8 +268,8 @@ ActiveRecord::Schema.define(:version => 20120109130927) do
     t.integer  "failed_attempts",                       :default => 0
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
