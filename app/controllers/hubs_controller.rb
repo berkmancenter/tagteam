@@ -168,6 +168,24 @@ class HubsController < ApplicationController
     end
 
     if ! params[:include_tags].blank? 
+      @search = Sunspot.new_search FeedItem
+      hub_context = @hub.tagging_key
+      include_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:include_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+      exclude_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:exclude_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+
+      @search.build do
+        any_of do
+          with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+        end
+        unless exclude_tags.blank?
+          any_of do
+            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+          end
+        end
+        paginate :page => params[:page], :per_page => cookies[:per_page]
+      end
+
+      @search.execute!
     end
 
     respond_to do|format|
