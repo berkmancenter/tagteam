@@ -89,6 +89,12 @@ blockquote{
   text-decoration: underline;
 }
 
+.pagination{
+  text-align: right;
+  font-size: 12px;
+  padding: .25em 0em .25em 0em;
+}
+
 #wrapper{
   float: left;
   background: #333;
