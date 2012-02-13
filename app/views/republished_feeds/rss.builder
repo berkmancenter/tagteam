@@ -8,7 +8,7 @@ xml.rss(
   xml.channel do
     xml.title @republished_feed.title
     xml.description @republished_feed.description
-    xml.link republished_feed_url(@republished_feed)
+    xml.link hub_republished_feed_url(@hub,@republished_feed)
     xml.generator RSS_GENERATOR
 
     @republished_feed.item_search.results.each do |item|

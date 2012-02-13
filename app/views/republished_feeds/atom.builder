@@ -19,7 +19,7 @@ atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'te
       entry.link item.url 
       entry.title item.title
       item.tag_list_on(@republished_feed.hub.tagging_key).each do |tag|
-        entry.category(:term => (@republished_feed.hub.tag_prefix.blank?) ? tag : "#{@republished_feed.hub.tag_prefix}#{tag}", :scheme => republished_feed_url(@republished_feed))
+        entry.category(:term => (@republished_feed.hub.tag_prefix.blank?) ? tag : "#{@republished_feed.hub.tag_prefix}#{tag}", :scheme => hub_republished_feed_url(@hub,@republished_feed))
       end
       entry.rights item.rights
       entry.summary item.description, :type => 'html'
