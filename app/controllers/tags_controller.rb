@@ -7,6 +7,23 @@ class TagsController < ApplicationController
     allow all
   end
 
+  def autocomplete
+    hub_id = @hub.id
+    @search = ActsAsTaggableOn::Tag.search do
+      with :hub_ids, hub_id
+      fulltext params[:term]
+    end
+
+    @search.execute!
+
+    respond_to do |format|
+      format.json { 
+        render :json => @search.results.collect{|r| {:id => r.name, :label => r.name} }
+      }
+    end
+
+  end
+
   def index
     if @hub_feed.blank?
       @tags = FeedItem.tag_counts_on(@hub.tagging_key)

@@ -167,6 +167,9 @@ class HubsController < ApplicationController
       @search.execute!
     end
 
+    if ! params[:include_tags].blank? 
+    end
+
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr?

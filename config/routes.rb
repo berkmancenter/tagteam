@@ -73,7 +73,11 @@ Tagteam::Application.routes.draw do
       end
     end
 
-    resources :tags
+    resources :tags do
+      collection do
+        get 'autocomplete'
+      end
+    end
 
     resources :hub_tag_filters do
       member do
