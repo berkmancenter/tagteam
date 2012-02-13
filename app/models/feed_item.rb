@@ -75,9 +75,6 @@ class FeedItem < ActiveRecord::Base
   end
 
   def render_filtered_tags_for_hub(hub = Hub.first)
-
-    # FIXME REVIEW FILTERS TO ENSURE THEY ARE BEING APPLIED IN THE CORRECT CIRCUMSTANCES.
-    #
     #"tag_list" is the source list of tags directly from RSS/Atom feeds.
     tag_list_for_filtering = self.tag_list.dup
 
