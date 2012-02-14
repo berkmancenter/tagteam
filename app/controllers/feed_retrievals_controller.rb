@@ -13,9 +13,8 @@ class FeedRetrievalsController < ApplicationController
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed)
     @feed_retrieval = FeedRetrieval.find(params[:id])
 
-    @new_items = FeedItem.find(:all, :conditions => {:id => @feed_retrievals.new_feed_items}, :order => 'created_at desc')
-    @changed_items = FeedItem.find(:all, :conditions => {:id => @feed_retrievals.new_feed_items}, :order => 'created_at desc')
-    @changelog = Yaml.l
+    @new_items = FeedItem.find(:all, :include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.new_feed_items}, :order => 'created_at desc')
+    @changed_items = FeedItem.find(:all, :include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.changed_feed_items}, :order => 'created_at desc')
   end
 
   private

@@ -225,11 +225,11 @@ $(document).ready(function(){
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
-            $('#add_feed_button').append('<img src="' + $.rootPath() + 'images/spinner.gif" id="feedaddspinner" />');
+            $.showSpinner();
             $('.add_feed_container .messages').html('');
           },
           complete: function(){
-            $('#feedaddspinner').remove();
+            $.hideSpinner();
           },
           success: function(html){
             $('.add_feed_container .messages').append('<div class="notice">' + html + '</div>');

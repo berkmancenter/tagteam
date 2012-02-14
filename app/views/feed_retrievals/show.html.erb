@@ -1,9 +1,28 @@
 <h2>Feed Retrieval on <%= l(@feed_retrieval.created_at, :format => :date_and_time_short) %> for "<%= @hub_feed %>"</h2>
 
-<% if @feed_retrieval.has_changes? %>
-      <% unless @feed_retrieval.new_feed_items.empty? %>
-      <% end %>
-<% else %>
-  <h3>No changes this time.</h3>
-<% end %>
+<div class="tabs">
 
+  <ul>
+    <% unless @new_items.empty? %>
+      <li><a href="#new_items">New items</a></li>
+    <% end %>
+    <% unless @changed_items.empty? %>
+      <li><a href="#changed_items">Changed items</a></li>
+    <% end %>
+  </ul>
+
+  <% unless @new_items.empty? %>
+    <div id="new_items">
+      <table class="hub feed_items" id="hub_<%= @hub.id %>">
+        <%= render :partial => 'shared/line_items/feed_item', :collection => @new_items %>
+      </table>
+    </div>
+  <% end %>
+  <% unless @changed_items.empty? %>
+    <div id="changed_items">
+      <table class="hub feed_items" id="hub_<%= @hub.id %>">
+        <%= render :partial => 'shared/line_items/feed_item', :collection => @changed_items %>
+      </table>
+    </div>
+  <% end %>
+</div>
