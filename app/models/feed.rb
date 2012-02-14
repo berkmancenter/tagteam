@@ -52,8 +52,6 @@ class Feed < ActiveRecord::Base
   
   validates_uniqueness_of :feed_url
 
-  scope :need_updating, lambda { where(['next_scheduled_retrieval <= ?', Time.now]) }
-
   def set_next_scheduled_retrieval
 
     feed_last_changed_at = self.items_changed_at 

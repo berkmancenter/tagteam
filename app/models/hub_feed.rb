@@ -10,6 +10,8 @@ class HubFeed < ActiveRecord::Base
   validates_uniqueness_of :feed_id, :scope => :hub_id
   validates_presence_of :feed_id, :hub_id
 
+  scope :need_updating, lambda { joins(:feed).where(['feeds.next_scheduled_retrieval <= ?', Time.now]) }
+
   attr_accessible :title, :description
   
   after_create do

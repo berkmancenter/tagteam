@@ -25,7 +25,7 @@ module FeedUtilities
       return false
     end
 
-    feed.title = (parsed_feed.channel.title.blank?) ? 'untitled' : parsed_feed.channel.title.blank?
+    feed.title = (parsed_feed.channel.title.blank?) ? 'untitled' : parsed_feed.channel.title
 		feed.description = parsed_feed.channel.description
     feed.guid = parsed_feed.channel.guid
     if parsed_feed.channel.updated.respond_to?(:to_datetime)

@@ -2,10 +2,10 @@ namespace :tagteam do
 
   desc 'update feeds'
   task :update_feeds => :environment do
-    feeds = Feed.need_updating
-    feeds.each do|f|
-      puts "Updating #{f.feed_url} "
-      f.update_feed
+    feeds = HubFeed.need_updating
+    feeds.each do|hf|
+      puts "Updating #{hf.feed.feed_url} "
+      hf.feed.update_feed
     end
   end
 
