@@ -1,4 +1,5 @@
 class Feed < ActiveRecord::Base
+
   validate :feed_url do
     if self.feed_url.blank? || ! self.feed_url.match(/https?:\/\/.+/i)
       self.errors.add(:feed_url, "doesn't look like a url")
@@ -152,9 +153,6 @@ class Feed < ActiveRecord::Base
         fi.save
         self.changelog[fi.id] = item_changelog
 
-        # Changed and/or new, so recalculate tag filtering.
-        logger.warn('Enqueueing resque jobs')
-        Resque.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
       logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")

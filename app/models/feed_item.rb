@@ -38,6 +38,11 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
+#  after_save :recalc_tags
+
+  def recalc_tags
+    Resque.enqueue(FeedItemTagRenderer, self.id)
+  end
 
   def self.descriptive_name
     'Feed Item'
@@ -72,6 +77,7 @@ class FeedItem < ActiveRecord::Base
     hs.each do |h|
       self.render_filtered_tags_for_hub(h)
     end
+    self.save
   end
 
   def render_filtered_tags_for_hub(hub = Hub.first)
@@ -99,7 +105,6 @@ class FeedItem < ActiveRecord::Base
       hfitf.filter.act(tag_list_for_filtering)
     end
     self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))
-    self.save
     tag_list_for_filtering
   end
 
