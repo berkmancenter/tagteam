@@ -14,3 +14,5 @@ SPIDER_DECAY_INTERVAL = 1.hour
 
 MAXIMUM_FEED_SPIDER_INTERVAL = 1.day
 
+Resque.redis.namespace = "resque:TagTeam"
+
