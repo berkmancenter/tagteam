@@ -13,6 +13,7 @@ class HubFeed < ActiveRecord::Base
   attr_accessible :title, :description
   
   after_create do
+    logger.warn('After create is firing')
     auto_create_republished_feed
     reindex_items_of_concern
     Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
@@ -21,6 +22,9 @@ class HubFeed < ActiveRecord::Base
   after_destroy do
     auto_delete_republished_feed
     reindex_items_of_concern
+
+    ActsAsTaggableOn::Tagging.destroy_all(:context => self.hub.tagging_key.to_s, :taggable_type => 'FeedItem', :taggable_id => self.feed.feed_items.collect{|fi| fi.id})
+    Resque.enqueue(ReindexTags)
   end
 
   def hub_ids
@@ -192,7 +196,6 @@ class HubFeed < ActiveRecord::Base
     logger.warn('reindexing everything')
     self.feed.solr_index
     self.feed.feed_items.collect{|fi| fi.solr_index}
-    # TODO - index hub feed tags?
   end
 
 end

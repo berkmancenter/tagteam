@@ -152,7 +152,7 @@ class Feed < ActiveRecord::Base
         self.dirty = true
         fi.save
         self.changelog[fi.id] = item_changelog
-
+        Resque.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
       logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")

@@ -38,10 +38,10 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
-#  after_save :recalc_tags
+  after_save :reindex_all_tags
 
-  def recalc_tags
-    Resque.enqueue(FeedItemTagRenderer, self.id)
+  def reindex_all_tags
+    self.taggings.collect{|tg| tg.tag}.uniq.collect{|t| t.index}
   end
 
   def self.descriptive_name

@@ -3,6 +3,9 @@ class HubFeedFeedItemTagRenderer
 
   def self.perform(hub_feed_id, tag_id = nil)
     hub_feed = HubFeed.find(hub_feed_id)
+
+#    puts 'HubFeed to update is :' + hub_feed.inspect
+
     feed_items = []
     if tag_id.nil?
       # Act on all items
@@ -12,10 +15,13 @@ class HubFeedFeedItemTagRenderer
       feed_items = FeedItem.includes(:feeds,:taggings).where({'feeds.id' => hub_feed.feed_id, 'taggings.tag_id' => tag_id, 'taggings.context' => 'tags'})
     end
 
+#    puts 'Feed items are:' + feed_items.inspect
+
     feed_items.each do |fi|
       fi.render_filtered_tags_for_hub(hub_feed.hub)
+      fi.save
     end
-    Sunspot.commit
+#    Sunspot.commit
   end
 
 end
