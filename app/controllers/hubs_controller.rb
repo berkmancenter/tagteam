@@ -20,7 +20,7 @@ class HubsController < ApplicationController
     @search = FeedItem.search(:include => [:tags, :taggings, :feeds]) do
       with(:hub_ids, hub_id)
       order_by('last_updated', :desc)
-      paginate :page => params[:page], :per_page => params[:per_page]
+      paginate :page => params[:page], :per_page => get_per_page
     end
     @search.execute!
     render :layout => ! request.xhr?
@@ -106,7 +106,7 @@ class HubsController < ApplicationController
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
     end
-    @hubs = Hub.paginate(:page => params[:page], :per_page => params[:per_page])
+    @hubs = Hub.paginate(:page => params[:page], :per_page => get_per_page)
   end
 
   def show
@@ -166,7 +166,7 @@ class HubsController < ApplicationController
       @search.build do
         fulltext params[:q]
         with :hub_ids, hub_id
-        paginate :page => params[:page], :per_page => cookies[:per_page]
+        paginate :page => params[:page], :per_page => get_per_page
       end
 
       @search.execute!
@@ -190,7 +190,7 @@ class HubsController < ApplicationController
             without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
           end
         end
-        paginate :page => params[:page], :per_page => cookies[:per_page]
+        paginate :page => params[:page], :per_page => get_per_page
       end
 
       @search.execute!

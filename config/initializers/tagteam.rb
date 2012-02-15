@@ -14,6 +14,8 @@ SPIDER_DECAY_INTERVAL = 1.hour
 
 MAXIMUM_FEED_SPIDER_INTERVAL = 1.day
 
+DEFAULT_TAGTEAM_PER_PAGE = 25
+
 Resque.redis.namespace = "resque:TagTeam"
 
 require File.dirname(__FILE__) + '/../../lib/will_paginate/view_helpers/custom_link_renderer.rb'

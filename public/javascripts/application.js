@@ -16,6 +16,9 @@
             modal: true
         }).dialog('open');
     },
+    initPerPage: function(){
+      $('.per_page_selector').val($.cookie('per_page') || 25);
+    },
     observeListPagination: function(){
       $('.pagination a').live('click',function(e){
         var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
@@ -24,6 +27,21 @@
           type: 'GET',
           cache: false,
           url: $(this).attr('href'),
+          dataType: 'html',
+          success: function(html){
+            $(paginationTarget).html(html);
+          }
+        });
+      });
+      $('.per_page_selector').live('change', function(e){
+        e.preventDefault();
+        $.cookie('per_page',$(this).val(), {expires: 365, path: $.rootPath()});
+        var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
+        var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/&page=\d+/,'&page=1');
+        $.ajax({
+          type: 'GET',
+          cache: false,
+          url: paginationLink,
           dataType: 'html',
           success: function(html){
             $(paginationTarget).html(html);
@@ -67,6 +85,7 @@
                   $.showSpinner();
                 },
                 complete: function(){
+                  $.initPerPage();
                   $.hideSpinner();
                 },
                 error: function(error){
@@ -191,6 +210,7 @@ $(document).ready(function(){
       $.showSpinner();
     },
     complete: function(){
+      $.initPerPage();
       $.hideSpinner();
     },
     error: function(error){
@@ -221,6 +241,7 @@ $(document).ready(function(){
         $.showMajorError(error);
       },
       complete: function(){
+        $.initPerPage();
         $.hideSpinner();
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
@@ -298,6 +319,7 @@ $(document).ready(function(){
         $.showSpinner();
       },
       complete: function(){
+        $.initPerPage();
         $.hideSpinner();
       },
       error: function(error){

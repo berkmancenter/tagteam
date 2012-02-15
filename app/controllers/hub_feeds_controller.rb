@@ -27,7 +27,7 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:tags,:taggings]]], :page => params[:page], :per_page => HubFeed.per_page, :order => 'created_at desc' )
+    @hub_feeds = @hub.hub_feeds.paginate(:include => [:feed => [:feed_items => [:tags,:taggings]]], :page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 
@@ -37,7 +37,7 @@ class HubFeedsController < ApplicationController
 
   def show
     breadcrumbs.add @hub_feed.display_title, hub_hub_feed_path(@hub,@hub_feed)
-    @feed_items = @hub_feed.feed.feed_items.paginate(:include => [:tags], :order => 'updated_at desc', :page => params[:page], :per_page => params[:per_page])
+    @feed_items = @hub_feed.feed.feed_items.paginate(:include => [:tags], :order => 'updated_at desc', :page => params[:page], :per_page => get_per_page)
   end
 
   def new

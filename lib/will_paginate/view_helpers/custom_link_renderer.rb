@@ -4,8 +4,8 @@ module WillPaginate::ViewHelpers
     private
 
     def html_container(html)
-      %Q|<div class="page_browsing_controls"><span class="per_page_selector">
-    Per Page: <select name="per_page" id="per_page">
+      %Q|<div class="page_browsing_controls"><span class="per_page_selector_container">
+    Per Page: <select name="per_page" class="per_page_selector">
     <option value="10">10</option>
     <option value="25">25</option>
     <option value="50">50</option>

@@ -4,7 +4,7 @@ class FeedRetrievalsController < ApplicationController
 
   def index
     breadcrumbs.add @hub_feed, hub_hub_feed_path(:hub_id => @hub, :id => @hub_feed)
-    @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => params[:per_page])
+    @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
@@ -13,8 +13,8 @@ class FeedRetrievalsController < ApplicationController
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed)
     @feed_retrieval = FeedRetrieval.find(params[:id])
 
-    @new_items = FeedItem.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.new_feed_items}, :order => 'created_at desc',:page => params[:page], :per_page => params[:per_page])
-    @changed_items = FeedItem.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.changed_feed_items}, :order => 'created_at desc',:page => params[:page], :per_page => params[:per_page])
+    @new_items = FeedItem.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.new_feed_items}, :order => 'created_at desc',:page => params[:page], :per_page => get_per_page)
+    @changed_items = FeedItem.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :conditions => {:id => @feed_retrieval.changed_feed_items}, :order => 'created_at desc',:page => params[:page], :per_page => get_per_page)
   end
 
   private

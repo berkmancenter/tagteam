@@ -15,7 +15,7 @@ class FeedItemsController < ApplicationController
   end
 
   def index
-    @feed_items = @hub_feed.feed_items.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => params[:per_page])
+    @feed_items = @hub_feed.feed_items.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
@@ -48,7 +48,7 @@ class FeedItemsController < ApplicationController
       ((dates[2].blank?) ? nil : dates[2])
     ].compact
 
-    @feed_items = FeedItem.paginate(:conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => params[:per_page])
+    @feed_items = FeedItem.paginate(:conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
   end
 
   private
