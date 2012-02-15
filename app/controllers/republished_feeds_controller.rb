@@ -12,7 +12,7 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def index
-    @republished_feeds = @hub.republished_feeds
+    @republished_feeds = @hub.republished_feeds.paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 
@@ -30,7 +30,7 @@ class RepublishedFeedsController < ApplicationController
     @search = @republished_feed.item_search
     unless @search.blank?
       @search.build do
-        paginate :page => params[:page], :per_page => params[:per_page]
+        paginate :page => params[:page], :per_page => get_per_page
       end
       @search.execute!
     end

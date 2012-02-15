@@ -2,6 +2,7 @@ class FeedItem < ActiveRecord::Base
   acts_as_taggable
 
   include ModelExtensions
+
   before_validation do
     auto_strip_tags(:description)
     auto_sanitize_html(:content)

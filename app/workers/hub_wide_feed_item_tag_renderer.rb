@@ -15,9 +15,15 @@ class HubWideFeedItemTagRenderer
       feed_items = FeedItem.includes(:feeds,:taggings).where({'feeds.id' => hub.feeds.collect{|f| f.id}, 'taggings.tag_id' => tag_id, 'taggings.context' => 'tags'})
     end
 
+    ac = ActionController::Base.new
+
     feed_items.each do |fi|
       fi.render_filtered_tags_for_hub(hub)
       fi.save
+
+      key = "feed-item-tag-list-#{hub.id}-#{fi.id}"
+      # puts "Expiring #{key}"
+      ac.expire_fragment(key)
     end
 #    Sunspot.commit
   end

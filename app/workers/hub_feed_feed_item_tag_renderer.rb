@@ -17,9 +17,14 @@ class HubFeedFeedItemTagRenderer
 
 #    puts 'Feed items are:' + feed_items.inspect
 
+    ac = ActionController::Base.new
+
     feed_items.each do |fi|
       fi.render_filtered_tags_for_hub(hub_feed.hub)
       fi.save
+      key = "feed-item-tag-list-#{hub_feed.hub_id}-#{fi.id}"
+      # puts "Expiring #{key}"
+      ac.expire_fragment(key)
     end
 #    Sunspot.commit
   end
