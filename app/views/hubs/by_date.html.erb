@@ -1,0 +1,17 @@
+<% unless request.xhr? %>
+<h1>Items from <%= params[:date] %></h1>
+<div class="tabs">
+  <ul>
+    <li><a href="#items">Items</a></li>
+  </ul>
+<% end %>
+  <div id="items"> 
+    <%= will_paginate @feed_items %>
+    <table>
+      <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+    </table>
+    <%= will_paginate @feed_items %>
+  </div>
+<% unless request.xhr? %>
+</div>
+<% end %>
