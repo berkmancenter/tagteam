@@ -93,10 +93,20 @@ blockquote{
   text-decoration: underline;
 }
 
+.page_browsing_controls{
+  text-align: center;
+  margin: 0px auto;
+}
+
 .pagination{
   text-align: center;
   font-size: 12px;
   padding: .25em 0em .25em 0em;
+  display: inline;
+}
+
+.per_page_selector{
+  font-size: 12px;
 }
 
 .documentation_control{
