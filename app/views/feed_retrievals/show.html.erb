@@ -13,16 +13,20 @@
 
   <% unless @new_items.empty? %>
     <div id="new_items">
+      <%= will_paginate @new_items %>
       <table class="hub feed_items" id="hub_<%= @hub.id %>">
         <%= render :partial => 'shared/line_items/feed_item', :collection => @new_items %>
       </table>
+      <%= will_paginate @new_items %>
     </div>
   <% end %>
   <% unless @changed_items.empty? %>
     <div id="changed_items">
+      <%= will_paginate @changed_items %>
       <table class="hub feed_items" id="hub_<%= @hub.id %>">
         <%= render :partial => 'shared/line_items/feed_item', :collection => @changed_items %>
       </table>
+      <%= will_paginate @changed_items %>
     </div>
   <% end %>
 </div>

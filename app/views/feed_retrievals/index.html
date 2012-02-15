@@ -5,6 +5,7 @@
   <% if @feed_retrievals.blank? %>
     <h2>None found.</h2>
   <% else %>
+  <%= will_paginate @feed_retrievals %>
     <table>
       <tr>
         <th>At:</th>
@@ -13,5 +14,6 @@
       </tr>
       <%= render :partial => 'shared/line_items/feed_retrieval', :collection => @feed_retrievals %>
     </table>
+  <%= will_paginate @feed_retrievals %>
   <% end %>
 </div>
