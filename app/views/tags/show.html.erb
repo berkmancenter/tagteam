@@ -1,5 +1,5 @@
 <% unless request.xhr? %>
-<h1>Tagged with "<%= @tag %>"</h1>
+  <h1>Tagged with "<%= @tag %>" - <%= @feed_items.total_entries %> total</h1>
 
 <div class="tabs">
   <ul>

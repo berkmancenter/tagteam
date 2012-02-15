@@ -17,6 +17,7 @@ class HubWideFeedItemTagRenderer
 
     feed_items.each do |fi|
       fi.render_filtered_tags_for_hub(hub)
+      fi.save
     end
 #    Sunspot.commit
   end

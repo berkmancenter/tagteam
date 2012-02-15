@@ -9,6 +9,11 @@ class HubsController < ApplicationController
     allow :superadmin, :hubadmin
   end
 
+  def recalc_all_tags
+    Resque.enqueue(RecalcAllItems,@hub.id)
+    flash[:notice] = 'Re-rendering all tags. This will take a while.'
+    redirect_to hub_path(@hub)
+  end
 
   def items
     hub_id = @hub.id

@@ -49,6 +49,7 @@ Tagteam::Application.routes.draw do
   resources :hubs do
 
     member do
+      post 'recalc_all_tags'
       get 'search'
       post 'add_feed'
       get 'custom_republished_feeds'
