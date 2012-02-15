@@ -11,7 +11,7 @@
     <% end %>
 <% cache("feed-item-tag-list-#{@hub.id}-#{feed_item.id}") do %>
     <% unless feed_item.date_published.blank? %>
-      <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_feed_feed_items_path(@hub_feed,:date => feed_item.date_published.strftime('%Y/%m/%d')) ) %>
+      <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_path(@hub,:date => feed_item.date_published.strftime('%Y/%m/%d')) ) %>
     <% end %>
   </td>
   <td width="80%" class="title">

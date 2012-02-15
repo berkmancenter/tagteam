@@ -3,10 +3,41 @@ class HubsController < ApplicationController
   before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
+  end
+
+  def by_date
+    # TODO - should just use solr, this code works and performs fine but is odd because it predates the integration of the 
+    # solr search engine.
+    params[:date] = (params[:date].blank?) ? Time.now.strftime('%Y-%m-%d') : params[:date]
+    dates = params[:date].split(/\D/).collect{|d| d.to_i}
+    if dates.length > 0
+      breadcrumbs.add dates[0], by_date_hub_path(@hub,:date => dates[0])
+    end
+    if dates.length > 1
+      breadcrumbs.add dates[1], by_date_hub_path(@hub,:date => "#{dates[0]}-#{dates[1]}")
+    end
+    if dates.length > 2
+      breadcrumbs.add dates[2], by_date_hub_path(@hub,:date => "#{dates[0]}-#{dates[1]}-#{dates[2]}")
+    end
+
+    conditions = [
+      'extract(year from date_published) = ?',
+      ((dates[1].blank?) ? nil : 'extract(month from date_published) = ?'),
+      ((dates[2].blank?) ? nil : 'extract(day from date_published) = ?')
+    ].compact
+
+    parameters = [
+      dates[0],
+      ((dates[1].blank?) ? nil : dates[1]),
+      ((dates[2].blank?) ? nil : dates[2])
+    ].compact
+
+    @feed_items = FeedItem.paginate(:conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    render :layout => ! request.xhr?
   end
 
   def recalc_all_tags

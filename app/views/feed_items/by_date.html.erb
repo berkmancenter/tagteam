@@ -1,7 +1,0 @@
-<h1>Items from <%= params[:date] %></h1>
-<%= will_paginate %>
-<table>
-  <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
-</table>
-
-<%= will_paginate %>

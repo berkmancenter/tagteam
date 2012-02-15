@@ -9,16 +9,6 @@ Tagteam::Application.routes.draw do
   end
   resources :input_source
 
-
-  resources :feed_items do
-    member do
-      get 'content'
-    end
-    collection do
-      get 'by_date'
-    end
-  end
-
   resources :tags
 
   resources :hub_feeds do
@@ -32,9 +22,6 @@ Tagteam::Application.routes.draw do
     resources :feed_items do
       member do
         get 'content'
-      end
-      collection do
-        get 'by_date'
       end
     end
     resources :tags
@@ -55,6 +42,7 @@ Tagteam::Application.routes.draw do
       get 'custom_republished_feeds'
       get 'tag_controls'
       get 'items'
+      get 'by_date'
     end
 
     resources :hub_feeds do
