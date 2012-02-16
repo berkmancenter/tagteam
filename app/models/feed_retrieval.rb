@@ -1,11 +1,24 @@
 class FeedRetrieval < ActiveRecord::Base
   belongs_to :feed
   has_and_belongs_to_many :feed_items 
+  has_many :hubs, :through => :feed
 
   scope :successful, where(['success is true'])
 
+  def hub_feed_for_hub(hub = Hub.first)
+    self.feed.hub_feeds.where('hub_feeds.hub_id' => hub.id).first
+  end
+
   after_save :update_feed_updated_at
   attr_accessor :changelog_summary_cache
+
+  searchable do
+    integer :feed_id
+    integer :hub_ids, :multiple => true
+    boolean :success
+    string :status_code
+    time :updated_at
+  end
 
   def update_feed_updated_at
     self.feed.updated_at = DateTime.now

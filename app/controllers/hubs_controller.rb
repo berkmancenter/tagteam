@@ -9,6 +9,18 @@ class HubsController < ApplicationController
     allow :superadmin, :hubadmin
   end
 
+  def retrievals
+    hub_id = @hub.id
+    @feed_retrievals = FeedRetrieval.search do
+      with(:hub_ids, hub_id)
+      order_by('updated_at', :desc)
+      paginate :page => params[:page], :per_page => get_per_page
+    end
+    @feed_retrievals.execute!
+    logger.warn(@feed_retrievals.inspect)
+    render :layout => ! request.xhr?
+  end
+
   def by_date
     # TODO - should just use solr, this code works and performs fine but is odd because it predates the integration of the 
     # solr search engine.

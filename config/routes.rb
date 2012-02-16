@@ -43,6 +43,7 @@ Tagteam::Application.routes.draw do
       get 'tag_controls'
       get 'items'
       get 'by_date'
+      get 'retrievals'
     end
 
     resources :hub_feeds do
