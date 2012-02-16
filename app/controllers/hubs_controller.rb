@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -11,7 +11,7 @@ class HubsController < ApplicationController
 
   def retrievals
     hub_id = @hub.id
-    @feed_retrievals = FeedRetrieval.search do
+    @feed_retrievals = FeedRetrieval.search(:include => [:feed => {:hub_feeds => [:feed]}]) do
       with(:hub_ids, hub_id)
       order_by('updated_at', :desc)
       paginate :page => params[:page], :per_page => get_per_page

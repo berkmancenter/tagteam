@@ -6,7 +6,7 @@ class FeedRetrieval < ActiveRecord::Base
   scope :successful, where(['success is true'])
 
   def hub_feed_for_hub(hub = Hub.first)
-    self.feed.hub_feeds.where('hub_feeds.hub_id' => hub.id).first
+    self.feed.hub_feeds.reject{|hf| hf.hub_id != hub.id}.first
   end
 
   after_save :update_feed_updated_at
