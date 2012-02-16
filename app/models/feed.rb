@@ -88,7 +88,6 @@ class Feed < ActiveRecord::Base
     self.raw_feed.items.each do|item|
       self.update_feed_item(item,fr)
     end
-    self.set_next_scheduled_retrieval
     fr.changelog = self.changelog.to_yaml
     fr.save
 
@@ -96,6 +95,7 @@ class Feed < ActiveRecord::Base
       logger.warn('dirty Feed and/or feed items have changed.')
       self.items_changed_at = Time.now
     end
+    self.set_next_scheduled_retrieval
     self.save
   end
 
