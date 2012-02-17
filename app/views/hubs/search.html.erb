@@ -24,7 +24,7 @@
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
   <%= will_paginate @search.results %>
-  <table>
+  <table class="hub search_results">
     <% @search.results.each do|r| %>
       <% if r.class == HubFeed %>
         <%= render :partial => 'shared/line_items/hub_feed', :object => r %>

@@ -12,6 +12,14 @@ class RepublishedFeed < ActiveRecord::Base
   belongs_to :hub
   has_many :input_sources, :dependent => :destroy, :order => :position 
 
+  def inputs
+    input_sources.where(:effect => 'add') 
+  end
+
+  def removals
+    input_sources.where(:effect => 'remove') 
+  end
+
   attr_accessible :title, :hub_id, :description, :default_sort, :mixing_strategy, :limit
 
   def item_search

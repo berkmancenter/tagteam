@@ -6,7 +6,9 @@
   <h3>Feeds this hub is publishing:</h3>
   <div id="republished_feed_list_<%= @hub.id %>">
     <%= will_paginate @republished_feeds %>
-    <%= render :partial => 'shared/line_items/republished_feed', :collection => @republished_feeds %>
+    <table class="republished_feeds">
+      <%= render :partial => 'shared/line_items/republished_feed', :collection => @republished_feeds %>
+    </table>
     <%= will_paginate @republished_feeds %>
   </div>
 </div>

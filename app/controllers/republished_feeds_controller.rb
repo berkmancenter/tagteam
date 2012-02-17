@@ -5,10 +5,14 @@ class RepublishedFeedsController < ApplicationController
   before_filter :register_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :show, :rss, :atom, :items, :inputs, :removals]
+    allow all, :to => [:index, :show, :rss, :atom, :items, :inputs, :removals, :more_details]
     allow :owner, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :republished_feed_admin
+  end
+
+  def more_details
+    render :layout => ! request.xhr?
   end
 
   def index

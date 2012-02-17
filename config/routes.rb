@@ -60,6 +60,7 @@ Tagteam::Application.routes.draw do
         get 'items'
         get 'inputs'
         get 'removals'
+        get 'more_details'
       end
     end
 

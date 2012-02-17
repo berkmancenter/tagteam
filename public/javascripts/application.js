@@ -293,7 +293,7 @@ $(document).ready(function(){
   });
 
 
-  $('.more').live({
+/*  $('.more').live({
     mouseover: function(){
       $(this).css('cursor','pointer');
     },
@@ -307,6 +307,7 @@ $(document).ready(function(){
       }
     }
   });
+  */
   // For tabs that need minimal options.
   $('.tabs').tabs({
     cookie: {
@@ -395,7 +396,7 @@ $(document).ready(function(){
     }
   });
 
-  $('.hub_feed_more_control').live({
+  $('.hub_feed_more_control,.republished_feed_more_control').live({
     click: function(e){
       e.preventDefault();
       if($(this).hasClass('more_details_included')){
