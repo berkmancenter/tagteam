@@ -70,7 +70,7 @@ GEM
     erubis (2.7.0)
     escape (0.0.4)
     eventmachine (0.12.10)
-    feed-abstract (0.0.7)
+    feed-abstract (0.0.8)
       feed-abstract
     ffi (1.0.11)
     formtastic (2.0.2)
