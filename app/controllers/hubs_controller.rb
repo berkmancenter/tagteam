@@ -48,7 +48,7 @@ class HubsController < ApplicationController
       ((dates[2].blank?) ? nil : dates[2])
     ].compact
 
-    @feed_items = FeedItem.paginate(:conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    @feed_items = FeedItem.paginate(:select => FeedItem.columns_for_line_item, :conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
@@ -60,7 +60,8 @@ class HubsController < ApplicationController
 
   def items
     hub_id = @hub.id
-    @search = FeedItem.search(:include => [:tags, :taggings, :feeds]) do
+    # TODO - it would be really nice to figure out how to include custom tag contexts.
+    @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
       with(:hub_ids, hub_id)
       order_by('last_updated', :desc)
       paginate :page => params[:page], :per_page => get_per_page
@@ -79,7 +80,7 @@ class HubsController < ApplicationController
     end
 
     if params[:hub_feed_item_id].to_i != 0
-      @feed_item = FeedItem.find(params[:hub_feed_item_id])
+      @feed_item = FeedItem.find(params[:hub_feed_item_id], :select => FeedItem.columns_for_line_item)
       @already_filtered_for_hub_feed_item = HubFeedItemTagFilter.where(:feed_item_id => params[:hub_feed_item_id].to_i).includes(:filter).collect{|hfitf| hfitf.filter.tag_id == params[:tag_id].to_i}.flatten.include?(true)
     end
 
@@ -220,7 +221,7 @@ class HubsController < ApplicationController
     end
 
     if ! include_tags.blank? 
-      @search = FeedItem.search(:include => [:tags, :taggings, :feeds, :hub_feeds])
+      @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:tags, :taggings, :feeds, :hub_feeds])
       hub_context = @hub.tagging_key
       exclude_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:exclude_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
 
