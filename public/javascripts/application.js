@@ -400,6 +400,8 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       if($(this).hasClass('more_details_included')){
+        $(this).closest('tr').after().next().remove();
+        $(this).removeClass('more_details_included');
         return;
       }
       var elem = this;
