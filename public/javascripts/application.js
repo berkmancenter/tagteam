@@ -443,7 +443,7 @@ $(document).ready(function(){
   $('a.choose_republished_feed').live({
     click: function(e){
       e.preventDefault();
-      var republished_feed_id = $(this).attr('id').split('-')[1];
+      var republished_feed_id = $(this).attr('data_id');
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');

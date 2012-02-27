@@ -6,12 +6,12 @@ xml.rss(
   'xmlns:dc' => 'http://purl.org/dc/elements/1.1/'
   ) do
   xml.channel do
-    xml.title @republished_feed.title
-    xml.description @republished_feed.description
-    xml.link hub_republished_feed_url(@hub,@republished_feed)
+    xml.title "Items tagged with #{@tag.name} in #{@hub.title}"
+    xml.description "Items tagged with #{@tag.name} in #{@hub.title}"
+    xml.link hub_tag_path(@hub,@tag)
     xml.generator RSS_GENERATOR
 
-    @republished_feed.item_search.results.each do |item|
+    @feed_items.each do |item|
       xml.item do
         xml.title item.title
         unless item.description.blank?
@@ -26,8 +26,8 @@ xml.rss(
         xml.link item.url
         xml.guid item.guid
         xml.author item.authors
-        item.tag_list_on(@republished_feed.hub.tagging_key).each do|tag|
-          xml.category (@republished_feed.hub.tag_prefix.blank?) ? tag : "#{@republished_feed.hub.tag_prefix}#{tag}"
+        item.tag_list_on(@hub.tagging_key).each do|tag|
+          xml.category (@hub.tag_prefix.blank?) ? tag : "#{@hub.tag_prefix}#{tag}"
         end
         unless item.rights.blank?
           xml.tag!('dc:rights', item.rights)

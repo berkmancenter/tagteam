@@ -9,8 +9,6 @@ Tagteam::Application.routes.draw do
   end
   resources :input_source
 
-  resources :tags
-
   resources :hub_feeds do
     member do
       get 'reschedule_immediately'
@@ -34,6 +32,10 @@ Tagteam::Application.routes.draw do
   end
 
   resources :hubs do
+
+    match 'tag/:name' => 'tags#show', :as => 'tag_show'
+    match 'tag/:name/rss' => 'tags#rss', :as => 'tag_rss'
+    match 'tag/:name/atom' => 'tags#atom', :as => 'tag_atom'
 
     member do
       post 'recalc_all_tags'

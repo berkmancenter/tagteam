@@ -1,6 +1,8 @@
 class TagsController < ApplicationController
 
   before_filter :load_hub
+  before_filter :load_tag_from_name, :only => [:rss, :atom, :show]
+  before_filter :load_feed_items_for_rss, :only => [:rss, :atom]
   before_filter :add_breadcrumbs
 
   access_control do
@@ -33,8 +35,13 @@ class TagsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
+  def rss
+  end
+
+  def atom
+  end
+
   def show
-    @tag = ActsAsTaggableOn::Tag.find(params[:id])
     @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
@@ -52,6 +59,18 @@ class TagsController < ApplicationController
 
   def add_breadcrumbs
     breadcrumbs.add @hub.to_s, hub_path(@hub) 
+  end
+
+  def load_tag_from_name
+    if ! params[:name].blank?
+      @tag = ActsAsTaggableOn::Tag.find_by_name(params[:name])
+    else
+      @tag = ActsAsTaggableOn::Tag.find(params[:id])
+    end
+  end
+
+  def load_feed_items_for_rss
+    @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).limit(50).order('date_published desc')
   end
 
 end

@@ -32,7 +32,7 @@ class InputSourcesController < ApplicationController
         flash[:notice] = 'Add that input source'
         format.html{
           unless request.xhr?
-            redirect_to republished_feed_url(@republished_feed)
+            redirect_to hub_republished_feed_url(@hub,@republished_feed)
           else
             message = (@input_source.effect == 'add') ? %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"| : %Q|Removed "#{@input_source.item_source}" from "#{@republished_feed}"|
             render :text => message 
@@ -60,7 +60,7 @@ class InputSourcesController < ApplicationController
       if @input_source.save
         current_user.has_role!(:editor, @input_source)
         flash[:notice] = 'Updated that input source'
-        format.html{redirect_to republished_feed_url(@input_source.republished_feed)}
+        format.html{redirect_to hub_republished_feed_url(@input_source.republished_feed.hub,@input_source.republished_feed)}
       else
         flash[:error] = 'Could not update that input source'
         format.html {render :action => :edit}
@@ -128,12 +128,13 @@ class InputSourcesController < ApplicationController
   def destroy
     begin
       @republished_feed = @input_source.republished_feed
+      @hub = @republished_feed.hub
       @input_source.destroy
       flash[:notice] = 'Removed that item'
     rescue
       flash[:notice] = 'Could not remove that item'
     end
-    redirect_to republished_feed_url(@republished_feed)
+    redirect_to hub_republished_feed_url(@hub,@republished_feed)
   end
 
   def show
@@ -144,6 +145,7 @@ class InputSourcesController < ApplicationController
   def load_republished_feed
     republished_feed_id = (params[:input_source].blank?) ? params[:republished_feed_id] : params[:input_source][:republished_feed_id]
     @republished_feed = RepublishedFeed.find(republished_feed_id)
+    @hub = @republished_feed.hub
   end
 
   def load_input_source

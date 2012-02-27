@@ -1,10 +1,10 @@
 atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'text/xsl', :media => 'screen', :href => root_path() + 'stylesheets/atom.xsl'}}) do |atom|
-  atom.title @republished_feed.title
-  atom.updated @republished_feed.updated_at
+  atom.title "Items tagged with #{@tag.name} in #{@hub.title}"
+  atom.updated @feed_items.first.updated_at
   atom.generator RSS_GENERATOR
 
-  @republished_feed.item_search.results.each do |item|
-    atom.entry( item , :url => item.url ) do |entry|
+  @feed_items.each do |item|
+    atom.entry( item, :url => item.url ) do |entry|
       unless item.authors.blank?
         entry.author do |author|
           author.name item.authors
@@ -18,8 +18,8 @@ atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'te
       entry.content item.content, :type => 'html'
       entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
       entry.title item.title
-      item.tag_list_on(@republished_feed.hub.tagging_key).each do |tag|
-        entry.category(:term => (@republished_feed.hub.tag_prefix.blank?) ? tag : "#{@republished_feed.hub.tag_prefix}#{tag}", :scheme => hub_republished_feed_url(@hub,@republished_feed))
+      item.tag_list_on(@hub.tagging_key).each do |tag|
+        entry.category(:term => (@hub.tag_prefix.blank?) ? tag : "#{@hub.tag_prefix}#{tag}", :scheme => hub_tag_path(@hub,@tag))
       end
       entry.rights item.rights
       entry.summary item.description, :type => 'html'
