@@ -33,9 +33,9 @@ Tagteam::Application.routes.draw do
 
   resources :hubs do
 
-    match 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { :name => /[^\/]+/ }
-    match 'tag/:name/rss' => 'tags#rss', :as => 'tag_rss', :constraints => { :name => /[^\/]+/ }
-    match 'tag/:name/atom' => 'tags#atom', :as => 'tag_atom', :constraints => { :name => /[^\/]+/ }
+    match 'tag/rss/:name' => 'tags#rss', :as => 'tag_rss', :constraints => { :name => /.+/ }
+    match 'tag/atom/:name' => 'tags#atom', :as => 'tag_atom', :constraints => { :name => /.+/ }
+    match 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { :name => /.+/ }
 
     member do
       post 'recalc_all_tags'
