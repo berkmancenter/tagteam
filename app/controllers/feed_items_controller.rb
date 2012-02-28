@@ -22,6 +22,7 @@ class FeedItemsController < ApplicationController
         render :layout => ! request.xhr?
       }
       format.atom{
+        render :layout => false
       }
       format.rss{
       }
