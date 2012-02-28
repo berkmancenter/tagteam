@@ -138,7 +138,7 @@ class Feed < ActiveRecord::Base
       end
     end
     if fi.valid?
-      if fi.changed? or fi.new_record?
+      if self.changelog.keys.include?(fi.id) or fi.new_record?
         # This runs here because we're auto stripping and auto-truncating columns and
         # want the change tracking to be relative to these fixed values.
         logger.warn('dirty because a feed item changed or was created.')
