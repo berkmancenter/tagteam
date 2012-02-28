@@ -173,7 +173,6 @@ class HubFeed < ActiveRecord::Base
       :title => self.feed.title, 
       :description => self.feed.description,
       :default_sort => 'date_published',
-      :mixing_strategy => 'date',
       :limit => 50
     )
 

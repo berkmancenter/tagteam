@@ -19,8 +19,6 @@
       <dl>
         <dt>Default sort:</dt>
         <dd><%= @republished_feed.default_sort %></dd>
-        <dt>Mixing strategy:</dt>
-        <dd><%= @republished_feed.mixing_strategy %></dd>
         <dt>Owners:</dt>
         <dd><%= @republished_feed.owners.collect{|o| o.email}.join(', ') %></dd>
       </dl>

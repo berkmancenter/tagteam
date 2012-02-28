@@ -6,8 +6,6 @@ class RepublishedFeed < ActiveRecord::Base
   acts_as_authorization_object
   SORTS = ['date_published', 'title']
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]
-  MIXING_STRATEGIES = ['interlaced','date']
-  MIXING_STRATEGIES_FOR_SELECT = [['Interlaced','interlaced'],['Date','date']]
 
   belongs_to :hub
   has_many :input_sources, :dependent => :destroy, :order => :position 
@@ -20,7 +18,7 @@ class RepublishedFeed < ActiveRecord::Base
     input_sources.where(:effect => 'remove') 
   end
 
-  attr_accessible :title, :hub_id, :description, :default_sort, :mixing_strategy, :limit
+  attr_accessible :title, :hub_id, :description, :default_sort, :limit
 
   def item_search
 
