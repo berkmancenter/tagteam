@@ -1,6 +1,6 @@
 <%= documentation('republished-feed-items-tab') %>
 <div id="items">
-  <h2>Items:</h2>
+  <h2>Items: <%= @search.total %> total</h2>
   <% unless @search.blank? %>
     <%= will_paginate @search.results %>
     <table class="republished_feed feed_items" id="republished_feed_metadata_<%= @republished_feed.id %>">

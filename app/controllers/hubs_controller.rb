@@ -60,7 +60,6 @@ class HubsController < ApplicationController
 
   def items
     hub_id = @hub.id
-    # TODO - it would be really nice to figure out how to include custom tag contexts.
     @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
       with(:hub_ids, hub_id)
       order_by('last_updated', :desc)

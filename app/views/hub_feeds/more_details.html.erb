@@ -1,7 +1,7 @@
 <tr class="metadata" id="hub_feed_metadata_<%= @hub_feed.id %>">
   <td>
     <span class="updated"> <%= @hub_feed.feed.updated_at.to_s(:long) %></span>
-    <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= @hub_feed.feed.feed_items.length %> items</span>
+    <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= @hub_feed.feed.feed_items.length %> items</span> <sup><%= link_to('RSS', rss_hub_republished_feed_path(@hub,@hub_feed.pass_thru_republished_feed)) %> <%= link_to('Atom', atom_hub_republished_feed_path(@hub,@hub_feed.pass_thru_republished_feed)) %></sup>
   </td>
   <td>
     <span class="feed_item_tags"><%= raw @hub_feed.latest_tags(10).collect{|t| tag_display(t, :hub => @hub, :hub_feed => @hub_feed) }.join(' ') %></span> 

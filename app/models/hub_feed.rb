@@ -136,6 +136,10 @@ class HubFeed < ActiveRecord::Base
     return []
   end
 
+  def pass_thru_republished_feed
+    RepublishedFeed.find(self.get_completely_dependent_republished_feeds.first['id'])
+  end
+
   def get_completely_dependent_republished_feeds
     # So. . . we need to find republished feeds that have this feed as a single input source and that belong to this hub.
     # We can do a bunch of tortured ruby, or just run the sql directly.

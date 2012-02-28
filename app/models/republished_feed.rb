@@ -88,6 +88,7 @@ class RepublishedFeed < ActiveRecord::Base
         end
       end
       order_by(sort_column, order)
+      paginate :per_page => self.limit, :page => 1
     end
 
     search
