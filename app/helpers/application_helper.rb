@@ -40,7 +40,7 @@ module ApplicationHelper
       options.delete(:hub_feed_item)
     end
 
-    link_to(tag.name, hub_tag_show_path(hub_id,tag.name), options) 
+    link_to(tag.name, hub_tag_show_path(hub_id,u(tag.name)), options) 
   end
 
 end

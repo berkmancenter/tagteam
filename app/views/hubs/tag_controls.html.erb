@@ -1,7 +1,7 @@
 <div class="controls">
   <ul>
-    <li><%= link_to(%Q|View items tagged with "#{@tag.name}"|, hub_tag_show_path(@hub,@tag.name)) %></li>
-    <li><%= link_to("RSS", hub_tag_rss_path(@hub,@tag.name)) %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= link_to('Atom', hub_tag_atom_path(@hub,@tag.name)) %></li>
+    <li><%= link_to(%Q|View items tagged with "#{@tag.name}"|, hub_tag_show_path(@hub,u(@tag.name))) %></li>
+    <li><%= link_to("RSS", hub_tag_rss_path(@hub,u(@tag.name))) %>&nbsp;&nbsp;|&nbsp;&nbsp;<%= link_to('Atom', hub_tag_atom_path(@hub,u(@tag.name))) %></li>
   </ul>
   <h3>Filters:</h3>
   <ul>
