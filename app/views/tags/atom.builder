@@ -1,4 +1,4 @@
-atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'text/xsl', :media => 'screen', :href => root_path() + 'stylesheets/atom.xsl'}}) do |atom|
+atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'text/xsl', :media => 'screen', :href => root_path() + 'stylesheets/atom.xsl'}}) do |atom|
   atom.title "Items tagged with #{@tag.name} in #{@hub.title}"
   atom.updated @feed_items.first.updated_at
   atom.generator RSS_GENERATOR
@@ -16,7 +16,7 @@ atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'te
         end
       end
       entry.content item.content, :type => 'html'
-      entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
+#      entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
       entry.title item.title
       item.tag_list_on(@hub.tagging_key).each do |tag|
         entry.category(:term => (@hub.tag_prefix.blank?) ? tag : "#{@hub.tag_prefix}#{tag}", :scheme => hub_tag_path(@hub,@tag))
