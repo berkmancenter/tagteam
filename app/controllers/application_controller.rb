@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   before_filter :init_breadcrumbs
 
   def get_per_page
-    cookies[:per_page] || DEFAULT_TAGTEAM_PER_PAGE
+    params[:per_page] || cookies[:per_page] || DEFAULT_TAGTEAM_PER_PAGE
   end
 
   private 

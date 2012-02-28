@@ -1,4 +1,4 @@
-atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'text/xsl', :media => 'screen', :href => root_path() + 'stylesheets/atom.xsl'}}) do |atom|
+atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US') do |atom|
   atom.title "Items tagged with #{@tag.name} in #{@hub.title}"
   atom.updated @feed_items.first.updated_at
   atom.generator RSS_GENERATOR

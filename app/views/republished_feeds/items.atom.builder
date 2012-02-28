@@ -1,4 +1,4 @@
-atom_feed(:root_url => hub_republished_feed_url(@hub,@republished_feed), :language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'text/xsl', :media => 'screen', :href => root_path() + 'stylesheets/atom.xsl'}}) do |atom|
+atom_feed(:root_url => hub_republished_feed_url(@hub,@republished_feed), :language => 'en-US') do |atom|
   atom.title @republished_feed.title
   atom.updated @republished_feed.updated_at
   atom.generator RSS_GENERATOR

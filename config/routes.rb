@@ -50,8 +50,6 @@ Tagteam::Application.routes.draw do
 
     resources :hub_feeds do
       member do
-        get 'rss'
-        get 'atom'
         get 'reschedule_immediately'
         get 'more_details'
       end
@@ -59,8 +57,6 @@ Tagteam::Application.routes.draw do
 
     resources :republished_feeds do
       member do
-        get 'rss'
-        get 'atom'
         get 'items'
         get 'inputs'
         get 'removals'

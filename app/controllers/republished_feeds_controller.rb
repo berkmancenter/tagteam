@@ -5,7 +5,7 @@ class RepublishedFeedsController < ApplicationController
   before_filter :register_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :show, :rss, :atom, :items, :inputs, :removals, :more_details]
+    allow all, :to => [:index, :show, :items, :inputs, :removals, :more_details]
     allow :owner, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :republished_feed_admin
@@ -38,7 +38,11 @@ class RepublishedFeedsController < ApplicationController
       end
       @search.execute!
     end
-    render :layout => ! request.xhr?
+    respond_to do |format|
+      format.html{ render :layout => ! request.xhr? }
+      format.rss{}
+      format.atom{}
+    end
   end
 
   def inputs
@@ -93,12 +97,6 @@ class RepublishedFeedsController < ApplicationController
   rescue
     flash[:error] = "Couldn't remove that feed."
     redirect_to(hub_path(@hub))
-  end
-
-  def rss
-  end
-
-  def atom
   end
 
   private
