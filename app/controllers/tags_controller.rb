@@ -36,12 +36,15 @@ class TagsController < ApplicationController
   end
 
   def rss
+    render :content_type => 'application/rss+xml'
   end
 
   def atom
+    render :content_type => 'application/atom+xml'
   end
 
   def show
+    @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
     @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end

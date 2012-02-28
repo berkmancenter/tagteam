@@ -25,12 +25,14 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def show
+    @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
     @owners = @republished_feed.owners
     @hub = @republished_feed.hub
 #    @republished_feed.items
   end
 
   def items
+    @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
     @search = @republished_feed.item_search
     unless @search.blank?
       @search.build do

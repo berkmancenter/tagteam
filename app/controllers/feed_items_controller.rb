@@ -15,17 +15,14 @@ class FeedItemsController < ApplicationController
   end
 
   def index
-    #@feed_items = @hub_feed.feed_items.paginate(:include => [:tags, :taggings, :feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     respond_to do |format|
       format.html{
         render :layout => ! request.xhr?
       }
-      format.atom{
-        render :layout => false
-      }
-      format.rss{
-      }
+      format.atom{ }
+      format.rss{ }
     end
   end
 

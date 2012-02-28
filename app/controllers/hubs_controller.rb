@@ -59,6 +59,7 @@ class HubsController < ApplicationController
   end
 
   def items
+    @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
     hub_id = @hub.id
 
     if request.format.to_s.match(/rss|atom/i)
@@ -166,6 +167,7 @@ class HubsController < ApplicationController
   end
 
   def show
+    @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
   end
 
   def new
