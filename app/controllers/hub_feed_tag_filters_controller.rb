@@ -40,7 +40,6 @@ class HubFeedTagFiltersController < ApplicationController
     filter_type_model = params[:filter_type].constantize
 
     @hub_feed_tag_filter = HubFeedTagFilter.new()
-    @hub_feed_tag_filter.hub_id = @hub.id
     @hub_feed_tag_filter.hub_feed_id = @hub_feed.id
 
     if filter_type_model == ModifyTagFilter
