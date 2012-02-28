@@ -21,7 +21,9 @@ atom_feed(:language => 'en-US', :instruct => { 'xml-stylesheet' => {:type => 'te
       item.tag_list_on(@hub.tagging_key).each do |tag|
         entry.category(:term => (@hub.tag_prefix.blank?) ? tag : "#{@hub.tag_prefix}#{tag}", :scheme => hub_tag_path(@hub,@tag))
       end
-      entry.rights item.rights
+      unless item.rights.blank?
+        entry.rights item.rights
+      end
       entry.summary item.description, :type => 'html'
     end
   end
