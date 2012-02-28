@@ -60,13 +60,26 @@ class HubsController < ApplicationController
 
   def items
     hub_id = @hub.id
-    @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
-      with(:hub_ids, hub_id)
-      order_by('last_updated', :desc)
-      paginate :page => params[:page], :per_page => get_per_page
+
+    if request.format.to_s.match(/rss|atom/i)
+      @search = FeedItem.search(:include => [:feeds, :hub_feeds]) do
+        with(:hub_ids, hub_id)
+        order_by('last_updated', :desc)
+        paginate :page => params[:page], :per_page => get_per_page
+      end
+    else
+      @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
+        with(:hub_ids, hub_id)
+        order_by('last_updated', :desc)
+        paginate :page => params[:page], :per_page => get_per_page
+      end
     end
-    @search.execute!
-    render :layout => ! request.xhr?
+
+    respond_to do |format|
+      format.html{ render :layout => ! request.xhr? }
+      format.rss{ }
+      format.atom{ }
+    end
   end
 
   def tag_controls
