@@ -3,7 +3,7 @@
     <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
     <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
   <% end %>
-  Feed: <%= @hub_feed %> <sup>
+  Input Feed: <%= @hub_feed %> <sup>
     <%= link_to("RSS", hub_feed_feed_items_path(@hub_feed, :format => :rss), :title => "An RSS feed with tag filters applied to it.") %>
     <%= link_to("Atom", hub_feed_feed_items_path(@hub_feed, :format => :atom), :title => "An Atom feed with tag filters applied to it.") %>
   </sup>
@@ -15,7 +15,7 @@
     <li><a href="#about">About</a></li>
     <li><%= link_to('Tags', hub_feed_tags_path(@hub_feed)) %></li>
     <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
-    <li><%= link_to('Retrievals', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
+    <li><%= link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
   </ul>
 
   <div id="about"> 
