@@ -62,7 +62,7 @@ class RepublishedFeed < ActiveRecord::Base
 
     (sort_column,order) = (self.default_sort == 'title') ? ['title', :asc] : ['date_published', :desc]
 
-    search = FeedItem.search(:include => [:tags,:taggings,:feeds]) do
+    search = FeedItem.search(:include => [:tags, :taggings, :feeds, :hub_feeds]) do
       any_of do
         unless add_feeds.blank?
           with(:feed_ids, add_feeds)

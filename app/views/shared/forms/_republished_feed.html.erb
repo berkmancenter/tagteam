@@ -6,5 +6,7 @@
     <%= f.input :default_sort, :collection => RepublishedFeed::SORTS_FOR_SELECT %>
     <%= f.input :limit, :hint => 'How many items to show in this feed?'  %>
   <% end %>
-  <%= f.buttons %>
+  <%= f.buttons do %>
+    <%= f.commit_button :label => (f.object.new_record?) ? 'Create new remixed feed' : 'Update this remixed feed'  %>
+  <% end %>
 <% end %>
