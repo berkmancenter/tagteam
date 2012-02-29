@@ -1,8 +1,10 @@
 <%= documentation('hub-wide-search') %>
 <div style="margin-bottom: 1em;">
-  <h2>Keyword search</h2>
-  <%= form_tag(search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
-    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search here. . .' %>
+  <h2>Feed Item Search</h2>
+  <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
+    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search here. . .' %> <br/>
+    <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags. . . .' %>
+    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags. . . .' %>
     <strong>Search in:</strong>
     <% [HubFeed,FeedItem,ActsAsTaggableOn::Tag].each_with_index do |search_in,i| %>
       <%= check_box_tag('search_in[]', search_in, ((params[:search_in].blank?) ? true : params[:search_in].include?(search_in.to_s)), :id => "search_in_#{i}") %><%= label_tag("search_in_#{i}", search_in.descriptive_name) %>

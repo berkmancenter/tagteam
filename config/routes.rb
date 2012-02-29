@@ -40,6 +40,7 @@ Tagteam::Application.routes.draw do
     member do
       post 'recalc_all_tags'
       get 'search'
+      get 'item_search'
       post 'add_feed'
       get 'custom_republished_feeds'
       get 'tag_controls'

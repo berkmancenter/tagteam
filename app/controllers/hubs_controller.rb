@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search]
     allow logged_in, :to => [:new, :create]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
@@ -30,10 +30,10 @@ class HubsController < ApplicationController
       breadcrumbs.add dates[0], by_date_hub_path(@hub,:date => dates[0])
     end
     if dates.length > 1
-      breadcrumbs.add dates[1], by_date_hub_path(@hub,:date => "#{dates[0]}-#{dates[1]}")
+      breadcrumbs.add dates[1], by_date_hub_path(@hub,:date => "#{dates[0]}/#{dates[1]}")
     end
     if dates.length > 2
-      breadcrumbs.add dates[2], by_date_hub_path(@hub,:date => "#{dates[0]}-#{dates[1]}-#{dates[2]}")
+      breadcrumbs.add dates[2], by_date_hub_path(@hub,:date => "#{dates[0]}/#{dates[1]}/#{dates[2]}")
     end
 
     conditions = [
@@ -214,6 +214,43 @@ class HubsController < ApplicationController
       format.html{
         redirect_to :action => :index
       }
+    end
+  end
+
+  def item_search
+
+    include_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:include_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+    exclude_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:exclude_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+
+    @search = FeedItem.search
+    hub_id = @hub.id
+
+    hub_context = @hub.tagging_key
+
+    @search.build do
+      with :hub_ids, hub_id
+      unless params[:q].blank?
+        fulltext params[:q]
+      end
+      unless include_tags.blank?
+        any_of do
+          with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+        end
+      end
+      unless exclude_tags.blank?
+        any_of do
+          without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+        end
+      end
+      paginate :page => params[:page], :per_page => get_per_page
+    end
+
+    @search.execute!
+    respond_to do|format|
+      format.html{
+        render :layout => ! request.xhr?
+      }
+      format.json{ render :json => @search }
     end
   end
 
