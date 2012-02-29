@@ -3,8 +3,8 @@
   <td class="date">
     <% if current_user && (current_user.is?(:owner,@hub || hub_feed) || current_user.is?(:owner, @hub || hub_feed.hub)) %>
       <span class="controls" id="feed_item_control-<%= feed_item.id %>-target" style="display: none;">
-        <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a republished feed'), custom_republished_feeds_hub_path(@hub || hub_feed.hub), :title => "Add #{feed_item} to a republished feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => feed_item.id) %><br/>
-        <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a republished feed'), custom_republished_feeds_hub_path(@hub || hub_feed.hub), :title => "Remove #{feed_item} from a republished feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => feed_item.id) %><br/>
+        <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub || hub_feed.hub), :title => "Add #{feed_item} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => feed_item.id) %><br/>
+        <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub || hub_feed.hub), :title => "Remove #{feed_item} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => feed_item.id) %><br/>
       </span>
       <a href="#" class="ui-silk ui-silk-add inline hover gray control" id="feed_item_control-<%= feed_item.id %>">controls</a>
     <% else %>

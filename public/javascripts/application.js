@@ -20,34 +20,37 @@
       $('.per_page_selector').val($.cookie('per_page') || 25);
     },
     observeListPagination: function(){
-      $('.pagination a').live('click',function(e){
-        var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-        e.preventDefault();
-        $.ajax({
-          type: 'GET',
-          cache: false,
-          url: $(this).attr('href'),
-          dataType: 'html',
-          success: function(html){
-            $(paginationTarget).html(html);
-          }
+      if($('.search_results,.ui-widget-content').length > 0){
+        // Only allow ajax-y stuff when actually in ajax-y context.
+        $('.pagination a').live('click',function(e){
+          var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
+          e.preventDefault();
+          $.ajax({
+            type: 'GET',
+            cache: false,
+            url: $(this).attr('href'),
+            dataType: 'html',
+            success: function(html){
+              $(paginationTarget).html(html);
+            }
+          });
         });
-      });
-      $('.per_page_selector').live('change', function(e){
-        e.preventDefault();
-        $.cookie('per_page',$(this).val(), {expires: 365, path: $.rootPath()});
-        var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-        var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/&page=\d+/,'&page=1');
-        $.ajax({
-          type: 'GET',
-          cache: false,
-          url: paginationLink,
-          dataType: 'html',
-          success: function(html){
-            $(paginationTarget).html(html);
-          }
+        $('.per_page_selector').live('change', function(e){
+          e.preventDefault();
+          $.cookie('per_page',$(this).val(), {expires: 365, path: $.rootPath()});
+          var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
+          var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/&page=\d+/,'&page=1');
+          $.ajax({
+            type: 'GET',
+            cache: false,
+            url: paginationLink,
+            dataType: 'html',
+            success: function(html){
+              $(paginationTarget).html(html);
+            }
+          });
         });
-      });
+      }
     },
     observeDialogShow: function(rootClass){
       $(rootClass).live('click',function(e){
@@ -416,17 +419,19 @@ $(document).ready(function(){
     }
   });
 
-  $('#hub_search_form,#hub_tag_search_form').live({
-    submit: function(e){
-      e.preventDefault();
-      $(this).ajaxSubmit({
-        success: function(html){
-          $('#hub_search_form').closest('.ui-widget-content').html(html);
-          $.bindHoverRows();
-        }
-      });
-    }
-  });
+  if($('.ui-widget-content').length > 0){
+    $('#hub_search_form,#hub_tag_search_form').live({
+      submit: function(e){
+        e.preventDefault();
+        $(this).ajaxSubmit({
+          success: function(html){
+            $('#hub_search_form').closest('.ui-widget-content').html(html);
+            $.bindHoverRows();
+          }
+        });
+      }
+    });
+  }
 
   $.observeDialogShow('.dialog-show');
 

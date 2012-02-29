@@ -5,7 +5,6 @@ class CreateRepublishedFeeds < ActiveRecord::Migration
       t.integer :hub_id
       t.string :title,            :limit => 500.bytes,    :null => false
       t.string :description,      :limit => 5.kilobytes
-      t.string :default_sort,     :limit => 100.bytes,          :default => 'date_published'
       t.integer :limit,           :default => 50
 
       t.timestamps
