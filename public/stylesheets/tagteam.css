@@ -4,7 +4,11 @@
 body{
   background: url('/images/bgstripe.png');
   font-size: 11pt;
-  font-family: Verdana;
+  font-family: Arial, sans-serif;
+}
+
+a{
+  color: #333;
 }
 
 #spinner{
