@@ -10,6 +10,9 @@ Tagteam::Application.routes.draw do
   resources :input_source
 
   resources :hub_feeds do
+    collection do
+      get 'autocomplete'
+    end
     member do
       get 'reschedule_immediately'
       get 'more_details'
@@ -50,6 +53,9 @@ Tagteam::Application.routes.draw do
     end
 
     resources :hub_feeds do
+      collection do
+        get 'autocomplete'
+      end
       member do
         get 'reschedule_immediately'
         get 'more_details'

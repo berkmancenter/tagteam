@@ -1,14 +1,30 @@
 class HubFeedsController < ApplicationController
-  before_filter :load_hub_feed, :except => [:index, :new, :create]
+  before_filter :load_hub_feed, :except => [:index, :new, :create, :autocomplete]
   before_filter :load_hub
-  before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately]
+  before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately, :autocomplete]
   before_filter :prep_resources
 
   access_control do
-    allow all, :to => [:index, :show, :more_details]
+    allow all, :to => [:index, :show, :more_details, :autocomplete]
     allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy]
     allow :superadmin, :hub_feed_admin
+  end
+
+  def autocomplete
+    hub_id = @hub.id
+    @search = HubFeed.search do
+      with :hub_ids, hub_id
+      fulltext params[:term]
+    end
+
+    @search.execute!
+
+    respond_to do |format|
+      format.json { 
+        render :json => @search.results.collect{|r| {:id => r.id, :label => r.display_title} }
+      }
+    end
   end
 
   def more_details

@@ -155,6 +155,57 @@
         }
       });
     },
+    observeHubFeedAutocomplete: function(hubId, rootId){
+      function split( val ) {
+        return val.split( /,\s*/ );
+      }
+      function extractLast( term ) {
+        return split( term ).pop();
+      }
+      $( rootId )
+      .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+        $( this ).data( "autocomplete" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        source: function( request, response ) {
+          $.getJSON( $.rootPath() + 'hubs/' + hubId + '/hub_feeds/autocomplete', {
+            term: extractLast( request.term )
+          }, response );
+        },
+        search: function() {
+          // custom minLength
+          var term = extractLast( this.value );
+          if ( term.length < 2 ) {
+            return false;
+          }
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var node = $('<span class="hub_feed_search_select" />');
+          $(node).html($('<input name="hub_feed_ids[]" type="hidden" />').val(ui.item.id));
+          $(node).append(ui.item.label);
+          console.log(node);
+          var terms = split( this.value );
+          var ids = split($('#hub_feed_ids').val());
+          ids.push(ui.item.id);
+          $('#hub_feed_ids').val(ids.join(', '));
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+      });
+    },
     observeTagAutocomplete: function(hubId, rootId){
       function split( val ) {
         return val.split( /,\s*/ );
