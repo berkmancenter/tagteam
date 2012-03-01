@@ -63,7 +63,7 @@ p{
 }
 
 table {
-//  width: 100%;
+  width: 100%;
 }
 table td{
   padding: 3px;
@@ -168,6 +168,23 @@ table.hub_feeds, table.republished_feeds{
   width: 100%;
 }
 
+.hub_feed_search_select{
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 0px 5px 0px 5px; 
+  font-size: 13px;
+  color: black;
+  margin: 4px 10px 4px 4px;
+  background-color: #e4e4e4;
+}
+
+.search_select_control{
+  font-weight: bold;
+}
+.search_select_control:hover{
+  cursor: pointer;
+}
+
 .hub_feed_title{
   opacity: 0.5;
   font-size: 12px;
@@ -217,9 +234,16 @@ input.button,
 a.button{
 	background: #7a000d;
 	color:white;
-	padding: 5px;
+	padding: 2px 4px 2px 4px;
 	border-radius: 10px;
 	border: 3px outset #ccc;
+}
+
+.hub_search{
+  background-color: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
 }
 
 .formtastic .create:hover, 

@@ -231,7 +231,11 @@ class HubsController < ApplicationController
       keywords = params[:q]
     end
 
-    if ! include_tags.blank? || ! exclude_tags.blank? || ! keywords.blank?
+    unless params[:hub_feed_ids].blank?
+      hub_feed_ids = params[:hub_feed_ids] 
+    end
+
+    if ! include_tags.blank? || ! exclude_tags.blank? || ! keywords.blank? || ! hub_feed_ids.blank?
       @search = FeedItem.search
       hub_id = @hub.id
 
@@ -242,6 +246,13 @@ class HubsController < ApplicationController
         unless params[:q].blank?
           fulltext params[:q]
         end
+
+        unless hub_feed_ids.blank?
+          any_of do
+            with :hub_feed_ids, hub_feed_ids
+          end
+        end
+
         unless include_tags.blank?
           any_of do
             with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
@@ -253,6 +264,7 @@ class HubsController < ApplicationController
           end
         end
         paginate :page => params[:page], :per_page => get_per_page
+        order_by(:date_published, :desc)
       end
 
       @search.execute!

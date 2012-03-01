@@ -190,19 +190,19 @@
           var node = $('<span class="hub_feed_search_select" />');
           $(node).html($('<input name="hub_feed_ids[]" type="hidden" />').val(ui.item.id));
           $(node).append(ui.item.label);
-          console.log(node);
-          var terms = split( this.value );
-          var ids = split($('#hub_feed_ids').val());
-          ids.push(ui.item.id);
-          $('#hub_feed_ids').val(ids.join(', '));
-          // remove the current input
-          terms.pop();
-          // add the selected item
-          terms.push( ui.item.value );
-          // add placeholder to get the comma-and-space at the end
-          terms.push( "" );
-          this.value = terms.join( ", " );
+          $(node).append('<span class="search_select_control"> X </span>');
+          $("#hub_feed_container").append(node);
+          this.value = "";
           return false;
+        }
+      });
+    },
+
+    observeSearchSelectControl: function(){
+      $('.search_select_control').live({
+        click: function(e){
+          e.preventDefault();
+          $(this).closest('span.hub_feed_search_select').remove();
         }
       });
     },

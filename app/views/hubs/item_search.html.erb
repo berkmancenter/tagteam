@@ -3,11 +3,15 @@
   <h2>Feed Item Search</h2>
   <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
     <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Keyword search. . .' %> <br/>
-    <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags. . . .' %>
-    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags. . . .' %><br/>
+    <%= text_field_tag :include_tags, params[:include_tags], :size => 50, :placeholder => 'Include these tags. . . .' %><br/>
+    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 50, :placeholder => 'Exclude these tags. . . .' %><br/>
 
-    <%= text_field_tag :in_hub_feeds, params[:in_hub_feeds], :size => 100, :placeholder => 'In these feeds. . . .' %><br/>
-    <%= hidden_field_tag :hub_feed_ids, params[:hub_feed_ids] %>
+    <%= text_field_tag :in_hub_feeds, params[:in_hub_feeds], :size => 50, :placeholder => 'In these feeds. . . .' %><br/>
+    <div id="hub_feed_container">
+      <% HubFeed.find(:all, :conditions => {:id => params[:hub_feed_ids]}).each do|hf| %>
+        <span class="hub_feed_search_select"><input name="hub_feed_ids[]" type="hidden" value="<%= hf.id %>" /><%= hf.display_title %><span class="search_select_control"> X </span></span>
+      <% end %>
+    </div>
     <%= submit_tag('Search items', :class => 'button') %>
   <% end %>
 </div>
@@ -28,4 +32,5 @@
 $.observeTagAutocomplete(#{@hub.id},'#include_tags'); 
 $.observeTagAutocomplete(#{@hub.id},'#exclude_tags');
 $.observeHubFeedAutocomplete(#{@hub.id},'#in_hub_feeds');
+$.observeSearchSelectControl();
 });| %>

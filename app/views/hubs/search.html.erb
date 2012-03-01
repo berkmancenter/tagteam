@@ -9,17 +9,6 @@
   <% end %>
 </div>
 
-<% if false %>
-  <div style="margin-bottom: 1em;">
-    <h2>Tag search</h2>
-    <%= form_tag(search_hub_path(@hub), :method => :get, :id => 'hub_tag_search_form') do %>
-      <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags. . . .' %>
-      <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags. . . .' %>
-      <%= submit_tag('Tag Search', :class => 'button') %>
-    <% end %>
-  </div>
-<% end %>
-
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
