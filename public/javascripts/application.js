@@ -155,48 +155,6 @@
         }
       });
     },
-    observeHubFeedAutocomplete: function(hubId, rootId){
-      function split( val ) {
-        return val.split( /,\s*/ );
-      }
-      function extractLast( term ) {
-        return split( term ).pop();
-      }
-      $( rootId )
-      .bind( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-        $( this ).data( "autocomplete" ).menu.active ) {
-          event.preventDefault();
-        }
-      })
-      .autocomplete({
-        source: function( request, response ) {
-          $.getJSON( $.rootPath() + 'hubs/' + hubId + '/hub_feeds/autocomplete', {
-            term: extractLast( request.term )
-          }, response );
-        },
-        search: function() {
-          // custom minLength
-          var term = extractLast( this.value );
-          if ( term.length < 2 ) {
-            return false;
-          }
-        },
-        focus: function() {
-          // prevent value inserted on focus
-          return false;
-        },
-        select: function( event, ui ) {
-          var node = $('<span class="search_select" />');
-          $(node).html($('<input name="hub_feed_ids[]" type="hidden" />').val(ui.item.id));
-          $(node).append(ui.item.label);
-          $(node).append('<span class="search_select_control"> X </span>');
-          $("#hub_feed_container").append(node);
-          this.value = "";
-          return false;
-        }
-      });
-    },
 
     observeSearchSelectControl: function(){
       $('.search_select_control').live({
@@ -206,7 +164,8 @@
         }
       });
     },
-    observeTagAutocomplete: function(hubId, rootId, paramName, containerId){
+
+    observeAutocomplete: function(url, hubId, rootId, paramName, containerId){
       function split( val ) {
         return val.split( /,\s*/ );
       }
@@ -222,7 +181,7 @@
       })
       .autocomplete({
         source: function( request, response ) {
-          $.getJSON( $.rootPath() + 'hubs/' + hubId + '/tags/autocomplete', {
+          $.getJSON( url, {
             term: extractLast( request.term )
           }, response );
         },
@@ -248,7 +207,6 @@
         }
       });
     }
-
   
 });
 

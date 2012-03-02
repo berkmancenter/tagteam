@@ -172,6 +172,14 @@ table.hub_feeds, table.republished_feeds{
   width: 100%;
 }
 
+.search_controls li{
+  padding-top: 1em;
+}
+
+.search_controls li.container{
+  padding: .1em 0px .25em 1.75em;
+}
+
 .search_select{
   display: inline-block;
   border: 1px solid #ccc;
