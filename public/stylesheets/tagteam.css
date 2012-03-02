@@ -172,7 +172,7 @@ table.hub_feeds, table.republished_feeds{
   width: 100%;
 }
 
-.hub_feed_search_select{
+.search_select{
   display: inline-block;
   border: 1px solid #ccc;
   padding: 0px 5px 0px 5px; 

@@ -187,7 +187,7 @@
           return false;
         },
         select: function( event, ui ) {
-          var node = $('<span class="hub_feed_search_select" />');
+          var node = $('<span class="search_select" />');
           $(node).html($('<input name="hub_feed_ids[]" type="hidden" />').val(ui.item.id));
           $(node).append(ui.item.label);
           $(node).append('<span class="search_select_control"> X </span>');
@@ -202,11 +202,11 @@
       $('.search_select_control').live({
         click: function(e){
           e.preventDefault();
-          $(this).closest('span.hub_feed_search_select').remove();
+          $(this).closest('span.search_select').remove();
         }
       });
     },
-    observeTagAutocomplete: function(hubId, rootId){
+    observeTagAutocomplete: function(hubId, rootId, paramName, containerId){
       function split( val ) {
         return val.split( /,\s*/ );
       }
@@ -238,14 +238,12 @@
           return false;
         },
         select: function( event, ui ) {
-          var terms = split( this.value );
-          // remove the current input
-          terms.pop();
-          // add the selected item
-          terms.push( ui.item.value );
-          // add placeholder to get the comma-and-space at the end
-          terms.push( "" );
-          this.value = terms.join( ", " );
+          var node = $('<span class="search_select tag" />');
+          $(node).html($('<input name="' + paramName + '[]" type="hidden" />').val(ui.item.id));
+          $(node).append(ui.item.label);
+          $(node).append('<span class="search_select_control"> X </span>');
+          $(containerId).append(node);
+          this.value = "";
           return false;
         }
       });
@@ -389,6 +387,9 @@ $(document).ready(function(){
         e.preventDefault();
 
         var tag_id = $(this).attr('data_tag_id') || 0;
+        if(tag_id == 0){
+          return false;
+        }
         var hub_id = $(this).attr('data_hub_id') || 0;
         var hub_feed_id = $(this).attr('data_hub_feed_id') || 0;
         var hub_feed_item_id = $(this).attr('data_hub_feed_item_id') || 0;
@@ -475,6 +476,7 @@ $(document).ready(function(){
       submit: function(e){
         e.preventDefault();
         $(this).ajaxSubmit({
+          cache: true,
           success: function(html){
             $('#hub_search_form').closest('.ui-widget-content').html(html);
             $.bindHoverRows();

@@ -20,7 +20,7 @@ class TagsController < ApplicationController
 
     respond_to do |format|
       format.json { 
-        render :json => @search.results.collect{|r| {:id => r.name, :label => r.name} }
+        render :json => @search.results.collect{|r| {:id => r.id, :label => r.name} }
       }
     end
 

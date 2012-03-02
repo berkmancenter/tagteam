@@ -219,12 +219,12 @@ class HubsController < ApplicationController
 
   def item_search
 
-    unless params[:include_tags].blank?
-      include_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:include_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+    unless params[:include_tag_ids].blank?
+      include_tags = params[:include_tag_ids]
     end
 
-    unless params[:exclude_tags].blank?
-      exclude_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:exclude_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
+    unless params[:exclude_tag_ids].blank?
+      exclude_tags = params[:exclude_tag_ids]
     end
 
     unless params[:q].blank?
@@ -255,12 +255,12 @@ class HubsController < ApplicationController
 
         unless include_tags.blank?
           any_of do
-            with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+            with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
           end
         end
         unless exclude_tags.blank?
           any_of do
-            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
+            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
           end
         end
         paginate :page => params[:page], :per_page => get_per_page

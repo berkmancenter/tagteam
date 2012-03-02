@@ -21,7 +21,7 @@
             <div class="hub_search">
               Search this hub:
               <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-                <%= text_field_tag :q, params[:q], :placeholder => 'Keyword Search. . .' %>
+                <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 15, :placeholder => 'Keyword Search. . .' %>
                 <%= submit_tag('go', :class => 'button') %>
               <% end %>
             </div>

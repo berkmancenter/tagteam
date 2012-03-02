@@ -2,23 +2,33 @@
 <div style="margin-bottom: 1em;">
   <h2>Feed Item Search</h2>
   <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
-    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Keyword search. . .' %> <br/>
-    <%= text_field_tag :include_tags, params[:include_tags], :size => 50, :placeholder => 'Include these tags. . . .' %><br/>
-    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 50, :placeholder => 'Exclude these tags. . . .' %><br/>
-
-    <%= text_field_tag :in_hub_feeds, params[:in_hub_feeds], :size => 50, :placeholder => 'In these feeds. . . .' %><br/>
-    <div id="hub_feed_container">
-      <% HubFeed.find(:all, :conditions => {:id => params[:hub_feed_ids]}).each do|hf| %>
-        <span class="hub_feed_search_select"><input name="hub_feed_ids[]" type="hidden" value="<%= hf.id %>" /><%= hf.display_title %><span class="search_select_control"> X </span></span>
+    <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Keyword search. . .' %> <br/>
+    <span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= text_field_tag :include_tag_autocomplete, '', :size => 50, :placeholder => 'Include these tags. . . .' %><br/>
+    <div id="include_tag_container">
+      <% ActsAsTaggableOn::Tag.find(:all, :conditions => {:id => params[:include_tag_ids]}).each do|tag| %>
+        <span class="search_select tag"><input name="include_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
       <% end %>
     </div>
-    <%= submit_tag('Search items', :class => 'button') %>
+    <span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= text_field_tag :exclude_tag_autocomplete, '', :size => 50, :placeholder => 'Exclude these tags. . . .' %><br/>
+    <div id="exclude_tag_container">
+      <% ActsAsTaggableOn::Tag.find(:all, :conditions => {:id => params[:exclude_tag_ids]}).each do|tag| %>
+        <span class="search_select tag"><input name="exclude_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
+      <% end %>
+    </div>
+    <span class="ui-silk ui-silk-feed inline"></span> <%= text_field_tag :in_hub_feeds, params[:in_hub_feeds], :size => 50, :placeholder => 'In these feeds. . . .' %><br/>
+    <div id="hub_feed_container">
+      <% HubFeed.find(:all, :conditions => {:id => params[:hub_feed_ids]}).each do|hf| %>
+        <span class="search_select"><input name="hub_feed_ids[]" type="hidden" value="<%= hf.id %>" /><%= hf.display_title %><span class="search_select_control"> X </span></span>
+      <% end %>
+    </div>
+    <%= submit_tag('Search items', :class => 'button') %> <%= link_to('bookmark this search', request.fullpath) unless @search.blank? || @search.results.length == 0 %>
   <% end %>
 </div>
 
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
+  <h2>Items: <%= @search.total %> total </h2>
   <%= will_paginate @search.results %>
   <table class="hub">
     <% @search.results.each do|r| %>
@@ -29,8 +39,8 @@
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){
-$.observeTagAutocomplete(#{@hub.id},'#include_tags'); 
-$.observeTagAutocomplete(#{@hub.id},'#exclude_tags');
+$.observeTagAutocomplete(#{@hub.id},'#include_tag_autocomplete', 'include_tag_ids', '#include_tag_container'); 
+$.observeTagAutocomplete(#{@hub.id},'#exclude_tag_autocomplete', 'exclude_tag_ids', '#exclude_tag_container');
 $.observeHubFeedAutocomplete(#{@hub.id},'#in_hub_feeds');
 $.observeSearchSelectControl();
 });| %>
