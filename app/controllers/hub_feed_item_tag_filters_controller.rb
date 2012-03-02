@@ -44,6 +44,10 @@ class HubFeedItemTagFiltersController < ApplicationController
     @hub_feed_item_tag_filter.feed_item_id = @feed_item.id
 
     if filter_type_model == ModifyTagFilter
+      if params[:tag_id].blank?
+        modify_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:modify_tag].downcase)
+        params[:tag_id] = modify_tag.id
+      end
       new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
 
@@ -52,7 +56,10 @@ class HubFeedItemTagFiltersController < ApplicationController
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
 
     else
-
+      if params[:tag_id].blank?
+        delete_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+        params[:tag_id] = delete_tag.id
+      end
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
     end
 

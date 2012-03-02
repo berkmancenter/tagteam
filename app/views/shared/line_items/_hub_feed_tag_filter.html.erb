@@ -5,4 +5,7 @@
     <%= link_to('move down', move_lower_hub_feed_hub_feed_tag_filter_path(hub_feed_tag_filter.hub_feed,hub_feed_tag_filter), :method => :post, :class => 'ui-silk inline ui-silk-arrow-down hover gray') unless hub_feed_tag_filter.last? %>
   <% end %>
   <%= hub_feed_tag_filter.filter.description %> <%= tag_display(hub_feed_tag_filter.filter.tag, :hub_feed => hub_feed_tag_filter.hub_feed, :hub => hub_feed_tag_filter.hub) %>
+  <% if hub_feed_tag_filter.filter.class == ModifyTagFilter %>
+    to <%= tag_display(hub_feed_tag_filter.filter.new_tag, :hub => hub_feed_tag_filter.hub) %>
+  <% end %>
 </div>

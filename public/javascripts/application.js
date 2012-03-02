@@ -100,13 +100,13 @@
         });
       });
     },
-    submitTagFilter: function(href,filter_type,tag_id,new_tag){
+    submitTagFilter: function(href,filter_type,tag_id,new_tag,modify_tag){
       $.ajax({
         dataType: 'html',
         cache: false,
         url: href,
         type: 'post',
-        data: {filter_type: filter_type, tag_id: tag_id, new_tag: new_tag},
+        data: {filter_type: filter_type, tag_id: tag_id, new_tag: new_tag, modify_tag: modify_tag},
         success: function(html){
          alert(html);
         }
@@ -365,11 +365,24 @@ $(document).ready(function(){
       click: function(e){
         e.preventDefault();
         var tag_id = $(this).attr('data_id');
+        var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
-        if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined)){
+        if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
-          $(dialogNode).append('<h2>Please enter the replacement tag</h2><input type="text" id="new_tag_for_filter" size="40" />');
+          var message = '';
+          var prepend = '';
+          if(filter_type == 'AddTagFilter'){
+            message = "<h2>Please enter the tag you'd like to add<h2>";
+          } else if (filter_type == 'ModifyTagFilter') {
+            if(tag_id == undefined){
+              prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' size='40' /><div id='replace_tag_container'></div>";
+            }
+            message = "<h2>Please enter the replacement tag</h2>";
+          } else if (filter_type == 'DeleteTagFilter'){
+            message = "<h2>Please enter the tag you'd like to remove</h2>";
+          }
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>');
           $(dialogNode).dialog({
             modal: true,
             width: 600,
@@ -377,13 +390,23 @@ $(document).ready(function(){
             height: 'auto',
             position: 'top',
             title: '',
+            create: function(){
+              $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
+                source: "/hubs/" + hub_id + "/tags/autocomplete",
+                minLength: 2
+              });
+            },
             buttons: {
               Close: function(){
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               },
               Submit: function(){
-                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val());
+                var replace_tag = undefined;
+                if($('#modify_tag_for_filter').length > 0){
+                  replace_tag = $('#modify_tag_for_filter').val();
+                }
+                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val(), replace_tag);
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               }
@@ -391,7 +414,7 @@ $(document).ready(function(){
           });
           return false;
         }
-        $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'');
+        $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'','');
       }
     });
   }

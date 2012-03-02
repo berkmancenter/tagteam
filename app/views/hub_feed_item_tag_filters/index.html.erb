@@ -1,8 +1,12 @@
 <%= documentation('feed-item-tag-filters') %>
 <h3>Filters on this item</h3>
 <% if @is_owner %>
-  <%= link_to 'Add a new tag to this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %> <br/> 
+  <ul class="tag_filter_controls">
+    <li><span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a tag to this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
+    <li><span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= link_to 'Remove a tag from this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
+    <li><span class="ui-silk ui-silk-tag-blue-edit inline"></span> <%= link_to 'Modify a tag on this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
+  </ul>
 <% end %>
-<div class="hub_feed_item_tag_filters">
+<div class="hub_feed_item_hub_feed_item_tag_filters">
   <%= render :partial => 'shared/line_items/hub_feed_item_tag_filter', :collection => @hub_feed_item_tag_filters %>
 </div>
