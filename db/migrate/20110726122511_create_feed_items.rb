@@ -1,5 +1,5 @@
 class CreateFeedItems < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :feed_items do |t|
       t.string :title,              :limit => 500.bytes
       t.string :url,                :limit => 2.kilobytes
@@ -39,11 +39,5 @@ class CreateFeedItems < ActiveRecord::Migration
     add_index :feed_items_feed_retrievals, :feed_item_id
     add_index :feed_items_feed_retrievals, :feed_retrieval_id
 
-  end
-
-  def self.down
-    drop_table :feed_items
-    drop_table :feed_items_feeds
-    drop_table :feed_items_feed_retrievals
   end
 end

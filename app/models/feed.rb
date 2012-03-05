@@ -1,6 +1,7 @@
 class Feed < ActiveRecord::Base
 
   validate :feed_url do
+    return true if self.is_bookmarking_feed?
     if self.feed_url.blank? || ! self.feed_url.match(/https?:\/\/.+/i)
       self.errors.add(:feed_url, "doesn't look like a url")
       return false
@@ -48,11 +49,16 @@ class Feed < ActiveRecord::Base
     string :generator
     string :flavor
     string :language
+    boolean :bookmarking_feed
   end
   
-  validates_uniqueness_of :feed_url
+  validates_uniqueness_of :feed_url, :unless => Proc.new{|rec|
+    rec.is_bookmarking_feed?
+  }
 
   def set_next_scheduled_retrieval
+
+    return if self.is_bookmarking_feed?
 
     feed_last_changed_at = self.items_changed_at 
     feed_changed_this_long_ago = Time.now - feed_last_changed_at
@@ -70,7 +76,14 @@ class Feed < ActiveRecord::Base
     end
   end
 
+  def is_bookmarking_feed?
+    self.bookmarking_feed
+  end
+
   def update_feed
+
+    return if self.bookmarking_feed?
+
     self.dirty = false
     self.changelog = {}
     parsed_feed = fetch_and_parse_feed(self)

@@ -1,6 +1,5 @@
 class CreateRepublishedFeeds < ActiveRecord::Migration
-
-  def self.up
+  def change
     create_table :republished_feeds do |t|
       t.integer :hub_id
       t.string :title,            :limit => 500.bytes,    :null => false
@@ -14,9 +13,5 @@ class CreateRepublishedFeeds < ActiveRecord::Migration
       add_index :republished_feeds, col
     end
 
-  end
-
-  def self.down
-    drop_table :republished_feeds
   end
 end

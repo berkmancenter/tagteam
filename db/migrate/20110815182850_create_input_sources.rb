@@ -1,5 +1,5 @@
 class CreateInputSources < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :input_sources do |t|
       t.integer :republished_feed_id,     :null => false
       t.integer :item_source_id,          :null => false
@@ -19,9 +19,5 @@ class CreateInputSources < ActiveRecord::Migration
 
     add_index :input_sources, [:item_source_type, :item_source_id, :effect, :republished_feed_id], :unique => true, :name => 'bob_the_index'
 
-  end
-
-  def self.down
-    drop_table :input_sources
   end
 end

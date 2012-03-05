@@ -96,18 +96,20 @@ ActiveRecord::Schema.define(:version => 20120213151834) do
     t.datetime "items_changed_at"
     t.string   "rights",                   :limit => 500
     t.string   "authors",                  :limit => 1024
-    t.string   "feed_url",                 :limit => 1024, :null => false
+    t.string   "feed_url",                 :limit => 1024,                    :null => false
     t.string   "link",                     :limit => 1024
     t.string   "generator",                :limit => 500
     t.string   "flavor",                   :limit => 25
     t.string   "language",                 :limit => 25
+    t.boolean  "bookmarking_feed",                         :default => false
     t.datetime "next_scheduled_retrieval"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
   end
 
   add_index "feeds", ["authors"], :name => "index_feeds_on_authors"
-  add_index "feeds", ["feed_url"], :name => "index_feeds_on_feed_url", :unique => true
+  add_index "feeds", ["bookmarking_feed"], :name => "index_feeds_on_bookmarking_feed"
+  add_index "feeds", ["feed_url"], :name => "index_feeds_on_feed_url"
   add_index "feeds", ["flavor"], :name => "index_feeds_on_flavor"
   add_index "feeds", ["generator"], :name => "index_feeds_on_generator"
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
@@ -210,13 +212,11 @@ ActiveRecord::Schema.define(:version => 20120213151834) do
 
   create_table "republished_feeds", :force => true do |t|
     t.integer  "hub_id"
-    t.string   "title",           :limit => 500,                                :null => false
-    t.string   "description",     :limit => 5120
-    t.string   "default_sort",    :limit => 100,  :default => "date_published"
-    t.string   "mixing_strategy", :limit => 25,   :default => "interlaced"
-    t.integer  "limit",                           :default => 50
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
+    t.string   "title",       :limit => 500,                  :null => false
+    t.string   "description", :limit => 5120
+    t.integer  "limit",                       :default => 50
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
   end
 
   add_index "republished_feeds", ["hub_id"], :name => "index_republished_feeds_on_hub_id"

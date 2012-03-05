@@ -1,5 +1,5 @@
 class CreateFeedRetrievals < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :feed_retrievals do |t|
       t.integer :feed_id
       t.boolean :success
@@ -9,9 +9,5 @@ class CreateFeedRetrievals < ActiveRecord::Migration
 
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :feed_retrievals
   end
 end

@@ -1,5 +1,5 @@
 class DeviseCreateUsers < ActiveRecord::Migration
-  def self.up
+  def change
     create_table(:users) do |t|
       t.string :first_name, :limit => 100
       t.string :last_name, :limit => 100
@@ -23,15 +23,5 @@ class DeviseCreateUsers < ActiveRecord::Migration
     add_index :users, :confirmation_token,   :unique => true
     add_index :users, :unlock_token,         :unique => true
     # add_index :users, :authentication_token, :unique => true
-
-    if Rails.env == 'development'
-      u = User.new(:email => 'admin@example.com', :password => 'foobar', :password_confirmation => "foobar")
-      u.save
-    end
-
-  end
-
-  def self.down
-    drop_table :users
   end
 end

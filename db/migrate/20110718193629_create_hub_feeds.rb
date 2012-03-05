@@ -1,5 +1,5 @@
 class CreateHubFeeds < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :hub_feeds do |t|
       t.integer :feed_id, :null => false
       t.integer :hub_id, :null => false
@@ -12,9 +12,5 @@ class CreateHubFeeds < ActiveRecord::Migration
     add_index :hub_feeds, :hub_id
     add_index :hub_feeds, [:hub_id, :feed_id], :unique => true
 
-  end
-
-  def self.down
-    drop_table :hub_feeds
   end
 end

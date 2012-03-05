@@ -1,5 +1,6 @@
 class CreateRoles < ActiveRecord::Migration
-  def self.up
+
+  def change
     create_table :roles, :force => true do |t|
       t.string   :name,              :limit => 40
       t.string   :authorizable_type, :limit => 40
@@ -20,8 +21,4 @@ class CreateRoles < ActiveRecord::Migration
     end
   end
 
-  def self.down
-    drop_table :roles
-    drop_table :roles_users
-  end
 end
