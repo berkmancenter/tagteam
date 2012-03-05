@@ -1,7 +1,7 @@
 class Feed < ActiveRecord::Base
 
   validate :feed_url do
-    return true if self.is_bookmarking_feed?
+    return if self.is_bookmarking_feed?
     if self.feed_url.blank? || ! self.feed_url.match(/https?:\/\/.+/i)
       self.errors.add(:feed_url, "doesn't look like a url")
       return false
@@ -20,10 +20,10 @@ class Feed < ActiveRecord::Base
 
   @dirty_feed_items = []
 
-  before_create :set_next_scheduled_retrieval_on_create
-  after_create :save_feed_items_on_create
+  before_create :set_next_scheduled_retrieval_on_create, :unless => Proc.new{|rec| rec.is_bookmarking_feed?}
+  after_create :save_feed_items_on_create, :unless => Proc.new{|rec| rec.is_bookmarking_feed?}
 
-  attr_accessible :feed_url, :title, :description
+  attr_accessible :feed_url, :title, :description, :bookmarking_feed
   attr_accessor :raw_feed, :status_code, :dirty, :changelog, :dirty_feed_items
 
   has_many :hub_feeds, :dependent => :destroy
@@ -57,8 +57,6 @@ class Feed < ActiveRecord::Base
   }
 
   def set_next_scheduled_retrieval
-
-    return if self.is_bookmarking_feed?
 
     feed_last_changed_at = self.items_changed_at 
     feed_changed_this_long_ago = Time.now - feed_last_changed_at

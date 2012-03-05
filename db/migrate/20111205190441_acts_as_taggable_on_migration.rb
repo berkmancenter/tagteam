@@ -7,9 +7,6 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
     add_index :tags, :name
 
     # Postgres only.
-    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-      execute 'CREATE INDEX "lower_name_index" on tags (lower(name))'
-    end
 
     create_table :taggings do |t|
       t.references :tag
@@ -28,5 +25,11 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
     add_index :taggings, [:taggable_id, :taggable_type, :context]
     # TODO Probably need some additional indexes here.tables
 
+  end
+
+  def self.up
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+      execute 'CREATE INDEX "lower_name_index" on tags (lower(name))'
+    end
   end
 end

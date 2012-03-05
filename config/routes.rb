@@ -1,5 +1,8 @@
 Tagteam::Application.routes.draw do
 
+  get "bookmarklets/add_item"
+  get "bookmarklets/add"
+
   resources :documentations
 
   resources :input_sources do
@@ -50,6 +53,10 @@ Tagteam::Application.routes.draw do
       get 'items'
       get 'by_date'
       get 'retrievals'
+    end
+
+    collection do
+      get 'my'
     end
 
     resources :hub_feeds do

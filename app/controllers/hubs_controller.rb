@@ -1,10 +1,10 @@
 class HubsController < ApplicationController
-  before_filter :load_hub, :except => [:index, :new, :create]
+  before_filter :load_hub, :except => [:index, :new, :create, :my]
   before_filter :add_breadcrumb
 
   access_control do
     allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search]
-    allow logged_in, :to => [:new, :create]
+    allow logged_in, :to => [:new, :create, :my]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
     allow :superadmin, :hubadmin
   end
@@ -172,6 +172,13 @@ class HubsController < ApplicationController
 
   def new
     @hub = Hub.new
+  end
+
+  def my
+    @hubs = current_user.my(Hub)
+    respond_to do |format|
+      format.json{ render :json => @hubs }
+    end
   end
 
   def create

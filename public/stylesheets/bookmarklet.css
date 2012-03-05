@@ -1,0 +1,23 @@
+header h1{
+  font-size: 3em;
+  width: 100%;
+}
+
+#wrapper{
+  margin-top: 0px;
+  padding-top: 10px;
+}
+
+.grid_10, .container_10{
+  margin:10px;
+}
+
+.grid_10{
+  width: 630px;
+}
+
+.grid_10{
+  margin-top: 0px;
+  margin-bottom: 0px;
+
+}
