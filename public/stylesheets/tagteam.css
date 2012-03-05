@@ -11,6 +11,25 @@ a{
   color: #333;
 }
 
+ol{
+  list-style: decimal outside none;
+  margin-bottom: .5em;
+}
+
+ul{
+  list-style: disc outside none;
+  margin-bottom: .5em;
+}
+
+li{
+  margin-left: 1.5em;
+}
+
+ul.tag_filter_controls li{
+  list-style:none;
+  margin-left: 0px;
+}
+
 #spinner{
   position: fixed;
   top: 15px; 

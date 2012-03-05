@@ -30,7 +30,7 @@
     <% end %>
     <div class="metadata">
       <div class="description">
-        <%= @hub.description %>
+        <%= raw(@hub.description) %>
       </div>
       <dl>
         <% unless @hub.tag_prefix.blank? %>

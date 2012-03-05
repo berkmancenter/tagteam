@@ -2,6 +2,9 @@ class RepublishedFeed < ActiveRecord::Base
 
   include AuthUtilities
   include ModelExtensions
+  before_validation do
+    auto_sanitize_html(:description)
+  end
 
   acts_as_authorization_object
   SORTS = ['date_published', 'title']

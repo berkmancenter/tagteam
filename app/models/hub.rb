@@ -2,6 +2,10 @@ class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
 
+  before_validation do
+    auto_sanitize_html(:description)
+  end
+
   attr_accessible :title, :description, :tag_prefix
   acts_as_authorization_object
   has_many :hub_feeds, :dependent => :destroy

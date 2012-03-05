@@ -340,6 +340,13 @@ $(document).ready(function(){
   });
 
   if($('#logged_in').length > 0){
+
+    $('textarea').each(function(){
+      if($(this).attr('id') != undefined){
+        new nicEditor({iconsPath: $.rootPath() + 'images/nicEditorIcons.gif'}).panelInstance($(this).attr('id'));
+      }
+    });
+
     $('.tag').live({
       click: function(e){
         e.preventDefault();
@@ -515,5 +522,6 @@ $(document).ready(function(){
     }
   });
   $.observeListPagination();
+
 
 });

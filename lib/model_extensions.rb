@@ -7,8 +7,8 @@ module ModelExtensions
 
       def auto_sanitize_html(*columns_to_sanitize)
         columns_to_sanitize.each do|col|
-          tags_to_allow = %w(ul li ol p b em strong div span blockquote img a dd dt dl table tr td th tbody thead tfoot i code strike abbr address h1 h2 h3 h4 h5 q s tt sub sup pre)
-          attributes_to_allow = %w(href src alt title width height border cellpadding cellspacing)
+          tags_to_allow = HTML_TAGS_TO_ALLOW
+          attributes_to_allow = ATTRIBUTES_TO_ALLOW
           self.send("#{col}=", sanitize(self.send("#{col}").to_str, :tags => tags_to_allow, :attributes => attributes_to_allow) )
         end
       end

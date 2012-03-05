@@ -12,3 +12,20 @@ The following style may be *conditionally* included for improved support on olde
 form.formtastic fieldset ol li fieldset legend { margin-left: -6px;}
 
 --------------------------------------------------------------------------------------------------*/
+
+/* Moderately hacky fix for nicedit in firefox */
+form.formtastic fieldset > ol > li > label{
+  margin-bottom: 10px;
+}
+
+div.nicEdit-main ol {
+  list-style: decimal outside none;
+  margin-bottom: .5em;
+}
+div.nicEdit-main ul {
+  list-style: disc outside none;
+  margin-bottom: .5em;
+}
+div.nicEdit-main li{
+  margin-left: 1.5em;
+}

@@ -16,6 +16,7 @@ class DocumentationsController < ApplicationController
 
   def new
     @documentation = Documentation.new
+    @javascripts_extras = ['nicEdit.js','initNicEdit.js']
     render :layout => ! request.xhr?
   end
 

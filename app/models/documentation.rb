@@ -1,7 +1,11 @@
 class Documentation < ActiveRecord::Base
+  include AuthUtilities
   # most validations are in ModelExtensions
   include ModelExtensions
-  include AuthUtilities
+  before_validation do
+    auto_sanitize_html(:description)
+  end
+
   validates_uniqueness_of :match_key
 
   def display_title

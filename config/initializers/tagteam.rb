@@ -1,6 +1,9 @@
 ROBOT_USER_AGENT = "tagteam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub"
 RSS_GENERATOR = "tagteam social RSS aggregrator"
 
+HTML_TAGS_TO_ALLOW = %w(ul li ol p b em strong div span blockquote img a dd dt dl table tr td th tbody thead tfoot i code strike abbr address h1 h2 h3 h4 h5 q s tt sub sup pre)
+ATTRIBUTES_TO_ALLOW = %w(href src alt title width height border cellpadding cellspacing)
+
 # If a feed has changed, schedule it to be spidered again within this interval.
 MINIMUM_FEED_SPIDER_INTERVAL = 30.minutes
 

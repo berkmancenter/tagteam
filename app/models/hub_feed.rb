@@ -1,5 +1,8 @@
 class HubFeed < ActiveRecord::Base
   include ModelExtensions
+  before_validation do
+    auto_sanitize_html(:description)
+  end
   include AuthUtilities
 
   acts_as_authorization_object

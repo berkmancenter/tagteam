@@ -17,7 +17,7 @@
     <%= documentation('republished-feed-about-tab') %>
     <% unless @republished_feed.description.blank? %>
       <div class="description">
-        <%= @republished_feed.description %>
+        <%= raw(@republished_feed.description) %>
       </div>
     <% end %>
     <div class="metadata">
