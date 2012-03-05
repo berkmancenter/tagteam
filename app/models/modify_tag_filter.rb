@@ -10,6 +10,7 @@ class ModifyTagFilter < ActiveRecord::Base
   belongs_to :tag, :class_name => 'ActsAsTaggableOn::Tag'
   belongs_to :new_tag, :class_name => 'ActsAsTaggableOn::Tag'
   validates_presence_of :tag_id, :new_tag_id
+  attr_accessible :tag_id, :new_tag_id
 
   def description
     'Change tag '

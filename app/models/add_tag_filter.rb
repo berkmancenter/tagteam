@@ -9,6 +9,7 @@ class AddTagFilter < ActiveRecord::Base
 
   belongs_to :tag, :class_name => 'ActsAsTaggableOn::Tag'
   validates_presence_of :tag_id
+  attr_accessible :tag_id
 
   def description
     'Add tag: '

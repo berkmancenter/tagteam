@@ -8,6 +8,7 @@ class DeleteTagFilter < ActiveRecord::Base
   has_one :hub_feed_item_tag_filter, :as => :filter
 
   belongs_to :tag, :class_name => 'ActsAsTaggableOn::Tag'
+  attr_accessible :tag_id
   validates_presence_of :tag_id
 
   def css_class

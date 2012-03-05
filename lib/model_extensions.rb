@@ -7,9 +7,9 @@ module ModelExtensions
 
       def auto_sanitize_html(*columns_to_sanitize)
         columns_to_sanitize.each do|col|
-          tags_to_allow = HTML_TAGS_TO_ALLOW
-          attributes_to_allow = ATTRIBUTES_TO_ALLOW
-          self.send("#{col}=", sanitize(self.send("#{col}").to_str, :tags => tags_to_allow, :attributes => attributes_to_allow) )
+          unless self.send("#{col}").nil?
+            self.send("#{col}=", sanitize(self.send("#{col}").to_str, :tags => HTML_TAGS_TO_ALLOW, :attributes => ATTRIBUTES_TO_ALLOW) )
+          end
         end
       end
 

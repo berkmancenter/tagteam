@@ -8,6 +8,8 @@ class FeedItem < ActiveRecord::Base
     auto_sanitize_html(:content)
     auto_truncate_columns(:title,:url,:guid,:authors,:contributors,:description,:content,:rights)
   end
+
+  attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights
   
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
@@ -59,16 +61,6 @@ class FeedItem < ActiveRecord::Base
   def hub_feed_for_hub(hub_id)
     hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
   end
-
-  #def hub_feeds(hub = nil)
-  #  # TODO Optimize via multi-table joins?
-  #  if hub.blank?
-  #    hf = HubFeed.find(:first, :conditions => {:feed_id => self.feeds.collect{|f| f.id}})
-  #  else
-  #    hf = HubFeed.find(:first, :conditions => {:hub_id => hub.id, :feed_id => self.feeds.collect{|f| f.id}})
-  #  end
-  #  hf
-  #end
 
   def hubs
     # TODO Optimize via multi-table joins
@@ -128,6 +120,65 @@ class FeedItem < ActiveRecord::Base
 
   def mini_icon
     %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
+  end
+
+  def self.create_or_update_feed_item(feed,item,feed_retrieval)
+    fi = FeedItem.find_or_initialize_by_url(:url => item.link)
+    item_changelog = {}
+
+    fi.title = item.title
+    fi.description = item.summary
+
+    if fi.new_record?
+      # Instantiate only for new records.
+      fi.guid = item.guid
+      fi.authors = item.author
+      fi.contributors = item.contributor
+
+      fi.description = item.summary
+      fi.content = item.content
+      fi.rights = item.rights
+      fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
+      fi.last_updated = item.updated.to_datetime
+      logger.warn('dirty because there is a new feed_item')
+      item_changelog[:new_record] = true
+      feed.dirty = true
+    end
+    fi.feed_retrievals << feed_retrieval
+    fi.feeds << feed unless fi.feeds.include?(feed)
+    # Merge tags. . .
+    pre_update_tags = fi.tag_list.dup.sort
+    # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
+    fi.tag_list = item.categories.collect{|t| t.downcase[0,255].gsub(/,/,'_')}.join(',')
+    if pre_update_tags != fi.tag_list.sort
+      logger.warn('dirty because tags have changed')
+      feed.dirty = true
+      unless fi.new_record?
+        # Be sure to update the feed changelog here in case
+        # an item only has tag changes.
+        item_changelog[:tags] = [pre_update_tags, fi.tag_list]
+        feed.changelog[fi.id] = item_changelog
+      end
+    end
+    if fi.valid?
+      if feed.changelog.keys.include?(fi.id) or fi.new_record?
+        # This runs here because we're auto stripping and auto-truncating columns and
+        # want the change tracking to be relative to these fixed values.
+        logger.warn('dirty because a feed item changed or was created.')
+        logger.warn('dirty Changes: ' + fi.changes.inspect)
+        unless fi.new_record?
+          item_changelog.merge!(fi.changes)
+        end
+        logger.warn('dirty item_changelog: ' + item_changelog.inspect)
+        feed.dirty = true
+        fi.save
+        feed.changelog[fi.id] = item_changelog
+        Resque.enqueue(FeedItemTagRenderer, fi.id)
+      end
+    else
+      logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
+    end
+
   end
 
 end

@@ -23,10 +23,10 @@ class Feed < ActiveRecord::Base
   before_create :set_next_scheduled_retrieval_on_create
   after_create :save_feed_items_on_create
 
-	attr_accessible :feed_url, :title, :description
-	attr_accessor :raw_feed, :status_code, :dirty, :changelog, :dirty_feed_items
+  attr_accessible :feed_url, :title, :description
+  attr_accessor :raw_feed, :status_code, :dirty, :changelog, :dirty_feed_items
 
-	has_many :hub_feeds, :dependent => :destroy
+  has_many :hub_feeds, :dependent => :destroy
   has_many :hubs, :through => :hub_feeds
   has_many :feed_retrievals, :order => 'created_at desc', :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
@@ -51,7 +51,7 @@ class Feed < ActiveRecord::Base
     string :language
     boolean :bookmarking_feed
   end
-  
+
   validates_uniqueness_of :feed_url, :unless => Proc.new{|rec|
     rec.is_bookmarking_feed?
   }
@@ -99,7 +99,7 @@ class Feed < ActiveRecord::Base
     fr.status_code = '200'
     fr.save
     self.raw_feed.items.each do|item|
-      self.update_feed_item(item,fr)
+      FeedItem.create_or_update_feed_item(self,item,fr)
     end
     fr.changelog = self.changelog.to_yaml
     fr.save
@@ -113,78 +113,24 @@ class Feed < ActiveRecord::Base
   end
 
   def update_feed_item(item, fr)
-    fi = FeedItem.find_or_initialize_by_url(:url => item.link)
-    item_changelog = {}
-
-    fi.title = item.title
-    fi.description = item.summary
-
-    if fi.new_record?
-      # Instantiate only for new records.
-      fi.guid = item.guid
-      fi.authors = item.author
-      fi.contributors = item.contributor
-
-      fi.description = item.summary
-      fi.content = item.content
-      fi.rights = item.rights
-      fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
-      fi.last_updated = item.updated.to_datetime
-      logger.warn('dirty because there is a new feed_item')
-      item_changelog[:new_record] = true
-      self.dirty = true
-    end
-    fi.feed_retrievals << fr
-    fi.feeds << self unless fi.feeds.include?(self)
-    # Merge tags. . .
-    pre_update_tags = fi.tag_list.dup.sort
-    # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
-    fi.tag_list = item.categories.collect{|t| t.downcase[0,255].gsub(/,/,'_')}.join(',')
-    if pre_update_tags != fi.tag_list.sort
-      logger.warn('dirty because tags have changed')
-      self.dirty = true
-      unless fi.new_record?
-        # Be sure to update the feed changelog here in case
-        # an item only has tag changes.
-        item_changelog[:tags] = [pre_update_tags, fi.tag_list]
-        self.changelog[fi.id] = item_changelog
-      end
-    end
-    if fi.valid?
-      if self.changelog.keys.include?(fi.id) or fi.new_record?
-        # This runs here because we're auto stripping and auto-truncating columns and
-        # want the change tracking to be relative to these fixed values.
-        logger.warn('dirty because a feed item changed or was created.')
-        logger.warn('dirty Changes: ' + fi.changes.inspect)
-        unless fi.new_record?
-          item_changelog.merge!(fi.changes)
-        end
-        logger.warn('dirty item_changelog: ' + item_changelog.inspect)
-        self.dirty = true
-        fi.save
-        self.changelog[fi.id] = item_changelog
-        Resque.enqueue(FeedItemTagRenderer, fi.id)
-      end
-    else
-      logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
-    end
   end
 
   def items(not_needed)
     # TODO - tweak the include?
     self.feed_items.find(:all, :include => [:taggings, :tags], :order => 'id desc')
   end
-  
+
   def save_feed_items_on_create
     self.dirty = false
     self.changelog = {}
-    fr = FeedRetrieval.new(:feed_id => self.id)
+    fr = FeedRetrieval.new
+    fr.feed_id = self.id
     #We wouldn't have gotten here if the feed weren't valid on create.
     fr.success = true
     fr.status_code = '200'
     fr.save
     self.raw_feed.items.each do|item|
-      self.update_feed_item(item,fr)
+      FeedItem.create_or_update_feed_item(self,item,fr)
     end
     fr.changelog = self.changelog.to_yaml
     fr.save
