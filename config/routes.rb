@@ -1,6 +1,6 @@
 Tagteam::Application.routes.draw do
 
-  get "bookmarklets/add_item"
+  post "bookmarklets/add_item"
   get "bookmarklets/add"
 
   resources :documentations
@@ -53,6 +53,7 @@ Tagteam::Application.routes.draw do
       get 'items'
       get 'by_date'
       get 'retrievals'
+      get 'my_stacks'
     end
 
     collection do

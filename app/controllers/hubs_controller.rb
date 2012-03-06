@@ -4,8 +4,8 @@ class HubsController < ApplicationController
 
   access_control do
     allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search]
-    allow logged_in, :to => [:new, :create, :my]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed]
+    allow logged_in, :to => [:new, :create, :my, :my_stacks]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_stacks]
     allow :superadmin, :hubadmin
   end
 
@@ -178,6 +178,13 @@ class HubsController < ApplicationController
     @hubs = current_user.my(Hub)
     respond_to do |format|
       format.json{ render :json => @hubs }
+    end
+  end
+
+  def my_stacks
+    @stacks = current_user.my_bookmarking_stacks_in(@hub)
+    respond_to do |format|
+      format.json{ render :json => @stacks }
     end
   end
 

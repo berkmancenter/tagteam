@@ -206,6 +206,82 @@
           return false;
         }
       });
+    },
+    initNicEditor: function(textArea){
+      if($(textArea).attr('id') != undefined){
+        new nicEditor({
+          iconsPath: $.rootPath() + 'images/nicEditorIcons.gif', 
+          maxHeight: 300,
+          buttonList: ['bold','italic','left','center','right','justify','ol','ul','subscript','superscript','strikethrough','removeformat','indent','outdent','hr','image','forecolor','link','unlink','fontFormat','xhtml']
+        }).panelInstance($(textArea).attr('id'));
+      }
+    },
+    initStackChoices: function(hubChoiceId){
+      $.cookie('bookmarklet_hub_choice', hubChoiceId, {expires: 365, path: $.rootPath()});
+      $.ajax({
+        type: 'GET',
+        cache: false,
+        url: $.rootPath() + 'hubs/' + hubChoiceId + '/my_stacks',
+        dataType: 'json',
+        success: function(json){
+          $('#feed_item_stack_id_input').show();
+          $('#feed_item_tag_list_input').show();
+          $('#feed_item_stack_id').html('');
+          $(json).each(function(i,stackObj){
+            $('#feed_item_stack_id').append(
+              $('<option />').attr({value: stackObj.id}).text(stackObj.title)
+            );
+          });
+
+          if($.cookie('bookmarklet_stack_id_choice') != undefined ){
+            $('#feed_item_stack_id').val($.cookie('bookmarklet_stack_id_choice'));
+          }
+
+          $('#feed_item_stack_id').change(function(){
+            $.cookie('bookmarklet_stack_id_choice', $(this).val(), {expires: 365, path: $.rootPath()});
+          });
+
+          $.observeAutocomplete($.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete',hubChoiceId,'#feed_item_tag_list', 'tag_ids', '#feed_item_tag_list_input'); 
+          $.observeSearchSelectControl();
+          $( "#feed_item_tag_list" ).autocomplete({
+            source: "/hubs/" + hubChoiceId + "/tags/autocomplete",
+            minLength: 2
+          });
+        }
+      });
+    },
+    observeHubSelector: function(){
+      if($.cookie('bookmarklet_hub_choice') != undefined){
+        // A selection! Set the defaults.
+        $('#feed_item_hub_id').val($.cookie('bookmarklet_hub_choice'));
+        $.initStackChoices($.cookie('bookmarklet_hub_choice'));
+      }
+      $('#feed_item_hub_id').change(function(){
+        $.initStackChoices($(this).val());
+      });
+    },
+    initBookmarklet: function(tagJsonOutput){
+      $('#feed_item_stack_id_input').hide();
+      $('#feed_item_tag_list_input').hide();
+      $.observeHubSelector();
+      $('.bookmarklet_tabs').tabs();
+      $('.datepicker').datepicker({
+        changeMonth: true,
+        changeYear:true,
+        changeDay: true,
+        yearRange: 'c-500',
+        dateFormat: 'yy-mm-dd'
+      });
+      $.initNicEditor($('#feed_item_description'));
+        // <span class="search_select tag"><input name="include_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
+      $(tagJsonOutput).each(function(i,el){
+        $('#feed_item_tag_list_input').append(
+          $('<span class="search_select tag" />')
+          .append($('<input name="tag_ids[]" type="hidden"/>').val(el.id))
+          .append(el.name)
+          .append('<span class="search_select_control"> X </span>')
+          );
+      });
     }
   
 });
@@ -304,19 +380,6 @@ $(document).ready(function(){
 
   // For tabs that need minimal options.
   $('.tabs').tabs({
-    complete: function(){
-      // TODO - Make this fire after the tab object is initiatiated.
-        alert('foobar');
-        if($('.datepicker').length > 0){
-          console.log("There are datepickers");
-        }
-        $('.datepicker').datepicker({
-          changeMonth: true,
-          changeYear: true,
-          yearRange: 'c-300:c',
-          dateFormat: 'yy-mm-dd'
-        });
-    },
     cookie: {
       expires: 3
     },
@@ -338,14 +401,8 @@ $(document).ready(function(){
 
   if($('#logged_in').length > 0){
 
-    $('textarea').each(function(){
-      if($(this).attr('id') != undefined){
-        new nicEditor({
-          iconsPath: $.rootPath() + 'images/nicEditorIcons.gif', 
-          maxHeight: 300,
-          buttonList: ['bold','italic','left','center','right','justify','ol','ul','subscript','superscript','strikethrough','removeformat','indent','outdent','hr','image','forecolor','link','unlink','fontFormat','xhtml']
-          }).panelInstance($(this).attr('id'));
-      }
+    $('textarea').not('.noNicEditor').each(function(){
+      $.initNicEditor(this);
     });
 
     $('.tag').live({
@@ -400,7 +457,7 @@ $(document).ready(function(){
             title: '',
             create: function(){
               $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
-                source: "/hubs/" + hub_id + "/tags/autocomplete",
+                source: $.rootPath() + "hubs/" + hub_id + "/tags/autocomplete",
                 minLength: 2
               });
             },

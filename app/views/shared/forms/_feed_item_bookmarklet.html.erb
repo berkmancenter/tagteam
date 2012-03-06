@@ -1,0 +1,41 @@
+<%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url) do |f| %>
+  <div class="bookmarklet_tabs">
+    <ul>
+      <li><a href="#basics">Basics</a></li>
+      <li><a href="#advanced">Advanced</a></li>
+    </ul>
+    <div id="basics">
+      <%= f.inputs do %>
+        <%= f.input :hub_id, :collection => current_user.my(Hub), :label => 'Add to this hub', :required => true %>
+        <%= f.input :stack_id, :as => :select, :required => true %>
+        <%= f.input :tag_list, :label => 'Tags' %>
+        <%= f.input :title, :required => true %>
+        <%= f.input :url, :required => true %>
+        <%= f.input :description, :as => :text, :input_html => {:class => 'noNicEditor'} %>
+        <%= f.input :date_published, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
+      <% end %>
+      <%= f.buttons %>
+    </div>
+    <div id="advanced">
+    <%= f.inputs do %>
+      <%= f.input :authors %>
+      <%= f.input :contributors %>
+      <%= f.input :rights %>
+      <%= f.input :last_updated, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
+    <% end %>
+      <%= f.buttons %>
+    </div>
+  </div>
+<% end %>
+
+<%= 
+  if ! params[:tag_ids].blank?
+    tag_json = ActsAsTaggableOn::Tag.find(params[:tag_ids])
+  end
+
+  javascript_tag %Q|
+$(document).ready(function(){
+  var tag_output = #{tag_json.to_json};
+  $.initBookmarklet(tag_output);
+});
+| %>

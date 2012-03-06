@@ -22,4 +22,28 @@ class User < ActiveRecord::Base
       Feed.select('DISTINCT feeds.*').joins(:accepted_roles => [:users]).joins(:hub_feeds).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_feeds.hub_id = ? and feeds.bookmarking_feed = ?','owner','Feed', ((self.blank?) ? nil : self.id), hub_id, true]).order('created_at desc')
     end
 
+    def get_default_bookmarking_stack_for(hub_id)
+      stacks = my_bookmarking_stacks_in(hub_id)
+      if stacks.blank?
+        feed = Feed.new
+        feed.bookmarking_feed = true
+        feed.title = "#{self.email}'s bookmarks"
+        feed.feed_url = 'not applicable'
+        feed.save
+
+        self.has_role!(:owner, feed)
+        self.has_role!(:creator, feed)
+
+        hf = HubFeed.new
+        hf.hub_id = hub_id
+        hf.feed_id = feed.id
+        hf.save
+
+        self.has_role!(:owner, hf)
+        self.has_role!(:creator, hf)
+      else
+        stacks.first
+      end
+    end
+
 end
