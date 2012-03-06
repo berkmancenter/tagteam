@@ -1,3 +1,11 @@
 <h2>Add item to TagTeam</h2>
-<%= form_tag(bookmarklets_add_item_url, :method => :post) do |f| %>
+<%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :title %>
+    <%= f.input :url %>
+    <%= f.input :description, :as => :text %>
+    <%= f.input :hub, :collection => current_user.my(Hub) %>
+    <%= f.input :date_published, :as => :string %>
+  <% end %>
+  <%= f.buttons %>
 <% end %>

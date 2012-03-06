@@ -13,6 +13,10 @@ form.formtastic fieldset ol li fieldset legend { margin-left: -6px;}
 
 --------------------------------------------------------------------------------------------------*/
 
+form.formtastic fieldset > ol > li{
+  margin-bottom: 0em;
+}
+
 /* Moderately hacky fix for nicedit in firefox */
 form.formtastic fieldset > ol > li > label{
   margin-bottom: 10px;
@@ -28,4 +32,13 @@ div.nicEdit-main ul {
 }
 div.nicEdit-main li{
   margin-left: 1.5em;
+}
+
+form.formtastic fieldset > ol > li.text textarea {
+  width: 100%;
+  height: 300px;
+}
+
+form.formtastic.feed_item fieldset > ol > li.text textarea {
+  height: 100px;
 }

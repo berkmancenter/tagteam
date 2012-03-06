@@ -11,6 +11,7 @@ class FeedRetrieval < ActiveRecord::Base
 
   after_save :update_feed_updated_at
   attr_accessor :changelog_summary_cache
+  attr_accessible :feed_id, :success, :status_code
 
   searchable do
     integer :feed_id
