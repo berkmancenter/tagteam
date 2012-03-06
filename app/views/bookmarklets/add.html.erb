@@ -1,11 +1,29 @@
-<h2>Add item to TagTeam</h2>
 <%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url) do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :title %>
-    <%= f.input :url %>
-    <%= f.input :description, :as => :text %>
-    <%= f.input :hub, :collection => current_user.my(Hub) %>
-    <%= f.input :date_published, :as => :string %>
-  <% end %>
-  <%= f.buttons %>
+  <div class="tabs">
+    <ul>
+      <li><a href="#basics">Basics</a></li>
+      <li><a href="#advanced">Advanced</a></li>
+    </ul>
+    <div id="basics">
+      <%= f.inputs do %>
+        <%= f.input :title %>
+        <%= f.input :url %>
+        <%= f.input :description, :as => :text %>
+        <%= f.input :hub, :collection => current_user.my(Hub), :label => 'Add to this hub' %>
+        <%= f.input :stack, :input_html => {:disabled => 'disabled'}  %>
+        <%= f.input :tag_list, :input_html => {:disabled => 'disabled'} %>
+        <%= f.input :date_published, :as => :string, :input_html => {:class => :datepicker} %>
+      <% end %>
+      <%= f.buttons %>
+    </div>
+    <div id="advanced">
+    <%= f.inputs do %>
+      <%= f.input :authors %>
+      <%= f.input :contributors %>
+      <%= f.input :rights %>
+      <%= f.input :last_updated, :as => :string, :input_html => {:class => :datepicker} %>
+    <% end %>
+      <%= f.buttons %>
+    </div>
+  </div>
 <% end %>
