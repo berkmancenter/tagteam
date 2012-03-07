@@ -16,15 +16,19 @@ module ModelExtensions
       # Instance methods go here.
       def auto_strip_tags(*columns_to_strip)
         columns_to_strip.each do|col|
-          self.send("#{col}=", strip_tags(self.send("#{col}").to_str))
+          unless self.send("#{col}").nil?
+            self.send("#{col}=", strip_tags(self.send("#{col}").to_str))
+          end
         end
       end
 
       def auto_truncate_columns(*columns_to_truncate)
         # logger.warn('auto truncating these columns: ' + columns_to_truncate.inspect)
         columns_to_truncate.each do|col|
-          column_def = self.class.columns.reject{|coldef| coldef.name != col.to_s}.first
-          self.send("#{col}=", self.send("#{col}").to_str[0,column_def.limit])
+          unless self.send("#{col}").nil?
+            column_def = self.class.columns.reject{|coldef| coldef.name != col.to_s}.first
+            self.send("#{col}=", self.send("#{col}").to_str[0,column_def.limit])
+          end
         end
       end
     end

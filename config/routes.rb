@@ -2,6 +2,7 @@ Tagteam::Application.routes.draw do
 
   post "bookmarklets/add_item"
   get "bookmarklets/add"
+  get "bookmarklets/confirm"
 
   resources :documentations
 

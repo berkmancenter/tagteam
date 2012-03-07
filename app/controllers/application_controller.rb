@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def layout_by_resource
-    if devise_controller? && resource_name == :user && action_name == 'new' && session[:user_return_to].match(/bookmarklet/)
+    if devise_controller? && resource_name == :user && action_name == 'new' && (session[:user_return_to] && session[:user_return_to].match(/bookmarklet/))
       "bookmarklet"
     else
       "application"

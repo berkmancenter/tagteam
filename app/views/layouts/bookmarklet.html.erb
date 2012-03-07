@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= page_title %></title>
+    <title><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></title>
     <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', 'reset','silk-sprite','custom-theme/jquery-ui-1.8.16.custom', 'tagteam', 'bookmarklet' ] %>
     <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.address-1.4.min', 'jquery-ui-1.8.16.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
@@ -11,7 +11,7 @@
       <div id="wrapper">
         <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
         <header class="grid_10">
-          <h1>Add item to a TagTeam bookmarking stack</span></h1>
+          <h1><a href="/"><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></a></h1>
         </header>
         <div class="clear"></div>
 

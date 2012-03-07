@@ -13,7 +13,7 @@ module ApplicationHelper
 
   def page_title
     if breadcrumbs.items.length == 0
-      'Tagteam'
+      'TagTeam'
     else
       breadcrumbs.items.collect{|i| i[0]}.reject{|i| i == 'Home'}.reverse.join(' :: ') + ' :: TagTeam'
     end

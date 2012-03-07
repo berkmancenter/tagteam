@@ -241,12 +241,53 @@
             $.cookie('bookmarklet_stack_id_choice', $(this).val(), {expires: 365, path: $.rootPath()});
           });
 
-          $.observeAutocomplete($.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete',hubChoiceId,'#feed_item_tag_list', 'tag_ids', '#feed_item_tag_list_input'); 
+         // $.observeAutocomplete($.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete',hubChoiceId,'#feed_item_tag_list', 'tag_ids', '#feed_item_tag_list_input'); 
           $.observeSearchSelectControl();
-          $( "#feed_item_tag_list" ).autocomplete({
-            source: "/hubs/" + hubChoiceId + "/tags/autocomplete",
-            minLength: 2
+
+          function split( val ) {
+            return val.split( /,\s*/ );
+          }
+          function extractLast( term ) {
+            return split( term ).pop();
+          }
+
+          $( "#feed_item_tag_list" )
+          .bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "autocomplete" ).menu.active ) {
+              event.preventDefault();
+            }
+          })
+          .autocomplete({
+            source: function( request, response ) {
+              $.getJSON( $.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete', {
+                term: extractLast( request.term )
+              }, response );
+            },
+            search: function() {
+              // custom minLength
+              var term = extractLast( this.value );
+              if ( term.length < 2 ) {
+                return false;
+              }
+            },
+            focus: function() {
+              // prevent value inserted on focus
+              return false;
+            },
+            select: function( event, ui ) {
+              var terms = split( this.value );
+              // remove the current input
+              terms.pop();
+              // add the selected item
+              terms.push( ui.item.value );
+              // add placeholder to get the comma-and-space at the end
+              terms.push( "" );
+              this.value = terms.join( ", " );
+              return false;
+            }
           });
+
         }
       });
     },

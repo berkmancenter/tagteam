@@ -1,4 +1,4 @@
-<%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url) do |f| %>
+<%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url, :method => :post) do |f| %>
   <div class="bookmarklet_tabs">
     <ul>
       <li><a href="#basics">Basics</a></li>
