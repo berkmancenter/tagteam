@@ -54,8 +54,8 @@ Tagteam::Application.routes.draw do
       get 'items'
       get 'by_date'
       get 'retrievals'
-      get 'my_stacks'
-      get 'stacks'
+      get 'my_bookmark_collections'
+      get 'bookmark_collections'
     end
 
     collection do

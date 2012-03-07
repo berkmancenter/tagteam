@@ -57,14 +57,14 @@ class HubFeedsController < ApplicationController
   end
 
   def new
-    # Only used to create stacks, AKA bookmarking collections.
+    # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
     @hub_feed.hub_id = @hub.id
   end
 
   def create
-    # Only used to create stacks, AKA bookmarking collections.
+    # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
     @hub_feed.hub_id = @hub.id

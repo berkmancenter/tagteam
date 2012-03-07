@@ -13,7 +13,7 @@ class HubFeed < ActiveRecord::Base
   validates_uniqueness_of :feed_id, :scope => :hub_id
   validates_presence_of :feed_id, :hub_id
 
-  scope :stacks, lambda { joins(:feed).where('feeds.bookmarking_feed' => true) }
+  scope :bookmark_collections, lambda { joins(:feed).where('feeds.bookmarking_feed' => true) }
   scope :rss, lambda { joins(:feed).where('feeds.bookmarking_feed' => false) }
 
   scope :need_updating, lambda { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? and bookmarking_feed is false', Time.now]) }

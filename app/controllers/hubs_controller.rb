@@ -3,9 +3,9 @@ class HubsController < ApplicationController
   before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search, :stacks]
-    allow logged_in, :to => [:new, :create, :my, :my_stacks]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_stacks]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
+    allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections]
     allow :superadmin, :hubadmin
   end
 
@@ -21,8 +21,8 @@ class HubsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
-  def stacks
-    @stacks = HubFeed.stacks.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
+  def bookmark_collections
+    @bookmark_collections = HubFeed.bookmark_collections.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
@@ -70,13 +70,13 @@ class HubsController < ApplicationController
     if request.format.to_s.match(/rss|atom/i)
       @search = FeedItem.search(:include => [:feeds, :hub_feeds]) do
         with(:hub_ids, hub_id)
-        order_by('last_updated', :desc)
+        order_by('date_published', :desc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     else
       @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
         with(:hub_ids, hub_id)
-        order_by('last_updated', :desc)
+        order_by('date_published', :desc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     end
@@ -186,10 +186,10 @@ class HubsController < ApplicationController
     end
   end
 
-  def my_stacks
-    @stacks = current_user.my_bookmarking_stacks_in(@hub)
+  def my_bookmark_collections
+    @bookmark_collections = current_user.my_bookmarking_bookmark_collections_in(@hub)
     respond_to do |format|
-      format.json{ render :json => @stacks }
+      format.json{ render :json => @bookmark_collections }
     end
   end
 

@@ -18,13 +18,13 @@ class User < ActiveRecord::Base
       self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id && r.name == role_name.to_s) ? false : true }.length >= 1
     end
 
-    def my_bookmarking_stacks_in(hub_id)
+    def my_bookmarking_bookmark_collections_in(hub_id)
       Feed.select('DISTINCT feeds.*').joins(:accepted_roles => [:users]).joins(:hub_feeds).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_feeds.hub_id = ? and feeds.bookmarking_feed = ?','owner','Feed', ((self.blank?) ? nil : self.id), hub_id, true]).order('created_at desc')
     end
 
-    def get_default_bookmarking_stack_for(hub_id)
-      stacks = my_bookmarking_stacks_in(hub_id)
-      if stacks.blank?
+    def get_default_bookmarking_bookmark_collection_for(hub_id)
+      bookmark_collections = my_bookmarking_bookmark_collections_in(hub_id)
+      if bookmark_collections.blank?
         feed = Feed.new
         feed.bookmarking_feed = true
         feed.title = "#{self.email}'s bookmarks"
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
         self.has_role!(:owner, hf)
         self.has_role!(:creator, hf)
       else
-        stacks.first
+        bookmark_collections.first
       end
     end
 

@@ -10,7 +10,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights
-  attr_accessor :hub_id, :stack_id
+  attr_accessor :hub_id, :bookmark_collection_id
   
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.

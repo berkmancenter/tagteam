@@ -216,29 +216,29 @@
         }).panelInstance($(textArea).attr('id'));
       }
     },
-    initStackChoices: function(hubChoiceId){
+    initBookmarkCollectionChoices: function(hubChoiceId){
       $.cookie('bookmarklet_hub_choice', hubChoiceId, {expires: 365, path: $.rootPath()});
       $.ajax({
         type: 'GET',
         cache: false,
-        url: $.rootPath() + 'hubs/' + hubChoiceId + '/my_stacks',
+        url: $.rootPath() + 'hubs/' + hubChoiceId + '/my_bookmark_collections',
         dataType: 'json',
         success: function(json){
-          $('#feed_item_stack_id_input').show();
+          $('#feed_item_bookmark_collection_id_input').show();
           $('#feed_item_tag_list_input').show();
-          $('#feed_item_stack_id').html('');
-          $(json).each(function(i,stackObj){
-            $('#feed_item_stack_id').append(
-              $('<option />').attr({value: stackObj.id}).text(stackObj.title)
+          $('#feed_item_bookmark_collection_id').html('');
+          $(json).each(function(i,bookmarkCollectionObj){
+            $('#feed_item_bookmark_collection_id').append(
+              $('<option />').attr({value: bookmarkCollectionObj.id}).text(bookmarkCollectionObj.title)
             );
           });
 
-          if($.cookie('bookmarklet_stack_id_choice') != undefined ){
-            $('#feed_item_stack_id').val($.cookie('bookmarklet_stack_id_choice'));
+          if($.cookie('bookmarklet_bookmark_collection_id_choice') != undefined ){
+            $('#feed_item_bookmark_collection_id').val($.cookie('bookmarklet_bookmark_collection_id_choice'));
           }
 
-          $('#feed_item_stack_id').change(function(){
-            $.cookie('bookmarklet_stack_id_choice', $(this).val(), {expires: 365, path: $.rootPath()});
+          $('#feed_item_bookmark_collection_id').change(function(){
+            $.cookie('bookmarklet_bookmark_collection_id_choice', $(this).val(), {expires: 365, path: $.rootPath()});
           });
 
          // $.observeAutocomplete($.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete',hubChoiceId,'#feed_item_tag_list', 'tag_ids', '#feed_item_tag_list_input'); 
@@ -295,14 +295,14 @@
       if($.cookie('bookmarklet_hub_choice') != undefined){
         // A selection! Set the defaults.
         $('#feed_item_hub_id').val($.cookie('bookmarklet_hub_choice'));
-        $.initStackChoices($.cookie('bookmarklet_hub_choice'));
+        $.initBookmarkCollectionChoices($.cookie('bookmarklet_hub_choice'));
       }
       $('#feed_item_hub_id').change(function(){
-        $.initStackChoices($(this).val());
+        $.initBookmarkCollectionChoices($(this).val());
       });
     },
     initBookmarklet: function(tagJsonOutput){
-      $('#feed_item_stack_id_input').hide();
+      $('#feed_item_bookmark_collection_id_input').hide();
       $('#feed_item_tag_list_input').hide();
       $.observeHubSelector();
       $('.bookmarklet_tabs').tabs();

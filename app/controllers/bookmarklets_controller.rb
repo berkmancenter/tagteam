@@ -14,19 +14,19 @@ class BookmarkletsController < ApplicationController
   end
 
   def add_item
-    @mini_title = 'Add this item to a TagTeam stack'
+    @mini_title = 'Add this item to a TagTeam bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url(params[:feed_item][:url])
-    [:hub_id, :stack_id, :title,:description, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
+    [:hub_id, :bookmark_collection_id, :title,:description, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
       unless params[:feed_item][col].blank?
         @feed_item.send(%Q|#{col}=|, params[:feed_item][col])
       end
     end
 
     @feed_item.tag_list = [@feed_item.tag_list, params[:feed_item][:tag_list].split(/,\s*/).collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(',')
-    @feed = Feed.find(:first, :conditions => {:id => params[:feed_item][:stack_id], :bookmarking_feed => true})
+    @feed = Feed.find(:first, :conditions => {:id => params[:feed_item][:bookmark_collection_id], :bookmarking_feed => true})
 
     if @feed.blank? || ! current_user.is?(:owner, @feed)
-      @feed = current_user.get_default_bookmarking_stack_for(@hub.id)
+      @feed = current_user.get_default_bookmarking_bookmark_collection_for(@hub.id)
     end
 
     respond_to do|format|
@@ -51,15 +51,16 @@ class BookmarkletsController < ApplicationController
   end
 
   def add
-    @mini_title = 'Add this item to a TagTeam stack'
+    @mini_title = 'Add this item to a TagTeam bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
-    [:hub_id, :stack_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
+    [:hub_id, :bookmark_collection_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
       unless params[:feed_item][col].blank?
         @feed_item.send(%Q|#{col}=|, params[:feed_item][col])
       end
     end
     if @feed_item.new_record?
       @feed_item.date_published = Date.today
+      @feed_item.last_updated = Date.today
     end
   end
 
