@@ -21,7 +21,7 @@
     <% end %>
   </td>
   <td width="80%" class="title">
-    <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item)) %> <span class="hub_feed_title">from <%= link_to(hub_feed, hub_hub_feed_path(@hub,hub_feed)) %></span>
+    <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item)) %> <span class="hub_feed_title">from <%= link_to(hub_feed.display_title, hub_hub_feed_path(@hub,hub_feed)) %></span>
   </td>
 </tr>
 

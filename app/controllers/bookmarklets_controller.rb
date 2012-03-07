@@ -31,10 +31,13 @@ class BookmarkletsController < ApplicationController
 
     respond_to do|format|
       if @feed_item.save
-        @feed.feed_items << @feed_item
-        @feed.save
+        unless @feed.feed_items.include?(@feed_item)
+          @feed.feed_items << @feed_item
+          @feed.save
+        end
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
+        Resque.enqueue(FeedItemTagRenderer, @feed_item.id)
         flash[:notice] = 'Added that feed item.'
         format.html {
           redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id) 
@@ -54,6 +57,9 @@ class BookmarkletsController < ApplicationController
       unless params[:feed_item][col].blank?
         @feed_item.send(%Q|#{col}=|, params[:feed_item][col])
       end
+    end
+    if @feed_item.new_record?
+      @feed_item.date_published = Date.today
     end
   end
 

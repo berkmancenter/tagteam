@@ -11,7 +11,7 @@
     <% else %>
       &nbsp;
     <% end %>
-    <span class="ui-silk inline ui-silk-feed"></span> <%= link_to(raw(strip_tags(hub_feed.to_s)), hub_hub_feed_path(@hub,hub_feed)) %>
+    <span class="ui-silk inline <%= (hub_feed.feed.is_bookmarking_feed?) ? 'ui-silk-book-addresses' : 'ui-silk-feed' %>"></span> <%= link_to(raw(strip_tags(hub_feed.to_s)), hub_hub_feed_path(@hub,hub_feed)) %>
     <% if defined?(show_hubs) && show_hubs == true %>
       <span class="smaller">in <%= link_to(hub_feed.hub, hub_path(hub_feed.hub) )%></span>
     <% end %>

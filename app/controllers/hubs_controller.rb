@@ -3,7 +3,7 @@ class HubsController < ApplicationController
   before_filter :add_breadcrumb
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :tag_controls, :search, :by_date, :retrievals, :item_search, :stacks]
     allow logged_in, :to => [:new, :create, :my, :my_stacks]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_stacks]
     allow :superadmin, :hubadmin
@@ -18,6 +18,11 @@ class HubsController < ApplicationController
     end
     @feed_retrievals.execute!
     logger.warn(@feed_retrievals.inspect)
+    render :layout => ! request.xhr?
+  end
+
+  def stacks
+    @stacks = HubFeed.stacks.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 

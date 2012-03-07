@@ -43,7 +43,7 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.paginate(:include => [ :feed ], :page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
+    @hub_feeds = @hub.hub_feeds.rss.paginate(:page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
     respond_to do|format|
       format.html{
         render :layout => ! request.xhr? 
@@ -57,9 +57,38 @@ class HubFeedsController < ApplicationController
   end
 
   def new
+    # Only used to create stacks, AKA bookmarking collections.
+    # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
+    @hub_feed = HubFeed.new
+    @hub_feed.hub_id = @hub.id
   end
 
   def create
+    # Only used to create stacks, AKA bookmarking collections.
+    # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
+    @hub_feed = HubFeed.new
+    @hub_feed.hub_id = @hub.id
+
+    actual_feed = Feed.new
+    actual_feed.bookmarking_feed = true
+    actual_feed.feed_url = 'not applicable'
+    actual_feed.title = params[:hub_feed][:title]
+    current_user.has_role!(:owner, actual_feed)
+    actual_feed.save
+
+    @hub_feed.feed = actual_feed
+    @hub_feed.attributes = params[:hub_feed]
+    respond_to do|format|
+      if @hub_feed.save
+        current_user.has_role!(:editor, @hub_feed)
+        current_user.has_role!(:owner, @hub_feed)
+        flash[:notice] = 'Created that bookmarking collection.'
+        format.html {redirect_to hub_path(@hub)}
+      else
+        flash[:error] = 'Couldn\'t create that bookmarking collection!'
+        format.html {render :action => :new}
+      end
+    end
   end
 
   def update

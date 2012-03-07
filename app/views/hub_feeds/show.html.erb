@@ -20,18 +20,20 @@
 
   <div id="about"> 
     <%= documentation('hub-feed-about-tab') %>
-    <dl class="metadata">
-      <dt>Feed URL:</dt>
-      <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
-      <dt>Feed last changed at:</dt>
-      <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
-      <dt>Feed will be downloaded again  at:</dt>
-      <dd><%= @hub_feed.feed.next_scheduled_retrieval.to_s(:long) %> 
-      <% if current_user && current_user.is?(:owner, @hub) %>
-        <%= link_to('Schedule for immediate download', reschedule_immediately_hub_hub_feed_path(@hub,@hub_feed)) %>
-      <% end %>
-      </dd>
-    </dl>
+    <% unless @hub_feed.feed.is_bookmarking_feed? %>
+      <dl class="metadata">
+        <dt>Feed URL:</dt>
+        <dd><%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
+        <dt>Feed last changed at:</dt>
+        <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
+        <dt>Feed will be downloaded again  at:</dt>
+        <dd><%= @hub_feed.feed.next_scheduled_retrieval.to_s(:long) %> 
+        <% if current_user && current_user.is?(:owner, @hub) %>
+          <%= link_to('Schedule for immediate download', reschedule_immediately_hub_hub_feed_path(@hub,@hub_feed)) %>
+        <% end %>
+        </dd>
+      </dl>
+    <% end %>
   </div>
 
 </div>
