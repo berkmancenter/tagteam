@@ -16,8 +16,10 @@ class FeedItemsController < ApplicationController
 
   def related
     @hub_feed = nil
+    hub_id = @hub.id
     @related = Sunspot.more_like_this(@feed_item) do
       fields :title, :tag_list
+      with :hub_ids, hub_id
       minimum_word_length 3
       paginate :page => params[:page], :per_page => get_per_page
     end

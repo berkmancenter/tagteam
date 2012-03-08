@@ -8,11 +8,6 @@
 
 # 
 
-if Rails.env == 'development'
-  u = User.new(:email => 'admin@example.com', :password => 'foobar', :password_confirmation => "foobar")
-  u.save
-end
-
 Documentation.create(
   :match_key => 'hub_about',
   :title => 'About a hub',

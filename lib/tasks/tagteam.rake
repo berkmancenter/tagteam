@@ -1,3 +1,6 @@
+require 'rake_helper'
+include RakeHelper
+
 namespace :tagteam do
 
   desc 'update feeds'
@@ -29,9 +32,15 @@ namespace :tagteam do
     end
   end
 
-  desc 'test feed sources'
-  task :test_feed_sources => :environment do
-    feeds = %w|
+  desc 'test hubs'
+  task :test_hubs => :environment do
+    u = User.new(:email => 'djcp@cyber.law.harvard.edu', :password => 'testfoobar', :password_confirmation => "testfoobar")
+    u.save
+
+    u = User.new(:email => 'peter.suber@gmail.com', :password => 'testpass', :password_confirmation => "testpass")
+    u.save
+
+    planet_feeds = %w|
 http://fringethoughts.wordpress.com/feed/
 http://blogs.law.harvard.edu/andresmh/feed/
 http://andyontheroad.wordpress.com/feed/
@@ -89,37 +98,76 @@ http://technosociology.org/?feed=rss2
 http://cyber.law.harvard.edu/views/minifeed/740/feed
 http://metalab.harvard.edu/feed/|
 
-  h = Hub.find_or_create_by_title(:title => 'Auto feed test hub')
-  u = User.find_by_email('admin@example.com')
+  add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'djcp@cyber.law.harvard.edu')
 
-  u.has_role!(:owner, h)
-  u.has_role!(:creator, h)
+  blogs_feeds = %w|http://blogs.law.harvard.edu/middleeast/feed
+http://blogs.law.harvard.edu/businessplans/feed
+http://blogs.law.harvard.edu/jkbaumga/feed
+http://blogs.law.harvard.edu/doc/feed
+http://blogs.law.harvard.edu/yulelog/feed
+http://blogs.law.harvard.edu/lamont/feed
+http://blogs.law.harvard.edu/adup/feed
+http://blogs.law.harvard.edu/dplatechdev/feed
+http://blogs.law.harvard.edu/vrm/feed
+http://blogs.law.harvard.edu/karolina/feed
+http://blogs.law.harvard.edu/dlarochelle/feed
+http://blogs.law.harvard.edu/admissions/feed
+http://blogs.law.harvard.edu/scotthartley/feed
+http://blogs.law.harvard.edu/harvardreview/feed
+http://blogs.law.harvard.edu/spaceoccupants/feed
+http://blogs.law.harvard.edu/harvardlibraryreads/feed
+http://blogs.law.harvard.edu/preserving/feed
+http://blogs.law.harvard.edu/hydeblog/feed
+http://blogs.law.harvard.edu/yana/feed
+http://blogs.law.harvard.edu/youthandmediaalpha/feed
+http://blogs.law.harvard.edu/infolaw/feed
+http://blogs.law.harvard.edu/clinicalprobono/feed
+http://blogs.law.harvard.edu/djcp/feed
+http://blogs.law.harvard.edu/houghton/feed
+http://blogs.law.harvard.edu/stepno/feed
+http://blogs.law.harvard.edu/pamphlet/feed
+http://blogs.law.harvard.edu/sulaymanibnqiddees/feed
+http://blogs.law.harvard.edu/sj/feed
+http://blogs.law.harvard.edu/philg/feed
+http://blogs.law.harvard.edu/mjahnke/feed
+http://blogs.law.harvard.edu/corpgov/feed
+http://blogs.law.harvard.edu/dplaalpha/feed
+http://blogs.law.harvard.edu/abinazir/feed
+http://blogs.law.harvard.edu/opia/feed
+http://blogs.law.harvard.edu/jsinger/feed
+http://blogs.law.harvard.edu/jezler/feed
+http://blogs.law.harvard.edu/collegeadmissionsstudentblog/feed
+http://blogs.law.harvard.edu/kevinguiney/feed
+https://twitter.com/statuses/user_timeline/djcp.rss
+http://blogs.law.harvard.edu/plap/feed
+http://blogs.law.harvard.edu/devivio/feed
+http://blogs.law.harvard.edu/herdict/feed
+http://blogs.law.harvard.edu/foodpolicyinitiative/feed
+http://blogs.law.harvard.edu/mediaberkman/feed
+http://blogs.law.harvard.edu/tatar/feed|
 
-  feeds.each do|feed|
-    f = Feed.find_or_initialize_by_feed_url(feed)
-    puts "Getting: #{feed}"
+  add_example_feeds('Blogs.law test aggregation Hub', blogs_feeds, 'djcp@cyber.law.harvard.edu')
 
-    if f.valid?
-      f.save
-      u.has_role!(:owner, f)
-      u.has_role!(:creator, f)
+  oa_feeds = %w|http://www.connotea.org/rss/tag/oa.new 
+http://www.connotea.org/rss/tag/oa.mandates
+http://www.connotea.org/rss/tag/oa.policies
+http://www.connotea.org/rss/tag/oa.repositories
+http://www.connotea.org/rss/tag/oa.journals
+http://www.connotea.org/rss/tag/oa.green
+http://www.connotea.org/rss/tag/oa.gold
+http://www.connotea.org/rss/tag/oa.data
+http://www.connotea.org/rss/tag/oa.books
+http://www.connotea.org/rss/tag/oa.rwa
+http://www.connotea.org/rss/tag/oa.frpaa
+http://www.connotea.org/rss/tag/oa.boycotts
+http://www.connotea.org/rss/tag/oa.petitions
+http://www.connotea.org/rss/tag/oa.pledges
+http://www.connotea.org/rss/tag/oa.elsevier
+http://www.connotea.org/rss/tag/oa.usa
+http://www.connotea.org/rss/tag/oa.europe
+http://www.connotea.org/rss/tag/oa.south|
 
-      hf = HubFeed.new
-      hf.hub = h
-      hf.feed = f
-
-      if hf.valid?
-        hf.save
-        u.has_role!(:owner, hf)
-        u.has_role!(:creator, hf)
-      else 
-        puts "Hub feed Error: #{hf.errors.inspect}"
-      end
-    else
-      puts "Feed Error: #{f.errors.inspect}"
-    end
-  end
-
+  add_example_feeds('Open Access', oa_feeds, 'peter.suber@gmail.com')
 
   end
 
