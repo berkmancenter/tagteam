@@ -193,6 +193,11 @@ table.hub_feeds, table.republished_feeds{
 
 .search_controls li{
   padding-top: 1em;
+  list-style-type: none;
+}
+
+li.title{
+  list-style-type: none;
 }
 
 .search_controls li.container{
