@@ -1,0 +1,12 @@
+<%= documentation('hub-feed-feed-item-related-list') %>
+<div id="items">
+  <h2>Related Items</h2>
+
+  <%= will_paginate @related.results %>
+
+  <table class="hub_feed feed_items">
+    <%= render :partial => 'shared/line_items/feed_item', :collection => @related.results %>
+  </table>
+
+  <%= will_paginate @related.results %>
+</div>

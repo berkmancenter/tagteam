@@ -244,6 +244,12 @@ header h1 a{
   color: green;
 }
 
+.info{
+  margin: 1em 0em;
+  padding: 1em 0em;
+  color: #555;
+}
+
 a.delete{
   font-size: 11px;
   margin-left: 2em;

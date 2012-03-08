@@ -19,7 +19,15 @@ class FeedItem < ActiveRecord::Base
   end
 
   searchable do
-    text :title, :description, :content, :url, :guid, :authors, :contributors, :rights
+    text :title, :more_like_this => true
+    text :description, :more_like_this => true
+    text :content, :more_like_this => true
+    text :url, :more_like_this => true
+    text :guid, :more_like_this => true
+    text :authors, :more_like_this => true
+    text :contributors, :more_like_this => true
+    text :rights, :more_like_this => true
+    text :tag_list, :more_like_this => true
     integer :hub_ids, :multiple => true
     integer :hub_feed_ids, :multiple => true
     integer :id
@@ -141,7 +149,7 @@ class FeedItem < ActiveRecord::Base
       fi.rights = item.rights
       fi.date_published = ((item.published.blank?) ? item.updated.to_datetime : item.published.to_datetime)
       fi.last_updated = item.updated.to_datetime
-      logger.warn('dirty because there is a new feed_item')
+      # logger.warn('dirty because there is a new feed_item')
       item_changelog[:new_record] = true
       feed.dirty = true
     end
@@ -152,7 +160,7 @@ class FeedItem < ActiveRecord::Base
     # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
     fi.tag_list = item.categories.collect{|t| t.downcase[0,255].gsub(/,/,'_').strip}.join(',')
     if pre_update_tags != fi.tag_list.sort
-      logger.warn('dirty because tags have changed')
+      # logger.warn('dirty because tags have changed')
       feed.dirty = true
       unless fi.new_record?
         # Be sure to update the feed changelog here in case
@@ -165,19 +173,19 @@ class FeedItem < ActiveRecord::Base
       if feed.changelog.keys.include?(fi.id) or fi.new_record?
         # This runs here because we're auto stripping and auto-truncating columns and
         # want the change tracking to be relative to these fixed values.
-        logger.warn('dirty because a feed item changed or was created.')
-        logger.warn('dirty Changes: ' + fi.changes.inspect)
+        # logger.warn('dirty because a feed item changed or was created.')
+        # logger.warn('dirty Changes: ' + fi.changes.inspect)
         unless fi.new_record?
           item_changelog.merge!(fi.changes)
         end
-        logger.warn('dirty item_changelog: ' + item_changelog.inspect)
+        # logger.warn('dirty item_changelog: ' + item_changelog.inspect)
         feed.dirty = true
         fi.save
         feed.changelog[fi.id] = item_changelog
         Resque.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
-      logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
+      # logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
     end
 
   end

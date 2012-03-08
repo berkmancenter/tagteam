@@ -27,6 +27,7 @@ Tagteam::Application.routes.draw do
     resources :feed_items do
       member do
         get 'content'
+        get 'related'
       end
     end
     resources :tags
@@ -103,6 +104,7 @@ Tagteam::Application.routes.draw do
       end
       member do
         get 'content'
+        get 'related'
       end
       collection do
         get 'by_date'

@@ -14,6 +14,19 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def related
+    @hub_feed = nil
+    @related = Sunspot.more_like_this(@feed_item) do
+      fields :title, :tag_list
+      minimum_word_length 3
+      paginate :page => params[:page], :per_page => get_per_page
+    end
+    @related.execute!
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr?}
+    end
+  end
+
   def index
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)

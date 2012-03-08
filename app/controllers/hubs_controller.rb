@@ -17,7 +17,6 @@ class HubsController < ApplicationController
       paginate :page => params[:page], :per_page => get_per_page
     end
     @feed_retrievals.execute!
-    logger.warn(@feed_retrievals.inspect)
     render :layout => ! request.xhr?
   end
 
@@ -121,7 +120,6 @@ class HubsController < ApplicationController
         # Not valid.
         respond_to do |format|
           # Tell 'em why.
-          logger.warn(format.inspect)
           format.json{ render(:text => @feed.errors.full_messages.join('<br/>'), :status => :not_acceptable) and return }
         end
       end

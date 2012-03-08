@@ -1,10 +1,10 @@
 <%= documentation('hub-bookmark_collections-list') %>
 <div class="hub_feeds">
-<h3>Bookmark Collections</h3>
   <% if current_user && current_user.is?(:owner, @hub) %>
-    <p>You can use a bookmarklet to add pages directly to your bookmark collections. Drag this link -- <strong><a href="javascript:(function(){f='<%= bookmarklets_add_url %>?feed_item%5burl%5d='+encodeURIComponent(window.location.href)+'&feed_item%5btitle%5d='+encodeURIComponent(document.title)+'&feed_item%5bdescription%5d='+encodeURIComponent(''+(window.getSelection?window.getSelection():document.getSelection?document.getSelection():document.selection.createRange().text))+'&';a=function(){if(!window.open(f+'noui=1&jump=doclose','tagteam','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()">Add to Tagteam</a> </strong> -- to your browser's bookmarks toolbar to get started.</p>
-    <%= link_to(raw('<span class="ui-silk inline ui-silk-book-addresses-go"></span> New Bookmark Collection'), new_hub_feed_path(:hub_id => @hub.id), :class=> "new_object") %>
+    <%= link_to(raw('<span class="ui-silk inline ui-silk-book-addresses"></span> New Bookmark Collection'), new_hub_feed_path(:hub_id => @hub.id), :class=> "new_object") %>
+    <p class="info">You can use a bookmarklet to add pages directly to your bookmark collections. Drag this link -- <strong><a href="javascript:(function(){f='<%= bookmarklets_add_url %>?feed_item%5burl%5d='+encodeURIComponent(window.location.href)+'&feed_item%5btitle%5d='+encodeURIComponent(document.title)+'&feed_item%5bdescription%5d='+encodeURIComponent(''+(window.getSelection?window.getSelection():document.getSelection?document.getSelection():document.selection.createRange().text))+'&';a=function(){if(!window.open(f+'noui=1&jump=doclose','tagteam','location=1,links=0,scrollbars=0,toolbar=0,width=710,height=660'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()">Add to Tagteam</a> </strong> -- to your browser's bookmarks toolbar to get started.</p>
   <% end %>
+<h3>Bookmark Collections</h3>
 <%= will_paginate @bookmark_collections %>
 <table class="hub_feeds" id="hub_feed_list_<%= @hub.id %>">
   <%= render :partial => 'shared/line_items/hub_feed', :collection => @bookmark_collections %>
