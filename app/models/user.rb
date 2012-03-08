@@ -41,6 +41,7 @@ class User < ActiveRecord::Base
 
         self.has_role!(:owner, hf)
         self.has_role!(:creator, hf)
+        feed
       else
         bookmark_collections.first
       end

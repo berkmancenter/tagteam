@@ -31,7 +31,7 @@ class BookmarkletsController < ApplicationController
 
     respond_to do|format|
       if @feed_item.save
-        unless @feed.feed_items.include?(@feed_item)
+        if @feed.feed_items.nil? || ! @feed.feed_items.include?(@feed_item)
           @feed.feed_items << @feed_item
           @feed.save
         end
