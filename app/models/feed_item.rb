@@ -1,5 +1,6 @@
 class FeedItem < ActiveRecord::Base
   acts_as_taggable
+  acts_as_api
 
   include ModelExtensions
 
@@ -15,7 +16,20 @@ class FeedItem < ActiveRecord::Base
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
   def self.columns_for_line_item
-    [:id,:date_published, :title, :url, :guid, :authors]
+    [:id,:date_published, :title, :url, :guid, :authors, :last_updated]
+  end
+
+  api_accessible :default do |t|
+    t.add :id
+    t.add :title
+    t.add :url
+    t.add :guid
+    t.add :authors
+    t.add :hub_ids
+    t.add :hub_feed_ids
+    t.add :date_published
+    t.add :last_updated
+    t.add :tag_context_hierarchy, :as => :tags
   end
 
   searchable do
@@ -49,6 +63,15 @@ class FeedItem < ActiveRecord::Base
 
   def tag_contexts
     self.taggings.collect{|tg| "#{tg.context}-#{tg.tag_id}"}
+  end
+
+  def tag_context_hierarchy
+    tags_for_api = {}
+    self.taggings.collect do|tg|
+      tags_for_api[tg.context].nil? ? (tags_for_api[tg.context] = []) : ''
+      tags_for_api[tg.context] << tg.tag.name
+    end
+    tags_for_api
   end
 
   validates_uniqueness_of :url

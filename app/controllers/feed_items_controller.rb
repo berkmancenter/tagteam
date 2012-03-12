@@ -38,7 +38,7 @@ class FeedItemsController < ApplicationController
       }
       format.atom{ }
       format.rss{ }
-      format.json{render :json => @feed_items, :callback => params[:callback] }
+      format.json{render_for_api :default,  :json => @feed_items, :callback => params[:callback] }
     end
   end
 
