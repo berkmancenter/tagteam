@@ -84,6 +84,7 @@ class HubsController < ApplicationController
       format.html{ render :layout => ! request.xhr? }
       format.rss{ }
       format.atom{ }
+      format.json{ render :json => @search.results, :callback => params[:callback]}
     end
   end
 

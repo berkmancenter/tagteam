@@ -6,7 +6,7 @@
     <% else %>
       &nbsp;
     <% end %>
-    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed.title,hub_republished_feed_path(@hub,republished_feed)) %> <%= link_to('RSS', items_hub_republished_feed_path(@hub,republished_feed, :format => :rss)) %> <%= link_to('Atom', items_hub_republished_feed_path(@hub,republished_feed, :format => :atom)) %>
+    <span class="ui-silk inline ui-silk-rss-go"></span> <%= link_to(republished_feed.title,hub_republished_feed_path(@hub,republished_feed)) %> <%= link_to('RSS', items_hub_republished_feed_path(@hub,republished_feed, :format => :rss)) %> <%= link_to('Atom', items_hub_republished_feed_path(@hub,republished_feed, :format => :atom)) %> <%= link_to('jsonp', items_hub_republished_feed_path(@hub,republished_feed, :format => :json, :callback => 'callback')) %>
   </td>
   <td width="40%">
     <%= link_to(raw('<span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more'), more_details_hub_republished_feed_path(@hub,republished_feed), :class => "republished_feed_more_control", :data_republished_feed_id => republished_feed.id) %>

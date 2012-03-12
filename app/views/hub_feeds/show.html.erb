@@ -6,6 +6,7 @@
   Input Feed: <%= @hub_feed %> <sup>
     <%= link_to("RSS", hub_feed_feed_items_path(@hub_feed, :format => :rss), :title => "An RSS feed with tag filters applied to it.") %>
     <%= link_to("Atom", hub_feed_feed_items_path(@hub_feed, :format => :atom), :title => "An Atom feed with tag filters applied to it.") %>
+    <%= link_to("jsonp", hub_feed_feed_items_path(@hub_feed, :format => :json, :callback => 'callback'), :title => "jsonp with tag filters applied to it.") %>
   </sup>
 </h1>
 
