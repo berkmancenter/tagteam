@@ -191,7 +191,7 @@ table.hub_feeds, table.republished_feeds{
   width: 100%;
 }
 
-.search_controls li{
+.form_controls li, .search_controls li{
   padding-top: 1em;
   list-style-type: none;
 }
@@ -200,7 +200,7 @@ li.title{
   list-style-type: none;
 }
 
-.search_controls li.container{
+.search_controls li.container, .search_controls li.container{
   padding: .1em 0px .25em 1.75em;
 }
 

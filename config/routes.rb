@@ -14,6 +14,8 @@ Tagteam::Application.routes.draw do
   resources :input_source
 
   resources :hub_feeds do
+    post 'import'
+
     collection do
       get 'autocomplete'
     end

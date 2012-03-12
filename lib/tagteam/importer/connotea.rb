@@ -6,8 +6,8 @@ module Tagteam
       end
 
       def parse_items
-        # Here's where we flip through the records to import them.
-
+        rdf = FeedAbstract::Feed.new(self.filehandle)
+        rdf.items
       end
 
       def verify_format
