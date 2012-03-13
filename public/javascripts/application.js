@@ -356,6 +356,10 @@ $(document).ready(function(){
     $.hideSpinner();
   };
 
+  $('#new_feed_item,#edit_feed_item').submit(function(e){
+    $.showSpinner();
+  });
+
   $('.hub_tabs').tabs({
     cookie: {
       expires: 3 

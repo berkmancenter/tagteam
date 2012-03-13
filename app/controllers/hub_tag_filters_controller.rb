@@ -68,10 +68,11 @@ class HubTagFiltersController < ApplicationController
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'
         format.html { render :text => "Added a filter for that tag to \"#{@hub.title}\"", :layout => ! request.xhr? }
-      else
-        flash[:error] = 'Could not add that hub tag filter'
-        format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
       end
+    end
+  rescue Exception => e
+    respond_to do|format|
+      format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
     end
   end
 

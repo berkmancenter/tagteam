@@ -12,6 +12,12 @@ class ModifyTagFilter < ActiveRecord::Base
   validates_presence_of :tag_id, :new_tag_id
   attr_accessible :tag_id, :new_tag_id
 
+  validate :tag_id do
+    if self.tag_id == self.new_tag_id
+      self.errors.add(:new_tag_id, " can't be the same as the original tag")
+    end
+  end
+
   def description
     'Change tag '
   end
