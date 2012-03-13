@@ -25,8 +25,8 @@ xml.rss(
         xml.link item.url
         xml.guid item.guid
         xml.author item.authors
-        item.tag_list_on(@hub.tagging_key).each do|tag|
-          xml.category (@hub.tag_prefix.blank?) ? tag : "#{@hub.tag_prefix}#{tag}"
+        item.tags_on(@hub.tagging_key).each do|tag|
+          xml.category (@hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub.tag_prefix)
         end
         unless item.rights.blank?
           xml.tag!('dc:rights', item.rights)

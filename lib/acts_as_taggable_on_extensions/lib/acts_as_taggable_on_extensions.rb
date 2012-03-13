@@ -5,6 +5,10 @@ ActsAsTaggableOn::Tag.class_eval do
     (contexts.length == 0) ? [] : contexts.collect{|tg| tg.context} 
   end
 
+  def name_prefixed_with(prefix = '')
+    (self.name[0..(prefix.length - 1)] == prefix) ? self.name : "#{prefix}#{self.name}"
+  end
+
   def hub_ids
     self.contexts.collect{|c| c.split('_')[1].to_i}.flatten.uniq
   end
