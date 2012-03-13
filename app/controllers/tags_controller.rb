@@ -1,8 +1,8 @@
 class TagsController < ApplicationController
 
   before_filter :load_hub
-  before_filter :load_tag_from_name, :only => [:rss, :atom, :show]
-  before_filter :load_feed_items_for_rss, :only => [:rss, :atom]
+  before_filter :load_tag_from_name, :only => [:rss, :atom, :show, :json]
+  before_filter :load_feed_items_for_rss, :only => [:rss, :atom, :json]
   before_filter :add_breadcrumbs
 
   access_control do
@@ -41,6 +41,10 @@ class TagsController < ApplicationController
 
   def atom
     render :content_type => 'application/atom+xml'
+  end
+
+  def json
+    render_for_api :default,  :json => @feed_items, :callback => params[:callback] 
   end
 
   def show

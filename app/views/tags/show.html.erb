@@ -1,5 +1,7 @@
 <% unless request.xhr? %>
-  <h1>Tagged with "<%= @tag %>" - <%= @feed_items.total_entries %> total <sup><%= link_to('rss', hub_tag_rss_path(@hub,u(@tag.name))) %> <%= link_to('atom', hub_tag_atom_path(@hub,u(@tag.name))) %></sup></h1>
+  <h1>Tagged with "<%= @tag %>" - <%= @feed_items.total_entries %> total <sup><%= link_to('rss', hub_tag_rss_path(@hub,u(@tag.name))) %> <%= link_to('atom', hub_tag_atom_path(@hub,u(@tag.name))) %>
+      <%= link_to('json', hub_tag_json_path(@hub,u(@tag.name), :callback => 'callback')) %>
+  </sup></h1>
 
 <div class="tabs">
   <ul>
