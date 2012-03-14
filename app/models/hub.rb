@@ -13,8 +13,6 @@ class Hub < ActiveRecord::Base
   has_many :republished_feeds, :dependent => :destroy, :order => 'created_at desc'
   has_many :feeds, :through => :hub_feeds
 
-  # TODO - make a scope to find all feed items in a hub.
-
   def display_title
     self.title
   end
