@@ -1,5 +1,7 @@
 class DocumentationsController < ApplicationController
-  before_filter :load_documentation, :except => [:index, :new, :create]
+  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.has_role?(:superadmin)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+    request.fullpath + "&per_page=" + get_per_page
+  }
 
   access_control do
     allow all, :to => [:index, :show]
@@ -11,6 +13,7 @@ class DocumentationsController < ApplicationController
   end
 
   def show
+    @documentation = Documentation.find(params[:id])
     render :layout => ! request.xhr?
   end
 
@@ -37,10 +40,12 @@ class DocumentationsController < ApplicationController
   end
   
   def edit
+    @documentation = Documentation.find(params[:id])
     render :layout => ! request.xhr?
   end
 
   def update
+    @documentation = Documentation.find(params[:id])
     @documentation.attributes = params[:documentation]
     respond_to do|format|
       if @documentation.save
@@ -55,21 +60,13 @@ class DocumentationsController < ApplicationController
   end
 
   def destroy
+    @documentation = Documentation.find(params[:id])
     @documentation.destroy
     flash[:notice] = 'Deleted that bit of documentation'
     respond_to do|format|
       format.html{
         redirect_to :action => :index
       }
-    end
-  end
-
-  private
-
-  def load_documentation
-    @documentation = Documentation.find(params[:id])
-    if current_user
-      @is_superadmin = current_user.has_role?(:superadmin)
     end
   end
 

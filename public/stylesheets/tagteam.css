@@ -316,6 +316,7 @@ a:hover{
   color: red;
 }
 
+.hub,
 .feed,
 .hub_feed,
 .republished_feed,
@@ -325,6 +326,17 @@ a:hover{
   margin-bottom: .5em;
   font-size: 10pt;
   line-height: 1.2em;
+}
+
+.hubs .hub{
+  box-shadow: 0px 0px 15px #aaa;
+  margin-bottom: 1em;
+  padding: .5em;
+  border-radius: 5px;
+}
+
+.hubs .hub .title{
+  font-size: 2em;
 }
 
 .search_result{

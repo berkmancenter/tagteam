@@ -4,6 +4,10 @@ class RepublishedFeedsController < ApplicationController
   before_filter :prep_resources
   before_filter :register_breadcrumb
 
+  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+    request.fullpath + "&per_page=" + get_per_page
+  }
+
   access_control do
     allow all, :to => [:index, :show, :items, :inputs, :removals, :more_details]
     allow :owner, :of => :hub, :to => [:new, :create]

@@ -27,7 +27,6 @@
           e.preventDefault();
           $.ajax({
             type: 'GET',
-            cache: false,
             url: $(this).attr('href'),
             dataType: 'html',
             success: function(html){
@@ -42,7 +41,6 @@
           var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/&page=\d+/,'&page=1');
           $.ajax({
             type: 'GET',
-            cache: false,
             url: paginationLink,
             dataType: 'html',
             success: function(html){
@@ -57,7 +55,6 @@
         e.preventDefault();
         var windowTitle = $(this).attr('title');
         $.ajax({
-          cache: false,
           dataType: 'html',
           url: $(this).attr('href'),
           success: function(html){
@@ -82,7 +79,6 @@
                 expires: 3
               },
               ajaxOptions: {
-                cache: false,
                 dataType: 'html',
                 beforeSend: function(){
                   $.showSpinner();
@@ -361,7 +357,6 @@ $(document).ready(function(){
 
 
   $.ajaxSetup({
-    cache: false,
     beforeSend: function(){
       $.showSpinner();
     },
@@ -459,7 +454,6 @@ $(document).ready(function(){
       expires: 3
     },
     ajaxOptions: {
-      cache: false,
       dataType: 'html',
       beforeSend: function(){
         $.showSpinner();
@@ -583,7 +577,6 @@ $(document).ready(function(){
       }
       var elem = this;
       $.ajax({
-        cache: false,
         url: $(this).attr('href'),
         success: function(html){
           $(elem).addClass('more_details_included');
@@ -598,7 +591,6 @@ $(document).ready(function(){
       submit: function(e){
         e.preventDefault();
         $(this).ajaxSubmit({
-          cache: true,
           success: function(html){
             $('#hub_search_form').closest('.ui-widget-content').html(html);
             $.bindHoverRows();

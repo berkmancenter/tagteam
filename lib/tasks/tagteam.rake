@@ -1,7 +1,23 @@
 require 'rake_helper'
+require 'find'
 include RakeHelper
 
 namespace :tagteam do
+
+  desc 'expire file cache'
+  task :expire_file_cache => :environment do
+    return unless Rails.cache.class == ActiveSupport::Cache::FileStore
+
+    Find.find(Rails.cache.cache_path) do |path|
+      if FileTest.file?(path)
+        c = Marshal.load(File.read(path))
+        if c.expired?
+          puts "Expired: #{path}"
+          File.unlink(path)
+        end
+      end
+    end
+  end
 
   desc 'update feeds'
   task :update_feeds => :environment do

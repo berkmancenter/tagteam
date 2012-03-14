@@ -5,6 +5,18 @@ class TagsController < ApplicationController
   before_filter :load_feed_items_for_rss, :only => [:rss, :atom, :json]
   before_filter :add_breadcrumbs
 
+  caches_action :rss, :atom, :json, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+    # TODO - fix the content type.
+    if request.fullpath.match(/tag\/rss/)
+      request.format = '.rss'
+      request.fullpath + "&per_page=" + get_per_page + '.rss'
+    elsif request.fullpath.match(/tag\/atom/)
+      request.fullpath + "&per_page=" + get_per_page + '.atom'
+    else
+      request.fullpath + "&per_page=" + get_per_page
+    end
+  }
+
   access_control do
     allow all
   end
@@ -53,6 +65,9 @@ class TagsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
+
+  private
+
   def load_hub
     if ! params[:hub_feed_id].blank?
       @hub_feed = HubFeed.find(params[:hub_feed_id])
@@ -61,8 +76,6 @@ class TagsController < ApplicationController
       @hub = Hub.find(params[:hub_id])
     end
   end
-
-  private
 
   def add_breadcrumbs
     breadcrumbs.add @hub.to_s, hub_path(@hub) 

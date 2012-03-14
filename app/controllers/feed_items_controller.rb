@@ -3,6 +3,10 @@ class FeedItemsController < ApplicationController
   before_filter :load_feed_item, :except => [:index]
   before_filter :add_breadcrumbs, :except => [:index, :content]
 
+  caches_action :content, :related, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+    request.fullpath + "&per_page=" + get_per_page
+  }
+
   access_control do
     allow all
   end

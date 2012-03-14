@@ -1,8 +1,6 @@
 <div class="hub">
-  <ul>
-    <li class="title"><%= link_to hub.title, hub_path(hub) %></li>
-    <% unless hub.description.blank? %>
-      <li class="description"><%= raw(hub.description) %></li>
+  <h2 class="title"><%= link_to hub.title, hub_path(hub) %></h2>
+  <% unless hub.description.blank? %>
+      <div class="description"><%= raw(hub.description) %></div>
     <% end %>
-  </ul>
 </div>
