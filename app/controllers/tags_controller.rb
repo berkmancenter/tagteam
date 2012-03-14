@@ -6,15 +6,12 @@ class TagsController < ApplicationController
   before_filter :add_breadcrumbs
 
   caches_action :rss, :atom, :json, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
-    # TODO - fix the content type.
     if request.fullpath.match(/tag\/rss/)
-      request.format = '.rss'
-      request.fullpath + "&per_page=" + get_per_page + '.rss'
+      params[:format] = :rss
     elsif request.fullpath.match(/tag\/atom/)
-      request.fullpath + "&per_page=" + get_per_page + '.atom'
-    else
-      request.fullpath + "&per_page=" + get_per_page
+      params[:format] = :atom
     end
+    request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
@@ -48,11 +45,9 @@ class TagsController < ApplicationController
   end
 
   def rss
-    render :content_type => 'application/rss+xml'
   end
 
   def atom
-    render :content_type => 'application/atom+xml'
   end
 
   def json
