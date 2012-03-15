@@ -180,8 +180,9 @@ class FeedItem < ActiveRecord::Base
     fi.feeds << feed unless fi.feeds.include?(feed)
     # Merge tags. . .
     pre_update_tags = fi.tag_list.dup.sort
+    # Merge the existing and the new tags together, assign to the it's tag list, uniquify and join
     # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
-    fi.tag_list = item.categories.collect{|t| t.downcase[0,255].gsub(/,/,'_').strip}.join(',')
+    fi.tag_list = [fi.tag_list,item.categories.collect{|t| t.downcase[0,255].gsub(/,/,'_').strip}].flatten.uniq
     if pre_update_tags != fi.tag_list.sort
       # logger.warn('dirty because tags have changed')
       feed.dirty = true
