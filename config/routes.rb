@@ -64,6 +64,8 @@ Tagteam::Application.routes.draw do
 
     collection do
       get 'my'
+      get 'update_feeds'
+      get 'expire_cache'
     end
 
     resources :hub_feeds do

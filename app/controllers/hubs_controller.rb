@@ -1,15 +1,29 @@
 class HubsController < ApplicationController
-  before_filter :load_hub, :except => [:index, :new, :create, :my]
+  before_filter :load_hub, :except => [:index, :new, :create, :my, :update_feeds, :expire_cache]
   before_filter :add_breadcrumb
   caches_action :index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => 15.minutes, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
+    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :update_feeds, :expire_cache]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls]
     allow :superadmin, :hubadmin
+  end
+
+  def update_feeds
+    UpdateFeeds.perform
+    render :text => 'Success!', :layout => false
+  rescue Exception => e
+    render :string => e.inspect
+  end
+
+  def expire_cache
+    ExpireFileCache.perform
+    render :text => 'Success!', :layout => false
+  rescue Exception => e
+    render :string => e.inspect
   end
 
   def retrievals
