@@ -8,6 +8,8 @@
 
 # 
 
+require 'digest/md5'
+
 Documentation.create(
   :match_key => 'hub_about',
   :title => 'About a hub',
@@ -25,3 +27,9 @@ Documentation.create(
   :lang => 'en'
 )
 
+shared_key_file = "#{Rails.root}/config/initializers/tagteam_shared_key.rb"
+unless File.exists?(shared_key_file)
+  f = File.new(shared_key_file,'w',0740)
+  f.write("SHARED_KEY_FOR_TASKS='#{Digest::MD5.hexdigest(Time.now.to_s + rand(100000).to_s)}'")
+  f.close
+end

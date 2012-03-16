@@ -4,6 +4,9 @@ Tagteam::Application.routes.draw do
   get "bookmarklets/add"
   get "bookmarklets/confirm"
 
+  post "scheduled_tasks/expire_cache"
+  post "scheduled_tasks/update_feeds"
+
   resources :documentations
 
   resources :input_sources do
@@ -64,8 +67,6 @@ Tagteam::Application.routes.draw do
 
     collection do
       get 'my'
-      get 'update_feeds'
-      get 'expire_cache'
     end
 
     resources :hub_feeds do

@@ -8,3 +8,4 @@ config/database.yml
 *~
 solr/data/*
 .rvmrc
+config/initializers/tagteam_shared_key.rb
