@@ -1,0 +1,33 @@
+= TagTeam
+
+TagTeam is an RSS / Atom / RDF aggregator with the ability to filter and remix its input feeds with a high degree of flexibility. 
+
+Items can be added directly to TagTeam "bookmarking collections" via the provided delicious-like bookmarklet, and these items can be remixed and filtered like any other item.
+
+TagTeam can aggregate content from anything that emits RSS, Atom, or RDF. This includes delicious, zotero, WordPress, twitter, mediawiki, connotea, blogger, and too many other applications and services to mention.
+
+Remixed feeds are available as RSS 2.0, Atom, and jsonp output and can be viewed directly in a hub. 
+
+Tag filters can be applied at different levels to allow hub owners to maintain a consistent collection of tags - you can take messy tags in and give clean tags out. 
+
+TagTeam can be many things to many people, allowing you to ignore or utilize its many features depending on what you need to. Examples:
+  * It can aggregate RSS feeds and simply give you a Planet-like collection of items from many sources,
+  * It can be your own delicious,
+  * It can help you find items via its built-in search engine and through "more like this" queries,
+  * It can be  
+
+== Links
+
+  http://cyber.law.harvard.edu
+
+== Contributors
+
+* Dan Collis-Puro
+
+== License
+
+TagTeam is licensed under the AGPL 
+
+== Copyright
+
+2011 President and Fellows of Harvard College
