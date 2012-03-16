@@ -9,7 +9,6 @@ class ExpireFileCache
         if FileTest.file?(path)
           c = Marshal.load(File.read(path))
           if c.expired?
-            logger.warn("Expired #{path}") if Rails.env != 'production'
             File.unlink(path)
           end
         end
