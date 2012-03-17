@@ -1,2 +1,0 @@
-class ModifyTagFiltersController < ApplicationController
-end
