@@ -1,5 +1,8 @@
 class HubFeedItemTagFilter < ActiveRecord::Base
   acts_as_list
+  acts_as_api do |c|
+    c.allow_jsonp_callback = true
+  end
 
   belongs_to :hub
   belongs_to :feed_item
@@ -11,6 +14,12 @@ class HubFeedItemTagFilter < ActiveRecord::Base
 
   validates_presence_of :hub_id, :feed_item_id
   before_validation :validate_filter_uniqueness
+
+  api_accessible :default do |t|
+    t.add :id
+    t.add :filter_type
+    t.add :filter
+  end
 
   def validate_filter_uniqueness
     # So it makes no sense to allow a tag to be filtered multiple times at this level - 

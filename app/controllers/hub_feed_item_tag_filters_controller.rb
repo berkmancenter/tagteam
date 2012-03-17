@@ -1,3 +1,4 @@
+# Allow Hub owners to add filters to a FeedItem.
 class HubFeedItemTagFiltersController < ApplicationController
   before_filter :load_feed_item
   before_filter :load_hub_feed_item_tag_filter, :except => [:index, :new, :create]
@@ -8,12 +9,13 @@ class HubFeedItemTagFiltersController < ApplicationController
     allow :superadmin, :hubfeeditemtagfilteradmin, :filteradmin
   end
 
+  #A list of filters on this FeedItem in a Hub..
   def index
     @hub_feed_item_tag_filters = @feed_item.hub_feed_item_tag_filters.all(:conditions => {:hub_id => @hub.id})
     respond_to do |format|
-      format.html{
-        render :layout => ! request.xhr?
-      }
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default,  :json => @hub_feed_item_tag_filters }
+      format.xml{ render_for_api :default,  :xml => @hub_feed_item_tag_filters }
     end
   end
 

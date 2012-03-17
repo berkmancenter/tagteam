@@ -6,6 +6,7 @@ class FeedRetrievalsController < ApplicationController
     request.fullpath + "&per_page=" + get_per_page
   }
 
+  # A list of FeedRetrieval objects for the Feed referenced by a HubFeed. Returns html, json, or xml.
   def index
     breadcrumbs.add @hub_feed, hub_hub_feed_path(:hub_id => @hub, :id => @hub_feed)
     @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => get_per_page)
@@ -16,6 +17,7 @@ class FeedRetrievalsController < ApplicationController
     end
   end
 
+  # Detailed info about a FeedRetrieval. Returns html, json, or xml.
   def show
     breadcrumbs.add @hub, hub_path(@hub)
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed)

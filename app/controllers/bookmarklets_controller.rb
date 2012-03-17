@@ -1,3 +1,4 @@
+# A "bookmark" is just a FeedItem that's been manually added to a Bookmark Collection. Currently the only way to add bookmarks is through the bookmarklet available under a Hub's "bookmarks" tab.
 class BookmarkletsController < ApplicationController
 
   before_filter :load_hub, :only => [:add_item]
@@ -9,10 +10,12 @@ class BookmarkletsController < ApplicationController
 
   layout 'bookmarklet'
 
+  # The page that appears after a bookmark has been successfully added.
   def confirm
     @feed_item = FeedItem.find(params[:feed_item_id])
   end
 
+  # Save the bookmarklet to the correct hub and bookmark collection.
   def add_item
     @mini_title = 'Add this item to a TagTeam bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url(params[:feed_item][:url])
@@ -22,9 +25,11 @@ class BookmarkletsController < ApplicationController
       end
     end
 
+    # Merge tags.
     @feed_item.tag_list = [@feed_item.tag_list, params[:feed_item][:tag_list].split(/,\s*/).collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(',')
     @feed = Feed.find(:first, :conditions => {:id => params[:feed_item][:bookmark_collection_id], :bookmarking_feed => true})
 
+    # Only add to a feed that the user can add to.
     if @feed.blank? || ! current_user.is?(:owner, @feed)
       @feed = current_user.get_default_bookmarking_bookmark_collection_for(@hub.id)
     end
@@ -50,6 +55,7 @@ class BookmarkletsController < ApplicationController
     end
   end
 
+  # Generate the bookmarklet.
   def add
     @mini_title = 'Add this item to a TagTeam bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
