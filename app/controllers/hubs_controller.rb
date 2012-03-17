@@ -1,6 +1,6 @@
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create, :my]
-  before_filter :add_breadcrumb
+  before_filter :add_breadcrumb, :except => [:index]
   caches_action :index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => 15.minutes, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
