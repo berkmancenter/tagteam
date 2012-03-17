@@ -65,7 +65,6 @@ class TagsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
-
   private
 
   def load_hub

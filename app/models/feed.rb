@@ -39,13 +39,15 @@ class Feed < ActiveRecord::Base
     'Feed'
   end
 
-  api_accessible :bookmarklet_choices do|t|
+  api_accessible :default do|t|
     t.add :authors
     t.add :id
     t.add :title
+    t.add :feed_url
+    t.add :bookmarking_feed
   end
 
-  api_accessible :default do|t|
+  api_accessible :bookmarklet_choices do|t|
     t.add :authors
     t.add :id
     t.add :title

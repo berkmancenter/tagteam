@@ -12,6 +12,20 @@ class FeedRetrieval < ActiveRecord::Base
   after_save :update_feed_updated_at
   attr_accessor :changelog_summary_cache
   attr_accessible :feed_id, :success, :status_code
+  acts_as_api do |c|
+    c.allow_jsonp_callback = true
+  end
+
+  api_accessible :default do|t|
+    t.add :feed
+    t.add :hubs
+    t.add :status_code
+    t.add :created_at
+    t.add :updated_at
+    t.add :success
+    t.add :new_feed_items
+    t.add :changed_feed_items
+  end
 
   searchable do
     integer :feed_id

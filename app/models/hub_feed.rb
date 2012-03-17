@@ -28,6 +28,8 @@ class HubFeed < ActiveRecord::Base
     t.add :display_title, :as => :title
     t.add :display_description, :as => :description
     t.add :link
+    t.add :hub
+    t.add :feed
   end
   
   after_create do

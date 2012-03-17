@@ -20,7 +20,11 @@ class HubsController < ApplicationController
       paginate :page => params[:page], :per_page => get_per_page
     end
     @feed_retrievals.execute!
-    render :layout => ! request.xhr?
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
+      format.xml{ render_for_api :default, :xml => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
+    end
   end
 
   def bookmark_collections
