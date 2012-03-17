@@ -6,12 +6,13 @@ class HubsController < ApplicationController
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
+    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds]
     allow :superadmin, :hubadmin
   end
 
+  # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.
   def retrievals
     hub_id = @hub.id
     @feed_retrievals = FeedRetrieval.search(:include => [:feed => {:hub_feeds => [:feed]}]) do
@@ -27,11 +28,17 @@ class HubsController < ApplicationController
     end
   end
 
+  # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
   def bookmark_collections
     @bookmark_collections = HubFeed.bookmark_collections.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
-    render :layout => ! request.xhr?
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @bookmark_collections }
+      format.xml{ render_for_api :default, :xml => @bookmark_collections }
+    end
   end
 
+  # Accessible via html, json, and xml. Pass the date in YYYY, YYYY-MM or YYYY-MM-DD format in the "?date=" parameter
   def by_date
     # TODO - should just use solr, this code works and performs fine but is odd because it predates the integration of the 
     # solr search engine.
@@ -60,15 +67,21 @@ class HubsController < ApplicationController
     ].compact
 
     @feed_items = FeedItem.paginate(:select => FeedItem.columns_for_line_item, :conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
-    render :layout => ! request.xhr?
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @feed_items }
+      format.xml{ render_for_api :default, :xml => @feed_items }
+    end
   end
 
+  # Recalculate all tag facets and re-apply all filters for all items in this hub. Only available to users with the "superadmin" privilege.
   def recalc_all_tags
     Resque.enqueue(RecalcAllItems,@hub.id)
     flash[:notice] = 'Re-rendering all tags. This will take a while.'
     redirect_to hub_path(@hub)
   end
 
+  # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml. 
   def items
     hub_id = @hub.id
 
@@ -155,6 +168,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # A list of all republished feeds(aka remixed feeds) that can be added to for the current user.
   def custom_republished_feeds
     @republished_feeds =  RepublishedFeed.select('DISTINCT republished_feeds.*').joins(:accepted_roles => [:users]).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_id = ?','owner','RepublishedFeed', ((current_user.blank?) ? nil : current_user.id), @hub.id ]).order('updated_at')
  
@@ -173,6 +187,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # All hubs, as html, json, or xml.
   def index
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
@@ -185,6 +200,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # Available as html, json, or xml.
   def show
     @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
     respond_to do|format|
@@ -198,6 +214,7 @@ class HubsController < ApplicationController
     @hub = Hub.new
   end
 
+  # A list of the current users' hubs, used mostly by the bookmarklet.
   def my
     @hubs = current_user.my(Hub)
     respond_to do |format|
@@ -206,6 +223,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # A list of the current users' bookmark collections for a specific hub, used mostly by the bookmarklet.
   def my_bookmark_collections
     @bookmark_collections = current_user.my_bookmarking_bookmark_collections_in(@hub)
     respond_to do |format|
@@ -257,6 +275,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # Search results are available as html, json, or xml. 
   def item_search
 
     unless params[:include_tag_ids].blank?
@@ -316,6 +335,7 @@ class HubsController < ApplicationController
     end
   end
 
+  # Not really used, needs to be updated.
   def search
     unless params[:q].blank?
       @search = Sunspot.new_search ((params[:search_in].blank?) ? [HubFeed,FeedItem,ActsAsTaggableOn::Tag] : params[:search_in].collect{|si| si.constantize})
