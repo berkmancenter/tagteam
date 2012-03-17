@@ -224,7 +224,7 @@
           $('#feed_item_bookmark_collection_id_input').show();
           $('#feed_item_tag_list_input').show();
           $('#feed_item_bookmark_collection_id').html('');
-          $(json).each(function(i,bookmarkCollectionObj){
+          $(json.feeds).each(function(i,bookmarkCollectionObj){
             $('#feed_item_bookmark_collection_id').append(
               $('<option />').attr({value: bookmarkCollectionObj.id}).text(bookmarkCollectionObj.title)
             );

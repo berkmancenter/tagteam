@@ -29,6 +29,7 @@ class TagsController < ApplicationController
 
     respond_to do |format|
       format.json { 
+        # Should probably change this to use render_for_api
         render :json => @search.results.collect{|r| {:id => r.id, :label => r.name} }
       }
     end
@@ -41,7 +42,11 @@ class TagsController < ApplicationController
     else
       @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
     end
-    render :layout => ! request.xhr?
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @tags, :root => :tags }
+      format.xml{ render_for_api :default, :xml => @tags, :root => :tags }
+    end
   end
 
   def rss

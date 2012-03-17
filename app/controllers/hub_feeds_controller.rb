@@ -52,6 +52,9 @@ class HubFeedsController < ApplicationController
       format.html{
         render :layout => ! request.xhr? 
       }
+      format.json{
+        render_for_api :default, :json => @hub_feeds
+      }
     end
   end
 

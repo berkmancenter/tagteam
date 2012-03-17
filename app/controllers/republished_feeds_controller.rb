@@ -22,9 +22,9 @@ class RepublishedFeedsController < ApplicationController
   def index
     @republished_feeds = @hub.republished_feeds.paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
-      format.html{
-        render :layout => ! request.xhr? 
-      }
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @republished_feeds }
+      format.xml{ render_for_api :default, :xml => @republished_feeds }
     end
   end
 
@@ -33,6 +33,11 @@ class RepublishedFeedsController < ApplicationController
     @owners = @republished_feed.owners
     @hub = @republished_feed.hub
 #    @republished_feed.items
+    respond_to do |format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @republished_feed }
+      format.xml{ render_for_api :default, :xml => @republished_feed }
+    end
   end
 
   def items
@@ -46,9 +51,10 @@ class RepublishedFeedsController < ApplicationController
     end
     respond_to do |format|
       format.html{ render :layout => ! request.xhr? }
-      format.rss{}
-      format.atom{}
-      format.json{render_for_api :default,  :json => (@search.blank?) ? [] : @search.results, :callback => params[:callback] }
+      format.rss{ }
+      format.atom{ }
+      format.json{ render_for_api :default,  :json => (@search.blank?) ? [] : @search.results }
+      format.xml{ render_for_api :default,  :xml => (@search.blank?) ? [] : @search.results }
     end
   end
 

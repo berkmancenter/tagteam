@@ -15,6 +15,8 @@ class FeedItemsController < ApplicationController
     breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
+      format.json{ render_for_api :with_content, :json => @feed_item}
+      format.xml{ render_for_api :with_content, :xml => @feed_item}
     end
   end
 
@@ -30,6 +32,8 @@ class FeedItemsController < ApplicationController
     @related.execute!
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
+      format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }
+      format.xml{ render_for_api :default, :xml => (@related.blank?) ? [] : @related.results }
     end
   end
 
@@ -37,17 +41,23 @@ class FeedItemsController < ApplicationController
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     respond_to do |format|
-      format.html{
-        render :layout => ! request.xhr?
-      }
+      format.html{ render :layout => ! request.xhr? }
       format.atom{ }
       format.rss{ }
-      format.json{render_for_api :default,  :json => @feed_items, :callback => params[:callback] }
+      format.json{ render_for_api :default,  :json => @feed_items }
+      format.xml{ render_for_api :default,  :xml => @feed_items }
     end
   end
 
   def show
-    breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    respond_to do |format|
+      format.html{
+        breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
+        render :layout => ! request.xhr?
+      }
+      format.json{ render_for_api :with_content, :json => @feed_item }
+      format.xml{ render_for_api :with_content, :xml => @feed_item }
+    end
   end
 
 

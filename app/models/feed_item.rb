@@ -1,6 +1,8 @@
 class FeedItem < ActiveRecord::Base
   acts_as_taggable
-  acts_as_api
+  acts_as_api do|c|
+    c.allow_jsonp_callback = true
+  end
 
   include ModelExtensions
 
@@ -30,6 +32,21 @@ class FeedItem < ActiveRecord::Base
     t.add :date_published
     t.add :last_updated
     t.add :tag_context_hierarchy, :as => :tags
+  end
+
+  api_accessible :with_content do |t|
+    t.add :id
+    t.add :title
+    t.add :url
+    t.add :guid
+    t.add :authors
+    t.add :hub_ids
+    t.add :hub_feed_ids
+    t.add :date_published
+    t.add :last_updated
+    t.add :tag_context_hierarchy, :as => :tags
+    t.add :description
+    t.add :content
   end
 
   searchable do

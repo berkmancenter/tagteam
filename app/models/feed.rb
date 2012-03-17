@@ -17,6 +17,9 @@ class Feed < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
   acts_as_authorization_object
+  acts_as_api do|c|
+    c.allow_jsonp_callback = true
+  end
 
   @dirty_feed_items = []
 
@@ -34,6 +37,18 @@ class Feed < ActiveRecord::Base
 
   def self.descriptive_name
     'Feed'
+  end
+
+  api_accessible :bookmarklet_choices do|t|
+    t.add :authors
+    t.add :id
+    t.add :title
+  end
+
+  api_accessible :default do|t|
+    t.add :authors
+    t.add :id
+    t.add :title
   end
 
   searchable(:include => [:hubs, :hub_feeds]) do

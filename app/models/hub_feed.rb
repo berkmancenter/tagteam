@@ -6,6 +6,9 @@ class HubFeed < ActiveRecord::Base
   include AuthUtilities
 
   acts_as_authorization_object
+  acts_as_api do|c|
+    c.allow_jsonp_callback = true
+  end
   belongs_to :hub
   belongs_to :feed
   has_many :feed_items, :through => :feed
@@ -19,6 +22,13 @@ class HubFeed < ActiveRecord::Base
   scope :need_updating, lambda { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? and bookmarking_feed is false', Time.now]) }
 
   attr_accessible :title, :description
+
+  api_accessible :default do|t|
+    t.add :id
+    t.add :display_title, :as => :title
+    t.add :display_description, :as => :description
+    t.add :link
+  end
   
   after_create do
     logger.warn('After create is firing')

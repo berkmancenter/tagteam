@@ -28,6 +28,15 @@ ActsAsTaggableOn::Tag.instance_eval do
   has_many :modify_tag_filters
   has_many :delete_tag_filters
   has_many :input_sources, :dependent => :destroy, :as => :item_source
+  
+  acts_as_api do|c|
+    c.allow_jsonp_callback = true
+  end
+
+  api_accessible :default do |t|
+    t.add :id
+    t.add :name
+  end
 
   searchable do
     text :name

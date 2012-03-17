@@ -7,11 +7,25 @@ class RepublishedFeed < ActiveRecord::Base
   end
 
   acts_as_authorization_object
+  acts_as_api do|c|
+    c.allow_jsonp_callback = true
+  end
+
   SORTS = ['date_published', 'title']
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]
 
   belongs_to :hub
   has_many :input_sources, :dependent => :destroy, :order => :position 
+
+  api_accessible :default do |t|
+    t.add :id
+    t.add :title
+    t.add :hub
+    t.add :description
+    t.add :created_at
+    t.add :updated_at
+    t.add :input_sources
+  end
 
   def inputs
     input_sources.where(:effect => 'add') 

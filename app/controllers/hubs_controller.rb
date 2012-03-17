@@ -66,7 +66,6 @@ class HubsController < ApplicationController
   end
 
   def items
-    @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
     hub_id = @hub.id
 
     if request.format.to_s.match(/rss|atom/i)
@@ -84,10 +83,14 @@ class HubsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ 
+        @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
+        render :layout => ! request.xhr? 
+      }
       format.rss{ }
       format.atom{ }
-      format.json{render_for_api :default,  :json => @search.results, :callback => params[:callback] }
+      format.json{ render_for_api :default, :json => (@search.blank?) ? [] : @search.results }
+      format.xml{ render_for_api :default, :xml => (@search.blank?) ? [] : @search.results }
     end
   end
 
@@ -171,10 +174,20 @@ class HubsController < ApplicationController
       @my_hubs = current_user.my(Hub)
     end
     @hubs = Hub.paginate(:page => params[:page], :per_page => get_per_page)
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @hubs }
+      format.xml{ render_for_api :default, :xml => @hubs }
+    end
   end
 
   def show
     @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @hub }
+      format.xml{ render_for_api :default, :xml => @hub }
+    end
   end
 
   def new
@@ -184,14 +197,16 @@ class HubsController < ApplicationController
   def my
     @hubs = current_user.my(Hub)
     respond_to do |format|
-      format.json{ render :json => @hubs }
+      format.json{ render_for_api :default, :json => @hubs }
+      format.xml{ render_for_api :default, :xml => @hubs }
     end
   end
 
   def my_bookmark_collections
     @bookmark_collections = current_user.my_bookmarking_bookmark_collections_in(@hub)
     respond_to do |format|
-      format.json{ render :json => @bookmark_collections }
+      format.json{ render_for_api :bookmarklet_choices, :json => @bookmark_collections }
+      format.xml{ render_for_api :bookmarklet_choices, :xml => @bookmark_collections }
     end
   end
 
@@ -291,10 +306,9 @@ class HubsController < ApplicationController
       @search.execute!
     end
     respond_to do|format|
-      format.html{
-        render :layout => ! request.xhr?
-      }
-      format.json{ render :json => @search }
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => (@search.blank?) ? [] : @search.results }
+      format.xml{ render_for_api :default, :xml => (@search.blank?) ? [] : @search.results }
     end
   end
 
