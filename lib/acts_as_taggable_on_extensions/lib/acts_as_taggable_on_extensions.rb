@@ -27,6 +27,7 @@ ActsAsTaggableOn::Tag.instance_eval do
   has_many :add_tag_filters
   has_many :modify_tag_filters
   has_many :delete_tag_filters
+  has_many :input_sources, :dependent => :destroy, :as => :item_source
 
   searchable do
     text :name

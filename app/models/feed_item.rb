@@ -80,6 +80,7 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
+  has_many :input_sources, :dependent => :destroy, :as => :item_source
   after_save :reindex_all_tags
 
   def reindex_all_tags

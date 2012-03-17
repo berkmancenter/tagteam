@@ -30,6 +30,7 @@ class Feed < ActiveRecord::Base
   has_many :hubs, :through => :hub_feeds
   has_many :feed_retrievals, :order => 'created_at desc', :dependent => :destroy
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
+  has_many :input_sources, :dependent => :destroy, :as => :item_source
 
   def self.descriptive_name
     'Feed'
