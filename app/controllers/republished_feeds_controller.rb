@@ -1,7 +1,6 @@
 class RepublishedFeedsController < ApplicationController
   before_filter :load_republished_feed, :except => [:new, :create, :index]
   before_filter :load_hub, :only => [:new, :create, :index]
-  before_filter :prep_resources
   before_filter :register_breadcrumb
 
   caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
@@ -19,6 +18,7 @@ class RepublishedFeedsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
+  # A list of RepublishedFeeds (aka "remixed feeds") in a hub. Returns html, json, and xml.
   def index
     @republished_feeds = @hub.republished_feeds.paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
@@ -28,6 +28,7 @@ class RepublishedFeedsController < ApplicationController
     end
   end
 
+  # An individual RepublishedFeed. Returns html, json, and xml.
   def show
     @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
     @owners = @republished_feed.owners
@@ -40,6 +41,7 @@ class RepublishedFeedsController < ApplicationController
     end
   end
 
+  # A paginated list of FeedItems in this RepublishedFeed. Returns html, rss, atom, json, and xml. 
   def items
     @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
     @search = @republished_feed.item_search
@@ -57,6 +59,7 @@ class RepublishedFeedsController < ApplicationController
       format.xml{ render_for_api :default,  :xml => (@search.blank?) ? [] : @search.results }
     end
   end
+
 
   def inputs
     render :layout => ! request.xhr?
@@ -122,10 +125,6 @@ class RepublishedFeedsController < ApplicationController
   def load_republished_feed
     @republished_feed = RepublishedFeed.find(params[:id])
     @hub = @republished_feed.hub
-  end
-
-  def prep_resources
-#    @javascripts_extras = ['republished_feeds']
   end
 
   def register_breadcrumb

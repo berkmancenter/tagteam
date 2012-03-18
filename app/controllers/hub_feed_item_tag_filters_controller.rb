@@ -1,4 +1,4 @@
-# Allow Hub owners to add filters to a FeedItem.
+# Allows Hub owners to add HubFeedItemTagFilters to a FeedItem.
 class HubFeedItemTagFiltersController < ApplicationController
   before_filter :load_feed_item
   before_filter :load_hub_feed_item_tag_filter, :except => [:index, :new, :create]

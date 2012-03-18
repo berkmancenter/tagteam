@@ -1,11 +1,11 @@
 class TagsController < ApplicationController
 
   before_filter :load_hub
-  before_filter :load_tag_from_name, :only => [:rss, :atom, :show, :json]
-  before_filter :load_feed_items_for_rss, :only => [:rss, :atom, :json]
+  before_filter :load_tag_from_name, :only => [:rss, :atom, :show, :json, :xml]
+  before_filter :load_feed_items_for_rss, :only => [:rss, :atom, :json, :xml]
   before_filter :add_breadcrumbs
 
-  caches_action :rss, :atom, :json, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
     if request.fullpath.match(/tag\/rss/)
       params[:format] = :rss
     elsif request.fullpath.match(/tag\/atom/)
@@ -18,6 +18,7 @@ class TagsController < ApplicationController
     allow all
   end
 
+  # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
     hub_id = @hub.id
     @search = ActsAsTaggableOn::Tag.search do
@@ -33,9 +34,9 @@ class TagsController < ApplicationController
         render :json => @search.results.collect{|r| {:id => r.id, :label => r.name} }
       }
     end
-
   end
 
+  # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.
   def index
     if @hub_feed.blank?
       @tags = FeedItem.tag_counts_on(@hub.tagging_key)
@@ -49,16 +50,25 @@ class TagsController < ApplicationController
     end
   end
 
+  # A paginated RSS feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag. This doesn't use the normal respond_to / format system because we use names instead of IDs to identify a tag.
   def rss
   end
 
+  # A paginated Atom feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def atom
   end
 
+  # A paginated json list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def json
-    render_for_api :default,  :json => @feed_items, :callback => params[:callback] 
+    render_for_api :default,  :json => @feed_items
   end
 
+  # A paginated xml list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
+  def xml
+    render_for_api :default,  :xml => @feed_items
+  end
+
+  # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
     @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)

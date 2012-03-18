@@ -1,3 +1,4 @@
+# A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create, :my]
   before_filter :add_breadcrumb, :except => [:index]

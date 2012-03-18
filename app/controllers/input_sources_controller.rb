@@ -1,3 +1,4 @@
+# Allows non-authenticated users to see info about InputSources. Also allows RepublishedFeed and InputSource owners to modify / add / delete.  
 class InputSourcesController < ApplicationController
   before_filter :load_input_source, :except => [:new, :create, :find]
   before_filter :load_republished_feed, :only => [:new, :create, :find]

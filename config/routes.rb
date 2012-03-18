@@ -49,6 +49,7 @@ Tagteam::Application.routes.draw do
     match 'tag/rss/:name' => 'tags#rss', :as => 'tag_rss', :constraints => { :name => /.+/ }
     match 'tag/atom/:name' => 'tags#atom', :as => 'tag_atom', :constraints => { :name => /.+/ }
     match 'tag/json/:name' => 'tags#json', :as => 'tag_json', :constraints => { :name => /.+/ }
+    match 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { :name => /.+/ }
     match 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { :name => /.+/ }
 
     member do

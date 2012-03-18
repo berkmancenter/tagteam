@@ -1,3 +1,4 @@
+# Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
   before_filter :load_hub_feed, :except => [:index, :new, :create, :autocomplete]
   before_filter :load_hub

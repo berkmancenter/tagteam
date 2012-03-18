@@ -1,3 +1,4 @@
+# Allow a Hub owner to add HubFeedTagFilters to a HubFeed.
 class HubFeedTagFiltersController < ApplicationController
   before_filter :load_hub_feed, :except => [:new]
   before_filter :load_hub_feed_tag_filter, :except => [:index, :new, :create]

@@ -1,3 +1,4 @@
-*/2 * * * * cd /home/djcp/code/tagteam && i=`/usr/bin/wget -O - -nv --post-file=config/initializers/tagteam_shared_key.rb http://localhost:3000/scheduled_tasks/expire_cache 2>&1` || echo $i
-*/3 * * * * cd /home/djcp/code/tagteam && i=`/usr/bin/wget -O - -nv --post-file=config/initializers/tagteam_shared_key.rb http://localhost:3000/scheduled_tasks/update_feeds 2>&1` || echo $i
+# Fix the URLs below to match your production environment.
+*/2 * * * * cd /home/djcp/code/tagteam && i=`/usr/bin/wget --timeout=300 -O - -nv --post-file=config/initializers/tagteam_shared_key.rb http://localhost:3000/scheduled_tasks/expire_cache 2>&1` || echo $i
+*/3 * * * * cd /home/djcp/code/tagteam && i=`/usr/bin/wget --timeout=300 -O - -nv --post-file=config/initializers/tagteam_shared_key.rb http://localhost:3000/scheduled_tasks/update_feeds 2>&1` || echo $i
 
