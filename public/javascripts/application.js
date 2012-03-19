@@ -38,7 +38,10 @@
           e.preventDefault();
           $.cookie('per_page',$(this).val(), {expires: 365, path: $.rootPath()});
           var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-          var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/&page=\d+/,'&page=1');
+          var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/page=\d+/,'page=1');
+          if (! paginationLink.match(/page=\d+/)){
+            paginationLink = paginationLink + "&page=1";
+          }
           $.ajax({
             type: 'GET',
             url: paginationLink,
