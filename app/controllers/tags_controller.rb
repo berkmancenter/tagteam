@@ -10,6 +10,10 @@ class TagsController < ApplicationController
       params[:format] = :rss
     elsif request.fullpath.match(/tag\/atom/)
       params[:format] = :atom
+    elsif request.fullpath.match(/tag\/json/)
+      params[:format] = :json
+    elsif request.fullpath.match(/tag\/xml/)
+      params[:format] = :xml
     end
     request.fullpath + "&per_page=" + get_per_page
   }

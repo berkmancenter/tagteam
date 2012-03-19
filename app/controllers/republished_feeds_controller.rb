@@ -60,11 +60,12 @@ class RepublishedFeedsController < ApplicationController
     end
   end
 
-
+  # List the InputSource objects that add items to this RepublishedFeed.
   def inputs
     render :layout => ! request.xhr?
   end
 
+  # List the InputSource objects that remove items from this RepublishedFeed.
   def removals
     render :layout => ! request.xhr?
   end
