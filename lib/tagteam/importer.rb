@@ -16,7 +16,7 @@ module Tagteam
       @target_object = options[:target_object]
       
       begin
-        @filehandle = File.open(file_name)
+        @filehandle = (file_name.respond_to?(:read)) ? file_name : File.open(file_name)
       rescue Exception
         raise Tagteam::ImportFileNotThere
       end

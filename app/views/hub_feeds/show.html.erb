@@ -17,25 +17,14 @@
     <li><%= link_to('Tags', hub_feed_tags_path(@hub_feed)) %></li>
     <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
     <li><%= link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
+    <% if ! @hub_feed.blank? && ! current_user.blank? && current_user.is?(:owner, @hub_feed.feed) && @hub_feed.feed.is_bookmarking_feed? %>
+      <li><a href="#import">Import Items</a></li>
+    <% end %>
   </ul>
 
   <div id="about"> 
     <%= documentation('hub-feed-about-tab') %>
 
-    <% if ! @hub_feed.blank? && ! current_user.blank? && current_user.is?(:owner, @hub_feed.feed) && @hub_feed.feed.is_bookmarking_feed? %>
-      <h2>Import items from a file</h2>
-      <p>
-      <%= form_tag(hub_feed_import_path(), :multipart => true, :method => :post) do %>
-        <ul class="form_controls">
-          <li>
-            Type: <%= select_tag(:type, options_for_select([['Connotea RDF export',:connotea_rdf], ['Delicious','delicious']])) %>
-          </li>
-          <li>File: <%= file_field_tag(:import_file) %></li>
-          <li><%= submit_tag('Import items', :class => 'button') %></li>
-        </ul>
-      <% end %>
-      </p>
-    <% end %>
 
     <% unless @hub_feed.feed.is_bookmarking_feed? %>
       <dl class="metadata">
@@ -52,5 +41,20 @@
       </dl>
     <% end %>
   </div>
-
+  <% if ! @hub_feed.blank? && ! current_user.blank? && current_user.is?(:owner, @hub_feed.feed) && @hub_feed.feed.is_bookmarking_feed? %>
+    <div id="import">
+      <h2>Import items from a file</h2>
+      <p>
+      <%= form_tag(import_hub_feed_path(@hub_feed), :multipart => true, :method => :post) do %>
+        <ul class="form_controls">
+          <li>
+          Type: <%= select_tag(:type, options_for_select([['Connotea RDF export',:connotea_rdf], ['Delicious','delicious']])) %>
+          </li>
+          <li>File: <%= file_field_tag(:import_file) %></li>
+          <li><%= submit_tag('Import items', :class => 'button') %></li>
+        </ul>
+      <% end %>
+      </p>
+    </div>
+  <% end %>
 </div>

@@ -8,6 +8,7 @@
 #
 class FeedItem < ActiveRecord::Base
   acts_as_taggable
+  acts_as_authorization_object
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
@@ -21,7 +22,7 @@ class FeedItem < ActiveRecord::Base
     auto_truncate_columns(:title,:url,:guid,:authors,:contributors,:description,:content,:rights)
   end
 
-  attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights
+  attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated
   attr_accessor :hub_id, :bookmark_collection_id
   
   # Necessary because we don't want to pass the huge content
