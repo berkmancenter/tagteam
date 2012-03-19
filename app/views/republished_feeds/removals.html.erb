@@ -3,5 +3,5 @@
 <p>The feeds, tags, searches and items below are removed from this feed before publishing.</p>
 <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'}, :locals => {:effect => 'add'} %>
 <% if current_user && current_user.is?(:owner, @republished_feed) %>
-  <%= link_to(raw('Remove items from this feed'), new_input_source_path(:republished_feed_id => @republished_feed, :effect => 'remove'), :class => 'new_object') %>
+  <p>Remove items from this remixed feed by using the controls throughout this hub.</p>
 <% end %>
