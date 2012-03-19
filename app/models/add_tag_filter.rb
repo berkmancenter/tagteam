@@ -1,3 +1,4 @@
+# An AddTagFilter lets you add a ActsAsTaggableOn::Tag to an object via a HubTagFilter, HubFeedTagFilter or HubFeedItemTagFilter.
 class AddTagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
@@ -27,6 +28,7 @@ class AddTagFilter < ActiveRecord::Base
     'add'
   end
 
+  # Does the actual "filtering" by appending itself into the tag list.
   def act(filtered_tags)
     filtered_tags << self.tag.name
   end

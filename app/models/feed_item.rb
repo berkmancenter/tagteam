@@ -1,9 +1,18 @@
+# A FeedItem is an individual bit of content that's gotten into TagTeam via a Feed or the bookmarklet. It can belong to many Feeds, has many ActsAsTaggableOn::Tag objects, and uses a subset of Dublin Core metadata to track it's info.
+#
+# A FeedItem belongs to a Hub through the HubFeed model, which means a FeedItem can belong to multiple Hubs as well. It has a separate tag context for every Hub, which is a pre-calculated tag list with the filters applied within that Hub. This means a FeedItem can have a separate set of tags for every Hub it appears in after filters are applied.
+#
+# A FeedItem is unique on its url.
+#
+# A FeedItem can belong to one or more FeedRetrieval objects if more than one Feed contains this item.
+#
 class FeedItem < ActiveRecord::Base
   acts_as_taggable
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
 
+  # Most validations are contained in the ModelExtensions mixin.
   include ModelExtensions
 
   before_validation do
@@ -78,10 +87,12 @@ class FeedItem < ActiveRecord::Base
     time :last_updated
   end
 
+  # An array of all tag contexts for every tagging on this item.
   def tag_contexts
     self.taggings.collect{|tg| "#{tg.context}-#{tg.tag_id}"}
   end
 
+  # A hash of arrays of tag contexts - used for the API.
   def tag_context_hierarchy
     tags_for_api = {}
     self.taggings.collect do|tg|
@@ -100,6 +111,7 @@ class FeedItem < ActiveRecord::Base
   has_many :input_sources, :dependent => :destroy, :as => :item_source
   after_save :reindex_all_tags
 
+  # Reindex all taggings on all facets into solr.
   def reindex_all_tags
     self.taggings.collect{|tg| tg.tag}.uniq.collect{|t| t.index}
   end
@@ -108,10 +120,12 @@ class FeedItem < ActiveRecord::Base
     'Feed Item'
   end
 
+  # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
   def hub_feed_for_hub(hub_id)
     hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
   end
 
+  # The hubs for this item as found through its HubFeeds.
   def hubs
     # TODO Optimize via multi-table joins
     hf = self.hub_feeds
@@ -122,6 +136,7 @@ class FeedItem < ActiveRecord::Base
     (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
   end
 
+  # Re-render all tag facets for this FeedItem.
   def update_filtered_tags
     hs = self.hubs
     hs.each do |h|
@@ -130,6 +145,7 @@ class FeedItem < ActiveRecord::Base
     self.save
   end
 
+  # Re-render tag facets by applying filters but only for this Hub.
   def render_filtered_tags_for_hub(hub = Hub.first)
     #"tag_list" is the source list of tags directly from RSS/Atom feeds.
     tag_list_for_filtering = self.tag_list.dup
@@ -164,6 +180,7 @@ class FeedItem < ActiveRecord::Base
 
   alias :display_title :to_s
 
+  # Used to emit this FeedItem as an array when it's included in at RepublishedFeed.
   def items(not_needed)
     [self]
   end
@@ -172,6 +189,7 @@ class FeedItem < ActiveRecord::Base
     %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
   end
 
+  # Used during the Feed#update_feed spidering process to de-duplicate and create a FeedItem if it doesn't exist. Tags from all sources are merged into a FeedItem. Changes are tracked and saved on the FeedRetrieval object passed into this method. If there are changes, a Resque job is created to re-calculate tag facets.
   def self.create_or_update_feed_item(feed,item,feed_retrieval)
     fi = FeedItem.find_or_initialize_by_url(:url => item.link)
     item_changelog = {}

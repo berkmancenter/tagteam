@@ -1,3 +1,8 @@
+# A RepublishedFeed (aka Remix) contains many InputSource objects that add and remove FeedItem objects. The end result of these additions and removals is an array of FeedItem objects found via the Sunspot search engine.
+#
+# A RepublishedFeed belongs to a Hub.
+#
+# Removals take precedence over additions.
 class RepublishedFeed < ActiveRecord::Base
 
   include AuthUtilities
@@ -10,6 +15,8 @@ class RepublishedFeed < ActiveRecord::Base
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
+
+  attr_accessible :title, :hub_id, :description, :limit
 
   SORTS = ['date_published', 'title']
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]
@@ -27,16 +34,17 @@ class RepublishedFeed < ActiveRecord::Base
     t.add :input_sources
   end
 
+  # All InputSource objects that add FeedItems to this RepublishedFeed.
   def inputs
     input_sources.where(:effect => 'add') 
   end
 
+  # All InputSource objects that remove FeedItems from this RepublishedFeed.
   def removals
     input_sources.where(:effect => 'remove') 
   end
 
-  attr_accessible :title, :hub_id, :description, :limit
-
+  # Create a set of arrays that define additions and removals to create a paginated Sunspot query.
   def item_search
 
     add_feeds = []

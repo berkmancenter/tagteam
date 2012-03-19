@@ -1,3 +1,5 @@
+# A HubFeedTagFilter is applied for all items within a HubFeed. It is applied after a HubTagFilter but before a HubFeedItemTagFilter, so it sits in the middle of the filter chain.
+#
 class HubFeedTagFilter < ActiveRecord::Base
   acts_as_list
   acts_as_api do |c|
@@ -18,9 +20,9 @@ class HubFeedTagFilter < ActiveRecord::Base
     t.add :filter
   end
 
+  # It makes no sense to allow a tag to be filtered multiple times at this level - 
+  # so disallow it. This means we need to look up the stack to see what tag we're filtering on .
   def validate_filter_uniqueness
-    # So it makes no sense to allow a tag to be filtered multiple times at this level - 
-    # so disallow it. This means we need to look up the stack to see what tag we're filtering on .
     filters_with_this_tag = self.class.where(:hub_feed_id => self.hub_feed_id).includes(:filter).collect{|hftf| hftf.filter.tag_id == self.filter.tag_id}.flatten.uniq
     
     if filters_with_this_tag.include?(true)
@@ -28,6 +30,7 @@ class HubFeedTagFilter < ActiveRecord::Base
     end
   end
 
+  # Updates all tag facets for items in this HubFeed.
   def update_filtered_items
     logger.warn('Update filtered items')
     if self.filter.class == AddTagFilter

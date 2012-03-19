@@ -5,11 +5,11 @@ HTML_TAGS_TO_ALLOW = %w(ul li ol p b em strong div span blockquote img a dd dt d
 ATTRIBUTES_TO_ALLOW = %w(href src alt title width height border cellpadding cellspacing)
 
 # If a feed has changed, schedule it to be spidered again within this interval.
-MINIMUM_FEED_SPIDER_INTERVAL = 30.minutes
+MINIMUM_FEED_SPIDER_INTERVAL = 15.minutes
 
 # If a feed has not changed within this interval, back off for SPIDER_DECAY_INTERVAL. This is set to 6 hours to 
 # ensure we don't entirely forget that a feed is busy over night.
-SPIDER_UPDATE_DECAY = 6.hours
+SPIDER_UPDATE_DECAY = 2.hours
 
 # After SPIDER_UPDATE_DECAY has been reached, extend the next spidering event out by this interval.
 

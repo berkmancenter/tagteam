@@ -1,3 +1,4 @@
+# In-app documentation linked contextually via the ApplicationHelper#documentation helper.
 class Documentation < ActiveRecord::Base
   include AuthUtilities
   # most validations are in ModelExtensions

@@ -1,3 +1,4 @@
+# An DeleteTagFilter lets you remove a ActsAsTaggableOn::Tag from an object via a HubTagFilter, HubFeedTagFilter or HubFeedItemTagFilter.
 class DeleteTagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
@@ -27,6 +28,7 @@ class DeleteTagFilter < ActiveRecord::Base
     'Delete tag: '
   end
 
+  # Does the actual "filtering" by removing a tag from the tag list.
   def act(filtered_tags)
     filtered_tags.delete(self.tag.name)
   end

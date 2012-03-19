@@ -1,3 +1,8 @@
+# A HubFeed links a Hub with a Feed. A Hub has many HubFeeds.
+#
+# A HubFeed inherits most its metadata from its parent Feed, but a Hub owner can override the title and description by editing the HubFeed.
+# 
+#
 class HubFeed < ActiveRecord::Base
   include ModelExtensions
   before_validation do
@@ -33,7 +38,7 @@ class HubFeed < ActiveRecord::Base
   end
   
   after_create do
-    logger.warn('After create is firing')
+  #  logger.warn('After create is firing')
     reindex_items_of_concern
     Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
@@ -41,7 +46,11 @@ class HubFeed < ActiveRecord::Base
   after_destroy do
     reindex_items_of_concern
 
+    # Possibly not necessary, but I put this in for a reason at some point so it might be.
     ActsAsTaggableOn::Tagging.destroy_all(:context => self.hub.tagging_key.to_s, :taggable_type => 'FeedItem', :taggable_id => self.feed.feed_items.collect{|fi| fi.id})
+    self.feed.feed_items.each do|fi|
+      Resque.enqueue(FeedItemTagRenderer,fi.id)
+    end
     Resque.enqueue(ReindexTags)
   end
 
@@ -67,10 +76,6 @@ class HubFeed < ActiveRecord::Base
     string :language
   end
 
-  def self.per_page
-    25
-  end
-
   def self.descriptive_name
     'Feed'
   end
@@ -84,38 +89,47 @@ class HubFeed < ActiveRecord::Base
     (self.description.blank?) ? self.feed.description : self.description
   end
 
+  # Inherited from this HubFeed's feed.
   def link
     self.feed.link
   end
 
+  # Inherited from this HubFeed's feed.
   def guid
     self.feed.guid
   end
 
+  # Inherited from this HubFeed's feed.
   def rights
     self.feed.rights
   end
 
+  # Inherited from this HubFeed's feed.
   def authors
     self.feed.authors
   end
 
+  # Inherited from this HubFeed's feed.
   def feed_url
     self.feed.feed_url
   end
   
+  # Inherited from this HubFeed's feed.
   def generator
     self.feed.generator
   end
 
+  # Inherited from this HubFeed's feed.
   def last_updated
     self.feed.last_updated
   end
 
+  # Inherited from this HubFeed's feed.
   def flavor
     self.feed.flavor
   end
 
+  # Inherited from this HubFeed's feed.
   def language
     self.feed.language
   end
@@ -131,13 +145,6 @@ class HubFeed < ActiveRecord::Base
     []
   end
 
-  def feed_item_count
-    res = self.connection.execute('select count(*) from feed_items_feeds where feed_id = ' + self.connection.quote(self.feed_id))
-    res.first['count']
-  rescue
-    0
-  end
-
   def latest_feed_items(limit = 15)
     self.feed.feed_items.limit(limit)
   rescue Exception => e
@@ -145,8 +152,10 @@ class HubFeed < ActiveRecord::Base
     []
   end
 
+  # Around 15 (by default) of the latest tags. If tags appear more than once in the latest items, the limit will be off. This is a tradeoff for performance sake.
   def latest_tags(limit = 15)
-    self.latest_feed_items.includes(:taggings).collect{|fi| fi.taggings.reject{|tg| tg.context != self.hub.tagging_key.to_s}.collect{|tg| tg.tag} }.flatten.uniq[0,limit]
+    tags = ActsAsTaggableOn::Tagging.find(:all, :include => [:tag], :conditions => {:taggable_type => 'FeedItem', :taggable_id => self.latest_feed_items.collect{|fi| fi.id}, :context => self.hub.tagging_key.to_s}, :limit => limit).collect{|tg| tg.tag}.uniq
+    return tags
   rescue Exception => e
     logger.warn(e.inspect)
     return []

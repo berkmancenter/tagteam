@@ -1,3 +1,9 @@
+# A Hub contains many Feeds through the HubFeed class. A Feed belongs to many HubFeeds (allowing it to be used in many Hubs) and is unique on the feed_url.
+#
+# A Feed maps directly to an individual RSS feed, unless it's a bookmark collection. A Feed contains many FeedItem objects.
+#
+# If a Feed is a bookmark collection, it serves only to hold FeedItems added via the Bookmarklet. This lets us leverage the rest of the filtering, searching, aggregating and other features built into TagTeam. A bookmark collection is identified by the "bookmarking_feed" boolean being true. When this boolean is true, feed_url validations are bypassed and it will never be spidered.
+#
 class Feed < ActiveRecord::Base
 
   validate :feed_url do
@@ -74,6 +80,15 @@ class Feed < ActiveRecord::Base
     rec.is_bookmarking_feed?
   }
 
+  # TagTeam uses a decaying update interval - the less a Feed changes, the longer we go between spidering up to the MAXIMUM_FEED_SPIDER_INTERVAL (1 day by default) setting in the tagteam.rb initializer. 
+  #
+  # Once a feed goes more than SPIDER_UPDATE_DECAY (2 hours by default) from its last change, we increment the next check by an additional SPIDER_DECAY_INTERVAL (1 hour by default).
+  #
+  # We will reset the decay timer when the Feed changes, and spider it again in the next MINIMUM_FEED_SPIDER_INTERVAL (15 minutes by default).
+  #
+  # So - with the default values - if after around of spidering at MINIMUM_FEED_SPIDER_INTERVAL a feed hasn't changed in 2 hours, we'll check it again in three. If it hasn't changed in three, we'll check it in four - and so on up to a maximum of a day between checks. If the feed changes at any point, we'll start re-spidering it again at MINIMUM_FEED_SPIDER_INTERVAL, looking for changes and starting the decay cycle over again after 2 hours.
+  #
+  # This lets us have a good balance ensuring slowly changing feeds get checked while rapidly changing feeds are spidered more quickly. It also helps to catch edits done after an item is published in a timely fashion, it's pretty common for a publisher to revise an item right after making it public.  
   def set_next_scheduled_retrieval
 
     feed_last_changed_at = self.items_changed_at 
@@ -96,6 +111,7 @@ class Feed < ActiveRecord::Base
     self.bookmarking_feed
   end
 
+  # The method called by UpdateFeeds to download and parse new FeedItem content. A FeedRetrieval object documenting this event is created with a changelog of new or changed FeedItem objects that were seen. This may spawn Resque jobs if/when items change or are added. The meat of updating a FeedItem lives in the FeedItem#create_or_update_feed_item method.
   def update_feed
 
     return if self.bookmarking_feed?
@@ -128,14 +144,13 @@ class Feed < ActiveRecord::Base
     self.save
   end
 
-  def update_feed_item(item, fr)
-  end
-
+  # A list of the FeedItem objects contained in this feed - this method is used by the RepublishedFeed system, which expects an InputSource to provide an items method that contains an array of FeedItem objects.
   def items(not_needed)
     # TODO - tweak the include?
     self.feed_items.find(:all, :include => [:taggings, :tags], :order => 'id desc')
   end
 
+  # Takes the parse FeedItems and saves them along with a FeedRetrieval when a Feed is created.
   def save_feed_items_on_create
     self.dirty = false
     self.changelog = {}
@@ -158,6 +173,7 @@ class Feed < ActiveRecord::Base
 
   alias :display_title :to_s
 
+  # Used in the RepublishedFeed system to give this Feed an icon in lists.
   def mini_icon
     %q|<span class="ui-silk inline ui-silk-feed"></span>|
   end

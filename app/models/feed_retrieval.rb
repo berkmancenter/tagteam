@@ -1,3 +1,7 @@
+# A FeedRetrieval tracks the results of the spidering of a Feed. It contains a YAML changelog of new or changed FeedItem objects, and some representation of what actually changed.
+# 
+# FeedItem change tracking is used to calculate the spidering schedule for a Feed, and could be used in the future to calculate metrics and do some interesting analysis about what's getting posted when.  More on how scheduling works can be found in the Feed class.
+#
 class FeedRetrieval < ActiveRecord::Base
   belongs_to :feed
   has_and_belongs_to_many :feed_items 
@@ -5,6 +9,7 @@ class FeedRetrieval < ActiveRecord::Base
 
   scope :successful, where(['success is true'])
 
+  # Find the HubFeed for this FeedRetrieval within a Hub. A Feed can live in multiple hubs, so this slightly contorted method is needed to find how this FeedRetrieval relates in the context of a Hub.
   def hub_feed_for_hub(hub = Hub.first)
     self.feed.hub_feeds.reject{|hf| hf.hub_id != hub.id}.first
   end
@@ -35,28 +40,34 @@ class FeedRetrieval < ActiveRecord::Base
     time :updated_at
   end
 
+  # We've got changes, so updates the updated_at value for the actual feed this FeedRetrieval references.
   def update_feed_updated_at
     self.feed.updated_at = DateTime.now
     self.feed.save
   end
 
+  # de-YAMLize the changelog back into ruby objects.
   def parsed_changelog
     return nil if changelog.nil?
     YAML.load(self.changelog)
   end
 
+  # Extract the new FeedItem ids from the changelog.
   def new_feed_items
     self.changelog_summary[:new_records]
   end
 
+  # Extract the changed FeedItem ids from the changelog.
   def changed_feed_items
     self.changelog_summary[:changed_records]
   end
 
+  # Returns true if this FeedRetrieval has resulted in FeedItems with changes.
   def has_changes?
     return (new_feed_items.blank? && changed_feed_items.blank?) ? false : true
   end
 
+  # Return a simple data structure of changes in this FeedRetrieval, if any. Use a simple in-object attribute cache to avoid parsing the same, non-changing YAML more than once per method call.
   def changelog_summary
 
     return self.changelog_summary_cache unless self.changelog_summary_cache.nil?

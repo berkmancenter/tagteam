@@ -1,3 +1,4 @@
+# A HubFeedItemTagFilter is applied to the tags within a Hub on an individual FeedItem. These tag filters are applied last in the filter chain, allowing a Hub owner to override any tags modified by a HubTagFilter or HubFeedTagFilter.
 class HubFeedItemTagFilter < ActiveRecord::Base
   acts_as_list
   acts_as_api do |c|
@@ -21,9 +22,9 @@ class HubFeedItemTagFilter < ActiveRecord::Base
     t.add :filter
   end
 
+  # It makes no sense to allow a tag to be filtered multiple times at this level - 
+  # so disallow it. This means we need to look up the stack to see what tag we're filtering on .
   def validate_filter_uniqueness
-    # So it makes no sense to allow a tag to be filtered multiple times at this level - 
-    # so disallow it. This means we need to look up the stack to see what tag we're filtering on .
     filters_with_this_tag = self.class.where(:hub_id => self.hub_id, :feed_item_id => self.feed_item_id).includes(:filter).collect{|hfitf| hfitf.filter.tag_id == self.filter.tag_id}.flatten.uniq
     
     if filters_with_this_tag.include?(true)

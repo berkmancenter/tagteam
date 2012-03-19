@@ -1,3 +1,4 @@
+# Changes an ActsAsTaggableOn::Tag into another ActsAsTaggableOn::Tag, effectively renaming a tag.
 class ModifyTagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
