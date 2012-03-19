@@ -217,6 +217,7 @@ DEPENDENCIES
   gravatar-ultimate
   jquery-rails
   launchy
+  nokogiri
   pg
   rails (~> 3.2.0)
   resque

@@ -6,8 +6,16 @@ module Tagteam
       end
 
       def parse_items
-        rdf = FeedAbstract::Feed.new(self.filehandle)
-        rdf.items
+        doc = Nokogiri::XML(self.filehandle)
+        output = []
+        doc.css('Post').each do|item|
+          item_val = {}
+          item_val[:title] = item.css('title').text
+          item_val[:tag_list] = item.xpath('dc:subject').collect{|t| t.text}
+          item_val[:description] = item.css('description').text
+          output << item_val
+        end
+        return output
       end
 
       def verify_format
