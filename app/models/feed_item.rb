@@ -17,8 +17,7 @@ class FeedItem < ActiveRecord::Base
   include ModelExtensions
 
   before_validation do
-    auto_strip_tags(:description)
-    auto_sanitize_html(:content)
+    auto_sanitize_html(:content, :description)
     auto_truncate_columns(:title,:url,:guid,:authors,:contributors,:description,:content,:rights)
   end
 

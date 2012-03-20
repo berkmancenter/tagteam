@@ -170,9 +170,8 @@ table.feed_items{
   width: 100%;
 }
 
-.feed_item .content, .feed_item .description{
+.feed_item .description{
   padding: 10px;
-  background: #f4f4f4;
   border: 4px solid #ccc;
   border-radius: 10px;
   font-size: 12px;
