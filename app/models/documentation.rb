@@ -1,7 +1,9 @@
 # In-app documentation linked contextually via the ApplicationHelper#documentation helper.
+#
+# Most validations are contained in the ModelExtensions mixin.
+#
 class Documentation < ActiveRecord::Base
   include AuthUtilities
-  # most validations are in ModelExtensions
   include ModelExtensions
   before_validation do
     auto_sanitize_html(:description)

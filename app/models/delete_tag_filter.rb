@@ -1,4 +1,7 @@
 # An DeleteTagFilter lets you remove a ActsAsTaggableOn::Tag from an object via a HubTagFilter, HubFeedTagFilter or HubFeedItemTagFilter.
+#
+# Most validations are contained in the ModelExtensions mixin.
+#
 class DeleteTagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions

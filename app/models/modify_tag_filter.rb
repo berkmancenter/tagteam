@@ -1,4 +1,7 @@
 # Changes an ActsAsTaggableOn::Tag into another ActsAsTaggableOn::Tag, effectively renaming a tag.
+# 
+# Most validations are contained in the ModelExtensions mixin.
+#
 class ModifyTagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions

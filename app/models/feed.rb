@@ -4,6 +4,9 @@
 #
 # If a Feed is a bookmark collection, it serves only to hold FeedItems added via the Bookmarklet. This lets us leverage the rest of the filtering, searching, aggregating and other features built into TagTeam. A bookmark collection is identified by the "bookmarking_feed" boolean being true. When this boolean is true, feed_url validations are bypassed and it will never be spidered.
 #
+#
+# Most validations are contained in the ModelExtensions mixin.
+#
 class Feed < ActiveRecord::Base
 
   validate :feed_url do

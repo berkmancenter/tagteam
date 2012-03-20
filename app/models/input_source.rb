@@ -3,6 +3,9 @@
 # In the future we may allow RepublishedFeed objects themselves to serve as ItemSources, and ideally the search engine would allow searches to be InputSources.
 # 
 # If I liked single table inheritance, we'd probably have InputSource and RemovalSource classes keyed on the "effect" attribute.
+# 
+# Most validations are contained in the ModelExtensions mixin.
+#
 class InputSource < ActiveRecord::Base
   include ModelExtensions
 

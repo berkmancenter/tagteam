@@ -6,14 +6,15 @@
 #
 # A FeedItem can belong to one or more FeedRetrieval objects if more than one Feed contains this item.
 #
+#
+# Most validations are contained in the ModelExtensions mixin.
+#
 class FeedItem < ActiveRecord::Base
   acts_as_taggable
   acts_as_authorization_object
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
-
-  # Most validations are contained in the ModelExtensions mixin.
   include ModelExtensions
 
   before_validation do

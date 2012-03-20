@@ -3,6 +3,9 @@
 # A RepublishedFeed belongs to a Hub.
 #
 # Removals take precedence over additions.
+# 
+# Most validations are contained in the ModelExtensions mixin.
+#
 class RepublishedFeed < ActiveRecord::Base
 
   include AuthUtilities

@@ -5,6 +5,9 @@
 # If a Hub has a tag_prefix defined, all tags on for FeedItems in this Hub will have it applied to them on output. So, if you use "oa." as a tag_prefix, all FeedItem tags will be prefixed with "oa." when they are published via rss, atom, xml, or json.
 #
 # The tag_prefix is smart enough not to duplicate itself if it already exists on a tag.
+# 
+# Most validations are contained in the ModelExtensions mixin.
+#
 class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions

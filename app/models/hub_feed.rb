@@ -2,6 +2,7 @@
 #
 # A HubFeed inherits most its metadata from its parent Feed, but a Hub owner can override the title and description by editing the HubFeed.
 # 
+# Most validations are contained in the ModelExtensions mixin.
 #
 class HubFeed < ActiveRecord::Base
   include ModelExtensions
