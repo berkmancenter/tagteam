@@ -4,13 +4,15 @@ TagTeam is an RSS / Atom / RDF aggregator with the ability to filter and remix i
 
 Items can be added directly to TagTeam "bookmarking collections" via the provided delicious-like bookmarklet, and these items can be remixed and filtered like any other item.
 
-TagTeam can aggregate content from anything that emits RSS, Atom, or RDF. This includes delicious, zotero, WordPress, twitter, mediawiki, connotea, blogger, github, and too many other applications and services to mention.
+TagTeam can aggregate content from anything that emits RSS, Atom, or RDF. This includes delicious, zotero, WordPress, twitter, mediawiki, connotea, blogger, github, and too many other applications and services to mention. It uses the feed-abstract gem, written as part of this project to create a better way of dealing with structured feeds.  feed-abstract understands some generators and does magical things - like turning twitter hashtags into actual tags on aggregated items.
 
-Remixed feeds are available as RSS 2.0, Atom, and jsonp output and can be viewed directly in a hub. 
+TagTeam can import Delicious and Connotea backups directly into a bookmark collection, and will support more formats soon.
+
+Remixed feeds are available as RSS 2.0, Atom, and jsonp output and can be viewed directly in a hub. Feeds, FeedItems, and Tags can be added and removed from a Remixed feed contextually within the application.
 
 Tag filters can be applied at different levels to allow hub owners to maintain a consistent collection of tags - you can take messy tags in and give clean tags out. 
 
-TagTeam can be many things to many people, allowing you to ignore or utilize its many features depending on what you need to. Examples:
+TagTeam can be many things to many people, allowing you to ignore or utilize its many features depending on what you need. Examples:
 
 * It can aggregate RSS feeds and simply give you a Planet-like collection of items from many sources,
 * It can be your own delicious-like bookmarking platform,
@@ -21,14 +23,16 @@ TagTeam can be many things to many people, allowing you to ignore or utilize its
 
 == Requirements
 
-* postgres - though mysql should work with minimal changes, it's just not tested.
-* redis - for resque background job processing
-* java - for sunspot fulltext searching. This has been tested under openjdk-6-jre on multiple flavors of ubuntu
+* A 'nix hosting environment,
+* postgres - though mysql should work with minimal changes, it's just not tested,
+* redis - for resque background job processing,
+* java - for sunspot fulltext searching. This has been tested under openjdk-6-jre on multiple flavors of ubuntu,
 * ruby 1.9.3
+* wget
 
 == Installation
 
-This is a fairly traditional rails 3.2 app that needs a java daemon and redis for job tracking / management. 
+TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis for job tracking / management. 
 
 * Install ruby 1.9.3, rvm is probably your best choice.
 * Install all requirements. Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
@@ -41,14 +45,54 @@ This is a fairly traditional rails 3.2 app that needs a java daemon and redis fo
 * Set up databases and docs via "rake db:migrate && rake db:seed"
 * rake sunspot:solr:start
 * rake resque:work
+* Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. 
+
+== Cron jobs
+
+Q: Why aren't you using redis-scheduler, DJCP?
+
+A: Aren't there enough daemons running for this app? Also, cron "just works." 
+
+By default, TagTeam assumes you're using cron to run scheduled tasks invoked via wget POSTs with a shared key.  When you run 'db:seed', the shared key is set up automatically for you in the correct location.
+
+See "docs/crontab.in" for example cron jobs. You can skip the wget POSTs and run the rake tasks "tagteam:update_feeds" and "tagteam:expire_file_cache" directly, but then you're invoking the entire rails framework and that's quite expensive.  You can also set up resque-scheduler on your own, as the cron jobs live in resque-compatible worker jobs under app/workers/.
+
+== Caching
+
+Most of TagTeam is action cached for non-authenticated users, and sometimes for users without administrative rights. The default cache time is 15 minutes, and the file-based cache is expired via the cron jobs articulated above. Feel free to switch the caching backend, but honestly if you're not clustering and have a moderately fast disk subsystem there's almost no point. "rake tmp:clear" can be your cache-clearing sledgehammer, of course.
+
+== Architectural Overview
+
+* A Hub is the highest level of organization. It has many HubFeeds, HubTagFilters, and RepublishedFeeds. It also has many Feeds and FeedItems through these other relationships.
+* A HubFeed links a Hub and a Feed together, giving a Hub owner the ability to override the title and description for a Feed but only in this Hub.
+* A HubFeed has many FeedItems through the Feed it relates to. A HubFeed also has many HubFeedTagFilters. A HubFeed can be a bookmarking feed, which means it doesn't have an actual RSS/Atom feed that it's aggregating, it only serves to group items added via the Bookmarklet or by a direct import.
+* A Feed is an actual RSS or Atom feed that we're aggregating and is unique to this entire TagTeam instance. Feed spidering events are tracked in a FeedRetrieval model. A Feed can be an InputSource for a RepublishedFeed.
+* A FeedItem belongs to many Feeds and is tracked in the changelog YAML contained in a FeedRetrieval where appropriate. It can serve as an InputSource for a RepublishedFeed. It can also have HubFeedItemTagFilters.
+* A Tag is provided by the ActsAsTaggableOn::Tag class and is related to a FeedItem through an ActsAsTaggableOn::Tagging relation. It can be an InputSource in a RepublishedFeed. It also serves as the sources used in the Hub, FeedItem, and Feed TagFilter classes.
+* A RepublishedFeed is a "remix" - it aggregates together InputSources (Feeds, FeedItems, and Tags) as defined by a Hub owner.
+
+More info can be found in the rdoc-generated API docs (check out this repo and run "rake doc:app") and in the doc/ddl.png graphical schema overview.
+
+== TODO
+
+* Add more InputSources for remixing, including searches, hubs, and remixed feeds,
+* Create a bookmarklet / chrome extension to streamline adding autodiscovered feeds from around the web,
+* Make TagTeam more social, exercising the excellent ACL9 framework for rights delegation,
+* Expose more of Sunspot's capabilities in the frontend search interface,
+* Add more Tagteam::Importer subclasses to support more import file types,
+* Improve the UI to make the features more obvious,
+* Improve the API to allow objects to be managed via xml/json,
+* Better API docs.
 
 == Links
 
-  http://cyber.law.harvard.edu
+* http://cyber.law.harvard.edu
+* https://github.com/berkmancenter/taghub
 
 == Contributors
 
-* Dan Collis-Puro
+* Dan Collis-Puro - everything technical
+* Peter Suber - the concept
 
 == License
 
@@ -56,4 +100,4 @@ TagTeam is licensed under the AGPL
 
 == Copyright
 
-2011 President and Fellows of Harvard College
+2012 President and Fellows of Harvard College
