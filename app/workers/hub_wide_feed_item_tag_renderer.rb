@@ -1,6 +1,10 @@
 class HubWideFeedItemTagRenderer
   @queue = :hub_wide
 
+  def self.display_name
+    'Updating all items effected by a change in a tag'
+  end
+
   def self.perform(hub_id, tag_id = nil)
     # Here is where we'll update all the items affected by this change in this feed.
     # if hub_tag_filter_id is nil, then this was a deleted filter and we should change our behavior accordingly.

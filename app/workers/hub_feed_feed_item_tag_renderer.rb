@@ -1,6 +1,10 @@
 class HubFeedFeedItemTagRenderer
   @queue = :hub_feed
 
+  def self.display_name
+    'Updating tag facets for an entire feed'
+  end
+
   def self.perform(hub_feed_id, tag_id = nil)
     hub_feed = HubFeed.find(hub_feed_id)
 

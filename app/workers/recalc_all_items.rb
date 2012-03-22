@@ -1,6 +1,10 @@
 class RecalcAllItems
   @queue = :all_items
 
+  def self.display_name
+    "Updating all tags for an entire hub"
+  end
+
   def self.perform(hub_id)
     hub = Hub.find(hub_id)
 

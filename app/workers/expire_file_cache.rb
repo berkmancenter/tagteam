@@ -2,6 +2,10 @@ require 'find'
 class ExpireFileCache
   @queue = :file_cache
 
+  def self.display_name
+    'Expiring cache entries'
+  end
+
   def self.perform
     # A no-op unless we're using a file cache store.
     if Rails.cache.class == ActiveSupport::Cache::FileStore
