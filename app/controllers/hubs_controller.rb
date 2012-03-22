@@ -1,14 +1,14 @@
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  before_filter :load_hub, :except => [:index, :new, :create, :my]
-  before_filter :add_breadcrumb, :except => [:index]
+  before_filter :load_hub, :except => [:index, :new, :create, :my, :background_activity]
+  before_filter :add_breadcrumb, :except => [:index, :background_activity]
   caches_action :index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => 15.minutes, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
     allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
-    allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections]
+    allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds]
     allow :superadmin, :hubadmin
   end
@@ -26,6 +26,20 @@ class HubsController < ApplicationController
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
       format.xml{ render_for_api :default, :xml => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
+    end
+  end
+
+  # Looks through the currently running resque jobs and returns a json response talking about what's going on.
+  def background_activity
+    @output = []
+    Resque.workers.collect.each do|w|
+      unless w.job.blank?
+        job = {:description => w.job['payload']['class'].constantize.display_name, :since => w.job['run_at']}
+        @output << job
+      end
+    end
+    respond_to do|format|
+      format.json{ render :json => @output }
     end
   end
 

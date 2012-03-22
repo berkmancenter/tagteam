@@ -32,40 +32,18 @@ class HubFeedsController < ApplicationController
     end
   end
 
+  # Accepts an import upload in Connotea RDF and delicious bookmark export format. Creates a Resque job that does the actual importing, as it's pretty slow on larger collections - around 400 per minute or so.
   def import
-    feed = @hub_feed.feed
-    errors = []
-    items = []
+    if params[:type].blank? || params[:import_file].blank?
+      flash[:notice] = 'Please select a file type and attach a file for importing.'
+    else 
+      file_name = Rails.root.to_s + '/tmp/incoming_import-' + Time.now.to_i.to_s
 
-    if params[:type] == 'connotea_rdf'
-      importer = Tagteam::Importer::Connotea.new(params[:import_file])
-    elsif params[:type] == 'delicious'
-      importer = Tagteam::Importer::Delicious.new(params[:import_file])
+      FileUtils.cp(params[:import_file].tempfile,file_name)
+      Resque.enqueue(ImportFeedItems,@hub_feed.id, current_user.id, file_name,params[:type])
+
+      flash[:notice] = 'The file has been uploaded and scheduled for import. Please see the "background jobs" link in the footer to track progress.'
     end
-
-    items = importer.parse_items
-
-    items.each do|item|
-      feed_item = FeedItem.find_or_initialize_by_url(item[:url])
-      [:title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated].each do|col|
-        feed_item.send(%Q|#{col}=|, item[col])
-      end
-      feed_item.tag_list = [feed_item.tag_list, item[:tag_list].collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(',')
-
-      if feed_item.save
-        feed_item.accepts_role!(:owner, current_user)
-        feed_item.accepts_role!(:creator, current_user)
-        if feed.feed_items.nil? || ! feed.feed_items.include?(feed_item)
-          feed.feed_items << feed_item
-        end
-      else
-        errors << feed_item.errors.full_messages.join('<br/>')
-      end
-    end
-    feed.save
-    Resque.enqueue(HubFeedFeedItemTagRenderer, @hub_feed.id)
-    flash[:error] = errors.join('<br/>')
-    flash[:notice] = "Imported those items." + ((errors.blank?) ? '' :" Please see the errors below.")
     redirect_to :action => :show
   end
 

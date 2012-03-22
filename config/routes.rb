@@ -68,6 +68,7 @@ Tagteam::Application.routes.draw do
 
     collection do
       get 'my'
+      get 'background_activity'
     end
 
     resources :hub_feeds do

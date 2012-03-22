@@ -7,7 +7,7 @@ class ScheduledTasksController < ApplicationController
   #Update feeds. You can also run this job via a regular old rake task, but it's a heckuva lost slower than using wget to POST to your running rails environment.
   def update_feeds
     logger.warn('Update feeds')
-    UpdateFeeds.perform
+    Resque.enqueue(UpdateFeeds)
     render :text => "Updated feeds\n", :layout => false
   rescue Exception => e
     render :string => e.inspect, :status => :internal_server_error
@@ -17,7 +17,7 @@ class ScheduledTasksController < ApplicationController
   #Expire the file cache via the ExpireFileCache class.
   def expire_cache
     logger.warn('Expire cache')
-    ExpireFileCache.perform
+    Resque.enqueue(ExpireFileCache)
     render :text => "Expired files from the cache\n", :layout => false
   rescue Exception => e
     render :string => e.inspect, :status => :internal_server_error

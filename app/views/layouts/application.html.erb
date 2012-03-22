@@ -65,6 +65,9 @@
         <div class="clear"></div>
 
         <footer class="grid_16">
+          <% unless current_user.blank? %>
+            <%= link_to('background jobs', '#', :id => 'background_jobs') %>
+          <% end %>
           &copy; 2011 President and Fellows of Harvard College
         </footer>
         <div class="clear"></div>

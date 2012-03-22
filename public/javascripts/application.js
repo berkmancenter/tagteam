@@ -348,13 +348,54 @@
           })
         });
       }
+    },
+    refreshBackgroundActivity: function(){
+      $.ajax({
+        url: $.rootPath() + 'hubs/background_activity',
+        dataType: 'json',
+        cache: false,
+        success: function(json){
+          $('#activity').html('');
+          if(json.length == 0){
+            $('#activity').html('<p>No background jobs are currently running.</p>');
+          } else {
+            $('#activity').html('<ol></ol>');
+            $(json).each(function(i,job){
+              $('#activity ol').append(job.description + ' since ' + job.since);
+            });
+          }
+        }
+      });
     }
-  
+
 });
 
 })(jQuery);
 
 $(document).ready(function(){
+  $('#background_jobs').click(function(e){
+    e.preventDefault();
+    var dialogNode = $('<div><div id="activity"></div></div>');
+    $(dialogNode).dialog({
+      modal: true,
+      height: 'auto',
+      width: 600,
+      position: 'top',
+      title: 'Background jobs running in this TagTeam',
+      create: function(){
+        $.refreshBackgroundActivity();
+      },
+      buttons: {
+        Refresh: function(){
+          $.refreshBackgroundActivity();
+        },
+        Close: function(){
+          $(dialogNode).dialog('close');
+          $(dialogNode).remove();
+        }
+      }
+    });
+  });
 
   $.checkPlaceholders();
 

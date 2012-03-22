@@ -484,3 +484,8 @@ footer{
   font-size: .8em;
   color: #444; 
 }
+
+#background_jobs{
+  float: left;
+  color: #aaa; 
+}
