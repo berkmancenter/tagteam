@@ -361,7 +361,7 @@
           } else {
             $('#activity').html('<ol></ol>');
             $(json).each(function(i,job){
-              $('#activity ol').append(job.description + ' since ' + job.since);
+              $('#activity ol').append(job.description + ' since "' + job.since + '", running for ' + job.running_for);
             });
           }
         }

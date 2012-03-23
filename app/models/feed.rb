@@ -132,7 +132,6 @@ class Feed < ActiveRecord::Base
     fr = FeedRetrieval.new(:feed_id => self.id)
     fr.success = true
     fr.status_code = '200'
-    fr.save
     self.raw_feed.items.each do|item|
       FeedItem.create_or_update_feed_item(self,item,fr)
     end
