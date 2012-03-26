@@ -324,21 +324,17 @@ class HubsController < ApplicationController
         end
 
         unless hub_feed_ids.blank?
-          any_of do
-            with :hub_feed_ids, hub_feed_ids
-          end
+          with :hub_feed_ids, hub_feed_ids
         end
 
         unless include_tags.blank?
-          any_of do
-            with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-          end
+          with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
         end
+
         unless exclude_tags.blank?
-          any_of do
-            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-          end
+          without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
         end
+
         paginate :page => params[:page], :per_page => get_per_page
         order_by(:date_published, :desc)
       end
