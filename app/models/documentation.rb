@@ -10,7 +10,7 @@ class Documentation < ActiveRecord::Base
   end
 
   validates_uniqueness_of :match_key
-  attr_accessible :match_key, :title, :description, :lang
+  attr_accessible :id, :match_key, :title, :description, :lang, :created_at, :updated_at
 
   def display_title
     (self.title.blank?) ? self.match_key : self.title

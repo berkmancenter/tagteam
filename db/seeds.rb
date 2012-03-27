@@ -8,24 +8,17 @@
 
 # 
 
+require 'yaml'
 require 'digest/md5'
 
-Documentation.create(
-  :match_key => 'hub_about',
-  :title => 'About a hub',
-  :description => %Q|
-
-  <p><strong>A "hub"</strong> collects a number of feeds, feed items and republished feeds together into one organized "hub" of information.</p>
-
-  <p>A hub contains many <strong>watched feeds</strong> (look at the "watching" tab) that serve as input sources of feed items.  These watched feeds are downloaded and parsed for title, content, tags, and other metadata. These feed items serve as the basic unit of information in a tagteam hub.</p>
-
-  <p>A hub also contains <strong>republished feeds</strong>, which are remixes of feeds, feed items and tags. Watched feeds serve as the inputs for republished feeds.</p>
-
-  <p><strong>Filters</strong> 
-
-  |,
-  :lang => 'en'
-)
+#get the Documentation class in here.
+Documentation.destroy_all
+docs = YAML.load(File.read("#{Rails.root}/db/documentation.yml"))
+docs.each do|doc_attr|
+  d = Documentation.find_or_initialize_by_match_key(doc_attr.attributes[:match_key])
+  d.attributes = doc_attr.attributes
+  d.save
+end
 
 shared_key_file = "#{Rails.root}/config/initializers/tagteam_shared_key.rb"
 unless File.exists?(shared_key_file)
