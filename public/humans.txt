@@ -1,0 +1,13 @@
+/* TEAM */
+Lead Developer: Daniel Collis Puro
+Site: http://blogs.law.harvard.edu/djcp/
+Twitter: djcp
+Location: Lynn, MA
+
+Idea Guy: Peter Suber
+Site: http://www.earlham.edu/~peters/
+
+/* SITE */
+Standards: HTML5, CSS2, CSS3, Atom, RSS, json
+Components: jQuery, jQuery UI, modernizer, nicEdit
+Software: rails, postgresql, ubuntu, sunspot, redis, resque

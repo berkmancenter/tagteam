@@ -5,6 +5,7 @@
     <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', '992-16col','reset','silk-sprite','custom-theme/jquery-ui-1.8.16.custom', 'tagteam', @css_extras].compact.flatten %>
     <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.address-1.4.min', 'jquery-ui-1.8.16.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
+    <link rel="author" href="<%= root_url %>humans.txt" />
     <% unless @show_auto_discovery_params.blank? %>
       <%= auto_discovery_link_tag :rss, @show_auto_discovery_params %>
     <% end %>
