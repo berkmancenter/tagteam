@@ -1,0 +1,240 @@
+---
+- !ruby/object:Documentation
+  attributes:
+    id: 23
+    match_key: hub_about
+    title: About Hubs
+    description: ! "  <p><strong>A \"hub\"</strong> collects a number of feeds, feed
+      items and remixed feeds together into one organized \"hub\" of information.</p>\r\n\r\n
+      \ <p>A hub contains many <strong>input feeds</strong> (look at the \"input\"
+      tab) that serve as input sources. These items in these input feeds are downloaded
+      and parsed for titles, content, tags, and other metadata. These feed items serve
+      as the basic unit of information in a tagteam hub.</p>\r\n\r\n  <p>A hub also
+      contains <strong>remixed feeds</strong>, which are remixes of feeds, feed items
+      and tags.</p>"
+    lang: en
+    created_at: 2012-03-27 18:54:56.367370000 Z
+    updated_at: 2012-03-27 19:23:44.517024000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 33
+    match_key: feed-item-tag-filters
+    title: Feed item tag filters
+    description: A <b>feed item tag filter</b>&nbsp;is the last tag filter applied
+      to a feed item when creating its list of tags. It can override the tag filters
+      at the hub or input feed level.<div>A feed item tag filter can:</div><div><ul><li>Add,</li><li>Remove,
+      or</li><li>Modify</li></ul><div>tags on this feed item.</div></div>
+    lang: en
+    created_at: 2012-03-27 20:06:20.479319000 Z
+    updated_at: 2012-03-27 20:08:17.153339000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 24
+    match_key: hub-wide-item-list
+    title: All items in this hub
+    description: This list represents all the items found in the <b>input feeds</b>&nbsp;this
+      hub is watching sorted in reverse chronological order.
+    lang: en
+    created_at: 2012-03-27 19:23:55.611894000 Z
+    updated_at: 2012-03-27 19:26:04.240557000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 26
+    match_key: hub-bookmark_collections-list
+    title: Bookmark collections
+    description: A <b>bookmark collection</b>&nbsp;represents a set of items that've
+      been brought into this hub in one of two ways:<div><ol><li>via the delicious-like
+      TagTeam bookmarklet that hub owners can use, and</li><li>by importing a bookmark
+      export from either Connotea or Delicious.</li></ol><div>If you're an owner of
+      this hub, you can import items into a <b>bookmark collection</b>&nbsp;under
+      its "import" tab. See more details on supported import formats there.</div></div>
+    lang: en
+    created_at: 2012-03-27 19:33:25.925252000 Z
+    updated_at: 2012-03-27 19:36:31.943541000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 27
+    match_key: hub-republished-feeds-list
+    title: Remixed feeds
+    description: A <b>remixed feed</b>&nbsp;allows hub owners to create their own
+      custom aggregations of feed items by adding (or removing):<div><ul><li>All the
+      items from an <b>input feed,</b></li><li>All items that have a specific tag,</li><li>and
+      individual items.</li></ul><div>A <b>remixed feed</b>&nbsp;is constructed by
+      pulling together all the <b>additions</b> to a feed and then removing all the
+      <b>removals</b>. A <b>remixed feed</b>&nbsp;will not contain the same item more
+      than once even if that item is included in multiple item sources.</div></div>
+    lang: en
+    created_at: 2012-03-27 19:36:46.419982000 Z
+    updated_at: 2012-03-27 19:45:43.839217000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 28
+    match_key: hub-tag-cloud
+    title: Hub wide tag cloud
+    description: This <a href="http://en.wikipedia.org/wiki/Tag_cloud" title="">tag
+      cloud</a>&nbsp;represents an auto-updating view of the tags contained in this
+      hub, with more frequent tags appearing larger.<div>Use the slider to filter
+      by frequency and the keyword text field to filter by text.</div>
+    lang: en
+    created_at: 2012-03-27 19:45:50.633022000 Z
+    updated_at: 2012-03-27 19:47:41.018589000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 29
+    match_key: hub-wide-tag-filters
+    title: Hub wide tag filters
+    description: A <b>hub wide tag filter</b>&nbsp;allows a hub owner to apply transformations
+      to the tags on all items in this hub. A filter can be used to:<div><ul><li>Add
+      a tag to all items,</li><li>Remove a tag from all items, and</li><li>Modify
+      a tag.</li></ul><div>Filters can also be applied at the <b>input source</b>&nbsp;and
+      <b>feed item</b>&nbsp;levels. The tags on a feed item have had tag filters applied
+      to them in this order:</div></div><div><ol><li>Hub-wide tag filters first,</li><li>then
+      the input source tag filters, and finally</li><li>the item-level filters.</li></ol><div>This
+      allows the effects of a filter to "cascade" down, and a hub-wide tag filter
+      can easily be overridden at the <b>input source</b>&nbsp;or <b>feed item</b>&nbsp;levels.</div></div>
+    lang: en
+    created_at: 2012-03-27 19:48:02.821978000 Z
+    updated_at: 2012-03-27 19:55:16.535242000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 30
+    match_key: hub-wide-feed-retrievals-list
+    title: Hub wide Feed Updates
+    description: This list shows you the new or changed items found in the <b>input
+      sources</b>&nbsp;this hub watches.
+    lang: en
+    created_at: 2012-03-27 19:55:28.775895000 Z
+    updated_at: 2012-03-27 19:58:34.567223000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 31
+    match_key: hub-wide-item-search
+    title: Search for items
+    description: You can search feed items by:<div><ul><li>Keyword,</li><li>Tags,</li><li>excluded
+      Tags (meaning, the items WITHOUT these tags), and</li><li>Input feeds.</li></ul><div>The
+      terms are AND'ed together by default, meaning the more fields you complete the
+      narrower your search results get. You can also switch to OR'ing fields together,
+      which will give you a broader result set.</div></div>
+    lang: en
+    created_at: 2012-03-27 19:59:02.461324000 Z
+    updated_at: 2012-03-27 20:02:54.573190000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 32
+    match_key: feed-item-about-tab
+    title: About a feed item
+    description: This tab shows the metadata attached to this feed item. If this feed
+      item was contained in multiple <b>input feeds</b>, they will be listed here.
+      If the full content of the item was included in the RSS or Atom feed, you'll
+      see a "Content" tab as well.
+    lang: en
+    created_at: 2012-03-27 20:03:18.807977000 Z
+    updated_at: 2012-03-27 20:06:11.275015000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 34
+    match_key: hub-feed-feed-item-related-list
+    title: Items related to this feed item
+    description: These items look like they might be related to this feed item based
+      on their title or tags.
+    lang: en
+    created_at: 2012-03-27 20:08:24.958964000 Z
+    updated_at: 2012-03-27 20:09:44.993723000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 37
+    match_key: hub-feed-feed-item-list
+    title: Input source item list
+    description: These items are what we found when downloading the RSS or Atom file
+      for this input feed.<div>If this is a <b>bookmark collection</b>, then these
+      items have been added manually via the <b>bookmarklet</b>&nbsp;or via a file
+      import.</div>
+    lang: en
+    created_at: 2012-03-27 20:09:58.434363000 Z
+    updated_at: 2012-03-27 20:11:42.341994000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 35
+    match_key: hub-feed-about-tab
+    title: About this input feed
+    description: This tab contains metadata about this input feed.<div>If you own
+      this hub, you can schedule this feed for immediate download via the link at
+      the bottom.</div>
+    lang: en
+    created_at: 2012-03-27 20:09:56.352196000 Z
+    updated_at: 2012-03-27 20:14:39.728259000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 36
+    match_key: hub-feed-tag-cloud
+    title: Input feed tag clouds
+    description: This tag cloud represents the tags included on all the items in this
+      input feed, post filtering.
+    lang: en
+    created_at: 2012-03-27 20:09:56.670412000 Z
+    updated_at: 2012-03-27 20:15:32.140389000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 38
+    match_key: hub-feed-filter-tab
+    title: Input feed tag filters
+    description: <b>Input feed tag filters</b>&nbsp;are applied AFTER <b>hub-wide
+      tag filters</b>&nbsp;but BEFORE <b>feed item tag filters</b>. They can:<div><ul><li>Add,</li><li>Remove,
+      or</li><li>Modify</li></ul><div>tags for all items in this input feed.</div></div>
+    lang: en
+    created_at: 2012-03-27 20:15:41.502777000 Z
+    updated_at: 2012-03-27 20:17:26.321156000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 40
+    match_key: hub-feed-hub-retrievals-tab
+    title: hub-feed-hub-retrievals-tab
+    description: 
+    lang: en
+    created_at: 2012-03-27 20:17:39.440463000 Z
+    updated_at: 2012-03-27 20:17:39.440463000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 39
+    match_key: hub-feed-retrievals-list
+    title: Input feed update list
+    description: This list shows you what new (or modified) items were contained in
+      this feed, and when. A red row indicates we were unable to download the feed,
+      probably because the RSS / Atom feed creator was temporarily unavailable.
+    lang: en
+    created_at: 2012-03-27 20:17:39.415396000 Z
+    updated_at: 2012-03-27 20:22:14.365780000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 41
+    match_key: tagged-item-list
+    title: Tagged items
+    description: These items have this tag on them after all tag filters were applied.
+    lang: en
+    created_at: 2012-03-27 20:23:56.159012000 Z
+    updated_at: 2012-03-27 20:25:23.104478000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 25
+    match_key: hub-watched-feeds-list
+    title: Input Feeds
+    description: ! '<p>An <b>input feed</b>&nbsp;is an <a href="http://en.wikipedia.org/wiki/RSS"
+      title="">RSS</a> or <a href="http://en.wikipedia.org/wiki/Atom_(standard)" title="">Atom</a>
+      feed that this hub is watching. TagTeam will download and parse items automatically,
+      and add tags, titles, content, and other metadata to its search index.</p><div><p>You
+      can add new RSS or Atom feeds here if you own this hub.&nbsp;</p><div><p>An
+      <b>input feed</b>''s change history is tracked as well, giving you the ability
+      to see new and changed items over time.</p><p>A new item will automatically
+      be included in a <b>remixed feed</b>&nbsp;if it matches the <b>item sources</b>&nbsp;used
+      to create that remix.</p></div></div><h2>RSS / Atom feed sources</h2><div><ul><li>Blogs!
+      WordPress, blogger, livejournal, etc. Look for the "rss" or "feed" icons and
+      copy that URL.</li><li>Wikis! Go to the "recent changes" page for any mediawiki
+      installation and you can bring the changes into TagTeam.</li><li>Twitter! You
+      can use the "old" twitter search interface to get RSS or Atom results. And example
+      atom feed for the hashtag #tags looks like:&nbsp;<a href="https://search.twitter.com/search.atom?q=%23tags">https://search.twitter.com/search.atom?q=%23tags</a></li><li>Delicious!
+      Go to a delicious user or tag page and look for the "RSS" links.</li><li>Newspapers!
+      Go to the nytimes.com site and look for the "RSS" link in the footer. Many other
+      newspaper websites have RSS feeds.</li></ul></div>'
+    lang: en
+    created_at: 2012-03-27 19:26:13.443214000 Z
+    updated_at: 2012-03-27 20:42:17.235821000 Z

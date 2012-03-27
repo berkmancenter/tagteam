@@ -3,6 +3,13 @@ include RakeHelper
 
 namespace :tagteam do
 
+  desc 'dump documentation'
+  task :dump_documentation => :environment do
+    f = File.open("#{Rails.root}/db/documentation.yml", 'w')
+    f.write(Documentation.all.to_yaml)
+    f.close
+  end
+
   desc 'expire file cache'
   task :expire_file_cache => :environment do
     ExpireFileCache.perform

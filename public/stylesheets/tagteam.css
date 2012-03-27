@@ -5,6 +5,7 @@ body{
   background: url('/images/bgstripe.png');
   font-size: 11pt;
   font-family: Arial, sans-serif;
+  line-height: 1.4em;
 }
 
 a{
@@ -81,8 +82,13 @@ h3{
   margin-top: .5em;
 }
 
+div.description div,
 p{
   margin-bottom: .5em;
+}
+
+div.description ol, div.description ul{
+  margin-top: .5em;
 }
 
 table {
@@ -324,7 +330,7 @@ a:hover{
 {
   margin-bottom: .5em;
   font-size: 10pt;
-  line-height: 1.2em;
+  line-height: 1.6em;
 }
 
 .hubs .hub{
