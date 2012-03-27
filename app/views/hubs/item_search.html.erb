@@ -22,6 +22,12 @@
         <span class="search_select"><input name="hub_feed_ids[]" type="hidden" value="<%= hf.id %>" /><%= hf.display_title %><span class="search_select_control"> X </span></span>
       <% end %>
     </li>
+    <li>Join fielded search criteria together with: 
+    <%= radio_button_tag(:junction_type, 'and', (params[:junction_type] == 'and') ? true : false, :id => 'junction_type_and') %> 
+    <%= label_tag(:junction_type_and, 'AND') %>
+    <%= radio_button_tag(:junction_type, 'or', (params[:junction_type] == 'or') ? true : false, :id => 'junction_type_or') %>
+    <%= label_tag(:junction_type_or, 'OR') %>
+    </li>
     <li><%= submit_tag('Search items', :class => 'button') %> <%= link_to('bookmark this search', request.fullpath) unless @search.blank? || @search.results.length == 0 %></li>
   </ul>
   <% end %>

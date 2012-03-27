@@ -295,6 +295,12 @@ class HubsController < ApplicationController
   # Search results are available as html, json, or xml. 
   def item_search
 
+    if params[:junction_type].blank?
+      params[:junction_type] = 'and'
+    end
+    # no code injection here.
+    junction_type_map = {'and' => 'all_of', 'or' => 'any_of'}
+
     unless params[:include_tag_ids].blank?
       include_tags = params[:include_tag_ids]
     end
@@ -318,23 +324,36 @@ class HubsController < ApplicationController
       hub_context = @hub.tagging_key
 
       @search.build do
+        self.send((junction_type_map[params[:junction_type]].blank?) ? 'any_of' : junction_type_map[params[:junction_type]]) do
+          unless hub_feed_ids.blank?
+            with :hub_feed_ids, hub_feed_ids
+          end
+          unless include_tags.blank?
+            with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
+          end
+          unless exclude_tags.blank?
+            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
+          end
+          unless params[:q].blank?
+            text_fields do
+              any_of do
+                with :title, params[:q]
+                with :description, params[:q]
+                with :content, params[:q]
+                with :url, params[:q]
+                with :guid, params[:q]
+                with :authors, params[:q]
+                with :contributors, params[:q]
+                with :rights, params[:q]
+                with :tag_list, params[:q]
+              end
+            end
+          end
+        end
+      end
+
+      @search.build do
         with :hub_ids, hub_id
-        unless params[:q].blank?
-          fulltext params[:q]
-        end
-
-        unless hub_feed_ids.blank?
-          with :hub_feed_ids, hub_feed_ids
-        end
-
-        unless include_tags.blank?
-          with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-        end
-
-        unless exclude_tags.blank?
-          without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-        end
-
         paginate :page => params[:page], :per_page => get_per_page
         order_by(:date_published, :desc)
       end
