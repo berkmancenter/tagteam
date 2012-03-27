@@ -10,4 +10,4 @@ Site: http://www.earlham.edu/~peters/
 /* SITE */
 Standards: HTML5, CSS2, CSS3, Atom, RSS, json
 Components: jQuery, jQuery UI, modernizer, nicEdit
-Software: rails, postgresql, ubuntu, sunspot, redis, resque
+Software: rails, postgresql, ubuntu, sunspot, redis, resque, feed-abstract
