@@ -55,7 +55,7 @@ class HubsController < ApplicationController
     end
   end
 
-  # Accessible via html, json, and xml. Pass the date in YYYY, YYYY-MM or YYYY-MM-DD format in the "?date=" parameter
+  # Accessible via html, json, and xml. Pass in the date by appending "/" separated parameters to this action, so: /hubs/1/by_date/2012/03/28. If you put in "00" for the month or day parameter, we'll search for all items form that month or year.
   def by_date
 
     @search = FeedItem.search
