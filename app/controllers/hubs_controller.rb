@@ -57,33 +57,52 @@ class HubsController < ApplicationController
 
   # Accessible via html, json, and xml. Pass the date in YYYY, YYYY-MM or YYYY-MM-DD format in the "?date=" parameter
   def by_date
-    # TODO - should just use solr, this code works and performs fine but is odd because it predates the integration of the 
-    # solr search engine.
-    params[:date] = (params[:date].blank?) ? Time.now.strftime('%Y-%m-%d') : params[:date]
-    dates = params[:date].split(/\D/).collect{|d| d.to_i}
-    if dates.length > 0
-      breadcrumbs.add dates[0], by_date_hub_path(@hub,:date => dates[0])
+
+    @search = FeedItem.search
+    hub_id = @hub.id
+
+    if params[:month] == '00'
+      logger.warn('year search')
+      # Year search
+      date = DateTime.parse("#{params[:year]}-01-01")
+      start_day = date - 1.second
+      end_day = date + 1.year
+      breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
+    elsif params[:day] == '00'
+      logger.warn('month search')
+      # Month search
+      date = DateTime.parse("#{params[:year]}-#{params[:month]}-01")
+      start_day = date - 1.second
+      end_day = date + 1.month
+      breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
+      breadcrumbs.add date.month, by_date_hub_path(@hub,:year => date.year, :month => date.month, :day => '00')
+    else
+      logger.warn('day search')
+      # Day search
+      date = DateTime.parse("#{params[:year]}-#{params[:month]}-#{params[:day]}")
+      start_day = date - 1.second
+      end_day = date + 1.day
+      breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
+      breadcrumbs.add date.month, by_date_hub_path(@hub,:year => date.year, :month => date.month, :day => '00')
+      breadcrumbs.add date.day, by_date_hub_path(@hub,:year => date.year, :month => date.month, :day => date.day)
     end
-    if dates.length > 1
-      breadcrumbs.add dates[1], by_date_hub_path(@hub,:date => "#{dates[0]}/#{dates[1]}")
-    end
-    if dates.length > 2
-      breadcrumbs.add dates[2], by_date_hub_path(@hub,:date => "#{dates[0]}/#{dates[1]}/#{dates[2]}")
+    start_day = start_day - DateTime.now.offset 
+    end_day = end_day - DateTime.now.offset 
+
+    logger.warn("date: #{date.inspect}")
+    logger.warn("start day: #{start_day.inspect}")
+    logger.warn("end day: #{end_day.inspect}")
+
+    @search.build do
+      with(:date_published).between(start_day..end_day)
+      with :hub_ids, hub_id
+      paginate :page => params[:page], :per_page => get_per_page
+      order_by(:date_published, :desc)
     end
 
-    conditions = [
-      'extract(year from date_published) = ?',
-      ((dates[1].blank?) ? nil : 'extract(month from date_published) = ?'),
-      ((dates[2].blank?) ? nil : 'extract(day from date_published) = ?')
-    ].compact
+    @search.execute
 
-    parameters = [
-      dates[0],
-      ((dates[1].blank?) ? nil : dates[1]),
-      ((dates[2].blank?) ? nil : dates[2])
-    ].compact
-
-    @feed_items = FeedItem.paginate(:select => FeedItem.columns_for_line_item, :conditions => [conditions.join(' AND '), parameters].flatten, :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    @feed_items = @search.results
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => @feed_items }

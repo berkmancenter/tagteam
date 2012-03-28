@@ -60,7 +60,7 @@ Tagteam::Application.routes.draw do
       get 'custom_republished_feeds'
       get 'tag_controls'
       get 'items'
-      get 'by_date'
+      match 'by_date/:year/:month/:day' => 'hubs#by_date', :as => 'by_date'
       get 'retrievals'
       get 'my_bookmark_collections'
       get 'bookmark_collections'
@@ -114,9 +114,9 @@ Tagteam::Application.routes.draw do
         get 'content'
         get 'related'
       end
-      collection do
-        get 'by_date'
-      end
+#      collection do
+#        match 'by_date/:year/:month/:day' => 'feed_items#by_date', :as => 'by_date'
+#      end
     end
 
   end
