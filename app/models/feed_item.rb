@@ -216,7 +216,6 @@ class FeedItem < ActiveRecord::Base
     fi.feed_retrievals << feed_retrieval
     fi.feeds << feed unless fi.feeds.include?(feed)
     # Merge tags. . .
-    # TODO - tag_list always does a SQL query?
     pre_update_tags = fi.tag_list.dup.sort
     # Merge the existing and the new tags together, assign to the it's tag list, uniquify and join
     # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.

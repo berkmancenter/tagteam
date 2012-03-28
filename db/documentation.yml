@@ -1,7 +1,25 @@
 ---
 - !ruby/object:Documentation
   attributes:
-    id: 23
+    id: 47
+    match_key: hub-feed-import-tab
+    title: Import items into a Bookmark Collection
+    description: You can bulk import items into a <b>bookmark collection</b>&nbsp;from
+      two different import formats (currently! we'll support more soon):<div><ol><li>Delicious
+      bookmark backups, which you can find under your delicious profile,</li><li>Connotea
+      RDF - go to a connotea user's export page and download the RDF file containing
+      their bookmarks.</li></ol><div>Select the file format, attach the file and then
+      click "import items." Your file will be uploaded and imported in a background
+      process. Click the "background jobs" link to get some idea of when the import
+      process has finished. This can take quite a while based on how large your import
+      is - 5 minutes or more, certainly. &nbsp;You can safely re-run an import because
+      items are de-duplicated and merged automatically.</div></div>
+    lang: en
+    created_at: 2012-03-28 12:03:33.536291000 Z
+    updated_at: 2012-03-28 12:11:10.450943000 Z
+- !ruby/object:Documentation
+  attributes:
+    id: 28
     match_key: hub_about
     title: About Hubs
     description: ! "  <p><strong>A \"hub\"</strong> collects a number of feeds, feed
@@ -17,7 +35,7 @@
     updated_at: 2012-03-27 19:23:44.517024000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 33
+    id: 29
     match_key: feed-item-tag-filters
     title: Feed item tag filters
     description: A <b>feed item tag filter</b>&nbsp;is the last tag filter applied
@@ -29,7 +47,7 @@
     updated_at: 2012-03-27 20:08:17.153339000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 24
+    id: 30
     match_key: hub-wide-item-list
     title: All items in this hub
     description: This list represents all the items found in the <b>input feeds</b>&nbsp;this
@@ -39,7 +57,7 @@
     updated_at: 2012-03-27 19:26:04.240557000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 26
+    id: 31
     match_key: hub-bookmark_collections-list
     title: Bookmark collections
     description: A <b>bookmark collection</b>&nbsp;represents a set of items that've
@@ -53,7 +71,7 @@
     updated_at: 2012-03-27 19:36:31.943541000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 27
+    id: 32
     match_key: hub-republished-feeds-list
     title: Remixed feeds
     description: A <b>remixed feed</b>&nbsp;allows hub owners to create their own
@@ -68,7 +86,7 @@
     updated_at: 2012-03-27 19:45:43.839217000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 28
+    id: 33
     match_key: hub-tag-cloud
     title: Hub wide tag cloud
     description: This <a href="http://en.wikipedia.org/wiki/Tag_cloud" title="">tag
@@ -80,7 +98,7 @@
     updated_at: 2012-03-27 19:47:41.018589000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 29
+    id: 34
     match_key: hub-wide-tag-filters
     title: Hub wide tag filters
     description: A <b>hub wide tag filter</b>&nbsp;allows a hub owner to apply transformations
@@ -97,7 +115,7 @@
     updated_at: 2012-03-27 19:55:16.535242000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 30
+    id: 35
     match_key: hub-wide-feed-retrievals-list
     title: Hub wide Feed Updates
     description: This list shows you the new or changed items found in the <b>input
@@ -107,7 +125,7 @@
     updated_at: 2012-03-27 19:58:34.567223000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 31
+    id: 36
     match_key: hub-wide-item-search
     title: Search for items
     description: You can search feed items by:<div><ul><li>Keyword,</li><li>Tags,</li><li>excluded
@@ -120,7 +138,7 @@
     updated_at: 2012-03-27 20:02:54.573190000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 32
+    id: 37
     match_key: feed-item-about-tab
     title: About a feed item
     description: This tab shows the metadata attached to this feed item. If this feed
@@ -132,7 +150,7 @@
     updated_at: 2012-03-27 20:06:11.275015000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 34
+    id: 38
     match_key: hub-feed-feed-item-related-list
     title: Items related to this feed item
     description: These items look like they might be related to this feed item based
@@ -142,7 +160,7 @@
     updated_at: 2012-03-27 20:09:44.993723000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 37
+    id: 39
     match_key: hub-feed-feed-item-list
     title: Input source item list
     description: These items are what we found when downloading the RSS or Atom file
@@ -154,7 +172,7 @@
     updated_at: 2012-03-27 20:11:42.341994000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 35
+    id: 40
     match_key: hub-feed-about-tab
     title: About this input feed
     description: This tab contains metadata about this input feed.<div>If you own
@@ -165,7 +183,7 @@
     updated_at: 2012-03-27 20:14:39.728259000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 36
+    id: 41
     match_key: hub-feed-tag-cloud
     title: Input feed tag clouds
     description: This tag cloud represents the tags included on all the items in this
@@ -175,7 +193,7 @@
     updated_at: 2012-03-27 20:15:32.140389000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 38
+    id: 42
     match_key: hub-feed-filter-tab
     title: Input feed tag filters
     description: <b>Input feed tag filters</b>&nbsp;are applied AFTER <b>hub-wide
@@ -186,7 +204,7 @@
     updated_at: 2012-03-27 20:17:26.321156000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 40
+    id: 43
     match_key: hub-feed-hub-retrievals-tab
     title: hub-feed-hub-retrievals-tab
     description: 
@@ -195,7 +213,7 @@
     updated_at: 2012-03-27 20:17:39.440463000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 39
+    id: 44
     match_key: hub-feed-retrievals-list
     title: Input feed update list
     description: This list shows you what new (or modified) items were contained in
@@ -206,7 +224,7 @@
     updated_at: 2012-03-27 20:22:14.365780000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 41
+    id: 45
     match_key: tagged-item-list
     title: Tagged items
     description: These items have this tag on them after all tag filters were applied.
@@ -215,7 +233,7 @@
     updated_at: 2012-03-27 20:25:23.104478000 Z
 - !ruby/object:Documentation
   attributes:
-    id: 25
+    id: 46
     match_key: hub-watched-feeds-list
     title: Input Feeds
     description: ! '<p>An <b>input feed</b>&nbsp;is an <a href="http://en.wikipedia.org/wiki/RSS"

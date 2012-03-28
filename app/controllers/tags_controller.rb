@@ -38,6 +38,8 @@ class TagsController < ApplicationController
         render :json => @search.results.collect{|r| {:id => r.id, :label => r.name} }
       }
     end
+  rescue
+    render :text => "Please try a different search term", :layout => ! request.xhr?
   end
 
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.

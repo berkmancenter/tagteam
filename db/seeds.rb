@@ -17,6 +17,7 @@ docs = YAML.load(File.read("#{Rails.root}/db/documentation.yml"))
 docs.each do|doc_attr|
   d = Documentation.find_or_initialize_by_match_key(doc_attr.attributes[:match_key])
   d.attributes = doc_attr.attributes
+  d.id = nil
   d.save
 end
 
