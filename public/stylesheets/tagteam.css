@@ -2,7 +2,8 @@
 @import url(//fonts.googleapis.com/css?family=Carme);
 
 body{
-  background: url('/images/bgstripe.png');
+/*  background: url('/images/bgstripe.png'); */
+  background-color: #006156;
   font-size: 11pt;
   font-family: Arial, sans-serif;
   line-height: 1.4em;
@@ -156,13 +157,12 @@ a.documentation_control:hover{
   text-decoration: underline;
 }
 
-
 #wrapper{
   float: left;
   background: #333;
   border-radius: 10px;
-  margin-top: 10px;
-  box-shadow: 10px 10px 10px #000;
+  margin: 10px 0px 20px 0px;
+  box-shadow: 5px 5px 5px #222;
 }
 
 section#content{
@@ -318,7 +318,7 @@ a.button:hover,
 }
 
 a:hover{
-  color: red;
+  color: #7a000d;
 }
 
 .hub,
@@ -488,7 +488,7 @@ footer{
   text-align: right;
   padding: 10px;
   font-size: .8em;
-  color: #444; 
+  color: #666; 
 }
 
 #background_jobs{
