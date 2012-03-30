@@ -1,9 +1,20 @@
 /* works schema-less! Sweet. */
 @import url(//fonts.googleapis.com/css?family=Carme);
 
+/* Color theme from http://kuler.adobe.com/#themeID/1799856
+ 
+Dark #151c21
+Red/orange #a33724
+white #ffffff
+gray #bfbfbf
+darkbrown #302825 
+
+*/
+
+
 body{
-/*  background: url('/images/bgstripe.png'); */
-  background-color: #006156;
+  background: url('/images/tactile_noise.png'); 
+/*   background-color: #302825; */
   font-size: 11pt;
   font-family: Arial, sans-serif;
   line-height: 1.4em;
@@ -45,8 +56,8 @@ sup{
 
 header{
   margin-top: 10px;
-  background: #ccc;
-  padding: 10px;
+  background: #bfbfbf;
+  padding: 5px;
   border-radius: 10px;
 }
 
@@ -159,10 +170,10 @@ a.documentation_control:hover{
 
 #wrapper{
   float: left;
-  background: #333;
+  background: #151c21;
   border-radius: 10px;
+  border: 2px solid #555;
   margin: 10px 0px 20px 0px;
-  box-shadow: 5px 5px 5px #222;
 }
 
 section#content{
@@ -318,7 +329,7 @@ a.button:hover,
 }
 
 a:hover{
-  color: #7a000d;
+  color: #a33724;
 }
 
 .hub,
