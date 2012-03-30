@@ -3,6 +3,17 @@ include RakeHelper
 
 namespace :tagteam do
 
+  desc 'auto import feeds from json'
+  task :auto_import_from_json, [:json_url, :hub_title, :owner_email] => :environment do |t,args|
+
+    include FeedUtilities
+
+    response = fetch(args[:json_url])
+    feeds = ActiveSupport::JSON.decode(response.body)
+
+    add_example_feeds(args[:hub_title], feeds, args[:owner_email])
+  end
+
   desc 'dump documentation'
   task :dump_documentation => :environment do
     f = File.open("#{Rails.root}/db/documentation.yml", 'w')
