@@ -8,8 +8,6 @@ class HubFeedFeedItemTagRenderer
   def self.perform(hub_feed_id, tag_id = nil)
     hub_feed = HubFeed.find(hub_feed_id)
 
-#    puts 'HubFeed to update is :' + hub_feed.inspect
-
     feed_items = []
     if tag_id.nil?
       # Act on all items

@@ -38,14 +38,15 @@ class HubFeed < ActiveRecord::Base
     t.add :feed
   end
   
+  # If a new HubFeed gets created, we need to ensure that the tag facets on the feed items it contains (whether those items exist already in TagTeam or not) are calculated.
   after_create do
-  #  logger.warn('After create is firing')
-    reindex_items_of_concern
+    self.feed.solr_index
     Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
+  # After a HubFeed has been removed
   after_destroy do
-    reindex_items_of_concern
+    self.feed.solr_index
 
     # Possibly not necessary, but I put this in for a reason at some point so it might be.
     ActsAsTaggableOn::Tagging.destroy_all(:context => self.hub.tagging_key.to_s, :taggable_type => 'FeedItem', :taggable_id => self.feed.feed_items.collect{|fi| fi.id})
@@ -160,14 +161,6 @@ class HubFeed < ActiveRecord::Base
   rescue Exception => e
     logger.warn(e.inspect)
     return []
-  end
-
-  private
-
-  def reindex_items_of_concern
-    logger.warn('reindexing everything')
-    self.feed.solr_index
-    self.feed.feed_items.collect{|fi| fi.solr_index}
   end
 
 end
