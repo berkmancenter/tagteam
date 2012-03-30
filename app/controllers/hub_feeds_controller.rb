@@ -5,7 +5,7 @@ class HubFeedsController < ApplicationController
   before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately, :autocomplete, :import]
   before_filter :prep_resources
 
-  caches_action :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+  caches_action :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 

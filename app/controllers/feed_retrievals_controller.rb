@@ -2,7 +2,7 @@ class FeedRetrievalsController < ApplicationController
 
   before_filter :load_hub_feed
 
-  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 

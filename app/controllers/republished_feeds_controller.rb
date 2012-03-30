@@ -3,7 +3,7 @@ class RepublishedFeedsController < ApplicationController
   before_filter :load_hub, :only => [:new, :create, :index]
   before_filter :register_breadcrumb
 
-  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => 15.minutes, :cache_path => Proc.new{ 
+  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 

@@ -21,5 +21,7 @@ DEFAULT_TAGTEAM_PER_PAGE = "25"
 
 Resque.redis.namespace = "resque:TagTeam"
 
+DEFAULT_ACTION_CACHE_TIME = 30.minutes
+
 require File.dirname(__FILE__) + '/../../lib/will_paginate/view_helpers/custom_link_renderer.rb'
 
