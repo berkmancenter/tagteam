@@ -9,7 +9,16 @@
     <% unless @changed_items.empty? %>
       <li><a href="#changed_items">Changed items</a></li>
     <% end %>
+    <% if @new_items.empty? && @changed_items.empty? %>
+      <li><a href="#nothing">Feed Update</a></li>
+    <% end %>
   </ul>
+
+  <% if @new_items.empty? && @changed_items.empty? %>
+    <div id="nothing">
+      <h2>No changes this time.</h2>
+    </div>
+  <% end %>
 
   <% unless @new_items.empty? %>
     <div id="new_items">
