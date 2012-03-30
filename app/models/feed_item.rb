@@ -210,8 +210,8 @@ class FeedItem < ActiveRecord::Base
       if ! item.published.blank? && item.published.year >= 1900
         fi.date_published = item.published.to_datetime
       end
-      if ! item.last_updated.blank? && item.last_updated.year >= 1900
-        fi.last_updated = item.last_updated.to_datetime
+      if ! item.updated.blank? && item.updated.year >= 1900
+        fi.last_updated = item.updated.to_datetime
       end
       # logger.warn('dirty because there is a new feed_item')
       item_changelog[:new_record] = true
