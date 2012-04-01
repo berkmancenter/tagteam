@@ -31,15 +31,19 @@ class HubsController < ApplicationController
 
   # Looks through the currently running resque jobs and returns a json response talking about what's going on.
   def background_activity
-    @output = []
+    @output = {}
     Resque.workers.collect.each do|w|
       unless w.job.blank?
         started_at = Time.parse(w.job['run_at'])
         running_for_this_many_seconds = Time.now - started_at
         job = {:description => w.job['payload']['class'].constantize.display_name, :since => w.job['run_at'], :running_for => (running_for_this_many_seconds > 60) ? "#{(running_for_this_many_seconds.round / 60)} minute(s), #{(running_for_this_many_seconds.round % 60)} seconds" : "#{running_for_this_many_seconds.round} seconds"}
-        @output << job
+        @output[:running] = job
       end
     end
+    count = 0
+    Resque.queues.each{ |q| count = count + Resque.peek(q,0,100000).length }
+    @output[:queued] = count
+
     respond_to do|format|
       format.json{ render :json => @output }
     end

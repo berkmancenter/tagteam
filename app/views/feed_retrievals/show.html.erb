@@ -1,6 +1,6 @@
 <h2>Feed Retrieval on <%= l(@feed_retrieval.created_at, :format => :date_and_time_short) %> for "<%= @hub_feed %>"</h2>
 
-<div class="tabs">
+<div class="tabs" id="feed_retrieval_tabs">
 
   <ul>
     <% unless @new_items.empty? %>

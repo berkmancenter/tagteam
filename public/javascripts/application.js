@@ -90,6 +90,7 @@
                   $.checkPlaceholders();
                   $.initPerPage();
                   $.hideSpinner();
+                  $.initTabHistory('.tabs');
                 },
                 error: function(error){
                   $.showMajorError(error);
@@ -356,16 +357,40 @@
         cache: false,
         success: function(json){
           $('#activity').html('');
-          if(json.length == 0){
+          if(json.running == undefined){
             $('#activity').html('<p>No background jobs are currently running.</p>');
           } else {
-            $('#activity').html('<ol></ol>');
-            $(json).each(function(i,job){
-              $('#activity ol').append(job.description + ' since "' + job.since + '", running for ' + job.running_for);
+            $('#activity').html('<ul></ul>');
+            $(json.running).each(function(i,job){
+              $('#activity ul').append('<li>' + job.description + ' since "' + job.since + '", running for ' + job.running_for + '</li>');
             });
+            if(json.queued > 0){
+              $('#activity ul').append('<li>' + json.queued + ' more jobs queued' + '</li>')
+            }
           }
         }
       });
+    },
+    initTabHistory: function(tabClass){
+      if($(tabClass).length > 0){
+        var tabs = $(tabClass);
+        var tab_a_selector = 'ul.ui-tabs-nav a';
+        tabs.tabs({ event: 'change' });
+        tabs.find( tab_a_selector ).click(function(){
+          var state = {};
+          id = $(this).closest( tabClass ).attr( 'id' );
+          idx = $(this).parent().prevAll().length;
+          state[ id ] = idx;
+          $.bbq.pushState( state );
+        });
+
+        $(window).bind( 'hashchange', function(e) {
+          tabs.each(function(){
+            var idx = $.bbq.getState( this.id, true ) || 0;
+            $(this).find( tab_a_selector ).eq( idx ).triggerHandler( 'change' );
+          });
+        });
+      }
     }
 
 });
@@ -373,6 +398,10 @@
 })(jQuery);
 
 $(document).ready(function(){
+  $.initTabHistory('.hub_tabs');
+  $.initTabHistory('.tabs');
+  $(window).trigger( 'hashchange' );
+
   $('#background_jobs').click(function(e){
     e.preventDefault();
     var dialogNode = $('<div><div id="activity"></div></div>');

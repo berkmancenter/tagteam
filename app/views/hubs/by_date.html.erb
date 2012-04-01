@@ -1,6 +1,6 @@
 <% unless request.xhr? %>
   <h2>Items from <%= breadcrumbs.items.collect{|i| i[0]}.reject{|i| ! i.match(/^\d+$/)}.join('-') %>, <%= @search.total %> total</h2>
-<div class="tabs">
+<div class="tabs" id="by_date_tabs">
   <ul>
     <li><a href="#items">Items</a></li>
   </ul>

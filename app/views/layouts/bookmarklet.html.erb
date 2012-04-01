@@ -3,7 +3,7 @@
   <head>
     <title><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></title>
     <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', 'reset','silk-sprite','custom-theme/jquery-ui-1.8.18.custom', 'tagteam', 'bookmarklet' ] %>
-    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.address-1.4.min', 'jquery-ui-1.8.18.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
+    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.8.18.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
   </head>
   <body>
