@@ -14,10 +14,10 @@
     <div class="container_16" id="outer_wrapper">
       <div id="wrapper">
         <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
-        <header class="<%= (@hub.blank?) ? 'grid_16' : 'grid_12' %>">
+        <header class="<%= (@hub.blank? || @hub.new_record?) ? 'grid_16' : 'grid_12' %>">
           <h1><a href="/">TagTeam</a></h1>
         </header>
-        <% unless @hub.blank? %>
+        <% if ! @hub.blank? && ! @hub.new_record? %>
           <div class="grid_4">
             <div class="hub_search">
               Search this hub:

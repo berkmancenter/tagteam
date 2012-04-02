@@ -11,7 +11,6 @@ darkbrown #302825
 
 */
 
-
 body{
   background: url('/images/tactile_noise.png'); 
 /*   background-color: #302825; */
@@ -49,6 +48,19 @@ ul.tag_filter_controls li{
   right: 15px;
 }
 
+.clear{
+  clear: both;
+}
+
+#left{
+  float: left;
+  width: 48%;
+}
+
+#right{
+  float: right;
+  width: 48%;
+}
 sup{
   vertical-align: super;
   font-size: smaller;
@@ -344,18 +356,16 @@ a:hover{
   line-height: 1.6em;
 }
 
-.hubs .hub{
-  box-shadow: 0px 0px 15px #555;
-  margin-bottom: 1em;
-  padding: .5em;
+.hub{
+  margin-bottom: .25em;
   border-radius: 5px;
 }
 
-.hubs .hub .title{
-  font-size: 1.25em;
+.hub .title{
+  font-size: 1.1em;
 }
 
-.hubs .hub a{
+.hub a{
   text-decoration: none;
 }
 

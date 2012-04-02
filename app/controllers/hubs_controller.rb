@@ -1,7 +1,7 @@
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
   before_filter :load_hub, :except => [:index, :new, :create, :my, :background_activity]
-  before_filter :add_breadcrumb, :except => [:index, :background_activity]
+  before_filter :add_breadcrumb, :except => [:index, :background_activity, :new, :create]
   caches_action :index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }

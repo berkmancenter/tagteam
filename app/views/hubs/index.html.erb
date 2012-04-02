@@ -1,33 +1,30 @@
-<div class="hubs tabs" id="hub_list">
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#all_hubs">All Hubs</a></li>
-    <% unless current_user.blank? %>
-      <li><a href="#my_hubs">My Hubs</a></li>
-    <% end %>
-  </ul>
-
-  <div id="about">
-    <div id="right">
-      <p>TagTeam is an open-source RSS (and atom) aggregrator with the power to:</p>
-      <ul>
-        <li>Aggregate ANYTHING (twitter, MediaWikis, blogs, delicious, zotero) that publishes RSS,</li>
-        <li>Create custom feed remixes,</li>
-        <li>Curate tags via a flexible filtering system,</li>
-        <li>and republish EVERYTHING as Atom, RSS, xml, and json.</li>
-      </ul>
-    </div>
+<div id="homepage">
+  <div id="left">
+    <p>TagTeam is an open-source RSS (and atom) aggregrator with the power to:</p>
+    <ul>
+      <li>Aggregate ANYTHING (twitter, MediaWikis, blogs, delicious, zotero) that publishes RSS,</li>
+      <li>Create custom feed remixes,</li>
+      <li>Curate tags via a flexible filtering system,</li>
+      <li>and republish EVERYTHING as Atom, RSS, xml, and json.</li>
+    </ul>
   </div>
 
-  <% unless current_user.blank? %>
-    <div id="my_hubs"> 
-      <%= render :partial => 'shared/line_items/hub', :collection => @my_hubs %>
-      <%= link_to(raw('<span class="inline ui-silk ui-silk-plugin-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
+  <div id="right">
+    <div id="hub_list">
+      <h2>Hubs</h2>
+      <div class="search_results">
+        <%= render :partial => 'shared/line_items/hub', :collection => @hubs %>
+        <%= will_paginate(@hubs) %>
+      </div>
+      <% unless current_user.blank? %>
+        <%= link_to(raw('<span class="inline ui-silk ui-silk-plugin-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
+      <% end %>
     </div>
-  <% end %>
-
-  <div id="all_hubs">
-    <%= render :partial => 'shared/line_items/hub', :collection => @hubs %>
-    <%= will_paginate(@hubs) %>
   </div>
+  <div class="clear" style="float: left;"></div>
+
+  <div id="item_list" class="search_results">
+
+  </div>
+
 </div>
