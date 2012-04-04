@@ -106,6 +106,10 @@ h3{
   margin-top: .5em;
 }
 
+#homepage h2{
+  margin-top: 0px;
+}
+
 div.description div,
 p{
   margin-bottom: .5em;

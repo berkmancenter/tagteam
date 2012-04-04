@@ -1,13 +1,13 @@
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  before_filter :load_hub, :except => [:index, :new, :create, :my, :background_activity]
-  before_filter :add_breadcrumb, :except => [:index, :background_activity, :new, :create]
+  before_filter :load_hub, :except => [:index, :new, :create, :my, :background_activity, :all_items]
+  before_filter :add_breadcrumb, :except => [:index, :background_activity, :new, :create, :all_items]
   caches_action :index, :items, :show, :custom_republished_feeds, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections]
+    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds]
     allow :superadmin, :hubadmin
@@ -121,19 +121,29 @@ class HubsController < ApplicationController
     redirect_to hub_path(@hub)
   end
 
+  def all_items
+    items
+  end
+
   # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml. 
   def items
-    hub_id = @hub.id
+    unless @hub.blank?
+      hub_id = @hub.id
+    end
 
     if request.format.to_s.match(/rss|atom/i)
       @search = FeedItem.search(:include => [:feeds, :hub_feeds]) do
-        with(:hub_ids, hub_id)
+        unless hub_id.blank?
+          with(:hub_ids, hub_id)
+        end
         order_by('date_published', :desc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     else
       @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
-        with(:hub_ids, hub_id)
+        unless hub_id.blank?
+          with(:hub_ids, hub_id)
+        end
         order_by('date_published', :desc)
         paginate :page => params[:page], :per_page => get_per_page
       end
@@ -141,11 +151,13 @@ class HubsController < ApplicationController
 
     respond_to do |format|
       format.html{ 
-        @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
-        render :layout => ! request.xhr? 
+        unless @hub.blank?
+          @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
+        end
+        render :template => 'hubs/items', :layout => ! request.xhr? 
       }
-      format.rss{ }
-      format.atom{ }
+      format.rss{ render :template => 'hubs/items.rss' }
+      format.atom{ render :template => 'hubs/items.atom' }
       format.json{ render_for_api :default, :json => (@search.blank?) ? [] : @search.results }
       format.xml{ render_for_api :default, :xml => (@search.blank?) ? [] : @search.results }
     end
