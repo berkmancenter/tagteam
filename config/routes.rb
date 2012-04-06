@@ -1,5 +1,7 @@
 Tagteam::Application.routes.draw do
 
+  get "users/autocomplete"
+
   post "bookmarklets/add_item"
   get "bookmarklets/add"
   get "bookmarklets/confirm"
@@ -65,6 +67,8 @@ Tagteam::Application.routes.draw do
       get 'my_bookmark_collections'
       get 'bookmark_collections'
       get 'community'
+      post 'add_role'
+      delete 'remove_role'
     end
 
     collection do
@@ -123,7 +127,7 @@ Tagteam::Application.routes.draw do
 
   end
 
-  devise_for :users
+  devise_for :users, :path => 'accounts'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

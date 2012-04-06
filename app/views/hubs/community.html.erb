@@ -1,10 +1,11 @@
 <h2>Community</h2>
-<h3>Collaborators</h3>
 <table>
   <tr>
     <th>&nbsp;</th>
-    <th>Roles</th>
+    <th>Role(s)</th>
   </tr>
-
   <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
 </table>
+<% if current_user && current_user.is?(:owner, @hub) %> 
+  
+<% end %>

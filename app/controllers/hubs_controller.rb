@@ -9,13 +9,25 @@ class HubsController < ApplicationController
   access_control do
     allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds, :community]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds, :community, :add_role, :remove_role]
     allow :bookmarker, :of => :hub, :to => [:community]
     allow :superadmin, :hubadmin
   end
 
   def community
     render :layout => ! request.xhr?
+  end
+
+  def add_role
+  end
+
+  def remove_role
+    user = User.find(params[:user_id])
+    if @hub.accepted_roles_by(user).reject{|r| r.name != params[:role_name]}.length > 0
+      flash[:notice] = "We can delete this role"
+      @hub.accepts_no_role!(params[:role_name], user)
+    end
+    redirect_to hub_path(@hub)
   end
 
   # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.
