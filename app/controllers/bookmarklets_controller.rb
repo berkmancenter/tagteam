@@ -6,6 +6,7 @@ class BookmarkletsController < ApplicationController
   access_control do
     allow logged_in, :to => [:add,:confirm]
     allow :owner, :of => :hub, :to => [:add_item]
+    allow :bookmarker, :of => :hub, :to => [:add_item]
   end
 
   layout 'bookmarklet'

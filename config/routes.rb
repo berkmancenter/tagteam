@@ -64,6 +64,7 @@ Tagteam::Application.routes.draw do
       get 'retrievals'
       get 'my_bookmark_collections'
       get 'bookmark_collections'
+      get 'community'
     end
 
     collection do

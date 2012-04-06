@@ -9,8 +9,13 @@ class HubsController < ApplicationController
   access_control do
     allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds, :community]
+    allow :bookmarker, :of => :hub, :to => [:community]
     allow :superadmin, :hubadmin
+  end
+
+  def community
+    render :layout => ! request.xhr?
   end
 
   # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.

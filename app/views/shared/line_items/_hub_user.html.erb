@@ -1,0 +1,4 @@
+<tr>
+  <td><%= hub_user.email %></td>
+  <td><%= hub_user.roles.where(:authorizable_type => 'Hub', :authorizable_id => @hub.id).collect{|r| r.name}.join(', ') %></td>
+  </tr>

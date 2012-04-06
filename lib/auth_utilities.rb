@@ -1,18 +1,28 @@
 module AuthUtilities
 
   def owners
-    owner_list = self.accepted_roles.reject{|r| r.name != 'owner'}
-    (owner_list.blank?) ? [] : owner_list.first.users.compact.uniq
+    find_role('owner')
   end
 
   def creators
-    creator_list = self.accepted_roles.reject{|r| r.name != 'creator'}
-    (creator_list.blank?) ? [] : creator_list.first.users.compact.uniq
+    find_role('creator')
   end
 
   def editors
-    editor_list = self.accepted_roles.reject{|r| r.name != 'editor'}
-    (editor_list.blank?) ? [] : editor_list.first.users.compact.uniq
+    find_role('editor')
+  end
+
+  def bookmarkers
+    find_role('bookmarker')
+  end
+
+  def users_with_roles
+    accepted_roles.collect{|r| r.users}.flatten.uniq
+  end
+
+  def find_role(role_name = 'owner')
+    role_list = self.accepted_roles.reject{|r| r.name != role_name}
+    (role_list.blank?) ? [] : role_list.first.users.compact.uniq
   end
 
 end

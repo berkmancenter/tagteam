@@ -15,7 +15,7 @@ module ApplicationHelper
     if breadcrumbs.items.length == 0
       'TagTeam'
     else
-      breadcrumbs.items.collect{|i| i[0]}.reject{|i| i == 'Home'}.reverse.join(' :: ') + ' :: TagTeam'
+     [breadcrumbs.items.collect{|i| i[0]}.reject{|i| i == 'Home'}.reverse, 'TagTeam'].flatten.compact.join(' :: ')
     end
   end
 
