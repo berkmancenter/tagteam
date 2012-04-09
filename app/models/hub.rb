@@ -19,6 +19,7 @@ class Hub < ActiveRecord::Base
   DELEGATABLE_ROLES_HASH = {
     :owner => 'Owns this hub, effectively able to do everything', 
     :creator => 'Created this hub - does not confer any special privileges', 
+    # TODO - refactor to maybe fix names. Change "bookmarker" to "tagger"
     :bookmarker => 'Can add bookmarks to this hub via the bookmarklet', 
     :remixer => 'Can remix items in this hub into new remixed feeds',
     :hub_tag_filterer => 'Can manage hub-wide tag filters in this hub',
