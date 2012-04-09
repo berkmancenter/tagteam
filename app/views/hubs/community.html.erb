@@ -1,4 +1,5 @@
 <h2>Community</h2>
+<h3>Current user privileges</h3>
 <table>
   <tr>
     <th>&nbsp;</th>
@@ -7,5 +8,16 @@
   <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
 </table>
 <% if current_user && current_user.is?(:owner, @hub) %> 
-  
+  <h3>Grant privileges</h3>
+  <ul class="search_controls">
+    <li><span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's email address. . . " %></li>
+    <li id="user_id_container">
+    </li>
+  </ul>
+
+<%= javascript_tag %Q|$(document).ready(function(){
+$.observeAutocomplete($.rootPath() + 'users/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container','search_select user'); 
+$.observeSearchSelectControl();
+});| %>
+
 <% end %>

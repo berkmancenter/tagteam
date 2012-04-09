@@ -16,6 +16,19 @@ class Hub < ActiveRecord::Base
     auto_sanitize_html(:description)
   end
 
+  DELEGATABLE_ROLES_HASH = {
+    :owner => 'Owns this hub, effectively able to do everything', 
+    :creator => 'Created this hub - does not confer any special privileges', 
+    :bookmarker => 'Can add bookmarks to this hub via the bookmarklet', 
+    :remixer => 'Can remix items in this hub into new remixed feeds',
+    :hub_tag_filterer => 'Can manage hub-wide tag filters in this hub',
+    :hub_feed_tag_filterer => 'Can manage feed-level tag filters in this hub',
+    :hub_feed_item_tag_filterer => 'Can manage item-level tag filters in this hub',
+    :inputter => 'Can manage input feeds'
+  }
+
+  DELEGATABLE_ROLES = DELEGATABLE_ROLES_HASH.keys.reject{|r| r == :creator}
+
   attr_accessible :title, :description, :tag_prefix
   acts_as_authorization_object
 

@@ -47,8 +47,8 @@
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete',#{@hub.id},'#include_tag_autocomplete', 'include_tag_ids', '#include_tag_container'); 
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete',#{@hub.id},'#exclude_tag_autocomplete', 'exclude_tag_ids', '#exclude_tag_container');
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/hub_feeds/autocomplete',#{@hub.id},'#hub_feed_autocomplete','hub_feed_ids', '#hub_feed_container');
+$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete','#include_tag_autocomplete', 'include_tag_ids', '#include_tag_container','search_select tag'); 
+$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete','#exclude_tag_autocomplete', 'exclude_tag_ids', '#exclude_tag_container','search_select tag');
+$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/hub_feeds/autocomplete','#hub_feed_autocomplete','hub_feed_ids', '#hub_feed_container','search_select tag');
 $.observeSearchSelectControl();
 });| %>

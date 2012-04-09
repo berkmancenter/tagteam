@@ -24,7 +24,7 @@ class HubsController < ApplicationController
   def remove_role
     user = User.find(params[:user_id])
     if @hub.accepted_roles_by(user).reject{|r| r.name != params[:role_name]}.length > 0
-      flash[:notice] = "We can delete this role"
+      flash[:notice] = "We deleted that role"
       @hub.accepts_no_role!(params[:role_name], user)
     end
     redirect_to hub_path(@hub)

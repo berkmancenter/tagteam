@@ -166,7 +166,7 @@
       });
     },
 
-    observeAutocomplete: function(url, hubId, rootId, paramName, containerId){
+    observeAutocomplete: function(url, rootId, paramName, containerId, elementClass){
       function split( val ) {
         return val.split( /,\s*/ );
       }
@@ -198,7 +198,7 @@
           return false;
         },
         select: function( event, ui ) {
-          var node = $('<span class="search_select tag" />');
+          var node = $('<span />').attr('class', elementClass);
           $(node).html($('<input name="' + paramName + '[]" type="hidden" />').val(ui.item.id));
           $(node).append(ui.item.label);
           $(node).append('<span class="search_select_control"> X </span>');
@@ -242,7 +242,6 @@
             $.cookie('bookmarklet_bookmark_collection_id_choice', $(this).val(), {expires: 365, path: $.rootPath()});
           });
 
-         // $.observeAutocomplete($.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete',hubChoiceId,'#feed_item_tag_list', 'tag_ids', '#feed_item_tag_list_input'); 
           $.observeSearchSelectControl();
 
           function split( val ) {
