@@ -1,23 +1,37 @@
 <h2>Community</h2>
-<h3>Current user privileges</h3>
-<table>
-  <tr>
-    <th>&nbsp;</th>
-    <th>Role(s)</th>
-  </tr>
-  <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
-</table>
+<div id="left">
+  <h3>Current user privileges</h3>
+  <table>
+    <tr>
+      <th>&nbsp;</th>
+      <th>Role(s)</th>
+    </tr>
+    <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
+  </table>
+</div>
 <% if current_user && current_user.is?(:owner, @hub) %> 
-  <h3>Grant privileges</h3>
-  <ul class="search_controls">
-    <li><span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's email address. . . " %></li>
-    <li id="user_id_container">
-    </li>
-  </ul>
+  <%= form_tag(add_roles_hub_path(@hub)) do %>
+    <div id="right">
+      <h3 style="margin-bottom: 0em;">Grant privileges</h3>
+      <ul class="search_controls">
+        <li>
+        <h3 style="margin: 0em;">Roles</h3>
+        <% Hub::DELEGATABLE_ROLES_FOR_FORMS.each do|r| %>
+          <span class="role"><%= check_box_tag('roles[]', r[0], false, {:id => "role_#{r[0]}"}) %> <%= label_tag("role_#{r[0]}", r[1]) %></span>
+        <% end %>
+        <h3>Users</h3>
+        <span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's email address. . . " %>
+        </li>
+        <li id="user_id_container">
+        </li>
+        <li><%= submit_tag('Grant roles to these users', :class => 'button', :id => 'add_roles') %></li>
+      </ul>
 
-<%= javascript_tag %Q|$(document).ready(function(){
+      <%= javascript_tag %Q|$(document).ready(function(){
 $.observeAutocomplete($.rootPath() + 'users/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container','search_select user'); 
 $.observeSearchSelectControl();
 });| %>
-
+    </div>
+  <% end %>
 <% end %>
+<div class="clear"></div>

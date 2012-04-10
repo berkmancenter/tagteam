@@ -202,7 +202,7 @@
           $(node).html($('<input name="' + paramName + '[]" type="hidden" />').val(ui.item.id));
           $(node).append(ui.item.label);
           $(node).append('<span class="search_select_control"> X </span>');
-          $(containerId).append(node);
+          $(containerId).show().append(node);
           this.value = "";
           return false;
         }

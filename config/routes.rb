@@ -67,7 +67,7 @@ Tagteam::Application.routes.draw do
       get 'my_bookmark_collections'
       get 'bookmark_collections'
       get 'community'
-      post 'add_role'
+      post 'add_roles'
       delete 'remove_role'
     end
 

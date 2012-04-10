@@ -9,7 +9,7 @@ class HubsController < ApplicationController
   access_control do
     allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds, :community, :add_role, :remove_role]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :tag_controls, :custom_republished_feeds, :community, :add_roles, :remove_role]
     allow :bookmarker, :of => :hub, :to => [:community]
     allow :superadmin, :hubadmin
   end
@@ -18,7 +18,16 @@ class HubsController < ApplicationController
     render :layout => ! request.xhr?
   end
 
-  def add_role
+  def add_roles
+    if ! params[:user_ids].blank? && ! params[:roles].blank?
+      params[:user_ids].each do|u|
+        user = User.find(u)
+        params[:roles].each do|r|
+          @hub.accepts_role!(r, user)
+        end
+      end
+    end
+    redirect_to hub_path(@hub)
   end
 
   def remove_role

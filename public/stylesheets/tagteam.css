@@ -226,6 +226,11 @@ table.hub_feeds, table.republished_feeds{
 .form_controls li, .search_controls li{
   padding-top: 1em;
   list-style-type: none;
+  margin-left: 0em;
+}
+
+.search_controls span.role{
+  display: inline-block;
 }
 
 li.title{
