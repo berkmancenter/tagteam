@@ -38,12 +38,7 @@ Tagteam::Application.routes.draw do
       end
     end
     resources :tags
-    resources :hub_feed_tag_filters do
-      member do
-        post 'move_higher'
-        post 'move_lower'
-      end
-    end
+    resources :hub_feed_tag_filters
   end
 
   resources :hubs do
@@ -102,20 +97,12 @@ Tagteam::Application.routes.draw do
       end
     end
 
-    resources :hub_tag_filters do
-      member do
-        post 'move_higher'
-        post 'move_lower'
-      end
-    end
+    resources :hub_tag_filters
 
     resources :feed_items do
-      resources :hub_feed_item_tag_filters do
-        member do
-          post 'move_higher'
-          post 'move_lower'
-        end
-      end
+
+      resources :hub_feed_item_tag_filters
+
       member do
         get 'content'
         get 'related'

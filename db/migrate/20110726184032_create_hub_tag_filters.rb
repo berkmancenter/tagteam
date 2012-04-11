@@ -4,11 +4,10 @@ class CreateHubTagFilters < ActiveRecord::Migration
       t.references :hub
       t.string :filter_type, :limit => 100, :null => false
       t.integer :filter_id, :null => false
-      t.integer :position
 
       t.timestamps
     end
-    [:hub_id, :filter_type, :filter_id, :position].each do|col|
+    [:hub_id, :filter_type, :filter_id].each do|col|
       add_index :hub_tag_filters, col
     end
   end

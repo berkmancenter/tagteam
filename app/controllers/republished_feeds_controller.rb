@@ -3,7 +3,8 @@ class RepublishedFeedsController < ApplicationController
   before_filter :load_hub, :only => [:new, :create, :index]
   before_filter :register_breadcrumb
 
-  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user && current_user.is?([:owner, :remixer], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  # Beef up cache rules.
+  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
@@ -12,7 +13,7 @@ class RepublishedFeedsController < ApplicationController
     allow :owner, :of => :hub
     allow :remixer, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :republished_feed, :to => [:edit, :update, :destroy]
-    allow :superadmin, :republished_feed_admin
+    allow :superadmin
   end
 
   def more_details

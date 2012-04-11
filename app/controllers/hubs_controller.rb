@@ -12,7 +12,7 @@ class HubsController < ApplicationController
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_role]
     allow :inputter, :of => :hub, :to => [:add_feed]
     allow :remixer, :of => :hub, :to => [:custom_republished_feeds]
-    allow :superadmin, :hubadmin
+    allow :superadmin
   end
 
   def community

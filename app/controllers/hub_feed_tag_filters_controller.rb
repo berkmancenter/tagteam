@@ -8,7 +8,7 @@ class HubFeedTagFiltersController < ApplicationController
     allow :owner, :of => :hub
     allow :hub_feed_tag_filterer, :to => [:new, :create]
     allow :owner, :of => :hub_feed_tag_filter, :to => [:destroy]
-    allow :superadmin, :hubfeedtagfilteradmin, :filteradmin
+    allow :superadmin
   end
 
   def index
@@ -22,16 +22,6 @@ class HubFeedTagFiltersController < ApplicationController
 
   def new
     @hub_feed_tag_filter = HubFeedTagFilter.new
-  end
-
-  def move_higher
-    @hub_feed_tag_filter.move_higher unless @hub_feed_tag_filter.first?
-    redirect_to hub_hub_feed_path(@hub,@hub_feed) 
-  end
-
-  def move_lower
-    @hub_feed_tag_filter.move_lower unless @hub_feed_tag_filter.last?
-    redirect_to hub_hub_feed_path(@hub,@hub_feed) 
   end
 
   def create

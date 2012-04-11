@@ -11,7 +11,6 @@ gem 'gravatar-ultimate'
 gem 'acl9'
 gem 'feed-abstract'
 gem "will_paginate"
-gem 'acts_as_list'
 gem 'sunspot'
 gem 'sunspot_rails'
 gem 'sunspot_solr'

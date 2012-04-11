@@ -5,7 +5,6 @@ class CreateInputSources < ActiveRecord::Migration
       t.integer :item_source_id,          :null => false
       t.string :item_source_type,         :limit => 100.bytes,    :null => false
       t.string :effect,                   :limit => 25.bytes,     :null => false,   :default => 'add'
-      t.integer :position
       t.integer :limit
 
       t.timestamps
@@ -13,7 +12,7 @@ class CreateInputSources < ActiveRecord::Migration
 
     # Index for item_source_type is in the unique index below.
     #
-    [:republished_feed_id, :item_source_id, :effect, :position].each do |col|
+    [:republished_feed_id, :item_source_id, :effect].each do |col|
       add_index :input_sources, col
     end
 

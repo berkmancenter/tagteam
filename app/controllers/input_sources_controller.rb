@@ -7,7 +7,8 @@ class InputSourcesController < ApplicationController
     allow all, :to => [:show, :find]
     allow :owner, :of => :republished_feed, :to => [:new, :create, :edit, :update]
     allow :owner, :of => :input_source, :to => [:edit, :update, :destroy]
-    allow :superadmin, :input_source_admin
+    allow :owner, :of => :hub
+    allow :superadmin
   end
 
   def new

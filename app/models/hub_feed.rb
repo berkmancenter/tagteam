@@ -18,7 +18,7 @@ class HubFeed < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed
   has_many :feed_items, :through => :feed
-  has_many :hub_feed_tag_filters, :dependent => :destroy, :order => :position
+  has_many :hub_feed_tag_filters, :dependent => :destroy, :order => 'created_at desc'
   validates_uniqueness_of :feed_id, :scope => :hub_id
   validates_presence_of :feed_id, :hub_id
 

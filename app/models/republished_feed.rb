@@ -25,7 +25,7 @@ class RepublishedFeed < ActiveRecord::Base
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]
 
   belongs_to :hub
-  has_many :input_sources, :dependent => :destroy, :order => :position 
+  has_many :input_sources, :dependent => :destroy, :order => 'created_at desc' 
 
   api_accessible :default do |t|
     t.add :id

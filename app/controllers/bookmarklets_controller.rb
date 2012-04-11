@@ -7,6 +7,7 @@ class BookmarkletsController < ApplicationController
     allow logged_in, :to => [:add,:confirm]
     allow :owner, :of => :hub, :to => [:add_item]
     allow :bookmarker, :of => :hub, :to => [:add_item]
+    allow :superadmin
   end
 
   layout 'bookmarklet'

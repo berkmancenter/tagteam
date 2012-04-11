@@ -108,7 +108,7 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds
-  has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => :position
+  has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => 'created_at desc'
   has_many :input_sources, :dependent => :destroy, :as => :item_source
   after_save :reindex_all_tags
 
@@ -168,7 +168,7 @@ class FeedItem < ActiveRecord::Base
       end
     end
     #Hub feed item filters
-    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}, :order => :position).each do|hfitf|
+    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}).each do|hfitf|
       hfitf.filter.act(tag_list_for_filtering)
     end
     self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))

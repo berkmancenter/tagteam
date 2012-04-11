@@ -2,13 +2,16 @@
 class HubFeedItemTagFiltersController < ApplicationController
   before_filter :load_feed_item
   before_filter :load_hub_feed_item_tag_filter, :except => [:index, :new, :create]
+  caches_action :index, :unless => Proc.new{|c| current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+    request.fullpath + "&per_page=" + get_per_page
+  }
 
   access_control do
     allow all, :to => [:index]
     allow :owner, :of => :hub
     allow :hub_feed_item_tag_filterer, :to => [:new, :create]
     allow :owner, :of => :hub_feed_item_tag_filter, :to => [:destroy]
-    allow :superadmin, :hubfeeditemtagfilteradmin, :filteradmin
+    allow :superadmin
   end
 
   #A list of filters on this FeedItem in a Hub..
@@ -23,16 +26,6 @@ class HubFeedItemTagFiltersController < ApplicationController
 
   def new
     @hub_feed_item_tag_filter = HubFeedItemTagFilter.new(:hub => @hub)
-  end
-
-  def move_higher
-    @hub_feed_item_tag_filter.move_higher unless @hub_feed_item_tag_filter.first?
-    redirect_to hub_feed_feed_item_path(@feed_item.hub_feeds.first,@feed_item) 
-  end
-
-  def move_lower
-    @hub_feed_item_tag_filter.move_lower unless @hub_feed_item_tag_filter.last?
-    redirect_to hub_feed_feed_item_path(@feed_item.hub_feeds.first,@feed_item) 
   end
 
   def create
