@@ -17,14 +17,63 @@ class Hub < ActiveRecord::Base
   end
 
   DELEGATABLE_ROLES_HASH = {
-    :owner => {:name => 'Owner', :description => 'Owns this hub, effectively able to do everything'}, 
-    :creator => {:name => 'Creator', :description => 'Created this hub - does not confer any special privileges'}, 
-    :bookmarker => {:name => 'Tagger', :description => 'Can add bookmarks to this hub via the bookmarklet'}, 
-    :remixer => {:name => 'Feed Remixer', :description => 'Can remix items in this hub into new remixed feeds'},
-    :hub_tag_filterer => {:name => 'Hub-wide Tag Filter Manager', :description => 'Can manage hub-wide tag filters in this hub'},
-    :hub_feed_tag_filterer => {:name => 'Feed-wide Tag Filter Manager', :description => 'Can manage feed-level tag filters in this hub'},
-    :hub_feed_item_tag_filterer => {:name => 'Feed Item Tag Filter Manager', :description => 'Can manage item-level tag filters in this hub'},
-    :inputter => {:name => 'Input Feed Manager', :description => 'Can manage input feeds'}
+    :owner => {:name => 'Owner', 
+      :description => 'Owns this hub, effectively able to do everything',
+      :objects_of_concern => lambda{|user,hub|
+        []
+      }
+    }, 
+    :creator => {
+      :name => 'Creator', 
+      :description => 'Created this hub - does not confer any special privileges',
+      :objects_of_concern => lambda{|user,hub| 
+        []
+      }
+    }, 
+    :bookmarker => {
+      :name => 'Tagger', 
+      :description => 'Can add bookmarks to this hub via the bookmarklet'
+      :objects_of_concern => lambda{|user,hub|
+        # Find all bookmark collections in this hub owned by this user.
+
+
+      }
+    }, 
+    :remixer => {
+      :name => 'Feed Remixer', 
+      :description => 'Can remix items in this hub into new remixed feeds',
+      :objects_of_concern => lambda{|user,hub|
+        #Find all republished_feeds in this hub owned by this user.
+      }
+    },
+    :hub_tag_filterer => {
+      :name => 'Hub-wide Tag Filter Manager', 
+      :description => 'Can manage hub-wide tag filters in this hub',
+      :objects_of_concern => lambda{|user,hub|
+        #Find all hub_tag_filters in this hub owned by this user.
+      }
+    },
+    :hub_feed_tag_filterer => {
+      :name => 'Feed-wide Tag Filter Manager', 
+      :description => 'Can manage feed-level tag filters in this hub',
+      :objects_of_concern => lambda{|user,hub|
+        #Find all hub_feed_tag_filters in this hub owned by this user.
+      }
+    },
+    :hub_feed_item_tag_filterer => {
+      :name => 'Feed Item Tag Filter Manager', 
+      :description => 'Can manage item-level tag filters in this hub',
+      :objects_of_concern => lambda{|user,hub|
+        #Find all hub_feed_item_tag_filters in this hub owned by this user.
+      }
+    },
+    :inputter => {
+      :name => 'Input Feed Manager', 
+      :description => 'Can manage input feeds',
+      :objects_of_concern => lambda{|user,hub|
+        #Find all hub_feeds in this hub owned by this user.
+      }
+    }
   }
   
   DELEGATABLE_ROLES_FOR_FORMS = DELEGATABLE_ROLES_HASH.keys.reject{|r| r == :creator}.collect{|r| [r, DELEGATABLE_ROLES_HASH[r][:name]]}

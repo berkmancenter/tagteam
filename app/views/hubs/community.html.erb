@@ -1,13 +1,21 @@
 <h2>Community</h2>
 <div id="left">
   <h3>Current user privileges</h3>
-  <table>
-    <tr>
-      <th>&nbsp;</th>
-      <th>Role(s)</th>
-    </tr>
-    <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
-  </table>
+  <%= form_tag(remove_roles_hub_path(@hub)) do %>
+    <table>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Role(s)</th>
+      </tr>
+      <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
+    </table>
+    <h3 style="margin-top: 1em;">
+    What should we do with the items that were managed by these user(s)?
+    </h3>
+    <p><%= radio_button_tag(:revocation_action, 'reassign', true, :id => "revocation_reassign") %><%= label_tag('revocation_reassign', raw('<b>Reassign them to</b>')) %><%= select_tag(:reassign_to, options_from_collection_for_select(@hub.owners, 'id','email')) %> </p>
+    <p><%= radio_button_tag(:revocation_action, 'delete', false, :id => "revocation_delete") %><%= label_tag('revocation_delete', raw('<b>Delete them permanently. I do not want them in this hub any more.</b>')) %></p>
+    <%= submit_tag('Remove roles', :class => 'button', :id => 'remove_roles') %>
+  <% end %>
 </div>
 <% if current_user && current_user.is?(:owner, @hub) %> 
   <%= form_tag(add_roles_hub_path(@hub)) do %>

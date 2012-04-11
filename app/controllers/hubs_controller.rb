@@ -9,7 +9,7 @@ class HubsController < ApplicationController
   access_control do
     allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
-    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_role]
+    allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
     allow :inputter, :of => :hub, :to => [:add_feed]
     allow :remixer, :of => :hub, :to => [:custom_republished_feeds]
     allow :superadmin
@@ -31,7 +31,7 @@ class HubsController < ApplicationController
     redirect_to hub_path(@hub)
   end
 
-  def remove_role
+  def remove_roles
     # TODO - revoke roles from individual objects encoded with this right.
     user = User.find(params[:user_id])
     if @hub.accepted_roles_by(user).reject{|r| r.name != params[:role_name]}.length > 0
