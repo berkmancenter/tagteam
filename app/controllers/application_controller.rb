@@ -19,9 +19,14 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from Acl9::AccessDenied do |exception|
-    flash[:notice] = 'Please log in'
-    session[:user_return_to] = request.original_url
-    redirect_to new_user_session_path
+    if current_user.blank?
+      flash[:notice] = 'Please log in'
+      session[:user_return_to] = request.original_url
+      redirect_to new_user_session_path
+    else
+      flash[:notice] = "You can't access that - sorry!"
+      redirect_to root_path
+    end
   end
 
   private 

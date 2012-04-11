@@ -5,15 +5,16 @@ class HubFeedsController < ApplicationController
   before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately, :autocomplete, :import]
   before_filter :prep_resources
 
-  caches_action :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user && current_user.is?([:owner, :inputter, :remixer], @hub) }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
     allow all, :to => [:index, :show, :more_details, :autocomplete]
-    allow :owner, :of => :hub, :to => [:new, :create, :reschedule_immediately]
+    allow :owner, :of => :hub
+    allow :bookmarker, :of => :hub, :to => [:new, :create]
     allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy, :import]
-    allow :superadmin, :hub_feed_admin
+    allow :superadmin
   end
 
   def autocomplete

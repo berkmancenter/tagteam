@@ -6,6 +6,8 @@ class HubFeedItemTagFiltersController < ApplicationController
   access_control do
     allow all, :to => [:index]
     allow :owner, :of => :hub
+    allow :hub_feed_item_tag_filterer, :to => [:new, :create]
+    allow :owner, :of => :hub_feed_item_tag_filter, :to => [:destroy]
     allow :superadmin, :hubfeeditemtagfilteradmin, :filteradmin
   end
 

@@ -482,6 +482,12 @@ input#filter_by{
   text-decoration: none;
 }
 
+.controls li{
+  list-style-type: none;
+  margin-left: 0em;
+  margin-bottom: .25em;
+}
+
 .feed_retrieval.success{
   color: #005500;
 }

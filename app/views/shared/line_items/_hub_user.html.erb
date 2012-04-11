@@ -8,7 +8,7 @@
         <% if current_user && current_user.is?(:owner, @hub) && current_user != hub_user %>
           <%= link_to(raw('<span class="ui-silk inline ui-silk-cancel"></span>'), remove_role_hub_path(@hub, :user_id => hub_user.id, :role_name => r.name), :method => :delete, :confirm => 'Are you sure you want to remove this role for this user?') %> 
         <% end %>
-        <%= r.name %></span><br />
+        <%= Hub::DELEGATABLE_ROLES_HASH[r.name.to_sym][:name] %></span><br />
     <% end %>
   </td>
 </tr>

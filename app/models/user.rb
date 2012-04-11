@@ -23,8 +23,22 @@ class User < ActiveRecord::Base
     []
   end
 
+  def my_bookmarkable_hubs
+    self.roles.find(:all, :conditions => {:authorizable_type => 'Hub', :name => [:owner,:bookmarker]}).collect{|r| r.authorizable}
+  end
+
   def is?(role_name, obj)
-    self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id && r.name == role_name.to_s) ? false : true }.length >= 1
+    if role_name.is_a?(Array)
+      roles_on_obj = self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id) ? false : true}.collect{|r| r.name}
+      has_a_role = false
+      role_name.each do|rname|
+        has_a_role = roles_on_obj.include?(rname.to_s)
+        return true if has_a_role == true
+      end
+      return has_a_role
+    else
+      return self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id && r.name == role_name.to_s) ? false : true }.length >= 1
+    end
   end
 
   def my_bookmarking_bookmark_collections_in(hub_id)

@@ -109,7 +109,7 @@
         type: 'post',
         data: {filter_type: filter_type, tag_id: tag_id, new_tag: new_tag, modify_tag: modify_tag},
         success: function(html){
-         alert(html);
+          window.location.reload();
         }
       });
     },

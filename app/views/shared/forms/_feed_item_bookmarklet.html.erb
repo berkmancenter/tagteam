@@ -6,7 +6,7 @@
     </ul>
     <div id="basics">
       <%= f.inputs do %>
-        <%= f.input :hub_id, :collection => current_user.my(Hub), :label => 'Add to this hub', :required => true %>
+        <%= f.input :hub_id, :collection => current_user.my_bookmarkable_hubs, :label => 'Add to this hub', :required => true %>
         <%= f.input :bookmark_collection_id, :as => :select, :required => true, :label => "Add to this bookmark collection" %>
         <%= f.input :tag_list, :label => 'Tags', :hint => 'A comma separated list of tags.' %>
         <%= f.input :title, :required => true %>

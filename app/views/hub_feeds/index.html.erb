@@ -1,6 +1,6 @@
 <%= documentation('hub-watched-feeds-list') %>
 <div class="hub_feeds">
-  <% if current_user && current_user.is?(:owner, @hub) %>
+  <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:inputter, @hub)) %>
     <div class="add_feed_container">
       <div class="messages"></div>
       <%= form_for(:hub, :url => add_feed_hub_path(@hub), :method => :post, :html => {:id => 'add_feed_to_hub'}) do |f| %>
