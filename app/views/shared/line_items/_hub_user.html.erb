@@ -6,8 +6,8 @@
     <% hub_user.roles.where(:authorizable_type => 'Hub', :authorizable_id => @hub.id).each do|r| %>
       <span class"role">
         <% if current_user && current_user.is?(:owner, @hub) && current_user != hub_user %>
-          <% role_att = "user_id-#{hub_user.id}:role_name#{r.name}" %>
-          <%= check_box_tag("role_to_remove", role_att, false, :id => role_att ) %>
+          <% role_att = "#{r.name}:#{hub_user.id}" %>
+          <%= check_box_tag("roles_to_remove[]", role_att, false, :id => role_att ) %>
           <%= label_tag(role_att, Hub::DELEGATABLE_ROLES_HASH[r.name.to_sym][:name]) %>
         <% end %>
        </span><br />

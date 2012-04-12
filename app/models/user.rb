@@ -20,8 +20,6 @@ class User < ActiveRecord::Base
   # Looks for objects of the class_of_interest owned by this user.
   def my(class_of_interest = Hub)
     roles.includes(:authorizable).find(:all, :conditions => {:authorizable_type => class_of_interest.name, :name => 'owner'}).collect{|r| r.authorizable}
-  rescue
-    []
   end
 
   # Looks for objects of the class_of_interest in a specific hub owned by this user. Not all objects have a direct relationship to a hub so this won't necesssarily work everywhere.

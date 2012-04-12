@@ -35,8 +35,8 @@ class HubsController < ApplicationController
     # TODO - revoke roles from individual objects encoded with this right.
     user = User.find(params[:user_id])
     if @hub.accepted_roles_by(user).reject{|r| r.name != params[:role_name]}.length > 0
-      flash[:notice] = "We deleted that role"
-      @hub.accepts_no_role!(params[:role_name], user)
+      flash[:notice] = "We deleted would've deleted that role"
+      #@hub.accepts_no_role!(params[:role_name], user)
     end
     redirect_to hub_path(@hub)
   end
