@@ -20,23 +20,23 @@ class Hub < ActiveRecord::Base
     :owner => {:name => 'Owner', 
       :description => 'Owns this hub, effectively able to do everything',
       :objects_of_concern => lambda{|user,hub|
-        []
+        return []
       }
     }, 
     :creator => {
       :name => 'Creator', 
       :description => 'Created this hub - does not confer any special privileges',
       :objects_of_concern => lambda{|user,hub| 
-        []
+        return []
       }
     }, 
     :bookmarker => {
       :name => 'Tagger', 
-      :description => 'Can add bookmarks to this hub via the bookmarklet'
+      :description => 'Can add bookmarks to this hub via the bookmarklet',
       :objects_of_concern => lambda{|user,hub|
-        # Find all bookmark collections in this hub owned by this user.
-
-
+        # Find all bookmark collections (and their hub feeds) in this hub owned by this user.
+        bookmarking_feeds = user.my_bookmarking_bookmark_collections_in(hub.id)
+        return [bookmarking_feeds, bookmarking_feeds.collect{|f| f.hub_feeds.reject{|hf| ! user.is?(:owner, hf)}}].flatten.compact
       }
     }, 
     :remixer => {
@@ -44,6 +44,7 @@ class Hub < ActiveRecord::Base
       :description => 'Can remix items in this hub into new remixed feeds',
       :objects_of_concern => lambda{|user,hub|
         #Find all republished_feeds in this hub owned by this user.
+        return user.my_objects_in(RepublishedFeed, hub)
       }
     },
     :hub_tag_filterer => {
@@ -51,13 +52,14 @@ class Hub < ActiveRecord::Base
       :description => 'Can manage hub-wide tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
         #Find all hub_tag_filters in this hub owned by this user.
+        return user.my_objects_in(HubTagFilter, hub)
       }
     },
     :hub_feed_tag_filterer => {
       :name => 'Feed-wide Tag Filter Manager', 
       :description => 'Can manage feed-level tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
-        #Find all hub_feed_tag_filters in this hub owned by this user.
+        return user.my_objects_in(HubFeedTagFilter, hub)
       }
     },
     :hub_feed_item_tag_filterer => {
@@ -65,13 +67,16 @@ class Hub < ActiveRecord::Base
       :description => 'Can manage item-level tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
         #Find all hub_feed_item_tag_filters in this hub owned by this user.
+        return user.my_objects_in(HubFeedItemTagFilter, hub)
       }
     },
     :inputter => {
       :name => 'Input Feed Manager', 
       :description => 'Can manage input feeds',
       :objects_of_concern => lambda{|user,hub|
-        #Find all hub_feeds in this hub owned by this user.
+        #Find all hub_feeds that aren't bookmarking collections in this hub owned by this user.
+        hub_feeds_of_concern = user.my_objects_in(HubFeed, hub)
+        return hub_feeds_of_concern.reject{|hf| hf.feed.is_bookmarking_feed? == true}
       }
     }
   }

@@ -3,6 +3,8 @@
 # This filter is a great way to clean up and remove spurious tags in your Hub. You can also add tags at this level, but it doesn't seem all that useful to apply a tag to everything you're aggregating.
 #
 class HubTagFilter < ActiveRecord::Base
+  include AuthUtilities
+  acts_as_authorization_object
   acts_as_api do |c|
     c.allow_jsonp_callback = true
   end

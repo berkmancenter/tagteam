@@ -7,6 +7,8 @@
 # Most validations are contained in the ModelExtensions mixin.
 #
 class InputSource < ActiveRecord::Base
+  include AuthUtilities
+  acts_as_authorization_object
   include ModelExtensions
 
   validates_uniqueness_of :item_source_type, :scope => [:item_source_id, :effect, :republished_feed_id]

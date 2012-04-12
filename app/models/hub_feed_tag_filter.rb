@@ -1,6 +1,8 @@
 # A HubFeedTagFilter is applied for all items within a HubFeed. It is applied after a HubTagFilter but before a HubFeedItemTagFilter, so it sits in the middle of the filter chain.
 #
 class HubFeedTagFilter < ActiveRecord::Base
+  include AuthUtilities
+  acts_as_authorization_object
   acts_as_api do |c|
     c.allow_jsonp_callback = true
   end

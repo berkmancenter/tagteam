@@ -1,5 +1,7 @@
 # A HubFeedItemTagFilter is applied to the tags within a Hub on an individual FeedItem. These tag filters are applied last in the filter chain, allowing a Hub owner to override any tags modified by a HubTagFilter or HubFeedTagFilter.
 class HubFeedItemTagFilter < ActiveRecord::Base
+  include AuthUtilities
+  acts_as_authorization_object
   acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
