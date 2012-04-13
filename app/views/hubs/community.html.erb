@@ -1,5 +1,5 @@
 <h2>Community</h2>
-<div id="left">
+<div id="left" class="hover_row">
   <h3>Current user privileges</h3>
   <%= form_tag(remove_roles_hub_path(@hub)) do %>
     <table>
@@ -19,7 +19,7 @@
 </div>
 <% if current_user && current_user.is?(:owner, @hub) %> 
   <%= form_tag(add_roles_hub_path(@hub)) do %>
-    <div id="right">
+    <div id="right" class="hover_row">
       <h3 style="margin-bottom: 0em;">Grant privileges</h3>
       <ul class="search_controls">
         <li>

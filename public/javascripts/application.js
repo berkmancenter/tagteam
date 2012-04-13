@@ -114,14 +114,22 @@
       });
     },
     bindHoverRows: function(){
-      $('.hover_row').hoverIntent(
+/*      $('.hover_row').hoverIntent(
         function(){
           $(this).addClass('over');
         },
         function(){
           $(this).removeClass('over');
         }
-      );
+        ); */
+       $('.hover_row').live({
+         mouseover: function(){
+           $(this).addClass('over');
+         },
+         mouseout: function(){
+           $(this).removeClass('over');
+         }
+       });
     },
     observeTagCloudControls: function(){
       $('#reset_filter').click(function(e){
@@ -665,7 +673,6 @@ $(document).ready(function(){
         $(this).ajaxSubmit({
           success: function(html){
             $('#hub_search_form').closest('.ui-widget-content').html(html);
-            $.bindHoverRows();
           }
         });
       }

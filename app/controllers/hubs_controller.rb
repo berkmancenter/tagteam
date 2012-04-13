@@ -32,12 +32,31 @@ class HubsController < ApplicationController
   end
 
   def remove_roles
-    # TODO - revoke roles from individual objects encoded with this right.
-    user = User.find(params[:user_id])
-    if @hub.accepted_roles_by(user).reject{|r| r.name != params[:role_name]}.length > 0
-      flash[:notice] = "We deleted would've deleted that role"
-      #@hub.accepts_no_role!(params[:role_name], user)
+    # TODO - Refactor this to work in a model-level after trigger, so that rights are properly revoked/reassigned when modified anywhere.
+    messages = []
+    params[:roles_to_remove].each do|r|
+      data = r.split(':')
+      user = User.find(data[1])
+      if @hub.accepted_roles_by(user).reject{|r| r.name != data[0]}.length > 0
+        objects_of_concern = Hub::DELEGATABLE_ROLES_HASH[data[0].to_sym][:objects_of_concern].call(user,@hub)
+        if params[:revocation_action] == 'reassign'
+          potential_user_to_reassign_to = User.find(params[:reassign_to])
+          # could be exploited via URL tampering, so double-check.
+          user_to_reassign_to = (@hub.owners.include?(potential_user_to_reassign_to)) ? potential_user_to_reassign_to : @hub.owners.first
+          objects_of_concern.each do|obj|
+            obj.accepts_no_role!(:owner, user)
+            obj.accepts_role!(:owner, user_to_reassign_to)
+          end
+        else
+          objects_of_concern.each do|obj|
+            obj.destroy
+          end
+        end
+        @hub.accepts_no_role!(data[0], user)
+        messages << "We deleted #{user.email}'s role as a #{Hub::DELEGATABLE_ROLES_HASH[data[0].to_sym][:name]} in this hub."
+      end
     end
+    flash[:notice] = messages.join(' ')
     redirect_to hub_path(@hub)
   end
 
