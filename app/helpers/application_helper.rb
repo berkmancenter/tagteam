@@ -1,13 +1,15 @@
 module ApplicationHelper
 
-  def documentation(match_key, title = match_key)
+  def documentation(match_key, title = match_key, label_type = 'help')
     doc_object = Documentation.find_or_initialize_by_match_key(match_key)
     if doc_object.new_record?
       doc_object.title = title || match_key
       doc_object.save
     end
     if ! doc_object.description.blank? || (current_user && current_user.has_role?(:superadmin))
-      link_to(raw('<span class="inline ui-silk ui-silk-information"></span> Help!'), documentation_path(doc_object), :class => 'documentation_control dialog-show')
+      if label_type == 'help'
+        link_to(raw('<span class="inline ui-silk ui-silk-information"></span> Help!'), documentation_path(doc_object), :class => 'documentation_control dialog-show')
+      end
     end
   end
 

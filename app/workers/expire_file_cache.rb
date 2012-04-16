@@ -8,6 +8,7 @@ class ExpireFileCache
 
   def self.perform
     # A no-op unless we're using a file cache store.
+    # Also, Marshal is pretty damned fast.
     if Rails.cache.class == ActiveSupport::Cache::FileStore
       Find.find(Rails.cache.cache_path) do |path|
         if FileTest.file?(path)
