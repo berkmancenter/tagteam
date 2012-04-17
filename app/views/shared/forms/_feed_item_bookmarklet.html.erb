@@ -14,7 +14,7 @@
         <%= f.input :description, :as => :text, :input_html => {:class => 'noNicEditor'}, :hint => "Select text on the page you're bookmarking to auto-populate the description field" %>
         <%= f.input :date_published, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
       <% end %>
-      <%= f.buttons %>
+      <%= f.actions %>
     </div>
     <div id="advanced">
     <%= f.inputs do %>
@@ -23,7 +23,7 @@
       <%= f.input :rights %>
       <%= f.input :last_updated, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
     <% end %>
-      <%= f.buttons %>
+      <%= f.actions %>
     </div>
   </div>
 <% end %>

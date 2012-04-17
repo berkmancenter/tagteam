@@ -309,9 +309,7 @@ div.error, div.notice{
   border-radius: 5px;
 }
 
-.formtastic .create, 
-.formtastic .edit,
-.formtastic .update,
+li.action input,
 input.button,
 a.button{
 	background: #7a000d;

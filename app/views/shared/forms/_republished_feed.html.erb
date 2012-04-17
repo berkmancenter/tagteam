@@ -5,7 +5,7 @@
     <%= f.input :description, :as => :text %>
     <%= f.input :limit, :hint => 'How many items to show in this feed?'  %>
   <% end %>
-  <%= f.buttons do %>
-    <%= f.commit_button :label => (f.object.new_record?) ? 'Create new remixed feed' : 'Update this remixed feed'  %>
+  <%= f.actions do %>
+    <%= f.action :submit,  :label => (f.object.new_record?) ? 'Create new remixed feed' : 'Update this remixed feed'  %>
   <% end %>
 <% end %>
