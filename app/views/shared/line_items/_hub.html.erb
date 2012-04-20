@@ -1,6 +1,6 @@
 <div class="hub">
   <h2 class="title"><%= link_to hub.title, hub_path(hub) %> 
-    <% if ! current_user.blank? && current_user.is?(:owner, hub) %>
+    <% if current_user && current_user.is?(:owner, hub) %>
       <sup><%= link_to('edit', edit_hub_path(hub)) %></sup>
     <% end %>
   </h2>

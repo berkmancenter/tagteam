@@ -1,6 +1,6 @@
 <%= documentation('hub-feed-filter-tab') %>
 <h3>Feed-wide filters</h3>
-<% if current_user.is?([:owner, :hub_feed_tag_filterer], @hub) %>
+<% if current_user && current_user.is?([:owner, :hub_feed_tag_filterer], @hub) %>
 
   <ul class="tag_filter_controls">
     <li><span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a tag to all items in this feed', hub_feed_hub_feed_tag_filters_path(@hub_feed), :data_hub_id => @hub.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
