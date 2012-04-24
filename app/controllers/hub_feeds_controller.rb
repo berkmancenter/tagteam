@@ -13,7 +13,7 @@ class HubFeedsController < ApplicationController
     allow all, :to => [:index, :show, :more_details, :autocomplete]
     allow :owner, :of => :hub
     allow :bookmarker, :of => :hub, :to => [:new, :create]
-    allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy, :import]
+    allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy, :import, :reschedule_immediately]
     allow :superadmin
   end
 
