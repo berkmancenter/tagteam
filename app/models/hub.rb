@@ -17,6 +17,12 @@ class Hub < ActiveRecord::Base
   end
 
   DELEGATABLE_ROLES_HASH = {
+    :editor => {:name => 'Editor',
+      :description => 'Has edited metadata about this hub - does not confer any special privileges.',
+      :objects_of_concern => lambda{|user,hub|
+        return []
+      }
+    },
     :owner => {:name => 'Owner', 
       :description => 'Owns this hub, effectively able to do everything',
       :objects_of_concern => lambda{|user,hub|
@@ -81,7 +87,7 @@ class Hub < ActiveRecord::Base
     }
   }
   
-  DELEGATABLE_ROLES_FOR_FORMS = DELEGATABLE_ROLES_HASH.keys.reject{|r| r == :creator}.collect{|r| [r, DELEGATABLE_ROLES_HASH[r][:name]]}
+  DELEGATABLE_ROLES_FOR_FORMS = DELEGATABLE_ROLES_HASH.keys.reject{|r| [:creator,:editor].include?(r) }.collect{|r| [r, DELEGATABLE_ROLES_HASH[r][:name]]}
 
   DELEGATABLE_ROLES = DELEGATABLE_ROLES_HASH.keys.reject{|r| r == :creator}
 

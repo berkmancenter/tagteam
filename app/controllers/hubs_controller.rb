@@ -34,7 +34,7 @@ class HubsController < ApplicationController
   def remove_roles
     # TODO - Refactor this to work in a model-level after trigger, so that rights are properly revoked/reassigned when modified anywhere.
     messages = []
-    params[:roles_to_remove].each do|r|
+    params[:roles_to_remove] && params[:roles_to_remove].each do|r|
       data = r.split(':')
       user = User.find(data[1])
       if @hub.accepted_roles_by(user).reject{|r| r.name != data[0]}.length > 0
