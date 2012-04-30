@@ -1,7 +1,28 @@
 class UsersController < ApplicationController
 
   access_control do
-    allow all
+    allow all, :to => [:autocomplete]
+    allow :superadmin
+  end
+
+  def show
+    @user = User.find(params[:id])
+  end
+
+  def index
+    breadcrumbs.add 'Users', users_path
+    @users = User.paginate(:page => params[:page], :per_page => get_per_page)
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    flash[:notice] = 'Deleted that user'
+    respond_to do|format|
+      format.html{
+        redirect_to :action => :index
+      }
+    end
   end
 
   def autocomplete

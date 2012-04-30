@@ -1,0 +1,14 @@
+<div id="users">
+  <h3>Users</h3>
+  <div id="user_list">
+    <%= will_paginate @users %>
+    <table class="user_list">
+      <tr>
+        <th>&nbsp;</th>
+        <th>Owns these hubs:</th>
+      </tr>
+      <%= render :partial => 'shared/line_items/user', :collection => @users %>
+    </table>
+    <%= will_paginate @users %>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<tr class="user hover_row">
+  <td>
+    <%= link_to('delete', user_path(user), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this user") %>
+    <%= link_to(user.email,user_path(user)) %>
+  </td>
+  <td>
+    <%= raw user.my(Hub).collect{|h| link_to(h.display_title, hub_path(h))}.join(', ') %>
+  </td>
+</tr>

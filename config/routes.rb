@@ -1,6 +1,10 @@
 Tagteam::Application.routes.draw do
 
-  get "users/autocomplete"
+  resources :users do
+    collection do
+      get 'autocomplete'
+    end
+  end
 
   post "bookmarklets/add_item"
   get "bookmarklets/add"

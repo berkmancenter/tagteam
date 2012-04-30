@@ -68,6 +68,9 @@
         <footer class="grid_16">
           <% unless current_user.blank? %>
             <%= link_to('background jobs', '#', :id => 'background_jobs') %>
+            <% if current_user.has_role?(:superadmin) %>
+             <%= link_to('Manage users', users_path) %>
+            <% end %>
           <% end %>
           &copy; 2011 President and Fellows of Harvard College
         </footer>
