@@ -48,8 +48,8 @@ en:
       failure: 'Could not authorize you from %{kind} because "%{reason}".'
     mailer:
       confirmation_instructions:
-        subject: 'Confirmation instructions'
+        subject: 'Please confirm your TagTeam account'
       reset_password_instructions:
-        subject: 'Reset password instructions'
+        subject: 'Reset your TagTeam password'
       unlock_instructions:
         subject: 'Unlock Instructions'

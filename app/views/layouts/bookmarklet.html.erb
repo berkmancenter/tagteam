@@ -40,6 +40,11 @@
                 <%= flash[:error] %>
               </div>
             <% end %>
+            <% unless flash[:alert].blank? %>
+              <div class="alert">
+                <%= flash[:alert] %>
+              </div>
+            <% end %>
           </section>
         <div class="clear"></div>
         <% end %>

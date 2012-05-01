@@ -73,7 +73,7 @@ Devise.setup do |config|
   # You can use this to let your user access some features of your application
   # without confirming the account, but blocking it after a certain period
   # (ie 2 days).
-  config.allow_unconfirmed_access_for = 14.days
+  config.allow_unconfirmed_access_for = 0.days
 
   # Defines which key will be used when confirming an account
   config.confirmation_keys = [ :email ]
@@ -81,7 +81,7 @@ Devise.setup do |config|
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
 
-  config.remember_for = 2.weeks
+  config.remember_for = 12.weeks
 
   # If true, a valid remember token can be re-used between multiple browsers.
   # config.remember_across_browsers = true
@@ -141,7 +141,7 @@ Devise.setup do |config|
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
 
-  config.reset_password_within = 4.hours
+  config.reset_password_within = 6.hours
 
   # ==> Configuration for :encryptable
   # Allow you to use another encryption algorithm besides bcrypt (default). You can use

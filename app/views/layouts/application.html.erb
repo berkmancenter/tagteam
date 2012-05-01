@@ -49,10 +49,14 @@
                 <%= flash[:notice] %>
               </div>
             <% end %>
-
             <% unless flash[:error].blank? %>
               <div class="error">
                 <%= flash[:error] %>
+              </div>
+            <% end %>
+            <% unless flash[:alert].blank? %>
+              <div class="alert">
+                <%= flash[:alert] %>
               </div>
             <% end %>
           </section>
