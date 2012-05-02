@@ -5,6 +5,26 @@ class UsersController < ApplicationController
     allow :superadmin
   end
 
+  def resend_unlock_token
+    u = User.find(params[:id])
+    u.resend_unlock_token
+    flash[:notice] = 'We resent the account unlock email to that user.'
+    redirect_to request.referer
+  rescue Exception => e
+    flash[:notice] = 'Woops. We could not send that right now. Please try again later.'
+    redirect_to request.referer
+  end
+
+  def resend_confirmation_token
+    u = User.find(params[:id])
+    u.resend_confirmation_token
+    flash[:notice] = 'We resent the account confirmation email to that user.'
+    redirect_to request.referer
+  rescue Exception => e
+    flash[:notice] = 'Woops. We could not send that right now. Please try again later.'
+    redirect_to request.referer
+  end
+
   def show
     @user = User.find(params[:id])
   end

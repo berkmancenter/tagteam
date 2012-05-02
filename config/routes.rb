@@ -4,6 +4,10 @@ Tagteam::Application.routes.draw do
     collection do
       get 'autocomplete'
     end
+    member do
+      post 'resend_confirmation_token'
+      post 'resend_unlock_token'
+    end
   end
 
   post "bookmarklets/add_item"
