@@ -20,10 +20,11 @@ class BookmarkletsController < ApplicationController
     if @feed.is_bookmarking_feed?
       @feed.feed_items.delete(@feed_item)
       flash[:notice] = %Q|Removed "#{@feed_item.title}" from that bookmark collection|
+      @feed_item.index
     else
       flash[:notice] = %Q|Could not remove "#{@feed_item.title}" from that bookmark collection|
     end
-    redirect_to hub_path(@hub)
+    redirect_to request.referer
   end
 
   # The page that appears after a bookmark has been successfully added.

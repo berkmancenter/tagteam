@@ -28,7 +28,7 @@ class HubsController < ApplicationController
         end
       end
     end
-    redirect_to hub_path(@hub)
+    redirect_to request.referer
   end
 
   def remove_roles
@@ -57,7 +57,7 @@ class HubsController < ApplicationController
       end
     end
     flash[:notice] = messages.join(' ')
-    redirect_to hub_path(@hub)
+    redirect_to request.referer
   end
 
   # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.
@@ -165,7 +165,7 @@ class HubsController < ApplicationController
   def recalc_all_tags
     Resque.enqueue(RecalcAllItems,@hub.id)
     flash[:notice] = 'Re-rendering all tags. This will take a while.'
-    redirect_to hub_path(@hub)
+    redirect_to request.referer
   end
 
   def all_items
