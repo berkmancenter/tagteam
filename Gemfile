@@ -7,7 +7,6 @@ gem 'jquery-rails'
 # gem 'carrierwave'
 # gem 'mini_magick'
 gem 'devise'
-gem 'gravatar-ultimate'
 gem 'acl9'
 gem 'feed-abstract'
 gem "will_paginate"
@@ -19,6 +18,7 @@ gem 'acts-as-taggable-on'
 gem 'resque', :require => 'resque/server'
 gem 'acts_as_api'
 gem 'nokogiri'
+gem 'sanitize'
 
 group :development, :test do
   gem 'rspec-rails'

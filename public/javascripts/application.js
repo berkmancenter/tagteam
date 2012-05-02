@@ -364,7 +364,7 @@
         cache: false,
         success: function(json){
           $('#activity').html('');
-          if(json.running == undefined){
+          if(json.running.length == 0){
             $('#activity').html('<p>No background jobs are currently running.</p>');
           } else {
             $('#activity').html('<ul></ul>');

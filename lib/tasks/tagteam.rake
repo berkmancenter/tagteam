@@ -119,54 +119,6 @@ http://metalab.harvard.edu/feed|
 
   add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'djcp@cyber.law.harvard.edu')
 
-  blogs_feeds = %w|http://blogs.law.harvard.edu/middleeast/feed
-http://blogs.law.harvard.edu/businessplans/feed
-http://blogs.law.harvard.edu/jkbaumga/feed
-http://blogs.law.harvard.edu/doc/feed
-http://blogs.law.harvard.edu/yulelog/feed
-http://blogs.law.harvard.edu/lamont/feed
-http://blogs.law.harvard.edu/adup/feed
-http://blogs.law.harvard.edu/dplatechdev/feed
-http://blogs.law.harvard.edu/vrm/feed
-http://blogs.law.harvard.edu/karolina/feed
-http://blogs.law.harvard.edu/dlarochelle/feed
-http://blogs.law.harvard.edu/admissions/feed
-http://blogs.law.harvard.edu/scotthartley/feed
-http://blogs.law.harvard.edu/harvardreview/feed
-http://blogs.law.harvard.edu/spaceoccupants/feed
-http://blogs.law.harvard.edu/harvardlibraryreads/feed
-http://blogs.law.harvard.edu/preserving/feed
-http://blogs.law.harvard.edu/hydeblog/feed
-http://blogs.law.harvard.edu/yana/feed
-http://blogs.law.harvard.edu/youthandmediaalpha/feed
-http://blogs.law.harvard.edu/infolaw/feed
-http://blogs.law.harvard.edu/clinicalprobono/feed
-http://blogs.law.harvard.edu/djcp/feed
-http://blogs.law.harvard.edu/houghton/feed
-http://blogs.law.harvard.edu/stepno/feed
-http://blogs.law.harvard.edu/pamphlet/feed
-http://blogs.law.harvard.edu/sulaymanibnqiddees/feed
-http://blogs.law.harvard.edu/sj/feed
-http://blogs.law.harvard.edu/philg/feed
-http://blogs.law.harvard.edu/mjahnke/feed
-http://blogs.law.harvard.edu/corpgov/feed
-http://blogs.law.harvard.edu/dplaalpha/feed
-http://blogs.law.harvard.edu/abinazir/feed
-http://blogs.law.harvard.edu/opia/feed
-http://blogs.law.harvard.edu/jsinger/feed
-http://blogs.law.harvard.edu/jezler/feed
-http://blogs.law.harvard.edu/collegeadmissionsstudentblog/feed
-http://blogs.law.harvard.edu/kevinguiney/feed
-https://twitter.com/statuses/user_timeline/djcp.rss
-http://blogs.law.harvard.edu/plap/feed
-http://blogs.law.harvard.edu/devivio/feed
-http://blogs.law.harvard.edu/herdict/feed
-http://blogs.law.harvard.edu/foodpolicyinitiative/feed
-http://blogs.law.harvard.edu/mediaberkman/feed
-http://blogs.law.harvard.edu/tatar/feed|
-
-  add_example_feeds('Blogs.law test aggregation Hub', blogs_feeds, 'djcp@cyber.law.harvard.edu')
-
   oa_feeds = %w|http://www.connotea.org/rss/tag/oa.new 
 http://www.connotea.org/rss/tag/oa.mandates
 http://www.connotea.org/rss/tag/oa.policies

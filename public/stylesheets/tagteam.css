@@ -305,7 +305,7 @@ a.delete{
   margin-left: 2em;
 }
 
-div.error, div.notice{
+div.error, div.notice, div.alert{
   font-size: 0.9em;
   font-weight: bold;
   margin: 10px;
