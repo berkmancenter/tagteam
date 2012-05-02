@@ -1,16 +1,30 @@
 # A "bookmark" is just a FeedItem that's been manually added to a Bookmark Collection. Currently the only way to add bookmarks is through the bookmarklet available under a Hub's "bookmarks" tab.
 class BookmarkletsController < ApplicationController
 
-  before_filter :load_hub, :only => [:add_item]
+  before_filter :load_hub, :only => [:add_item,:remove_item]
+  before_filter :load_feed, :only => [:remove_item]
 
   access_control do
     allow logged_in, :to => [:add,:confirm]
-    allow :owner, :of => :hub, :to => [:add_item]
+    allow :owner, :of => :hub, :to => [:add_item, :remove_item]
+    allow :owner, :of => :feed, :to => [:remove_item]
     allow :bookmarker, :of => :hub, :to => [:add_item]
     allow :superadmin
   end
 
   layout 'bookmarklet'
+
+  def remove_item
+    # Can only be removed from bookmarking feeds.
+    @feed_item = FeedItem.find(params[:feed_item_id])
+    if @feed.is_bookmarking_feed?
+      @feed.feed_items.delete(@feed_item)
+      flash[:notice] = %Q|Removed "#{@feed_item.title}" from that bookmark collection|
+    else
+      flash[:notice] = %Q|Could not remove "#{@feed_item.title}" from that bookmark collection|
+    end
+    redirect_to hub_path(@hub)
+  end
 
   # The page that appears after a bookmark has been successfully added.
   def confirm
@@ -86,6 +100,10 @@ class BookmarkletsController < ApplicationController
 
   def load_hub
     @hub = Hub.find(params[:hub_id] || params[:feed_item][:hub_id])
+  end
+
+  def load_feed
+    @feed = Feed.find(params[:feed_id])
   end
 
 end

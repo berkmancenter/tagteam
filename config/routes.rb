@@ -7,6 +7,7 @@ Tagteam::Application.routes.draw do
   end
 
   post "bookmarklets/add_item"
+  post "bookmarklets/remove_item"
   get "bookmarklets/add"
   get "bookmarklets/confirm"
 
