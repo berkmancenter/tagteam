@@ -10,6 +10,6 @@
     <%= raw user.confirmed? ? '' : %Q|No. #{link_to('resend confirmation', resend_confirmation_token_user_path(user), :method => :post, :confirm => 'Resend confirmation email to user?')}| %>
   </td>
   <td>
-    <%= raw user.access_locked? ? %Q|Yes! #{link_to('resend unlock token', resend_unlock_token_user_path(user), :method => :post, :confirm => 'Resend unlock email to user?')}| : '' %>
+    <%= raw user.access_locked? ? %Q|Yes! #{link_to('resend unlock request', resend_unlock_token_user_path(user), :method => :post, :confirm => 'Resend unlock email to user?')}| : '' %>
   </td>
 </tr>
