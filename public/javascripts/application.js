@@ -398,7 +398,28 @@
           });
         });
       }
-    }
+    },
+    simpleClassFilter: function(filterContainer,objectSelector){
+
+      $('.filter_control').live({click: function(){
+        $(objectSelector + '.' + $(this).attr('id')).toggle();
+      }});
+      $('#reset_filter').live({click: function(){
+        $(objectSelector).show();
+      }});
+
+      var classesOfImport = {};
+      $(objectSelector).each(function(){
+        classesOfImport[$(this).attr('class')] = 1;
+      });
+      $.each(classesOfImport,function(key,value){
+        $(filterContainer).append($('<span/> ').attr({id: key, class: 'filter_control'}).html(key + ' '));
+      });
+
+      $(filterContainer).append($('<span/> ').attr({id: 'reset_filter' }).html("<strong>Show all</strong>"));
+
+
+    },
 
 });
 
@@ -408,6 +429,10 @@ $(document).ready(function(){
   $.initTabHistory('.hub_tabs');
   $.initTabHistory('.tabs');
   $(window).trigger( 'hashchange' );
+
+  if($('#user_role_list').length > 0){
+    $.simpleClassFilter('#user_role_filter_container','#user_role_list li');
+  }
 
   $('#background_jobs').click(function(e){
     e.preventDefault();

@@ -431,6 +431,23 @@ a.tag {
   color: black;
 }
 
+#user_role_filter_container{
+  margin-bottom: 1em;
+}
+#user_role_filter_container span{
+  display: inline-block;
+  padding: 4px;
+  background-color: #e4e4e4;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+}
+
+#user_role_filter_container span:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #tag_slider{
   margin-bottom: 1em;
 }

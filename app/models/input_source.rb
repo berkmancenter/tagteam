@@ -34,6 +34,10 @@ class InputSource < ActiveRecord::Base
     t.add :effect
   end
 
+  def to_s
+    item_source.to_s
+  end
+
   # Get rid of this when removing the input source editing.
   def search_in
     'Feed'

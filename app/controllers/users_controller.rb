@@ -26,6 +26,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    breadcrumbs.add 'Users', users_path
     @user = User.find(params[:id])
   end
 
