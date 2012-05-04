@@ -3,7 +3,7 @@
       <%= @user.first_name %> <%= @user.last_name %> <%= mail_to(@user.email, @user.email, :encode => 'javascript') %>
     </div>
 <% unless @user.things_owned.blank? %>
-  <div class="tabs" id="roles_for_<%= @user.id %>">
+  <div class="tabs roles_on" id="roles_for_<%= @user.id %>">
     <ul>
       <% @user.things_owned.each do |t| %>
         <li><%= link_to(t, roles_on_user_path(@user,:roles_on => t)) %></li> 

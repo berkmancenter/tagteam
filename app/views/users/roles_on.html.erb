@@ -1,3 +1,5 @@
   <%= will_paginate @roles_on %>
-  <%= render :partial => 'shared/roles_on/' + params[:roles_on].downcase, :collection => @roles_on %>
+  <table>
+    <%= render :partial => 'shared/roles_on/' + params[:roles_on].constantize.to_s.tableize.singularize, :collection => @roles_on %>
+  </table>
   <%= will_paginate @roles_on %>

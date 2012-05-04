@@ -364,7 +364,8 @@ a:hover{
 .hub_feed,
 .republished_feed,
 .feed_item,
-.feed_item_tag
+.feed_item_tag,
+.roles_on
 {
   margin-bottom: .5em;
   font-size: 10pt;
