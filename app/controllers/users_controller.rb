@@ -1,19 +1,19 @@
 class UsersController < ApplicationController
 
-  before_filter :load_user, :only => [:owned]
+  before_filter :load_user, :only => [:roles_on]
 
   access_control do
     allow all, :to => [:autocomplete]
-    allow logged_in, :to => [:owned]
+    allow logged_in, :to => [:roles_on]
     allow :superadmin
   end
 
-  def owned
-    @owned = @user.roles.where(:authorizable_type => params[:owned]).paginate(:order => 'id', :page => params[:page], :per_page => get_per_page)
+  def roles_on
+    @roles_on = @user.roles.includes(:authorizable).where(:authorizable_type => params[:roles_on]).order(:authorizable_type, :authorizable_id).paginate(:order => 'id', :page => params[:page], :per_page => get_per_page)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
-      format.json{ render_for_api :default, :json => @owned, :root => :owned }
-      format.xml{ render_for_api :default, :xml => @owned, :root => :owned }
+      format.json{ render_for_api :default, :json => @roles_on, :root => :role }
+      format.xml{ render_for_api :default, :xml => @roles_on, :root => :role }
     end
   end
 

@@ -1,14 +1,13 @@
-<h1>Account info for <%= @user.email %></h1>
-<div class="tabs">
-  <ul>
-    <li><a href="#about">About</a></li>
-    <% unless @user.things_owned.blank? %>
+<h1><%= @user.email %></h1>
+    <div id="about">
+      <%= @user.first_name %> <%= @user.last_name %> <%= mail_to(@user.email, @user.email, :encode => 'javascript') %>
+    </div>
+<% unless @user.things_owned.blank? %>
+  <div class="tabs" id="roles_for_<%= @user.id %>">
+    <ul>
       <% @user.things_owned.each do |t| %>
-        <li><%= link_to(t, owned_user_path(@user,:owned => t)) %></li> 
+        <li><%= link_to(t, roles_on_user_path(@user,:roles_on => t)) %></li> 
       <% end %>
-    <% end %>
-  </ul>
-  <div id="about">
-    <%= @user.email %>
+    </ul>
   </div>
-</div>
+<% end %>
