@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
     time :confirmed_at
   end
 
+  def things_owned
+    self.roles.select(:authorizable_type).where(['name = ? AND authorizable_id is not null','owner']).group(:authorizable_type).collect{|r| r.authorizable_type}
+  end
+
   # Looks for objects of the class_of_interest owned by this user.
   def my(class_of_interest = Hub)
     roles.includes(:authorizable).find(:all, :conditions => {:authorizable_type => class_of_interest.name, :name => 'owner'}).collect{|r| r.authorizable}

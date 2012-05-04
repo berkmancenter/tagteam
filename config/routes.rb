@@ -7,6 +7,7 @@ Tagteam::Application.routes.draw do
     member do
       post 'resend_confirmation_token'
       post 'resend_unlock_token'
+      get 'owned'
     end
   end
 

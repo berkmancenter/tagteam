@@ -1,8 +1,14 @@
 <h1>Account info for <%= @user.email %></h1>
-<div id="user_role_filter_container"><strong>Filter on:</strong>
+<div class="tabs">
+  <ul>
+    <li><a href="#about">About</a></li>
+    <% unless @user.things_owned.blank? %>
+      <% @user.things_owned.each do |t| %>
+        <li><%= link_to(t, owned_user_path(@user,:owned => t)) %></li> 
+      <% end %>
+    <% end %>
+  </ul>
+  <div id="about">
+    <%= @user.email %>
+  </div>
 </div>
-<ul id="user_role_list">
-  <% @user.roles.select([:id, :name, :authorizable_type, :authorizable_id]).includes(:authorizable).where("authorizable_type not in ('Feed','FeedItem','HubTagFilter','RepublishedFeed','HubFeedItemTagFilter','HubFeedTagFilter','InputSource') and authorizable_type is not null").each do|r| %>
-    <li class="<%= r.authorizable.class.to_s %>"><%= r.name %> of the <%= r.authorizable.class.to_s %> "<%= link_to r.authorizable, r.authorizable %>"</li>
-  <% end %>
-</ul>

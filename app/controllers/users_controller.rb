@@ -1,8 +1,20 @@
 class UsersController < ApplicationController
 
+  before_filter :load_user, :only => [:owned]
+
   access_control do
     allow all, :to => [:autocomplete]
+    allow logged_in, :to => [:owned]
     allow :superadmin
+  end
+
+  def owned
+    @owned = @user.roles.where(:authorizable_type => params[:owned]).paginate(:order => 'id', :page => params[:page], :per_page => get_per_page)
+    respond_to do|format|
+      format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @owned, :root => :owned }
+      format.xml{ render_for_api :default, :xml => @owned, :root => :owned }
+    end
   end
 
   def resend_unlock_token
@@ -59,6 +71,16 @@ class UsersController < ApplicationController
     end
   rescue
     render :text => "Please try a different search term", :layout => ! request.xhr?
+  end
+
+  private
+
+  def load_user
+    if current_user.has_role?(:superadmin)
+      @user = User.find params[:id]
+    else 
+      @user = current_user
+    end
   end
 
 end
