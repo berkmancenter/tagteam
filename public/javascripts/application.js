@@ -14,7 +14,7 @@
       console.log(error);
         $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + error.responseText + '</p>').dialog({
             modal: true
-        }).dialog('open');
+        }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
     },
     initPerPage: function(){
       $('.per_page_selector').val($.cookie('per_page') || 25);

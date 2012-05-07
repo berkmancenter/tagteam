@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   def roles_on
-    @roles_on = @user.roles.includes(:authorizable).where(:authorizable_type => params[:roles_on]).order(:authorizable_type, :authorizable_id).paginate(:order => 'id', :page => params[:page], :per_page => get_per_page)
+    @roles_on = @user.roles.select([:authorizable_type, :authorizable_id]).includes(:authorizable).where(:authorizable_type => params[:roles_on]).group(:authorizable_type, :authorizable_id).order(:authorizable_type, :authorizable_id).paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => @roles_on, :root => :role }
