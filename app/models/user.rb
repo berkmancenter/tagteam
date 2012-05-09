@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
     time :confirmed_at
   end
 
-  def things_owned
-    self.roles.select(:authorizable_type).where(['name = ? AND authorizable_id is not null','owner']).group(:authorizable_type).collect{|r| r.authorizable_type}
+  def things_i_have_roles_on
+    self.roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')",'owner']).group(:authorizable_type).collect{|r| r.authorizable_type}.sort.collect{|r| r.constantize}
   end
 
   # Looks for objects of the class_of_interest owned by this user.

@@ -42,5 +42,9 @@ class InputSource < ActiveRecord::Base
   def search_in
     'Feed'
   end
+
+  def self.title
+    'Remixed Feed Item Source'
+  end
   
 end

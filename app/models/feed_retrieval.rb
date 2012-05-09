@@ -97,4 +97,14 @@ class FeedRetrieval < ActiveRecord::Base
     return changes
   end
 
+  def display_title
+    "#{created_at}"
+  end
+  
+  alias :to_s :display_title
+
+  def self.title
+    "Feed Update"
+  end
+
 end

@@ -17,4 +17,8 @@ class Documentation < ActiveRecord::Base
   end
   alias :to_s :display_title
 
+  def self.title
+    'Documentation'
+  end
+
 end

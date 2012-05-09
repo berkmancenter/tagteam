@@ -44,10 +44,6 @@ class Feed < ActiveRecord::Base
   has_and_belongs_to_many :feed_items, :order => 'date_published desc'
   has_many :input_sources, :dependent => :destroy, :as => :item_source
 
-  def self.descriptive_name
-    'Feed'
-  end
-
   api_accessible :default do|t|
     t.add :authors
     t.add :id
@@ -174,6 +170,10 @@ class Feed < ActiveRecord::Base
   end
 
   alias :display_title :to_s
+
+  def self.title
+    'Feed'
+  end
 
   # Used in the RepublishedFeed system to give this Feed an icon in lists.
   def mini_icon

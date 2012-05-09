@@ -45,7 +45,12 @@ ActsAsTaggableOn::Tag.instance_eval do
     string :name
   end
 
-  def descriptive_name
-    'Tag'
+  def title
+    "#{name}"
   end
+
+  def self.title
+    "Tag"
+  end
+
 end

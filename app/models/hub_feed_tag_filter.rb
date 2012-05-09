@@ -43,4 +43,8 @@ class HubFeedTagFilter < ActiveRecord::Base
     end
   end
 
+  def self.title
+    'Feed wide Tag Filter'
+  end
+
 end

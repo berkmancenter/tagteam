@@ -37,4 +37,10 @@ class HubFeedItemTagFilter < ActiveRecord::Base
     Resque.enqueue(FeedItemTagRenderer, self.feed_item_id)
   end
 
+  def self.title
+    'Feed Item Tag Filter'
+  end
+
+  alias :to_s :title
+
 end

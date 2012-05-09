@@ -2,11 +2,11 @@
     <div id="about">
       <%= @user.first_name %> <%= @user.last_name %> <%= mail_to(@user.email, @user.email, :encode => 'javascript') %>
     </div>
-<% unless @user.things_owned.blank? %>
+<% unless @user.things_i_have_roles_on.blank? %>
   <div class="tabs roles_on" id="roles_for_<%= @user.id %>">
     <ul>
-      <% @user.things_owned.each do |t| %>
-        <li><%= link_to(t, roles_on_user_path(@user,:roles_on => t)) %></li> 
+      <% @user.things_i_have_roles_on.each do |t| %>
+        <li><%= link_to(t.title, roles_on_user_path(@user,:roles_on => t)) %></li> 
       <% end %>
     </ul>
   </div>

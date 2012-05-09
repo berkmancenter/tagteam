@@ -112,7 +112,11 @@ class Hub < ActiveRecord::Base
   end
 
   def display_title
-    self.title
+    title
+  end
+
+  def self.title
+    'Hub'
   end
 
   alias :to_s :display_title

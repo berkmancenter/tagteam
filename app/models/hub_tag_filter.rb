@@ -43,4 +43,8 @@ class HubTagFilter < ActiveRecord::Base
     end
   end
 
+  def self.title
+    'Hub wide Tag Filter'
+  end
+
 end

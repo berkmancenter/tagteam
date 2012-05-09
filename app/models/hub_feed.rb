@@ -78,7 +78,7 @@ class HubFeed < ActiveRecord::Base
     string :language
   end
 
-  def self.descriptive_name
+  def self.title
     'Feed'
   end
 

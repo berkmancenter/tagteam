@@ -117,10 +117,6 @@ class FeedItem < ActiveRecord::Base
     self.taggings.collect{|tg| tg.tag}.uniq.collect{|t| t.index}
   end
 
-  def self.descriptive_name
-    'Feed Item'
-  end
-
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
   def hub_feed_for_hub(hub_id)
     hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
@@ -180,6 +176,10 @@ class FeedItem < ActiveRecord::Base
   end
 
   alias :display_title :to_s
+
+  def self.title
+    'RSS Feed Item'
+  end
 
   # Used to emit this FeedItem as an array when it's included in at RepublishedFeed.
   def items(not_needed)

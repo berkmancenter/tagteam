@@ -3,9 +3,7 @@
 # Most validations are contained in the ModelExtensions mixin.
 #
 class ModifyTagFilter < ActiveRecord::Base
-  include AuthUtilities
   include ModelExtensions
-  acts_as_authorization_object
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
