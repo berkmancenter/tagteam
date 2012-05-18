@@ -41,6 +41,4 @@ class HubFeedItemTagFilter < ActiveRecord::Base
     'Feed Item Tag Filter'
   end
 
-  alias :to_s :title
-
 end

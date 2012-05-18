@@ -25,7 +25,7 @@ hub_feed = (@hub_feed.blank?) ? feed_item.hub_feed_for_hub(hub.id) : @hub_feed
     <% else %>
       &nbsp;
     <% end %>
-    <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}") do %>
+    <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}", :expires => 30.minutes ) do %>
       <% unless feed_item.date_published.blank? %>
         <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_path(hub, :year => feed_item.date_published.year, :month => feed_item.date_published.month, :day => feed_item.date_published.day) ) %>
       <% end %>

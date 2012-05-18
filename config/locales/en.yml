@@ -8,3 +8,7 @@ en:
       date_and_time_short: "%m/%d/%Y, %H:%M"
       date_short: "%m/%d/%Y"
       time_short: "%H:%M"
+  activerecord:
+    attributes:
+      user:  
+        login: "Username or email"

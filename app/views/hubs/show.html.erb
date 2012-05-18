@@ -43,7 +43,7 @@
           <dd><%= @hub.tag_prefix %></dd>
         <% end %>
         <dt>Owners:</dt>
-        <dd><%= @hub.owners.collect{|o| o.email}.join(', ') %></dd>
+        <dd><%= @hub.owners.collect{|o| o.username}.join(', ') %></dd>
       </dl>
     </div>
   </div>
