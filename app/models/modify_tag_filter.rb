@@ -45,4 +45,8 @@ class ModifyTagFilter < ActiveRecord::Base
     filtered_tags
   end
 
+  def self.title
+    'Modify tag filter'
+  end
+
 end

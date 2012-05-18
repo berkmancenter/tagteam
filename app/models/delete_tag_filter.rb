@@ -34,4 +34,8 @@ class DeleteTagFilter < ActiveRecord::Base
     filtered_tags.delete(self.tag.name)
   end
 
+  def self.title
+    'Delete tag filter'
+  end
+
 end

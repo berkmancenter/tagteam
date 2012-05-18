@@ -34,4 +34,8 @@ class AddTagFilter < ActiveRecord::Base
     filtered_tags << self.tag.name
   end
 
+  def self.title
+    'Add tag filter'
+  end
+
 end

@@ -89,4 +89,9 @@ class User < ActiveRecord::Base
   end
 
 
+  def self.title
+    'User account'
+  end
+
+
 end

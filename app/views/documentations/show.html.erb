@@ -1,6 +1,6 @@
 <div class="documentation" id="documentation_<%= @documentation.id %>">
   <h2><%= @documentation.display_title %>
-    <% if current_user && current_user.has_role?(:superadmin) %>
+    <% if current_user && (current_user.has_role?(:superadmin) || current_user.has_role?(:documentation_admin)) %>
       <sup><%= link_to('edit', edit_documentation_path(@documentation)) %></sup>
     <% end %>
   </h2>

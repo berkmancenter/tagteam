@@ -7,7 +7,7 @@ class DocumentationsController < ApplicationController
 
   access_control do
     allow all, :to => [:index, :show]
-    allow :superadmin
+    allow :superadmin, :documentation_admin
   end
 
   def index

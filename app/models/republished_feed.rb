@@ -123,4 +123,8 @@ class RepublishedFeed < ActiveRecord::Base
     "#{title}"
   end
 
+  def self.title
+    'Remixed feed'
+  end
+
 end
