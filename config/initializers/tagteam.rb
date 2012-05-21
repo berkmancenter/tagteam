@@ -32,3 +32,5 @@ DEFAULT_ACTION_CACHE_TIME = 30.minutes
 
 require File.dirname(__FILE__) + '/../../lib/will_paginate/view_helpers/custom_link_renderer.rb'
 
+DEFAULT_SENDER = 'djcp+tagteam@cyber.law.harvard.edu'
+
