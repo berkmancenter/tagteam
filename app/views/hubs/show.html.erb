@@ -26,7 +26,20 @@
     <% if current_user && current_user.is?(:owner, @hub) %> 
       <li><%= link_to('Community', community_hub_path(@hub) )%></li>
     <% end %>
+    <% if current_user %>
+      <li><a href="#contact">Contact</a></li>
+    <% end %>
   </ul>
+
+  <div id="contact">
+    <h2>Contact the owners of this hub</h2>
+    <%= semantic_form_for(:contact, :url => request_rights_hub_path(@hub)) do |f| %>
+      <%= f.input :name %>
+      <%= f.input :email %>
+      <%= f.input :reason, :as => :select, :collection => ['Question','Bug report','Broken feed', 'Request to Collaborate'] %>
+
+    <% end %>
+  </div>
 
   <div id="about">
     <%= documentation('hub_about') %>

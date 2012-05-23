@@ -1,0 +1,10 @@
+Dear owner of <%= @hub.title %>,
+
+<%= @params[:name] %> (<%= @params[:email] %>) has requested the ability to:
+
+<%= @params[:requested_rights].join("\n") %>
+
+Please go the the "community" tab within your hub and grant them whatever rights you feel appropriate.
+
+-- The TagTeam, ahem, "Team."
+

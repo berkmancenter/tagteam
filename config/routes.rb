@@ -74,6 +74,7 @@ Tagteam::Application.routes.draw do
       get 'community'
       post 'add_roles'
       post 'remove_roles'
+      post 'request_rights'
     end
 
     collection do
