@@ -19,6 +19,10 @@ class HubsController < ApplicationController
     
   end
 
+  def contact
+    render :layout => ! request.xhr?
+  end
+
   def community
     render :layout => ! request.xhr?
   end

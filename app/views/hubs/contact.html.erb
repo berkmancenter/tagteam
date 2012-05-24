@@ -1,0 +1,20 @@
+<div id="contact">
+  <h2>Contact the owners of this hub</h2>
+  <%= semantic_form_for(:contact, :url => request_rights_hub_path(@hub)) do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :name %>
+      <%= f.input :email %>
+      <%= f.input :reason, :as => :select, :collection => [['Question','question'],['Bug report','bug'],['Broken feed','broken feed'], ['Feed Suggestion','feed suggestion'], ['Request to Collaborate','collaborate']] %>
+      <%= f.input :message, :as => :text, :input_html => {:style => 'height: 100px;', :cols => 80} %>
+    <% end %>
+    <%= f.actions %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+$(document).ready(function(){
+  $('#contact_reason').change(function(e){
+    
+  });
+});
+<% end %>
