@@ -6,6 +6,7 @@
       <%= f.input :email %>
       <%= f.input :reason, :as => :select, :collection => [['Question','question'],['Bug report','bug'],['Broken feed','broken feed'], ['Feed Suggestion','feed suggestion'], ['Request to Collaborate','collaborate']] %>
       <%= f.input :message, :as => :text, :input_html => {:style => 'height: 100px;', :cols => 80} %>
+      <%= f.input :rights, :as => :checkboxes, :collection => [['Add feeds','add_feeds']] %>
     <% end %>
     <%= f.actions %>
   <% end %>
@@ -14,6 +15,8 @@
 <%= javascript_tag do %>
 $(document).ready(function(){
   $('#contact_reason').change(function(e){
+    e.preventDefault();
+    
     
   });
 });
