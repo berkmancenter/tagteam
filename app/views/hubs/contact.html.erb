@@ -1,22 +1,38 @@
+<% if ! @errors.nil? %>
+  <div class="error">
+    <%= raw @errors %>
+  </div>
+<% end %>
 <div id="contact">
   <h2>Contact the owners of this hub</h2>
   <%= semantic_form_for(:contact, :url => request_rights_hub_path(@hub)) do |f| %>
     <%= f.inputs do %>
-      <%= f.input :name %>
+      <%= f.input :name, :required => false %>
       <%= f.input :email %>
-      <%= f.input :reason, :as => :select, :collection => [['Question','question'],['Bug report','bug'],['Broken feed','broken feed'], ['Feed Suggestion','feed suggestion'], ['Request to Collaborate','collaborate']] %>
+      <%= f.input :reason, :required => false, :as => :select, :collection => [['Question','question'],['Bug report','bug'],['Broken feed','broken feed'], ['Feed Suggestion','feed suggestion'], ['Request to Collaborate','collaborate']] %>
       <%= f.input :message, :as => :text, :input_html => {:style => 'height: 100px;', :cols => 80} %>
-      <%= f.input :rights, :as => :checkboxes, :collection => [['Add feeds','add_feeds']] %>
+      <%= f.input :rights, :as => :check_boxes, :collection => ['Full Rights','Add bookmarked items','Add Input Feeds','Feed Remixer','Tag Filter Manager'] %>
+      <%= f.input :why_rights, :as => :text, :hint => 'Tell us why you\'re requesting these rights', :input_html => {:style => 'height: 50px;', :cols => 80} %>
     <% end %>
-    <%= f.actions %>
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button %>
+    <% end %>
   <% end %>
 </div>
 
 <%= javascript_tag do %>
 $(document).ready(function(){
+  if($('#contact_reason').val() != 'collaborate'){
+    $('#contact_rights_input, #contact_why_rights_input').hide();
+  }
   $('#contact_reason').change(function(e){
-    e.preventDefault();
-    
+    if($(this).val() == 'collaborate'){
+      $('#contact_rights_input, #contact_why_rights_input').show('slow');
+    } else {
+      $('#contact_rights_input, #contact_why_rights_input').hide();
+    }
+  });
+  $('.formtastic.contact').ajaxForm({
     
   });
 });
