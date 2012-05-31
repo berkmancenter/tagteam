@@ -26,9 +26,7 @@
     <% if current_user && current_user.is?(:owner, @hub) %> 
       <li><%= link_to('Community', community_hub_path(@hub) )%></li>
     <% end %>
-    <% if current_user %>
-      <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
-    <% end %>
+    <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
   </ul>
 
 
