@@ -10,9 +10,8 @@
       <%= f.input :name, :required => false %>
       <%= f.input :email %>
       <%= f.input :reason, :required => false, :as => :select, :collection => [['Question','question'],['Bug report','bug'],['Broken feed','broken feed'], ['Feed Suggestion','feed suggestion'], ['Request to Collaborate','collaborate']] %>
+      <%= f.input :rights, :as => :check_boxes, :label => "Ways you'd like to collaborate", :required => false, :hint => 'Please describe why you\'d like to collaborate in this hub in the field below.', :collection => ['Full rights to manage this hub','Add bookmarked items','Add new input RSS / Atom feeds','Create new feed remixes','Manage tag filters'] %>
       <%= f.input :message, :as => :text, :input_html => {:style => 'height: 100px;', :cols => 80} %>
-      <%= f.input :rights, :as => :check_boxes, :collection => ['Full Rights','Add bookmarked items','Add Input Feeds','Feed Remixer','Tag Filter Manager'] %>
-      <%= f.input :why_rights, :as => :text, :hint => 'Tell us why you\'re requesting these rights', :input_html => {:style => 'height: 50px;', :cols => 80} %>
     <% end %>
     <%= f.actions do %>
       <%= f.action :submit, :as => :button %>
@@ -33,7 +32,9 @@ $(document).ready(function(){
     }
   });
   $('.formtastic.contact').ajaxForm({
-    
+    success: function(html){
+      $('.formtastic.contact').html("<p>Thanks! We'll be in touch soon.</p>");
+    }
   });
 });
 <% end %>

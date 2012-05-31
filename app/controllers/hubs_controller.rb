@@ -19,11 +19,15 @@ class HubsController < ApplicationController
     @errors = ''
     if params[:contact][:email].nil? || params[:contact][:email] !~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
       @errors += 'Email address is invalid<br/>'
-    else
+    end
+
+    if params[:contact][:message].nil?
+      @errors += 'Please fill in a message'
     end
 
     if @errors.blank?
-
+      Contact.request_rights(params,@hub).deliver
+      render :text => '' and return
     else
       render :text => @errors, :status => :not_acceptable and return
     end

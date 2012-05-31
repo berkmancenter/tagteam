@@ -1,10 +1,15 @@
-Dear owner of <%= @hub.title %>,
+<%= @params[:contact][:name] %> (<%= @params[:contact][:email] %>) has sent you message about your hub: "<%= @hub %>" at: <%= @hub_url %>
 
-<%= @params[:name] %> (<%= @params[:email] %>) has requested the ability to:
+Reason: <%= @params[:contact][:reason] %>
 
-<%= @params[:requested_rights].join("\n") %>
+<% unless @params[:contact][:rights].length == 1 %>
+Rights they are requesting:<%= @params[:contact][:rights].join("\n") %>
 
 Please go the the "community" tab within your hub and grant them whatever rights you feel appropriate.
+<% end %>
 
--- The TagTeam, ahem, "Team."
+Message:
+<%= @params[:contact][:message] %>
+
+-- TagTeam
 

@@ -4,7 +4,8 @@ class Contact < ActionMailer::Base
   def request_rights(params, hub)
     @hub = hub
     @params = params
-    mail(:to => @hub.owners)
+    @hub_url = hub_url(@hub)
+    mail(:to => @hub.owners.collect{|u| u.email})
   end
 
 end
