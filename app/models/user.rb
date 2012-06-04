@@ -93,5 +93,10 @@ class User < ActiveRecord::Base
     'User account'
   end
 
+  def display_name
+    tmp_name = "#{first_name} #{last_name}"
+    (tmp_name.blank?) ? email : tmp_name 
+  end
+
 
 end

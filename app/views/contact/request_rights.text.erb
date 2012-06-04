@@ -1,11 +1,14 @@
-<%= @params[:contact][:name] %> (<%= @params[:contact][:email] %>) has sent you message about your hub: "<%= @hub %>" at: <%= @hub_url %>
+<%= @params[:contact][:name] %> (<%= @params[:contact][:email] %>) has sent 
+you message about your hub: "<%= @hub %>" at:
+<%= @hub_url %>
 
 Reason: <%= @params[:contact][:reason] %>
 
 <% unless @params[:contact][:rights].length == 1 %>
 Rights they are requesting:<%= @params[:contact][:rights].join("\n") %>
 
-Please go the the "community" tab within your hub and grant them whatever rights you feel appropriate.
+Please go the the "community" tab within your hub and grant them whatever
+rights you feel appropriate.
 <% end %>
 
 Message:
