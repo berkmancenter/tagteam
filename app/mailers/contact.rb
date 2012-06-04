@@ -6,7 +6,7 @@ class Contact < ActionMailer::Base
     @params = params
     @hub_url = hub_url(@hub)
     subject = (params[:contact][:rights].length == 1) ? "Feedback submission about your hub - #{@hub}" : "A request for rights to collaborate in your hub - #{@hub}"
-    mail(:to => @hub.owners.collect{|u| u.email}, :subject => subject)
+    mail(:to => @hub.owners.collect{|u| u.email}, :subject => subject, 'reply-to' => params[:contact][:email])
   end
 
 end
