@@ -10,11 +10,17 @@
     hideSpinner: function(){
       $('#spinner').hide();
     }, 
-    showMajorError: function(error){
-      console.log(error);
-        $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + error.responseText + '</p>').dialog({
-            modal: true
-        }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
+    showMajorError: function(jqXHR,textStatus,errorThrown){
+      if (window.console && console.log){
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+      }
+      if(errorThrown != ''){
+        $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + jqXHR.responseText + '</p>').dialog({
+          modal: true
+          }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
+        }
     },
     initPerPage: function(){
       $('.per_page_selector').val($.cookie('per_page') || 25);
@@ -92,8 +98,8 @@
                   $.hideSpinner();
                   $.initTabHistory('.tabs');
                 },
-                error: function(error){
-                  $.showMajorError(error);
+                error: function(jqXHR,textStatus,errorThrown){
+                  $.showMajorError(jqXHR,textStatus,errorThrown);
                 }
               }
             });
@@ -469,9 +475,9 @@ $(document).ready(function(){
       $.initPerPage();
       $.hideSpinner();
     },
-    error: function(error){
-      $.showMajorError(error);
-    },
+    error: function(jqXHR,textStatus,errorThrown){
+      $.showMajorError(jqXHR,textStatus,errorThrown);
+    }
   });
 
   jQuery.bt.options.ajaxCache = false;
@@ -497,8 +503,8 @@ $(document).ready(function(){
       beforeSend: function(){
         $.showSpinner();
       },
-      error: function(error){
-        $.showMajorError(error);
+      error: function(jqXHR,textStatus,errorThrown){
+        $.showMajorError(jqXHR,textStatus,errorThrown);
       },
       complete: function(){
         $.checkPlaceholders();
@@ -568,8 +574,8 @@ $(document).ready(function(){
         $.initPerPage();
         $.hideSpinner();
       },
-      error: function(error){
-        $.showMajorError(error);
+      error: function(jqXHR,textStatus,errorThrown){
+        $.showMajorError(jqXHR,textStatus,errorThrown);
       }
     }
   });
@@ -741,14 +747,9 @@ $(document).ready(function(){
           $('#dialog-notice').show().html(html);
         },
         error: function(jqXHR, textStatus, errorThrown){
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
           $('#dialog-error').show().html(jqXHR.responseText);
         }
-
       });
-
     }
   });
   $.observeListPagination();
