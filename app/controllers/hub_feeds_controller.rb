@@ -133,7 +133,7 @@ class HubFeedsController < ApplicationController
 
   def destroy
     @hub_feed.destroy
-    flash[:notice] = 'Removed that feed.'
+    flash[:notice] = 'Removed it. It\'ll take a few minutes depending on how many items were in this feed.'
     redirect_to(hub_path(@hub))
   rescue
     flash[:error] = "Couldn't remove that feed."

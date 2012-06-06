@@ -68,13 +68,13 @@ class FeedItem < ActiveRecord::Base
     text :authors, :more_like_this => true
     text :contributors, :more_like_this => true
     text :rights, :more_like_this => true
-    text :tag_list, :more_like_this => true
+    text :tag_list_string_for_indexing, :more_like_this => true
     integer :hub_ids, :multiple => true
     integer :hub_feed_ids, :multiple => true
     integer :id
 
     integer :feed_ids, :multiple => true
-    string :tag_list, :multiple => true
+    string :tag_list_array_for_indexing, :multiple => true
     string :tag_contexts, :multiple => true
 
     string :title
@@ -108,6 +108,7 @@ class FeedItem < ActiveRecord::Base
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds
+  has_many :hubs, :through => :hub_feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => 'created_at desc'
   has_many :input_sources, :dependent => :destroy, :as => :item_source
   after_save :reindex_all_tags
@@ -122,15 +123,14 @@ class FeedItem < ActiveRecord::Base
     hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
   end
 
-  # The hubs for this item as found through its HubFeeds.
-  def hubs
-    # TODO Optimize via multi-table joins
-    hf = self.hub_feeds
-    (hf.empty?) ? [] : hf.collect{|hf| hf.hub}.flatten.uniq.compact
+  def tag_list_array_for_indexing
+    # tag_list as provided by ActsAsTaggableOn always does a sql query. Construct the tag list correctly.
+    self.tags.collect{|t| t.name}
   end
 
-  def hub_ids
-    (self.hubs.empty?) ? [] : self.hubs.collect{|h| h.id}
+  def tag_list_string_for_indexing
+    # tag_list as provided by ActsAsTaggableOn always does a sql query. Construct the tag list correctly.
+    self.tags.collect{|t| t.name}.join(', ')
   end
 
   # Re-render all tag facets for this FeedItem.
@@ -144,6 +144,7 @@ class FeedItem < ActiveRecord::Base
 
   # Re-render tag facets by applying filters but only for this Hub.
   def render_filtered_tags_for_hub(hub = Hub.first)
+    # FIXME - does this actually remove tags last as I have been saying it does?
     #"tag_list" is the source list of tags directly from RSS/Atom feeds.
     tag_list_for_filtering = self.tag_list.dup
 

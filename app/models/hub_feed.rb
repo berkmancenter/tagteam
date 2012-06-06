@@ -47,13 +47,9 @@ class HubFeed < ActiveRecord::Base
   # After a HubFeed has been removed
   after_destroy do
     self.feed.solr_index
-
-    # Possibly not necessary, but I put this in for a reason at some point so it might be.
-    ActsAsTaggableOn::Tagging.destroy_all(:context => self.hub.tagging_key.to_s, :taggable_type => 'FeedItem', :taggable_id => self.feed.feed_items.collect{|fi| fi.id})
-    self.feed.feed_items.each do|fi|
-      Resque.enqueue(FeedItemTagRenderer,fi.id)
-    end
-    Resque.enqueue(ReindexTags)
+    feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
+    tagging_key = self.hub.tagging_key.to_s
+    Resque.enqueue(ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
   end
 
   def hub_ids
