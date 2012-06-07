@@ -6,7 +6,6 @@
 #
 # A FeedItem can belong to one or more FeedRetrieval objects if more than one Feed contains this item.
 #
-#
 # Most validations are contained in the ModelExtensions mixin.
 #
 class FeedItem < ActiveRecord::Base
@@ -115,7 +114,8 @@ class FeedItem < ActiveRecord::Base
 
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
-    self.taggings.collect{|tg| tg.tag}.uniq.collect{|t| t.index}
+    tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
+    ActsAsTaggableOn::Tag.where(:id => tags_of_concern).reindex(:batch_size => 500, :include => :taggings, :batch_commit => false)
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
@@ -144,7 +144,6 @@ class FeedItem < ActiveRecord::Base
 
   # Re-render tag facets by applying filters but only for this Hub.
   def render_filtered_tags_for_hub(hub = Hub.first)
-    # FIXME - does this actually remove tags last as I have been saying it does?
     #"tag_list" is the source list of tags directly from RSS/Atom feeds.
     tag_list_for_filtering = self.tag_list.dup
 

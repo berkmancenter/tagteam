@@ -17,8 +17,6 @@ class HubFeedFeedItemTagRenderer
       feed_items = FeedItem.includes(:feeds,:taggings).where({'feeds.id' => hub_feed.feed_id, 'taggings.tag_id' => tag_id, 'taggings.context' => 'tags'})
     end
 
-#    puts 'Feed items are:' + feed_items.inspect
-
     ac = ActionController::Base.new
 
     feed_items.each do |fi|
