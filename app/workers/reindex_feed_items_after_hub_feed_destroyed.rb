@@ -7,11 +7,10 @@ class ReindexFeedItemsAfterHubFeedDestroyed
 
   def self.perform(feed_item_ids = [], tagging_key)
 
-    ActsAsTaggableOn::Tagging.includes([:tag]).destroy_all(:context => tagging_key, :taggable_type => 'FeedItem', :taggable_id => feed_item_ids)
+    #It's OK to delete rather than destroy here because we're not using "remove_unused" (which is run via an after_destroy trigger) and this makes it run hella fast.
+    ActsAsTaggableOn::Tagging.delete_all(:context => tagging_key, :taggable_type => 'FeedItem', :taggable_id => feed_item_ids)
 
-    FeedItem.includes({:taggings => [:tag],:feeds => {:hub_feeds => [:hub]}}).where(:id => feed_item_ids).each do |fi|
-      fi.index
-    end
+    FeedItem.where(:id => feed_item_ids).solr_index(:batch_size => 500, :include => [:taggings, :tags, :hub_feeds, :hubs, :feeds], :batch_commit => false)
 
     Resque.enqueue(ReindexTags)
 

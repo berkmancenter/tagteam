@@ -1,8 +1,9 @@
 ActsAsTaggableOn::Tag.class_eval do
 
   def contexts
-    contexts = ActsAsTaggableOn::Tagging.select('context').where('tag_id = ? and context != ?',self.id,'tags').group('context')
-    (contexts.length == 0) ? [] : contexts.collect{|tg| tg.context} 
+    #contexts = ActsAsTaggableOn::Tagging.select('context').where('tag_id = ? and context != ?',self.id,'tags').group('context')
+    contexts = self.taggings.collect{|tg| tg.context}.reject{|ct| ct == 'tags'}
+    (contexts.length == 0) ? [] : contexts 
   end
 
   def name_prefixed_with(prefix = '')
