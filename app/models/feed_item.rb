@@ -68,13 +68,13 @@ class FeedItem < ActiveRecord::Base
     text :authors, :more_like_this => true
     text :contributors, :more_like_this => true
     text :rights, :more_like_this => true
-    text :tag_list_string_for_indexing, :more_like_this => true
+    text :tag_list, :using => :tag_list_string_for_indexing, :more_like_this => true
     integer :hub_ids, :multiple => true
     integer :hub_feed_ids, :multiple => true
     integer :id
 
     integer :feed_ids, :multiple => true
-    string :tag_list_array_for_indexing, :multiple => true
+    string :tag_list, :using => :tag_list_array_for_indexing, :multiple => true
     string :tag_contexts, :multiple => true
 
     string :title

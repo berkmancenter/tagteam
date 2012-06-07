@@ -44,7 +44,8 @@ TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis
 * export RAILS_ENV=production
 * Set up databases and docs via "rake db:migrate && rake db:seed"
 * rake sunspot:solr:start
-* rake resque:work
+* Start up your resque workers:
+* resque-pool --daemon --environment production 
 * Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. 
 
 == Cron jobs
