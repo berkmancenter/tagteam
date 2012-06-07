@@ -21,7 +21,7 @@ class HubsController < ApplicationController
       @errors += 'Email address is invalid<br/>'
     end
 
-    if params[:contact][:message].nil?
+    if params[:contact][:message].blank?
       @errors += 'Please fill in a message'
     end
 
