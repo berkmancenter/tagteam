@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   before_filter :load_user, :only => [:roles_on]
 
   access_control do
-    allow all, :to => [:autocomplete]
-    allow logged_in, :to => [:roles_on]
+    allow logged_in, :to => [:roles_on, :autocomplete]
     allow :superadmin
   end
 
@@ -66,7 +65,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json { 
         # Should probably change this to use render_for_api
-        render :json => @search.results.collect{|r| {:id => r.id, :label => r.email} }
+        render :json => @search.results.collect{|r| {:id => r.id, :label => "#{r.username} - #{r.email}"} }
       }
     end
   rescue
