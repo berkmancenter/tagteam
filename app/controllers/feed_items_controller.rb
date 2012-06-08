@@ -8,7 +8,12 @@ class FeedItemsController < ApplicationController
   }
 
   access_control do
-    allow all
+    allow all, :to => [:content, :related, :index, :show]
+    allow logged_in, :to => [:controls]
+  end
+
+  def controls
+    render :layout => ! request.xhr?
   end
 
   # Return the full content for a FeedItem,, this could potentially be a large amount of content. Returns html, json, or xml. Action cached for anonymous visitors.

@@ -1,0 +1,16 @@
+<% if current_user && current_user.is?([:owner,:remixer,:hub_feed_item_tag_filterer,:bookmarker],@hub) %>
+  <span class="controls" id="feed_item_control-<%= @feed_item.id %>-target">
+    <% if current_user.is?([:owner, :hub_feed_item_tag_filterer],@hub) %>
+      <span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a tag to this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_feed_item_tag_filter' %><br/> 
+    <% end %>
+    <% if current_user.is?([:owner, :remixer],@hub) %>
+      <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Add #{@feed_item} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => @feed_item.id) %><br/>
+      <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Remove #{@feed_item} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'FeedItem', :data_item_id => @feed_item.id) %><br/>
+    <% end %>
+    <% if @hub_feed && @hub_feed.feed.is_bookmarking_feed? && (current_user.is?(:owner, @hub) || current_user.is?(:owner,@hub_feed.feed)) %>
+      <%= link_to(raw('<span class="ui-silk ui-silk-book-delete inline hover gray"></span> Remove from this bookmarking collection'), bookmarklets_remove_item_path(:hub_id => @hub, :feed_id => @hub_feed.feed, :feed_item_id => @feed_item), :title => "Remove #{@feed_item} from this bookmarking collection", :method => :post, :confirm => "Are you sure?") %>
+    <% end %>
+  </span>
+<% else %>
+  &nbsp;
+<% end %>

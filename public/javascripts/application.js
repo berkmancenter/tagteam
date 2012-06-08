@@ -668,10 +668,11 @@ $(document).ready(function(){
   $('.control').live({
     click: function(e){
       e.preventDefault();
-      var id = $(this).attr('id');
+      var url = $(this).attr('href');
+      console.log(url);
       $(this).bt({
         trigger: 'none',
-        contentSelector: $('#' + id + '-target'),
+        ajaxPath: url,
         closeWhenOthersOpen: true
       });
       $(this).btOn();
