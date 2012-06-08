@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   end
 
   def things_i_have_roles_on
-    self.roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')",'owner']).group(:authorizable_type).collect{|r| r.authorizable_type}.sort.collect{|r| r.constantize}
+    roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')",'owner']).group(:authorizable_type).collect{|r| r.authorizable_type}.sort.collect{|r| r.constantize}
   end
 
   # Looks for objects of the class_of_interest owned by this user.
@@ -33,21 +33,19 @@ class User < ActiveRecord::Base
   end
 
   def my_bookmarkable_hubs
-    self.roles.find(:all, :conditions => {:authorizable_type => 'Hub', :name => [:owner,:bookmarker]}).collect{|r| r.authorizable}
+    roles.find(:all, :conditions => {:authorizable_type => 'Hub', :name => [:owner,:bookmarker]}).collect{|r| r.authorizable}
   end
 
   def is?(role_name, obj)
-    if role_name.is_a?(Array)
-      roles_on_obj = self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id) ? false : true}.collect{|r| r.name}
-      has_a_role = false
-      role_name.each do|rname|
-        has_a_role = roles_on_obj.include?(rname.to_s)
-        return true if has_a_role == true
+    # This allows us to accept strings or arrays.
+    role_names = [role_name].flatten.uniq
+    gen_role_cache
+    role_names.each do|r|
+      if ! @role_cache["#{obj.class.name}-#{obj.id}-#{r}"].nil?
+        return true
       end
-      return has_a_role
-    else
-      return self.roles.reject{|r| (r.authorizable_type == obj.class.name && r.authorizable_id == obj.id && r.name == role_name.to_s) ? false : true }.length >= 1
     end
+    return false
   end
 
   def my_bookmarking_bookmark_collections_in(hub_id)
@@ -59,20 +57,20 @@ class User < ActiveRecord::Base
     if bookmark_collections.blank?
       feed = Feed.new
       feed.bookmarking_feed = true
-      feed.title = "#{self.email}'s bookmarks"
+      feed.title = "#{email}'s bookmarks"
       feed.feed_url = 'not applicable'
       feed.save
 
-      self.has_role!(:owner, feed)
-      self.has_role!(:creator, feed)
+      has_role!(:owner, feed)
+      has_role!(:creator, feed)
 
       hf = HubFeed.new
       hf.hub_id = hub_id
       hf.feed_id = feed.id
       hf.save
 
-      self.has_role!(:owner, hf)
-      self.has_role!(:creator, hf)
+      has_role!(:owner, hf)
+      has_role!(:creator, hf)
       feed
     else
       bookmark_collections.first
@@ -98,5 +96,16 @@ class User < ActiveRecord::Base
     (tmp_name.blank?) ? email : tmp_name 
   end
 
+  protected
+
+  def gen_role_cache
+    if @role_cache.nil?
+      logger.warn('regenerating role cache')
+      @role_cache = {}
+      roles.each do|r|
+        @role_cache["#{r.authorizable_type}-#{r.authorizable_id}-#{r.name}"] = 1
+      end
+    end
+  end
 
 end
