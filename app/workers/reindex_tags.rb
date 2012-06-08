@@ -6,7 +6,7 @@ class ReindexTags
   end
 
   def self.perform
-    ActsAsTaggableOn::Tag.reindex(:batch_size => 500, :include => :taggings, :batch_commit => false)
+    ActsAsTaggableOn::Tag.reindex(:batch_size => 500, :include => :taggings)
   end
 
 end

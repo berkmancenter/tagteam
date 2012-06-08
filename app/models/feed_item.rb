@@ -115,7 +115,7 @@ class FeedItem < ActiveRecord::Base
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
     tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
-    ActsAsTaggableOn::Tag.where(:id => tags_of_concern).reindex(:batch_size => 500, :include => :taggings, :batch_commit => false)
+    ActsAsTaggableOn::Tag.where(:id => tags_of_concern).reindex(:batch_size => 500, :include => :taggings)
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
