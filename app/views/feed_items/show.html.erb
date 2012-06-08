@@ -22,7 +22,7 @@
     <dl class="metadata">
       <dt>Link:</dt>
       <dd>
-      <%= link_to(@feed_item.url, @feed_item.url, :target => '_blank') %>
+      <%= link_to(@feed_item.url, @feed_item.url, :target => '_blank', :rel => 'nofollow') %>
       </dd>
       <% unless @feed_item.date_published.blank? %>
         <dt>Published:</dt>

@@ -8,11 +8,9 @@ hub_feed = (@hub_feed.blank?) ? feed_item.hub_feed_for_hub(hub.id) : @hub_feed
 %>
 <tr class="feed_item hover_row" id="feed_item_<%= feed_item.id %>">
   <td class="date">
-    <% if current_user %>
-      <%= link_to('controls', controls_hub_feed_feed_item_path(hub_feed,feed_item), :class => 'ui-silk ui-silk-add inline hover gray control') %>
-    <% end %>
+    <%= link_to('controls', controls_hub_feed_feed_item_path(hub_feed,feed_item), :class => 'ui-silk ui-silk-add inline hover gray control') %>
 
-    <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}", :expires => 30.minutes ) do %>
+    <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}", :expires => 120.minutes ) do %>
       <% unless feed_item.date_published.blank? %>
         <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_path(hub, :year => feed_item.date_published.year, :month => feed_item.date_published.month, :day => feed_item.date_published.day) ) %>
       <% end %>

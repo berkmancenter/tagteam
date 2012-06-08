@@ -3,13 +3,12 @@ class FeedItemsController < ApplicationController
   before_filter :load_feed_item, :except => [:index]
   before_filter :add_breadcrumbs, :except => [:index, :content]
 
-  caches_action :content, :related, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?([:owner,:remixer, :hub_feed_item_tag_filterer, :bookmarker], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :controls, :content, :related, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?([:owner,:remixer, :hub_feed_item_tag_filterer, :bookmarker], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
-    allow all, :to => [:content, :related, :index, :show]
-    allow logged_in, :to => [:controls]
+    allow all
   end
 
   def controls
