@@ -34,3 +34,5 @@ require File.dirname(__FILE__) + '/../../lib/will_paginate/view_helpers/custom_l
 
 DEFAULT_SENDER = 'djcp+tagteam@cyber.law.harvard.edu'
 
+SOCIAL_LINKS = 'twitter,facebook,google_plus'
+

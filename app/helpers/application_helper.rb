@@ -45,4 +45,25 @@ module ApplicationHelper
     link_to(tag.name, hub_tag_show_path(hub_id,u(tag.name)), options) 
   end
 
+  def insert_social_links(url, options = {})
+    options.merge!({:rel => 'nofollow', :target => '_blank', :class => 'share_icon twitter'})
+    output = []
+    SOCIAL_LINKS.split(',').each do|social_network|
+      output << send("#{social_network}_share_link", url, options)
+    end
+    output.join('<br/>')
+  end
+
+  def twitter_share_link(url, options = {})
+    link_to(raw(image_tag('twitter-icon.png') + ' Share on Twitter'), "https://twitter.com/intent/tweet?url=#{CGI.escape(url)}", options)
+  end
+
+  def facebook_share_link(url, options = {})
+    link_to(raw(image_tag('facebook-icon.png') + ' Share on Facebook'), "https://www.facebook.com/sharer.php?u=#{CGI.escape(url)}", options)
+  end
+
+  def google_plus_share_link(url,options = {})
+    link_to(raw(image_tag('google-plus-icon.png') + ' Share on Google+'), "https://plus.google.com/share?url=#{CGI.escape(url)}", options)
+  end
+
 end

@@ -13,7 +13,5 @@
     <hr />
   <% end %>
   <%= link_to(raw('<span class="ui-silk ui-silk-link inline"></span> Original link'), @feed_item.url, :rel => 'nofollow', :target => '_blank') %><br/>
-  <%= link_to(raw(image_tag('twitter-icon.png') + ' Share on Twitter'), "https://twitter.com/intent/tweet?url=#{CGI.escape(@feed_item.url)}", :rel => 'nofollow', :target => '_blank') %><br/>
-  <%= link_to(raw(image_tag('facebook-icon.png') + ' Share on Facebook'), "http://www.facebook.com/sharer.php?u=#{CGI.escape(@feed_item.url)}", :rel => 'nofollow', :target => '_blank') %><br/>
-  <%= link_to(raw(image_tag('google-plus-icon.png') + ' Share on Google+'), "https://plus.google.com/share?url=#{CGI.escape(@feed_item.url)}", :rel => 'nofollow', :target => '_blank') %><br/>
+  <%= raw insert_social_links(@feed_item.url) %>
 </span>

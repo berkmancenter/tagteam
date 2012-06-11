@@ -37,6 +37,7 @@ Tagteam::Application.routes.draw do
       get 'reschedule_immediately'
       get 'more_details'
       post 'import'
+      get 'controls'
     end
 
     resources :feed_retrievals
@@ -92,6 +93,7 @@ Tagteam::Application.routes.draw do
       member do
         get 'reschedule_immediately'
         get 'more_details'
+        get 'controls'
       end
     end
 
