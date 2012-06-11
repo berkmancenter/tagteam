@@ -22,7 +22,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated
-  attr_accessor :hub_id, :bookmark_collection_id
+  attr_accessor :hub_id, :bookmark_collection_id, :skip_tag_indexing_after_save
   
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
@@ -114,8 +114,10 @@ class FeedItem < ActiveRecord::Base
 
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
-    tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
-    ActsAsTaggableOn::Tag.where(:id => tags_of_concern).reindex(:batch_size => 500, :include => :taggings)
+    unless skip_tag_indexing_after_save == true
+      tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
+      ActsAsTaggableOn::Tag.where(:id => tags_of_concern).solr_index(:include => :taggings, :batch_commit => false)
+    end
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.

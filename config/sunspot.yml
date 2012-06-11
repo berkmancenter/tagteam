@@ -1,10 +1,5 @@
-production:
-  solr:
-    hostname: localhost
-    port: 8987
-    log_level: WARNING
-    max_memory: 128M
-    min_memory: 32M
+auto_commit_after_request: false
+auto_commit_after_delete_request: true
 
 development:
   solr:
@@ -13,6 +8,18 @@ development:
     log_level: INFO
     max_memory: 128M
     min_memory: 32M
+  auto_commit_after_request: false
+  auto_commit_after_delete_request: true
+
+production:
+  solr:
+    hostname: localhost
+    port: 8987
+    log_level: WARNING
+    max_memory: 128M
+    min_memory: 32M
+  auto_commit_after_request: false
+  auto_commit_after_delete_request: true
 
 test:
   solr:
@@ -21,3 +28,5 @@ test:
     log_level: WARNING
     max_memory: 512M
     min_memory: 32M
+  auto_commit_after_request: false
+  auto_commit_after_delete_request: true
