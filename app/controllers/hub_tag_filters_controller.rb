@@ -82,8 +82,6 @@ class HubTagFiltersController < ApplicationController
 
   def load_hub
     @hub = Hub.find(params[:hub_id])
-    @owners = @hub.owners
-    @is_owner = @owners.include?(current_user)
   end
 
   def load_hub_tag_filter

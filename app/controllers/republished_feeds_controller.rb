@@ -33,7 +33,6 @@ class RepublishedFeedsController < ApplicationController
   # An individual RepublishedFeed. Returns html, json, and xml.
   def show
     @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
-    @owners = @republished_feed.owners
     @hub = @republished_feed.hub
 #    @republished_feed.items
     respond_to do |format|

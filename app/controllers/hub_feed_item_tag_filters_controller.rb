@@ -88,8 +88,6 @@ class HubFeedItemTagFiltersController < ApplicationController
   def load_feed_item
     @hub = Hub.find(params[:hub_id]) 
     @feed_item = FeedItem.find(params[:feed_item_id])
-    @owners = @hub.owners
-    @is_owner = @owners.include?(current_user)
   end
 
   def load_hub_feed_item_tag_filter
