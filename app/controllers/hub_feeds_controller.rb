@@ -3,7 +3,6 @@ class HubFeedsController < ApplicationController
   before_filter :load_hub_feed, :except => [:index, :new, :create, :autocomplete]
   before_filter :load_hub
   before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately, :autocomplete, :import]
-  before_filter :prep_resources
 
   caches_action :controls, :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
@@ -156,9 +155,6 @@ class HubFeedsController < ApplicationController
     else
       @hub = Hub.find(params[:hub_id])
     end
-  end
-
-  def prep_resources
   end
 
   def add_breadcrumbs
