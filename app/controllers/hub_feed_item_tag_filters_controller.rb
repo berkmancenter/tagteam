@@ -1,8 +1,6 @@
 # Allows Hub owners to add HubFeedItemTagFilters to a FeedItem.
 class HubFeedItemTagFiltersController < ApplicationController
-  before_filter :load_feed_item
-  before_filter :load_hub_feed_item_tag_filter, :except => [:index, :new, :create]
-  caches_action :index, :unless => Proc.new{|c| current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :index, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
@@ -16,6 +14,7 @@ class HubFeedItemTagFiltersController < ApplicationController
 
   #A list of filters on this FeedItem in a Hub..
   def index
+    load_feed_item
     @hub_feed_item_tag_filters = @feed_item.hub_feed_item_tag_filters.all(:conditions => {:hub_id => @hub.id})
     respond_to do |format|
       format.html{ render :layout => ! request.xhr? }
@@ -25,10 +24,12 @@ class HubFeedItemTagFiltersController < ApplicationController
   end
 
   def new
+    load_feed_item
     @hub_feed_item_tag_filter = HubFeedItemTagFilter.new(:hub => @hub)
   end
 
   def create
+    load_feed_item
     # Add the three types of filters here -
     # AddTagFilter
     # DeleteTagFilter
@@ -74,6 +75,8 @@ class HubFeedItemTagFiltersController < ApplicationController
   end
 
   def destroy
+    load_feed_item
+    load_hub_feed_item_tag_filter
     @hub_feed_item_tag_filter.destroy
     flash[:notice] = 'Deleted that hub feed tag filter'
     respond_to do|format|
