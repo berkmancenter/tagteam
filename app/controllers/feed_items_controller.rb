@@ -1,4 +1,7 @@
 class FeedItemsController < ApplicationController
+  before_filter :load_hub_feed
+  before_filter :load_feed_item, :except => [:index]
+  before_filter :add_breadcrumbs, :except => [:index, :content]
 
   caches_action :controls, :content, :related, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?([:owner,:remixer, :hub_feed_item_tag_filterer, :bookmarker], @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
@@ -9,19 +12,11 @@ class FeedItemsController < ApplicationController
   end
 
   def controls
-    @feed_item = FeedItem.find(params[:id])
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    add_breadcrumbs
-    @hub = @hub_feed.hub
     render :layout => ! request.xhr?
   end
 
   # Return the full content for a FeedItem,, this could potentially be a large amount of content. Returns html, json, or xml. Action cached for anonymous visitors.
   def content
-    @feed_item = FeedItem.find(params[:id])
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    @hub = @hub_feed.hub
-    add_breadcrumbs
     breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
@@ -32,10 +27,6 @@ class FeedItemsController < ApplicationController
 
   # Uses a solr more_like_this query to find items to related to this one by comparing the title and tag list. Returns html, json, or xml. Action cached for anonymous visitors.
   def related
-    @feed_item = FeedItem.find(params[:id])
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    @hub = @hub_feed.hub
-    add_breadcrumbs
     @hub_feed = nil
     hub_id = @hub.id
     @related = Sunspot.more_like_this(@feed_item) do
@@ -55,8 +46,6 @@ class FeedItemsController < ApplicationController
 
   # A paginated list of FeedItems in a HubFeed. Returns html, atom, rss, json, or xml. Action cached for anonymous visitors.
   def index
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    @hub = @hub_feed.hub
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     respond_to do |format|
@@ -70,10 +59,6 @@ class FeedItemsController < ApplicationController
 
   # A FeedItem. Returns html, json, or xml. Action cached for anonymous visitors.
   def show
-    @feed_item = FeedItem.find(params[:id])
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    @hub = @hub_feed.hub
-    add_breadcrumbs
     respond_to do |format|
       format.html{
         breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
@@ -86,6 +71,15 @@ class FeedItemsController < ApplicationController
 
 
   private
+
+  def load_hub_feed
+    @hub_feed = HubFeed.find(params[:hub_feed_id])
+    @hub = @hub_feed.hub
+  end
+
+  def load_feed_item
+    @feed_item = FeedItem.find(params[:id])
+  end
 
   def add_breadcrumbs
     unless @hub_feed.blank?

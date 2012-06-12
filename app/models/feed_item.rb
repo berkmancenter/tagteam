@@ -247,6 +247,8 @@ class FeedItem < ActiveRecord::Base
         end
         # logger.warn('dirty item_changelog: ' + item_changelog.inspect)
         feed.dirty = true
+        # Tags will be reindexed by resque.
+        fi.skip_tag_indexing_after_save = true
         fi.save
         feed.changelog[fi.id] = item_changelog
         Resque.enqueue(FeedItemTagRenderer, fi.id)
