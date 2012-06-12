@@ -31,7 +31,7 @@ class HubFeedFeedItemTagRenderer
 
     #batch expire caches.
     feed_items.each do|fi|
-      key = "feed-item-tag-list-#{hub.id}-#{fi.id}"
+      key = "feed-item-tag-list-#{hub_feed.hub.id}-#{fi.id}"
       ac.expire_fragment(key)
     end
   end
