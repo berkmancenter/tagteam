@@ -1,8 +1,5 @@
 # Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
-  before_filter :load_hub_feed, :except => [:index, :new, :create, :autocomplete]
-  before_filter :load_hub
-  before_filter :add_breadcrumbs, :except => [:index, :new, :create, :reschedule_immediately, :autocomplete, :import]
 
   caches_action :controls, :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
@@ -17,10 +14,13 @@ class HubFeedsController < ApplicationController
   end
 
   def controls
+    load_hub_feed
+    load_hub
     render :layout => ! request.xhr?
   end
 
   def autocomplete
+    load_hub
     hub_id = @hub.id
     @search = HubFeed.search do
       with :hub_ids, hub_id
@@ -40,6 +40,8 @@ class HubFeedsController < ApplicationController
 
   # Accepts an import upload in Connotea RDF and delicious bookmark export format. Creates a Resque job that does the actual importing, as it's pretty slow on larger collections - around 400 per minute or so.
   def import
+    load_hub_feed
+    load_hub
     if params[:type].blank? || params[:import_file].blank?
       flash[:notice] = 'Please select a file type and attach a file for importing.'
     else 
@@ -54,10 +56,14 @@ class HubFeedsController < ApplicationController
   end
 
   def more_details
+    load_hub_feed
+    load_hub
     render :layout => ! request.xhr?
   end
 
   def reschedule_immediately
+    load_hub_feed
+    load_hub
     feed = @hub_feed.feed
     feed.next_scheduled_retrieval = Time.now
     feed.save
@@ -69,6 +75,7 @@ class HubFeedsController < ApplicationController
   end
 
   def index
+    load_hub
     @hub_feeds = @hub.hub_feeds.rss.paginate(:page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
@@ -78,11 +85,15 @@ class HubFeedsController < ApplicationController
   end
 
   def show
+    load_hub_feed
+    load_hub
+    add_breadcrumbs
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     breadcrumbs.add @hub_feed.display_title, hub_hub_feed_path(@hub,@hub_feed)
   end
 
   def new
+    load_hub
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
@@ -90,6 +101,7 @@ class HubFeedsController < ApplicationController
   end
 
   def create
+    load_hub
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
@@ -118,6 +130,8 @@ class HubFeedsController < ApplicationController
   end
 
   def update
+    load_hub_feed
+    load_hub
     @hub_feed.attributes = params[:hub_feed]
     respond_to do|format|
       if @hub_feed.save
@@ -132,9 +146,14 @@ class HubFeedsController < ApplicationController
   end
 
   def edit
+    load_hub_feed
+    load_hub
+    add_breadcrumbs
   end
 
   def destroy
+    load_hub_feed
+    load_hub
     @hub_feed.destroy
     flash[:notice] = 'Removed it. It\'ll take a few minutes depending on how many items were in this feed.'
     redirect_to(hub_path(@hub))
