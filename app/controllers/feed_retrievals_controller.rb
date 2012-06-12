@@ -1,13 +1,11 @@
 class FeedRetrievalsController < ApplicationController
-
-  before_filter :load_hub_feed
-
-  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :index, :show, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   # A list of FeedRetrieval objects for the Feed referenced by a HubFeed. Returns html, json, or xml.
   def index
+    load_hub_feed
     breadcrumbs.add @hub_feed, hub_hub_feed_path(:hub_id => @hub, :id => @hub_feed)
     @feed_retrievals = @hub_feed.feed.feed_retrievals.paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
@@ -19,6 +17,7 @@ class FeedRetrievalsController < ApplicationController
 
   # Detailed info about a FeedRetrieval. Returns html, json, or xml.
   def show
+    load_hub_feed
     breadcrumbs.add @hub, hub_path(@hub)
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed)
     @feed_retrieval = FeedRetrieval.find(params[:id])
