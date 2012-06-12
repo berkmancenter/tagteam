@@ -1,5 +1,5 @@
 class ReindexTags
-  @queue = :reindex_tags
+  @queue = :reindexer
 
   def self.display_name
     "Reindexing tags"

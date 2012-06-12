@@ -1,5 +1,5 @@
 class HubWideFeedItemTagRenderer
-  @queue = :hub_wide
+  @queue = :renderer
 
   def self.display_name
     'Updating all items effected by a change in a tag'

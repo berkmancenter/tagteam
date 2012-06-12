@@ -1,5 +1,5 @@
 class ReindexFeedItemsAfterHubFeedDestroyed
-  @queue = :feed_items_reindexer
+  @queue = :reindexer
 
   def self.display_name
     'Reindexing feed items in bulk after a hub feed was removed'

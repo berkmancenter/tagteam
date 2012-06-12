@@ -1,5 +1,5 @@
 class RecalcAllItems
-  @queue = :all_items
+  @queue = :renderer
 
   def self.display_name
     "Updating all tags for an entire hub"

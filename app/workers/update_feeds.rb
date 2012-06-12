@@ -1,5 +1,5 @@
 class UpdateFeeds
-  @queue = :update_feeds
+  @queue = :updater
 
   def self.display_name
     "Looking for new or changed feed items"

@@ -1,5 +1,5 @@
 class FeedItemTagRenderer
-  @queue = :feed_items
+  @queue = :renderer
 
   def self.display_name
     'Updating tag facets for a feed item'

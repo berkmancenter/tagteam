@@ -1,5 +1,5 @@
 class ImportFeedItems
-  @queue = :imports
+  @queue = :importer
 
   def self.display_name
     'Importing items from an uploaded file'
