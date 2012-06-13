@@ -669,7 +669,6 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       var url = $(this).attr('href');
-      console.log(url);
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,
