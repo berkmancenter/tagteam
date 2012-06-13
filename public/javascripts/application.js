@@ -419,7 +419,7 @@
         classesOfImport[$(this).attr('class')] = 1;
       });
       $.each(classesOfImport,function(key,value){
-        $(filterContainer).append($('<span/> ').attr({id: key, class: 'filter_control'}).html(key + ' '));
+        $(filterContainer).append($('<span/> ').attr({id: key, 'class': 'filter_control'}).html(key + ' '));
       });
 
       $(filterContainer).append($('<span/> ').attr({id: 'reset_filter' }).html("<strong>Show all</strong>"));
