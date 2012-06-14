@@ -36,12 +36,12 @@ class User < ActiveRecord::Base
     roles.find(:all, :conditions => {:authorizable_type => 'Hub', :name => [:owner,:bookmarker]}).collect{|r| r.authorizable}
   end
 
-  def is?(role_name, obj)
+  def is?(role_name, obj = nil)
     # This allows us to accept strings or arrays.
     role_names = [role_name].flatten.uniq
     gen_role_cache
     role_names.each do|r|
-      if ! @role_cache["#{obj.class.name}-#{obj.id}-#{r}"].nil?
+      if ! @role_cache["#{(obj.nil?) ? '' : obj.class.name}-#{(obj.nil?) ? '' : obj.id}-#{r}"].nil?
         return true
       end
     end

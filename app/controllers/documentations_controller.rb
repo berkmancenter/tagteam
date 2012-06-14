@@ -1,7 +1,7 @@
 # The user-edited Documentation controller. The base docs are created via the db:seed rake task during installation.
 #
 class DocumentationsController < ApplicationController
-  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.has_role?(:superadmin,:documentation_admin)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.is?([:superadmin,:documentation_admin])}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
