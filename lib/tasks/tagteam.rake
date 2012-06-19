@@ -36,16 +36,12 @@ namespace :tagteam do
     conn = ActiveRecord::Base.connection
 
     results = conn.execute("select id from feeds where id not in(select feed_id from hub_feeds group by feed_id)")
-    results.each do|row|
-      puts "Destroying Feed #{row['id']}"
-      Feed.destroy(row['id'])
-    end
+    puts "Destroying Feeds #{results.collect{|r| r['id']}.join(',')}"
+    Feed.destroy(results.collect{|r| r['id']})
 
     results = conn.execute('select id from feed_items where id not in(select feed_item_id from feed_items_feeds group by feed_item_id)')
-    results.each do|row|
-      puts "Destroying FeedItem #{row['id']}"
-      FeedItem.destroy(row['id'])
-    end
+    puts "Destroying FeedItems #{results.collect{|r| r['id']}.join(',')}"
+    FeedItem.destroy(results.collect{|r| r['id']})
 
     Role.includes(:authorizable).where('authorizable_id is not null').all.each do|r|
       if r.authorizable.blank?
