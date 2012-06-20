@@ -1,16 +1,20 @@
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
+  caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights]
+    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
     allow :inputter, :of => :hub, :to => [:add_feed]
     allow :remixer, :of => :hub, :to => [:custom_republished_feeds]
     allow :superadmin
+  end
+
+  def meta
+    render :layout => ! request.xhr?
   end
 
   def request_rights

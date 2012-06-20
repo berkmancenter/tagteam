@@ -75,7 +75,7 @@ class UsersController < ApplicationController
   private
 
   def load_user
-    if current_user.has_role?(:superadmin)
+    if current_user.is?(:superadmin)
       @user = User.find params[:id]
     else 
       @user = current_user

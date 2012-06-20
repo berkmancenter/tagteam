@@ -81,6 +81,7 @@ Tagteam::Application.routes.draw do
     end
 
     collection do
+      get 'meta'
       get 'my'
       get 'background_activity'
       get 'all_items'

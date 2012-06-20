@@ -32,7 +32,7 @@
 
   <div id="about">
     <%= documentation('hub_about') %>
-    <% if current_user && current_user.has_role?(:superadmin) %>
+    <% if current_user && current_user.is?(:superadmin) %>
       <p><%= link_to('Re-create all tags for this hub', recalc_all_tags_hub_path(@hub), :method => :post, :confirm => 'Are you sure? This should be needed in very rare circumstances') %></p>
     <% end %>
     <div class="metadata">

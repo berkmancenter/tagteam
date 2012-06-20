@@ -6,7 +6,7 @@ module ApplicationHelper
       doc_object.title = title || match_key
       doc_object.save
     end
-    if ! doc_object.description.blank? || (current_user && current_user.has_role?(:superadmin))
+    if ! doc_object.description.blank? || (current_user && current_user.is?([:superadmin,:documentation_admin]))
       if label_type == 'help'
         link_to(raw('<span class="inline ui-silk ui-silk-information"></span> Help!'), documentation_path(doc_object), :class => 'documentation_control dialog-show')
       end
