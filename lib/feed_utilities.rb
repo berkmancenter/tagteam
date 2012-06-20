@@ -73,7 +73,7 @@ module FeedUtilities
 		end
 		url = URI.parse(uri)
 		req = Net::HTTP::Get.new(url.request_uri + ((url.fragment.blank?) ? '' : '#' + url.fragment ))
-		req.initialize_http_header({"User-Agent" => ROBOT_USER_AGENT})
+		req.initialize_http_header({"User-Agent" => Tagteam::Application.config.robot_user_agent})
 
     # logger.warn(url.inspect)
     # logger.warn(url.port)

@@ -1,7 +1,7 @@
 atom_feed(:root_url => hub_republished_feed_url(@hub,@republished_feed), :language => 'en-US') do |atom|
   atom.title @republished_feed.title
   atom.updated @republished_feed.updated_at
-  atom.generator RSS_GENERATOR
+  atom.generator Tagteam::Application.config.rss_generator
 
   @republished_feed.item_search.results.each do |item|
     atom.entry( item , :url => item.url ) do |entry|

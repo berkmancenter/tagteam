@@ -8,7 +8,7 @@ xml.rss(
     xml.title "Items tagged with #{@tag.name} in #{@hub.title}"
     xml.description "Items tagged with #{@tag.name} in #{@hub.title}"
     xml.link hub_tag_path(@hub,@tag)
-    xml.generator RSS_GENERATOR
+    xml.generator Tagteam::Application.config.rss_generator
 
     @feed_items.each do |item|
       xml.item do

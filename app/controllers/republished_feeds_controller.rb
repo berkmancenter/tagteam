@@ -4,7 +4,7 @@ class RepublishedFeedsController < ApplicationController
   before_filter :register_breadcrumb
 
   # Beef up cache rules.
-  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :index, :show, :items, :inputs, :removals, :more_details, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 

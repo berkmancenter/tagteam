@@ -1,5 +1,5 @@
 class Contact < ActionMailer::Base
-  default from: DEFAULT_SENDER
+  default from: Tagteam::Application.config.default_sender
 
   def request_rights(params, hub)
     @hub = hub

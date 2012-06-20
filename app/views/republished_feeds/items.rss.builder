@@ -8,7 +8,7 @@ xml.rss(
     xml.title @republished_feed.title
     xml.description @republished_feed.description
     xml.link hub_republished_feed_url(@hub,@republished_feed)
-    xml.generator RSS_GENERATOR
+    xml.generator Tagteam::Application.config.rss_generator
 
     @republished_feed.item_search.results.each do |item|
       xml.item do

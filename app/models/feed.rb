@@ -79,30 +79,30 @@ class Feed < ActiveRecord::Base
     rec.is_bookmarking_feed?
   }
 
-  # TagTeam uses a decaying update interval - the less a Feed changes, the longer we go between spidering up to the MAXIMUM_FEED_SPIDER_INTERVAL (1 day by default) setting in the tagteam.rb initializer. 
+  # TagTeam uses a decaying update interval - the less a Feed changes, the longer we go between spidering up to the maximum_feed_spider_interval (1 day by default) setting in the tagteam.rb initializer. 
   #
-  # Once a feed goes more than SPIDER_UPDATE_DECAY (2 hours by default) from its last change, we increment the next check by an additional SPIDER_DECAY_INTERVAL (1 hour by default).
+  # Once a feed goes more than spider_update_decay (2 hours by default) from its last change, we increment the next check by an additional spider_decay_interval (1 hour by default).
   #
-  # We will reset the decay timer when the Feed changes, and spider it again in the next MINIMUM_FEED_SPIDER_INTERVAL (15 minutes by default).
+  # We will reset the decay timer when the Feed changes, and spider it again in the next minimum_feed_spider_interval (15 minutes by default).
   #
-  # So - with the default values - if after around of spidering at MINIMUM_FEED_SPIDER_INTERVAL a feed hasn't changed in 2 hours, we'll check it again in three. If it hasn't changed in three, we'll check it in four - and so on up to a maximum of a day between checks. If the feed changes at any point, we'll start re-spidering it again at MINIMUM_FEED_SPIDER_INTERVAL, looking for changes and starting the decay cycle over again after 2 hours.
+  # So - with the default values - if after around of spidering at minimum_feed_spider_interval a feed hasn't changed in 2 hours, we'll check it again in three. If it hasn't changed in three, we'll check it in four - and so on up to a maximum of a day between checks. If the feed changes at any point, we'll start re-spidering it again at minimum_feed_spider_interval, looking for changes and starting the decay cycle over again after 2 hours.
   #
   # This lets us have a good balance ensuring slowly changing feeds get checked while rapidly changing feeds are spidered more quickly. It also helps to catch edits done after an item is published in a timely fashion, it's pretty common for a publisher to revise an item right after making it public.  
   def set_next_scheduled_retrieval
 
     feed_last_changed_at = self.items_changed_at 
     feed_changed_this_long_ago = Time.now - feed_last_changed_at
-    max_next_scheduled_retrieval_time = Time.now + MAXIMUM_FEED_SPIDER_INTERVAL 
+    max_next_scheduled_retrieval_time = Time.now + Tagteam::Application.config.maximum_feed_spider_interval 
 
-    if feed_changed_this_long_ago > SPIDER_UPDATE_DECAY
-      logger.warn('Feed looks old, pushing out next spidering event by SPIDER_DECAY_INTERVAL')
+    if feed_changed_this_long_ago > Tagteam::Application.config.spider_update_decay
+      logger.warn("Feed #{self.id} looks old, pushing out next spidering event by spider_decay_interval, which is #{Tagteam::Application.config.spider_decay_interval}")
       last_interval_was = self.next_scheduled_retrieval - self.updated_at 
-      next_spider_time = Time.now + last_interval_was + SPIDER_DECAY_INTERVAL
+      next_spider_time = Time.now + last_interval_was + Tagteam::Application.config.spider_decay_interval
       self.next_scheduled_retrieval = (next_spider_time > max_next_scheduled_retrieval_time) ? max_next_scheduled_retrieval_time : next_spider_time
     else
       #Changed in the last two hours.
-      logger.warn('Feed JUST changed.')
-      self.next_scheduled_retrieval = Time.now + MINIMUM_FEED_SPIDER_INTERVAL
+      logger.warn("Feed #{self.id} JUST changed.")
+      self.next_scheduled_retrieval = Time.now + Tagteam::Application.config.minimum_feed_spider_interval
     end
   end
 
@@ -119,7 +119,7 @@ class Feed < ActiveRecord::Base
     self.changelog = {}
     parsed_feed = fetch_and_parse_feed(self)
     if ! parsed_feed 
-      logger.warn('we could not update this feed: ' + self.inspect)
+      logger.warn("We could not update this Feed #{self.id} : " + self.inspect)
       FeedRetrieval.create(:feed_id => self.id, :success => false, :status_code => self.status_code) 
       self.set_next_scheduled_retrieval
       self.save
@@ -135,7 +135,6 @@ class Feed < ActiveRecord::Base
     fr.save
 
     if self.dirty == true
-      logger.warn('dirty Feed and/or feed items have changed.')
       self.items_changed_at = Time.now
     end
     self.set_next_scheduled_retrieval
@@ -185,6 +184,6 @@ class Feed < ActiveRecord::Base
     if self.items_changed_at.nil?
       self.items_changed_at = Time.now 
     end
-    self.next_scheduled_retrieval = Time.now + MINIMUM_FEED_SPIDER_INTERVAL
+    self.next_scheduled_retrieval = Time.now + Tagteam::Application.config.minimum_feed_spider_interval
   end
 end

@@ -8,7 +8,7 @@ xml.rss(
     xml.title @hub.title
     xml.description @hub.description
     xml.link hub_url(@hub)
-    xml.generator RSS_GENERATOR
+    xml.generator Tagteam::Application.config.rss_generator
 
     @search.results.each do |item|
       xml.item do

@@ -1,5 +1,5 @@
 class FeedItemsController < ApplicationController
-  caches_action :controls, :content, :related, :index, :show, :unless => Proc.new{|c| current_user }, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :controls, :content, :related, :index, :show, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
     request.fullpath + "&per_page=" + get_per_page
   }
 

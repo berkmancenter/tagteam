@@ -20,6 +20,7 @@ gem 'resque-pool'
 gem 'acts_as_api'
 gem 'nokogiri'
 gem 'sanitize'
+gem 'exception_notification'
 
 group :development, :test do
   gem 'rspec-rails'

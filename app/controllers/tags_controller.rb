@@ -5,7 +5,7 @@ class TagsController < ApplicationController
   before_filter :load_feed_items_for_rss, :only => [:rss, :atom, :json, :xml]
   before_filter :add_breadcrumbs
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => DEFAULT_ACTION_CACHE_TIME, :cache_path => Proc.new{ 
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :unless => Proc.new{|c| current_user && current_user.is?(:owner, @hub)}, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
     if request.fullpath.match(/tag\/rss/)
       params[:format] = :rss
     elsif request.fullpath.match(/tag\/atom/)

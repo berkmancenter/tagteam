@@ -1,7 +1,7 @@
 atom_feed(:root_url => hub_url(@hub), :language => 'en-US') do |atom|
   atom.title @hub.title
   atom.updated (@search.results.blank?) ? Time.now : @search.results.first.updated_at
-  atom.generator RSS_GENERATOR
+  atom.generator Tagteam::Application.config.rss_generator
 
   @search.results.each do |item|
     atom.entry( item , :url => item.url ) do |entry|

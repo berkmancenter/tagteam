@@ -46,5 +46,19 @@ module Tagteam
    # config.assets.version = '1.0'
 
    config.active_record.whitelist_attributes = true
+
+   tagteam_config = YAML.load_file("#{Rails.root}/config/tagteam.yml")
+   tagteam_config.keys.collect{|k| 
+     Tagteam::Application.config.send("#{k}=", tagteam_config[k])
+   }
+
+   Resque.redis.namespace = config.redis_namespace
+
+   config.middleware.use ExceptionNotifier,
+     :email_prefix => "[tagteam-errors] ",
+     :sender_address => config.default_sender,
+     :exception_recipients => config.exceptions_mailed_to,
+     :ignore_exceptions => [Acl9::AccessDenied, ActionController::RoutingError]
+
   end
 end

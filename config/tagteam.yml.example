@@ -1,0 +1,109 @@
+###############################
+# Fix for your deployment
+
+hostname: tagteam.example.com
+default_sender: no_reply@example.com
+exceptions_mailed_to: exceptions@example.com
+
+###############################
+# Spidering and schedule options
+robot_user_agent: 'TagTeam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub'
+rss_generator: TagTeam social RSS aggregrator
+
+# If a feed has changed, schedule it to be spidered again within this interval. Seconds.
+minimum_feed_spider_interval: 180
+
+# If a feed has not changed within this interval, back off for spider_decay_interval. This is set to 6 hours to 
+# ensure we don't entirely forget that a feed is busy over night. Seconds.
+spider_update_decay: 3600
+
+# After spider_update_decay has been reached, extend the next spidering event out by this interval.
+
+spider_decay_interval: 3600
+maximum_feed_spider_interval: 86400
+
+#############################
+# HTML Sanity / filtering settings
+html_tags_to_allow:
+- ul
+- li
+- ol
+- p
+- b
+- em
+- strong
+- div
+- span
+- blockquote
+- img
+- a
+- dd
+- dt
+- dl
+- table
+- tr
+- td
+- th
+- tbody
+- thead
+- tfoot
+- i
+- code 
+- strike
+- abbr
+- address
+- h1
+- h2
+- h3
+- h4
+- h5
+- q
+- s
+- tt
+- sub
+- sup
+- pre
+- hr
+
+attributes_to_allow:
+  a:
+  - href
+  - title
+  img:
+  - src
+  - alt
+  - title
+  - width
+  - height
+  - align
+  table:
+  - cellpadding
+  - cellspacing
+  - border
+  - width
+  th:
+  - width
+  tr:
+  - width
+
+allowed_protocols:
+  a:
+    href:
+    - http
+    - https
+    - mailto
+
+###################
+# UI settings
+default_tagteam_per_page: 25
+default_action_cache_time: 1800
+social_links: 
+- twitter
+- facebook
+- google_plus
+
+#################
+# Random
+
+redis_namespace: 'resque:TagTeam'
+

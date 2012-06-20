@@ -48,7 +48,7 @@ module ApplicationHelper
   def insert_social_links(url, options = {})
     options.merge!({:rel => 'nofollow', :target => '_blank', :class => 'share_icon twitter'})
     output = []
-    SOCIAL_LINKS.split(',').each do|social_network|
+    Tagteam::Application.config.social_links.each do|social_network|
       output << send("#{social_network}_share_link", url, options)
     end
     output.join('<br/>')
