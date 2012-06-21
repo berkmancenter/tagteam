@@ -44,8 +44,13 @@ class HubFeed < ActiveRecord::Base
     Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
-  # After a HubFeed has been removed
   after_destroy do
+    # Clean up any input_sources that might've been using the feed this points to.
+    InputSource.joins(:republished_feed).where('republished_feeds.hub_id' => self.hub_id).where(:item_source_type => 'Feed', :item_source_id => self.feed_id).destroy_all
+
+    # Clean up feed_item input sources 
+    InputSource.joins(:republished_feed).where('republished_feeds.hub_id' => self.hub_id).where(:item_source_type => 'FeedItem', :item_source_id => self.feed.feed_items.collect{|f| f.id}).destroy_all
+
     self.feed.solr_index
     feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
     tagging_key = self.hub.tagging_key.to_s
