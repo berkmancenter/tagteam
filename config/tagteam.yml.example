@@ -7,7 +7,7 @@ exceptions_mailed_to: exceptions@example.com
 
 ###############################
 # Spidering and schedule options
-robot_user_agent: 'TagTeam social RSS aggregrator 0.1: http://github.com/berkmancenter/taghub'
+robot_user_agent: 'TagTeam social RSS aggregrator 0.1: http://github.com/berkmancenter/tagteam'
 rss_generator: TagTeam social RSS aggregrator
 
 # If a feed has changed, schedule it to be spidered again within this interval. Seconds.

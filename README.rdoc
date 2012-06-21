@@ -37,7 +37,7 @@ TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis
 * Install ruby 1.9.3, rvm is probably your best choice.
 * Install all requirements. Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
 * If you're using rvm, create a gemset to hold this application's gem environment
-* git clone https://github.com:berkmancenter/taghub.git tagteam && cd tagteam && bundle
+* git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle
 * Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough. 
 * Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption. 
 * Copy config/tagteam.yml.example to config/tagteam.yml and edit it to reflect your deployment.
@@ -88,7 +88,7 @@ More info can be found in the rdoc-generated API docs (check out this repo and r
 == Links
 
 * http://cyber.law.harvard.edu
-* https://github.com/berkmancenter/taghub
+* https://github.com/berkmancenter/tagteam
 
 == Contributors
 

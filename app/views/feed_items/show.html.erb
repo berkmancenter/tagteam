@@ -3,10 +3,10 @@
 <div class="feed_item tabs" id="feed_item_<%= @feed_item.id %>">
 
   <ul>
-    <li><a href="#about">About</a> <span id="spinner"></span></li>
     <% unless @feed_item.content.blank? %>
       <li><%= link_to('Full Content',content_hub_feed_feed_item_path(@hub_feed,@feed_item)) %></li>
     <% end %>
+    <li><a href="#about">About</a> <span id="spinner"></span></li>
     <li><%= link_to('Filters', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item) )%></li>
     <li><%= link_to('Related Items', related_hub_feed_feed_item_path(@hub_feed,@feed_item) )%></li>
   </ul>
