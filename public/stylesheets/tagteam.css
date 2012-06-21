@@ -37,6 +37,14 @@ li{
   margin-left: 1.5em;
 }
 
+dt{
+  font-weight: bold;
+  margin-top: .5em;
+}
+
+dd{
+  margin-left: 1em;
+}
 ul.tag_filter_controls li{
   list-style:none;
   margin-left: 0px;

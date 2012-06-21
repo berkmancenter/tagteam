@@ -1,6 +1,6 @@
 class FeedRetrievalsController < ApplicationController
   caches_action :index, :show, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    request.fullpath + "&per_page=" + get_per_page
+    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
   }
 
   # A list of FeedRetrieval objects for the Feed referenced by a HubFeed. Returns html, json, or xml.

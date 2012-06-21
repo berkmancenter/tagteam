@@ -2,7 +2,7 @@
 #
 class DocumentationsController < ApplicationController
   caches_action :index, :show, :unless => Proc.new{|c| current_user && current_user.is?([:superadmin,:documentation_admin])}, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    request.fullpath + "&per_page=" + get_per_page
+    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
   }
 
   access_control do

@@ -2,7 +2,7 @@
 class HubFeedsController < ApplicationController
 
   caches_action :controls, :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    request.fullpath + "&per_page=" + get_per_page
+    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
   }
 
   access_control do

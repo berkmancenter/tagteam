@@ -1,7 +1,7 @@
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
   caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    request.fullpath + "&per_page=" + get_per_page
+    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
   }
 
   access_control do

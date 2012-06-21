@@ -77,12 +77,12 @@
             <%= link_to('background jobs', '#', :id => 'background_jobs') %>
           <% end  %>
 
-          <%= link_to('meta', meta_hubs_path, :class => 'dialog-show') %>
+          <%= link_to('about', meta_hubs_path, :class => 'dialog-show') %>&nbsp;&nbsp;
 
           <% if current_user && current_user.is?(:superadmin) %>
-            <%= link_to('Manage users', users_path) %>
+            |&nbsp;&nbsp;<%= link_to('Manage users', users_path) %>&nbsp;&nbsp;
           <% end %>
-          &copy; 2011 President and Fellows of Harvard College
+          &copy; 2011 - <%= Time.now.year %> President and Fellows of Harvard College
         </footer>
         <div class="clear"></div>
       </div><!-- wrapper -->

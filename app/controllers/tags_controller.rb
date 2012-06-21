@@ -15,7 +15,7 @@ class TagsController < ApplicationController
     elsif request.fullpath.match(/tag\/xml/)
       params[:format] = :xml
     end
-    request.fullpath + "&per_page=" + get_per_page
+    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
   }
 
   access_control do
