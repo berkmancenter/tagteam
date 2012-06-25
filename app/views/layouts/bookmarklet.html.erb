@@ -21,7 +21,7 @@
               Welcome, <%= current_user.username %>
               <%= link_to('log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
             <% else %>
-              <%= link_to('log in', new_user_session_path) %>
+              <%= link_to('log in', new_user_session_url(:protocol => protocol_resolver)) %>
             <% end %>
           </section>
         </nav>
