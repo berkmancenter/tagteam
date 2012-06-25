@@ -1,6 +1,6 @@
 Tagteam::Application.routes.draw do
 
-  resources :users, :constraints => { :protocol => ((Tagteam::Application.config.ssl_for_user_accounts) ? 'https' : 'http')} do 
+  resources :users, :constraints => { :protocol => ((Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts) ? {:protocol => 'https'} : {}) } do
     collection do
       get 'autocomplete'
     end
@@ -130,8 +130,8 @@ Tagteam::Application.routes.draw do
 
   end
 
-  devise_for :users, :path => 'accounts'
-#  devise_for :users, :path => 'accounts', :constraints => { :protocol => ((Tagteam::Application.config.ssl_for_user_accounts) ? 'https' : 'http')}
+  #devise_for :users, :path => 'accounts'
+  devise_for :users, :path => 'accounts', :constraints => { :protocol => ((Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts) ? {:protocol => 'https'} : {}) }
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
