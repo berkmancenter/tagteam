@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  def protocol_resolver
+    if Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts == true
+      'https'
+    else
+      'http'
+    end
+  end
+
   def documentation(match_key, title = match_key, label_type = 'help')
     doc_object = Documentation.find_or_initialize_by_match_key(match_key)
     if doc_object.new_record?

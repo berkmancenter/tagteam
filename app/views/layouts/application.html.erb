@@ -37,7 +37,7 @@
           <section class="user_meta">
             <% unless current_user.blank? %>
               Welcome, <%= current_user.username %>
-              <%= link_to('log out', destroy_user_session_path, :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
+              <%= link_to('log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
             <% else %>
               <%= link_to('log in', new_user_session_path) %>
             <% end %>
@@ -80,7 +80,7 @@
           <%= link_to('about', meta_hubs_path, :class => 'dialog-show') %>&nbsp;&nbsp;
 
           <% if current_user && current_user.is?(:superadmin) %>
-            |&nbsp;&nbsp;<%= link_to('Manage users', users_path) %>&nbsp;&nbsp;
+            |&nbsp;&nbsp;<%= link_to('Manage users', users_url(:protocol => protocol_resolver)) %>&nbsp;&nbsp;
           <% end %>
           &copy; 2011 - <%= Time.now.year %> President and Fellows of Harvard College
         </footer>

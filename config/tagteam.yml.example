@@ -4,6 +4,7 @@
 hostname: tagteam.example.com
 default_sender: no_reply@example.com
 exceptions_mailed_to: exceptions@example.com
+ssl_for_user_accounts: true
 
 ###############################
 # Spidering and schedule options

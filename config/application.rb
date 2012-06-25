@@ -11,6 +11,20 @@ end
 
 module Tagteam
   class Application < Rails::Application
+
+    tagteam_config = YAML.load_file("#{Rails.root}/config/tagteam.yml")
+    tagteam_config.keys.collect{|k| 
+      Tagteam::Application.config.send("#{k}=", tagteam_config[k])
+    }
+
+    Resque.redis.namespace = config.redis_namespace
+
+    config.middleware.use ExceptionNotifier,
+      :email_prefix => "[tagteam-errors] ",
+      :sender_address => config.default_sender,
+      :exception_recipients => config.exceptions_mailed_to,
+      :ignore_exceptions => [Acl9::AccessDenied, ActionController::RoutingError]
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -40,25 +54,12 @@ module Tagteam
     config.filter_parameters += [:password, :password_confirmation, 'SHARED_KEY_FOR_TASKS']
 
     # Enable the asset pipeline
-   config.assets.enabled = false
+    config.assets.enabled = false
 
     # Version of your assets, change this if you want to expire all your assets
-   # config.assets.version = '1.0'
+    # config.assets.version = '1.0'
 
-   config.active_record.whitelist_attributes = true
-
-   tagteam_config = YAML.load_file("#{Rails.root}/config/tagteam.yml")
-   tagteam_config.keys.collect{|k| 
-     Tagteam::Application.config.send("#{k}=", tagteam_config[k])
-   }
-
-   Resque.redis.namespace = config.redis_namespace
-
-   config.middleware.use ExceptionNotifier,
-     :email_prefix => "[tagteam-errors] ",
-     :sender_address => config.default_sender,
-     :exception_recipients => config.exceptions_mailed_to,
-     :ignore_exceptions => [Acl9::AccessDenied, ActionController::RoutingError]
+    config.active_record.whitelist_attributes = true
 
   end
 end
