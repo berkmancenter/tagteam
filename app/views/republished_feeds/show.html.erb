@@ -1,6 +1,6 @@
 <h1><% if current_user && current_user.is?(:owner,@republished_feed) %>
-    <%= link_to('delete', hub_republished_feed_path(@republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
-    <%= link_to('edit', edit_hub_republished_feed_path(@republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+    <%= link_to('delete', hub_republished_feed_path(@hub, @republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+    <%= link_to('edit', edit_hub_republished_feed_path(@hub,@republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
   <% end %>
   Remixed Feed: <%= @republished_feed %> <sup><%= link_to('rss', items_hub_republished_feed_path(@hub,@republished_feed, :format => :rss)) %> <%= link_to('atom', items_hub_republished_feed_path(@hub,@republished_feed, :format => :atom)) %> <%= link_to('jsonp', items_hub_republished_feed_path(@hub,@republished_feed, :format => :json, :callback => 'callback')) %></sup>
 </h1>

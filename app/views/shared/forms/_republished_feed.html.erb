@@ -2,6 +2,7 @@
   <%= f.inputs do %>
     <%= f.input :hub_id, :as => :hidden %>
     <%= f.input :title %>
+    <%= f.input :url_key, :hint => 'This is the unique identifier that\'s used to create the URL for this remix. It should be lowercase and contain letters, digits, and the hyphen only.' %>
     <%= f.input :description, :as => :text %>
     <%= f.input :limit, :hint => 'How many items to show in this feed?'  %>
   <% end %>

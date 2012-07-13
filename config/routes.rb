@@ -53,6 +53,9 @@ Tagteam::Application.routes.draw do
     resources :hub_feed_tag_filters
   end
 
+  match 'remix/:url_key' => 'republished_feeds#show', :as => 'remix'
+  match 'remix/:url_key/items' => 'republished_feeds#items', :as => 'remix_items'
+
   resources :hubs do
 
     match 'tag/rss/:name' => 'tags#rss', :as => 'tag_rss', :constraints => { :name => /.+/ }

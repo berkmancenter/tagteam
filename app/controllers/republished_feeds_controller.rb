@@ -32,8 +32,9 @@ class RepublishedFeedsController < ApplicationController
 
   # An individual RepublishedFeed. Returns html, json, and xml.
   def show
-    @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, :format => :rss)
-    @hub = @republished_feed.hub
+    logger.warn @republished_feed.inspect
+    logger.warn @hub.inspect
+    @show_auto_discovery_params = remix_items_url(@republished_feed.url_key, :format => :rss)
 #    @republished_feed.items
     respond_to do |format|
       format.html{ render :layout => ! request.xhr? }
@@ -125,7 +126,11 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def load_republished_feed
-    @republished_feed = RepublishedFeed.find(params[:id])
+    if params[:url_key].blank? 
+      @republished_feed = RepublishedFeed.find(params[:id])
+    else
+      @republished_feed = RepublishedFeed.find_by_url_key(params[:url_key])
+    end
     @hub = @republished_feed.hub
   end
 

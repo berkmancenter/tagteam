@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120518173803) do
+ActiveRecord::Schema.define(:version => 20120713184742) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -217,10 +217,12 @@ ActiveRecord::Schema.define(:version => 20120518173803) do
     t.integer  "limit",                       :default => 50
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
+    t.string   "url_key",     :limit => 50,                   :null => false
   end
 
   add_index "republished_feeds", ["hub_id"], :name => "index_republished_feeds_on_hub_id"
   add_index "republished_feeds", ["title"], :name => "index_republished_feeds_on_title"
+  add_index "republished_feeds", ["url_key"], :name => "index_republished_feeds_on_url_key", :unique => true
 
   create_table "roles", :force => true do |t|
     t.string   "name",              :limit => 40
