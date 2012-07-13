@@ -1,6 +1,6 @@
 atom_feed(:root_url => hub_hub_feed_url(@hub,@hub_feed), :language => 'en-US') do |atom|
   atom.title @hub_feed.display_title
-  atom.updated @feed_items.first.updated_at
+  atom.updated (@feed_items.blank?) ? Time.now : @feed_items.first.updated_at
   atom.generator Tagteam::Application.config.rss_generator
 
   @feed_items.each do |item|

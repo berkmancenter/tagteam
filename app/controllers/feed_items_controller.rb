@@ -18,7 +18,7 @@ class FeedItemsController < ApplicationController
   def content
     load_hub_feed
     load_feed_item
-    breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
       format.json{ render_for_api :with_content, :json => @feed_item}
@@ -69,7 +69,7 @@ class FeedItemsController < ApplicationController
     add_breadcrumbs
     respond_to do |format|
       format.html{
-        breadcrumbs.add @feed_item.title, hub_feed_feed_item_path(@hub_feed,@feed_item)
+        breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
         render :layout => ! request.xhr?
       }
       format.json{ render_for_api :with_content, :json => @feed_item }

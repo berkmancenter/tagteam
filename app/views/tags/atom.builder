@@ -1,6 +1,6 @@
 atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US') do |atom|
   atom.title "Items tagged with #{@tag.name} in #{@hub.title}"
-  atom.updated @feed_items.first.updated_at
+  atom.updated (@feed_items.blank?) ? Time.now : @feed_items.first.updated_at
   atom.generator Tagteam::Application.config.rss_generator
 
   @feed_items.each do |item|

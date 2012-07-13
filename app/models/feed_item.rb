@@ -174,7 +174,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   def to_s
-    "#{title}"
+    "#{(title.blank?) ? 'untitled' : title}"
   end
 
   alias :display_title :to_s
