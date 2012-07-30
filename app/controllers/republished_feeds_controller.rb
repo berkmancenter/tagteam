@@ -83,10 +83,10 @@ class RepublishedFeedsController < ApplicationController
       if @republished_feed.save
         current_user.has_role!(:owner, @republished_feed)
         current_user.has_role!(:creator, @republished_feed)
-        flash[:notice] = 'Created a new republished feed. You should switch to the "inputs" tab and add items for publishing.'
+        flash[:notice] = 'Created a new remix. You should switch to the "inputs" tab and add items for publishing.'
         format.html{redirect_to :action => :show, :id => @republished_feed.id}
       else
-        flash[:error] = 'Could not add that republished feed'
+        flash[:error] = 'Could not add that remix.'
         format.html {render :action => :new}
       end
     end
@@ -97,10 +97,10 @@ class RepublishedFeedsController < ApplicationController
     respond_to do|format|
       if @republished_feed.save
         current_user.has_role!(:editor, @republished_feed)
-        flash[:notice] = 'Edited that republished feed'
+        flash[:notice] = 'Edited that remix.'
         format.html{redirect_to :action => :show, :id => @republished_feed.id}
       else
-        flash[:error] = 'Could not edit that republished feed'
+        flash[:error] = 'Could not edit that remix.'
         format.html {render :action => :update}
       end
     end
@@ -111,10 +111,10 @@ class RepublishedFeedsController < ApplicationController
 
   def destroy
     @republished_feed.destroy
-    flash[:notice] = 'Removed that feed.'
+    flash[:notice] = 'Removed that remix.'
     redirect_to(hub_path(@hub))
   rescue
-    flash[:error] = "Couldn't remove that feed."
+    flash[:error] = "Couldn't remove that remix."
     redirect_to(hub_path(@hub))
   end
 
