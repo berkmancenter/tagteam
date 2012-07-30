@@ -19,7 +19,7 @@ class RepublishedFeed < ActiveRecord::Base
     c.allow_jsonp_callback = true
   end
 
-  attr_accessible :title, :hub_id, :description, :limit
+  attr_accessible :title, :hub_id, :description, :limit, :url_key
 
   SORTS = ['date_published', 'title']
   SORTS_FOR_SELECT = [['Date Published','date_published' ],['Title', 'title']]

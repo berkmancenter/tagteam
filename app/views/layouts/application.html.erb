@@ -77,7 +77,7 @@
             <%= link_to('background jobs', '#', :id => 'background_jobs') %>
           <% end  %>
 
-          <%= link_to('about', meta_hubs_path, :class => 'dialog-show') %>&nbsp;&nbsp;
+          <%= link_to('about', meta_hubs_path, :class => 'dialog-show', :id => 'meta_about') %>&nbsp;&nbsp;
 
           <% if current_user && current_user.is?(:superadmin) %>
             |&nbsp;&nbsp;<%= link_to('Manage users', users_url(:protocol => protocol_resolver)) %>&nbsp;&nbsp;

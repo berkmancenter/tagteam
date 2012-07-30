@@ -563,7 +563,11 @@ footer{
   color: #666; 
 }
 
+#background_jobs, #meta_about{
+  color: #aaa; 
+
+}
+
 #background_jobs{
   float: left;
-  color: #aaa; 
 }
