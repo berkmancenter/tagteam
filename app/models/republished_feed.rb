@@ -27,6 +27,7 @@ class RepublishedFeed < ActiveRecord::Base
   belongs_to :hub
   has_many :input_sources, :dependent => :destroy, :order => 'created_at desc' 
 
+  validates_uniqueness_of :url_key
   validates_format_of :url_key, :with => /^[a-z\d\-]+/
 
   api_accessible :default do |t|
