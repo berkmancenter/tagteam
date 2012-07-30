@@ -37,7 +37,7 @@ class ImportFeedItems
       end
     end
     feed.save
-    Resque.enqueue(HubFeedFeedItemTagRenderer, @hub_feed.id)
+    Resque.enqueue(HubFeedFeedItemTagRenderer, hub_feed.id)
   end
 
 end
