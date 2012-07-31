@@ -17,7 +17,7 @@
     <li><%= link_to('Tags', hub_feed_tags_path(@hub_feed)) %></li>
     <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
     <li><%= link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
-    <% if ! @hub_feed.blank? && ! current_user.blank? && current_user.is?(:owner, @hub_feed.feed) && @hub_feed.feed.is_bookmarking_feed? %>
+    <% if ! @hub_feed.blank? && ! current_user.blank? && (current_user.is?(:owner, @hub_feed.feed) || current_user.is?(:owner, @hub) ) && @hub_feed.feed.is_bookmarking_feed? %>
       <li><a href="#import">Import Items</a></li>
     <% end %>
   </ul>
@@ -51,7 +51,7 @@
       </dl>
     <% end %>
   </div>
-  <% if ! @hub_feed.blank? && ! current_user.blank? && current_user.is?(:owner, @hub_feed.feed) && @hub_feed.feed.is_bookmarking_feed? %>
+  <% if ! @hub_feed.blank? && ! current_user.blank? && (current_user.is?(:owner, @hub_feed.feed) || current_user.is?(:owner, @hub) ) && @hub_feed.feed.is_bookmarking_feed? %>
     <div id="import">
       <%= documentation('hub-feed-import-tab') %>
       <h2>Import items from a file</h2>
