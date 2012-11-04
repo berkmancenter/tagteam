@@ -532,6 +532,11 @@ $(document).ready(function(){
       }
     }
   });
+  
+  // bound dynamically b/c the jquery ui tabs() function creates elements
+  $('.hub_tabs .ui-tabs-nav').addClass('grid_3');
+  $('.hub_tabs .ui-tabs-panel').addClass('grid_13');
+  $('.hub_tabs').append('<div class="clear"></div>');
 
   $.bindHoverRows();
 
@@ -579,6 +584,11 @@ $(document).ready(function(){
       }
     }
   });
+
+  // bound dynamically b/c the jquery ui tabs() function creates elements
+  $('.tabs .ui-tabs-nav').addClass('grid_3');
+  $('.tabs .ui-tabs-panel').addClass('grid_13');
+  $('.tabs').append('<div class="clear"></div>');
 
   if($('#logged_in').length > 0){
 
