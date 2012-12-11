@@ -14,35 +14,33 @@
     <% end %>
   </head>
   <body>
-    <div class="container_16" id="outer_wrapper">
-      <div id="wrapper">
-        <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
-        <header class="<%= (@hub.blank? || @hub.new_record?) ? 'grid_16' : 'grid_12' %>">
-          <h1><a href="/">TagTeam</a></h1>
-        </header>
-        <% if ! @hub.blank? && ! @hub.new_record? %>
-          <div class="grid_4">
-            <div class="hub_search">
-              Search this hub:
-              <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-                <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 15, :placeholder => 'Keyword Search. . .' %>
-                <%= submit_tag('go', :class => 'button') %>
+    <div id="outer_wrapper">
+      <header>
+        <div class="container_16">
+          <h1 class="grid_4"><a href="/">TagTeam</a></h1>
+          <nav class="user_meta grid_12">
+            <div>
+              <% unless current_user.blank? %>
+               Welcome, <%= current_user.username %> 
+                (<%= link_to('log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>)
+              <% else %>
+                <%= link_to('log in', new_user_session_url(:protocol => protocol_resolver)) %>
               <% end %>
             </div>
+          </nav>
+          <div class="clear"></div>
+        </div>
+      </header>
+      <section class='breadcrumbs_holder'>
+        <div class="breadcrumbs container_16">
+          <div class="grid_16">
+            <%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %>
           </div>
-        <% end %>
-        <div class="clear"></div>
-
-        <nav class="grid_16">
-          <section class="user_meta">
-            <% unless current_user.blank? %>
-              Welcome, <%= current_user.username %>
-              <%= link_to('log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
-            <% else %>
-              <%= link_to('log in', new_user_session_url(:protocol => protocol_resolver)) %>
-            <% end %>
-          </section>
-        </nav>
+          <div class='clear'></div>
+        </div>
+      </section>
+      <div id="wrapper" class='container_16'>
+        <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
         <div class="clear"></div>
 
         <% unless flash.blank? %>
@@ -67,26 +65,26 @@
         <% end %>
 
         <section class="grid_16" id="content">
-          <div class="breadcrumbs"><%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %></div>
           <%= yield %>
         </section>
         <div class="clear"></div>
-
-        <footer class="grid_16">
-          <% unless current_user.blank? %>
-            <%= link_to('background jobs', '#', :id => 'background_jobs') %>
-          <% end  %>
-
-          <%= link_to('about', meta_hubs_path, :class => 'dialog-show', :id => 'meta_about') %>&nbsp;&nbsp;
-
-          <% if current_user && current_user.is?(:superadmin) %>
-            |&nbsp;&nbsp;<%= link_to('Manage users', users_url(:protocol => protocol_resolver)) %>&nbsp;&nbsp;
-          <% end %>
-          &copy; 2011 - <%= Time.now.year %> President and Fellows of Harvard College
-        </footer>
-        <div class="clear"></div>
       </div><!-- wrapper -->
-    </div><!-- container_16 -->
+      <div class="clear"></div>
+    </div><!-- outer wrapper -->
+    <footer class="container_16">
+      <div class="grid_16">
+        <% unless current_user.blank? %>
+          <%= link_to('background jobs', '#', :id => 'background_jobs') %>
+        <% end  %>
 
+        <%= link_to('about', meta_hubs_path, :class => 'dialog-show', :id => 'meta_about') %>&nbsp;&nbsp;
+
+        <% if current_user && current_user.is?(:superadmin) %>
+          |&nbsp;&nbsp;<%= link_to('Manage users', users_url(:protocol => protocol_resolver)) %>&nbsp;&nbsp;
+        <% end %>
+        &copy; 2011 - <%= Time.now.year %> President and Fellows of Harvard College
+      </div>
+      <div class="clear"></div>
+    </footer>
   </body>
 </html>
