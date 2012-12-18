@@ -1,7 +1,14 @@
 <% unless request.xhr? %>
-  <h1>Tagged with "<%= @tag %>" - <%= @feed_items.total_entries %> total <sup><%= link_to('rss', hub_tag_rss_path(@hub,u(@tag.name))) %> <%= link_to('atom', hub_tag_atom_path(@hub,u(@tag.name))) %>
-      <%= link_to('json', hub_tag_json_path(@hub,u(@tag.name), :callback => 'callback')) %>
-  </sup></h1>
+  <h1>Tagged with "<%= @tag %>" - <%= @feed_items.total_entries %> total
+    <div class="export_menu">
+      <h4>Export</h4>
+      <div>
+        <%= link_to('rss', hub_tag_rss_path(@hub,u(@tag.name))) %>
+        <%= link_to('atom', hub_tag_atom_path(@hub,u(@tag.name))) %>
+        <%= link_to('json', hub_tag_json_path(@hub,u(@tag.name), :callback => 'callback')) %>
+      </div>
+    </div>
+  </h1>
 
 <div class="tabs" id="tags_tabs">
   <ul>

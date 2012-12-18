@@ -9,6 +9,6 @@
     <% end %>
   </td>
   <td width="40%">
-    <%= link_to(raw('<span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more'), more_details_hub_hub_feed_path(@hub,hub_feed), :class => "hub_feed_more_control", :data_hub_feed_id => hub_feed.id) %>
+    <%= link_to(raw('<span class="hub_more_link">More</span>'), more_details_hub_hub_feed_path(@hub,hub_feed), :class => "hub_feed_more_control", :data_hub_feed_id => hub_feed.id) %>
   </td>
 </tr>

@@ -6,26 +6,24 @@ if hub.blank?
 end
 hub_feed = (@hub_feed.blank?) ? feed_item.hub_feed_for_hub(hub.id) : @hub_feed 
 %>
-<tr class="feed_item hover_row" id="feed_item_<%= feed_item.id %>">
-  <td class="date">
-    <%= link_to('controls', controls_hub_feed_feed_item_path(hub_feed,feed_item), :class => 'ui-silk ui-silk-add inline hover gray control') %>
-
+<tr class="feed_item" id="feed_item_<%= feed_item.id %>">
+  <td>
     <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}", :expires => 120.minutes ) do %>
-      <% unless feed_item.date_published.blank? %>
-        <%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_path(hub, :year => feed_item.date_published.year, :month => feed_item.date_published.month, :day => feed_item.date_published.day) ) %>
-      <% end %>
-    </td>
-    <td width="80%" class="title">
-      <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item)) %> <span class="hub_feed_title">from <%= link_to(hub_feed.display_title, hub_hub_feed_path(hub,hub_feed)) %></span>
-    </td>
-  </tr>
-
-  <tr class="feed_item_tags">
-    <td></td>
-    <td>
-      <% unless feed_item.tags_on(hub.tagging_key).empty? %>
-        <%= raw feed_item.tags_on(hub.tagging_key).collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ') %>
-      <% end %>
+      <div class='feed_item_title'>
+        <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item)) %>
+        <%= link_to('controls', controls_hub_feed_feed_item_path(hub_feed,feed_item), :class => 'ui-silk ui-silk-add inline hover gray control') %>
+      </div>
+      <div class='feed_item_feed'>
+        <span class="hub_feed_title"><%= link_to(hub_feed.display_title, hub_hub_feed_path(hub,hub_feed)) %></span>
+        <% unless feed_item.date_published.blank? %>
+          (<%= link_to(l(feed_item.date_published, :format => :date_and_time_short),by_date_hub_path(hub, :year => feed_item.date_published.year, :month => feed_item.date_published.month, :day => feed_item.date_published.day) ) %>)
+        <% end %>
+      </div>
+      <div class='feed_item_tags'>
+        <% unless feed_item.tags_on(hub.tagging_key).empty? %>
+          <%= raw feed_item.tags_on(hub.tagging_key).collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ') %>
+        <% end %>
+      </div>
     </td>
   </tr>
 <% end %>
