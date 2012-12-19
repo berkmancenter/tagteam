@@ -35,6 +35,10 @@ class HubTagFiltersController < ApplicationController
     @hub_tag_filter.hub_id = @hub.id
 
     if filter_type_model == ModifyTagFilter
+      if (params[:new_tag].casecmp params[:modify_tag]) == 0
+          @hub_tag_filter.errors.add(:new_tag, 'cannot be the same as the old tag')
+          raise
+      end
       if params[:tag_id].blank?
         modify_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:modify_tag].downcase)
         params[:tag_id] = modify_tag.id
@@ -63,6 +67,8 @@ class HubTagFiltersController < ApplicationController
       end
     end
   rescue Exception => e
+    @hub_tag_filter.errors.full_messages << e.message
+    puts @hub_tag_filter.errors.inspect
     respond_to do|format|
       format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
     end
