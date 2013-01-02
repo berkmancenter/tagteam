@@ -102,6 +102,10 @@ class TagsController < ApplicationController
     else
       @tag = ActsAsTaggableOn::Tag.find(params[:id])
     end
+    if ! @tag
+      flash[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
+      render 'hubs/show', :layout => ! request.xhr?, :status => 404
+    end
   end
 
   def load_feed_items_for_rss
