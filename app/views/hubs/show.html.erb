@@ -31,8 +31,8 @@
     <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
     <li class="hub_search">
       <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 15, :placeholder => 'Keyword Search. . .' %>
-        <%= submit_tag('go', :class => 'button keyword_search_submit') %>
+        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 15, :placeholder => 'Keyword Search...' %>
+        <%= submit_tag('Go', :class => 'button keyword_search_submit') %>
       <% end %>
     </li>
   </ul>

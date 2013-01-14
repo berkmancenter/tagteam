@@ -28,7 +28,7 @@
           <span class="role"><%= check_box_tag('roles[]', r[0], false, {:id => "role_#{r[0]}"}) %> <strong><%= label_tag("role_#{r[0]}", r[1]) %></strong></span> - <%= Hub::DELEGATABLE_ROLES_HASH[r[0]][:description] %><br/>
         <% end %>
         <h3>Users</h3>
-        <span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's username or email address. . . " %>
+        <span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's username or email address... " %>
         </li>
         <li id="user_id_container">
         </li>

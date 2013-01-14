@@ -483,7 +483,7 @@ $(document).ready(function(){
   jQuery.bt.options.ajaxCache = false;
   jQuery.bt.options.fill = '#dddddd';
   jQuery.bt.options.strokeWidth = 2;
-  jQuery.bt.options.strokeStyle = '#333';
+  jQuery.bt.options.strokeStyle = '#999';
   jQuery.bt.options.textzIndex = 999;
   jQuery.bt.options.boxzIndex = 998;
   jQuery.bt.options.wrapperzIndex = 997;
