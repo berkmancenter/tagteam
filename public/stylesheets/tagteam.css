@@ -244,7 +244,7 @@ table.feed_items{
   font-size: 12px;
 }
 
-.feed_item_title .ui-silk-add.inline {
+.feed_item_title .ui-silk-cog.inline {
   margin-bottom: 7px;
 }
 

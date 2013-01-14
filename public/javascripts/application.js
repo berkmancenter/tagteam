@@ -538,6 +538,11 @@ $(document).ready(function(){
   $('.hub_tabs .ui-tabs-panel').addClass('grid_13');
   $('.hub_tabs').append('<div class="clear"></div>');
 
+  // Make entire tab block clickable
+  $('.ui-tabs-nav li.ui-state-default').click(function() {
+      $('.hub_tabs').tabs('select', $(this).index());
+  });
+
   $.bindHoverRows();
 
   $('.toggler').bind({
