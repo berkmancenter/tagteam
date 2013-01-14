@@ -118,7 +118,7 @@ h1, h2, h3, h4{
 
 h1{
   font-size:2em;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #999;
 }
 
 h1 sup{
@@ -240,7 +240,7 @@ table.feed_items{
 .feed_item .description{
   padding: 10px;
   border: 4px solid #ccc;
-  border-radius: 10px;
+  border-width: 0 0 0 4px;
   font-size: 12px;
 }
 
@@ -262,6 +262,9 @@ table.hub_feeds, table.republished_feeds{
 
 table.hub_feeds td:nth-child(2), table.republished_feeds td:nth-child(2){
   text-align: right;
+}
+table.hub_feeds td:nth-child(2) a, table.republished_feeds td:nth-child(2) a{
+  text-align: left;
 }
 
 .form_controls li, .search_controls li{

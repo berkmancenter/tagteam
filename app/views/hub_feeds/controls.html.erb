@@ -1,12 +1,12 @@
 <span class="controls">
   <% if current_user && ( current_user.is?(:owner, @hub) || current_user.is?(:owner, @hub_feed) ) %>
-    <%= link_to(raw('<span class="ui-silk ui-silk-delete inline hover gray "></span> Remove from hub'), hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :title => "Delete this item") %><br/>
-    <%= link_to(raw('<span class="ui-silk ui-silk-application-edit inline hover gray"> </span> Edit this feed'), edit_hub_hub_feed_path(@hub,@hub_feed), :title => "Edit this item") %><br/>
+    <%= link_to(raw('<span class="ui-silk ui-silk-delete inline "></span> Remove from hub'), hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :title => "Delete this item") %><br/>
+    <%= link_to(raw('<span class="ui-silk ui-silk-application-edit inline "> </span> Edit this feed'), edit_hub_hub_feed_path(@hub,@hub_feed), :title => "Edit this item") %><br/>
   <% end %>
 
   <% if current_user && current_user.is?([:owner, :remixer], @hub) %>
-    <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Add #{@hub_feed} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => @hub_feed.feed_id) %><br/>
-    <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Remove #{@hub_feed} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => @hub_feed.feed_id) %>
+    <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline "></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Add #{@hub_feed} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => @hub_feed.feed_id) %><br/>
+    <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline "></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub), :title => "Remove #{@hub_feed} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'Feed', :data_item_id => @hub_feed.feed_id) %>
     <hr/>
   <% end %>
   <%= link_to(raw('<span class="ui-silk ui-silk-link inline"></span> Original link'), @hub_feed.feed.link, :rel => 'nofollow', :target => '_blank') %><br/>

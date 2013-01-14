@@ -1,9 +1,9 @@
 <h1>
-  <% if current_user && current_user.is?(:owner,@hub_feed) %>
-    <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
-    <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
-  <% end %>
   Input Feed: <%= @hub_feed %>
+  <% if current_user && current_user.is?(:owner,@hub_feed) %>
+    <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-pencil inline hover gray', :title => "Edit this feed") %>
+    <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure you want to delete this feed?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this feed") %>
+  <% end %>
   <div class="export_menu">
     <h4>Export</h4>
     <div>
