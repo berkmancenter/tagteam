@@ -407,14 +407,6 @@ button:not([role='button']) {
   margin-left: 25%;
 }
 
-#content .ui-tabs .ui-tabs-nav li.hub_search{
-  background-color: #EEE;
-}
-
-#content .ui-tabs .ui-tabs-nav li.hub_search form {
-  padding: 5px;
-}
-
 .hub_search .keyword_search_submit {
   display: block;
   line-height: 1.6em;
@@ -674,6 +666,7 @@ footer{
   border: none;
   border-radius: 0;
   background-color: transparent;
+  margin-left: 0;
 }
 .ui-tabs .ui-tabs-nav.ui-widget-header {
   background: none;
@@ -701,12 +694,30 @@ footer{
   color: #000000;
   padding: 0.5em 0;
   width: 100%;
-}
-#content .ui-tabs .ui-tabs-nav li:not(.ui-tabs-active):hover a {
-  color: #A33724;
+  margin-left: 0.2em;
 }
 #content .ui-tabs .ui-tabs-nav li.ui-tabs-active {
   position:relative;
+}
+#content .ui-tabs-nav li.ui-state-default:hover {
+  background-color: #ddd !important;
+  cursor: pointer;
+}
+#content .ui-tabs-nav li.ui-state-active:hover {
+  cursor: auto;
+}
+#content .ui-tabs-nav .ui-tabs-anchor {
+  font-weight: normal;
+}
+#content .ui-tabs-nav .ui-tabs-active .ui-tabs-anchor {
+  color: #A33724;
+}
+#content .ui-tabs .ui-tabs-nav li.hub_search{
+  background-color: #EEE;
+  border-bottom-width: 0px !important;
+}
+#content .ui-tabs .ui-tabs-nav li.hub_search form {
+  padding: 5px;
 }
 #content .ui-tabs .ui-tabs-nav li.ui-tabs-active:after, #content .ui-tabs .ui-tabs-nav li.ui-tabs-active:before {
   right:-1px;
