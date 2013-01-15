@@ -28,7 +28,7 @@
     <%= radio_button_tag(:junction_type, 'or', (params[:junction_type] == 'or') ? true : false, :id => 'junction_type_or') %>
     <%= label_tag(:junction_type_or, 'OR') %>
     </li>
-    <li><%= submit_tag('Search items', :class => 'button') %> <%= link_to('bookmark this search', request.fullpath) unless @search.blank? || @search.results.length == 0 %></li>
+    <li><%= submit_tag('Search', :class => 'button') %> <%= link_to('bookmark this search', request.fullpath) unless @search.blank? || @search.results.length == 0 %></li>
   </ul>
   <% end %>
 </div>

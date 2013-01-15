@@ -1,15 +1,15 @@
 <%= documentation('hub-feed-retrievals-list') %>
 <div class="feed_retrievals">
-  <h2>Update history</h2>
+  <h2>Update History</h2>
   <% if @feed_retrievals.blank? %>
     <h3>None found.</h3>
   <% else %>
   <%= will_paginate @feed_retrievals %>
     <table>
       <tr>
-        <th>At:</th>
-        <th>New:</th>
-        <th>Changed:</th>
+        <th>Time</th>
+        <th>New Items</th>
+        <th>Changed Items</th>
       </tr>
       <%= render :partial => 'shared/line_items/feed_retrieval', :collection => @feed_retrievals %>
     </table>

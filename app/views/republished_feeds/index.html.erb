@@ -3,7 +3,7 @@
   <% if current_user && current_user.is?([:owner, :remixer], @hub) %>
     <%= link_to(raw('<span class="ui-silk inline ui-silk-feed-add"></span> New Remixed Feed'), new_hub_republished_feed_path(@hub), :class=> "new_object") %>
   <% end %>
-  <h3>Remixed feeds</h3>
+  <h3>Remixed Feeds</h3>
   <div id="republished_feed_list_<%= @hub.id %>">
     <%= will_paginate @republished_feeds %>
     <table class="republished_feeds">
