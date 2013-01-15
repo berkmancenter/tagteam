@@ -366,16 +366,29 @@ header h1 a{
   text-decoration: none;
 }
 
-.error{
+#notices > div {
+  border: 1px solid black;
+  margin: 10px 0 5px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+#notices .error{
   color: red;
+  border-color: red;
+  background-color: #FFE7E7;
 }
 
-.notice{
+#notices .notice{
   color: green;
+  border-color: green;
+  background-color: #DAF8D1;
 }
 
-.alert{
+#notices .alert{
   color: #555;
+  border-color: #555;
+  background-color: #D5D5D5;
 }
 
 
@@ -388,15 +401,6 @@ header h1 a{
 a.delete{
   font-size: 11px;
   margin-left: 2em;
-}
-
-div.error, div.notice, div.alert{
-  font-size: 0.9em;
-  font-weight: bold;
-  margin: 10px 0;
-  background: white;
-  padding: 5px;
-  border-radius: 5px;
 }
 
 li.action input,
@@ -646,15 +650,16 @@ input#filter_by{
   margin-bottom: 2px;
   padding: 5px;
   border-radius: 5px;
+  line-height: 2em;
 }
 
 .tag_filter.delete{
-  background-color: #990000;
+  background-color: #8F2D2D;
   color: white;
 }
 
 .tag_filter.add{
-  background-color: #009900;
+  background-color: #4A7E4A;
   color: white;
 }
 
