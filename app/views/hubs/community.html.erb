@@ -10,7 +10,7 @@
           <span class="role" title="<%= Hub::DELEGATABLE_ROLES_HASH[r[0]][:description] %>"><%= check_box_tag('roles[]', r[0], false, {:id => "role_#{r[0]}"}) %><%= label_tag("role_#{r[0]}", r[1]) %></span><br/>
         <% end %>
         <h4>Users</h4>
-        <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Username or email address... " %>
+        <%= text_field_tag :find_user_autocomplete, '', :size => 40, :placeholder => "Username or email address... " %>
         </li>
         <li id="user_id_container">
         </li>
