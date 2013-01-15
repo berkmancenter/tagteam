@@ -487,12 +487,25 @@ a:hover{
   line-height: 1.6em;
 }
 
+#homepage .hub {
+  margin-bottom: 0.8em;
+}
+
 #homepage .hub .title{
   font-size: 1.1em;
+  line-height: 1.2em;
+  margin-bottom: 0.2em;
 }
 
 #homepage .hub a{
   text-decoration: none;
+}
+
+#homepage .search_results .description {
+  padding-left: 2em;
+  line-height: 1.2em;
+  font-size: 0.8em;
+  color: #747474;
 }
 
 .search_result{
@@ -643,7 +656,6 @@ input#filter_by{
 }
 
 .no_changes{
-  background-color: #e4e4e4;
 }
 
 .tag_filter{

@@ -27,6 +27,7 @@ group :development, :test do
   gem 'thin'
   gem 'sqlite3'
   gem 'silent-postgres'
+  gem 'progress_bar'
 end
 
 group :test do
