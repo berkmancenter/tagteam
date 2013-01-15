@@ -9,6 +9,7 @@
     <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.9.2.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
     <link rel="author" href="<%= root_url %>humans.txt" />
+    <link rel="icon" type="image/png" href="<%= root_url %>favicon.png">
     <% unless @show_auto_discovery_params.blank? %>
       <%= auto_discovery_link_tag :rss, @show_auto_discovery_params %>
     <% end %>
