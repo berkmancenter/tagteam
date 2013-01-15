@@ -38,7 +38,7 @@
         <dt>URL:</dt>
         <dd><%= link_to(@hub_feed.feed.link,@hub_feed.feed.link, :target => '_blank') %></dd>
         <dt>RSS / Atom URL:</dt>
-        <dd><span class="ui-silk ui-silk-rss-go inline hover gray"></span> <%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
+        <dd><span class="ui-silk ui-silk-feed-go inline"></span> <%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
         <dt>Last changed at:</dt>
         <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
         <dt>Feed will be downloaded again at:</dt>

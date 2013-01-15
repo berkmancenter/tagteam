@@ -82,6 +82,10 @@ hr{
   border-width: 1px 0 0;
 }
 
+abbr[title=required] {
+  color: #A33724;
+}
+
 #spinner{
   position: fixed;
   top: 10px; 
@@ -788,6 +792,7 @@ footer{
   margin-bottom: 0;
   line-height: 2em;
   color: #AAA;
+  cursor: default;
 }
 
 .export_menu > div {

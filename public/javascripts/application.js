@@ -74,7 +74,6 @@
               width: 600,
               minWidth: 400,
               height: 'auto',
-              position: 'top',
               title: windowTitle,
               buttons: {
                 Close: function(){
@@ -447,7 +446,6 @@ $(document).ready(function(){
       modal: true,
       height: 'auto',
       width: 600,
-      position: 'top',
       title: 'Background jobs running in this TagTeam',
       create: function(){
         $.refreshBackgroundActivity();
@@ -644,7 +642,6 @@ $(document).ready(function(){
             width: 600,
             minWidth: 400,
             height: 'auto',
-            position: 'top',
             title: '',
             create: function(){
               $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({

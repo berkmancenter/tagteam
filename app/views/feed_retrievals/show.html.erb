@@ -1,5 +1,4 @@
-<h2>Feed Retrieval on <%= l(@feed_retrieval.created_at, :format => :date_and_time_short) %> for "<%= @hub_feed %>"</h2>
-
+<h1>Feed Retrieval on <%= l(@feed_retrieval.created_at, :format => :date_and_time_short) %></h1>
 <div class="tabs" id="feed_retrieval_tabs">
 
   <ul>
@@ -22,6 +21,7 @@
 
   <% unless @new_items.empty? %>
     <div id="new_items">
+      <h2>New items for "<%= @hub_feed %>" - <%= @new_items.count %> total</h2>
       <%= will_paginate @new_items %>
       <table class="hub feed_items" id="hub_<%= @hub.id %>">
         <%= render :partial => 'shared/line_items/feed_item', :collection => @new_items %>
@@ -31,6 +31,7 @@
   <% end %>
   <% unless @changed_items.empty? %>
     <div id="changed_items">
+      <h2>Changed items for "<%= @hub_feed %>" - <%= @changed_items.count %> total</h2>
       <%= will_paginate @changed_items %>
       <table class="hub feed_items" id="hub_<%= @hub.id %>">
         <%= render :partial => 'shared/line_items/feed_item', :collection => @changed_items %>
