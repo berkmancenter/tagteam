@@ -16,7 +16,7 @@
         console.log(textStatus);
         console.log(errorThrown);
       }
-      if(errorThrown != ''){
+      if(errorThrown != '' && textStatus != 'abort'){
         $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + jqXHR.responseText + '</p>').dialog({
           modal: true
           }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
