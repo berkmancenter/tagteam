@@ -35,6 +35,9 @@
             type: 'GET',
             url: $(this).attr('href'),
             dataType: 'html',
+            beforeSend: function(){
+              $.showSpinner();
+            },
             success: function(html){
               $(paginationTarget).html(html);
             }
@@ -52,6 +55,9 @@
             type: 'GET',
             url: paginationLink,
             dataType: 'html',
+            beforeSend: function(){
+              $.showSpinner();
+            },
             success: function(html){
               $(paginationTarget).html(html);
             }
@@ -86,11 +92,11 @@
               cookie: {
                 expires: 3
               },
+              beforeLoad: function(){
+                $.showSpinner();
+              },
               ajaxOptions: {
                 dataType: 'html',
-                beforeSend: function(){
-                  $.showSpinner();
-                },
                 complete: function(){
                   $.checkPlaceholders();
                   $.initPerPage();
@@ -497,10 +503,10 @@ $(document).ready(function(){
     cookie: {
       expires: 3 
     },
+    beforeLoad: function(){
+      $.showSpinner();
+    },
     ajaxOptions: {
-      beforeSend: function(){
-        $.showSpinner();
-      },
       error: function(jqXHR,textStatus,errorThrown){
         $.showMajorError(jqXHR,textStatus,errorThrown);
       },
@@ -567,11 +573,11 @@ $(document).ready(function(){
     cookie: {
       expires: 3
     },
+    beforeLoad: function(){
+      $.showSpinner();
+    },
     ajaxOptions: {
       dataType: 'html',
-      beforeSend: function(){
-        $.showSpinner();
-      },
       complete: function(){
         $.checkPlaceholders();
         $.initPerPage();
