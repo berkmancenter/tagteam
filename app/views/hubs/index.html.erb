@@ -1,3 +1,4 @@
+<% unless request.xhr? %>
 <div id="homepage">
   <div id="left">
     <h1>TagTeam...</h1>
@@ -14,8 +15,10 @@
     <div id="hub_list">
       <h2>Hubs</h2>
       <div class="search_results">
+<% end %>
         <%= render :partial => 'shared/line_items/hub', :collection => @hubs %>
         <%= will_paginate(@hubs) %>
+<% unless request.xhr? %>
       </div>
       <% unless current_user.blank? %>
         <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
@@ -26,5 +29,5 @@
 
   <div id="item_list" class="search_results">
   </div>
-
 </div>
+<% end %>
