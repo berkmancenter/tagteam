@@ -55,8 +55,8 @@
     <h3>Publishing:</h3>
     <ul>
       <li>
-      <%= link_to(raw('<span class="ui-silk ui-silk-rss-go inline hover gray"></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub || @hub_feed.hub), :title => "Add #{@tag.name} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'ActsAsTaggableOn::Tag', :data_item_id => @tag.id) %><br/>
-      <%= link_to(raw('<span class="ui-silk ui-silk-rss-delete inline hover gray"></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub || @hub_feed.hub), :title => "Remove #{@tag.name} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'ActsAsTaggableOn::Tag', :data_item_id => @tag.id) %>
+      <%= link_to(raw('<span class="ui-silk ui-silk-feed-go inline hover gray"></span> Add to a remixed feed'), custom_republished_feeds_hub_path(@hub || @hub_feed.hub), :title => "Add #{@tag.name} to a remixed feed", :class => 'dialog-show add_item_source_to_custom_republished_feed', :data_item_type => 'ActsAsTaggableOn::Tag', :data_item_id => @tag.id) %><br/>
+      <%= link_to(raw('<span class="ui-silk ui-silk-feed-delete inline hover gray"></span> Remove from a remixed feed'), custom_republished_feeds_hub_path(@hub || @hub_feed.hub), :title => "Remove #{@tag.name} from a remixed feed", :class => 'dialog-show remove_item_source_from_custom_republished_feed', :data_item_type => 'ActsAsTaggableOn::Tag', :data_item_id => @tag.id) %>
       </li>
     </ul>
   <% end %>
