@@ -443,17 +443,21 @@ class HubsController < ApplicationController
     hub_id = @hub.id
 
     @search = FeedItem.search do
-      fulltext params[:q]
       with :hub_ids, hub_id
       paginate :page => params[:page], :per_page => get_per_page
       order_by(:date_published, :desc)
-      adjust_solr_params do |params|
-        params[:q].gsub! '#', 'tag_list_sm:'
+      unless params[:q].blank?
+          fulltext params[:q]
+          adjust_solr_params do |params|
+              params[:q].gsub! '#', 'tag_list_sm:'
+          end
       end
     end
 
     @search.execute!
-    params[:q].gsub! 'tag_list_sm:', '#'
+    unless params[:q].blank?
+        params[:q].gsub! 'tag_list_sm:', '#'
+    end
 
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
