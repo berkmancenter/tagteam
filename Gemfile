@@ -33,6 +33,8 @@ end
 group :test do
   gem 'cucumber-rails'
   gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'headless'
   gem 'database_cleaner'
   gem 'shoulda'
   gem 'shoulda-matchers'

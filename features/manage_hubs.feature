@@ -1,6 +1,7 @@
 Feature: Manage hubs
   In order to manage hubs, users should be able to take various actions on hubs.
   
+    @wip
   Scenario: Register new hub
     Given I am the user "foo@bar.com" identified by "foobar22"
     And I am on the new hub page
@@ -13,6 +14,7 @@ Feature: Manage hubs
     And I should see "tag_prefix 1"
     And I should see "foo@bar.com"
 
+    @wip
   Scenario: An owner can remove a hub
     Given I am the user "foo@bar.com" identified by "foobar22"
     And I am on the new hub page
@@ -25,7 +27,7 @@ Feature: Manage hubs
     When I follow "Delete"
     Then I should see "Deleted that hub"
 
-  @allow-rescue
+  @allow-rescue @wip
   Scenario: An anonymous user can't remove a hub
     Given I am the user "foo@bar.com" identified by "foobar22"
     And I am on the new hub page
@@ -39,14 +41,14 @@ Feature: Manage hubs
     And I visit the hub I just attempted to delete
 		Then I should get a response with an error code of "200"
 
-	@allow-rescue
+	@allow-rescue @wip
 	Scenario: Can't create a hub if anonymous
     Given I go to the home page
     And I am not logged in
 		When I go to the new hub page
 		Then I should get a response with an error code of "500"
 
-  @wip
+    @wip
   Scenario: Be able to add a feed to a hub
     Given I am the user "foo@bar.com" identified by "foobar22"
     And a hub I own titled "Test hub fibble foo"
