@@ -4,30 +4,6 @@
   <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
     <ul class="search_controls">
       <li><span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Keyword search. . .' %></li>
-      <li><span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= text_field_tag :include_tag_autocomplete, '', :size => 50, :placeholder => 'Include these tags. . . .' %></li>
-    <li id="include_tag_container" class="container">
-      <% ActsAsTaggableOn::Tag.find(:all, :conditions => {:id => params[:include_tag_ids]}).each do|tag| %>
-        <span class="search_select tag"><input name="include_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
-      <% end %>
-    </li>
-    <li><span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= text_field_tag :exclude_tag_autocomplete, '', :size => 50, :placeholder => 'Exclude these tags. . . .' %></li>
-    <li id="exclude_tag_container" class="container">
-      <% ActsAsTaggableOn::Tag.find(:all, :conditions => {:id => params[:exclude_tag_ids]}).each do|tag| %>
-        <span class="search_select tag"><input name="exclude_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
-      <% end %>
-    </li>
-    <li><span class="ui-silk ui-silk-feed inline"></span> <%= text_field_tag :hub_feed_autocomplete, '', :size => 50, :placeholder => 'In these feeds. . . .' %></li>
-    <li id="hub_feed_container" class="container">
-      <% HubFeed.find(:all, :conditions => {:id => params[:hub_feed_ids]}).each do|hf| %>
-        <span class="search_select"><input name="hub_feed_ids[]" type="hidden" value="<%= hf.id %>" /><%= hf.display_title %><span class="search_select_control"> X </span></span>
-      <% end %>
-    </li>
-    <li>Join fielded search criteria together with: 
-    <%= radio_button_tag(:junction_type, 'and', (params[:junction_type] == 'and') ? true : false, :id => 'junction_type_and') %> 
-    <%= label_tag(:junction_type_and, 'AND') %>
-    <%= radio_button_tag(:junction_type, 'or', (params[:junction_type] == 'or') ? true : false, :id => 'junction_type_or') %>
-    <%= label_tag(:junction_type_or, 'OR') %>
-    </li>
     <li><%= submit_tag('Search items', :class => 'button') %> <%= link_to('bookmark this search', request.fullpath) unless @search.blank? || @search.results.length == 0 %></li>
   </ul>
   <% end %>
@@ -47,8 +23,5 @@
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete','#include_tag_autocomplete', 'include_tag_ids', '#include_tag_container','search_select tag'); 
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/tags/autocomplete','#exclude_tag_autocomplete', 'exclude_tag_ids', '#exclude_tag_container','search_select tag');
-$.observeAutocomplete($.rootPath() + 'hubs/#{@hub.id}/hub_feeds/autocomplete','#hub_feed_autocomplete','hub_feed_ids', '#hub_feed_container','search_select tag');
 $.observeSearchSelectControl();
 });| %>
