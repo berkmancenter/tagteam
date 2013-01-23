@@ -8,6 +8,8 @@
         <% role_att = "#{r.name}:#{hub_user.id}" %>
         <% if current_user && current_user.is?(:owner, @hub) && current_user != hub_user %>
           <%= check_box_tag("roles_to_remove[]", role_att, false, :id => role_att ) %>
+        <% else %>
+          <%= check_box_tag('cannot_remove', 1, false, :disabled => true) %>
         <% end %>
         <%= label_tag(role_att, Hub::DELEGATABLE_ROLES_HASH[r.name.to_sym][:name]) %>
        </span><br />

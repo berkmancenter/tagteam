@@ -3,6 +3,7 @@ Feature: Manage feeds
 	a user
 	should be able to create a feed.
 
+    @wip
 	Scenario: Register new feed
 		Given I am the user "foo@bar.com" identified by "foobar22"
 		And I am on the new feed page
@@ -10,7 +11,7 @@ Feature: Manage feeds
 		And I press "Create"
 		Then I should see "Dan Collis-Puro"
 
-	@allow-rescue
+	@allow-rescue @wip
 	Scenario: Can't register a feed if anonymous
 		Given I am not logged in
 		When I go to the new feed page

@@ -4,10 +4,11 @@ auto_commit_after_delete_request: true
 development:
   solr:
     hostname: localhost
-    port: 8982
+    port: 8983
     log_level: INFO
     max_memory: 128M
     min_memory: 32M
+    path: '/solr/tagteam'
   auto_commit_after_request: false
   auto_commit_after_delete_request: true
 

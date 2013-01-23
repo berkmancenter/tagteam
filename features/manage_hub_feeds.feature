@@ -3,6 +3,7 @@ Feature: Manage hub_feeds
   [stakeholder]
   wants [behaviour]
   
+    @wip
   Scenario: Register new hub_feed
     Given I am on the new hub_feed page
     When I fill in "Feed" with "feed_id 1"
@@ -13,6 +14,7 @@ Feature: Manage hub_feeds
     And I should see "title 1"
     And I should see "description 1"
 
+    @wip
   Scenario: Delete hub_feed
     Given the following hub_feeds:
       |feed_id|title|description|

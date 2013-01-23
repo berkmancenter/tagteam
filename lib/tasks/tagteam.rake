@@ -52,6 +52,23 @@ namespace :tagteam do
   
   end
 
+  desc 'tiny test hubs'
+  task :tiny_test_hubs => :environment do
+      u = User.new(:email => 'djcp@cyber.law.harvard.edu', :password => 'testfoobar', :password_confirmation => "testfoobar")
+      u.save
+
+      planet_feeds = %w|
+http://cyber.law.harvard.edu/news/feed
+http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/
+http://www.shirky.com/weblog/feed/
+http://reagle.org/joseph/blog/?flav=atom
+http://www.matthewhindman.com/index.php/component/option,com_rss/feed,RSS2.0/no_html,1/
+http://www.mediacloud.org/blog/feed/|
+
+    add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'djcp@cyber.law.harvard.edu')
+
+  end
+
   desc 'test hubs'
   task :test_hubs => :environment do
     u = User.new(:email => 'djcp@cyber.law.harvard.edu', :password => 'testfoobar', :password_confirmation => "testfoobar")

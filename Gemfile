@@ -27,11 +27,14 @@ group :development, :test do
   gem 'thin'
   gem 'sqlite3'
   gem 'silent-postgres'
+  gem 'progress_bar'
 end
 
 group :test do
   gem 'cucumber-rails'
   gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'headless'
   gem 'database_cleaner'
   gem 'shoulda'
   gem 'shoulda-matchers'
