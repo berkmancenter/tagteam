@@ -247,11 +247,17 @@
           $('#feed_item_bookmark_collection_id_input').show();
           $('#feed_item_tag_list_input').show();
           $('#feed_item_bookmark_collection_id').html('');
+          if (json.feeds.length > 0) {
           $(json.feeds).each(function(i,bookmarkCollectionObj){
             $('#feed_item_bookmark_collection_id').append(
               $('<option />').attr({value: bookmarkCollectionObj.id}).text(bookmarkCollectionObj.title)
             );
           });
+          } else {
+            $('#feed_item_bookmark_collection_id').append(
+              $('<option />').attr({value: ''}).text('<New Collection>')
+            );
+          }
 
           if($.cookie('bookmarklet_bookmark_collection_id_choice') != undefined ){
             $('#feed_item_bookmark_collection_id').val($.cookie('bookmarklet_bookmark_collection_id_choice'));
