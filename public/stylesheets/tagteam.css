@@ -608,7 +608,7 @@ input#q {
   color: #7a000d;
 }
 
-input[type=text], input[type=email], input[type=password], textarea {
+input[type=text], input[type=url], input[type=email], input[type=password], textarea {
   border: 2px solid #ccc;
   padding: 0.1em 0.2em;
 }
