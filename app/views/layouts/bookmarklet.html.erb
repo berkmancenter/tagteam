@@ -2,29 +2,30 @@
 <html>
   <head>
     <title><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></title>
-    <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', 'reset','silk-sprite','custom-theme/jquery-ui-1.8.18.custom', 'tagteam', 'bookmarklet' ] %>
-    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.8.18.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
+    <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', '660-10col', 'reset','silk-sprite','custom-theme/jquery-ui-1.9.2.custom', 'tagteam', 'bookmarklet' ] %>
+    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.9.2.custom.min', 'jquery.bt.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
     <%= csrf_meta_tag %>
   </head>
   <body>
+    <div id="outer_wrapper">
+      <header>
+        <div class="container_10">
+          <h1 class="grid_4"><a href="/">TagTeam</a></h1>
+          <nav class="user_meta grid_6">
+            <div>
+              <% unless current_user.blank? %>
+               Welcome, <%= current_user.username %> 
+                &ndash; <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
+              <% else %>
+                <%= link_to('Log in', new_user_session_url(:protocol => protocol_resolver)) %>
+              <% end %>
+            </div>
+          </nav>
+          <div class="clear"></div>
+        </div>
+      </header>
     <div class="container_10">
-      <div id="wrapper">
         <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
-        <header class="grid_10">
-          <h1><a href="/"><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></a></h1>
-        </header>
-        <div class="clear"></div>
-
-        <nav class="grid_10">
-          <section class="user_meta">
-            <% unless current_user.blank? %>
-              Welcome, <%= current_user.username %>
-              <%= link_to('log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
-            <% else %>
-              <%= link_to('log in', new_user_session_url(:protocol => protocol_resolver)) %>
-            <% end %>
-          </section>
-        </nav>
         <div class="clear"></div>
 
         <% unless flash.blank? %>
@@ -50,6 +51,9 @@
         <% end %>
 
         <section class="grid_10" id="content">
+          <% unless @mini_title.blank? %>
+            <h1><%= @mini_title %></h1>
+          <% end %>
           <%= yield %>
         </section>
         <div class="clear"></div>
