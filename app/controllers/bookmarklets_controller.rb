@@ -70,7 +70,6 @@ class BookmarkletsController < ApplicationController
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
         Resque.enqueue(FeedItemTagRenderer, @feed_item.id)
-        flash[:notice] = 'Added that feed item.'
         format.html {
           redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id) 
         }
