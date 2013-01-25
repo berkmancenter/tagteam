@@ -245,7 +245,6 @@
         dataType: 'json',
         success: function(json){
           $('#feed_item_bookmark_collection_id_input').show();
-          $('#feed_item_tag_list_input').show();
           $('#feed_item_bookmark_collection_id').html('');
           if (json.feeds.length > 0) {
           $(json.feeds).each(function(i,bookmarkCollectionObj){
@@ -328,7 +327,6 @@
     },
     initBookmarklet: function(tagJsonOutput){
       $('#feed_item_bookmark_collection_id_input').hide();
-      $('#feed_item_tag_list_input').hide();
       $.observeHubSelector();
       $('.bookmarklet_tabs').tabs();
       $('.datepicker').datepicker({
