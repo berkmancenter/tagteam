@@ -1,0 +1,330 @@
+/*
+	Variable Grid System.
+	Learn more ~ http://www.spry-soft.com/grids/
+	Based on 960 Grid System - http://960.gs/
+
+	Licensed under GPL and MIT.
+*/
+
+/*
+  Forces backgrounds to span full width,
+  even if there is horizontal scrolling.
+  Increase this if your layout is wider.
+
+  Note: IE6 works fine without this fix.
+*/
+
+body {
+  min-width: 665px;
+}
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+.container_10 {
+	margin-left: auto;
+	margin-right: auto;
+	width: 665px;
+}
+
+/* Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+
+
+.grid_1,
+.grid_2,
+.grid_3,
+.grid_4,
+.grid_5,
+.grid_6,
+.grid_7,
+.grid_8,
+.grid_9,
+.grid_10 {
+	display:inline;
+	float: left;
+	position: relative;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+
+
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4,
+.push_5, .pull_5,
+.push_6, .pull_6,
+.push_7, .pull_7,
+.push_8, .pull_8,
+.push_9, .pull_9,
+.push_10, .pull_10 {
+	position:relative;
+}
+
+
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+.alpha {
+	margin-left: 0;
+}
+
+.omega {
+	margin-right: 0;
+}
+
+/* Grid >> 10 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_10 .grid_1 {
+	width:56px;
+}
+
+.container_10 .grid_2 {
+	width:122px;
+}
+
+.container_10 .grid_3 {
+	width:188px;
+}
+
+.container_10 .grid_4 {
+	width:254px;
+}
+
+.container_10 .grid_5 {
+	width:320px;
+}
+
+.container_10 .grid_6 {
+	width:386px;
+}
+
+.container_10 .grid_7 {
+	width:452px;
+}
+
+.container_10 .grid_8 {
+	width:518px;
+}
+
+.container_10 .grid_9 {
+	width:584px;
+}
+
+.container_10 .grid_10 {
+	width:650px;
+}
+
+
+
+
+/* Prefix Extra Space >> 10 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_10 .prefix_1 {
+	padding-left:66px;
+}
+
+.container_10 .prefix_2 {
+	padding-left:132px;
+}
+
+.container_10 .prefix_3 {
+	padding-left:198px;
+}
+
+.container_10 .prefix_4 {
+	padding-left:264px;
+}
+
+.container_10 .prefix_5 {
+	padding-left:330px;
+}
+
+.container_10 .prefix_6 {
+	padding-left:396px;
+}
+
+.container_10 .prefix_7 {
+	padding-left:462px;
+}
+
+.container_10 .prefix_8 {
+	padding-left:528px;
+}
+
+.container_10 .prefix_9 {
+	padding-left:594px;
+}
+
+
+
+/* Suffix Extra Space >> 10 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_10 .suffix_1 {
+	padding-right:66px;
+}
+
+.container_10 .suffix_2 {
+	padding-right:132px;
+}
+
+.container_10 .suffix_3 {
+	padding-right:198px;
+}
+
+.container_10 .suffix_4 {
+	padding-right:264px;
+}
+
+.container_10 .suffix_5 {
+	padding-right:330px;
+}
+
+.container_10 .suffix_6 {
+	padding-right:396px;
+}
+
+.container_10 .suffix_7 {
+	padding-right:462px;
+}
+
+.container_10 .suffix_8 {
+	padding-right:528px;
+}
+
+.container_10 .suffix_9 {
+	padding-right:594px;
+}
+
+
+
+/* Push Space >> 10 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_10 .push_1 {
+	left:66px;
+}
+
+.container_10 .push_2 {
+	left:132px;
+}
+
+.container_10 .push_3 {
+	left:198px;
+}
+
+.container_10 .push_4 {
+	left:264px;
+}
+
+.container_10 .push_5 {
+	left:330px;
+}
+
+.container_10 .push_6 {
+	left:396px;
+}
+
+.container_10 .push_7 {
+	left:462px;
+}
+
+.container_10 .push_8 {
+	left:528px;
+}
+
+.container_10 .push_9 {
+	left:594px;
+}
+
+
+
+/* Pull Space >> 10 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_10 .pull_1 {
+	left:-66px;
+}
+
+.container_10 .pull_2 {
+	left:-132px;
+}
+
+.container_10 .pull_3 {
+	left:-198px;
+}
+
+.container_10 .pull_4 {
+	left:-264px;
+}
+
+.container_10 .pull_5 {
+	left:-330px;
+}
+
+.container_10 .pull_6 {
+	left:-396px;
+}
+
+.container_10 .pull_7 {
+	left:-462px;
+}
+
+.container_10 .pull_8 {
+	left:-528px;
+}
+
+.container_10 .pull_9 {
+	left:-594px;
+}
+
+
+
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+.clearfix:before,
+.clearfix:after {
+  content: '\0020';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+
+.clearfix {
+  zoom: 1;
+}
