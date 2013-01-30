@@ -56,6 +56,7 @@ namespace :tagteam do
   task :tiny_test_hubs => :environment do
       u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
       u.save
+      u.confirm!
 
       planet_feeds = %w|
 http://cyber.law.harvard.edu/news/feed
@@ -73,9 +74,11 @@ http://www.mediacloud.org/blog/feed/|
   task :test_hubs => :environment do
     u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
     u.save
+    u.confirm!
 
     u = User.new(:username => 'ps', :email => 'peter.suber@gmail.com', :password => 'testpass', :password_confirmation => "testpass")
     u.save
+    u.confirm!
 
     planet_feeds = %w|
 http://fringethoughts.wordpress.com/feed/
