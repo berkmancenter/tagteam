@@ -33,6 +33,7 @@ module RakeHelper
         puts "Failed on #{feed}, error: #{e.inspect}"
       end
     end
+    u.save
 
   end
 end

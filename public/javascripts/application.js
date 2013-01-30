@@ -660,7 +660,7 @@ $(document).ready(function(){
               });
             },
             buttons: {
-              Close: function(){
+              Cancel: function(){
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               },
