@@ -83,6 +83,12 @@ class BookmarkletsController < ApplicationController
 
   # Generate the bookmarklet.
   def add
+    if current_user.my_bookmarkable_hubs.empty?
+      flash[:notice] = "You don't have any hubs in which to put bookmarks.  Please create one."
+      session[:redirect_after] = request.fullpath
+      @hub = Hub.new
+      render 'hubs/new', :layout => 'bookmarklet'
+    end
     @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
     [:hub_id, :bookmark_collection_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
