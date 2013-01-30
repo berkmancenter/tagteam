@@ -394,7 +394,15 @@ class HubsController < ApplicationController
         current_user.has_role!(:owner, @hub)
         current_user.has_role!(:creator, @hub)
         flash[:notice] = 'Added that Hub.'
-        format.html {redirect_to hub_path(@hub)}
+        format.html {
+          if session[:redirect_after].nil?
+            redirect_to hub_path(@hub)
+          else
+            redirect_path = session[:redirect_after]
+            session[:redirect_after] = nil
+            redirect_to redirect_path
+          end
+        }
       else
         flash[:error] = 'Could not add that Hub'
         format.html {render :action => :new}

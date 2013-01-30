@@ -320,10 +320,9 @@
         // A selection! Set the defaults.
         $('#feed_item_hub_id').val($.cookie('bookmarklet_hub_choice'));
         $.initBookmarkCollectionChoices($.cookie('bookmarklet_hub_choice'));
+      } else {
+        $.initBookmarkCollectionChoices($('#feed_item_hub_id').val());
       }
-      $('#feed_item_hub_id').change(function(){
-        $.initBookmarkCollectionChoices($(this).val());
-      });
     },
     initBookmarklet: function(tagJsonOutput){
       $('#feed_item_bookmark_collection_id_input').hide();
