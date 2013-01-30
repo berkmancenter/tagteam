@@ -89,6 +89,10 @@ class BookmarkletsController < ApplicationController
       @hub = Hub.new
       render 'hubs/new', :layout => 'bookmarklet'
     end
+    # Remove saved hub preference if hub no longer exists
+    if !cookies[:bookmarklet_hub_choice].nil? && !Hub.exists?(cookies[:bookmarklet_hub_choice])
+      cookies.delete(:bookmarklet_hub_choice)
+    end
     @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
     [:hub_id, :bookmark_collection_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
