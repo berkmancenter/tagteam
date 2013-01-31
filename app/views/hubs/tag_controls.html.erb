@@ -15,9 +15,9 @@
         <p>This tag has already been used in a hub-wide filter.</p>
       <% else %>
         <br/>
-        <span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-        <span class="ui-silk ui-silk-tag-blue-edit inline"></span> <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
-        <span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
+        <span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add', hub_hub_tag_filters_path(@hub), "data_hub_id" => @hub.id, :data_id => @tag.id, :data_type => 'AddTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+        <span class="ui-silk ui-silk-tag-blue-edit inline"></span> <%= link_to 'Modify', hub_hub_tag_filters_path(@hub), "data_hub_id" => @hub.id, :data_id => @tag.id, :data_type => 'ModifyTagFilter', :class => 'add_filter_control hub_tag_filter' %> | 
+        <span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= link_to 'Delete', hub_hub_tag_filters_path(@hub), "data_hub_id" => @hub.id, :data_id => @tag.id, :data_type => 'DeleteTagFilter', :class => 'add_filter_control hub_tag_filter' %>
       <% end %>
       </li>
     <% end %>
