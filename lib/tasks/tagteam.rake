@@ -55,7 +55,7 @@ namespace :tagteam do
   desc 'tiny test hubs'
   task :tiny_test_hubs => :environment do
       u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
-      u.save
+      u.save!
       u.confirm!
 
       planet_feeds = %w|
