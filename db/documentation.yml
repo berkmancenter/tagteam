@@ -27,7 +27,7 @@
       \ <p>A hub contains many <strong>input feeds</strong> (look at the \"input\"
       tab) that serve as input sources. These items in these input feeds are downloaded
       and parsed for titles, content, tags, and other metadata. These feed items serve
-      as the basic unit of information in a tagteam hub.</p>\r\n\r\n  <p>A hub also
+      as the basic unit of information in a TagTeam hub.</p>\r\n\r\n  <p>A hub also
       contains <strong>remixed feeds</strong>, which are remixes of feeds, feed items
       and tags.</p>"
     lang: en
@@ -60,7 +60,7 @@
     id: 31
     match_key: hub-bookmark_collections-list
     title: Bookmark collections
-    description: A <b>bookmark collection</b>&nbsp;represents a set of items that've
+    description: A <b>bookmark collection</b>&nbsp;represents a set of items that&apos;ve
       been brought into this hub in one of two ways:<div><ol><li>via the delicious-like
       TagTeam bookmarklet that hub owners can use, and</li><li>by importing a bookmark
       export from either Connotea or Delicious.</li></ol><div>If you're an owner of
@@ -128,11 +128,12 @@
     id: 36
     match_key: hub-wide-item-search
     title: Search for items
-    description: You can search feed items by:<div><ul><li>Keyword,</li><li>Tags,</li><li>excluded
-      Tags (meaning, the items WITHOUT these tags), and</li><li>Input feeds.</li></ul><div>The
-      terms are AND'ed together by default, meaning the more fields you complete the
-      narrower your search results get. You can also switch to OR'ing fields together,
-      which will give you a broader result set.</div></div>
+    description: <p>Search allows for both simple keyword searches and more complex searches.</p>
+      <p>If you're interested in more complex searches, TagTeam supports a subset of the 
+      <a href="http://lucene.apache.org/core/4_1_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description" target="_blank">Lucene Query Syntax</a>.  TagTeam supports all the features supported by Lucene except fielded search, range search, and field grouping.</p>
+      <p>In addition, TagTeam supports searching based on tag.  To search for a tag, simply
+      prefix the tag with &#35;.  For example, to search for items tagged with &quot;geek&quot;,
+      use the search term <i>&#35;geek</i>.</p>
     lang: en
     created_at: 2012-03-27 19:59:02.461324000 Z
     updated_at: 2012-03-27 20:02:54.573190000 Z
