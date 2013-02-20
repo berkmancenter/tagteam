@@ -75,7 +75,7 @@ GEM
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
     fattr (2.2.1)
-    feed-abstract (0.0.12)
+    feed-abstract (0.0.13)
     ffi (1.0.11)
     formtastic (2.2.1)
       actionpack (>= 3.0)
@@ -227,7 +227,7 @@ DEPENDENCIES
   database_cleaner
   devise
   exception_notification
-  feed-abstract
+  feed-abstract (~> 0.0.13)
   formtastic
   headless
   jquery-rails

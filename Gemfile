@@ -8,7 +8,7 @@ gem 'jquery-rails'
 # gem 'mini_magick'
 gem 'devise'
 gem 'acl9'
-gem 'feed-abstract'
+gem 'feed-abstract', '~> 0.0.13'
 gem "will_paginate"
 gem 'sunspot'
 gem 'sunspot_rails'
