@@ -449,6 +449,7 @@ class HubsController < ApplicationController
     breadcrumbs.add @hub, hub_path(@hub)
 
     hub_id = @hub.id
+    tagging_key = @hub.tagging_key
 
     @search = FeedItem.search do
       with :hub_ids, hub_id
@@ -457,14 +458,14 @@ class HubsController < ApplicationController
       unless params[:q].blank?
           fulltext params[:q]
           adjust_solr_params do |params|
-              params[:q].gsub! '#', 'tag_list_sm:'
+              params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
           end
       end
     end
 
     @search.execute!
     unless params[:q].blank?
-        params[:q].gsub! 'tag_list_sm:', '#'
+        params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end
 
     respond_to do|format|

@@ -31,11 +31,11 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'headless'
-  gem 'database_cleaner'
   gem 'shoulda'
   gem 'shoulda-matchers'
   gem 'selenium-client'

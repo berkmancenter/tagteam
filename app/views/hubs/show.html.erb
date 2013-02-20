@@ -24,14 +24,13 @@
     <li><%= link_to('Tags', hub_tags_path(@hub))%></li>
     <li><%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%></li>
     <li><%= link_to('Updates', retrievals_hub_path(@hub) )%></li>
-    <li><%= link_to('Advanced Search', item_search_hub_path(@hub) )%></li>
     <% if current_user && current_user.is?(:owner, @hub) %> 
       <li><%= link_to('Community', community_hub_path(@hub) )%></li>
     <% end %>
     <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
     <li class="hub_search">
       <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 14, :placeholder => 'Keyword Search...' %>
+        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 14, :placeholder => 'Search this hub...' %>
         <%= submit_tag('Go', :class => 'button keyword_search_submit') %>
       <% end %>
     </li>

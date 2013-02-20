@@ -4,7 +4,6 @@ module WillPaginate::ViewHelpers
     private
 
     def html_container(html)
-        puts @collection.per_page
       %Q|<div class="page_browsing_controls">#{tag(:div, html, container_attributes)}
       <span class="per_page_selector_container">
     Per Page: <select name="per_page" class="per_page_selector">
