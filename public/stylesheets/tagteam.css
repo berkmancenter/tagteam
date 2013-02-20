@@ -293,6 +293,7 @@ table.hub_feeds td:nth-child(2) a, table.republished_feeds td:nth-child(2) a{
 
 .search_controls li {
   padding-top: 0;
+  display: inline-block;
 }
 
 .search_controls h4 {

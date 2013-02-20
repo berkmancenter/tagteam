@@ -89,7 +89,7 @@ class FeedItem < ActiveRecord::Base
 
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
-    self.taggings.collect{|tg| "#{tg.context}-#{tg.tag_id}"}
+    self.taggings.collect{|tg| "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'}.compact
   end
 
   # A hash of arrays of tag contexts - used for the API.

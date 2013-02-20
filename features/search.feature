@@ -8,6 +8,7 @@ Feature: Search by tag
         Then there should be at least one result
         And every result should have the tag "uncategorized"
 
+    @wip
     Scenario: Searching for a tag with a space with quotes
         Given I am not logged in
         And I am viewing the "Berkman Planet Test Hub" hub
