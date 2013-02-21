@@ -32,10 +32,7 @@ class RepublishedFeedsController < ApplicationController
 
   # An individual RepublishedFeed. Returns html, json, and xml.
   def show
-    logger.warn @republished_feed.inspect
-    logger.warn @hub.inspect
     @show_auto_discovery_params = remix_items_url(@republished_feed.url_key, :format => :rss)
-#    @republished_feed.items
     respond_to do |format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => @republished_feed }
