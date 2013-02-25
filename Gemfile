@@ -1,12 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.0'
+gem 'rails', '~> 3.2.12'
 gem 'pg'
 gem 'formtastic'
 gem 'jquery-rails'
 # gem 'carrierwave'
 # gem 'mini_magick'
-gem 'devise'
+gem 'devise', '~> 2.0'
 gem 'acl9'
 gem 'feed-abstract', '~> 0.0.13'
 gem "will_paginate"
