@@ -367,26 +367,26 @@ header h1 a{
   text-decoration: none;
 }
 
-#notices > div {
+.notices > div {
   border: 1px solid black;
   margin: 10px 0 5px;
   padding: 5px 10px;
   font-size: 0.9em;
 }
 
-#notices .error{
+.notices .error{
   color: red;
   border-color: red;
   background-color: #FFE7E7;
 }
 
-#notices .notice{
+.notices .notice{
   color: green;
   border-color: green;
   background-color: #DAF8D1;
 }
 
-#notices .alert{
+.notices .alert{
   color: #555;
   border-color: #555;
   background-color: #D5D5D5;
