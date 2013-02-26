@@ -306,7 +306,7 @@ class HubsController < ApplicationController
         current_user.has_role!(:owner, @hub_feed)
         current_user.has_role!(:creator, @hub_feed)
         format.html{ 
-          render :text => 'Added that feed'
+          render :text => 'Added that feed', :layout => ! request.xhr?
         }
       else
         format.html{ 

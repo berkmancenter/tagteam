@@ -507,14 +507,13 @@ $(document).ready(function(){
     cookie: {
       expires: 3 
     },
-    beforeLoad: function(){
+    beforeLoad: function(event, ui){
       $.showSpinner();
-    },
-    ajaxOptions: {
-      error: function(jqXHR,textStatus,errorThrown){
+      ui.jqXHR.error(function(jqXHR,textStatus,errorThrown){
         $.showMajorError(jqXHR,textStatus,errorThrown);
-      },
-      complete: function(){
+      })
+    },
+    load: function(event, ui) {
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
@@ -522,22 +521,20 @@ $(document).ready(function(){
           dataType: 'html',
           beforeSend: function(){
             $.showSpinner();
-            $('.add_feed_container .messages').html('');
+            $('.add_feed_container .notices').html('');
           },
           complete: function(){
             $.hideSpinner();
           },
           success: function(html){
-            $('.add_feed_container .messages').append('<div class="notice">' + html + '</div>');
             // Update the feed list.
             var current_index = $('.hub_tabs').tabs('option','selected');
             $('.hub_tabs').tabs('load',current_index);
           },
           error: function(jqXHR){
-            $('.add_feed_container .messages').append('<div class="error">' + jqXHR.responseText + '</div>');
+            $('.add_feed_container .notices').append('<div class="error">' + jqXHR.responseText + '</div>');
           }
         });
-      }
     }
   });
   
