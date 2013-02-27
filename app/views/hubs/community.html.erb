@@ -1,38 +1,20 @@
 <h2>Community</h2>
-<div id="left" class="hover_row">
-  <h3>User roles on this hub</h3>
-  <%= form_tag(remove_roles_hub_path(@hub)) do %>
-    <table>
-      <tr>
-        <th>&nbsp;</th>
-        <th>Role(s)</th>
-      </tr>
-      <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
-    </table>
-    <h3 style="margin-top: 1em;">
-    What should we do with the items that were managed by these user(s)?
-    </h3>
-    <p><%= radio_button_tag(:revocation_action, 'reassign', true, :id => "revocation_reassign") %><%= label_tag('revocation_reassign', raw('<b>Reassign them to</b>')) %><%= select_tag(:reassign_to, options_from_collection_for_select(@hub.owners, 'id','username')) %> </p>
-    <p><%= radio_button_tag(:revocation_action, 'delete', false, :id => "revocation_delete") %><%= label_tag('revocation_delete', raw('<b>Delete them permanently. I do not want them in this hub any more.</b>')) %></p>
-    <%= submit_tag('Remove roles', :class => 'button', :id => 'remove_roles') %>
-  <% end %>
-</div>
 <% if current_user && current_user.is?(:owner, @hub) %> 
   <%= form_tag(add_roles_hub_path(@hub)) do %>
-    <div id="right" class="hover_row">
-      <h3 style="margin-bottom: 0em;">Grant privileges</h3>
+    <div id="left" class="grant_roles">
+      <h3>Assign Roles</h3>
+      <h4>Roles</h4>
       <ul class="search_controls">
         <li>
-        <h3 style="margin: 0em;">Roles</h3>
         <% Hub::DELEGATABLE_ROLES_FOR_FORMS.each do|r| %>
-          <span class="role"><%= check_box_tag('roles[]', r[0], false, {:id => "role_#{r[0]}"}) %> <strong><%= label_tag("role_#{r[0]}", r[1]) %></strong></span> - <%= Hub::DELEGATABLE_ROLES_HASH[r[0]][:description] %><br/>
+          <span class="role" title="<%= Hub::DELEGATABLE_ROLES_HASH[r[0]][:description] %>"><%= check_box_tag('roles[]', r[0], false, {:id => "role_#{r[0]}"}) %><%= label_tag("role_#{r[0]}", r[1]) %></span><br/>
         <% end %>
-        <h3>Users</h3>
-        <span class="ui-silk ui-silk-user inline"></span> <%= text_field_tag :find_user_autocomplete, '', :size => 50, :placeholder => "Start typing a user's username or email address. . . " %>
+        <h4>Users</h4>
+        <%= text_field_tag :find_user_autocomplete, '', :size => 40, :placeholder => "Username or email address... " %>
         </li>
         <li id="user_id_container">
         </li>
-        <li><%= submit_tag('Grant roles to these users', :class => 'button', :id => 'add_roles') %></li>
+        <li><%= submit_tag('Grant Roles', :class => 'button', :id => 'add_roles') %></li>
       </ul>
 
       <%= javascript_tag %Q|$(document).ready(function(){
@@ -42,4 +24,22 @@ $.observeSearchSelectControl();
     </div>
   <% end %>
 <% end %>
+<div id="right" class="remove_roles">
+  <h3>Remove Roles</h3>
+  <%= form_tag(remove_roles_hub_path(@hub)) do %>
+    <table>
+      <tr>
+        <th>Username</th>
+        <th>Roles</th>
+      </tr>
+      <%= render :partial => 'shared/line_items/hub_user', :collection => @hub.users_with_roles %>
+    </table>
+    <p>
+    What should we do with items managed by these users?
+    </p>
+    <p><%= radio_button_tag(:revocation_action, 'reassign', true, :id => "revocation_reassign") %><%= label_tag('revocation_reassign', raw('Reassign them to user ')) %><%= select_tag(:reassign_to, options_from_collection_for_select(@hub.owners, 'id','username')) %> </p>
+    <p><%= radio_button_tag(:revocation_action, 'delete', false, :id => "revocation_delete") %><%= label_tag('revocation_delete', raw('Delete them permanently')) %></p>
+    <%= submit_tag('Remove Roles', :class => 'button', :id => 'remove_roles') %>
+  <% end %>
+</div>
 <div class="clear"></div>

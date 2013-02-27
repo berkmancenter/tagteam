@@ -34,7 +34,7 @@ class BookmarkletsController < ApplicationController
 
   # Save the bookmarklet to the correct hub and bookmark collection.
   def add_item
-    @mini_title = 'Add this item to a TagTeam bookmark collection'
+    @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url(params[:feed_item][:url])
     [:hub_id, :bookmark_collection_id, :title, :description, :authors, :contributors, :rights].each do |col|
       unless params[:feed_item][col].blank?
@@ -70,7 +70,6 @@ class BookmarkletsController < ApplicationController
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
         Resque.enqueue(FeedItemTagRenderer, @feed_item.id)
-        flash[:notice] = 'Added that feed item.'
         format.html {
           redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id) 
         }
@@ -84,7 +83,17 @@ class BookmarkletsController < ApplicationController
 
   # Generate the bookmarklet.
   def add
-    @mini_title = 'Add this item to a TagTeam bookmark collection'
+    if current_user.my_bookmarkable_hubs.empty?
+      flash[:notice] = "You don't have any hubs in which to put bookmarks.  Please create one."
+      session[:redirect_after] = request.fullpath
+      @hub = Hub.new
+      render 'hubs/new', :layout => 'bookmarklet'
+    end
+    # Remove saved hub preference if hub no longer exists
+    if !cookies[:bookmarklet_hub_choice].nil? && !Hub.exists?(cookies[:bookmarklet_hub_choice])
+      cookies.delete(:bookmarklet_hub_choice)
+    end
+    @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
     [:hub_id, :bookmark_collection_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
       unless params[:feed_item][col].blank?

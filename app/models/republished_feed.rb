@@ -67,27 +67,23 @@ class RepublishedFeed < ActiveRecord::Base
 
     self.input_sources.each do|input_source|
       if input_source.effect == 'add'
-        if input_source.item_source_type == 'Feed'
-          add_feeds << input_source.item_source_id
-
-        elsif input_source.item_source_type == 'FeedItem'
-          add_feed_items << input_source.item_source_id
-
-        else
-          add_tags << input_source.item_source_id
-        end
-
+          case input_source.item_source_type
+          when 'Feed'
+              add_feeds << input_source.item_source_id
+          when 'FeedItem'
+              add_feed_items << input_source.item_source_id
+          when 'ActsAsTaggableOn::Tag'
+              add_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          end
       else
-        if input_source.item_source_type == 'Feed'
-          remove_feeds << input_source.item_source_id
-
-        elsif input_source.item_source_type == 'FeedItem'
-          remove_feed_items << input_source.item_source_id
-
-        else
-          remove_tags << input_source.item_source_id
-        end
-
+          case input_source.item_source_type
+          when 'Feed'
+              remove_feeds << input_source.item_source_id
+          when 'FeedItem'
+              remove_feed_items << input_source.item_source_id
+          when 'ActsAsTaggableOn::Tag'
+              remove_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          end
       end
     end
 
@@ -100,7 +96,7 @@ class RepublishedFeed < ActiveRecord::Base
           with(:id, add_feed_items)
         end
         unless add_tags.blank?
-          with(:tag_contexts, add_tags.collect{|t| "hub_#{self.hub_id}-#{t}"})
+          with(:tag_contexts, add_tags.collect{|t| "hub_#{self.hub_id}-#{t.name}"})
         end
       end
       any_of do
@@ -111,7 +107,7 @@ class RepublishedFeed < ActiveRecord::Base
           without(:id, remove_feed_items)
         end
         unless remove_tags.blank?
-          without(:tag_contexts, remove_tags.collect{|t| "hub_#{self.hub_id}-#{t}"})
+          without(:tag_contexts, remove_tags.collect{|t| "hub_#{self.hub_id}-#{t.name}"})
         end
       end
       order_by('date_published', :desc)

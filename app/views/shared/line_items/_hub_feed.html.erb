@@ -1,14 +1,12 @@
 <tr class="hub_feed hover_row" id="hub_feed-<%= hub_feed.id %>">
   <td width="60%">
-    <%= link_to('controls', controls_hub_feed_path(hub_feed), :class => 'ui-silk ui-silk-add inline hover gray control') %>
-
-
+    <%= link_to('More', more_details_hub_hub_feed_path(@hub,hub_feed), :class => "ui-silk ui-silk-bullet-toggle-plus inline hub_feed_more_control", :data_hub_feed_id => hub_feed.id) %>
     <span class="ui-silk inline <%= (hub_feed.feed.is_bookmarking_feed?) ? 'ui-silk-book-addresses' : 'ui-silk-feed' %>"></span> <%= link_to(raw(strip_tags(hub_feed.to_s)), hub_hub_feed_path(@hub,hub_feed)) %>
     <% if defined?(show_hubs) && show_hubs == true %>
       <span class="smaller">in <%= link_to(hub_feed.hub, hub_path(hub_feed.hub) )%></span>
     <% end %>
   </td>
   <td width="40%">
-    <%= link_to(raw('<span class="ui-silk inline ui-silk-asterisk-orange gray hover"></span> more'), more_details_hub_hub_feed_path(@hub,hub_feed), :class => "hub_feed_more_control", :data_hub_feed_id => hub_feed.id) %>
+      <%= link_to('Controls', controls_hub_feed_path(hub_feed), :class => 'ui-silk ui-silk-cog inline hover gray control', :title => 'Feed actions') %>
   </td>
 </tr>

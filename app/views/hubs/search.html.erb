@@ -1,11 +1,11 @@
 <%= documentation('hub-wide-item-search') %>
 <div style="margin-bottom: 1em;">
-  <h2>Feed Item Search</h2>
+  <h2>Search</h2>
   <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
-    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Keyword Search. . .' %> <br/>
-    <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags. . . .' %>
-    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags. . . .' %>
-    <%= submit_tag('Search items', :class => 'button') %>
+    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search this hub...' %> <br/>
+    <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags...' %>
+    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags...' %>
+    <%= submit_tag('Search', :class => 'button') %>
   <% end %>
 </div>
 

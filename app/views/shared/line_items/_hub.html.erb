@@ -1,7 +1,8 @@
 <div class="hub">
   <h2 class="title"><%= link_to hub.title, hub_path(hub) %> 
     <% if current_user && current_user.is?(:owner, hub) %>
-      <sup><%= link_to('edit', edit_hub_path(hub)) %></sup>
+      <%= link_to('edit', edit_hub_path(hub), :class => 'ui-silk inline ui-silk-pencil hover gray', :title => 'Edit this hub') %>
+      <%= link_to('Delete', hub_path(hub), :method => :delete, :confirm => 'Are you sure you want to delete this hub?', :class => 'ui-silk inline ui-silk-delete hover gray', :title => 'Delete this hub') %>
     <% end %>
   </h2>
   <% unless hub.description.blank? %>
