@@ -52,13 +52,33 @@ namespace :tagteam do
   
   end
 
+  desc 'tiny test hubs'
+  task :tiny_test_hubs => :environment do
+      u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
+      u.save!
+      u.confirm!
+
+      planet_feeds = %w|
+http://cyber.law.harvard.edu/news/feed
+http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/
+http://www.shirky.com/weblog/feed/
+http://reagle.org/joseph/blog/?flav=atom
+http://www.matthewhindman.com/index.php/component/option,com_rss/feed,RSS2.0/no_html,1/
+http://www.mediacloud.org/blog/feed/|
+
+    add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'jclark@cyber.law.harvard.edu')
+
+  end
+
   desc 'test hubs'
   task :test_hubs => :environment do
-    u = User.new(:email => 'djcp@cyber.law.harvard.edu', :password => 'testfoobar', :password_confirmation => "testfoobar")
+    u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
     u.save
+    u.confirm!
 
-    u = User.new(:email => 'peter.suber@gmail.com', :password => 'testpass', :password_confirmation => "testpass")
+    u = User.new(:username => 'ps', :email => 'peter.suber@gmail.com', :password => 'testpass', :password_confirmation => "testpass")
     u.save
+    u.confirm!
 
     planet_feeds = %w|
 http://fringethoughts.wordpress.com/feed/
@@ -118,7 +138,7 @@ http://technosociology.org/?feed=rss2
 http://cyber.law.harvard.edu/views/minifeed/740/feed
 http://metalab.harvard.edu/feed|
 
-  add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'djcp@cyber.law.harvard.edu')
+  add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'jclark@cyber.law.harvard.edu')
 
   oa_feeds = %w|http://www.connotea.org/rss/tag/oa.new 
 http://www.connotea.org/rss/tag/oa.mandates

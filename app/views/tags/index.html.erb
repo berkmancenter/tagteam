@@ -3,17 +3,19 @@
 <% else %>
   <%= documentation('hub-tag-cloud') %>
 <% end %>
-<p><b>Filter tags by:</b></p>
+<h3>Filter Tags</h3>
+<h4>By Usage Frequency</h4>
 <div id="slider_controls">
-  <div style="float: left">less frequent</div>
-  <div style="float: right;">more frequent</div>
+  <div style="float: left">Less Frequent</div>
+  <div style="float: right;">More Frequent</div>
 </div>
 <div class="clear"></div>
 
 <div id="tag_slider"></div>
 
+<h4>By Keyword</h4>
 <div style="margin-bottom: 1em;">
-  Keyword: <input id="filter_by" size="15" /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">reset</a>
+  <input id="filter_by" size="15" placeholder="Keyword..." /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">Reset</a>
 </div>
 
 

@@ -1,14 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.0'
+gem 'rails', '~> 3.2.12'
 gem 'pg'
 gem 'formtastic'
 gem 'jquery-rails'
 # gem 'carrierwave'
 # gem 'mini_magick'
-gem 'devise'
+gem 'devise', '~> 2.0'
 gem 'acl9'
-gem 'feed-abstract'
+gem 'feed-abstract', '~> 0.0.13'
 gem "will_paginate"
 gem 'sunspot'
 gem 'sunspot_rails'
@@ -27,12 +27,15 @@ group :development, :test do
   gem 'thin'
   gem 'sqlite3'
   gem 'silent-postgres'
+  gem 'progress_bar'
 end
 
 group :test do
-  gem 'cucumber-rails'
-  gem 'capybara'
+  gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'headless'
   gem 'shoulda'
   gem 'shoulda-matchers'
   gem 'selenium-client'

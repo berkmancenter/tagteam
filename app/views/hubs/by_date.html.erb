@@ -1,11 +1,12 @@
 <% unless request.xhr? %>
-  <h2>Items from <%= breadcrumbs.items.collect{|i| i[0]}.reject{|i| ! i.match(/^\d+$/)}.join('-') %>, <%= @search.total %> total</h2>
+<h1>Items by Date</h1>
 <div class="tabs" id="by_date_tabs">
   <ul>
     <li><a href="#items">Items</a></li>
   </ul>
 <% end %>
   <div id="items"> 
+    <h2>Items from <%= breadcrumbs.items.collect{|i| i[0]}.reject{|i| ! i.match(/^\d+$/)}.join('-') %>, <%= @search.total %> total</h2>
     <%= will_paginate @feed_items %>
     <table class="hub feed_items" id="hub_<%= @hub.id %>">
       <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>

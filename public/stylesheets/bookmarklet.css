@@ -1,23 +1,20 @@
-header h1{
-  font-size: 1.5em;
-  width: 100%;
+#content .ui-tabs .ui-tabs-nav li {
+    width: auto;
+    padding: 0.2em 1.1em 0.2em 1em;
 }
-
-#wrapper{
-  margin-top: 0px;
-  padding-top: 10px;
+#content .ui-tabs .ui-tabs-nav li a {
+    font-weight: normal;
+    font-size: 13px;
 }
-
-.grid_10, .container_10{
-  margin:10px;
+#content .ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+    color: #A33724;
 }
-
-.grid_10{
-  width: 630px;
+#content .ui-tabs .ui-tabs-nav li.ui-tabs-active:after, #content .ui-tabs .ui-tabs-nav li.ui-tabs-active:before {
+    content: none;
 }
-
-.grid_10{
-  margin-top: 0px;
-  margin-bottom: 0px;
-
+.ui-tabs .ui-tabs-panel {
+    padding: 1em 0;
+}
+footer {
+    margin-top: -20px;
 }

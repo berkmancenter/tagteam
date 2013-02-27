@@ -2,6 +2,11 @@ Given /^the following hubs:$/ do |hubs|
   Hub.create!(hubs.hashes)
 end
 
+Given "I am viewing the \"$hub_title\" hub" do |hub_title|
+    @hub = Hub.where(:title => hub_title).first
+    visit url_for @hub
+end
+
 When /^I delete the (\d+)(?:st|nd|rd|th) hub$/ do |pos|
   visit hubs_path
   within("table tr:nth-child(#{pos.to_i+1})") do

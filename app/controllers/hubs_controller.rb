@@ -306,7 +306,7 @@ class HubsController < ApplicationController
         current_user.has_role!(:owner, @hub_feed)
         current_user.has_role!(:creator, @hub_feed)
         format.html{ 
-          render :text => 'Added that feed'
+          render :text => 'Added that feed', :layout => ! request.xhr?
         }
       else
         format.html{ 
@@ -394,7 +394,15 @@ class HubsController < ApplicationController
         current_user.has_role!(:owner, @hub)
         current_user.has_role!(:creator, @hub)
         flash[:notice] = 'Added that Hub.'
-        format.html {redirect_to hub_path(@hub)}
+        format.html {
+          if session[:redirect_after].nil?
+            redirect_to hub_path(@hub)
+          else
+            redirect_path = session[:redirect_after]
+            session[:redirect_after] = nil
+            redirect_to redirect_path
+          end
+        }
       else
         flash[:error] = 'Could not add that Hub'
         format.html {render :action => :new}
@@ -440,71 +448,26 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
 
-    if params[:junction_type].blank?
-      params[:junction_type] = 'and'
-    end
-    # no code injection here.
-    junction_type_map = {'and' => 'all_of', 'or' => 'any_of'}
+    hub_id = @hub.id
+    tagging_key = @hub.tagging_key
 
-    unless params[:include_tag_ids].blank?
-      include_tags = params[:include_tag_ids]
+    @search = FeedItem.search do
+      with :hub_ids, hub_id
+      paginate :page => params[:page], :per_page => get_per_page
+      order_by(:date_published, :desc)
+      unless params[:q].blank?
+          fulltext params[:q]
+          adjust_solr_params do |params|
+              params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
+          end
+      end
     end
 
-    unless params[:exclude_tag_ids].blank?
-      exclude_tags = params[:exclude_tag_ids]
-    end
-
+    @search.execute!
     unless params[:q].blank?
-      keywords = params[:q]
+        params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end
 
-    unless params[:hub_feed_ids].blank?
-      hub_feed_ids = params[:hub_feed_ids] 
-    end
-
-    if ! include_tags.blank? || ! exclude_tags.blank? || ! keywords.blank? || ! hub_feed_ids.blank?
-      @search = FeedItem.search
-      hub_id = @hub.id
-
-      hub_context = @hub.tagging_key
-
-      @search.build do
-        self.send((junction_type_map[params[:junction_type]].blank?) ? 'any_of' : junction_type_map[params[:junction_type]]) do
-          unless hub_feed_ids.blank?
-            with :hub_feed_ids, hub_feed_ids
-          end
-          unless include_tags.blank?
-            with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-          end
-          unless exclude_tags.blank?
-            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it}|}
-          end
-          unless params[:q].blank?
-            text_fields do
-              any_of do
-                with :title, params[:q]
-                with :description, params[:q]
-                with :content, params[:q]
-                with :url, params[:q]
-                with :guid, params[:q]
-                with :authors, params[:q]
-                with :contributors, params[:q]
-                with :rights, params[:q]
-                with :tag_list, params[:q]
-              end
-            end
-          end
-        end
-      end
-
-      @search.build do
-        with :hub_ids, hub_id
-        paginate :page => params[:page], :per_page => get_per_page
-        order_by(:date_published, :desc)
-      end
-
-      @search.execute!
-    end
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => (@search.blank?) ? [] : @search.results }

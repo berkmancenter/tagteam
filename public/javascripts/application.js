@@ -16,7 +16,7 @@
         console.log(textStatus);
         console.log(errorThrown);
       }
-      if(errorThrown != ''){
+      if(errorThrown != '' && textStatus != 'abort'){
         $('<div></div>').html("There appears to have been an error.<br/><p class='error'>" + jqXHR.responseText + '</p>').dialog({
           modal: true
           }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
@@ -35,6 +35,9 @@
             type: 'GET',
             url: $(this).attr('href'),
             dataType: 'html',
+            beforeSend: function(){
+              $.showSpinner();
+            },
             success: function(html){
               $(paginationTarget).html(html);
             }
@@ -44,7 +47,7 @@
           e.preventDefault();
           $.cookie('per_page',$(this).val(), {expires: 365, path: $.rootPath()});
           var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-          var paginationLink = $(this).parent().next().find('a').first().attr('href').replace(/page=\d+/,'page=1');
+          var paginationLink = $(this).parent().prev().find('a').first().attr('href').replace(/page=\d+/,'page=1');
           if (! paginationLink.match(/page=\d+/)){
             paginationLink = paginationLink + "&page=1";
           }
@@ -52,6 +55,9 @@
             type: 'GET',
             url: paginationLink,
             dataType: 'html',
+            beforeSend: function(){
+              $.showSpinner();
+            },
             success: function(html){
               $(paginationTarget).html(html);
             }
@@ -74,7 +80,6 @@
               width: 600,
               minWidth: 400,
               height: 'auto',
-              position: 'top',
               title: windowTitle,
               buttons: {
                 Close: function(){
@@ -87,11 +92,11 @@
               cookie: {
                 expires: 3
               },
+              beforeLoad: function(){
+                $.showSpinner();
+              },
               ajaxOptions: {
                 dataType: 'html',
-                beforeSend: function(){
-                  $.showSpinner();
-                },
                 complete: function(){
                   $.checkPlaceholders();
                   $.initPerPage();
@@ -240,13 +245,18 @@
         dataType: 'json',
         success: function(json){
           $('#feed_item_bookmark_collection_id_input').show();
-          $('#feed_item_tag_list_input').show();
           $('#feed_item_bookmark_collection_id').html('');
+          if (json.feeds.length > 0) {
           $(json.feeds).each(function(i,bookmarkCollectionObj){
             $('#feed_item_bookmark_collection_id').append(
               $('<option />').attr({value: bookmarkCollectionObj.id}).text(bookmarkCollectionObj.title)
             );
           });
+          } else {
+            $('#feed_item_bookmark_collection_id').append(
+              $('<option />').attr({value: ''}).text('<New Collection>')
+            );
+          }
 
           if($.cookie('bookmarklet_bookmark_collection_id_choice') != undefined ){
             $('#feed_item_bookmark_collection_id').val($.cookie('bookmarklet_bookmark_collection_id_choice'));
@@ -309,15 +319,14 @@
       if($.cookie('bookmarklet_hub_choice') != undefined){
         // A selection! Set the defaults.
         $('#feed_item_hub_id').val($.cookie('bookmarklet_hub_choice'));
-        $.initBookmarkCollectionChoices($.cookie('bookmarklet_hub_choice'));
       }
-      $('#feed_item_hub_id').change(function(){
+      $.initBookmarkCollectionChoices($('#feed_item_hub_id').val());
+      $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
       });
     },
     initBookmarklet: function(tagJsonOutput){
       $('#feed_item_bookmark_collection_id_input').hide();
-      $('#feed_item_tag_list_input').hide();
       $.observeHubSelector();
       $('.bookmarklet_tabs').tabs();
       $('.datepicker').datepicker({
@@ -447,7 +456,6 @@ $(document).ready(function(){
       modal: true,
       height: 'auto',
       width: 600,
-      position: 'top',
       title: 'Background jobs running in this TagTeam',
       create: function(){
         $.refreshBackgroundActivity();
@@ -483,7 +491,7 @@ $(document).ready(function(){
   jQuery.bt.options.ajaxCache = false;
   jQuery.bt.options.fill = '#dddddd';
   jQuery.bt.options.strokeWidth = 2;
-  jQuery.bt.options.strokeStyle = '#333';
+  jQuery.bt.options.strokeStyle = '#999';
   jQuery.bt.options.textzIndex = 999;
   jQuery.bt.options.boxzIndex = 998;
   jQuery.bt.options.wrapperzIndex = 997;
@@ -499,14 +507,13 @@ $(document).ready(function(){
     cookie: {
       expires: 3 
     },
-    ajaxOptions: {
-      beforeSend: function(){
-        $.showSpinner();
-      },
-      error: function(jqXHR,textStatus,errorThrown){
+    beforeLoad: function(event, ui){
+      $.showSpinner();
+      ui.jqXHR.error(function(jqXHR,textStatus,errorThrown){
         $.showMajorError(jqXHR,textStatus,errorThrown);
-      },
-      complete: function(){
+      })
+    },
+    load: function(event, ui) {
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
@@ -514,24 +521,27 @@ $(document).ready(function(){
           dataType: 'html',
           beforeSend: function(){
             $.showSpinner();
-            $('.add_feed_container .messages').html('');
+            $('.add_feed_container .notices').html('');
           },
           complete: function(){
             $.hideSpinner();
           },
           success: function(html){
-            $('.add_feed_container .messages').append('<div class="notice">' + html + '</div>');
             // Update the feed list.
             var current_index = $('.hub_tabs').tabs('option','selected');
             $('.hub_tabs').tabs('load',current_index);
           },
           error: function(jqXHR){
-            $('.add_feed_container .messages').append('<div class="error">' + jqXHR.responseText + '</div>');
+            $('.add_feed_container .notices').append('<div class="error">' + jqXHR.responseText + '</div>');
           }
         });
-      }
     }
   });
+  
+  // bound dynamically b/c the jquery ui tabs() function creates elements
+  $('.hub_tabs .ui-tabs-nav').addClass('grid_3');
+  $('.hub_tabs .ui-tabs-panel').addClass('grid_13');
+  $('.hub_tabs').append('<div class="clear"></div>');
 
   $.bindHoverRows();
 
@@ -564,11 +574,11 @@ $(document).ready(function(){
     cookie: {
       expires: 3
     },
+    beforeLoad: function(){
+      $.showSpinner();
+    },
     ajaxOptions: {
       dataType: 'html',
-      beforeSend: function(){
-        $.showSpinner();
-      },
       complete: function(){
         $.checkPlaceholders();
         $.initPerPage();
@@ -579,6 +589,11 @@ $(document).ready(function(){
       }
     }
   });
+
+  // bound dynamically b/c the jquery ui tabs() function creates elements
+  $('.tabs .ui-tabs-nav').addClass('grid_3');
+  $('.tabs .ui-tabs-panel').addClass('grid_13');
+  $('.tabs').append('<div class="clear"></div>');
 
   if($('#logged_in').length > 0){
 
@@ -634,7 +649,6 @@ $(document).ready(function(){
             width: 600,
             minWidth: 400,
             height: 'auto',
-            position: 'top',
             title: '',
             create: function(){
               $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
@@ -643,7 +657,7 @@ $(document).ready(function(){
               });
             },
             buttons: {
-              Close: function(){
+              Cancel: function(){
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               },
@@ -684,6 +698,8 @@ $(document).ready(function(){
       if($(this).hasClass('more_details_included')){
         $(this).closest('tr').after().next().remove();
         $(this).removeClass('more_details_included');
+        $(this).removeClass('ui-silk-bullet-toggle-minus');
+        $(this).addClass('ui-silk-bullet-toggle-plus');
         return;
       }
       var elem = this;
@@ -692,6 +708,8 @@ $(document).ready(function(){
         success: function(html){
           $(elem).addClass('more_details_included');
           $(elem).closest('tr').after(html);
+          $(elem).removeClass('ui-silk-bullet-toggle-plus');
+          $(elem).addClass('ui-silk-bullet-toggle-minus');
         }
       });
     }

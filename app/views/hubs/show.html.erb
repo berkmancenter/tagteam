@@ -1,18 +1,20 @@
 <h1>  
+  <%= @hub.title %> 
   <% if current_user && current_user.is?(:owner, @hub) %> 
-    <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-edit hover gray') %>
-    <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
+    <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-pencil hover gray', :title => 'Edit this hub') %>
+    <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure you want to delete this hub?', :class => 'ui-silk inline ui-silk-delete hover gray', :title => 'Delete this hub') %>
   <% end %>
-  Hub: <%= @hub.title %> 
-  <sup>
-    <%= link_to('RSS', items_hub_path(@hub, :format => :rss), :title => "An RSS feed of all items in this hub, with tag filters applied.") %>
-    <%= link_to('Atom', items_hub_path(@hub, :format => :atom), :title => "An Atom feed of all items in this hub, with tag filters applied.") %>
-    <%= link_to('jsonp', items_hub_path(@hub, :format => :json, :callback => 'callback'), :title => "jsonp of all items in this hub, with tag filters applied.") %>
-  </sup>
+  <div class="export_menu">
+    <h4>Export Hub</h4>
+    <div>
+      <%= link_to('RSS', items_hub_path(@hub, :format => :rss), :title => "An RSS feed of all items in this hub, with tag filters applied.") %>
+      <%= link_to('Atom', items_hub_path(@hub, :format => :atom), :title => "An Atom feed of all items in this hub, with tag filters applied.") %>
+      <%= link_to('jsonp', items_hub_path(@hub, :format => :json, :callback => 'callback'), :title => "jsonp of all items in this hub, with tag filters applied.") %>
+    </div>
+  </div>
 </h1>
 
 <div class="hub detailed hub_tabs" id="hub_<%= @hub.id %>">
-
   <ul>
     <li><%= link_to('Items', items_hub_path(@hub))%></li>
     <li><a href="#about">About</a></li>
@@ -22,11 +24,16 @@
     <li><%= link_to('Tags', hub_tags_path(@hub))%></li>
     <li><%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%></li>
     <li><%= link_to('Updates', retrievals_hub_path(@hub) )%></li>
-    <li><%= link_to('Search', item_search_hub_path(@hub) )%></li>
     <% if current_user && current_user.is?(:owner, @hub) %> 
       <li><%= link_to('Community', community_hub_path(@hub) )%></li>
     <% end %>
     <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
+    <li class="hub_search">
+      <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
+        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 14, :placeholder => 'Search this hub...' %>
+        <%= submit_tag('Go', :class => 'button keyword_search_submit') %>
+      <% end %>
+    </li>
   </ul>
 
 
