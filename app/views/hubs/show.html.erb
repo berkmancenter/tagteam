@@ -1,6 +1,6 @@
 <h1>  
   <%= @hub.title %> 
-  <% if current_user && current_user.is?(:owner, @hub) %> 
+  <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:superadmin)) %> 
     <%= link_to('edit', edit_hub_path(@hub), :class => 'ui-silk inline ui-silk-pencil hover gray', :title => 'Edit this hub') %>
     <%= link_to('Delete', hub_path(@hub), :method => :delete, :confirm => 'Are you sure you want to delete this hub?', :class => 'ui-silk inline ui-silk-delete hover gray', :title => 'Delete this hub') %>
   <% end %>
