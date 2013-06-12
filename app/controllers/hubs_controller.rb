@@ -13,6 +13,8 @@ class HubsController < ApplicationController
     allow :superadmin
   end
 
+  before_filter :sanitize_params, :only => :index
+
   def meta
     render :layout => ! request.xhr?
   end
@@ -522,6 +524,12 @@ class HubsController < ApplicationController
       format.json{ render :json => @search }
     end
 
+  end
+
+  private
+
+  def sanitize_params
+      params[:page] = params[:page] =~ /^\d*$/ ? params[:page] : 1
   end
 
 end
