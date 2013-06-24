@@ -4,4 +4,4 @@
 # User-Agent: *
 # Disallow: /
 User-Agent: *
-Disallow: /hub-feeds/*/feed_items/*/related
+Disallow: /hub_feeds/*/feed_items/*/related
