@@ -21,6 +21,7 @@ gem 'acts_as_api'
 gem 'nokogiri'
 gem 'sanitize'
 gem 'exception_notification'
+gem 'progress_bar'
 
 group :development, :test do
   gem 'rspec-rails'
