@@ -124,7 +124,7 @@ class RepublishedFeedsController < ApplicationController
 
   def load_republished_feed
     if params[:url_key].blank? 
-      @republished_feed = RepublishedFeed.find!(params[:id])
+      @republished_feed = RepublishedFeed.find(params[:id])
     else
       @republished_feed = RepublishedFeed.find_by_url_key!(params[:url_key])
     end
