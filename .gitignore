@@ -12,3 +12,11 @@ config/initializers/tagteam_shared_key.rb
 config/tagteam.yml
 doc/app
 .DS_Store
+bin
+config/unicorn.rb
+config/sunspot.yml
+nginx/
+pgsql/
+solr/pids/
+var/
+redis/
