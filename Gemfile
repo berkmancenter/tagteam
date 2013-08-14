@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '~> 3.2.12'
+gem 'rack', '~> 1.4.5'
 gem 'pg'
 gem 'formtastic'
 gem 'jquery-rails'
@@ -20,8 +21,9 @@ gem 'resque-pool'
 gem 'acts_as_api'
 gem 'nokogiri'
 gem 'sanitize'
-gem 'exception_notification'
+gem 'exception_notification', "~> 2.6.1"
 gem 'progress_bar'
+gem 'unicorn'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -34,8 +36,7 @@ end
 group :test do
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
-  gem 'capybara'
-  gem 'capybara-webkit'
+  gem 'capybara-webkit', "~> 0.12.1"
   gem 'headless'
   gem 'shoulda'
   gem 'shoulda-matchers'
