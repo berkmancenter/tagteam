@@ -11,7 +11,6 @@ gem 'devise', '~> 2.0'
 gem 'acl9'
 gem 'feed-abstract', '~> 0.0.13'
 gem "will_paginate"
-gem 'sunspot'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'breadcrumbs'
@@ -31,6 +30,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'silent-postgres'
   gem 'progress_bar'
+  gem 'zeus'
 end
 
 group :test do
