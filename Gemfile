@@ -31,6 +31,7 @@ group :development, :test do
   gem 'silent-postgres'
   gem 'progress_bar'
   gem 'zeus'
+  gem 'debugger'
 end
 
 group :test do
