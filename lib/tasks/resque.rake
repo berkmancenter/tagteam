@@ -22,10 +22,15 @@
 
 
 require 'resque/pool/tasks'
+require 'resque_scheduler/tasks'
 # this task will get called before resque:pool:setup
 # and preload the rails environment in the pool manager
 task "resque:setup" => :environment do
     # generic worker setup, e.g. Hoptoad for failed jobs
+    require 'resque_scheduler'
+    require 'resque/scheduler'
+
+    Resque.schedule = YAML.load_file('config/resque_schedule.yml')
 end
 task "resque:pool:setup" do
     # close any sockets or files in pool manager

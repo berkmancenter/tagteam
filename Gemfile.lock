@@ -163,6 +163,10 @@ GEM
       rake
       resque (~> 1.20)
       trollop (~> 1.16)
+    resque-scheduler (2.0.1)
+      redis (>= 2.0.1)
+      resque (>= 1.20.0)
+      rufus-scheduler
     rsolr (1.0.9)
       builder (>= 2.1.2)
     rspec-core (2.14.5)
@@ -177,6 +181,8 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     rubyzip (0.9.9)
+    rufus-scheduler (2.0.23)
+      tzinfo (>= 0.3.23)
     sanitize (2.0.6)
       nokogiri (>= 1.4.4)
     selenium-client (1.2.18)
@@ -261,6 +267,7 @@ DEPENDENCIES
   rails (~> 3.2.12)
   resque
   resque-pool
+  resque-scheduler
   rspec-rails
   sanitize
   selenium-client

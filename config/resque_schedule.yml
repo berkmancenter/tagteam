@@ -1,0 +1,11 @@
+UpdateFeeds:
+  cron: "*/3 * * * * "
+  queue: updater
+  class: UpdateFeeds
+  description: "Looking for new or changed feed items"
+
+ExpireFileCache:
+  cron: "*/2 * * * * "
+  queue: file_cache
+  class: ExpireFileCache
+  description: "Expiring cache entries"

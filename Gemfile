@@ -23,6 +23,7 @@ gem 'sanitize'
 gem 'exception_notification', "~> 2.6.1"
 gem 'progress_bar'
 gem 'unicorn'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 
 group :development, :test do
   gem 'rspec-rails'
