@@ -18,9 +18,22 @@
   <input id="filter_by" size="15" placeholder="Keyword..." /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">Reset</a>
 </div>
 
+<h4>Sort</h4>
+<div style="margin-bottom: 1em;">
+  <select id="sort_tags_by">
+    <option value="alpha">Alphabetical</option>
+    <option value="frequency">Frequency</option>
+  </select>
+  <select id="sort_tags_direction">
+    <option value="asc">Ascending</option>
+    <option value="desc">Desending</option>
+  </select>
+</div>
 
-<% tag_cloud(@tags, %w(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10)) do |tag, css_class| %>
-  <%= tag_display(tag,:hub => @hub, :hub_feed => @hub_feed, :class => css_class) %>
-<% end %>
+<div id="tag_cloud" data-hub-id="<%= @hub.id %>">
+  <% tag_cloud(@tags, %w(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10)) do |tag, css_class| %>
+    <%= tag_display(tag, :show_count => true, :hub => @hub, :hub_feed => @hub_feed, :class => css_class) %>
+  <% end %>
+</div>
 
 <%= javascript_tag "$(document).ready(function(){$.observeTagCloudControls()});" %>

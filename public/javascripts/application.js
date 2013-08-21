@@ -145,6 +145,41 @@
        });
     },
     observeTagCloudControls: function(){
+      var sort_tags_on_change = function(e){
+        var sort_by = $('#sort_tags_by').val();
+        var sort = $("#sort_tags_direction").val();
+        var mapping_function = function(elem) {
+          var tag_frequency = $(elem).data('tag-frequency'),
+              tag_text = $(elem).data('tag-name'),
+              attributes = {};
+
+          attributes['frequency'] = tag_frequency;
+          attributes['name'] = tag_text;
+
+          return attributes;
+        };
+        var compare_function = function(a,b) {
+            if(sort_by == "frequency" && sort == "desc") {
+              return (b.value.frequency - a.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "frequency" && sort == "asc") {
+              return (a.value.frequency - b.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "alpha" && sort == "asc") {
+              return a.value.name.localeCompare(b.value.name);
+            }
+            else if(sort_by == "alpha" && sort == "desc") {
+              return b.value.name.localeCompare(a.value.name);
+            }
+            else {
+              return null;
+            }
+        };
+        $("#tag_cloud").sortChildren(mapping_function, compare_function);
+      };
+      $('#sort_tags_by').change(sort_tags_on_change);
+      $('#sort_tags_direction').change(sort_tags_on_change);
+
       $('#reset_filter').click(function(e){
         $('.tag').show();
       });
