@@ -7,17 +7,28 @@ class TagSorter
     @sort_by = args[:sort_by].to_s
     raise "No sort option supplied" if @sort_by.blank?
     raise "Invalid sort option: please use #{SORT_OPTS.join(" or ")}" unless SORT_OPTS.include?(@sort_by)
+
+    @context = args[:context]
+    @klass = args[:class]
+    raise "Must supply context to sort by date created" if @sort_by == "created_at" and @context.blank?
+    raise "Must supply class to sort by date created" if @sort_by == "created_at" and @klass.blank?
   end
 
   def sort
-    case @sort_by
-    when "alpha"
-      sort_by_alpha
-    when "frequency"
-      sort_by_frequency
-    when "created_at"
-      sort_by_created_at
+    output = nil
+    result = Benchmark.measure do
+      output = case @sort_by
+      when "alpha"
+        sort_by_alpha
+      when "frequency"
+        sort_by_frequency
+      when "created_at"
+        sort_by_created_at
+      end
     end
+    Rails.logger.debug "*****SORT BY #{@sort_by} took #{result}"
+    output
+
   end
 
 
@@ -33,6 +44,6 @@ class TagSorter
   end
 
   def sort_by_created_at
-    @tags.sort { |a,b| b.created_at <=> a.created_at }
+    @tags.sort { |a,b| @klass.first_use_of_tag_in_context(a.name, @context) <=> @klass.first_use_of_tag_in_context(b.name, @context) }
   end
 end
