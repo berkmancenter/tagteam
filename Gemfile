@@ -27,12 +27,12 @@ gem 'resque-scheduler', :require => 'resque_scheduler'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'thin'
+#  gem 'thin'
   gem 'sqlite3'
-  gem 'silent-postgres'
-  gem 'progress_bar'
-  gem 'zeus'
-  gem 'debugger'
+#  gem 'silent-postgres'
+#  gem 'progress_bar'
+#  gem 'zeus'
+#  gem 'debugger'
 end
 
 group :test do
