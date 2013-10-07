@@ -1,5 +1,5 @@
 UpdateFeeds:
-  cron: "*/3 * * * * "
+  cron: "*/2 * * * * "
   queue: updater
   class: UpdateFeeds
   description: "Looking for new or changed feed items"
