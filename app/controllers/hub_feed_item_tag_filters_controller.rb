@@ -40,6 +40,7 @@ class HubFeedItemTagFiltersController < ApplicationController
     @hub_feed_item_tag_filter = HubFeedItemTagFilter.new()
     @hub_feed_item_tag_filter.hub_id = @hub.id
     @hub_feed_item_tag_filter.feed_item_id = @feed_item.id
+    @hub_feed_item_tag_filter.created_by = current_user
 
     if filter_type_model == ModifyTagFilter
       if params[:tag_id].blank?

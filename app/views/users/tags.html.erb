@@ -1,0 +1,29 @@
+<% unless request.xhr? %>
+  <h1>Tags for "<%= @user.username %>"
+    <div class="export_menu">
+      <h4>Export</h4>
+      <div>
+        <%= link_to('rss', hub_user_tags_rss_path(@hub, @user)) %>
+        <%= link_to('atom', hub_user_tags_atom_path(@hub, @user)) %>
+        <%= link_to('json', hub_user_tags_json_path(@hub, @user, :callback => 'callback')) %>
+      </div>
+    </div>
+  </h1>
+
+<div class="tabs" id="tags_tabs">
+  <ul>
+    <li><a href="#tagged_items">Items</a></li>
+  </ul>
+  <div id="tagged_items">
+  <%= documentation('tagged-item-list') %>
+  <h2>Items - <%= @feed_items.total_entries %> total</h2>
+  <% end %>
+    <%= will_paginate(@feed_items) %>
+    <table class="hub_feed feed_items">
+      <%= render :partial => 'shared/line_items/feed_item', :collection => @feed_items %>
+    </table>
+    <%= will_paginate(@feed_items) %>
+<% unless request.xhr? %>
+  </div>
+</div>
+<% end %>

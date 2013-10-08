@@ -9,6 +9,7 @@ class HubFeedItemTagFilter < ActiveRecord::Base
   belongs_to :hub
   belongs_to :feed_item
   belongs_to :filter, :polymorphic => true
+  belongs_to :created_by, :polymorphic => true
   attr_accessible :filter_type, :filter_id
 
   after_save :update_feed_item_tags
