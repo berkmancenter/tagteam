@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation, :remember_me, :login
   attr_accessor :login
   acts_as_authorization_subject :association_name => :roles, :join_table_name => :roles_users
+  validates_uniqueness_of :username
 
   searchable do
     text :first_name, :last_name, :email, :url
