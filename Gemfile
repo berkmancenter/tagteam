@@ -26,6 +26,7 @@ gem 'unicorn'
 gem 'resque-scheduler', :require => 'resque_scheduler'
 
 group :development, :test do
+  gem 'awesome_print'
   gem 'rspec-rails'
   gem 'thin'
   gem 'sqlite3'

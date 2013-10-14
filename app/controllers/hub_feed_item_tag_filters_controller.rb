@@ -53,6 +53,7 @@ class HubFeedItemTagFiltersController < ApplicationController
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
+      current_user.tag @feed_item, :with => new_tag, :on => "hub_#{@hub.id}"
 
     else
       if params[:tag_id].blank?
