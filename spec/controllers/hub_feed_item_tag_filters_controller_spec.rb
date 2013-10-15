@@ -30,7 +30,7 @@ describe HubFeedItemTagFiltersController do
         assigns[:hub_feed_item_tag_filter].filter.should == af
       end
 
-      it "responds with at positive message"  do
+      it "responds with a positive message"  do
         flash[:notice].should == "Added that filter to this hub."
       end
 
@@ -38,12 +38,41 @@ describe HubFeedItemTagFiltersController do
         users_tags = @user.owned_tags.pluck(:name)
         users_tags.should include "testing456"
       end
-      
-
-
     end
 
     context "when deleting a tag" do
+      before do 
+        @hub = Hub.first
+        @feed_item = FeedItem.first
+
+        @tag = ActsAsTaggableOn::Tag.create(:name => "testing123")
+        @user.tag @feed_item, :with => "testing123", :on => "hub_#{@hub.id}"
+
+        post :create, {
+          "filter_type"=>"DeleteTagFilter",
+          "new_tag"=>"", 
+          "modify_tag"=>"",
+          "feed_item_id" => "5",
+          "hub_id" => @hub.id,
+          "tag_id" => @tag.id
+        }
+      end
+
+      it "creates a DeleteTagFilter record" do
+        df = DeleteTagFilter.find_by_tag_id @tag.id
+        df.should_not be_nil
+        assigns[:hub_feed_item_tag_filter].filter.should == df
+      end
+
+      it "response with a positive message" do
+        flash[:notice].should == "Added that filter to this hub."
+      end
+
+      it "removes the tag from the users owned tags" do
+        users_tags = @user.owned_tags.pluck(:name)
+        users_tags.should_not include "testing123"
+
+      end
     end
 
     

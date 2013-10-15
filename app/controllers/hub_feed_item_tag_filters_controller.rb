@@ -61,6 +61,7 @@ class HubFeedItemTagFiltersController < ApplicationController
         params[:tag_id] = delete_tag.id
       end
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
+      current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
     end
 
     respond_to do|format|
