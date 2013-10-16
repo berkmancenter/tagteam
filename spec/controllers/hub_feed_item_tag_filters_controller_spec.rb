@@ -52,7 +52,7 @@ describe HubFeedItemTagFiltersController do
           "filter_type"=>"DeleteTagFilter",
           "new_tag"=>"", 
           "modify_tag"=>"",
-          "feed_item_id" => "5",
+          "feed_item_id" => @feed_item.id,
           "hub_id" => @hub.id,
           "tag_id" => @tag.id
         }
@@ -71,12 +71,42 @@ describe HubFeedItemTagFiltersController do
       it "removes the tag from the users owned tags" do
         users_tags = @user.owned_tags.pluck(:name)
         users_tags.should_not include "testing123"
-
       end
     end
 
     
     context "when modifying a tag" do
+      before do 
+        @hub = Hub.first
+        @feed_item = FeedItem.first
+
+        @tag = ActsAsTaggableOn::Tag.create(:name => "testing123")
+        @user.tag @feed_item, :with => "testing123", :on => "hub_#{@hub.id}"
+
+        post :create, {
+          "filter_type"=>"ModifyTagFilter",
+          "new_tag"=>"testing456", 
+          "feed_item_id" => @feed_item.id,
+          "hub_id" => @hub.id,
+          "tag_id" => @tag.id
+        }
+      end
+
+      it "creates a ModifyTagFilter record" do
+        mf = ModifyTagFilter.find_by_tag_id @tag.id
+        mf.tag_id.should == @tag.id
+        assigns[:hub_feed_item_tag_filter].filter.should == mf
+      end
+
+      it "responds with a positive message" do
+        flash[:notice].should == "Added that filter to this hub."
+      end
+
+      it "modifies the users owned tags" do
+        users_tags = @user.owned_tags.pluck(:name)
+        users_tags.should_not include "testing123"
+        users_tags.should include "testing456"
+      end
     end
   end
 end
