@@ -444,7 +444,6 @@ $(document).ready(function(){
   $.initTabHistory('.hub_tabs');
   $.initTabHistory('.tabs');
   $(window).trigger( 'hashchange' );
-
   if($('#user_role_list').length > 0){
     $.simpleClassFilter('#user_role_filter_container','#user_role_list li');
   }
@@ -517,6 +516,14 @@ $(document).ready(function(){
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
+        var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
+        if (anchor != null && anchor[2] != "") {
+          $('html, body').animate({
+            scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
+          }, 0);
+          document.cookie = 'return_to=';
+        }
+
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
@@ -629,6 +636,7 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
+        var return_to = $(this).attr('return_to'); 
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           var message = '';
@@ -683,6 +691,8 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       var url = $(this).attr('href');
+      var anchor = $(this).prev().attr('name');
+      document.cookie = 'return_to=' + anchor;
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,

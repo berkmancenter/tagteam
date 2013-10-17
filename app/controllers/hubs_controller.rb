@@ -449,7 +449,8 @@ class HubsController < ApplicationController
   def item_search
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
-
+    breadcrumbs.add "Search", request.url
+ 
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
 
