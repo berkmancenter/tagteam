@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe HubFeedItemTagFiltersController do
+describe HubFeedTagFiltersController do
   include Devise::TestHelpers
-  context "create" do
+  context "#create" do
     before do
       @user = User.first
       sign_in @user
@@ -12,39 +12,40 @@ describe HubFeedItemTagFiltersController do
 
       before do 
         @hub = Hub.first
-        @feed_item = FeedItem.first
-        @feed_item.skip_tag_indexing_after_save = true
+        @hub_feed = HubFeed.first
         get :create, {
           "filter_type"=>"AddTagFilter",
           "new_tag"=>"testing456",
           "hub_id"=> @hub.id,
-          "feed_item_id"=>@feed_item.id,
+          "hub_feed_id"=>@hub_feed.id,
           "format" => "html"
         } 
       end
-    
-      it "creates an AddTagFilter record" do
+
+
+      it "creates an AddTagFilter" do
         t = ActsAsTaggableOn::Tag.find_by_name "testing456"
         af = AddTagFilter.find_by_tag_id t.id
-
         af.should_not be_nil
-        assigns[:hub_feed_item_tag_filter].filter.should == af
+        assigns[:hub_feed_tag_filter].filter.should == af
       end
 
-      it "responds with a positive message"  do
+      it "responds with a proper flash message" do
         flash[:notice].should == "Added that filter to this hub."
       end
 
-      it "gives the user ownership of that tag" do
+      it "adds the user as an owner of the tag" do
         users_tags = @user.owned_tags.pluck(:name)
         users_tags.should include "testing456"
       end
+
     end
 
     context "when deleting a tag" do
       before do 
         @hub = Hub.first
-        @feed_item = FeedItem.first
+        @hub_feed = HubFeed.first
+        @feed_item = @hub_feed.feed_items.first
         @feed_item.skip_tag_indexing_after_save = true
 
         @tag = ActsAsTaggableOn::Tag.create(:name => "testing123")
@@ -54,7 +55,7 @@ describe HubFeedItemTagFiltersController do
           "filter_type"=>"DeleteTagFilter",
           "new_tag"=>"", 
           "modify_tag"=>"",
-          "feed_item_id" => @feed_item.id,
+          "hub_feed_id" => @hub_feed.id,
           "hub_id" => @hub.id,
           "tag_id" => @tag.id
         }
@@ -63,7 +64,7 @@ describe HubFeedItemTagFiltersController do
       it "creates a DeleteTagFilter record" do
         df = DeleteTagFilter.find_by_tag_id @tag.id
         df.should_not be_nil
-        assigns[:hub_feed_item_tag_filter].filter.should == df
+        assigns[:hub_feed_tag_filter].filter.should == df
       end
 
       it "response with a positive message" do
@@ -76,20 +77,23 @@ describe HubFeedItemTagFiltersController do
       end
     end
 
-    
-    context "when modifying a tag" do
+
+
+    context "when modifying an existing tag" do
       before do 
         @hub = Hub.first
-        @feed_item = FeedItem.first
+        @hub_feed = HubFeed.first
+        @feed_item = @hub_feed.feed_items.first
         @feed_item.skip_tag_indexing_after_save = true
 
         @tag = ActsAsTaggableOn::Tag.create(:name => "testing123")
         @user.tag @feed_item, :with => "testing123", :on => "hub_#{@hub.id}"
 
+        #{"filter_type"=>"ModifyTagFilter", "tag_id"=>"11", "new_tag"=>"redhat2", "hub_feed_id"=>"1"}
         post :create, {
           "filter_type"=>"ModifyTagFilter",
           "new_tag"=>"testing456", 
-          "feed_item_id" => @feed_item.id,
+          "hub_feed_id" => @hub_feed.id,
           "hub_id" => @hub.id,
           "tag_id" => @tag.id
         }
@@ -98,7 +102,7 @@ describe HubFeedItemTagFiltersController do
       it "creates a ModifyTagFilter record" do
         mf = ModifyTagFilter.find_by_tag_id @tag.id
         mf.tag_id.should == @tag.id
-        assigns[:hub_feed_item_tag_filter].filter.should == mf
+        assigns[:hub_feed_tag_filter].filter.should == mf
       end
 
       it "responds with a positive message" do
@@ -110,6 +114,12 @@ describe HubFeedItemTagFiltersController do
         users_tags.should_not include "testing123"
         users_tags.should include "testing456"
       end
+
     end
+
+
+
+
   end
+
 end
