@@ -110,6 +110,10 @@ class Hub < ActiveRecord::Base
     t.add :created_at
     t.add :updated_at
   end
+  
+  def self.top_new_hubs
+    Hub.order('created_at DESC').limit(3)
+  end
 
   def display_title
     title

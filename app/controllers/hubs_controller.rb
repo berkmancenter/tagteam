@@ -5,7 +5,7 @@ class HubsController < ApplicationController
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
+    allow all, :to => [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
     allow :inputter, :of => :hub, :to => [:add_feed]
@@ -17,6 +17,10 @@ class HubsController < ApplicationController
 
   def meta
     render :layout => ! request.xhr?
+  end
+
+  def list
+    @hubs = Hub.paginate(:page => params[:p] || 1, :per_page => 25).order('title ASC')
   end
 
   def request_rights
@@ -344,7 +348,7 @@ class HubsController < ApplicationController
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
     end
-    @hubs = Hub.paginate(:page => params[:page], :per_page => get_per_page)
+    @hubs = Hub.paginate(:page => params[:page], :per_page => 5 ).order('title ASC') #get_per_page)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => @hubs }

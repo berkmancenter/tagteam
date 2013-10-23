@@ -30,18 +30,20 @@
         // Only allow ajax-y stuff when actually in ajax-y context.
         $('.pagination a').live('click',function(e){
           var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-          e.preventDefault();
-          $.ajax({
-            type: 'GET',
-            url: $(this).attr('href'),
-            dataType: 'html',
-            beforeSend: function(){
-              $.showSpinner();
-            },
-            success: function(html){
-              $(paginationTarget).html(html);
-            }
-          });
+          if (paginationTarget.length > 0) {
+            e.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: $(this).attr('href'),
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+          }
         });
         $('.per_page_selector').live('change', function(e){
           e.preventDefault();
@@ -441,7 +443,45 @@
 })(jQuery);
 
 $(document).ready(function(){
-  $.initTabHistory('.hub_tabs');
+  $('#pagination').bootpag({total:$("#pagination").attr("data-total-pages"), maxVisible:5}).on("page", function(event, num){
+     var paginationTarget = $(this).closest("#pagination").siblings('.search_results,.ui-widget-content');
+     event.stopPropagation();
+     event.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: "?page=" + num,
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+  });
+
+    var container = $('#masonry');
+    if (container.length > 0) {
+      container.masonry({
+          itemSelector: '.hub'
+       });
+      container.infinitescroll({
+        navSelector  : '#page-nav',    // selector for the paged navigation
+        nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
+        itemSelector : '.hub',     // selector for all items you'll retrieve
+        loading: {
+            finishedMsg: 'No more pages to load.',
+            img: 'http://i.imgur.com/6RMhx.gif'
+         }
+       },
+       function( newElements ) {
+         var newElems = $(newElements).css({ opacity: 0 });
+         newElems.animate({ opacity: 1 });
+         container.masonry( 'appended', newElems, true );
+         $.hideSpinner();
+       }
+      );
+    }
   $.initTabHistory('.tabs');
   $(window).trigger( 'hashchange' );
   if($('#user_role_list').length > 0){
@@ -523,7 +563,6 @@ $(document).ready(function(){
           }, 0);
           document.cookie = 'return_to=';
         }
-
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
