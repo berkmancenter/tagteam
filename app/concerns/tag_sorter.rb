@@ -15,20 +15,16 @@ class TagSorter
   end
 
   def sort
-    output = nil
-    result = Benchmark.measure do
-      output = case @sort_by
-      when "alpha"
-        sort_by_alpha
-      when "frequency"
-        sort_by_frequency
-      when "created_at"
-        sort_by_created_at
-      end
+    case @sort_by
+    when "alpha"
+      sort_by_alpha
+    when "frequency"
+      sort_by_frequency
+    when "created_at"
+      sort_by_created_at
+    else
+      nil
     end
-    Rails.logger.debug "*****SORT BY #{@sort_by} took #{result}"
-    output
-
   end
 
 
