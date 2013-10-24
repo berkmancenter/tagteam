@@ -198,8 +198,9 @@ class FeedItem < ActiveRecord::Base
     item_changelog = {}
 
     fi.title = item.title
-    fi.description = item.summary
-
+    unless item.summary.blank?
+      fi.description = item.summary
+    end
     if fi.new_record?
       # Instantiate only for new records.
       fi.guid = item.guid

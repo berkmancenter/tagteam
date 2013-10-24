@@ -93,7 +93,7 @@ class FeedItemsController < ApplicationController
   end
 
   def from_search?
-    request.referer and Rails.application.routes.recognize_path(request.referer)[:action]=="item_search"
+   request.referer and request.referer.include?("item_search")
   end
 
   def add_breadcrumbs
