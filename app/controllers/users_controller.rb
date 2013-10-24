@@ -3,8 +3,17 @@ class UsersController < ApplicationController
   before_filter :load_user, :only => [:roles_on]
 
   access_control do
+    allow all, :to => [:tags]
     allow logged_in, :to => [:roles_on, :autocomplete]
     allow :superadmin
+  end
+
+  def tags
+    @hub = Hub.find(params[:hub_id])
+    @user = User.find_by_username(params[:username])
+    @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
+    @feed_items = @user.owned_taggings.paginate(:page => params[:page], :per_page => get_per_page)
+    render :layout => ! request.xhr?
   end
 
   def roles_on

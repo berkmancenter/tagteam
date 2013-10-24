@@ -30,18 +30,20 @@
         // Only allow ajax-y stuff when actually in ajax-y context.
         $('.pagination a').live('click',function(e){
           var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-          e.preventDefault();
-          $.ajax({
-            type: 'GET',
-            url: $(this).attr('href'),
-            dataType: 'html',
-            beforeSend: function(){
-              $.showSpinner();
-            },
-            success: function(html){
-              $(paginationTarget).html(html);
-            }
-          });
+          if (paginationTarget.length > 0) {
+            e.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: $(this).attr('href'),
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+          }
         });
         $('.per_page_selector').live('change', function(e){
           e.preventDefault();
@@ -143,6 +145,41 @@
        });
     },
     observeTagCloudControls: function(){
+      var sort_tags_on_change = function(e){
+        var sort_by = $('#sort_tags_by').val();
+        var sort = $("#sort_tags_direction").val();
+        var mapping_function = function(elem) {
+          var tag_frequency = $(elem).data('tag-frequency'),
+              tag_text = $(elem).data('tag-name'),
+              attributes = {};
+
+          attributes['frequency'] = tag_frequency;
+          attributes['name'] = tag_text;
+
+          return attributes;
+        };
+        var compare_function = function(a,b) {
+            if(sort_by == "frequency" && sort == "desc") {
+              return (b.value.frequency - a.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "frequency" && sort == "asc") {
+              return (a.value.frequency - b.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "alpha" && sort == "asc") {
+              return a.value.name.localeCompare(b.value.name);
+            }
+            else if(sort_by == "alpha" && sort == "desc") {
+              return b.value.name.localeCompare(a.value.name);
+            }
+            else {
+              return null;
+            }
+        };
+        $("#tag_cloud").sortChildren(mapping_function, compare_function);
+      };
+      $('#sort_tags_by').change(sort_tags_on_change);
+      $('#sort_tags_direction').change(sort_tags_on_change);
+
       $('#reset_filter').click(function(e){
         $('.tag').show();
       });
@@ -441,10 +478,47 @@
 })(jQuery);
 
 $(document).ready(function(){
-  $.initTabHistory('.hub_tabs');
+  $('#pagination').bootpag({total:$("#pagination").attr("data-total-pages"), maxVisible:5}).on("page", function(event, num){
+     var paginationTarget = $(this).closest("#pagination").siblings('.search_results,.ui-widget-content');
+     event.stopPropagation();
+     event.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: "?page=" + num,
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+  });
+
+    var container = $('#masonry');
+    if (container.length > 0) {
+      container.masonry({
+          itemSelector: '.hub'
+       });
+      container.infinitescroll({
+        navSelector  : '#page-nav',    // selector for the paged navigation
+        nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
+        itemSelector : '.hub',     // selector for all items you'll retrieve
+        loading: {
+            finishedMsg: 'No more pages to load.',
+            img: 'http://i.imgur.com/6RMhx.gif'
+         }
+       },
+       function( newElements ) {
+         var newElems = $(newElements).css({ opacity: 0 });
+         newElems.animate({ opacity: 1 });
+         container.masonry( 'appended', newElems, true );
+         $.hideSpinner();
+       }
+      );
+    }
   $.initTabHistory('.tabs');
   $(window).trigger( 'hashchange' );
-
   if($('#user_role_list').length > 0){
     $.simpleClassFilter('#user_role_filter_container','#user_role_list li');
   }
@@ -517,6 +591,13 @@ $(document).ready(function(){
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
+        var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
+        if (anchor != null && anchor[2] != "") {
+          $('html, body').animate({
+            scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
+          }, 0);
+          document.cookie = 'return_to=';
+        }
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
@@ -629,6 +710,7 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
+        var return_to = $(this).attr('return_to'); 
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           var message = '';
@@ -683,6 +765,8 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       var url = $(this).attr('href');
+      var anchor = $(this).prev().attr('name');
+      document.cookie = 'return_to=' + anchor;
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,

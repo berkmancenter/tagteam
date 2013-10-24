@@ -11,6 +11,7 @@ hub_feed = (@hub_feed.blank?) ? feed_item.hub_feed_for_hub(hub.id) : @hub_feed
     <% cache("feed-item-tag-list-#{hub.id}-#{feed_item.id}", :expires => 120.minutes ) do %>
       <div class='feed_item_title'>
         <%= link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item)) %>
+        <a name="<%= feed_item.title.strip.to_param %>"></a>
         <%= link_to('controls', controls_hub_feed_feed_item_path(hub_feed,feed_item), :class => 'ui-silk ui-silk-cog inline hover gray control', :title => 'Item actions') %>
       </div>
       <div class='feed_item_feed'>
