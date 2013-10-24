@@ -20,3 +20,5 @@ pgsql/
 solr/pids/
 var/
 redis/
+add_test_mappings.vim
+run-test-listener.sh

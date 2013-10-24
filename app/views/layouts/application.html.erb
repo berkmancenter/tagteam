@@ -23,7 +23,10 @@
           <nav class="user_meta grid_12">
             <div>
               <% unless current_user.blank? %>
-               Welcome, <%= current_user.username %> 
+                Welcome, 
+                <%= @hub.present? ? 
+                  link_to(current_user.username, hub_user_tags_path(@hub, current_user.username)) : 
+                  current_user.username %> 
                 &ndash; <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
               <% else %>
                 <%= link_to('Log in', new_user_session_url(:protocol => protocol_resolver)) %>

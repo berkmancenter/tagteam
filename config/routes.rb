@@ -64,6 +64,12 @@ Tagteam::Application.routes.draw do
     match 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { :name => /.+/ }
     match 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { :name => /.+/ }
 
+    match 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { :name => /.+/ }
+    match 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { :name => /.+/ }
+    match 'user/:username/atom' => 'users#tags_atom', :as => 'user_tags_atom', :constraints => { :name => /.+/ }
+    match 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { :name => /.+/ }
+    match 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { :name => /.+/ }
+
     member do
       post 'recalc_all_tags'
       get 'search'
