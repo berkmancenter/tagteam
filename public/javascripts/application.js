@@ -505,11 +505,13 @@ $(document).ready(function(){
         nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
         itemSelector : '.hub',     // selector for all items you'll retrieve
         loading: {
-            finishedMsg: 'No more pages to load.',
-            img: 'http://i.imgur.com/6RMhx.gif'
-         }
-       },
-       function( newElements ) {
+         finishedMsg: '',
+         msgText: '' 
+        },
+        errorCallback: function(){
+          $.hideSpinner();
+        }
+       }, function( newElements ) {
          var newElems = $(newElements).css({ opacity: 0 });
          newElems.animate({ opacity: 1 });
          container.masonry( 'appended', newElems, true );
