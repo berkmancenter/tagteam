@@ -1,10 +1,21 @@
 <% hub = (@hub.blank?) ? input_source.republished_feed.hub : @hub %>
 <div class="input_source">
   <div class="grid_1 alpha">
-    <% if current_user && current_user.is?(:owner, input_source) %>
-      <%= link_to('delete', input_source_path(input_source), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+    <% if current_user && current_user.is?(:owner, hub) && defined?(effect) %>
+      <%= form_tag(input_source.new_record? ? input_sources_path : input_source_path(input_source), :method => input_source.new_record? ? :post: :put) do %>
+        <%= link_to_function(effect, "$(this.parentNode).find('#return_to').val(window.location.toString()); this.parentNode.submit()", {:class => "ui-silk ui-silk-add inline hover gray", :title => "#{effect.capitalize} this item"}) %>
+        <%= hidden_field_tag 'return_to', '' %>
+        <%= hidden_field_tag 'input_source[item_source_type]',input_source.item_source.class.name  %>
+        <%= hidden_field_tag 'input_source[item_source_id]',input_source.item_source.id  %>
+        <%= hidden_field_tag 'input_source[republished_feed_id]', input_source.republished_feed.id %> 
+        <%= hidden_field_tag 'input_source[effect]', effect %>
+      <% end %>
+    <% elsif current_user && current_user.is?(:owner, input_source) %>
+      <% unless input_source.new_record? %>
+        <%= link_to('delete', input_source_path(input_source), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
       <% if false %>
         <%= link_to('edit', edit_input_source_path(input_source), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
+      <% end %>
       <% end %>
     <% end %>
   </div>

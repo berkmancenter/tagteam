@@ -34,7 +34,11 @@ class InputSourcesController < ApplicationController
         flash[:notice] = 'Add that input source'
         format.html{
           unless request.xhr?
-            redirect_to hub_republished_feed_url(@hub,@republished_feed)
+            if params[:return_to]
+              redirect_to params[:return_to]
+            else
+              redirect_to hub_republished_feed_url(@hub,@republished_feed)
+            end
           else
             message = (@input_source.effect == 'add') ? %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"| : %Q|Removed "#{@input_source.item_source}" from "#{@republished_feed}"|
             render :text => message 
@@ -62,7 +66,11 @@ class InputSourcesController < ApplicationController
       if @input_source.save
         current_user.has_role!(:editor, @input_source)
         flash[:notice] = 'Updated that input source'
-        format.html{redirect_to hub_republished_feed_url(@input_source.republished_feed.hub,@input_source.republished_feed)}
+        if params[:return_to]
+          format.html{ redirect_to params[:return_to]}
+        else
+          format.html{redirect_to hub_republished_feed_url(@input_source.republished_feed.hub,@input_source.republished_feed)}
+        end
       else
         flash[:error] = 'Could not update that input source'
         format.html {render :action => :edit}

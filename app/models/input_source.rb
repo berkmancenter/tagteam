@@ -23,7 +23,7 @@ class InputSource < ActiveRecord::Base
   end
   validates_inclusion_of :effect, :in => EFFECTS
 
-  attr_accessible :item_source, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
+  attr_accessible :item_source, :republished_feed, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
   attr_accessor :search_in
 
   api_accessible :default do |t|

@@ -1,7 +1,18 @@
 <%= documentation('republished-feed-inputs-tab') %>
 <h3>Inputs</h3>
-<p>The feeds, tags, searches, and items below serve as the sources used to create this feed.</p>
-<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
+<p>The feeds, tags, searches, and items below serve as the sources used to create this feed:</p>
+<% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'add'} %>
+  <i>No items to display.</i>
+<% end %>
+<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'} %>
 <% if current_user && current_user.is?(:owner, @republished_feed) %>
-  <p>Add new inputs to this remixed feed by using the controls throughout this hub.</p>
+<br/>
+<p>Add new inputs to this remixed feed:</p>
+<% f = @republished_feed.hub.hub_feeds.select {|h| !@republished_feed.input_sources.map(&:item_source).include?(h.feed) } %>
+<% tags = ActsAsTaggableOn::Tag.where('id  NOT IN (?)', @republished_feed.input_sources.select {|t| t.item_source.is_a? ActsAsTaggableOn::Tag }.map(&:id)) %>
+<% fi = @republished_feed.hub.hub_feeds.map(&:feed_items).flatten.select {|i| !@republished_feed.input_sources.map(&:item_source).include?(i)} %>
+<% if (fi + tags + f).empty? %>
+  <i>No items to display.</i>
+<% end %>
+<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.available_inputs.map{|i| InputSource.new(:item_source => i, :republished_feed => @republished_feed)}, :locals => {:effect => 'add'} %>
 <% end %>

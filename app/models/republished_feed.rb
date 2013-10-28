@@ -40,6 +40,18 @@ class RepublishedFeed < ActiveRecord::Base
     t.add :input_sources
   end
 
+  #todo performance
+  def removable_inputs
+    self.input_sources.reject{|ins| ins.effect != 'add'} + self.item_search.results.select {|r| r.input_sources.blank? }.map{|i| InputSource.new(:item_source => i, :republished_feed => self)}
+  end
+
+  def available_inputs
+    @available_feeds ||= self.hub.hub_feeds.map(&:feed).select {|h| !self.input_sources.map(&:item_source).include?(h) }
+    @available_tags ||= ActsAsTaggableOn::Tag.where('id  NOT IN (?)', self.input_sources.select {|t| t.item_source_type == 'ActsAsTaggableOn::Tag' }.map(&:item_source_id))
+    @available_items ||= self.hub.hub_feeds.map(&:feed_items).flatten.select {|i| !self.input_sources.map(&:item_source).include?(i)}
+    @available_tags + @available_feeds + @available_items 
+  end
+
   # All InputSource objects that add FeedItems to this RepublishedFeed.
   def inputs
     input_sources.where(:effect => 'add') 
