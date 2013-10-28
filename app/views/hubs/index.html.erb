@@ -12,7 +12,7 @@
   </div>
  <div id="right">
     <%= render :partial => 'shared/top_new_hubs' %>
- 
+     
     <div id="hub_list">
       <h2>Hubs</h2>
       <div class="search_results">
@@ -27,8 +27,9 @@
       <% unless current_user.blank? %>
         <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
       <% end %>
-      <%= link_to(raw('<span class="inline ui-silk"></span> All Hubs'), "/hubs/list") %>
- 
+      <% unless @hubs.empty? %>
+        <%= link_to(raw('<span class="inline ui-silk"></span> All Hubs'), "/hubs/list") %>
+      <% end %>
     </div>
   </div>
   <div class="clear" style="float: left;"></div>
