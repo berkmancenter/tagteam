@@ -49,8 +49,11 @@ class TagsController < ApplicationController
     else
       @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
     end
+    #tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
+    tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :frequency)
+    @tags = tag_sorter.sort
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render :layout => !request.xhr? }
       format.json{ render_for_api :default, :json => @tags, :root => :tags }
       format.xml{ render_for_api :default, :xml => @tags, :root => :tags }
     end

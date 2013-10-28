@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120713184742) do
+ActiveRecord::Schema.define(:version => 20130822213157) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -118,10 +118,12 @@ ActiveRecord::Schema.define(:version => 20120713184742) do
   create_table "hub_feed_item_tag_filters", :force => true do |t|
     t.integer  "hub_id"
     t.integer  "feed_item_id"
-    t.string   "filter_type",  :limit => 100, :null => false
-    t.integer  "filter_id",                   :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.string   "filter_type",     :limit => 100, :null => false
+    t.integer  "filter_id",                      :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.string   "created_by_type"
+    t.integer  "created_by_id"
   end
 
   add_index "hub_feed_item_tag_filters", ["feed_item_id"], :name => "index_hub_feed_item_tag_filters_on_feed_item_id"

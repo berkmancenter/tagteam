@@ -45,10 +45,23 @@ class HubTagFiltersController < ApplicationController
       end
       new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
+      current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
+      @hub.feeds.each do |feed|
+        feed.feed_items.each do |feed_item|
+          feed_item.skip_tag_indexing_after_save = true
+          current_user.tag feed_item, :with => new_tag, :on => "hub_#{@hub.id}"
+        end
+      end
 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
+      @hub.feeds.each do |feed|
+        feed.feed_items.each do |feed_item|
+          feed_item.skip_tag_indexing_after_save = true
+          current_user.tag feed_item, :with => new_tag, :on => "hub_#{@hub.id}"
+        end
+      end
 
     else
       if params[:tag_id].blank?
@@ -56,6 +69,7 @@ class HubTagFiltersController < ApplicationController
         params[:tag_id] = delete_tag.id
       end
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
+      current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
     end
 
     respond_to do|format|
@@ -67,6 +81,7 @@ class HubTagFiltersController < ApplicationController
       end
     end
   rescue Exception => e
+    ap e.message
     @hub_tag_filter.errors.full_messages << e.message
     respond_to do|format|
       format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
