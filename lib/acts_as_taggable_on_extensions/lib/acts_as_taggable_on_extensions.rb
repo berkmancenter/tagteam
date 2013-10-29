@@ -1,5 +1,23 @@
 ActsAsTaggableOn::Tag.class_eval do
 
+  after_initialize do |tag|
+    name.try(:strip!)
+  end
+ 
+  def self.find_or_create_by_name_normalized(name)
+    puts "self.focbNN: '#{name}'"
+    self.find_or_create_by_name(self.normalize_name(name))
+  end
+
+  def self.find_by_name_normalized(name)
+    puts "self.fbNN: '#{name}'"
+    self.find_by_name(self.normalize_name(name))
+  end
+
+  def self.normalize_name(name)
+    name.to_s.gsub(',', '').strip.downcase
+  end
+
   def contexts
     #contexts = ActsAsTaggableOn::Tagging.select('context').where('tag_id = ? and context != ?',self.id,'tags').group('context')
     contexts = self.taggings.collect{|tg| tg.context}.reject{|ct| ct == 'tags'}
@@ -29,7 +47,7 @@ ActsAsTaggableOn::Tag.instance_eval do
   has_many :modify_tag_filters
   has_many :delete_tag_filters
   has_many :input_sources, :dependent => :destroy, :as => :item_source
-  
+
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
@@ -54,6 +72,7 @@ ActsAsTaggableOn::Tag.instance_eval do
     "Tag"
   end
 
+  
 end
 
 ActsAsTaggableOn::Taggable.class_eval do

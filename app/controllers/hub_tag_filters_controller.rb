@@ -36,14 +36,15 @@ class HubTagFiltersController < ApplicationController
 
     if filter_type_model == ModifyTagFilter
       if !params[:modify_tag].nil? && (params[:new_tag].casecmp params[:modify_tag]) == 0
-          @hub_tag_filter.errors.add(:new_tag, 'cannot be the same as the old tag')
-          raise
+        @hub_tag_filter.errors.add(:new_tag, 'cannot be the same as the old tag')
+        raise
       end
       if params[:tag_id].blank?
-        modify_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:modify_tag].downcase)
+        modify_tag = find_or_create_tag_by_name(params[:modify_tag])
         params[:tag_id] = modify_tag.id
       end
-      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+
+      new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
       @hub.feeds.each do |feed|
@@ -54,7 +55,7 @@ class HubTagFiltersController < ApplicationController
       end
 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
-      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+      new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
       @hub.feeds.each do |feed|
         feed.feed_items.each do |feed_item|
@@ -65,9 +66,10 @@ class HubTagFiltersController < ApplicationController
 
     else
       if params[:tag_id].blank?
-        delete_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+        delete_tag = find_or_create_tag_by_name(params[:new_tag])
         params[:tag_id] = delete_tag.id
       end
+
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
     end
@@ -77,11 +79,12 @@ class HubTagFiltersController < ApplicationController
         current_user.has_role!(:owner, @hub_tag_filter)
         current_user.has_role!(:creator, @hub_tag_filter)
         flash[:notice] = 'Added that filter to this hub.'
-        format.html { render :text => "Added a filter for that tag to \"#{@hub.title}\"", :layout => ! request.xhr? }
+        format.html { render(:text => "Added a filter for that tag to \"#{@hub.title}\"", :layout => ! request.xhr?) and return }
+      else
+        format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }
       end
     end
   rescue Exception => e
-    ap e.message
     @hub_tag_filter.errors.full_messages << e.message
     respond_to do|format|
       format.html { render(:text => @hub_tag_filter.errors.full_messages.join('<br/>'), :status => :not_acceptable, :layout => ! request.xhr?) and return }

@@ -101,9 +101,9 @@ class TagsController < ApplicationController
 
   def load_tag_from_name
     if ! params[:name].blank?
-      @tag = ActsAsTaggableOn::Tag.find_by_name(params[:name])
+      @tag = ActsAsTaggableOn::Tag.find_by_name_normalized(params[:name])
     else
-      @tag = ActsAsTaggableOn::Tag.find(params[:id])
+      @tag = ActsAsTaggableOn::Tag.find_by_id(params[:id])
     end
     if ! @tag
       flash.now[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
