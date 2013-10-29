@@ -235,14 +235,17 @@ class HubsController < ApplicationController
           with(:hub_ids, hub_id)
         end
         order_by('date_published', :desc)
+        order_by('id', :asc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     else
+ logger.warn "*"*1000
       @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
         unless hub_id.blank?
           with(:hub_ids, hub_id)
         end
         order_by('date_published', :desc)
+        order_by('id', :asc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     end
