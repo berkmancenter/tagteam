@@ -1,8 +1,8 @@
 <% unless (@top_new_hubs = Hub.top_new_hubs).empty? %>
    <div id="top_hub_list">
-      <h2>Top 3 New Hubs</h2>
+      <h4>Top 3 New Hubs:</h4>
       <div class="search_results">
-        <%= render :partial => 'shared/line_items/hub', :collection => @top_new_hubs %>
+        <%= render :partial => 'shared/line_items/hub', :collection => @top_new_hubs , :locals => {:limit => 50 } %>
     </div>
   </div>
 <% end %>

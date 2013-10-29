@@ -916,12 +916,17 @@ footer{
     text-decoration: none;
 }
 
+#infscr-loading {
+  visibility:hidden;
+}
+
 #top_hub_list {
   border:1px solid grey; 
   background-color:#efefef; 
   float:right;
   padding: 10px;
-  width:50%;
+  margin: 7px;
+  width:40%;
   overflow:hidden;
 }
     .transitions-enabled.masonry .masonry-brick {
