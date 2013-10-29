@@ -12,7 +12,7 @@
         <%= f.input :title, :required => true %>
         <%= f.input :url, :required => true %>
         <%= f.input :description, :as => :text, :input_html => {:class => 'noNicEditor'}, :hint => "Select text on the page you're bookmarking to auto-populate the description field" %>
-        <%= f.input :date_published, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
+        <%= f.input :date_published, :as => :string, :label => "Date added", :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
       <% end %>
       <%= f.actions %>
     </div>
