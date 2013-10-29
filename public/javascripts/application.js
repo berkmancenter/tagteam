@@ -835,13 +835,24 @@ $(document).ready(function(){
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');
+      var search_query = $('#q').val();
+      var args = { 
+        search_string: search_query, 
+        input_source: {
+          republished_feed_id: republished_feed_id, 
+          item_source_type: item_source_type, 
+          item_source_id: item_source_id, 
+          effect: item_effect
+        }
+      };
+
       // TODO - make this emit when it's been added.
       $.ajax({
         cache: false,
         dataType: 'html',
         url: $.rootPath() + 'input_sources',
         type: 'post',
-        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: item_effect}},
+        data: args,
         beforeSend: function(){ 
           $.showSpinner();
           $('#dialog-error,#dialog-notice').html('').hide();

@@ -4,7 +4,16 @@
   <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
     <ul class="search_controls">
       <li><span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search this hub...' %></li>
-    <li><%= submit_tag('Search', :class => 'button') %> <%= link_to('Permalink', request.fullpath) unless @search.blank? || @search.results.length == 0 %></li>
+      <li>
+        <%= submit_tag('Search', :class => 'button') %> 
+        <% unless @search.blank? || @search.results.length == 0 %>
+          <%= link_to('Permalink', request.fullpath) %> &nbsp;
+          <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
+            :data_item_id => 0,
+            :data_item_type => 'SearchRemix', 
+            :class => "dialog-show add_item_source_to_custom_republished_feed") %>
+        <% end %>
+      </li>
   </ul>
   <% end %>
 </div>

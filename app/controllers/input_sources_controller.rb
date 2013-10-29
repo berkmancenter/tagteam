@@ -22,6 +22,9 @@ class InputSourcesController < ApplicationController
     @input_source.attributes = params[:input_source]
     if @input_source.item_source_type == 'Tag'
       @input_source.item_source_type = 'ActsAsTaggableOn::Tag'
+    elsif @input_source.item_source_type == 'SearchRemix'
+      s = SearchRemix.create! search_string: params[:search_string], hub: @hub
+      @input_source.item_source_id = s.id
     end
 
     #ok because we're using ACL9 to protect this method.
