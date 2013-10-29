@@ -712,7 +712,11 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
-        var return_to = $(this).attr('return_to'); 
+        var return_to = $(this).attr('return_to');
+        var tagList = '';
+        if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
+          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+        }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           var message = '';
@@ -727,7 +731,7 @@ $(document).ready(function(){
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           }
-          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>');
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({
             modal: true,
             width: 600,
