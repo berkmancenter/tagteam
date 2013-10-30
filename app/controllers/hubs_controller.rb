@@ -335,7 +335,7 @@ class HubsController < ApplicationController
       format.html{
         if request.xhr?
           unless @republished_feeds.empty?
-            render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
+            render :layout => false 
           else 
             render :text => 'None yet. You should create a remixed feed from the "remixes" tab on the hub page.'
           end

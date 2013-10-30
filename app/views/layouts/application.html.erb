@@ -15,7 +15,7 @@
       <%= auto_discovery_link_tag :rss, @show_auto_discovery_params %>
     <% end %>
   </head>
-  <body>
+  <body <%= @hub.present? ? "data-hub_id=#{@hub.id}" : "" %>>
     <div id="outer_wrapper">
       <header>
         <div class="container_16">

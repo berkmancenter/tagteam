@@ -12,6 +12,9 @@ class User < ActiveRecord::Base
   attr_accessor :login
   acts_as_authorization_subject :association_name => :roles, :join_table_name => :roles_users
 
+  #This should be a url friendly username because it's used to see the user's tags
+  validates_format_of :username, :with => /\A[A-Za-z0-9_-]+\z/, :message => "Usernames may only contain letters, numbers, underscores, and hyphens."
+
   searchable do
     text :first_name, :last_name, :email, :url
     string :email
