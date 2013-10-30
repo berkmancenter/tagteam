@@ -40,6 +40,19 @@ class RepublishedFeed < ActiveRecord::Base
     t.add :input_sources
   end
 
+
+  def self.create_with_user(user, hub, params)
+    f = new(:hub_id => hub.id)
+    f.attributes = params[:republished_feed]
+    if f.save
+      user.has_role!(:owner, f)
+      user.has_role!(:creator, f)
+      f
+    else
+      nil
+    end
+  end
+
   #todo performance
   def removable_inputs
     self.input_sources.reject{|ins| ins.effect != 'add'} + self.item_search.results.select {|r| r.input_sources.blank? }.map{|i| InputSource.new(:item_source => i, :republished_feed => self)}

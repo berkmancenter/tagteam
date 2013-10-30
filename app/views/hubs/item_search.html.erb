@@ -7,11 +7,15 @@
       <li>
         <%= submit_tag('Search', :class => 'button') %> 
         <% unless @search.blank? || @search.results.length == 0 %>
-          <%= link_to('Permalink', request.fullpath) %> &nbsp;
-          <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
-            :data_item_id => 0,
-            :data_item_type => 'SearchRemix', 
-            :class => "dialog-show add_item_source_to_custom_republished_feed") %>
+          <%= link_to('Permalink', item_search_hub_path(@hub, q: params[:q])) %> &nbsp;
+          <% if current_user %>
+            <span class="ui-silk ui-silk-feed-go inline"></span>
+            <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
+              :data_item_id => 0,
+              :data_item_type => 'SearchRemix', 
+              :title => "Choose the Remix Feed to add this search to",
+              :class => "dialog-show add_item_source_to_custom_republished_feed") %>
+          <% end %>
         <% end %>
       </li>
   </ul>
@@ -31,6 +35,4 @@
   <%= will_paginate @search.results %>
 <% end %>
 
-<%= javascript_tag %Q|$(document).ready(function(){
-$.observeSearchSelectControl();
-});| %>
+<%= javascript_tag %Q|$(document).ready(function(){ $.observeSearchSelectControl(); });| %>

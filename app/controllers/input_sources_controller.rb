@@ -25,10 +25,28 @@ class InputSourcesController < ApplicationController
     elsif @input_source.item_source_type == 'SearchRemix'
       s = SearchRemix.create! search_string: params[:search_string], hub: @hub
       @input_source.item_source_id = s.id
+      if ! @republished_feed
+        attrs = {
+          :republished_feed => {
+            :title => s.default_remix_title,
+            :hub_id => @hub.id,
+            :description => s.to_s,
+            :limit => 50,
+            :url_key => s.url_key
+          }
+
+        }
+
+        @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, attrs)
+        @input_source.republished_feed_id = @republished_feed.id
+      end
+
+      
+
     end
 
     #ok because we're using ACL9 to protect this method.
-    @input_source.republished_feed_id = params[:input_source][:republished_feed_id]
+    @input_source.republished_feed_id ||= params[:input_source][:republished_feed_id]
 
     respond_to do|format|
       if @input_source.save
@@ -157,8 +175,12 @@ class InputSourcesController < ApplicationController
 
   def load_republished_feed
     republished_feed_id = (params[:input_source].blank?) ? params[:republished_feed_id] : params[:input_source][:republished_feed_id]
-    @republished_feed = RepublishedFeed.find(republished_feed_id)
-    @hub = @republished_feed.hub
+    @republished_feed = RepublishedFeed.find_by_id(republished_feed_id)
+    if @republished_feed
+      @hub = @republished_feed.hub
+    elsif params[:hub_id]
+      @hub = Hub.find params[:hub_id]
+    end
   end
 
   def load_input_source

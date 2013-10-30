@@ -840,8 +840,10 @@ $(document).ready(function(){
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');
       var search_query = $('#q').val();
+      var hub_id = $('body').data('hub_id');
       var args = { 
         search_string: search_query, 
+        hub_id: hub_id,
         input_source: {
           republished_feed_id: republished_feed_id, 
           item_source_type: item_source_type, 
