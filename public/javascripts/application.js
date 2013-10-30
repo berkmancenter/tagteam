@@ -594,11 +594,13 @@ $(document).ready(function(){
         $.initPerPage();
         $.hideSpinner();
         var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
-        if (anchor != null && anchor[2] != "") {
+        if (anchor != null) {
+         if (anchor[2] != "undefined" && anchor[2] != "") {
           $('html, body').animate({
             scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
           }, 0);
           document.cookie = 'return_to=';
+          }
         }
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
@@ -712,7 +714,11 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
-        var return_to = $(this).attr('return_to'); 
+        var return_to = $(this).attr('return_to');
+        var tagList = '';
+        if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
+          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+        }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           var message = '';
@@ -727,7 +733,7 @@ $(document).ready(function(){
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           }
-          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>');
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({
             modal: true,
             width: 600,
@@ -768,7 +774,9 @@ $(document).ready(function(){
       e.preventDefault();
       var url = $(this).attr('href');
       var anchor = $(this).prev().attr('name');
-      document.cookie = 'return_to=' + anchor;
+      if (anchor != "" && anchor != null && anchor != undefined) {
+        document.cookie = 'return_to=' + anchor;
+      } 
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,
@@ -835,13 +843,26 @@ $(document).ready(function(){
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');
+      var search_query = $('#q').val();
+      var hub_id = $('body').data('hub_id');
+      var args = { 
+        search_string: search_query, 
+        hub_id: hub_id,
+        input_source: {
+          republished_feed_id: republished_feed_id, 
+          item_source_type: item_source_type, 
+          item_source_id: item_source_id, 
+          effect: item_effect
+        }
+      };
+
       // TODO - make this emit when it's been added.
       $.ajax({
         cache: false,
         dataType: 'html',
         url: $.rootPath() + 'input_sources',
         type: 'post',
-        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: item_effect}},
+        data: args,
         beforeSend: function(){ 
           $.showSpinner();
           $('#dialog-error,#dialog-notice').html('').hide();

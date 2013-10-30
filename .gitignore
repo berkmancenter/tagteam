@@ -18,6 +18,7 @@ pgsql/
 redis/
 solr/data/*
 solr/pids/
+tags
 tmp/
 var/
 redis/
