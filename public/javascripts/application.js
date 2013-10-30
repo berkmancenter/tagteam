@@ -594,11 +594,13 @@ $(document).ready(function(){
         $.initPerPage();
         $.hideSpinner();
         var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
-        if (anchor != null && anchor[2] != "") {
+        if (anchor != null) {
+         if (anchor[2] != "undefined" && anchor[2] != "") {
           $('html, body').animate({
             scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
           }, 0);
           document.cookie = 'return_to=';
+          }
         }
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
@@ -772,7 +774,9 @@ $(document).ready(function(){
       e.preventDefault();
       var url = $(this).attr('href');
       var anchor = $(this).prev().attr('name');
-      document.cookie = 'return_to=' + anchor;
+      if (anchor != "" && anchor != null && anchor != undefined) {
+        document.cookie = 'return_to=' + anchor;
+      } 
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,
