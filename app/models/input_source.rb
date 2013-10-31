@@ -22,8 +22,8 @@ class InputSource < ActiveRecord::Base
     c.allow_jsonp_callback = true
   end
   validates_inclusion_of :effect, :in => EFFECTS
-
-  attr_accessible :item_source, :republished_feed, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
+  accepts_nested_attributes_for :item_source
+  attr_accessible :item_source, :item_source_attributes, :republished_feed, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
   attr_accessor :search_in
 
   api_accessible :default do |t|
@@ -47,4 +47,7 @@ class InputSource < ActiveRecord::Base
     'Remixed Feed Item Source'
   end
   
+  def item_source_attributes=(attrs)
+    self.item_source = attrs[:type].constantize.new(attrs.except(:type))
+  end  
 end

@@ -9,5 +9,8 @@
   </ul>
 <% end %>
 <div class="hub_feed_item_hub_feed_item_tag_filters">
+  <%= render :partial => 'shared/line_items/tag', :collection => @feed_item.tags_on(@hub.tagging_key)  %>
+</div>
+<div class="hub_feed_item_hub_feed_item_tag_filters">
   <%= render :partial => 'shared/line_items/hub_feed_item_tag_filter', :collection => @hub_feed_item_tag_filters %>
 </div>

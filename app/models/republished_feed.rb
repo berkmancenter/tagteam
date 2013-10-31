@@ -42,7 +42,11 @@ class RepublishedFeed < ActiveRecord::Base
 
   #todo performance
   def removable_inputs
-    self.input_sources.reject{|ins| ins.effect != 'add'} + self.item_search.results.select {|r| r.input_sources.blank? }.map{|i| InputSource.new(:item_source => i, :republished_feed => self)}
+    result = self.input_sources.reject{|ins| ins.effect != 'add'} 
+    if self.item_search
+      result += self.item_search.results.select {|r| r.input_sources.blank? }.map{|i| InputSource.new(:item_source => i, :republished_feed => self)}
+    end
+    result
   end
 
   def available_inputs

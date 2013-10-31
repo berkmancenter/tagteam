@@ -8,6 +8,8 @@
 <% if current_user && current_user.is?(:owner, @republished_feed) %>
 <br/>
 <p>Add new inputs to this remixed feed:</p>
+<div>
+<span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a new tag as input source', input_sources_path, :republished_feed_id => @republished_feed.id, :class => 'add_input_source_control' %></div>
 <% f = @republished_feed.hub.hub_feeds.select {|h| !@republished_feed.input_sources.map(&:item_source).include?(h.feed) } %>
 <% tags = ActsAsTaggableOn::Tag.where('id  NOT IN (?)', @republished_feed.input_sources.select {|t| t.item_source.is_a? ActsAsTaggableOn::Tag }.map(&:id)) %>
 <% fi = @republished_feed.hub.hub_feeds.map(&:feed_items).flatten.select {|i| !@republished_feed.input_sources.map(&:item_source).include?(i)} %>

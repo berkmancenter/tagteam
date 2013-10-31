@@ -705,6 +705,36 @@ $(document).ready(function(){
         $(this).btOn();
       }
     });
+    $('.add_input_source_control').live({
+      click: function(e){
+        e.preventDefault();
+        var remix_id = $(this).attr('republished_feed_id');
+        var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+          var prepend = '';
+          var message = "<h2>Please enter the tag you'd like to add<h2>";
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><form method="post" action="/input_sources" accept-charset="UTF-8"><input type="hidden" value="' + $('[name=csrf-token]').attr('content') + '" name="authenticity_token"><input type="hidden" name="return_to" value="' + window.location+ '"><input type="text" id="new_tag_for_filter" name="input_source[item_source_attributes][name]" size="40" /><input type="hidden" value="ActsAsTaggableOn::Tag" name="input_source[item_source_attributes][type]" id="input_source_item_source_type"><input type="hidden" value="' + remix_id + '" name="input_source[republished_feed_id]" id="input_source_republished_feed_id"><input type="hidden" value="add" name="input_source[effect]" id="input_source_effect"></form>');        
+  $(dialogNode).dialog({
+            modal: true,
+            width: 600,
+            minWidth: 400,
+            height: 'auto',
+            title: '',
+                   buttons: {
+              Cancel: function(){
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+              Submit: function(){
+                $('#new_tag_for_filter').parent('form').submit();
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              }
+            }
+          });
+          return false;
+       }
+    });
+
     $('.add_filter_control').live({
       click: function(e){
         e.preventDefault();
