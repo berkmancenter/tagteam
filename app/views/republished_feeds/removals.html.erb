@@ -3,13 +3,14 @@
 <p>The feeds, tags, searches and items below are removed from this feed before publishing:</p>
 <% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'remove'} %>
   <i>No items to display.</i>
+<% else %>
+  <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'} %>
 <% end %>
-<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'} %>
 <% if current_user && current_user.is?(:owner, @republished_feed) %>
 <br/>
 <p>Remove items from this remixed feed:</p>
 
-<% if !@republished_feed.input_sources.any? {|ins| ins.effect != 'remove'} %>
+<% if @republished_feed.removable_inputs.empty? %>
   <i>No items to display.</i>
 <% else %>
  <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.removable_inputs, :locals => {:effect => 'remove'} %>
