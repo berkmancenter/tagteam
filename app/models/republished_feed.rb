@@ -40,6 +40,19 @@ class RepublishedFeed < ActiveRecord::Base
     t.add :input_sources
   end
 
+
+  def self.create_with_user(user, hub, params)
+    f = new(:hub_id => hub.id)
+    f.attributes = params[:republished_feed]
+    if f.save
+      user.has_role!(:owner, f)
+      user.has_role!(:creator, f)
+      f
+    else
+      nil
+    end
+  end
+
   #todo performance
   def removable_inputs
     result = self.input_sources.reject{|ins| ins.effect != 'add'} 
@@ -90,6 +103,8 @@ class RepublishedFeed < ActiveRecord::Base
               add_feed_items << input_source.item_source_id
           when 'ActsAsTaggableOn::Tag'
               add_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          when 'SearchRemix' 
+              add_feed_items << SearchRemix.search_results_for(input_source.item_source_id)
           end
       else
           case input_source.item_source_type
@@ -102,6 +117,9 @@ class RepublishedFeed < ActiveRecord::Base
           end
       end
     end
+
+    add_feed_items.flatten!
+    add_feed_items.uniq!
 
     search = FeedItem.search(:include => [:tags, :taggings, :feeds, :hub_feeds]) do
       any_of do
