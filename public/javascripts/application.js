@@ -690,11 +690,11 @@ $(document).ready(function(){
       click: function(e){
         e.preventDefault();
 
-        var tag_id = $(this).attr('data_tag_id') || 0;
+        var tag_id = $(this).attr('data-tag-id') || 0;
         if(tag_id == 0){
           return false;
         }
-        var hub_id = $(this).attr('data_hub_id') || 0;
+        var hub_id = $(this).attr('data-hub-id') || 0;
         var hub_feed_id = $(this).attr('data_hub_feed_id') || 0;
         var hub_feed_item_id = $(this).attr('data_hub_feed_item_id') || 0;
         
