@@ -48,6 +48,6 @@ class InputSource < ActiveRecord::Base
   end
   
   def item_source_attributes=(attrs)
-    self.item_source = attrs[:type].constantize.new(attrs.except(:type))
+    self.item_source = attrs[:type].constantize.find_or_initialize_by_name(attrs[:name]) if attrs[:name]
   end  
 end
