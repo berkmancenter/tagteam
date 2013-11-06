@@ -783,10 +783,10 @@ $(document).ready(function(){
               },
               Submit: function(){
                 var replace_tag = undefined;
-                if($('#modify_tag_for_filter').length > 0){
-                  replace_tag = $('#modify_tag_for_filter').val();
+                if ($(this).find('#modify_tag_for_filter').length > 0){
+                  replace_tag = $(this).find('#modify_tag_for_filter').val();
                 }
-                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val(), replace_tag);
+                $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               }
