@@ -25,7 +25,7 @@
       <%= link_to(@feed_item.url, @feed_item.url, :target => '_blank', :rel => 'nofollow') %>
       </dd>
       <% unless @feed_item.date_published.blank? %>
-        <dt>Published:</dt>
+        <dt>Added:</dt>
         <dd><%= l(@feed_item.date_published, :format => :date_and_time_short)  %></dd>
       <% end %>
       <% unless @feed_item.last_updated.blank? || @feed_item.last_updated == @feed_item.date_published %>
