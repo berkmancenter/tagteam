@@ -1,4 +1,9 @@
 <%= documentation('republished-feed-items-tab') %>
+<script type="text/javascript">
+$(function() {
+  $.processReturnCookie();
+})();
+</script>
 <div id="items">
   <% unless @search.blank? %>
     <h2>Items: <%= @search.total %> total</h2>

@@ -10,6 +10,17 @@
     hideSpinner: function(){
       $('#spinner').hide();
     }, 
+    processReturnCookie: function(){
+      var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
+        if (anchor != null) {
+         if (anchor[2] != "undefined" && anchor[2] != "") {
+          $('html, body').animate({
+            scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
+          }, 0);
+          document.cookie = 'return_to=';
+          }
+        }
+    },
     showMajorError: function(jqXHR,textStatus,errorThrown){
       if (window.console && console.log){
         console.log(jqXHR);
@@ -593,15 +604,7 @@ $(document).ready(function(){
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
-        var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
-        if (anchor != null) {
-         if (anchor[2] != "undefined" && anchor[2] != "") {
-          $('html, body').animate({
-            scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
-          }, 0);
-          document.cookie = 'return_to=';
-          }
-        }
+        $.processReturnCookie();
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
@@ -744,7 +747,6 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
-        var return_to = $(this).attr('return_to');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
           tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
