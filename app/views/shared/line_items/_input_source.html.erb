@@ -12,7 +12,7 @@
       <% end %>
     <% elsif current_user && current_user.is?(:owner, input_source) %>
       <% unless input_source.new_record? %>
-        <%= link_to('delete', input_source_path(input_source), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
+        <%= link_to('delete', input_source_path(input_source), :onclick=> "$(this).attr('href', $(this).attr('href') + '?return_to=' + window.location.toString())", :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
       <% if false %>
         <%= link_to('edit', edit_input_source_path(input_source), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
       <% end %>
