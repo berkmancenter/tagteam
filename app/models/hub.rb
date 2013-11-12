@@ -11,6 +11,7 @@
 class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
+  extend FriendlyId
 
   before_validation do
     auto_sanitize_html(:description)
@@ -91,8 +92,13 @@ class Hub < ActiveRecord::Base
 
   DELEGATABLE_ROLES = DELEGATABLE_ROLES_HASH.keys.reject{|r| r == :creator}
 
-  attr_accessible :title, :description, :tag_prefix
+  attr_accessible :title, :description, :tag_prefix, :nickname
   acts_as_authorization_object
+
+  friendly_id :nickname, :use => [:slugged, :history]
+
+  after_validation :move_friendly_id_error_to_nickname
+  before_save :clean_slug
 
   acts_as_api do|c|
     c.allow_jsonp_callback = true
@@ -111,8 +117,22 @@ class Hub < ActiveRecord::Base
     t.add :updated_at
   end
   
+  def clean_slug
+    # work around FriendlyId bug that generates slugs for empty nicknames
+    self.slug = nil if nickname.blank?
+    true
+  end
+
+  def move_friendly_id_error_to_nickname
+    errors.add :nickname, *errors.delete(:friendly_id) if errors[:friendly_id].present?
+  end
+
+  def should_generate_new_friendly_id?
+    !new_record? && nickname_changed?
+  end   
+
   def self.top_new_hubs
-    Hub.order('created_at DESC').limit(3)
+    self.order('created_at DESC').limit(3)
   end
 
   def display_title

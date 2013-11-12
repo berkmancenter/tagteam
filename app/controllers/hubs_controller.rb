@@ -14,6 +14,19 @@ class HubsController < ApplicationController
   end
 
   before_filter :sanitize_params, :only => :index
+  before_filter :find_slugged_hub, :only => :show
+
+  def find_slugged_hub
+    return unless params[:id]
+    @hub = Hub.find params[:id]
+
+    # If an old id or a numeric id was used to find the record, then
+    # the request path will not match the hub_path, and we should do
+    # a 301 redirect that uses the current friendly id.
+    if request.path != hub_path(@hub)
+      return redirect_to @hub, :status => :moved_permanently
+    end
+  end
 
   def meta
     render :layout => ! request.xhr?
@@ -239,7 +252,6 @@ class HubsController < ApplicationController
         paginate :page => params[:page], :per_page => get_per_page
       end
     else
- logger.warn "*"*1000
       @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:feeds, :hub_feeds]) do
         unless hub_id.blank?
           with(:hub_ids, hub_id)

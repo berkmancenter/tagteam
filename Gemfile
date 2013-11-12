@@ -7,6 +7,7 @@ gem 'formtastic'
 gem 'jquery-rails'
 # gem 'carrierwave'
 # gem 'mini_magick'
+gem 'friendly_id', '~> 4.0.10'
 gem 'devise', '~> 2.0'
 gem 'acl9'
 gem 'feed-abstract', '~> 0.0.13'
@@ -28,12 +29,8 @@ gem 'resque-scheduler', :require => 'resque_scheduler'
 group :development, :test do
   gem 'awesome_print'
   gem 'rspec-rails'
-#  gem 'thin'
+  # gem 'thin'
   gem 'sqlite3'
-#  gem 'silent-postgres'
-#  gem 'progress_bar'
-#  gem 'zeus'
-#  gem 'debugger'
 end
 
 group :test do

@@ -5,17 +5,15 @@ ActsAsTaggableOn::Tag.class_eval do
   end
  
   def self.find_or_create_by_name_normalized(name)
-    puts "self.focbNN: '#{name}'"
     self.find_or_create_by_name(self.normalize_name(name))
   end
 
   def self.find_by_name_normalized(name)
-    puts "self.fbNN: '#{name}'"
     self.find_by_name(self.normalize_name(name))
   end
 
   def self.normalize_name(name)
-    name.to_s.gsub(',', '').strip.downcase
+    name.to_s.sub(/,\s*$/, '').strip.downcase
   end
 
   def contexts
