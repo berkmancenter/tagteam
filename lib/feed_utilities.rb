@@ -20,7 +20,8 @@ module FeedUtilities
     parsed_feed = ''
     begin 
       parsed_feed = FeedAbstract::Feed.new(response.body)
-    rescue
+    rescue Exception
+      logger.warn "ERROR: test_single_feed failed to parse feed with url: #{feed.feed_url}"
       self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
       return false
     end
@@ -50,7 +51,8 @@ module FeedUtilities
     parsed_feed = ''
     begin 
       parsed_feed = FeedAbstract::Feed.new(response.body)
-    rescue
+    rescue Exception
+      logger.warn "ERROR: test_single_feed failed to parse feed with url: #{feed.feed_url}"
       feed.status_code = "couldn't parse"
       self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
       return false
