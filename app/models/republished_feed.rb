@@ -104,7 +104,7 @@ class RepublishedFeed < ActiveRecord::Base
           when 'ActsAsTaggableOn::Tag'
               add_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
           when 'SearchRemix' 
-              add_feed_items << SearchRemix.search_results_for(input_source.item_source_id)
+              add_feed_items << SearchRemix.search_results_for(input_source.item_source_id, self.limit)
           end
       else
           case input_source.item_source_type

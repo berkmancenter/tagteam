@@ -16,7 +16,7 @@ class SearchRemix < ActiveRecord::Base
     "Remix of search: #{search_string}"
   end
 
-  def self.search_results_for(search_remix_id)
+  def self.search_results_for(search_remix_id, limit=150)
     s = find search_remix_id
 
     search = FeedItem.search do
@@ -25,7 +25,7 @@ class SearchRemix < ActiveRecord::Base
       order_by('date_published', :desc)
       # This is a little bit of a hack, but we need to get as many
       # feed items that match as possible for the remix feed.
-      paginate :page => 1, :per_page => 150 
+      paginate :page => 1, :per_page => limit
       adjust_solr_params do |params|
         params[:q].gsub! '#', "tag_contexts_sm:#{s.hub.tagging_key}-"
       end
