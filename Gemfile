@@ -5,8 +5,6 @@ gem 'rack', '~> 1.4.5'
 gem 'pg'
 gem 'formtastic'
 gem 'jquery-rails'
-# gem 'carrierwave'
-# gem 'mini_magick'
 gem 'friendly_id', '~> 4.0.10'
 gem 'devise', '~> 2.0'
 gem 'acl9'
@@ -24,12 +22,11 @@ gem 'sanitize'
 gem 'exception_notification', "~> 2.6.1"
 gem 'progress_bar'
 gem 'unicorn'
-gem 'resque-scheduler', :require => 'resque_scheduler'
 
 group :development, :test do
+  gem 'resque-scheduler', :require => 'resque_scheduler'
   gem 'awesome_print'
   gem 'rspec-rails'
-  # gem 'thin'
   gem 'sqlite3'
 end
 

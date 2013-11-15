@@ -30,7 +30,8 @@ task "resque:setup" => :environment do
     require 'resque_scheduler'
     require 'resque/scheduler'
 
-    Resque.schedule = YAML.load_file('config/resque_schedule.yml')
+    resque_schedule = 'config/resque_schedule.yml'
+    Resque.schedule = YAML.load_file(resque_schedule) if File.exist?(resque_schedule)
 end
 task "resque:pool:setup" do
     # close any sockets or files in pool manager
