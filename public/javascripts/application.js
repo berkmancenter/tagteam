@@ -13,7 +13,7 @@
     processReturnCookie: function(){
       var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
         if (anchor != null) {
-         if (anchor[2] != "undefined" && anchor[2] != "") {
+         if (anchor[2] != undefined && anchor[2] != "") {
           $('html, body').animate({
             scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
           }, 0);
@@ -698,10 +698,17 @@ $(document).ready(function(){
           return false;
         }
         var hub_id = $(this).attr('data-hub-id') || 0;
-        var hub_feed_id = $(this).attr('data_hub_feed_id') || 0;
-        var hub_feed_item_id = $(this).attr('data_hub_feed_item_id') || 0;
+        var hub_feed_id = $(this).attr('data-hub-feed-id') || 0;
+        var hub_feed_item_id = $(this).attr('data-hub-feed-item-id') || 0;
         
-        $(this).bt({
+        var anchor = $(this).parents('td').find('div a').first();
+        if (anchor) {
+          var anchor = anchor.html();
+          if (anchor != "" && anchor != null && anchor != undefined) {
+            document.cookie = 'return_to=' + anchor;
+          }
+        }
+ $(this).bt({
           ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id + '&hub_feed_id=' + hub_feed_id + '&hub_feed_item_id=' + hub_feed_item_id,
           trigger: 'none',
           closeWhenOthersOpen: true,
