@@ -39,7 +39,7 @@ class FeedItemsController < ApplicationController
       minimum_word_length 3
       paginate :page => params[:page], :per_page => get_per_page
     end
-    @related.execute!
+
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
       format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }

@@ -124,7 +124,7 @@ class HubsController < ApplicationController
       order_by('updated_at', :desc)
       paginate :page => params[:page], :per_page => get_per_page
     end
-    @feed_retrievals.execute!
+
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
@@ -169,18 +169,13 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
 
-    @search = FeedItem.search
-    hub_id = @hub.id
-
     if params[:month] == '00'
-      logger.warn('year search')
       # Year search
       date = DateTime.parse("#{params[:year]}-01-01")
       start_day = date - 1.second
       end_day = date + 1.year
       breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
     elsif params[:day] == '00'
-      logger.warn('month search')
       # Month search
       date = DateTime.parse("#{params[:year]}-#{params[:month]}-01")
       start_day = date - 1.second
@@ -188,7 +183,6 @@ class HubsController < ApplicationController
       breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
       breadcrumbs.add date.month, by_date_hub_path(@hub,:year => date.year, :month => date.month, :day => '00')
     else
-      logger.warn('day search')
       # Day search
       date = DateTime.parse("#{params[:year]}-#{params[:month]}-#{params[:day]}")
       start_day = date - 1.second
@@ -200,18 +194,14 @@ class HubsController < ApplicationController
     start_day = start_day - DateTime.now.offset 
     end_day = end_day - DateTime.now.offset 
 
-    logger.warn("date: #{date.inspect}")
-    logger.warn("start day: #{start_day.inspect}")
-    logger.warn("end day: #{end_day.inspect}")
+    hub_id = @hub.id
 
-    @search.build do
+    @search = FeedItem.search do
       with(:date_published).between(start_day..end_day)
       with :hub_ids, hub_id
       paginate :page => params[:page], :per_page => get_per_page
       order_by(:date_published, :desc)
     end
-
-    @search.execute
 
     @feed_items = @search.results
     respond_to do|format|
@@ -481,7 +471,6 @@ class HubsController < ApplicationController
       end
     end
 
-    @search.execute!
     unless params[:q].blank?
         params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end

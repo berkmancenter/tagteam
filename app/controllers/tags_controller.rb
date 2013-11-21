@@ -30,8 +30,6 @@ class TagsController < ApplicationController
       fulltext params[:term]
     end
 
-    @search.execute!
-
     respond_to do |format|
       format.json { 
         # Should probably change this to use render_for_api

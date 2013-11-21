@@ -27,8 +27,6 @@ class HubFeedsController < ApplicationController
       fulltext params[:term]
     end
 
-    @search.execute!
-
     respond_to do |format|
       format.json { 
         render :json => @search.results.collect{|r| {:id => r.id, :label => r.display_title} }
