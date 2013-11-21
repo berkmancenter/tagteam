@@ -71,11 +71,10 @@ class UsersController < ApplicationController
     @search = User.search do
       fulltext params[:term]
     end
-    @search.execute!
     respond_to do |format|
       format.json { 
         # Should probably change this to use render_for_api
-        render :json => @search.results.collect{|r| {:id => r.id, :label => "#{r.username} - #{r.email}"} }
+        render :json => @search.results.collect{|r| {:id => r.id, :label => "#{r.username}"} }
       }
     end
   rescue

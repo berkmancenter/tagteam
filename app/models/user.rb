@@ -17,7 +17,8 @@ class User < ActiveRecord::Base
   validates_format_of :username, :with => /\A[A-Za-z0-9_-]+\z/, :message => "Usernames may only contain letters, numbers, underscores, and hyphens."
 
   searchable do
-    text :first_name, :last_name, :email, :url
+    text :first_name, :last_name, :email, :url, :username
+    string :username
     string :email
     string :first_name
     string :last_name
