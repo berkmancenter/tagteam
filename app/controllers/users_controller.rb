@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
   def tags
     @hub = Hub.find(params[:hub_id])
+    breadcrumbs.add @hub, hub_path(@hub)
     @user = User.find_by_username(params[:username])
     @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
     @feed_items = @user.owned_taggings.paginate(:page => params[:page], :per_page => get_per_page)
