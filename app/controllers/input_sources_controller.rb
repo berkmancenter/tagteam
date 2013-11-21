@@ -24,7 +24,7 @@ class InputSourcesController < ApplicationController
       @input_source.item_source_type = 'ActsAsTaggableOn::Tag'
     elsif @input_source.item_source_type == 'SearchRemix'
       s = SearchRemix.create! search_string: params[:search_string], hub: @hub
-      @input_source.item_source_id = s.id
+      @input_source.item_source = s
       if ! @republished_feed
         attrs = {
           :republished_feed => {
@@ -38,7 +38,7 @@ class InputSourcesController < ApplicationController
         }
 
         @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, attrs)
-        @input_source.republished_feed_id = @republished_feed.id
+        @input_source.republished_feed = @republished_feed
       end
 
       

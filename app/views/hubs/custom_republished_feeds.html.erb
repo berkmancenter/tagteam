@@ -8,4 +8,8 @@
   </div>
   <div class="clear"></div>
 </div>
-<%= render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds %>
+<% if @republished_feeds.size > 0 %>
+  <%= render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds %>
+<% else %>
+  <%= "None yet. You should create a remixed feed from the \"remixes\" tab on the hub page." %>
+<% end %>

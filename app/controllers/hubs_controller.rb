@@ -346,11 +346,7 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         if request.xhr?
-          unless @republished_feeds.empty?
-            render :layout => false 
-          else 
-            render :text => 'None yet. You should create a remixed feed from the "remixes" tab on the hub page.'
-          end
+           render :layout => false 
         else
           render
         end
