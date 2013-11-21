@@ -44,11 +44,13 @@ class RepublishedFeed < ActiveRecord::Base
   def self.create_with_user(user, hub, params)
     f = new(:hub_id => hub.id)
     f.attributes = params[:republished_feed]
+    #BUG: By returning nil, this hides the error that prevented the instance from saving
     if f.save
       user.has_role!(:owner, f)
       user.has_role!(:creator, f)
       f
     else
+      logger.warn "RepublishedFeed.create_with_user error: #{f.errors.first}"
       nil
     end
   end

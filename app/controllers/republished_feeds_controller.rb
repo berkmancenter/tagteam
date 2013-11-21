@@ -80,6 +80,8 @@ class RepublishedFeedsController < ApplicationController
         flash[:notice] = 'Created a new remix. You should switch to the "inputs" tab and add items for publishing.'
         format.html{redirect_to :action => :show, :id => @republished_feed.id}
       else
+        # new instance needed to avoid breaking form
+        @republished_feed = RepublishedFeed.new(:hub_id => @hub.id)
         flash[:error] = 'Could not add that remix.'
         format.html {render :action => :new}
       end
