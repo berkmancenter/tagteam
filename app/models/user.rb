@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   acts_as_tagger
-
+  has_and_belongs_to_many :roles, :join_table => :roles_users
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
     if bookmark_collections.blank?
       feed = Feed.new
       feed.bookmarking_feed = true
-      feed.title = "#{email}'s bookmarks"
+      feed.title = "#{username}'s bookmarks"
       feed.feed_url = 'not applicable'
       feed.save
 

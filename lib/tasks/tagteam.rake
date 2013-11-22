@@ -30,7 +30,18 @@ namespace :tagteam do
   task :update_feeds => :environment do
     UpdateFeeds.perform
   end
-
+  
+  desc 'cleanup titles'
+  task :cleanup_titles => :environment do
+    Feed.where(:bookmarking_feed => true).each do |f|
+      u = User.where(["roles.authorizable_id = ? and roles.authorizable_type = 'Feed' and roles.name ='creator'", f.id]).joins(:roles).first
+      if u and f.title.include?(u.email)
+        puts "feed #{f.id}: #{f.title} => '#{u.username}\'s boookmarks'"
+        f.update_attribute(:title, "#{u.username}'s bookmarks")
+      end
+    end
+  end
+     
   desc 'clean up orphaned items'
   task :clean_orphan_items => :environment do
     conn = ActiveRecord::Base.connection
