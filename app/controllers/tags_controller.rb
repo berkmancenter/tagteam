@@ -82,7 +82,7 @@ class TagsController < ApplicationController
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
-    @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).uniq.paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
