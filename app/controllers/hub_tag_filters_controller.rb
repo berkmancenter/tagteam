@@ -47,7 +47,9 @@ class HubTagFiltersController < ApplicationController
       new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
-      @hub.feeds.each do |feed|
+      HubFeedItemTagFilter.where(:hub_id => @hub.id).select {|hf| next if hf.filter.tag_id != params[:tag_id].to_i; hf.filter.destroy; hf.destroy }
+   
+    @hub.feeds.each do |feed|
         feed.feed_items.each do |feed_item|
           feed_item.skip_tag_indexing_after_save = true
           current_user.tag feed_item, :with => new_tag, :on => "hub_#{@hub.id}"
