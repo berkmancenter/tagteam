@@ -908,7 +908,10 @@ $(document).ready(function(){
         },
         complete: function(){ $.hideSpinner();},
         success: function(html){
-          $('#dialog-notice').show().html(html);
+          eval("var results = " + html);
+          $('#dialog-notice').show().html(results.message);
+          $('#dialog-notice').parent().append(results.html);
+          $('div.empty-message').remove(); 
         },
         error: function(jqXHR, textStatus, errorThrown){
           $('#dialog-error').show().html(jqXHR.responseText);

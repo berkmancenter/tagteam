@@ -49,7 +49,7 @@ class InputSourcesController < ApplicationController
     @input_source.republished_feed_id ||= params[:input_source][:republished_feed_id]
 
     respond_to do|format|
-      if @input_source.save
+      if @input_source.save and (@input_source.item_source_type != 'SearchRemix' or @republished_feed)
         current_user.has_role!(:owner, @input_source)
         current_user.has_role!(:creator, @input_source)
         flash[:notice] = 'Add that input source'
@@ -62,7 +62,11 @@ class InputSourcesController < ApplicationController
             end
           else
             message = (@input_source.effect == 'add') ? %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"| : %Q|Removed "#{@input_source.item_source}" from "#{@republished_feed}"|
-            render :text => message 
+            if @input_source.item_source_type == 'SearchRemix' and @republished_feed
+             render :json => {:message => message, :html => render_to_string(:partial => 'shared/line_items/republished_feed_choice', :locals => {:republished_feed_choice => @republished_feed})}
+            else 
+              render :text => message
+            end  
           end
         }
       else
