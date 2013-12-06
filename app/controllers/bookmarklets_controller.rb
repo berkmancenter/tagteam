@@ -71,8 +71,8 @@ class BookmarkletsController < ApplicationController
         current_user.has_role!(:creator, @feed_item)
         
         # Assign ownership of the feed item and tag to the user.
-        tags = @feed_item.tag_list.map {|tag_name| ActsAsTaggableOn::Tag.find_or_create_by_name(tag_name)}
-        tags.each {|tag| current_user.tag(@feed_item, :with => tag, :on => "hub_#{@hub.id}")}
+        tags = @feed_item.tag_list.uniq.map {|tag_name| ActsAsTaggableOn::Tag.find_or_create_by_name(tag_name)}
+        current_user.tag(@feed_item, :with => tags, :on => "hub_#{@hub.id}")
         
         Resque.enqueue(FeedItemTagRenderer, @feed_item.id)
         format.html {

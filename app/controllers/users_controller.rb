@@ -13,7 +13,12 @@ class UsersController < ApplicationController
     breadcrumbs.add @hub, hub_path(@hub)
     @user = User.find_by_username(params[:username])
     @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
-    @feed_items = @user.owned_taggings.paginate(:page => params[:page], :per_page => get_per_page)
+    @feed_items = ActsAsTaggableOn::Tagging.where({
+      :context => "hub_#{@hub.id}",
+      :taggable_type => "FeedItem", 
+      :tagger_id => @user,
+      :tagger_type => "User"}).
+      paginate(:page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
    
@@ -25,6 +30,7 @@ class UsersController < ApplicationController
     @tag = ActsAsTaggableOn::Tag.find_by_name(params[:tagname])
     @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
     @feed_items = ActsAsTaggableOn::Tagging.where({
+      :context => "hub_#{@hub.id}",
       :tag_id => @tag, 
       :taggable_type => "FeedItem", 
       :tagger_id => @user,

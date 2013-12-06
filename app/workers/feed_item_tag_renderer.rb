@@ -14,6 +14,7 @@ class FeedItemTagRenderer
       fi.skip_tag_indexing_after_save = true
       fi.save
     end
+
     #batch reindex tags.
     ActsAsTaggableOn::Tag.includes(:taggings).where('taggings.taggable_type' => 'FeedItem', 'taggings.taggable_id' => fi.id).solr_index(:batch_size => 500, :batch_commit => false)
 
