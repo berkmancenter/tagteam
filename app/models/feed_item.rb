@@ -123,7 +123,7 @@ class FeedItem < ActiveRecord::Base
   def all_tags(user, hub_key)
     tags = self.tags_on(hub_key)
     tags += self.owner_tags_on(user, hub_key) if user
-    tags
+    tags.uniq
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
