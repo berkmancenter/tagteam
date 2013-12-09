@@ -35,7 +35,7 @@
       <dt>From feed(s):</dt>
       <dd><%= raw @feed_item.hub_feeds.collect{|hf| %Q|#{link_to(hf.hub, hf.hub)} &raquo; #{link_to(hf.display_title, [hf.hub,hf])}|}.join('<br/>') %></dd>
       <dt>Tags:</dt>
-      <dd><%= raw @feed_item.tags_on(@hub_feed.hub.tagging_key).collect{|t| tag_display(t, :hub => @hub_feed.hub, :hub_feed_item => @feed_item) }.join(' ') %></dd>
+      <dd><%= raw @feed_item.all_tags(current_user, @hub_feed.hub.tagging_key).collect{|t| tag_display(t, :hub => @hub_feed.hub, :hub_feed_item => @feed_item) }.join(' ') %></dd>
       <% unless @feed_item.authors.blank? %>
         <dt>Authors:</dt>
         <dd><%= @feed_item.authors %></dd>

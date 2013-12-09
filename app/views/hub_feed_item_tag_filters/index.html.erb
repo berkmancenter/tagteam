@@ -1,5 +1,5 @@
 <%= documentation('feed-item-tag-filters') %>
-<% tag_list = @feed_item.tags_on(@hub.tagging_key).map(&:name).join(', ') %>
+<% tag_list = @feed_item.all_tags(current_user, @hub.tagging_key).map(&:name).join(', ') %>
 <h3>Filters on this item</h3>
 <% if current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) %>
   <ul class="tag_filter_controls">
