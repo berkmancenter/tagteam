@@ -128,7 +128,7 @@ class Hub < ActiveRecord::Base
   end
 
   def should_generate_new_friendly_id?
-    !new_record? && nickname_changed?
+    nickname_changed?
   end   
 
   def self.top_new_hubs
