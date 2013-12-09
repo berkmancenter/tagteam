@@ -3,7 +3,11 @@ ActsAsTaggableOn::Tag.class_eval do
   after_initialize do |tag|
     name.try(:strip!)
   end
- 
+  
+  def count_by_hub(hub)
+    FeedItem.tagged_with(name, :on => hub.tagging_key.to_s).uniq.size
+  end
+  
   def self.find_or_create_by_name_normalized(name)
     self.find_or_create_by_name(self.normalize_name(name))
   end

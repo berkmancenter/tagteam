@@ -51,8 +51,9 @@ module ApplicationHelper
     end
 
     if ! options[:show_count].blank?
-      tag_text = tag.name + " (#{tag.count})"
-      options.merge!({"data-tag-frequency" => tag.count})
+      tag_count = hub_id.nil? ? tag.count : tag.count_by_hub(Hub.find(hub_id))
+      tag_text = tag.name + " (#{tag_count})"
+      options.merge!({"data-tag-frequency" => tag_count})
       options.delete(:show_count)
     else
       tag_text = tag.name
