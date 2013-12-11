@@ -45,12 +45,22 @@ class HubTagFiltersController < ApplicationController
       end
 
       new_tag = find_or_create_tag_by_name(params[:new_tag])
+      old_tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+      feed_items = FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key, :owned_by => current_user)
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
-      current_user.owned_taggings.where(:tag_id => params[:tag_id]).each do |t|
-        t.taggable.skip_tag_indexing_after_save = true        
-        current_user.tag t.taggable, :with => new_tag, :on => "hub_#{@hub.id}"
-        HubFeedItemTagFilter.where(:hub_id => @hub.id, :feed_item_id => t.taggable.id).each {|hf| next if hf.filter.tag_id != params[:tag_id].to_i; hf.filter.destroy; hf.destroy }
-        t.destroy
+      feed_items.each do |f|
+        f.skip_tag_indexing_after_save = true        
+        HubFeedItemTagFilter.where(:hub_id => @hub.id, :feed_item_id => f.id).each {|hf| next if hf.filter.tag_id != params[:tag_id].to_i; hf.filter.destroy; hf.destroy }
+        #f = HubFeedItemTagFilter.new
+        #f.hub_id = @hub.id
+        #f.feed_item_id = f.id
+        #f.created_by = current_user
+        #f.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
+        #f.save
+        tag_list = f.owner_tags_on(current_user, @hub.tagging_key)
+        tag_list = tag_list.select {|t| t.name != old_tag.name } 
+        tag_list << new_tag
+        current_user.tag f, :with => tag_list, :on => @hub.tagging_key
       end
 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
@@ -59,7 +69,9 @@ class HubTagFiltersController < ApplicationController
       @hub.feeds.each do |feed|
         feed.feed_items.each do |feed_item|
           feed_item.skip_tag_indexing_after_save = true
-          current_user.tag feed_item, :with => new_tag, :on => "hub_#{@hub.id}"
+          tag_list = feed_item.owner_tags_on(current_user, @hub.tagging_key.to_s)
+          tag_list << new_tag
+          current_user.tag feed_item, :with => tag_list, :on => "hub_#{@hub.id}"
         end
       end
 
