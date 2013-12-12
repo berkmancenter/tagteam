@@ -50,10 +50,10 @@ class HubFeedItemTagFiltersController < ApplicationController
 
       new_tag = find_or_create_tag_by_name(params[:new_tag])
       old_tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
-      tag_list.delete(old_tag)
+      tag_list = tag_list.select {|t| t.name != old_tag.name }
       tag_list << new_tag
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
-      current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
+      current_user.owned_taggings.where(:taggable_type => "FeedItem", :taggable_id => @feed_item.id, :tag_id => params[:tag_id]).destroy_all
       current_user.tag @feed_item, :with => tag_list, :on => "hub_#{@hub.id}"
 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
