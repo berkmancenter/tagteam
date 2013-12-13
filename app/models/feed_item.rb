@@ -119,6 +119,12 @@ class FeedItem < ActiveRecord::Base
       ActsAsTaggableOn::Tag.where(:id => tags_of_concern).solr_index(:include => :taggings, :batch_commit => false)
     end
   end
+  
+  def all_tags(user, hub_key)
+    tags = self.tags_on(hub_key)
+    tags += self.owner_tags_on(user, hub_key) if user
+    tags.uniq
+  end
 
   # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
   def hub_feed_for_hub(hub_id)
@@ -198,8 +204,9 @@ class FeedItem < ActiveRecord::Base
     item_changelog = {}
 
     fi.title = item.title
-    fi.description = item.summary
-
+    unless item.summary.blank?
+      fi.description = item.summary
+    end
     if fi.new_record?
       # Instantiate only for new records.
       fi.guid = item.guid

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120713184742) do
+ActiveRecord::Schema.define(:version => 20131031140017) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -115,13 +115,26 @@ ActiveRecord::Schema.define(:version => 20120713184742) do
   add_index "feeds", ["guid"], :name => "index_feeds_on_guid"
   add_index "feeds", ["next_scheduled_retrieval"], :name => "index_feeds_on_next_scheduled_retrieval"
 
+  create_table "friendly_id_slugs", :force => true do |t|
+    t.string   "slug",                         :null => false
+    t.integer  "sluggable_id",                 :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], :name => "index_friendly_id_slugs_on_slug_and_sluggable_type", :unique => true
+  add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
+  add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
+
   create_table "hub_feed_item_tag_filters", :force => true do |t|
     t.integer  "hub_id"
     t.integer  "feed_item_id"
-    t.string   "filter_type",  :limit => 100, :null => false
-    t.integer  "filter_id",                   :null => false
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.string   "filter_type",     :limit => 100, :null => false
+    t.integer  "filter_id",                      :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.string   "created_by_type"
+    t.integer  "created_by_id"
   end
 
   add_index "hub_feed_item_tag_filters", ["feed_item_id"], :name => "index_hub_feed_item_tag_filters_on_feed_item_id"
@@ -172,8 +185,11 @@ ActiveRecord::Schema.define(:version => 20120713184742) do
     t.string   "tag_prefix",  :limit => 25
     t.datetime "created_at",                  :null => false
     t.datetime "updated_at",                  :null => false
+    t.string   "nickname"
+    t.string   "slug"
   end
 
+  add_index "hubs", ["slug"], :name => "index_hubs_on_slug"
   add_index "hubs", ["tag_prefix"], :name => "index_hubs_on_tag_prefix"
   add_index "hubs", ["title"], :name => "index_hubs_on_title"
 
@@ -235,6 +251,13 @@ ActiveRecord::Schema.define(:version => 20120713184742) do
 
   add_index "roles_users", ["role_id"], :name => "index_roles_users_on_role_id"
   add_index "roles_users", ["user_id"], :name => "index_roles_users_on_user_id"
+
+  create_table "search_remixes", :force => true do |t|
+    t.integer  "hub_id"
+    t.text     "search_string"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

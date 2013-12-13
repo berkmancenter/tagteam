@@ -10,18 +10,25 @@
       <li>and republish everything as Atom, RSS, XML, and json.</li>
     </ul>
   </div>
-
-  <div id="right">
+ <div id="right">
+    <%= render :partial => 'shared/top_new_hubs' %>
+     
     <div id="hub_list">
       <h2>Hubs</h2>
       <div class="search_results">
 <% end %>
-        <%= render :partial => 'shared/line_items/hub', :collection => @hubs %>
-        <%= will_paginate(@hubs) %>
+        <%= render :partial => 'shared/line_items/hub', :collection => @hubs, :locals => {:limit => 100}  %>
+        <%#= will_paginate(@hubs) %>
 <% unless request.xhr? %>
       </div>
+      <p id="pagination" data-total-pages="<%= @hubs.total_pages %>"></p>
+
+
       <% unless current_user.blank? %>
         <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
+      <% end %>
+      <% unless @hubs.empty? %>
+        <%= link_to(raw('<span class="inline ui-silk"></span> All Hubs'), "/hubs/list") %>
       <% end %>
     </div>
   </div>

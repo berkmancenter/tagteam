@@ -10,6 +10,17 @@
     hideSpinner: function(){
       $('#spinner').hide();
     }, 
+    processReturnCookie: function(){
+      var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
+        if (anchor != null) {
+         if (anchor[2] != undefined && anchor[2] != "") {
+          $('html, body').animate({
+            scrollTop: $('a[name="' + anchor[2] + '"]').offset().top
+          }, 0);
+          document.cookie = 'return_to=';
+          }
+        }
+    },
     showMajorError: function(jqXHR,textStatus,errorThrown){
       if (window.console && console.log){
         console.log(jqXHR);
@@ -30,18 +41,20 @@
         // Only allow ajax-y stuff when actually in ajax-y context.
         $('.pagination a').live('click',function(e){
           var paginationTarget = $(this).closest('.search_results,.ui-widget-content');
-          e.preventDefault();
-          $.ajax({
-            type: 'GET',
-            url: $(this).attr('href'),
-            dataType: 'html',
-            beforeSend: function(){
-              $.showSpinner();
-            },
-            success: function(html){
-              $(paginationTarget).html(html);
-            }
-          });
+          if (paginationTarget.length > 0) {
+            e.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: $(this).attr('href'),
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+          }
         });
         $('.per_page_selector').live('change', function(e){
           e.preventDefault();
@@ -143,6 +156,41 @@
        });
     },
     observeTagCloudControls: function(){
+      var sort_tags_on_change = function(e){
+        var sort_by = $('#sort_tags_by').val();
+        var sort = $("#sort_tags_direction").val();
+        var mapping_function = function(elem) {
+          var tag_frequency = $(elem).data('tag-frequency'),
+              tag_text = $(elem).data('tag-name'),
+              attributes = {};
+
+          attributes['frequency'] = tag_frequency;
+          attributes['name'] = tag_text;
+
+          return attributes;
+        };
+        var compare_function = function(a,b) {
+            if(sort_by == "frequency" && sort == "desc") {
+              return (b.value.frequency - a.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "frequency" && sort == "asc") {
+              return (a.value.frequency - b.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
+            }
+            else if(sort_by == "alpha" && sort == "asc") {
+              return a.value.name.localeCompare(b.value.name);
+            }
+            else if(sort_by == "alpha" && sort == "desc") {
+              return b.value.name.localeCompare(a.value.name);
+            }
+            else {
+              return null;
+            }
+        };
+        $("#tag_cloud").sortChildren(mapping_function, compare_function);
+      };
+      $('#sort_tags_by').change(sort_tags_on_change);
+      $('#sort_tags_direction').change(sort_tags_on_change);
+
       $('#reset_filter').click(function(e){
         $('.tag').show();
       });
@@ -441,10 +489,49 @@
 })(jQuery);
 
 $(document).ready(function(){
-  $.initTabHistory('.hub_tabs');
+  $('#pagination').bootpag({total:$("#pagination").attr("data-total-pages"), maxVisible:5}).on("page", function(event, num){
+     var paginationTarget = $(this).closest("#pagination").siblings('.search_results,.ui-widget-content');
+     event.stopPropagation();
+     event.preventDefault();
+            $.ajax({
+              type: 'GET',
+              url: "?page=" + num,
+              dataType: 'html',
+              beforeSend: function(){
+                $.showSpinner();
+              },
+              success: function(html){
+                $(paginationTarget).html(html);
+              }
+            });
+  });
+
+    var container = $('#masonry');
+    if (container.length > 0) {
+      container.masonry({
+          itemSelector: '.hub'
+       });
+      container.infinitescroll({
+        navSelector  : '#page-nav',    // selector for the paged navigation
+        nextSelector : '#page-nav a',  // selector for the NEXT link (to page 2)
+        itemSelector : '.hub',     // selector for all items you'll retrieve
+        loading: {
+         finishedMsg: '',
+         msgText: '' 
+        },
+        errorCallback: function(){
+          $.hideSpinner();
+        }
+       }, function( newElements ) {
+         var newElems = $(newElements).css({ opacity: 0 });
+         newElems.animate({ opacity: 1 });
+         container.masonry( 'appended', newElems, true );
+         $.hideSpinner();
+       }
+      );
+    }
   $.initTabHistory('.tabs');
   $(window).trigger( 'hashchange' );
-
   if($('#user_role_list').length > 0){
     $.simpleClassFilter('#user_role_filter_container','#user_role_list li');
   }
@@ -517,6 +604,7 @@ $(document).ready(function(){
         $.checkPlaceholders();
         $.initPerPage();
         $.hideSpinner();
+        $.processReturnCookie();
         $('#add_feed_to_hub').ajaxForm({
           dataType: 'html',
           beforeSend: function(){
@@ -605,15 +693,22 @@ $(document).ready(function(){
       click: function(e){
         e.preventDefault();
 
-        var tag_id = $(this).attr('data_tag_id') || 0;
+        var tag_id = $(this).attr('data-tag-id') || 0;
         if(tag_id == 0){
           return false;
         }
-        var hub_id = $(this).attr('data_hub_id') || 0;
-        var hub_feed_id = $(this).attr('data_hub_feed_id') || 0;
-        var hub_feed_item_id = $(this).attr('data_hub_feed_item_id') || 0;
+        var hub_id = $(this).attr('data-hub-id') || 0;
+        var hub_feed_id = $(this).attr('data-hub-feed-id') || 0;
+        var hub_feed_item_id = $(this).attr('data-hub-feed-item-id') || 0;
         
-        $(this).bt({
+        var anchor = $(this).parents('td').find('div a').first();
+        if (anchor) {
+          var anchor = anchor.html();
+          if (anchor != "" && anchor != null && anchor != undefined) {
+            document.cookie = 'return_to=' + anchor;
+          }
+        }
+ $(this).bt({
           ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id + '&hub_feed_id=' + hub_feed_id + '&hub_feed_item_id=' + hub_feed_item_id,
           trigger: 'none',
           closeWhenOthersOpen: true,
@@ -622,6 +717,36 @@ $(document).ready(function(){
         $(this).btOn();
       }
     });
+    $('.add_input_source_control').live({
+      click: function(e){
+        e.preventDefault();
+        var remix_id = $(this).attr('republished_feed_id');
+        var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+          var prepend = '';
+          var message = "<h2>Please enter the tag you'd like to add<h2>";
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><form method="post" action="/input_sources" accept-charset="UTF-8"><input type="hidden" value="' + $('[name=csrf-token]').attr('content') + '" name="authenticity_token"><input type="hidden" name="return_to" value="' + window.location+ '"><input type="text" id="new_tag_for_filter" name="input_source[item_source_attributes][name]" size="40" /><input type="hidden" value="ActsAsTaggableOn::Tag" name="input_source[item_source_attributes][type]" id="input_source_item_source_type"><input type="hidden" value="' + remix_id + '" name="input_source[republished_feed_id]" id="input_source_republished_feed_id"><input type="hidden" value="add" name="input_source[effect]" id="input_source_effect"></form>');        
+  $(dialogNode).dialog({
+            modal: true,
+            width: 600,
+            minWidth: 400,
+            height: 'auto',
+            title: '',
+                   buttons: {
+              Cancel: function(){
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+              Submit: function(){
+                $('#new_tag_for_filter').parent('form').submit();
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              }
+            }
+          });
+          return false;
+       }
+    });
+
     $('.add_filter_control').live({
       click: function(e){
         e.preventDefault();
@@ -629,6 +754,10 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
+        var tagList = '';
+        if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
+          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+        }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
           var message = '';
@@ -643,7 +772,7 @@ $(document).ready(function(){
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           }
-          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>');
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({
             modal: true,
             width: 600,
@@ -663,10 +792,10 @@ $(document).ready(function(){
               },
               Submit: function(){
                 var replace_tag = undefined;
-                if($('#modify_tag_for_filter').length > 0){
-                  replace_tag = $('#modify_tag_for_filter').val();
+                if ($(this).find('#modify_tag_for_filter').length > 0){
+                  replace_tag = $(this).find('#modify_tag_for_filter').val();
                 }
-                $.submitTagFilter(filter_href, filter_type, tag_id, $('#new_tag_for_filter').val(), replace_tag);
+                $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();
               }
@@ -683,6 +812,10 @@ $(document).ready(function(){
     click: function(e){
       e.preventDefault();
       var url = $(this).attr('href');
+      var anchor = $(this).prev().attr('name');
+      if (anchor != "" && anchor != null && anchor != undefined) {
+        document.cookie = 'return_to=' + anchor;
+      } 
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,
@@ -749,20 +882,36 @@ $(document).ready(function(){
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');
+      var search_query = $('#q').val();
+      var hub_id = $('body').data('hub_id');
+      var args = { 
+        search_string: search_query, 
+        hub_id: hub_id,
+        input_source: {
+          republished_feed_id: republished_feed_id, 
+          item_source_type: item_source_type, 
+          item_source_id: item_source_id, 
+          effect: item_effect
+        }
+      };
+
       // TODO - make this emit when it's been added.
       $.ajax({
         cache: false,
         dataType: 'html',
         url: $.rootPath() + 'input_sources',
         type: 'post',
-        data:{ input_source: {republished_feed_id: republished_feed_id, item_source_type: item_source_type, item_source_id: item_source_id, effect: item_effect}},
+        data: args,
         beforeSend: function(){ 
           $.showSpinner();
           $('#dialog-error,#dialog-notice').html('').hide();
         },
         complete: function(){ $.hideSpinner();},
         success: function(html){
-          $('#dialog-notice').show().html(html);
+          eval("var results = " + html);
+          $('#dialog-notice').show().html(results.message);
+          $('#dialog-notice').parent().append(results.html);
+          $('div.empty-message').remove(); 
         },
         error: function(jqXHR, textStatus, errorThrown){
           $('#dialog-error').show().html(jqXHR.responseText);

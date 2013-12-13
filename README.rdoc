@@ -46,13 +46,13 @@ TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis
 * Set up databases and docs via "rake db:migrate && rake db:seed"
 * rake sunspot:solr:start
 * Start up your resque workers via "resque-pool --daemon --environment production"
-* Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. Examples are in doc/crontab.in
+* Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. Examples are in doc/crontab.in OR use the resque scheduler by calling "bundle exec rake resque:scheduler BACKGROUND=true MUTE=true PIDFILE=var/run/resque_scheduler.pid"
 
 == Cron jobs
 
 Q: Why aren't you using redis-scheduler, DJCP?
 
-A: Aren't there enough daemons running for this app? Also, cron "just works." 
+A: Aren't there enough daemons running for this app? Also, cron "just works." If you'd prefer support is now available for resque-scheduler. Start with "bundle exec rake resque:scheduler BACKGROUND=true MUTE=true PIDFILE=var/run/resque_scheduler.pid"
 
 By default, TagTeam assumes you're using cron to run scheduled tasks invoked via wget POSTs with a shared key.  When you run 'db:seed', the shared key is set up automatically for you in the correct location.
 

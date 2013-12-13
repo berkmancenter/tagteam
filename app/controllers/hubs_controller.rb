@@ -5,7 +5,7 @@ class HubsController < ApplicationController
   }
 
   access_control do
-    allow all, :to => [:index, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
+    allow all, :to => [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
     allow :inputter, :of => :hub, :to => [:add_feed]
@@ -14,9 +14,26 @@ class HubsController < ApplicationController
   end
 
   before_filter :sanitize_params, :only => :index
+  before_filter :find_slugged_hub, :only => :show
+
+  def find_slugged_hub
+    return unless params[:id]
+    @hub = Hub.find params[:id]
+
+    # If an old id or a numeric id was used to find the record, then
+    # the request path will not match the hub_path, and we should do
+    # a 301 redirect that uses the current friendly id.
+    if request.path != hub_path(@hub)
+      return redirect_to @hub, :status => :moved_permanently
+    end
+  end
 
   def meta
     render :layout => ! request.xhr?
+  end
+
+  def list
+    @hubs = Hub.paginate(:page => params[:p] || 1, :per_page => 25).order('title ASC')
   end
 
   def request_rights
@@ -107,7 +124,7 @@ class HubsController < ApplicationController
       order_by('updated_at', :desc)
       paginate :page => params[:page], :per_page => get_per_page
     end
-    @feed_retrievals.execute!
+
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
@@ -152,18 +169,13 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
 
-    @search = FeedItem.search
-    hub_id = @hub.id
-
     if params[:month] == '00'
-      logger.warn('year search')
       # Year search
       date = DateTime.parse("#{params[:year]}-01-01")
       start_day = date - 1.second
       end_day = date + 1.year
       breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
     elsif params[:day] == '00'
-      logger.warn('month search')
       # Month search
       date = DateTime.parse("#{params[:year]}-#{params[:month]}-01")
       start_day = date - 1.second
@@ -171,7 +183,6 @@ class HubsController < ApplicationController
       breadcrumbs.add date.year, by_date_hub_path(@hub,:year => date.year, :month => '00', :day => '00')
       breadcrumbs.add date.month, by_date_hub_path(@hub,:year => date.year, :month => date.month, :day => '00')
     else
-      logger.warn('day search')
       # Day search
       date = DateTime.parse("#{params[:year]}-#{params[:month]}-#{params[:day]}")
       start_day = date - 1.second
@@ -183,18 +194,14 @@ class HubsController < ApplicationController
     start_day = start_day - DateTime.now.offset 
     end_day = end_day - DateTime.now.offset 
 
-    logger.warn("date: #{date.inspect}")
-    logger.warn("start day: #{start_day.inspect}")
-    logger.warn("end day: #{end_day.inspect}")
+    hub_id = @hub.id
 
-    @search.build do
+    @search = FeedItem.search do
       with(:date_published).between(start_day..end_day)
       with :hub_ids, hub_id
       paginate :page => params[:page], :per_page => get_per_page
       order_by(:date_published, :desc)
     end
-
-    @search.execute
 
     @feed_items = @search.results
     respond_to do|format|
@@ -231,6 +238,7 @@ class HubsController < ApplicationController
           with(:hub_ids, hub_id)
         end
         order_by('date_published', :desc)
+        order_by('id', :asc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     else
@@ -239,6 +247,7 @@ class HubsController < ApplicationController
           with(:hub_ids, hub_id)
         end
         order_by('date_published', :desc)
+        order_by('id', :asc)
         paginate :page => params[:page], :per_page => get_per_page
       end
     end
@@ -327,11 +336,7 @@ class HubsController < ApplicationController
     respond_to do|format|
       format.html{
         if request.xhr?
-          unless @republished_feeds.empty?
-            render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
-          else 
-            render :text => 'None yet. You should create a remixed feed from the "remixes" tab on the hub page.'
-          end
+           render :layout => false 
         else
           render
         end
@@ -344,7 +349,7 @@ class HubsController < ApplicationController
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
     end
-    @hubs = Hub.paginate(:page => params[:page], :per_page => get_per_page)
+    @hubs = Hub.paginate(:page => params[:page], :per_page => 5 ).order('title ASC') #get_per_page)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => @hubs }
@@ -449,7 +454,8 @@ class HubsController < ApplicationController
   def item_search
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
-
+    breadcrumbs.add "Search", request.url
+ 
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
 
@@ -465,7 +471,6 @@ class HubsController < ApplicationController
       end
     end
 
-    @search.execute!
     unless params[:q].blank?
         params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end

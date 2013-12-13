@@ -30,8 +30,6 @@ class TagsController < ApplicationController
       fulltext params[:term]
     end
 
-    @search.execute!
-
     respond_to do |format|
       format.json { 
         # Should probably change this to use render_for_api
@@ -49,8 +47,15 @@ class TagsController < ApplicationController
     else
       @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
     end
+
+    if @tags.any?
+      #tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
+      tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :frequency)
+      @tags = tag_sorter.sort
+    end
+    
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render :layout => !request.xhr? }
       format.json{ render_for_api :default, :json => @tags, :root => :tags }
       format.xml{ render_for_api :default, :xml => @tags, :root => :tags }
     end
@@ -77,7 +82,7 @@ class TagsController < ApplicationController
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
-    @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
+    @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).uniq.paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     render :layout => ! request.xhr?
   end
 
@@ -98,9 +103,9 @@ class TagsController < ApplicationController
 
   def load_tag_from_name
     if ! params[:name].blank?
-      @tag = ActsAsTaggableOn::Tag.find_by_name(params[:name])
+      @tag = ActsAsTaggableOn::Tag.find_by_name_normalized(params[:name])
     else
-      @tag = ActsAsTaggableOn::Tag.find(params[:id])
+      @tag = ActsAsTaggableOn::Tag.find_by_id(params[:id])
     end
     if ! @tag
       flash.now[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"

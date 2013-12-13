@@ -18,6 +18,7 @@ module Tagteam
     }
 
     Resque.redis.namespace = config.redis_namespace
+    Resque.redis = config.redis_host
 
     config.middleware.use ExceptionNotifier,
       :email_prefix => "[tagteam-errors] ",

@@ -1,7 +1,19 @@
 <%= documentation('republished-feed-inputs-tab') %>
 <h3>Inputs</h3>
-<p>The feeds, tags, searches, and items below serve as the sources used to create this feed.</p>
-<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'}, :locals => {:effect => 'add'} %>
+<p>The feeds, tags, searches, and items below serve as the sources used to create this feed:</p>
+<% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'add'} %>
+  <i>No items to display.</i>
+<% else %>
+  <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'} %>
+<% end %>
 <% if current_user && current_user.is?(:owner, @republished_feed) %>
-  <p>Add new inputs to this remixed feed by using the controls throughout this hub.</p>
+<br/>
+<p>Add new inputs to this remixed feed:</p>
+<div>
+<span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a new tag as input source', input_sources_path, :republished_feed_id => @republished_feed.id, :class => 'add_input_source_control' %></div>
+<% if @republished_feed.available_inputs.empty? %>
+  <i>No items to display.</i>
+<% else %>
+<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.available_inputs.map{|i| InputSource.new(:item_source => i, :republished_feed => @republished_feed)}, :locals => {:effect => 'add'} %>
+<% end %>
 <% end %>

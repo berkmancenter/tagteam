@@ -37,23 +37,38 @@ class HubFeedTagFiltersController < ApplicationController
 
     if filter_type_model == ModifyTagFilter
       if params[:tag_id].blank?
-        modify_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:modify_tag].downcase)
+        modify_tag = find_or_create_tag_by_name(params[:modify_tag])
         params[:tag_id] = modify_tag.id
       end
-      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+      old_tag = ActsAsTaggableOn::Tag.find(params[:tag_id])  
+      feed_items = FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key, :owned_by => current_user).select {|fi| fi.hub_feeds.include?(@hub_feed) }
+      new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
+      feed_items.each do |f|
+        f.skip_tag_indexing_after_save = true
+        HubFeedItemTagFilter.where(:hub_id => @hub.id, :feed_item_id => f.id).each     {|hf| next if hf.filter.tag_id != params[:tag_id].to_i; hf.filter.destroy; hf.destroy }
+        tag_list = f.owner_tags_on(current_user, @hub.tagging_key)
+        tag_list = tag_list.select {|t| t.name != old_tag.name }
+        tag_list << new_tag
+        current_user.tag f, :with => tag_list, :on => "hub_#{@hub.id}"
+      end
 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       # It's a new tag but we didn't get a tag id. Grab the tag manually.
-      new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+      new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
-
+      @hub_feed.feed_items.each do |fi|
+        fi.skip_tag_indexing_after_save = true
+        current_user.tag fi, :with => new_tag, :on => "hub_#{@hub.id}"
+      end
     else
       if params[:tag_id].blank?
-        delete_tag = ActsAsTaggableOn::Tag.find_or_create_by_name(params[:new_tag].downcase)
+        delete_tag = find_or_create_tag_by_name(params[:new_tag])
         params[:tag_id] = delete_tag.id
       end
+
       @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
+      current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
     end
 
     respond_to do|format|

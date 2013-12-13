@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def find_or_create_tag_by_name(name)
+    ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(name)
+  end
+
   private 
   def init_breadcrumbs
     breadcrumbs.add 'Home', root_path

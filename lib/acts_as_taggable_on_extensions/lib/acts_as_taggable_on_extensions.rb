@@ -1,5 +1,25 @@
 ActsAsTaggableOn::Tag.class_eval do
 
+  after_initialize do |tag|
+    name.try(:strip!)
+  end
+  
+  def count_by_hub(hub)
+    FeedItem.tagged_with(name, :on => hub.tagging_key.to_s).uniq.size
+  end
+  
+  def self.find_or_create_by_name_normalized(name)
+    self.find_or_create_by_name(self.normalize_name(name))
+  end
+
+  def self.find_by_name_normalized(name)
+    self.find_by_name(self.normalize_name(name))
+  end
+
+  def self.normalize_name(name)
+    name.to_s.sub(/,\s*$/, '').strip.downcase
+  end
+
   def contexts
     #contexts = ActsAsTaggableOn::Tagging.select('context').where('tag_id = ? and context != ?',self.id,'tags').group('context')
     contexts = self.taggings.collect{|tg| tg.context}.reject{|ct| ct == 'tags'}
@@ -29,7 +49,7 @@ ActsAsTaggableOn::Tag.instance_eval do
   has_many :modify_tag_filters
   has_many :delete_tag_filters
   has_many :input_sources, :dependent => :destroy, :as => :item_source
-  
+
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
@@ -54,4 +74,11 @@ ActsAsTaggableOn::Tag.instance_eval do
     "Tag"
   end
 
+  
+end
+
+ActsAsTaggableOn::Taggable.class_eval do
+  def first_use_of_tag_in_context(tag, context)
+    tagged_with(tag, :on => context).order("created_at").limit(1).first.created_at
+  end
 end

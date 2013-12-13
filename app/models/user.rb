@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+
+  acts_as_tagger
+  has_and_belongs_to_many :roles, :join_table => :roles_users
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -8,9 +11,14 @@ class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation, :remember_me, :login
   attr_accessor :login
   acts_as_authorization_subject :association_name => :roles, :join_table_name => :roles_users
+  validates_uniqueness_of :username
+
+  #This should be a url friendly username because it's used to see the user's tags
+  validates_format_of :username, :with => /\A[A-Za-z0-9_-]+\z/, :message => "Usernames may only contain letters, numbers, underscores, and hyphens."
 
   searchable do
-    text :first_name, :last_name, :email, :url
+    text :first_name, :last_name, :email, :url, :username
+    string :username
     string :email
     string :first_name
     string :last_name
@@ -57,7 +65,7 @@ class User < ActiveRecord::Base
     if bookmark_collections.blank?
       feed = Feed.new
       feed.bookmarking_feed = true
-      feed.title = "#{email}'s bookmarks"
+      feed.title = "#{username}'s bookmarks"
       feed.feed_url = 'not applicable'
       feed.save
 

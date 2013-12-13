@@ -39,7 +39,7 @@ class FeedItemsController < ApplicationController
       minimum_word_length 3
       paginate :page => params[:page], :per_page => get_per_page
     end
-    @related.execute!
+
     respond_to do|format|
       format.html{ render :layout => ! request.xhr?}
       format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }
@@ -69,7 +69,11 @@ class FeedItemsController < ApplicationController
     add_breadcrumbs
     respond_to do |format|
       format.html{
-        breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+        if from_search?
+          breadcrumbs.add @feed_item.to_s 
+        else
+          breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+        end
         render :layout => ! request.xhr?
       }
       format.json{ render_for_api :with_content, :json => @feed_item }
@@ -88,10 +92,19 @@ class FeedItemsController < ApplicationController
     @feed_item = FeedItem.find(params[:id])
   end
 
+  def from_search?
+   request.referer and request.referer.include?("item_search")
+  end
+
   def add_breadcrumbs
-    unless @hub_feed.blank?
+    if from_search?
       breadcrumbs.add @hub.to_s, hub_path(@hub) 
-      breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub,@hub_feed) 
+      breadcrumbs.add "Search", request.referer
+    else
+      unless @hub_feed.blank?
+        breadcrumbs.add @hub.to_s, hub_path(@hub) 
+        breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub,@hub_feed) 
+      end
     end
   end
 

@@ -30,27 +30,36 @@ module ApplicationHelper
   end
 
   def tag_display(tag, options = {})
-    options.merge!({:class => ['tag', options[:class]].compact.join(' '), :data_tag_id => tag.id})
+    options.merge!({:class => ['tag', options[:class]].compact.join(' '), "data-tag-id" => tag.id, "data-tag-name" => tag.name})
 
     hub_id = nil
     if ! options[:hub].blank?
-      options.merge!({:data_hub_id => options[:hub].id})
+      options.merge!({"data-hub-id" => options[:hub].id})
       hub_id = options[:hub].id
       options.delete(:hub)
 
     end
 
     if ! options[:hub_feed].blank?
-      options.merge!({:data_hub_feed_id => options[:hub_feed].id})
+      options.merge!({"data-hub-feed-id" => options[:hub_feed].id})
       options.delete(:hub_feed)
     end
 
     if ! options[:hub_feed_item].blank?
-      options.merge!({:data_hub_feed_item_id => options[:hub_feed_item].id})
+      options.merge!({"data-hub-feed-item-id" => options[:hub_feed_item].id})
       options.delete(:hub_feed_item)
     end
 
-    link_to(tag.name, hub_tag_show_path(hub_id,u(tag.name)), options) 
+    if ! options[:show_count].blank?
+      tag_count = hub_id.nil? ? tag.count : tag.count_by_hub(Hub.find(hub_id))
+      tag_text = tag.name + " (#{tag_count})"
+      options.merge!({"data-tag-frequency" => tag_count})
+      options.delete(:show_count)
+    else
+      tag_text = tag.name
+    end
+
+    link_to(tag_text, hub_tag_show_path(hub_id,u(tag.name)), options)
   end
 
   def insert_social_links(url, options = {})

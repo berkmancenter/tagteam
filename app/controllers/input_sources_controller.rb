@@ -22,22 +22,51 @@ class InputSourcesController < ApplicationController
     @input_source.attributes = params[:input_source]
     if @input_source.item_source_type == 'Tag'
       @input_source.item_source_type = 'ActsAsTaggableOn::Tag'
+    elsif @input_source.item_source_type == 'SearchRemix'
+      s = SearchRemix.create! search_string: params[:search_string], hub: @hub
+      @input_source.item_source = s
+      if ! @republished_feed
+        attrs = {
+          :republished_feed => {
+            :title => s.default_remix_title,
+            :hub_id => @hub.id,
+            :description => s.to_s,
+            :limit => 50,
+            :url_key => s.url_key
+          }
+
+        }
+
+        @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, attrs)
+        @input_source.republished_feed = @republished_feed
+      end
+
+      
+
     end
 
     #ok because we're using ACL9 to protect this method.
-    @input_source.republished_feed_id = params[:input_source][:republished_feed_id]
+    @input_source.republished_feed_id ||= params[:input_source][:republished_feed_id]
 
     respond_to do|format|
-      if @input_source.save
+      if @input_source.save and (@input_source.item_source_type != 'SearchRemix' or @republished_feed)
         current_user.has_role!(:owner, @input_source)
         current_user.has_role!(:creator, @input_source)
         flash[:notice] = 'Add that input source'
         format.html{
           unless request.xhr?
-            redirect_to hub_republished_feed_url(@hub,@republished_feed)
+            if params[:return_to]
+              redirect_to params[:return_to]
+            else
+              redirect_to hub_republished_feed_url(@hub,@republished_feed)
+            end
           else
             message = (@input_source.effect == 'add') ? %Q|Added "#{@input_source.item_source}" to "#{@republished_feed}"| : %Q|Removed "#{@input_source.item_source}" from "#{@republished_feed}"|
-            render :text => message 
+            if @input_source.item_source_type == 'SearchRemix' and @republished_feed
+             render :json => {:message => message, :html => render_to_string(:partial => 'shared/line_items/republished_feed_choice', :locals => {:republished_feed_choice => @republished_feed})}
+            else 
+              render :text => message
+            end  
           end
         }
       else
@@ -62,7 +91,11 @@ class InputSourcesController < ApplicationController
       if @input_source.save
         current_user.has_role!(:editor, @input_source)
         flash[:notice] = 'Updated that input source'
-        format.html{redirect_to hub_republished_feed_url(@input_source.republished_feed.hub,@input_source.republished_feed)}
+        if params[:return_to]
+          format.html{ redirect_to params[:return_to]}
+        else
+          format.html{redirect_to hub_republished_feed_url(@input_source.republished_feed.hub,@input_source.republished_feed)}
+        end
       else
         flash[:error] = 'Could not update that input source'
         format.html {render :action => :edit}
@@ -146,8 +179,12 @@ class InputSourcesController < ApplicationController
 
   def load_republished_feed
     republished_feed_id = (params[:input_source].blank?) ? params[:republished_feed_id] : params[:input_source][:republished_feed_id]
-    @republished_feed = RepublishedFeed.find(republished_feed_id)
-    @hub = @republished_feed.hub
+    @republished_feed = RepublishedFeed.find_by_id(republished_feed_id)
+    if @republished_feed
+      @hub = @republished_feed.hub
+    elsif params[:hub_id]
+      @hub = Hub.find params[:hub_id]
+    end
   end
 
   def load_input_source

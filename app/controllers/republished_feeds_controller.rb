@@ -74,15 +74,14 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def create
-    @republished_feed = RepublishedFeed.new(:hub_id => @hub.id)
-    @republished_feed.attributes = params[:republished_feed]
+    @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, params)
     respond_to do|format|
-      if @republished_feed.save
-        current_user.has_role!(:owner, @republished_feed)
-        current_user.has_role!(:creator, @republished_feed)
+      if @republished_feed
         flash[:notice] = 'Created a new remix. You should switch to the "inputs" tab and add items for publishing.'
         format.html{redirect_to :action => :show, :id => @republished_feed.id}
       else
+        # new instance needed to avoid breaking form
+        @republished_feed = RepublishedFeed.new(:hub_id => @hub.id)
         flash[:error] = 'Could not add that remix.'
         format.html {render :action => :new}
       end
