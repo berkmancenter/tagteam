@@ -31,7 +31,7 @@ namespace :tagteam do
     UpdateFeeds.perform
   end
   
-  desc 'cleanup titles'
+  desc 'Transmogrifies feed titles from email@example.com\'s bookmarks to username\'s bookmarks'
   task :cleanup_titles => :environment do
     Feed.where(:bookmarking_feed => true).each do |f|
       u = User.where(["roles.authorizable_id = ? and roles.authorizable_type = 'Feed' and roles.name ='creator'", f.id]).joins(:roles).first
