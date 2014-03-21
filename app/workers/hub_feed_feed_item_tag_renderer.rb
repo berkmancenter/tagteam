@@ -34,6 +34,7 @@ class HubFeedFeedItemTagRenderer
       key = "feed-item-tag-list-#{hub_feed.hub.id}-#{fi.id}"
       ac.expire_fragment(key)
     end
-  end
-
+    Sunspot.commit
+    TagCountUpdater.perform [hub_feed.hub]
+ end
 end

@@ -52,7 +52,8 @@ class HubFeedTagFiltersController < ApplicationController
         tag_list << new_tag
         current_user.tag f, :with => tag_list, :on => "hub_#{@hub.id}"
       end
-
+      @hub.decrement_tag_count(old_tag, FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key).size)
+      @hub.increment_tag_count(new_tag, FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key).size) 
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       # It's a new tag but we didn't get a tag id. Grab the tag manually.
       new_tag = find_or_create_tag_by_name(params[:new_tag])
@@ -61,6 +62,7 @@ class HubFeedTagFiltersController < ApplicationController
         fi.skip_tag_indexing_after_save = true
         current_user.tag fi, :with => new_tag, :on => "hub_#{@hub.id}"
       end
+      @hub.set_tag_count(new_tag, @hub_feed.feed_items.size) 
     else
       if params[:tag_id].blank?
         delete_tag = find_or_create_tag_by_name(params[:new_tag])
@@ -69,7 +71,13 @@ class HubFeedTagFiltersController < ApplicationController
 
       @hub_feed_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
-    end
+      if (filter_type_model == DeleteTagFilter)
+        @hub.decrement_tag_count(ActsAsTaggableOn::Tag.find(params[:tag_id]), @hub_feed.feed_items.size) 
+      end
+      if (filter_type_model == AddTagFilter)
+        @hub.set_tag_count(ActsAsTaggableOn::Tag.find(params[:tag_id]), @hub_feed.feed_items.size)
+      end   
+ end
 
     respond_to do|format|
       if @hub_feed_tag_filter.save

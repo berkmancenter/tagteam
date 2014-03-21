@@ -12,6 +12,7 @@ class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
   extend FriendlyId
+  serialize :tag_count, Hash
 
   before_validation do
     auto_sanitize_html(:description)
@@ -116,7 +117,57 @@ class Hub < ActiveRecord::Base
     t.add :created_at
     t.add :updated_at
   end
+ 
+  def increment_tag_count(tag, amount = 1)
+    self.tag_count[tag.id] ||= 0
+    self.tag_count[tag.id] = (self.tag_count[tag.id] || 0) + amount 
+    self.update_attribute(:tag_count, self.tag_count)   
+  end
   
+  def decrement_tag_count(tag, amount = 1)
+    self.tag_count[tag.id] = (self.tag_count[tag.id] || 0) - amount
+    if self.tag_count[tag.id] < 1
+      self.tag_count.delete(tag.id)
+    end
+    self.update_attribute(:tag_count, self.tag_count)
+  end
+
+  def set_tag_count(tag, count = 1)
+    self.tag_count[tag.id] = count
+    if self.tag_count[tag.id] < 1
+      self.tag_count.delete(tag.id)
+    end 
+    self.update_attribute(:tag_count, self.tag_count)
+  end
+
+  def update_all_tag_count
+    tags = FeedItem.tag_counts_on(self.tagging_key)
+    self.tag_count ||= {} 
+    self.tag_count.clear
+    
+    tags.each do |t|
+      if t.count > 0
+        self.tag_count[t.id] = t.count
+      else
+        self.tag_count.delete(t.id)
+      end
+    end
+    self.update_attribute(:tag_count, self.tag_count)
+  end
+ 
+  def update_tag_count(tags = ActsAsTaggableOn::Tag.all)
+    t = tags.is_a?(Array) ? tags : [tags]
+    t.each do |tt|
+      tc =  FeedItem.tagged_with(tt.name, :on => self.tagging_key).size
+      if tc > 0 
+        self.tag_count[tt.id] = tc
+      else
+        self.tag_count.delete(tt.id)
+      end 
+    end
+    self.update_attribute(:tag_count, self.tag_count)
+  end
+ 
   def clean_slug
     # work around FriendlyId bug that generates slugs for empty nicknames
     self.slug = nil if nickname.blank?
