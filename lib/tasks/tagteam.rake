@@ -3,11 +3,9 @@ include RakeHelper
 
 namespace :tagteam do
   desc 'update Hub#tag_count'
-  task :update_hub_tag_count => :environment do |t, args|
-   Hub.all.each do |h|
-      h.update_tag_count
-    end
-   end
+  task :update_tag_count => :environment do |t, args|
+    Resque.enqueue(TagCountUpdater)
+  end
 
   desc 'auto import feeds from json'
   task :auto_import_from_json, [:json_url, :hub_title, :owner_email] => :environment do |t,args|

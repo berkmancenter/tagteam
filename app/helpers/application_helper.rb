@@ -52,7 +52,8 @@ module ApplicationHelper
 
     if ! options[:show_count].blank?
       #tag_count = options[:use_count] ? tag.count : tag.count_by_hub(Hub.find(hub_id))
-      new_tag_count = options[:use_count] ? tag.count :  hub.tag_count[tag.id]
+      hub.tag_count ||= {}
+      new_tag_count = options[:use_count] ? tag.count : (hub.tag_count[tag.id]||0)
       #tag_text = tag.name + " (#{tag_count})" + "(#{new_tag_count})"
       tag_text = tag.name + " (#{new_tag_count})"
       #options.merge!({"data-tag-frequency" => tag_count})

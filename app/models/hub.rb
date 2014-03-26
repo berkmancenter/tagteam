@@ -141,24 +141,33 @@ class Hub < ActiveRecord::Base
   end
 
   def update_all_tag_count
-    tags = FeedItem.tag_counts_on(self.tagging_key)
+    tags = ActsAsTaggableOn::Tag.all
     self.tag_count ||= {} 
     self.tag_count.clear
-    
-    tags.each do |t|
-      if t.count > 0
-        self.tag_count[t.id] = t.count
+    tags.each do |tt|
+      tc =  FeedItem.tagged_with(tt.name, :on => self.tagging_key).uniq.size
+      if tc > 0 
+        self.tag_count[tt.id] = tc
       else
-        self.tag_count.delete(t.id)
-      end
+        self.tag_count.delete(tt.id)
+      end 
     end
+   # counts duplicate tags; as a result count is incorrect 
+   #tags = FeedItem.tag_counts_on(self.tagging_key)
+   #tags.each do |t|
+   #   if t.count > 0
+   #     self.tag_count[t.id] = t.count
+   #   else
+   #     self.tag_count.delete(t.id)
+   #   end
+   # end
     self.update_attribute(:tag_count, self.tag_count)
   end
  
   def update_tag_count(tags = ActsAsTaggableOn::Tag.all)
     t = tags.is_a?(Array) ? tags : [tags]
     t.each do |tt|
-      tc =  FeedItem.tagged_with(tt.name, :on => self.tagging_key).size
+      tc =  FeedItem.tagged_with(tt.name, :on => self.tagging_key).uniq.size
       if tc > 0 
         self.tag_count[tt.id] = tc
       else
