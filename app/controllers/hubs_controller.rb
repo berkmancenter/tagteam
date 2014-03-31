@@ -458,21 +458,18 @@ class HubsController < ApplicationController
  
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
-
+    tag = params[:q].blank? ? nil : ActsAsTaggableOn::Tag.find_by_name(params[:q])
+    q = "#" + params[:q] if params[:q] and tag
     @search = FeedItem.search do
       with :hub_ids, hub_id
       paginate :page => params[:page], :per_page => get_per_page
       order_by(:date_published, :desc)
-      unless params[:q].blank?
-          fulltext params[:q]
+      unless q.blank?
+          fulltext q
           adjust_solr_params do |params|
-              params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
+            q.gsub! "#", "tag_contexts_sm:#{tagging_key}-"
           end
       end
-    end
-
-    unless params[:q].blank?
-        params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end
 
     respond_to do|format|
