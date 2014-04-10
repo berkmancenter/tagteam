@@ -35,6 +35,7 @@ class HubTagFiltersController < ApplicationController
     @hub_tag_filter.hub_id = @hub.id
 
     if filter_type_model == ModifyTagFilter
+
       if !params[:modify_tag].nil? && (params[:new_tag].casecmp params[:modify_tag]) == 0
         @hub_tag_filter.errors.add(:new_tag, 'cannot be the same as the old tag')
         raise
@@ -46,24 +47,19 @@ class HubTagFiltersController < ApplicationController
 
       new_tag = find_or_create_tag_by_name(params[:new_tag])
       old_tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
-      feed_items = FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key, :owned_by => current_user)
+      feed_items = FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key, :owned_by => current_user)  
+      @hub.set_tag_count(old_tag, 0)
+      @hub.set_tag_count(new_tag, FeedItem.tagged_with(old_tag.name, :on => @hub.tagging_key).size) 
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
       feed_items.each do |f|
         f.skip_tag_indexing_after_save = true        
         HubFeedItemTagFilter.where(:hub_id => @hub.id, :feed_item_id => f.id).each {|hf| next if hf.filter.tag_id != params[:tag_id].to_i; hf.filter.destroy; hf.destroy }
-        #f = HubFeedItemTagFilter.new
-        #f.hub_id = @hub.id
-        #f.feed_item_id = f.id
-        #f.created_by = current_user
-        #f.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
-        #f.save
         tag_list = f.owner_tags_on(current_user, @hub.tagging_key)
         tag_list = tag_list.select {|t| t.name != old_tag.name } 
         tag_list << new_tag
         current_user.tag f, :with => tag_list, :on => @hub.tagging_key
       end
-
-    elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
+   elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       new_tag = find_or_create_tag_by_name(params[:new_tag])
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
       @hub.feeds.each do |feed|
@@ -74,7 +70,7 @@ class HubTagFiltersController < ApplicationController
           current_user.tag feed_item, :with => tag_list, :on => "hub_#{@hub.id}"
         end
       end
-
+      @hub.set_tag_count(new_tag, @hub.feeds.map(&:feed_items).flatten.size)
     else
       if params[:tag_id].blank?
         delete_tag = find_or_create_tag_by_name(params[:new_tag])
@@ -83,6 +79,12 @@ class HubTagFiltersController < ApplicationController
 
       @hub_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
+      if (filter_type_model == DeleteTagFilter)
+        @hub.set_tag_count(ActsAsTaggableOn::Tag.find(params[:tag_id]), 0)
+      end
+      if (filter_type_model == AddTagFilter)
+        @hub.set_tag_count(ActsAsTaggableOn::Tag.find(params[:tag_id]), @hub.feeds.map(&:feed_items).flatten.size)
+      end
     end
 
     respond_to do|format|

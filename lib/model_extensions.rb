@@ -44,8 +44,11 @@ module ModelExtensions
 #          logger.warn("Auto validating: #{val_col.name} for presence")
           valid_output += "validates_presence_of :#{val_col.name}\n"
         end
-        valid_output += "validates_length_of :#{val_col.name}, :maximum => #{val_col.limit}, :allow_blank => #{val_col.null}\n"
-      end
+        if val_col.limit
+          valid_output += "validates_length_of :#{val_col.name}, :maximum => #{val_col.limit}, :allow_blank => #{val_col.null}\n"
+        end  
+        valid_output
+     end
 
       before_create_content = ''
       self.columns.each do|col|

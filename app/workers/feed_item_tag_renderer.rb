@@ -23,7 +23,12 @@ class FeedItemTagRenderer
       key = "feed-item-tag-list-#{hub.id}-#{fi.id}"
       ac.expire_fragment(key)
     end
-   
-    #Sunspot.commit
-  end
+
+    Sunspot.commit
+
+    fi.hubs.each do |h|
+      h.update_tag_count
+    end  
+    Resque.enqueue(TagCountUpdater, fi.hubs)   
+   end
 end
