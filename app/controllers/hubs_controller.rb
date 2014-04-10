@@ -458,7 +458,7 @@ class HubsController < ApplicationController
  
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
-
+    query = params[:q].dup
     @search = FeedItem.search do
       with :hub_ids, hub_id
       paginate :page => params[:page], :per_page => get_per_page
@@ -466,15 +466,11 @@ class HubsController < ApplicationController
       unless params[:q].blank?
           fulltext params[:q]
           adjust_solr_params do |params|
-              params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
+            params[:q].gsub! "#", "tag_contexts_sm:#{tagging_key}-"
           end
       end
     end
-
-    unless params[:q].blank?
-        params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
-    end
-
+    params[:q] = query
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
       format.json{ render_for_api :default, :json => (@search.blank?) ? [] : @search.results }

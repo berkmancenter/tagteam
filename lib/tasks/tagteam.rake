@@ -2,6 +2,10 @@ require 'rake_helper'
 include RakeHelper
 
 namespace :tagteam do
+  desc 'update tag counts for all hubs asynchronously via a TagCountUpdater job'
+  task :update_tag_count => :environment do |t, args|
+    Resque.enqueue(TagCountUpdater)
+  end
 
   desc 'auto import feeds from json'
   task :auto_import_from_json, [:json_url, :hub_title, :owner_email] => :environment do |t,args|
@@ -31,7 +35,7 @@ namespace :tagteam do
     UpdateFeeds.perform
   end
   
-  desc 'Transmogrifies feed titles from email@example.com\'s bookmarks to username\'s bookmarks'
+  desc 'transmogrifies feed titles from email@example.com\'s bookmarks to username\'s bookmarks'
   task :cleanup_titles => :environment do
     Feed.where(:bookmarking_feed => true).each do |f|
       u = User.where(["roles.authorizable_id = ? and roles.authorizable_type = 'Feed' and roles.name ='creator'", f.id]).joins(:roles).first
