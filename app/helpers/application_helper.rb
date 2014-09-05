@@ -31,7 +31,7 @@ module ApplicationHelper
 
   def tag_display(tag, options = {})
     options.merge!({:class => ['tag', options[:class]].compact.join(' '), "data-tag-id" => tag.id, "data-tag-name" => tag.name})
-    hub = options[:hub]
+
     hub_id = nil
     if ! options[:hub].blank?
       options.merge!({"data-hub-id" => options[:hub].id})
@@ -51,13 +51,9 @@ module ApplicationHelper
     end
 
     if ! options[:show_count].blank?
-      #tag_count = options[:use_count] ? tag.count : tag.count_by_hub(Hub.find(hub_id))
-      hub.tag_count ||= {}
-      new_tag_count = options[:use_count] ? tag.count : (hub.tag_count[tag.id]||0)
-      #tag_text = tag.name + " (#{tag_count})" + "(#{new_tag_count})"
-      tag_text = tag.name + " (#{new_tag_count})"
-      #options.merge!({"data-tag-frequency" => tag_count})
-      options.merge!({"data-tag-frequency" => new_tag_count})
+      tag_count = options[:use_count] ? tag.count : tag.count_by_hub(Hub.find(hub_id))
+      tag_text = tag.name + " (#{tag_count})"
+      options.merge!({"data-tag-frequency" => tag_count})
       options.delete(:show_count)
     else
       tag_text = tag.name

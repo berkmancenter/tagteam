@@ -45,7 +45,7 @@ class HubWideFeedItemTagRenderer
       key = "feed-item-tag-list-#{hub.id}-#{fi.id}"
       ac.expire_fragment(key)
     end
-    Resque.enqueue(TagCountUpdater, [hub])
+
   end
 
 end
