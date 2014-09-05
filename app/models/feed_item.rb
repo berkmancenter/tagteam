@@ -103,7 +103,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   validates_uniqueness_of :url
-  has_many :tags, through: :taggings
+
   has_and_belongs_to_many :feed_retrievals
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, :through => :feeds

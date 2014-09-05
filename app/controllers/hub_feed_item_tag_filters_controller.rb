@@ -55,14 +55,13 @@ class HubFeedItemTagFiltersController < ApplicationController
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id], :new_tag_id => new_tag.id)
       current_user.owned_taggings.where(:taggable_type => "FeedItem", :taggable_id => @feed_item.id, :tag_id => params[:tag_id]).destroy_all
       current_user.tag @feed_item, :with => tag_list, :on => "hub_#{@hub.id}"
-      @hub.decrement_tag_count(old_tag)
-      @hub.increment_tag_count(new_tag)
+
     elsif (filter_type_model == AddTagFilter) && params[:tag_id].blank?
       new_tag = find_or_create_tag_by_name(params[:new_tag])
       tag_list << new_tag
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => new_tag.id)
       current_user.tag @feed_item, :with => tag_list, :on => "hub_#{@hub.id}"
-      @hub.increment_tag_count(new_tag)
+
     else
       if params[:tag_id].blank?
         delete_tag = find_or_create_tag_by_name(params[:new_tag])
@@ -70,9 +69,6 @@ class HubFeedItemTagFiltersController < ApplicationController
       end
       @hub_feed_item_tag_filter.filter = filter_type_model.new(:tag_id => params[:tag_id])
       current_user.owned_taggings.where(:tag_id => params[:tag_id]).destroy_all
-      if (filter_type_model == DeleteTagFilter)
-        @hub.decrement_tag_count(ActsAsTaggableOn::Tag.find(params[:tag_id]))
-      end
     end
 
     respond_to do|format|

@@ -43,15 +43,11 @@ class TagsController < ApplicationController
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.
   def index
     if @hub_feed.blank?
-      @tags = ActsAsTaggableOn::Tag.find(@hub.tag_count.keys)
-      @tags.each do |t|
-        t.send :write_attribute, :count,  @hub.tag_count[t.id].to_i
-      end  
-   #  @tags = FeedItem.tag_counts_on(@hub.tagging_key)
+      @tags = FeedItem.tag_counts_on(@hub.tagging_key)
     else
       @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
     end
-  
+
     if @tags.any?
       #tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
       tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :frequency)

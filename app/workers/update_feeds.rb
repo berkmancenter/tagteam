@@ -9,7 +9,7 @@ class UpdateFeeds
     feeds = HubFeed.need_updating
     feeds.each do|hf|
       hf.feed.update_feed
-      hf.hub.update_all_tag_count
     end
   end
+
 end
