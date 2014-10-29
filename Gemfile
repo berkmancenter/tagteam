@@ -13,7 +13,7 @@ gem "will_paginate"
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'breadcrumbs'
-gem 'acts-as-taggable-on'
+gem 'acts-as-taggable-on', '~> 3.4.1'
 gem 'resque', :require => 'resque/server'
 gem 'resque-pool'
 gem 'acts_as_api'
@@ -24,7 +24,7 @@ gem 'progress_bar'
 gem 'unicorn'
 
 group :development, :test do
-  gem 'resque-scheduler', :require => 'resque_scheduler'
+  gem 'resque-scheduler'
   gem 'awesome_print'
   gem 'rspec-rails'
   gem 'sqlite3'
@@ -33,13 +33,12 @@ end
 group :test do
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
-  gem 'capybara-webkit', "~> 0.12.1"
+  gem 'capybara-webkit', "~> 1.3.1"
   gem 'headless'
   gem 'shoulda'
   gem 'shoulda-matchers'
   gem 'selenium-client'
   gem 'selenium-webdriver'
   gem 'launchy'
-  gem 'sqlite3'
 end
 

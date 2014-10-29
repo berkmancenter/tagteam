@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131031140017) do
+ActiveRecord::Schema.define(:version => 20141029173235) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
     t.integer  "feed_item_id"
     t.string   "filter_type",     :limit => 100, :null => false
     t.integer  "filter_id",                      :null => false
+    t.integer  "position"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.string   "created_by_type"
@@ -141,11 +142,13 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
   add_index "hub_feed_item_tag_filters", ["filter_id"], :name => "index_hub_feed_item_tag_filters_on_filter_id"
   add_index "hub_feed_item_tag_filters", ["filter_type"], :name => "index_hub_feed_item_tag_filters_on_filter_type"
   add_index "hub_feed_item_tag_filters", ["hub_id"], :name => "index_hub_feed_item_tag_filters_on_hub_id"
+  add_index "hub_feed_item_tag_filters", ["position"], :name => "index_hub_feed_item_tag_filters_on_position"
 
   create_table "hub_feed_tag_filters", :force => true do |t|
     t.integer  "hub_feed_id"
     t.string   "filter_type", :limit => 100, :null => false
     t.integer  "filter_id",                  :null => false
+    t.integer  "position"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
   end
@@ -153,6 +156,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
   add_index "hub_feed_tag_filters", ["filter_id"], :name => "index_hub_feed_tag_filters_on_filter_id"
   add_index "hub_feed_tag_filters", ["filter_type"], :name => "index_hub_feed_tag_filters_on_filter_type"
   add_index "hub_feed_tag_filters", ["hub_feed_id"], :name => "index_hub_feed_tag_filters_on_hub_feed_id"
+  add_index "hub_feed_tag_filters", ["position"], :name => "index_hub_feed_tag_filters_on_position"
 
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id",                     :null => false
@@ -171,6 +175,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
     t.integer  "hub_id"
     t.string   "filter_type", :limit => 100, :null => false
     t.integer  "filter_id",                  :null => false
+    t.integer  "position"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
   end
@@ -178,6 +183,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
   add_index "hub_tag_filters", ["filter_id"], :name => "index_hub_tag_filters_on_filter_id"
   add_index "hub_tag_filters", ["filter_type"], :name => "index_hub_tag_filters_on_filter_type"
   add_index "hub_tag_filters", ["hub_id"], :name => "index_hub_tag_filters_on_hub_id"
+  add_index "hub_tag_filters", ["position"], :name => "index_hub_tag_filters_on_position"
 
   create_table "hubs", :force => true do |t|
     t.string   "title",       :limit => 500,  :null => false
@@ -187,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
     t.datetime "updated_at",                  :null => false
     t.string   "nickname"
     t.string   "slug"
+    t.text     "tag_count"
   end
 
   add_index "hubs", ["slug"], :name => "index_hubs_on_slug"
@@ -198,6 +205,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
     t.integer  "item_source_id",                                        :null => false
     t.string   "item_source_type",    :limit => 100,                    :null => false
     t.string   "effect",              :limit => 25,  :default => "add", :null => false
+    t.integer  "position"
     t.integer  "limit"
     t.datetime "created_at",                                            :null => false
     t.datetime "updated_at",                                            :null => false
@@ -206,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
   add_index "input_sources", ["effect"], :name => "index_input_sources_on_effect"
   add_index "input_sources", ["item_source_id"], :name => "index_input_sources_on_item_source_id"
   add_index "input_sources", ["item_source_type", "item_source_id", "effect", "republished_feed_id"], :name => "bob_the_index", :unique => true
+  add_index "input_sources", ["position"], :name => "index_input_sources_on_position"
   add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
 
   create_table "modify_tag_filters", :force => true do |t|
@@ -269,21 +278,22 @@ ActiveRecord::Schema.define(:version => 20131031140017) do
     t.datetime "created_at"
   end
 
-  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], :name => "taggings_idx", :unique => true
   add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
 
   create_table "tags", :force => true do |t|
-    t.string "name"
+    t.string  "name"
+    t.integer "taggings_count", :default => 0
   end
 
-  add_index "tags", ["name"], :name => "index_tags_on_name"
+  add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "first_name",             :limit => 100
     t.string   "last_name",              :limit => 100
     t.string   "url",                    :limit => 250
     t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",                    :default => "", :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
