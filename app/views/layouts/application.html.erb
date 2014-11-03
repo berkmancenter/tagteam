@@ -27,7 +27,9 @@
                 <%= @hub.present? && !@hub.new_record? ? 
                   link_to(current_user.username, hub_user_tags_path(@hub, current_user.username)) : 
                   current_user.username %> 
-                &ndash; <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
+                &ndash; 
+                <%= link_to('My account', edit_user_registration_path) %> | 
+                <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
               <% else %>
                 <%= link_to('Log in', new_user_session_url(:protocol => protocol_resolver)) %>
               <% end %>
