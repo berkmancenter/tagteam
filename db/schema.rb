@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(:version => 20141029173235) do
 
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], :name => "taggings_idx", :unique => true
   add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
+  add_index "taggings", ["taggable_type", "context"], :name => "index_taggings_on_taggable_type_and_context"
 
   create_table "tags", :force => true do |t|
     t.string  "name"

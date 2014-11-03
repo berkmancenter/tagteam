@@ -165,7 +165,7 @@
               attributes = {};
 
           attributes['frequency'] = tag_frequency;
-          attributes['name'] = tag_text;
+          attributes['name'] = tag_text.toString();
 
           return attributes;
         };
