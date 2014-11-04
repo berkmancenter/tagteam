@@ -1,12 +1,13 @@
 require 'find'
 class ExpireFileCache
-  @queue = :file_cache
+  include Sidekiq::Worker
+  sidekiq_options :queue => :file_cache
 
   def self.display_name
     'Expiring cache entries'
   end
 
-  def self.perform
+  def perform
     # A no-op unless we're using a file cache store.
     # Also, Marshal is pretty damned fast.
     if Rails.cache.class == ActiveSupport::Cache::FileStore

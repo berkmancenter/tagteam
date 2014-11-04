@@ -1,0 +1,12 @@
+:concurrency: 5
+:pidfile: tmp/pids/sidekiq.pid
+staging:
+  :concurrency: 5
+production:
+  :concurrency: 5
+:queues:
+  - [updater, 1]
+  - [file_cache, 1]
+  - [importer, 1]
+  - [reindexer, 1]
+  - [renderer, 2]

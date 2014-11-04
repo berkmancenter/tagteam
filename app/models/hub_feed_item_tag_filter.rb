@@ -38,7 +38,7 @@ class HubFeedItemTagFilter < ActiveRecord::Base
   end
 
   def update_feed_item_tags
-    Resque.enqueue(FeedItemTagRenderer, self.feed_item_id)
+    Sidekiq::Client.enqueue(FeedItemTagRenderer, self.feed_item_id)
   end
 
   def self.title

@@ -266,7 +266,7 @@ class FeedItem < ActiveRecord::Base
         fi.skip_tag_indexing_after_save = true
         fi.save
         feed.changelog[fi.id] = item_changelog
-        Resque.enqueue(FeedItemTagRenderer, fi.id)
+        Sidekiq::Client.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
       # logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")

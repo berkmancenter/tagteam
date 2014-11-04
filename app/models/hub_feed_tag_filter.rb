@@ -36,10 +36,10 @@ class HubFeedTagFilter < ActiveRecord::Base
     logger.warn('Update filtered items')
     if self.filter.class == AddTagFilter
       #act on all items
-      Resque.enqueue(HubFeedFeedItemTagRenderer, self.hub_feed.id)
+      Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.hub_feed.id)
     else
       # act only on the items tagged with a specific tag.
-      Resque.enqueue(HubFeedFeedItemTagRenderer, self.hub_feed.id, self.filter.tag_id)
+      Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.hub_feed.id, self.filter.tag_id)
     end
   end
 

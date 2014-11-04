@@ -1,11 +1,12 @@
 class ImportFeedItems
-  @queue = :importer
+  include Sidekiq::Worker
+  sidekiq_options :queue => :importer
 
   def self.display_name
     'Importing items from an uploaded file'
   end
 
-  def self.perform(hub_feed_id,user_id,file_name,type)
+  def perform(hub_feed_id,user_id,file_name,type)
     hub_feed = HubFeed.find(hub_feed_id)
     feed = hub_feed.feed
     errors = []
@@ -37,7 +38,7 @@ class ImportFeedItems
       end
     end
     feed.save
-    Resque.enqueue(HubFeedFeedItemTagRenderer, hub_feed.id)
+    Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, hub_feed.id)
   end
 
 end

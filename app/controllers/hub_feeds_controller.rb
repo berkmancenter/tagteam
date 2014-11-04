@@ -46,7 +46,7 @@ class HubFeedsController < ApplicationController
       file_name = Rails.root.to_s + '/tmp/incoming_import-' + Time.now.to_i.to_s
 
       FileUtils.cp(params[:import_file].tempfile,file_name)
-      Resque.enqueue(ImportFeedItems,@hub_feed.id, current_user.id, file_name,params[:type])
+      Sidekiq::Client.enqueue(ImportFeedItems,@hub_feed.id, current_user.id, file_name,params[:type])
 
       flash[:notice] = 'The file has been uploaded and scheduled for import. Please see the "background jobs" link in the footer to track progress.'
     end

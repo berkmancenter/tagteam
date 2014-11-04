@@ -20,10 +20,3 @@ docs.each do|doc_attr|
   d.id = nil
   d.save
 end
-
-shared_key_file = "#{Rails.root}/config/initializers/tagteam_shared_key.rb"
-unless File.exists?(shared_key_file)
-  f = File.new(shared_key_file,'w',0740)
-  f.write("SHARED_KEY_FOR_TASKS='#{Digest::MD5.hexdigest(Time.now.to_s + rand(100000).to_s)}'")
-  f.close
-end

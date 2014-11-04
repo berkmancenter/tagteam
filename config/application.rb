@@ -17,8 +17,21 @@ module Tagteam
       Tagteam::Application.config.send("#{k}=", tagteam_config[k])
     }
 
-    Resque.redis.namespace = config.redis_namespace
-    Resque.redis = config.redis_host
+    Sidekiq.configure_server do |sidekiq_config|
+      sidekiq_config.redis = {
+        namespace: config.redis_namespace,
+        url: "redis://#{config.redis_host}"
+      }
+    end
+
+    Sidekiq.configure_client do |sidekiq_config|
+      sidekiq_config.redis = {
+        namespace: config.redis_namespace,
+        url: "redis://#{config.redis_host}"
+      }
+    end
+
+    ActsAsTaggableOn.tags_counter = false
 
     config.middleware.use ExceptionNotifier,
       :email_prefix => "[tagteam-errors] ",

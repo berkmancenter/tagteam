@@ -74,7 +74,7 @@ class BookmarkletsController < ApplicationController
         tags = @feed_item.tag_list.uniq.map {|tag_name| ActsAsTaggableOn::Tag.find_or_create_by_name(tag_name)}
         current_user.tag(@feed_item, :with => tags, :on => "hub_#{@hub.id}")
         
-        Resque.enqueue(FeedItemTagRenderer, @feed_item.id)
+        Sidekiq::Client.enqueue(FeedItemTagRenderer, @feed_item.id)
         format.html {
           redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id) 
         }

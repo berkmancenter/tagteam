@@ -1,11 +1,12 @@
 class RecalcAllItems
-  @queue = :renderer
+  include Sidekiq::Worker
+  sidekiq_options :queue => :renderer
 
   def self.display_name
     "Updating all tags for an entire hub"
   end
 
-  def self.perform(hub_id)
+  def perform(hub_id)
     hub = Hub.find(hub_id)
 
     HubFeed.all(:conditions => {:hub_id => hub_id}).each do |hf|

@@ -149,6 +149,11 @@ Tagteam::Application.routes.draw do
   #devise_for :users, :path => 'accounts'
   devise_for :users, :path => 'accounts', :constraints => { :protocol => ((Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts) ? {:protocol => 'https'} : {}) }
 
+  require 'sidekiq/web'
+  authenticate :user, lambda { |u| u.has_role? :superadmin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   root :to => "hubs#index"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

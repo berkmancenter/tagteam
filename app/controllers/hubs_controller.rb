@@ -134,18 +134,26 @@ class HubsController < ApplicationController
 
   # Looks through the currently running resque jobs and returns a json response talking about what's going on.
   def background_activity
+    require 'sidekiq/api'
     @output = {:running => []}
-    Resque.workers.collect.each do|w|
-      unless w.job.blank?
-        started_at = Time.parse(w.job['run_at'])
-        running_for_this_many_seconds = Time.now - started_at
-        job = {:description => w.job['payload']['class'].constantize.display_name, :since => w.job['run_at'], :running_for => (running_for_this_many_seconds > 60) ? "#{(running_for_this_many_seconds.round / 60)} minute(s), #{(running_for_this_many_seconds.round % 60)} seconds" : "#{running_for_this_many_seconds.round} seconds"}
-        @output[:running] << job
+    workers = Sidekiq::Workers.new
+    workers.collect.each do |process_id, thread_id, work|
+      started_at = Time.at(work['run_at'])
+      running_seconds = Time.now - started_at
+      if running_seconds > 60
+        running_for = "#{(running_seconds.round / 60)} minute(s), #{(running_seconds.round % 60)} seconds"
+      else
+        running_for = "#{running_seconds.round} seconds"
       end
+      job = {
+        :description => work['payload']['class'].constantize.display_name,
+        :since => started_at,
+        :running_for => running_for
+      }
+      @output[:running] << job
     end
-    count = 0
-    Resque.queues.each{ |q| count = count + Resque.peek(q,0,100000).length }
-    @output[:queued] = count
+    stats = Sidekiq::Stats.new
+    @output[:queued] = stats.enqueued
 
     respond_to do|format|
       format.json{ render :json => @output }
@@ -215,7 +223,7 @@ class HubsController < ApplicationController
   def recalc_all_tags
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
-    Resque.enqueue(RecalcAllItems,@hub.id)
+    Sidekiq::Client.enqueue(RecalcAllItems,@hub.id)
     flash[:notice] = 'Re-rendering all tags. This will take a while.'
     redirect_to request.referer
   end

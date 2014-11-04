@@ -41,7 +41,7 @@ class HubFeed < ActiveRecord::Base
   # If a new HubFeed gets created, we need to ensure that the tag facets on the feed items it contains (whether those items exist already in TagTeam or not) are calculated.
   after_create do
     self.feed.solr_index
-    Resque.enqueue(HubFeedFeedItemTagRenderer, self.id)
+    Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
   after_destroy do
@@ -54,8 +54,8 @@ class HubFeed < ActiveRecord::Base
     self.feed.solr_index
     feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
     tagging_key = self.hub.tagging_key.to_s
-    Resque.enqueue(ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
-    Resque.enqueue(ReindexFeedRetrievals, self.feed.id)
+    Sidekiq::Client.enqueue(ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
+    Sidekiq::Client.enqueue(ReindexFeedRetrievals, self.feed.id)
   end
 
   def hub_ids

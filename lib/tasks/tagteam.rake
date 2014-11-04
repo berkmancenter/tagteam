@@ -23,12 +23,12 @@ namespace :tagteam do
 
   desc 'expire file cache'
   task :expire_file_cache => :environment do
-    ExpireFileCache.perform
+    ExpireFileCache.new.perform
   end
 
   desc 'update feeds'
   task :update_feeds => :environment do
-    UpdateFeeds.perform
+    UpdateFeeds.new.perform
   end
   
   desc 'Transmogrifies feed titles from email@example.com\'s bookmarks to username\'s bookmarks'
