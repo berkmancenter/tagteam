@@ -6,6 +6,7 @@ require 'sidekiq'
 require 'yaml'
 
 klass = ARGV[0]
+queue = ARGV[1]
 config_file = File.absolute_path(File.join(__dir__, "../config/tagteam.yml"))
 tagteam_config = YAML.load_file(config_file)
 Sidekiq.configure_client do |config|
@@ -14,4 +15,4 @@ Sidekiq.configure_client do |config|
     namespace: tagteam_config['redis_namespace']
   }
 end
-Sidekiq::Client.push('class' => klass, 'args' => [])
+Sidekiq::Client.push('class' => klass, 'queue' => queue, 'args' => [])
