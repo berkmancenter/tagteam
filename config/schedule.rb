@@ -33,5 +33,8 @@ job_type :job, "cd :path && :environment_variable=:environment bundle exec scrip
 
 every 10.minutes do
   job 'ExpireFileCache', queue: :file_cache
+end
+
+every 30.minutes do
   job 'UpdateFeeds', queue: :updater
 end
