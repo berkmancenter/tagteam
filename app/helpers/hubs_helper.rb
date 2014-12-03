@@ -2,6 +2,6 @@ module HubsHelper
   def limit_html(html, limit)
     require 'nokogiri'
     html = html[0..limit]
-    Nokogiri::HTML::fragment(html).to_xml
+    Nokogiri::HTML::fragment(html).to_html
   end
 end

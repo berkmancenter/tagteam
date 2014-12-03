@@ -20,7 +20,6 @@
       <div class="search_results">
 <% end %>
         <%= render :partial => 'shared/line_items/hub', :collection => @hubs, :locals => {:limit => 100}  %>
-        <%#= will_paginate(@hubs) %>
 <% unless request.xhr? %>
       </div>
       <p id="pagination" data-total-pages="<%= @hubs.total_pages %>"></p>
