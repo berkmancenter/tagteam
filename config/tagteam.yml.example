@@ -107,4 +107,5 @@ social_links:
 # Random
 
 redis_namespace: 'resque:TagTeam'
+redis_host: 'localhost:6379'
 
