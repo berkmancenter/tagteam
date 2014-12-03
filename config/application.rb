@@ -20,14 +20,14 @@ module Tagteam
     Sidekiq.configure_server do |sidekiq_config|
       sidekiq_config.redis = {
         namespace: config.redis_namespace,
-        url: "redis://#{config.redis_host}"
+        url: config.redis_host
       }
     end
 
     Sidekiq.configure_client do |sidekiq_config|
       sidekiq_config.redis = {
         namespace: config.redis_namespace,
-        url: "redis://#{config.redis_host}"
+        url: config.redis_host
       }
     end
 
