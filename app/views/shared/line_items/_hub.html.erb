@@ -7,7 +7,7 @@
   </h2>
   <% unless hub.description.blank? %>
      <% if defined?(limit) and hub.description.length > limit %>
-       <div class="description"><%= raw(hub.description[0..limit]) + "..." %></div>
+       <div class="description"><%= raw(limit_html(hub.description, limit)) + "..." %></div>
      <% else %>
        <div class="description"><%= raw(hub.description) %></div>
      <% end %>
