@@ -3,11 +3,11 @@
   From http://xheo.com/
 */
 
-.ui-silk { width: 16px; height: 16px; display:block; background: transparent url(../images/silk-sprite.png?634485954313507137) no-repeat; text-indent: -99999px; overflow: hidden; }
-.ui-silk.gray, .ui-silk.gray, .ui-silk.hover { background-image: url(../images/silk-sprite-gray.png?634485954313507137); }
+.ui-silk { width: 16px; height: 16px; display:block; background: transparent url(/assets/silk-sprite.png?634485954313507137) no-repeat; text-indent: -99999px; overflow: hidden; }
+.ui-silk.gray, .ui-silk.gray, .ui-silk.hover { background-image: url(/assets/silk-sprite-gray.png?634485954313507137); }
 *.ui-silk.inline{ display: inline-block; vertical-align: middle; border: 0; outline: 0; }
 
-.ui-silk.hover:hover{background-image: url(../images/silk-sprite.png?634485954313507137);}.ui-silk-accept { background-position: -0px -0px }
+.ui-silk.hover:hover{background-image: url(/assets/silk-sprite.png?634485954313507137);}.ui-silk-accept { background-position: -0px -0px }
 .ui-silk-add { background-position: -16px -0px }
 .ui-silk-anchor { background-position: -32px -0px }
 .ui-silk-application { background-position: -48px -0px }

@@ -23,11 +23,13 @@ gem 'unicorn'
 gem 'sidekiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', :require => false
+gem 'less-rails-bootstrap', '~> 3.0'
 
 group :development, :test do
   gem 'awesome_print'
   gem 'rspec-rails'
   gem 'sqlite3'
+  gem 'therubyracer'
 end
 
 group :test do

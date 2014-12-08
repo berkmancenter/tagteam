@@ -2,11 +2,8 @@
 <html>
   <head>
     <title><%= page_title %></title>
-    <!--[if lt IE 9]>
-    <%= javascript_include_tag 'excanvas.compiled.js' %>
-    <![endif]--> 
-    <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', '992-16col','reset','silk-sprite','custom-theme/jquery-ui-1.9.2.custom', 'tagteam', @css_extras].compact.flatten %>
-    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.9.2.custom.min', 'jquery.bt.js', 'jquery.bootpag.min.js', 'jquery.masonry.min.js', 'jquery.infinitescroll.min.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', 'jquery.sortChildren',@javascripts_extras].compact.flatten %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tag %>
     <script src="http://code.jquery.com/jquery-migrate-1.1.1.js"></script>
     <link rel="author" href="<%= root_url %>humans.txt" />

@@ -1,3 +1,21 @@
+//
+//= require jquery
+//= require jquery_ujs
+//= require jquery.cookie
+//= require jquery.form
+//= require jquery.observe_field
+//= require jquery.hoverIntent.minified
+//= require jquery.ba-bbq.min
+//= require jquery-ui-1.9.2.custom.min
+//= require jquery.bt
+//= require jquery.bootpag.min
+//= require jquery.masonry.min
+//= require jquery.infinitescroll.min
+//= require nicEdit
+//= require modernizr.custom.15012
+//= require jquery.sortChildren
+//= require_tree .
+//
 ( function($){
 
 	$.extend({

@@ -59,6 +59,7 @@ GEM
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
+    commonjs (0.2.7)
     connection_pool (2.1.0)
     crass (0.2.1)
     cucumber (1.3.17)
@@ -104,6 +105,14 @@ GEM
     kgio (2.9.2)
     launchy (2.4.3)
       addressable (~> 2.3)
+    less (2.6.0)
+      commonjs (~> 0.2.7)
+    less-rails (2.6.0)
+      actionpack (>= 3.1)
+      less (~> 2.6.0)
+    less-rails-bootstrap (3.3.1.0)
+      less-rails (~> 2.6.0)
+    libv8 (3.16.14.7)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -154,6 +163,7 @@ GEM
     redis (3.1.0)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
+    ref (1.0.5)
     rsolr (1.0.10)
       builder (>= 2.1.2)
     rspec-core (3.1.7)
@@ -213,6 +223,9 @@ GEM
       rails (>= 3)
       sunspot (= 2.1.1)
     sunspot_solr (2.1.1)
+    therubyracer (0.12.1)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.19.1)
     tilt (1.4.1)
     timers (4.0.1)
@@ -254,6 +267,7 @@ DEPENDENCIES
   headless
   jquery-rails
   launchy
+  less-rails-bootstrap (~> 3.0)
   nokogiri
   pg
   progress_bar
@@ -270,6 +284,7 @@ DEPENDENCIES
   sqlite3
   sunspot_rails
   sunspot_solr
+  therubyracer
   unicorn
   whenever
   will_paginate
