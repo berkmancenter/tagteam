@@ -1,0 +1,102 @@
+@import "variables.less";
+
+h1.title {
+  margin-top: 0;
+  font-size: 114px;
+  font-weight: 100;
+}
+
+.jumbotron {
+  .fa {
+    font-size: 75%;
+    line-height: 135%;
+    vertical-align: bottom;
+    letter-spacing: -15px;
+  }
+  p {
+    font-weight: 300;
+    font-size: @font-size-h3;
+  }
+  .start-hub {
+    margin-top: 6 * @padding-large-vertical;
+    padding: 2*@padding-base-vertical 6*@padding-large-horizontal;
+  }
+}
+
+h2 {
+  border-bottom: 1px solid @gray-lightish;
+  padding-bottom: 3%;
+}
+
+#app-description {
+  font-size: @font-size-large;
+  ul {
+    padding-right: 3 * @padding-large-horizontal;
+    li {
+      padding: @padding-small-vertical 0 0;
+    }
+  }
+}
+
+#user-hubs {
+  margin-bottom: 7 * @padding-large-vertical;
+}
+#user-hubs, #active-hubs {
+  border-bottom: 1px solid @gray-lightish;
+}
+
+#hub-lists {
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+.hub-list {
+  margin-bottom: @padding-small-vertical;
+
+  li {
+    padding: 3*@padding-small-vertical 0 2*@padding-base-vertical 0;
+    border-bottom: 1px solid @gray-lightish;
+
+    h3 {
+      margin-bottom: @padding-small-vertical;
+    }
+    .fa-arrow-circle-right {
+      font-size: ceil(@font-size-base * 1.4);
+    }
+  }
+
+  .hub {
+    .actions {
+      a:hover {
+        text-decoration: none;
+      }
+      .fa-pencil:hover {
+        color: @brand-warning;
+      }
+      .fa-remove:hover {
+        color: @brand-danger;
+      }
+      .fa {
+        color: @gray-lightish;
+      }
+    }
+    .fa-archive {
+      margin-top: 2px;
+      color: @brand-success;
+    }
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.github {
+  margin-top: 10*@padding-large-vertical;
+
+  iframe {
+    vertical-align: bottom;
+    margin-left: @padding-large-horizontal;
+  }
+}

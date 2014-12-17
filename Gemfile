@@ -24,6 +24,7 @@ gem 'sidekiq'
 gem 'whenever'
 gem 'sinatra', '>= 1.3.0', :require => false
 gem 'less-rails-bootstrap', '~> 3.0'
+gem 'font-awesome-rails'
 
 group :development, :test do
   gem 'awesome_print'

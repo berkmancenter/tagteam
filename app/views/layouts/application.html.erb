@@ -1,94 +1,90 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title><%= page_title %></title>
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tag %>
+
     <script src="http://code.jquery.com/jquery-migrate-1.1.1.js"></script>
+
     <link rel="author" href="<%= root_url %>humans.txt" />
-    <link rel="icon" type="image/png" href="<%= root_url %>favicon.png">
+    <link rel="icon" type="image/png" href="<%= asset_path 'favicon.png' %>">
+
     <% unless @show_auto_discovery_params.blank? %>
       <%= auto_discovery_link_tag :rss, @show_auto_discovery_params %>
     <% end %>
   </head>
-  <body <%= @hub.present? ? "data-hub_id=#{@hub.id}" : "" %>>
-    <div id="outer_wrapper">
-      <header>
-        <div class="container_16">
-          <h1 class="grid_4"><a href="/">TagTeam</a></h1>
-          <nav class="user_meta grid_12">
-            <div>
-              <% unless current_user.blank? %>
-                Welcome, 
-                <%= @hub.present? && !@hub.new_record? ? 
-                  link_to(current_user.username, hub_user_tags_path(@hub, current_user.username)) : 
-                  current_user.username %> 
-                &ndash; 
-                <%= link_to('My account', edit_user_registration_path) %> | 
-                <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
+
+  <body>
+  <header>
+     <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<%= root_path %>"><%= fa_icon 'bolt', text: 'TagTeam' %></a>
+          </div>
+          <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li><%= link_to('About', meta_hubs_path, :class => 'dialog-show', :id => 'meta_about') %></li>
+              <li class="active"><%= link_to "Hubs", hubs_path %></li>
+            </ul>
+            <div class="nav navbar-nav navbar-right">
+              <% if user_signed_in? %>
+                <%= link_to "Sign In", new_user_session_path, class: 'btn btn-default navbar-btn' %>
               <% else %>
-                <%= link_to('Log in', new_user_session_url(:protocol => protocol_resolver)) %>
+                <p>Welcome, <%= link_to current_user.username, edit_user_registration_path %> &ndash;
+                <%= link_to "Logout", destroy_user_session_path, method: :delete %>
               <% end %>
             </div>
-          </nav>
-          <div class="clear"></div>
-        </div>
-      </header>
-      <section class='breadcrumbs_holder'>
-        <div class="breadcrumbs container_16">
-          <div class="grid_16">
-            <%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %>
           </div>
-          <div class='clear'></div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container">
+      <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
+
+      <% if use_breadcrumbs? %>
+      <section class='row breadcrumbs_holder'>
+        <div class="breadcrumbs col-md-12">
+          <%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %>
         </div>
       </section>
-      <div id="wrapper" class='container_16'>
-        <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
-        <div class="clear"></div>
+      <% end %>
 
-        <% unless flash.blank? %>
-          <section class="grid_16 notices" id="notices">
-            <% unless flash[:notice].blank? %>
-              <div class="notice">
-                <%= flash[:notice] %>
-              </div>
-            <% end %>
-            <% unless flash[:error].blank? %>
-              <div class="error">
-                <%= flash[:error] %>
-              </div>
-            <% end %>
-            <% unless flash[:alert].blank? %>
-              <div class="alert">
-                <%= flash[:alert] %>
-              </div>
-            <% end %>
-          </section>
-        <div class="clear"></div>
+      <% unless flash.blank? %>
+      <section id="notices" class="row">
+        <% unless flash[:notice].blank? %>
+          <div class="notice col-md-12">
+            <%= flash[:notice] %>
+          </div>
         <% end %>
+        <% unless flash[:error].blank? %>
+          <div class="error col-md-12">
+            <%= flash[:error] %>
+          </div>
+        <% end %>
+        <% unless flash[:alert].blank? %>
+          <div class="alert col-md-12">
+            <%= flash[:alert] %>
+          </div>
+        <% end %>
+      </section>
+      <% end %>
 
-        <section id="content">
+      <section id="content" class="row">
+        <div class="col-md-12">
           <%= yield %>
-        </section>
-        <div class="clear"></div>
-      </div><!-- wrapper -->
-      <div class="clear"></div>
-    </div><!-- outer wrapper -->
-    <footer class="container_16">
-      <div class="grid_16">
-        <% unless current_user.blank? %>
-          <%= link_to('Background Jobs', '#', :id => 'background_jobs') %>
-        <% end  %>
+        </div>
+      </section>
+    </div>
 
-        <%= link_to('About', meta_hubs_path, :class => 'dialog-show', :id => 'meta_about') %>&nbsp;&nbsp;
-
-        <% if current_user && current_user.is?(:superadmin) %>
-          |&nbsp;&nbsp;<%= link_to('Manage users', users_url(:protocol => protocol_resolver)) %>&nbsp;&nbsp;
-        <% end %>
-
-      </div>
-      <div class="clear"></div>
-    </footer>
+    <%= render partial: 'shared/footer' %>
   </body>
 </html>

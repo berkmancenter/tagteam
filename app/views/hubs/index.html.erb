@@ -1,8 +1,7 @@
-<% unless request.xhr? %>
-<div id="homepage">
-  <div id="left">
-    <h1>TagTeam...</h1>
-    <p>is an open-source tagging platform and feed aggregrator with the power to:</p>
+<%= render partial: 'shared/logo' %>
+<div class="row">
+  <div id="app-description" class="col-md-6">
+    <h2>TagTeam lets you:</h2>
     <ul>
       <li>Tag online resources</li>
       <li>Generate feeds of tagged items</li>
@@ -14,28 +13,57 @@
       <li>and republish everything as HTML, Atom, RSS, and JSON.</li>
     </ul>
   </div>
- <div id="right">
-    <div id="hub_list">
-      <h2>Hubs</h2>
-      <div class="search_results">
-<% end %>
-        <%= render :partial => 'shared/line_items/hub', :collection => @hubs, :locals => {:limit => 100}  %>
-<% unless request.xhr? %>
-      </div>
-      <p id="pagination" data-total-pages="<%= @hubs.total_pages %>"></p>
-
-
-      <% unless current_user.blank? %>
-        <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
-      <% end %>
-      <% unless @hubs.empty? %>
-        <%= link_to(raw('<span class="inline ui-silk"></span> All Hubs'), "/hubs/list") %>
+  <div id="hub-lists" class="col-md-6">
+    <% if user_signed_in? %>
+    <div id="user-hubs">
+      <h2>Your hubs</h2>
+      <% if current_user.my(Hub).empty? %>
+        <p>You do not currently have any hubs. <%= link_to "Start one now.", new_hub_path %></p>
+      <% else %>
+        <ul class="list-unstyled hub-list">
+          <%= render partial: 'hubs/list_item',
+            collection: current_user.my(Hub).slice(0, 3),
+            as: 'hub',
+            locals: {limit: 100}  %>
+          <% if current_user.my(Hub).count > 3 %>
+            <li>
+            <%= link_to hubs_path do %>
+              <div class="row">
+                <div class="col-xs-1"><%= fa_icon "arrow-circle-right" %></div>
+                <div class="col-xs-11"><h3>See all your hubs</h3></div>
+              </div>
+            <% end %>
+            </li>
+          <% end %>
+        </ul>
       <% end %>
     </div>
-  </div>
-  <div class="clear" style="float: left;"></div>
-
-  <div id="item_list" class="search_results">
+    <% end %>
+    <div id="active-hubs">
+      <div class="pull-right">Search</div>
+      <h2>Most active hubs</h2>
+      <ul class="list-unstyled hub-list">
+        <%= render partial: 'hubs/list_item',
+          collection: @hubs.limit(4),
+          as: 'hub',
+          locals: {limit: 50}  %>
+        <li>
+        <%= link_to hubs_path do %>
+          <div class="row">
+            <div class="col-xs-1"><%= fa_icon "arrow-circle-right" %></div>
+            <div class="col-xs-11"><h3>See all hubs</h3></div>
+          </div>
+        <% end %>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
-<% end %>
+<div class="github row">
+  <p class="text-center">Find the TagTeam code on GitHub: 
+    <iframe src="/github-btn.html?user=berkmancenter&repo=tagteam&type=watch&count=true"
+    allowtransparency="true" frameborder="0" scrolling="0" width="80" height="20"></iframe>
+    <iframe src="/github-btn.html?user=berkmancenter&repo=tagteam&type=fork&count=true"
+    allowtransparency="true" frameborder="0" scrolling="0" width="80" height="20"></iframe>
+  </p>
+</div>

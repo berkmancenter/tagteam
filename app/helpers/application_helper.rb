@@ -83,4 +83,13 @@ module ApplicationHelper
     link_to(raw(image_tag('google-plus-icon.png') + ' Share on Google+'), "https://plus.google.com/share?url=#{CGI.escape(url)}", options)
   end
 
+  def use_breadcrumbs?
+    blacklist = [['hubs', 'index'], ['hubs', 'new']]
+    !(blacklist.include? [controller_name, action_name])
+  end
+
+  def show_liblab?
+    whitelist = [['hubs', 'index']]
+    whitelist.include? [controller_name, action_name]
+  end
 end

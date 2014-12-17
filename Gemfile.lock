@@ -86,6 +86,8 @@ GEM
       actionmailer (>= 3.0.4)
     feed-abstract (0.0.13)
     ffi (1.9.6)
+    font-awesome-rails (4.2.0.0)
+      railties (>= 3.2, < 5.0)
     formtastic (3.1.2)
       actionpack (>= 3.2.13)
     friendly_id (4.0.10.1)
@@ -262,6 +264,7 @@ DEPENDENCIES
   devise (~> 2.0)
   exception_notification (~> 2.6.1)
   feed-abstract (~> 0.0.13)
+  font-awesome-rails
   formtastic
   friendly_id (~> 4.0.10)
   headless
