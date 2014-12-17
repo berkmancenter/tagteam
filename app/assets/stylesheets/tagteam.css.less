@@ -9,3 +9,39 @@ body {
   font-size: @font-size-large;
 }
 
+.navbar {
+  font-weight: normal;
+  margin-bottom: 0;
+
+  .welcome {
+    color: @gray-lighter;
+    
+    a {
+      color: @gray-lighter;
+    }
+  }
+
+  .navbar-brand {
+    font-weight: 300;
+  }
+}
+
+.breadcrumbs {
+  border-bottom: @border;
+  padding: @padding-large-vertical 0;
+
+  a {
+    color: black;
+  }
+  .first {
+    color: @gray;
+  }
+  .separator {
+    margin: 0 0.5*@padding-small-horizontal;
+
+    .fa {
+      font-size: @font-size-small;
+      color: @gray-light;
+    }
+  }
+}

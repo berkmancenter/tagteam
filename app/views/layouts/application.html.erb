@@ -36,10 +36,10 @@
             </ul>
             <div class="nav navbar-nav navbar-right">
               <% if user_signed_in? %>
-                <%= link_to "Sign In", new_user_session_path, class: 'btn btn-default navbar-btn' %>
+                <p class="navbar-text welcome">Welcome, <%= link_to current_user.username, edit_user_registration_path %> &ndash;
+                <%= link_to "Logout", destroy_user_session_path, method: :delete %></p>
               <% else %>
-                <p>Welcome, <%= link_to current_user.username, edit_user_registration_path %> &ndash;
-                <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+                <%= link_to "Sign In", new_user_session_path, class: 'btn btn-default navbar-btn' %>
               <% end %>
             </div>
           </div>
@@ -53,7 +53,7 @@
       <% if use_breadcrumbs? %>
       <section class='row breadcrumbs_holder'>
         <div class="breadcrumbs col-md-12">
-          <%= breadcrumbs.render(:format => :inline, :separator => ' &raquo; ') %>
+          <%= breadcrumbs.render(format: :inline, separator: fa_icon('chevron-right')) %>
         </div>
       </section>
       <% end %>

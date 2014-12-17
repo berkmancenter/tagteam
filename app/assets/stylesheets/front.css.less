@@ -1,7 +1,7 @@
 @import "variables.less";
 
 h1.title {
-  margin-top: 0;
+  margin-top: 20px;
   font-size: 114px;
   font-weight: 100;
 }
@@ -24,7 +24,7 @@ h1.title {
 }
 
 h2 {
-  border-bottom: 1px solid @gray-lightish;
+  border-bottom: @border;
   padding-bottom: 3%;
 }
 
@@ -42,7 +42,7 @@ h2 {
   margin-bottom: 7 * @padding-large-vertical;
 }
 #user-hubs, #active-hubs {
-  border-bottom: 1px solid @gray-lightish;
+  border-bottom: @border;
 }
 
 #hub-lists {
@@ -56,7 +56,7 @@ h2 {
 
   li {
     padding: 3*@padding-small-vertical 0 2*@padding-base-vertical 0;
-    border-bottom: 1px solid @gray-lightish;
+    border-bottom: @border;
 
     h3 {
       margin-bottom: @padding-small-vertical;
@@ -67,20 +67,6 @@ h2 {
   }
 
   .hub {
-    .actions {
-      a:hover {
-        text-decoration: none;
-      }
-      .fa-pencil:hover {
-        color: @brand-warning;
-      }
-      .fa-remove:hover {
-        color: @brand-danger;
-      }
-      .fa {
-        color: @gray-lightish;
-      }
-    }
     .fa-archive {
       margin-top: 2px;
       color: @brand-success;
@@ -89,6 +75,20 @@ h2 {
 
   h3 {
     margin-top: 0;
+  }
+}
+.actions {
+  a:hover {
+    text-decoration: none;
+  }
+  .fa-pencil:hover {
+    color: @brand-warning;
+  }
+  .fa-remove:hover {
+    color: @brand-danger;
+  }
+  .fa {
+    color: @gray-lightish;
   }
 }
 
