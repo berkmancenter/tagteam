@@ -608,6 +608,7 @@ $(document).ready(function(){
     $.showSpinner();
   });
 
+  /*
   $('.hub_tabs').tabs({
     cookie: {
       expires: 3 
@@ -643,6 +644,7 @@ $(document).ready(function(){
         });
     }
   });
+  */
   
   // bound dynamically b/c the jquery ui tabs() function creates elements
   $('.hub_tabs .ui-tabs-nav').addClass('grid_3');

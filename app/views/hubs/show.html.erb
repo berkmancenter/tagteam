@@ -38,48 +38,53 @@
   </div>
 </div>
 
-<div class="hub detailed hub_tabs" id="hub_<%= @hub.id %>">
-  <ul>
-    <li><%= link_to('Items', items_hub_path(@hub))%></li>
-    <li><a href="#about">About</a></li>
-    <li><%= link_to('Inputs', hub_hub_feeds_path(@hub))%></li>
-    <li><%= link_to('Bookmarks', bookmark_collections_hub_path(@hub))%></li>
-    <li><%= link_to('Remixes', hub_republished_feeds_path(@hub))%></li>
-    <li><%= link_to('Tags', hub_tags_path(@hub))%></li>
-    <li><%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%></li>
-    <li><%= link_to('Updates', retrievals_hub_path(@hub) )%></li>
-    <% if current_user && current_user.is?(:owner, @hub) %> 
-      <li><%= link_to('Community', community_hub_path(@hub) )%></li>
-    <% end %>
-    <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
-    <li class="hub_search">
-      <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-        <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 14, :placeholder => 'Search this hub...' %>
-        <%= submit_tag('Go', :class => 'button keyword_search_submit') %>
+<div class="row hub detailed hub_tabs" id="hub_<%= @hub.id %>">
+  <div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+      <li>
+      <%= link_to('Items', items_hub_path(@hub))%>
+      </li>
+      <li class="active">
+        <a href="#about">About</a>
+        <div class="nav-pill-arrow"></div>
+      </li>
+      <li><%= link_to('Inputs', hub_hub_feeds_path(@hub))%></li>
+      <li><%= link_to('Bookmarks', bookmark_collections_hub_path(@hub))%></li>
+      <li><%= link_to('Remixes', hub_republished_feeds_path(@hub))%></li>
+      <li><%= link_to('Tags', hub_tags_path(@hub))%></li>
+      <li><%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%></li>
+      <li><%= link_to('Updates', retrievals_hub_path(@hub) )%></li>
+      <% if current_user && current_user.is?(:owner, @hub) %> 
+        <li><%= link_to('Community', community_hub_path(@hub) )%></li>
       <% end %>
-    </li>
-  </ul>
-
-
-  <div id="about">
-    <%= documentation('hub_about') %>
-    <% if current_user && current_user.is?(:superadmin) %>
-      <p><%= link_to('Re-create all tags for this hub', recalc_all_tags_hub_path(@hub), :method => :post, :confirm => 'Are you sure? This should be needed in very rare circumstances') %></p>
-    <% end %>
-    <div class="metadata">
-      <div class="description">
-        <%= raw(@hub.description) %>
-      </div>
-      <dl>
-        <% unless @hub.tag_prefix.blank? %>
-          <dt>Prefix all tags emitted from the hub with</dt>
-          <dd><%= @hub.tag_prefix %></dd>
+      <li><%= link_to('Contact', contact_hub_path(@hub)) %></li>
+      <li class="hub_search">
+        <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
+          <span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 14, :placeholder => 'Search this hub...' %>
+          <%= submit_tag('Go', :class => 'button keyword_search_submit') %>
         <% end %>
-        <dt>Owners:</dt>
-        <dd><%= @hub.owners.collect{|o| o.username}.join(', ') %></dd>
-      </dl>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-10">
+    <div id="about">
+      <%= documentation('hub_about') %>
+      <% if current_user && current_user.is?(:superadmin) %>
+        <p><%= link_to('Re-create all tags for this hub', recalc_all_tags_hub_path(@hub), :method => :post, :confirm => 'Are you sure? This should be needed in very rare circumstances') %></p>
+      <% end %>
+      <div class="metadata">
+        <div class="description">
+          <%= raw(@hub.description) %>
+        </div>
+        <dl>
+          <% unless @hub.tag_prefix.blank? %>
+            <dt>Prefix all tags emitted from the hub with</dt>
+            <dd><%= @hub.tag_prefix %></dd>
+          <% end %>
+          <dt>Owners:</dt>
+          <dd><%= @hub.owners.collect{|o| o.username}.join(', ') %></dd>
+        </dl>
+      </div>
     </div>
   </div>
-
 </div>
-
