@@ -14,6 +14,7 @@
 //= require nicEdit
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
+//= require twitter/bootstrap
 //= require_tree .
 //
 ( function($){
