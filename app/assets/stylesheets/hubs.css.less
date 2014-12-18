@@ -92,16 +92,22 @@
     margin-top: @pill-height/8;
   }
 
-  a {
-    line-height: @pill-height;
-    vertical-align: middle;
-    margin-right: @padding-base-horizontal;
+  .views {
+    a {
+      line-height: @pill-height;
+      vertical-align: middle;
+      margin-right: @padding-base-horizontal;
 
-    &.active {
-      .fa {
-        color: @brand-primary;
+      &.active {
+        .fa {
+          color: @brand-primary;
+        }
       }
     }
+  }
+
+  .pagination {
+    margin: @pill-height/8 0 0;
   }
 
   .fa {

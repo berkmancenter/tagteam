@@ -10,6 +10,7 @@ gem 'devise', '~> 2.0'
 gem 'acl9'
 gem 'feed-abstract', '~> 0.0.13'
 gem "will_paginate"
+gem 'will_paginate-bootstrap'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'breadcrumbs'
