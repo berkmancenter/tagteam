@@ -33,12 +33,6 @@ module Tagteam
 
     ActsAsTaggableOn.tags_counter = false
 
-    config.middleware.use ExceptionNotifier,
-      :email_prefix => "[tagteam-errors] ",
-      :sender_address => config.default_sender,
-      :exception_recipients => config.exceptions_mailed_to,
-      :ignore_exceptions => [Acl9::AccessDenied, ActionController::RoutingError,ActiveRecord::RecordNotFound]
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

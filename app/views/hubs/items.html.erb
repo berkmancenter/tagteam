@@ -1,13 +1,32 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'items' } %>
+<% end %>
+
+<% content_for :tab_content do %>
 <%= documentation('hub-wide-item-list') %>
-<div id="items">
-  <% unless @search.blank? %>
-    <h2>Items - <%= @search.total %> total</h2>
-    <%= will_paginate @search.results %>
-    <table class="hub feed_items" id="hub_<%= (@hub.blank?) ? '' : @hub.id %>">
-      <%= render :partial => 'shared/line_items/feed_item', :collection => @search.results %>
-    </table>
-    <%= will_paginate @search.results %>
-  <% else %>
-    <p>None yet. Please add some feeds from the "watching" tab.</p>
-  <% end %>
+<div class="feed-item-view row">
+  <div class="col-xs-offset-1 col-xs-11">
+    <div class="row">
+      <div class="col-sm-4"><%= render partial: 'search_form' %></div>
+      <div class="pull-right">
+        <%= fa_icon 'align-justify' %>
+        <%= fa_icon 'th-large' %>
+      </div>
+    </div>
+  </div>
 </div>
+
+<% if @search.total == 0 %>
+  <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
+<% else %>
+  <ul class="list-unstyled">
+    <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
+  </ul>
+  <%= will_paginate @search.results %>
+<% end %>
+
+<% end %>

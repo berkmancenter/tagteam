@@ -1,7 +1,3 @@
-<li class="<%= 'active' if active == 'about' %>">
-  <%= link_to('About', about_hub_path(@hub))%>
-  <div class="nav-pill-arrow"></div>
-</li>
 <li class="<%= 'active' if active == 'items' %>">
 <%= link_to('Items', items_hub_path(@hub))%>
   <div class="nav-pill-arrow"></div>
@@ -36,17 +32,14 @@
   <div class="nav-pill-arrow"></div>
 </li>
 <% end %>
+<li class="<%= 'active' if active == 'about' %>">
+  <%= link_to('About', about_hub_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
 <li class="last-of-section <%= 'active' if active == 'contact' %>">
 <%= link_to('Contact', contact_hub_path(@hub)) %>
   <div class="nav-pill-arrow"></div>
 </li>
 <li class="hub-search">
-  <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
-    <div class="input-group">
-    <%= text_field_tag :q, params[:q], size: 14, placeholder: 'Search hub', class: 'form-control' %>
-    <span class="input-group-btn">
-      <%= submit_tag('Go', class: 'btn btn-default keyword_search_submit') %>
-    </span>
-    </div>
-  <% end %>
+  <%= render partial: 'search_form' %>
 </li>

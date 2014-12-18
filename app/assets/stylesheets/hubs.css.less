@@ -22,6 +22,36 @@
   }
 }
 
-.tab-content {
-  padding-left: 0;
+.feed-item {
+  border-bottom: @border;
+  padding-bottom: @padding-large-vertical;
+
+  h2 {
+    font-size: @font-size-h3;
+  }
+  p {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+
+    a {
+      color: @gray;
+    }
+  }
+  .date {
+    margin-left: @padding-large-horizontal;
+  }
+  .fa {
+    color: @gray-lightish;
+  }
+  a {
+    .fa {
+      &:hover {
+        color: @gray;
+      }
+    }
+  }
+}
+
+.feed-item-view {
+  border-bottom: @border;
 }

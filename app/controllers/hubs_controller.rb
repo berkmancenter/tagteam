@@ -271,7 +271,7 @@ class HubsController < ApplicationController
         unless @hub.blank?
           @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
         end
-        render :template => 'hubs/items', :layout => ! request.xhr? 
+        render layout: request.xhr? ? false : 'tabs'
       }
       format.rss{ render :template => 'hubs/items.rss' }
       format.atom{ render :template => 'hubs/items.atom' }
@@ -376,7 +376,7 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
     @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
-    redirect_to about_hub_path(@hub)
+    redirect_to items_hub_path(@hub)
     
     #respond_to do|format|
     #  format.html{ render :layout => ! request.xhr? }

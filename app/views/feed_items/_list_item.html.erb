@@ -1,0 +1,45 @@
+<% 
+  # So, sometimes a feed item will be called outside the context of a hub, mainly for the homepage.
+hub = @hub || feed_item.hubs.first
+hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feeds.first
+%>
+<li class="feed-item row">
+    <% cache("feed-item-tag-list-#{hub.id}-#{hub_feed.id}-#{feed_item.id}", :expires => 120.minutes ) do %>
+      <div class="col-xs-10 col-xs-offset-1">
+        <h2>
+          <%= link_to(raw(strip_tags(feed_item.title)),
+                hub_feed_feed_item_path(hub_feed,feed_item)) %>
+          <%= link_to controls_hub_feed_feed_item_path(hub_feed,feed_item),
+              class: 'control', title: 'Item actions' do %>
+            <%= fa_icon 'cog' %>
+          <% end %>
+        </h2>
+        <p class="text-nowrap">
+          <%= link_to feed_item.url %>
+        </p>
+
+        <p>
+          <%= link_to(hub_feed.display_title, hub_hub_feed_path(hub,hub_feed)) %>
+          <% unless feed_item.date_published.blank? %>
+            <%= link_to(
+              l(feed_item.date_published, format: :date_short),
+              by_date_hub_path(
+                hub,
+                year: feed_item.date_published.year,
+                month: feed_item.date_published.month,
+                day: feed_item.date_published.day
+              ),
+              class: 'date'
+            ) %>
+          <% end %>
+        </p>
+
+        <div>
+        <% unless feed_item.all_tags(current_user, hub.tagging_key).empty? %>
+          <%= raw feed_item.all_tags(current_user, hub.tagging_key).collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ') %>
+        <% end %>
+        </div>
+
+      </div>
+  </li>
+<% end %>
