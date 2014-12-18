@@ -1,0 +1,52 @@
+<li class="<%= 'active' if active == 'about' %>">
+  <%= link_to('About', about_hub_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="<%= 'active' if active == 'items' %>">
+<%= link_to('Items', items_hub_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="<%= 'active' if active == 'inputs' %>">
+<%= link_to('Inputs', hub_hub_feeds_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="<%= 'active' if active == 'bookmarks' %>">
+<%= link_to('Bookmarks', bookmark_collections_hub_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="last-of-section <%= 'active' if active == 'remixes' %>">
+<%= link_to('Remixes', hub_republished_feeds_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="<%= 'active' if active == 'tags' %>">
+<%= link_to('Tags', hub_tags_path(@hub))%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="last-of-section <%= 'active' if active == 'filters' %>">
+<%= link_to('Filters', hub_hub_tag_filters_path(@hub) )%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="<%= 'active' if active == 'history' %>">
+<%= link_to('History', retrievals_hub_path(@hub) )%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<% if current_user && current_user.is?(:owner, @hub) %> 
+<li class="<%= 'active' if active == 'community' %>">
+  <%= link_to('Community', community_hub_path(@hub) )%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<% end %>
+<li class="last-of-section <%= 'active' if active == 'contact' %>">
+<%= link_to('Contact', contact_hub_path(@hub)) %>
+  <div class="nav-pill-arrow"></div>
+</li>
+<li class="hub-search">
+  <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
+    <div class="input-group">
+    <%= text_field_tag :q, params[:q], size: 14, placeholder: 'Search hub', class: 'form-control' %>
+    <span class="input-group-btn">
+      <%= submit_tag('Go', class: 'btn btn-default keyword_search_submit') %>
+    </span>
+    </div>
+  <% end %>
+</li>

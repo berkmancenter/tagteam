@@ -16,6 +16,12 @@ class HubsController < ApplicationController
   before_filter :sanitize_params, :only => :index
   before_filter :find_slugged_hub, :only => :show
 
+  def about
+    @hub = Hub.find(params[:id])
+    breadcrumbs.add @hub, hub_path(@hub)
+    render layout: 'tabs'
+  end
+
   def find_slugged_hub
     return unless params[:id]
     @hub = Hub.find params[:id]
@@ -370,11 +376,13 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
     @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
-    respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
-      format.json{ render_for_api :default, :json => @hub }
-      format.xml{ render_for_api :default, :xml => @hub }
-    end
+    redirect_to about_hub_path(@hub)
+    
+    #respond_to do|format|
+    #  format.html{ render :layout => ! request.xhr? }
+    #  format.json{ render_for_api :default, :json => @hub }
+    #  format.xml{ render_for_api :default, :xml => @hub }
+    #end
   end
 
   def new

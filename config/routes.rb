@@ -77,6 +77,7 @@ Tagteam::Application.routes.draw do
     match 'user/:username/tag/:tagname/xml' => 'users#user_tags_xml', :as => 'user_tags_name_xml', :constraints => { :name => /.+/ }
 
     member do
+      get 'about'
       post 'recalc_all_tags'
       get 'search'
       get 'item_search'

@@ -1,0 +1,19 @@
+<% content_for :content do %>
+<div class="hub-header row">
+  <%= yield :top_panel %>
+</div>
+
+<div class="row hub detailed">
+  <div class="col-md-2 pill-container">
+    <ul class="nav nav-pills nav-stacked">
+      <%= yield :tabs %>
+    </ul>
+  </div>
+
+  <div class="col-md-10 tab-content">
+    <%= yield :tab_content %>
+  </div>
+</div>
+<% end %>
+
+<%= render template: 'layouts/application' %>

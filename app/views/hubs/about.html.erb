@@ -1,0 +1,29 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'about' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<div id="about">
+  <%= documentation('hub_about') %>
+  <% if current_user && current_user.is?(:superadmin) %>
+    <p><%= link_to('Re-create all tags for this hub', recalc_all_tags_hub_path(@hub), :method => :post, :confirm => 'Are you sure? This should be needed in very rare circumstances') %></p>
+<% end %>
+  <div class="metadata">
+    <div class="description">
+      <%= raw(@hub.description) %>
+    </div>
+    <dl>
+      <% unless @hub.tag_prefix.blank? %>
+        <dt>Prefix all tags emitted from the hub with</dt>
+      <dd><%= @hub.tag_prefix %></dd>
+    <% end %>
+      <dt>Owners:</dt>
+      <dd><%= @hub.owners.collect{|o| o.username}.join(', ') %></dd>
+    </dl>
+  </div>
+</div>
+<% end %>

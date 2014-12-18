@@ -45,3 +45,75 @@ body {
     }
   }
 }
+
+.pill-container {
+  padding: 0;
+}
+.nav-stacked > li + li {
+  margin-top: 0;
+}
+.nav-pills {
+  border-right: @border;
+
+  > li {
+    margin-top: 0;
+
+    &:after {
+      height: 1px;
+      background: @gray-lightish;
+      width: 85%;
+      display: block;
+      margin: 0px @nav-pill-padding-horizontal;
+      content: "";
+    }
+
+    &.active {
+      font-weight: bold;
+
+      &:after {
+        height: 0;
+      }
+      .nav-pill-arrow {
+        display: block;
+      }
+      > a {
+        margin: 0;
+        padding-left: 2*@nav-pill-padding-horizontal;
+      }
+    }
+
+    &.last-of-section:after {
+      height: 7px;
+      background: inherit;
+      border: @border;
+      border-width: 1px 0;
+    }
+
+    &.hub-search {
+      margin-top: @nav-pill-padding-vertical;
+      padding: 0 @nav-pill-padding-horizontal;
+
+      &:after {
+        height: 0;
+      }
+    }
+
+    > a {
+      border-radius: 0;
+      padding: @nav-pill-padding-vertical @nav-pill-padding-horizontal;
+      margin: 0 @nav-pill-padding-horizontal;
+    }
+  }
+}
+.nav-pill-arrow {
+  position: absolute;
+  top: 0;
+  right: -1*@arrow-width;
+  width: 0;
+  height: 0;
+  border-top: @pill-height/2 solid transparent;
+  border-bottom: @pill-height/2 solid transparent;
+  border-left: @arrow-width solid @brand-primary;
+  display: none;
+  z-index: 10;
+}

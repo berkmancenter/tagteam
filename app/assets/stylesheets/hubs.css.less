@@ -1,7 +1,4 @@
 @import "variables.less";
-@nav-pill-padding-vertical: 14px;
-@nav-pill-padding-horizontal: 10px;
-@arrow-width: 18px;
 
 .hub-header {
   padding: 3*@padding-large-vertical 0;
@@ -19,29 +16,12 @@
 }
 
 .hub {
-  .nav-pills {
-    > li {
-      margin-top: 0;
-      border-bottom: @border;
+  &.detailed {
+    margin-top: @padding-small-vertical;
+    border-top: @border;
+  }
+}
 
-      &.active {
-        font-weight: bold;
-        border-bottom-width: 0;
-      }
-      > a {
-        border-radius: 0;
-        padding: @nav-pill-padding-vertical @nav-pill-padding-horizontal;
-      }
-    }
-  }
-  .nav-pill-arrow {
-    position: absolute;
-    top: 0;
-    right: -1*@arrow-width;
-    width: 0;
-    height: 0;
-    border-top: (@line-height-computed + @nav-pill-padding-vertical*2)/2 solid transparent;
-    border-bottom: (@line-height-computed + @nav-pill-padding-vertical*2)/2 solid transparent;
-    border-left: @arrow-width solid @brand-primary;
-  }
+.tab-content {
+  padding-left: 0;
 }
