@@ -1,4 +1,13 @@
-<%= documentation('hub-wide-tag-filters') %>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'filters' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-wide-tag-filters') %>
 <h3>Hub-wide filters</h3>
 <% if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub) %>
   <ul class="tag_filter_controls">
@@ -10,3 +19,4 @@
 <div class="hub_tag_filters">
   <%= render :partial => 'shared/line_items/hub_tag_filter', :collection => @hub_tag_filters %>
 </div>
+<% end %>

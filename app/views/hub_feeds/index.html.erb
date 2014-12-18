@@ -1,4 +1,13 @@
-<%= documentation('hub-watched-feeds-list') %>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'inputs' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-watched-feeds-list') %>
 <div class="hub_feeds">
   <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:inputter, @hub)) %>
     <div class="add_feed_container">
@@ -16,3 +25,4 @@
 </table>
 <%= will_paginate @hub_feeds %>
 </div>
+<% end %>

@@ -1,4 +1,13 @@
-<%= documentation('hub-bookmark_collections-list') %>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'bookmarks' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-bookmark_collections-list') %>
 <div class="hub_feeds">
   <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub))%>
     <%= link_to(raw('<span class="ui-silk inline ui-silk-book-add"></span> New Bookmark Collection'), new_hub_feed_path(:hub_id => @hub.id), :class=> "new_object") %>
@@ -11,3 +20,4 @@
 </table>
 <%= will_paginate @bookmark_collections %>
 </div>
+<% end %>

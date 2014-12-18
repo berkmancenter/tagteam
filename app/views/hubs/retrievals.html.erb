@@ -1,4 +1,13 @@
-<%= documentation('hub-wide-feed-retrievals-list') %>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'history' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-wide-feed-retrievals-list') %>
 <div class="feed_retrievals">
   <h2>Update History</h2>
   <% if @feed_retrievals.blank? %>
@@ -17,3 +26,4 @@
   <%= will_paginate @feed_retrievals.results %>
   <% end %>
 </div>
+<% end %>

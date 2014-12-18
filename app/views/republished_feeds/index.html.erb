@@ -1,4 +1,13 @@
-<%= documentation('hub-republished-feeds-list') %>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'remixes' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-republished-feeds-list') %>
 <div class="republished_feeds">
   <% if current_user && current_user.is?([:owner, :remixer], @hub) %>
     <%= link_to(raw('<span class="ui-silk inline ui-silk-feed-add"></span> New Remixed Feed'), new_hub_republished_feed_path(@hub), :class=> "new_object") %>
@@ -12,3 +21,4 @@
     <%= will_paginate @republished_feeds %>
   </div>
 </div>
+<% end %>

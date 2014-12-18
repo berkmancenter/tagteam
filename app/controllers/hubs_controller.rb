@@ -66,13 +66,13 @@ class HubsController < ApplicationController
   def contact
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
-    render :layout => ! request.xhr?
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   def community
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
-    render :layout => ! request.xhr?
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   def add_roles
@@ -97,7 +97,7 @@ class HubsController < ApplicationController
     params[:roles_to_remove] && params[:roles_to_remove].each do|r|
       data = r.split(':')
       user = User.find(data[1])
-      if @hub.accepted_roles_by(user).reject{|r| r.name != data[0]}.length > 0
+      if @hub.accepted_roles_by(user).reject{|q| q.name != data[0]}.length > 0
         objects_of_concern = Hub::DELEGATABLE_ROLES_HASH[data[0].to_sym][:objects_of_concern].call(user,@hub)
         if params[:revocation_action] == 'reassign'
           potential_user_to_reassign_to = User.find(params[:reassign_to])
@@ -132,7 +132,7 @@ class HubsController < ApplicationController
     end
 
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
       format.xml{ render_for_api :default, :xml => (@feed_retrievals.blank?) ? [] : @feed_retrievals.results }
     end
@@ -172,7 +172,7 @@ class HubsController < ApplicationController
     breadcrumbs.add @hub, hub_path(@hub)
     @bookmark_collections = HubFeed.bookmark_collections.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @bookmark_collections }
       format.xml{ render_for_api :default, :xml => @bookmark_collections }
     end

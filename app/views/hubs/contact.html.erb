@@ -1,3 +1,12 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'contact' } %>
+<% end %>
+
+<% content_for :tab_content do %>
 <% if ! @errors.nil? %>
   <div class="error">
     <%= raw @errors %>
@@ -37,4 +46,5 @@ $(document).ready(function(){
     }
   });
 });
+<% end %>
 <% end %>

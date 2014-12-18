@@ -1,7 +1,16 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'tags' } %>
+<% end %>
+
+<% content_for :tab_content do %>
 <% if ! @hub_feed.blank? %>
-  <%= documentation('hub-feed-tag-cloud') %>
+  <%# documentation('hub-feed-tag-cloud') %>
 <% else %>
-  <%= documentation('hub-tag-cloud') %>
+  <%# documentation('hub-tag-cloud') %>
 <% end %>
 <h3>Filter Tags</h3>
 <h4>By Usage Frequency</h4>
@@ -37,3 +46,4 @@
 </div>
 
 <%= javascript_tag "$(document).ready(function(){$.observeTagCloudControls()});" %>
+<% end %>

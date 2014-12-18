@@ -55,7 +55,7 @@ class TagsController < ApplicationController
     end
     
     respond_to do|format|
-      format.html{ render :layout => !request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @tags, :root => :tags }
       format.xml{ render_for_api :default, :xml => @tags, :root => :tags }
     end

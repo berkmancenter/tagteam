@@ -24,7 +24,7 @@ class RepublishedFeedsController < ApplicationController
   def index
     @republished_feeds = @hub.republished_feeds.paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @republished_feeds }
       format.xml{ render_for_api :default, :xml => @republished_feeds }
     end
