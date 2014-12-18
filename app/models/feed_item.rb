@@ -187,6 +187,9 @@ class FeedItem < ActiveRecord::Base
     tag_list_for_filtering
   end
 
+  def image
+  end
+
   def to_s
     "#{(title.blank?) ? 'untitled' : title}"
   end

@@ -271,7 +271,12 @@ class HubsController < ApplicationController
         unless @hub.blank?
           @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
         end
-        render layout: request.xhr? ? false : 'tabs'
+        if params[:view] == 'grid'
+          template = 'hubs/items_grid'
+        else
+          template = 'hubs/items'
+        end
+        render template, layout: request.xhr? ? false : 'tabs'
       }
       format.rss{ render :template => 'hubs/items.rss' }
       format.atom{ render :template => 'hubs/items.atom' }

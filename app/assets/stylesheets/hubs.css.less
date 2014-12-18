@@ -1,4 +1,4 @@
-@import "variables.less";
+@import "my_vars.less";
 
 .hub-header {
   padding: 3*@padding-large-vertical 0;
@@ -22,9 +22,41 @@
   }
 }
 
+.feed-item-grid {
+  border-bottom: 1px solid @gray;
+  overflow: hidden;
+}
+
 .feed-item {
   border-bottom: @border;
   padding-bottom: @padding-large-vertical;
+
+  &.grid-item {
+    padding: 0;
+    border: 0;
+
+    &:first-child {
+      img {
+        border-right: 1px solid @gray;
+      }
+      .feed-item-content {
+        border-right: @border;
+      }
+    }
+
+    .feed-item-content {
+      padding: 2*@padding-large-vertical @padding-base-horizontal;
+
+      &.equal-height {
+        margin-bottom: -99999 + 2*@padding-large-vertical;
+        padding-bottom: 99999px;
+      }
+
+      h2 {
+        margin: 0;
+      }
+    }
+  }
 
   h2 {
     font-size: @font-size-h3;
@@ -54,4 +86,29 @@
 
 .feed-item-view {
   border-bottom: @border;
+  height: @pill-height;
+
+  .input-group {
+    margin-top: @pill-height/8;
+  }
+
+  a {
+    line-height: @pill-height;
+    vertical-align: middle;
+    margin-right: @padding-base-horizontal;
+
+    &.active {
+      .fa {
+        color: @brand-primary;
+      }
+    }
+  }
+
+  .fa {
+    color: @gray-light;
+  }
+
+  &.grid-view {
+    border-color: @gray;
+  }
 }

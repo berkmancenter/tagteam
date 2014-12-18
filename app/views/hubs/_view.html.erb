@@ -1,0 +1,13 @@
+<div class="feed-item-view row <%= 'grid-view' if view and view == 'grid' %>">
+  <div class="col-sm-offset-1 col-sm-3"><%= render partial: 'search_form' %></div>
+  <div class="pull-right">
+    <%= link_to items_hub_path(@hub, view: 'list'),
+      class: (view and view == 'list') ? 'active' : '' do %>
+      <%= fa_icon 'align-justify' %>
+    <% end %>
+    <%= link_to items_hub_path(@hub, view: 'grid'),
+      class: (view and view == 'grid') ? 'active' : '' do %>
+      <%= fa_icon 'th-large' %>
+    <% end %>
+  </div>
+</div>

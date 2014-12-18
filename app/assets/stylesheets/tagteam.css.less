@@ -1,5 +1,5 @@
 @import url(//fonts.googleapis.com/css?family=Roboto:100,300,300italic,400);
-@import "variables.less";
+@import "my_vars.less";
 
 body {
   font-weight: 300;
@@ -15,7 +15,7 @@ body {
 
   .welcome {
     color: @gray-lighter;
-    
+
     a {
       color: @gray-lighter;
     }
@@ -100,7 +100,7 @@ body {
     > a {
       border-radius: 0;
       padding: @nav-pill-padding-vertical @nav-pill-padding-horizontal;
-      margin: 0 @nav-pill-padding-horizontal;
+      margin: 0 2*@nav-pill-padding-horizontal 0 @nav-pill-padding-horizontal;
     }
   }
 }
@@ -136,6 +136,7 @@ body {
   border-radius: 10px;
   font-weight: normal;
   line-height: 2.5em;
+  white-space: nowrap;
 
   &:hover {
     text-decoration: none;

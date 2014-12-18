@@ -8,14 +8,21 @@
 
 <% content_for :tab_content do %>
 <%# documentation('hub-wide-item-list') %>
-<%= render partial: 'hubs/view', locals: { view: 'list' } %>
+<%= render partial: 'hubs/view', locals: { view: 'grid' } %>
 
 <% if @search.total == 0 %>
   <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
 <% else %>
-  <ul class="list-unstyled">
-    <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
-  </ul>
+    <% @search.results.each_with_index do |feed_item, i| %>
+      <% if i % 2 == 0 %>
+        <div class="row feed-item-grid">
+      <% end %>
+      <%= render partial: 'feed_items/grid_item', as: :feed_item, object: feed_item %>
+      <% if (i + 1) % 2 == 0 %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
   <%= will_paginate @search.results %>
 <% end %>
 
