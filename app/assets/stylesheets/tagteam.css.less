@@ -140,7 +140,7 @@ body {
     padding-bottom: @padding-large-vertical;
   }
 
-  ul {
+  ul.list-unstyled {
     margin-top: 4*@padding-large-vertical;
   }
 
@@ -170,6 +170,11 @@ body {
     padding-top: 2*@padding-large-vertical;
     .make-md-column-offset(1);
     .make-md-column(10);
+  }
+
+  .pagination {
+    float: right;
+    margin-bottom: @padding-small-vertical;
   }
 }
 
@@ -232,6 +237,38 @@ body {
           color: @brand-warning;
         }
       }
+    }
+  }
+}
+
+.btn {
+  .fa {
+    color: white;
+    margin-right: @padding-small-horizontal;
+  }
+}
+
+.pagination {
+  > li {
+    > span, a { 
+      > .fa {
+        vertical-align: bottom;
+        color: @gray-lightish;
+      }
+    }
+  }
+
+  .next, .prev {
+    &.disabled {
+      span {
+        background-color: @gray-lighter;
+      }
+    }
+  }
+
+  .active {
+    span {
+      font-weight: bold;
     }
   }
 }
