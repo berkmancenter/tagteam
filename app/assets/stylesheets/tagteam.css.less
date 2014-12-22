@@ -140,9 +140,20 @@ body {
     padding-bottom: @padding-large-vertical;
   }
 
-  ul.list-unstyled {
-    margin-top: 4*@padding-large-vertical;
+  ul {
+    &.list-unstyled {
+      margin-top: 4*@padding-large-vertical;
+    }
+
+    &.flush-top {
+      margin-top: 0;
+
+      li:first-child {
+        border-top: 0;
+      }
+    }
   }
+
 
   li {
     padding: 3*@padding-small-vertical 0 2*@padding-base-vertical;

@@ -13,7 +13,7 @@
 <% if @search.total == 0 %>
   <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
 <% else %>
-  <ul class="list-unstyled">
+  <ul class="list-unstyled flush-top">
     <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
   </ul>
   <div class="text-center">
