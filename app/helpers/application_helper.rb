@@ -63,24 +63,30 @@ module ApplicationHelper
   end
 
   def insert_social_links(url, options = {})
-    options.merge!({:rel => 'nofollow', :target => '_blank', :class => 'share_icon twitter'})
+    options.merge!({ rel: 'nofollow', target: '_blank', class: 'share_icon twitter'})
     output = []
     Tagteam::Application.config.social_links.each do|social_network|
       output << send("#{social_network}_share_link", url, options)
     end
-    output.join('<br/>')
+    "<li>#{output.join('</li><li>')}</li>"
   end
 
   def twitter_share_link(url, options = {})
-    link_to(raw(image_tag('twitter-icon.png') + ' Share on Twitter'), "https://twitter.com/intent/tweet?url=#{CGI.escape(url)}", options)
+    link_to "https://twitter.com/intent/tweet?url=#{CGI.escape(url)}", options do
+      fa_icon 'twitter', text: 'Share on Twitter'
+    end
   end
 
   def facebook_share_link(url, options = {})
-    link_to(raw(image_tag('facebook-icon.png') + ' Share on Facebook'), "https://www.facebook.com/sharer.php?u=#{CGI.escape(url)}", options)
+    link_to "https://www.facebook.com/sharer.php?u=#{CGI.escape(url)}", options do
+      fa_icon 'facebook-square', text: 'Share on Facebook'
+    end
   end
 
   def google_plus_share_link(url,options = {})
-    link_to(raw(image_tag('google-plus-icon.png') + ' Share on Google+'), "https://plus.google.com/share?url=#{CGI.escape(url)}", options)
+    link_to "https://plus.google.com/share?url=#{CGI.escape(url)}", options do
+      fa_icon 'google-plus', text: 'Share on Google+'
+    end
   end
 
   def use_breadcrumbs?

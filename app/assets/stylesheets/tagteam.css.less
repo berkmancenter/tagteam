@@ -1,5 +1,6 @@
 @import url(//fonts.googleapis.com/css?family=Roboto:100,300,300italic,400);
 @import "my_vars.less";
+@import "twitter/bootstrap/mixins.less";
 
 body {
   font-weight: 300;
@@ -119,14 +120,56 @@ body {
   display: none;
   z-index: 10;
 }
+
 .tab-content {
   padding-left: 0;
   padding-right: 0;
   border-left: @border;
   border-right: @border;
 
+  h1 {
+    border-bottom: @border;
+    font-size: @font-size-h2;
+    padding-bottom: 2*@padding-large-vertical;
+    margin-bottom: 2*@padding-large-vertical;
+  }
+
+  label {
+    font-weight: 300;
+    font-size: @font-size-h3;
+    padding-bottom: @padding-large-vertical;
+  }
+
+  ul {
+    margin-top: 4*@padding-large-vertical;
+  }
+
+  li {
+    padding: 3*@padding-small-vertical 0 2*@padding-base-vertical;
+    border-bottom: @border;
+
+    &:first-child {
+      border-top: @border;
+    }
+
+    h2 {
+      margin: 0 0 @padding-small-vertical;
+      font-size: @font-size-h3;
+    }
+
+    .feed-item-tags {
+      margin-top: @padding-large-vertical;
+    }
+  }
+
   .row {
     margin: 0;
+  }
+
+  .nicely-padded {
+    padding-top: 2*@padding-large-vertical;
+    .make-md-column-offset(1);
+    .make-md-column(10);
   }
 }
 
@@ -149,4 +192,46 @@ body {
 
 .alert {
   margin-top: @padding-large-vertical;
+}
+
+.bt-wrapper {
+  color: white;
+  font-weight: normal;
+
+  a {
+    color: white;
+  }
+
+  hr {
+    border-top: 0;
+    & + li {
+      border-top: 1px solid lighten(@gray, 10%);
+    }
+  }
+
+  ul {
+    margin: 0;
+
+    li {
+      padding: @padding-large-vertical @padding-base-horizontal;
+      border-bottom-color: lighten(@gray, 10%);
+
+      &:first-child {
+        border-top: 0;
+      }
+
+      &:last-child {
+        border: 0;
+      }
+
+      .fa {
+        padding-right: 0.5*@padding-base-horizontal;
+        color: white;
+
+        &.text-warning {
+          color: @brand-warning;
+        }
+      }
+    }
+  }
 }

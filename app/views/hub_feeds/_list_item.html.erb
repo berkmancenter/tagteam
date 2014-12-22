@@ -1,0 +1,25 @@
+<li id="hub_feed-<%= hub_feed.id %>">
+  <div class="media">
+    <div class="pull-right">
+      <%= link_to controls_hub_feed_path(hub_feed), class: 'control', title: 'Feed actions' do %>
+        <%= fa_icon 'cog' %>
+      <% end %>
+    </div>
+
+    <div class="media-left">
+  <%= link_to more_details_hub_hub_feed_path(@hub,hub_feed),
+          class: "hub_feed_more_control", data_hub_feed_id: hub_feed.id do %>
+    <%= fa_icon('caret-right') %>
+  <% end %>
+    </div>
+
+    <div class="media-body">
+      <%= link_to hub_hub_feed_path(@hub,hub_feed) do %>
+        <h2><%= raw(strip_tags(hub_feed.to_s)) %></h2>
+      <% end %>
+      <% if defined?(show_hubs) && show_hubs == true %>
+        <span class="smaller">in <%= link_to(hub_feed.hub, hub_path(hub_feed.hub) )%></span>
+      <% end %>
+    </div>
+  </div>
+</li>

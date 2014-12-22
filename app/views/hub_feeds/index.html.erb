@@ -8,21 +8,35 @@
 
 <% content_for :tab_content do %>
 <%# documentation('hub-watched-feeds-list') %>
+<div class="nicely-padded">
+<h1>Input feeds</h1>
 <div class="hub_feeds">
   <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:inputter, @hub)) %>
     <div class="add_feed_container">
       <div class="notices"></div>
-      <h3>New Input Feed</h3>
-      <%= form_for(:hub, :url => add_feed_hub_path(@hub), :method => :post, :html => {:id => 'add_feed_to_hub'}) do |f| %>
-        <input placeholder="Feed URL..." type="text" name="feed_url" id="feed_url" /> <input type="submit" class="button" value="Add"></a>
+      <%= form_for(:hub, url: add_feed_hub_path(@hub),
+                   method: :post,
+                   html: { id: 'add_feed_to_hub' }) do |f| %>
+        <div class="form-group">
+          <label for="feed_url">New Input Feed</label>
+          <div class="row">
+            <div class="col-sm-8">
+              <input placeholder="Feed URL" type="text" name="feed_url" id="feed_url" class="form-control" />
+            </div>
+            <div class="col-sm-4">
+              <input type="submit" class="btn btn-success" value="Add"></a>
+            </div>
+          </div>
+        </div>
       <% end %>
     </div> 
 <% end %>
-<h3>Input feeds - <%= @hub_feeds.total_entries %> total</h3>
+
 <%= will_paginate @hub_feeds %>
-<table class="hub_feeds" id="hub_feed_list_<%= @hub.id %>">
-  <%= render :partial => 'shared/line_items/hub_feed', :collection => @hub_feeds %>
-</table>
+<ul class="list-unstyled">
+  <%= render partial: 'hub_feeds/list_item', collection: @hub_feeds, as: :hub_feed %>
+</ul>
 <%= will_paginate @hub_feeds %>
 </div>
 <% end %>
+</div>
