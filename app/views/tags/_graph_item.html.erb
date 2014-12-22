@@ -1,0 +1,9 @@
+<li>
+  <%= tag_display(tag, show_count: true, use_count: true, hub: hub, hub_feed: hub_feed) %>
+
+  <span class="tag-count">
+    <%= tag.count %>
+  </span>
+
+  <div class="tag-graph-bar" style="width: <%= tag.count.to_f / max_count * 100 %>%"></div>
+</li>

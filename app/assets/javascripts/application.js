@@ -179,12 +179,12 @@
         var sort_by = $('#sort_tags_by').val();
         var sort = $("#sort_tags_direction").val();
         var mapping_function = function(elem) {
-          var tag_frequency = $(elem).data('tag-frequency'),
-              tag_text = $(elem).data('tag-name'),
+          var tag_frequency = $(elem).find('.tag').data('tag-frequency'),
+              tag_text = $(elem).find('.tag').data('tag-name'),
               attributes = {};
 
-          attributes['frequency'] = tag_frequency;
-          attributes['name'] = tag_text.toString();
+          attributes.frequency = tag_frequency;
+          attributes.name = tag_text.toString();
 
           return attributes;
         };
@@ -211,21 +211,24 @@
       $('#sort_tags_direction').change(sort_tags_on_change);
 
       $('#reset_filter').click(function(e){
-        $('.tag').show();
+        $('#tag_cloud li').show();
+        $('#filter_by').val('');
       });
+
       var filterStuff = function(e){
         if(e != ''){
           e.preventDefault();
         }
-        $('a.tag').show();
+        $('#tag_cloud li').show();
         var filterVal = $('#filter_by').val();
         var filterregex = new RegExp(filterVal,'i');
-        $('a.tag').each(function(){
-          if(! $(this).html().match(filterregex)){
+        $('#tag_cloud li').each(function(){
+          if(! $(this).find('.tag').html().match(filterregex)){
             $(this).hide();
           }
         });
       };
+
       $('#filter_button').click(filterStuff);
       $('#filter_by').observe_field(1,filterStuff);
 

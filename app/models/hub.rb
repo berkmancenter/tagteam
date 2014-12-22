@@ -150,4 +150,11 @@ class Hub < ActiveRecord::Base
     "hub_#{self.id}".to_sym
   end
 
+  def tag_counts
+    ActsAsTaggableOn::Tag.find_by_sql([
+      'SELECT tags.*, count(*)
+      FROM tags JOIN taggings ON taggings.tag_id = tags.id
+      WHERE taggings.context = ? AND taggings.taggable_type = ?
+      GROUP BY tags.id ORDER BY count(*) DESC', self.tagging_key, 'FeedItem'])
+  end
 end

@@ -7,43 +7,51 @@
 <% end %>
 
 <% content_for :tab_content do %>
+<div class="nicely-padded">
 <% if ! @hub_feed.blank? %>
   <%# documentation('hub-feed-tag-cloud') %>
 <% else %>
   <%# documentation('hub-tag-cloud') %>
 <% end %>
-<h3>Filter Tags</h3>
-<h4>By Usage Frequency</h4>
-<div id="slider_controls">
-  <div style="float: left">Less Frequent</div>
-  <div style="float: right;">More Frequent</div>
+<h2>Filter tags</h2>
+
+<div class="form-group">
+  <div class="row">
+    <div class="col-xs-5">
+      <div class="input-group">
+        <input id="filter_by" size="15" placeholder="Keyword" class="form-control"/>
+        <span class="input-group-btn">
+          <a class="btn btn-primary" id="filter_button" href="#">Filter</a>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-1">
+      <a href="#" id="reset_filter">Reset</a>
+    </div>
+  </div>
 </div>
-<div class="clear"></div>
 
-<div id="tag_slider"></div>
-
-<h4>By Keyword</h4>
-<div style="margin-bottom: 1em;">
-  <input id="filter_by" size="15" placeholder="Keyword..." /> <a class="button" id="filter_button" href="#">Filter</a> <a href="#" id="reset_filter">Reset</a>
-</div>
-
-<h4>Sort</h4>
-<div style="margin-bottom: 1em;">
-  <select id="sort_tags_by">
+<h2>Sort tags</h2>
+<div class="row">
+  <div class="col-sm-3">
+  <select id="sort_tags_by" class="form-control">
     <option value="alpha">Alphabetical</option>
     <option selected="selected" value="frequency">Frequency</option>
   </select>
-  <select id="sort_tags_direction">
-    <option value="asc">Ascending</option>
-    <option selected="selected" value="desc">Descending</option>
-  </select>
+  </div>
+  <div class="col-sm-3">
+    <select id="sort_tags_direction" class="form-control">
+      <option value="asc">Ascending</option>
+      <option selected="selected" value="desc">Descending</option>
+    </select>
+  </div>
 </div>
 
-<div id="tag_cloud" data-hub-id="<%= @hub.id %>">
-  <% tag_cloud(@tags, %w(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10)) do |tag, css_class| %>
-    <%= tag_display(tag, :use_count => true, :show_count => true, :hub => @hub, :hub_feed => @hub_feed, :class => css_class) %>
-  <% end %>
-</div>
+<ul class="list-unstyled" id="tag_cloud" data-hub-id="<%= @hub.id %>">
+  <%= render partial: 'tags/graph_item', as: :tag, collection: @tags,
+    locals: { hub: @hub, hub_feed: @hub_feed, max_count: @tags.first.count } %>
+</ul>
 
 <%= javascript_tag "$(document).ready(function(){$.observeTagCloudControls()});" %>
+</div>
 <% end %>
