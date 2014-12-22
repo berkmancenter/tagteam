@@ -1,8 +1,4 @@
-<tr>
-  <td>
-    <%= @republished_feed.inputs.length %> input(s).
-    <%= @republished_feed.removals.length %> removal(s).
-  </td>
-  <td>
-  </td>
-</tr>
+<div class="metadata">
+  <%= pluralize @republished_feed.inputs.length, 'input' %>,
+  <%= pluralize @republished_feed.removals.length, 'removal' %>
+</div>

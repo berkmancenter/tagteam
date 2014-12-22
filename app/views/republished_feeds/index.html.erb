@@ -8,17 +8,25 @@
 
 <% content_for :tab_content do %>
 <%# documentation('hub-republished-feeds-list') %>
-<div class="republished_feeds">
+<div class="republished_feeds nicely-padded">
+  <h1>Remixed Feeds</h1>
+
   <% if current_user && current_user.is?([:owner, :remixer], @hub) %>
-    <%= link_to(raw('<span class="ui-silk inline ui-silk-feed-add"></span> New Remixed Feed'), new_hub_republished_feed_path(@hub), :class=> "new_object") %>
+    <%= link_to new_hub_republished_feed_path(@hub), class: "new_object btn btn-success" do %>
+      <%= fa_icon 'plus-circle', text: 'New remixed feed' %>
+    <% end %>
   <% end %>
-  <h3>Remixed Feeds</h3>
+
   <div id="republished_feed_list_<%= @hub.id %>">
+
     <%= will_paginate @republished_feeds %>
-    <table class="republished_feeds">
-      <%= render :partial => 'shared/line_items/republished_feed', :collection => @republished_feeds %>
-    </table>
+    <ul class="republished_feeds list-unstyled">
+      <%= render partial: 'republished_feeds/list_item',
+        collection: @republished_feeds,
+        as: :republished_feed %>
+    </ul>
     <%= will_paginate @republished_feeds %>
+
   </div>
 </div>
 <% end %>

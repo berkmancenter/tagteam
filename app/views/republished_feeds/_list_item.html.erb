@@ -1,0 +1,36 @@
+<% hub = (@hub.blank?) ? republished_feed.hub : @hub %>
+
+<li class="republished_feed hover_row" id="republished_feed_<%= republished_feed.id %>">
+  <div class="media">
+  <% if current_user && (current_user.is?(:owner, hub) || current_user.is?(:owner,republished_feed)) %>
+    <div class="pull-right">
+      <%= link_to edit_hub_republished_feed_path(hub, republished_feed), title: "Edit this item" do %>
+         <%= fa_icon 'pencil' %>
+      <% end %>
+
+      <%= link_to hub_republished_feed_path(hub,republished_feed),
+        method: :delete, confirm: "Are you sure?", title: "Delete this item" do %>
+        <%= fa_icon 'times' %>
+      <% end %>
+    </div>
+  <% end %>
+
+    <div class="media-left">
+      <%= link_to more_details_hub_republished_feed_path(hub, republished_feed),
+        class: 'republished_feed_more_control',
+        data_republished_feed_id: republished_feed.id do %>
+        <%= fa_icon 'caret-right' %>
+      <% end %>
+    </div>
+
+    <div class="media-body">
+      <h2><%= hub.title %></h2>
+
+      <%= link_to(republished_feed.title,remix_path(republished_feed.url_key)) %>&nbsp;&nbsp;|&nbsp;
+      <%= link_to('RSS', remix_items_path(republished_feed.url_key, format: :rss)) %>&nbsp;
+      <%= link_to('ATOM', remix_items_path(republished_feed.url_key, format: :atom)) %>&nbsp;
+      <%= link_to('JSON', remix_items_path(republished_feed.url_key, format: :json, callback: 'callback')) %>
+
+    </div>
+  </div>
+</li>
