@@ -33,7 +33,7 @@
 <% end %>
 
 <%= will_paginate @hub_feeds, renderer: BootstrapPagination::Rails %>
-<ul class="list-unstyled">
+<ul class="list-unstyled nicely-padded">
   <%= render partial: 'hub_feeds/list_item', collection: @hub_feeds, as: :hub_feed %>
 </ul>
 <%= will_paginate @hub_feeds, renderer: BootstrapPagination::Rails %>
