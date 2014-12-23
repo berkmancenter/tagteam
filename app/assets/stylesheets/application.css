@@ -2,9 +2,7 @@
 *= require_self
 *= require bootstrap
 *= require font-awesome
-*= require formtastic
-*= require formtastic_changes
-*= require silk-sprite
+*= require formtastic-bootstrap
 *= require custom-theme/jquery-ui-1.9.2.custom
 *= require tagteam
 *= require_tree .

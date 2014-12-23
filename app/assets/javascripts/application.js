@@ -300,7 +300,7 @@
     initNicEditor: function(textArea){
       if($(textArea).attr('id') != undefined){
         new nicEditor({
-          iconsPath: $.rootPath() + 'images/nicEditorIcons.gif', 
+          iconsPath: $.rootPath() + 'assets/nicEditorIcons.gif', 
           maxHeight: 300,
           buttonList: ['bold','italic','left','center','right','justify','ol','ul','subscript','superscript','strikethrough','removeformat','indent','outdent','hr','image','forecolor','link','unlink','fontFormat','xhtml']
         }).panelInstance($(textArea).attr('id'));
