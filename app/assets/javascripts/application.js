@@ -569,15 +569,21 @@ $(document).ready(function(){
       create: function(){
         $.refreshBackgroundActivity();
       },
-      buttons: {
-        Refresh: function(){
-          $.refreshBackgroundActivity();
+      buttons: [
+        {
+          text: 'Refresh',
+          click: function(){ $.refreshBackgroundActivity(); },
+          class: 'btn btn-primary'
         },
-        Close: function(){
-          $(dialogNode).dialog('close');
-          $(dialogNode).remove();
+        {
+          text: 'Close',
+          click: function(){
+            $(dialogNode).dialog('close');
+            $(dialogNode).remove();
+          },
+          class: 'btn btn-primary'
         }
-      }
+      ]
     });
   });
 
@@ -794,13 +800,13 @@ $(document).ready(function(){
             message = "<h2>Please enter the tag you'd like to add<h2>";
           } else if (filter_type == 'ModifyTagFilter') {
             if(tag_id == undefined){
-              prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' size='40' /><div id='replace_tag_container'></div>";
+              prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
             }
             message = "<h2>Please enter the replacement tag</h2>";
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           }
-          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" size="40" /><div id="new_tag_container"></div>' + tagList);
+          $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" class="form-control" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({
             modal: true,
             width: 600,
@@ -813,21 +819,29 @@ $(document).ready(function(){
                 minLength: 2
               });
             },
-            buttons: {
-              Cancel: function(){
-                $(dialogNode).dialog('close');
-                $(dialogNode).remove();
+            buttons: [
+              {
+                click: function(){
+                  $(dialogNode).dialog('close');
+                  $(dialogNode).remove();
+                },
+                text: 'Cancel',
+                class: 'btn btn-primary'
               },
-              Submit: function(){
-                var replace_tag = undefined;
-                if ($(this).find('#modify_tag_for_filter').length > 0){
-                  replace_tag = $(this).find('#modify_tag_for_filter').val();
-                }
-                $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
-                $(dialogNode).dialog('close');
-                $(dialogNode).remove();
+              {
+                text: 'Submit',
+                click: function(){
+                  var replace_tag = undefined;
+                  if ($(this).find('#modify_tag_for_filter').length > 0){
+                    replace_tag = $(this).find('#modify_tag_for_filter').val();
+                  }
+                  $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
+                  $(dialogNode).dialog('close');
+                  $(dialogNode).remove();
+                },
+                class: 'btn btn-primary'
               }
-            }
+            ]
           });
           return false;
         }
