@@ -8,22 +8,29 @@
 
 <% content_for :tab_content do %>
 <%# documentation('hub-wide-feed-retrievals-list') %>
-<div class="feed_retrievals">
-  <h2>Update History</h2>
+<div class="feed_retrievals nicely-padded">
+  <h1>Update History</h1>
   <% if @feed_retrievals.blank? %>
     <h2>None found.</h2>
   <% else %>
-  <%= will_paginate @feed_retrievals.results %>
-    <table>
+    <%= will_paginate @feed_retrievals.results,
+        next_label: fa_icon('chevron-right'),
+        previous_label: fa_icon('chevron-left'),
+        renderer: BootstrapPagination::Rails %>
+    <table class="table table-condensed">
       <tr>
         <th>Feed</th>
         <th>Time</th>
         <th>New Items</th>
         <th>Changed Items</th>
       </tr>
-      <%= render :partial => 'shared/line_items/hub_feed_retrieval', :collection => @feed_retrievals.results %>
+      <%= render partial: 'feed_retrievals/list_item', as: :hub_feed_retrieval,
+        collection: @feed_retrievals.results %>
     </table>
-  <%= will_paginate @feed_retrievals.results %>
+    <%= will_paginate @feed_retrievals.results,
+        next_label: fa_icon('chevron-right'),
+        previous_label: fa_icon('chevron-left'),
+        renderer: BootstrapPagination::Rails %>
   <% end %>
 </div>
 <% end %>

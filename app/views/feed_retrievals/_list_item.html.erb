@@ -1,11 +1,13 @@
 <% feed_retrieval = hub_feed_retrieval 
 @hub_feed = hub_feed_retrieval.hub_feed_for_hub(@hub)
 %>
-<tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'failure' %>">
-    <td><span class="ui-silk ui-silk-feed inline"></span> <%= link_to(@hub_feed.display_title, hub_hub_feed_path(@hub, @hub_feed)) %>
+<tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'danger' %>">
+  <td>
+    <%= link_to(@hub_feed.display_title, hub_hub_feed_path(@hub, @hub_feed)) %>
   </td>
   <td>
-    <%= link_to(l(feed_retrieval.created_at, :format => :date_and_time_short), hub_feed_feed_retrieval_path(@hub_feed, feed_retrieval)) %>
+    <%= link_to(l(feed_retrieval.created_at, format: :date_and_time_short),
+                hub_feed_feed_retrieval_path(@hub_feed, feed_retrieval)) %>
   </td>
   <% if feed_retrieval.has_changes? %> 
     <td>
