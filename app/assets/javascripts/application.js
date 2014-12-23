@@ -113,12 +113,16 @@
               minWidth: 400,
               height: 'auto',
               title: windowTitle,
-              buttons: {
-                Close: function(){
-                  $(dialogNode).dialog('close');
-                  $(dialogNode).remove();
-                },
-              }
+              buttons: [
+                {
+                  text: 'Close',
+                  click: function(){
+                      $(dialogNode).dialog('close');
+                      $(dialogNode).remove();
+                    },
+                  class: 'btn btn-primary'
+                }
+              ]
             });
             $('.tabs').tabs({
               cookie: {
@@ -765,7 +769,7 @@ $(document).ready(function(){
             minWidth: 400,
             height: 'auto',
             title: '',
-                   buttons: {
+            buttons: {
               Cancel: function(){
                 $(dialogNode).dialog('close');
                 $(dialogNode).remove();

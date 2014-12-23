@@ -7,7 +7,7 @@ body {
   overflow-y: scroll;
 }
 
-th, dt, b, strong {
+th, dt, b, strong, label {
   font-weight: 400;
 }
 
@@ -189,7 +189,8 @@ th, dt, b, strong {
   div.nicely-padded {
     padding-top: 2*@padding-large-vertical;
     .make-md-column-offset(1);
-    .make-md-column(10);
+    .make-md-column(11);
+    padding-right: percentage((1 / @grid-columns));
   }
 
   .pagination {

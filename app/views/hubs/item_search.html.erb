@@ -1,38 +1,54 @@
-<%= documentation('hub-wide-item-search') %>
-<div style="margin-bottom: 1em;">
-  <h2>Search</h2>
-  <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
-    <ul class="search_controls">
-      <li><span class="ui-silk ui-silk-zoom inline"></span> <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search this hub...' %></li>
-      <li>
-        <%= submit_tag('Search', :class => 'button') %> 
-        <% unless @search.blank? || @search.results.length == 0 %>
-          <%= link_to('Permalink', item_search_hub_path(@hub, q: params[:q])) %> &nbsp;
-          <% if current_user %>
-            <span class="ui-silk ui-silk-feed-go inline"></span>
-            <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
-              :data_item_id => 0,
-              :data_item_type => 'SearchRemix', 
-              :title => "Choose the Remix Feed to add this search to",
-              :class => "dialog-show add_item_source_to_custom_republished_feed") %>
-          <% end %>
-        <% end %>
-      </li>
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/header' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'items' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<%# documentation('hub-wide-item-search') %>
+<div class="nicely-padded">
+  <h1>Search</h1>
+  <%= form_tag(item_search_hub_path(@hub), method: :get, id: 'hub_search_form') do %>
+    <div class="form-group">
+      <div class="input-group">
+    <%= text_field_tag :q, params[:q], size: 50, placeholder: 'Search this hub',
+        class: 'form-control' %>
+        <span class="input-group-btn">
+          <%= submit_tag('Search', class: 'btn btn-success') %> 
+        </span>
+      </div>
+    </div>
+
+    <% unless @search.blank? || @search.results.length == 0 %>
+      <%= link_to('Permalink', item_search_hub_path(@hub, q: params[:q])) %> &nbsp;
+      <% if current_user %>
+        <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
+          data_item_id: 0,
+          data_item_type: 'SearchRemix', 
+          title: "Choose the Remix Feed to add this search to",
+          class: "dialog-show add_item_source_to_custom_republished_feed") %>
+      <% end %>
+    <% end %>
   </ul>
   <% end %>
 </div>
 
+<div class="row">
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
 <% else %>
+  <%= render partial: 'hubs/paginate', locals: { results: @search.results } %>
   <h2>Items: <%= @search.total %> total </h2>
-  <%= will_paginate @search.results %>
-  <table class="hub">
+  <ul class="hub list-unstyled">
     <% @search.results.each do|r| %>
-      <%= render :partial => 'shared/line_items/feed_item', :object => r %>
+      <%= render partial: 'feed_items/list_item', as: :feed_item, object: r %>
     <% end %>
-  </table>
-  <%= will_paginate @search.results %>
+  </ul>
+  <%= render partial: 'hubs/paginate', locals: { results: @search.results } %>
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){ $.observeSearchSelectControl(); });| %>
+<% end %>
+</div>
