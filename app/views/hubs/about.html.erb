@@ -7,15 +7,13 @@
 <% end %>
 
 <% content_for :tab_content do %>
-<div id="about">
-  <%= documentation('hub_about') %>
-  <% if current_user && current_user.is?(:superadmin) %>
-    <p><%= link_to('Re-create all tags for this hub', recalc_all_tags_hub_path(@hub), :method => :post, :confirm => 'Are you sure? This should be needed in very rare circumstances') %></p>
-<% end %>
+<div id="about" class="nicely-padded">
+  <h1>About this hub</h1>
+  <%# documentation('hub_about') %>
   <div class="metadata">
-    <div class="description">
+    <p class="description">
       <%= raw(@hub.description) %>
-    </div>
+    </p>
     <dl>
       <% unless @hub.tag_prefix.blank? %>
         <dt>Prefix all tags emitted from the hub with</dt>
@@ -25,5 +23,12 @@
       <dd><%= @hub.owners.collect{|o| o.username}.join(', ') %></dd>
     </dl>
   </div>
+
+  <% if current_user && current_user.is?(:superadmin) %>
+    <%= link_to 'Re-create all tags for this hub',
+      recalc_all_tags_hub_path(@hub), method: :post,
+      class: 'btn btn-warning',
+      confirm: 'Are you sure? This should be needed in very rare circumstances' %>
+  <% end %>
 </div>
 <% end %>
