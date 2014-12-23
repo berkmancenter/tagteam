@@ -1,0 +1,20 @@
+<li class="tag_filter hub_tag_filter <%= hub_tag_filter.filter.css_class %>">
+  <div class="pull-right">
+    <% if current_user &&
+         (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_tag_filter)) %>
+       <%= link_to hub_hub_tag_filter_path(hub_tag_filter.hub,hub_tag_filter),
+         method: :delete,
+         title: 'Remove this filter',
+         confirm: 'Are you sure you want to remove this filter?' do %>
+         <%= fa_icon 'times' %>
+       <% end %>
+    <% end %>
+  </div>
+
+  <span class="filter-action"><%= hub_tag_filter.filter.description %></span> tag
+  <%= tag_display(hub_tag_filter.filter.tag, hub: hub_tag_filter.hub) %> 
+  <% if hub_tag_filter.filter.class == ModifyTagFilter %>
+    <span class="filter-action">to</span>
+    <%= tag_display(hub_tag_filter.filter.new_tag, hub: hub_tag_filter.hub) %>
+  <% end %>
+</li>

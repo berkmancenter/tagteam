@@ -22,7 +22,7 @@ class AddTagFilter < ActiveRecord::Base
   end
 
   def description
-    'Add tag: '
+    'Add'
   end
 
   def css_class

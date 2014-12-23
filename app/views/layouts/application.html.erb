@@ -39,7 +39,7 @@
             <div class="nav navbar-nav navbar-right">
               <% if user_signed_in? %>
                 <p class="navbar-text welcome">Welcome, <%= link_to current_user.username, edit_user_registration_path %> &ndash;
-                <%= link_to "Logout", destroy_user_session_path, method: :delete %></p>
+                <%= link_to "Logout", destroy_user_session_path, method: :delete, id: 'logged_in' %></p>
               <% else %>
                 <%= link_to "Sign In", new_user_session_path, class: 'btn btn-default navbar-btn' %>
               <% end %>

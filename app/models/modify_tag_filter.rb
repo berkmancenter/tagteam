@@ -30,7 +30,7 @@ class ModifyTagFilter < ActiveRecord::Base
   end
 
   def description
-    'Change tag '
+    'Change'
   end
 
   def css_class

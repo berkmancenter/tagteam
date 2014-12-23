@@ -132,6 +132,11 @@ body {
     font-size: @font-size-h2;
     padding-bottom: 2*@padding-large-vertical;
     margin-bottom: 2*@padding-large-vertical;
+    margin-top: 6*@padding-large-vertical;
+    
+    &:first-child {
+      margin-top: 2*@padding-large-vertical;
+    }
   }
 
   label {
@@ -158,6 +163,7 @@ body {
   li {
     padding: 3*@padding-small-vertical 0 2*@padding-base-vertical;
     border-bottom: @border;
+    overflow: hidden;
 
     &:first-child {
       border-top: @border;
@@ -193,7 +199,8 @@ body {
   background: @gray-light;
   color: white;
   padding: 2px @padding-large-horizontal 4px;
-  margin-right: 3px;
+  margin-right: 2px;
+  margin-left: 2px;
   border-radius: 10px;
   font-weight: normal;
   line-height: 2.5em;

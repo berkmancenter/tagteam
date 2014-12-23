@@ -8,15 +8,47 @@
 
 <% content_for :tab_content do %>
 <%# documentation('hub-wide-tag-filters') %>
-<h3>Hub-wide filters</h3>
-<% if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub) %>
-  <ul class="tag_filter_controls">
-    <li><span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a tag to all items in this hub', hub_hub_tag_filters_path(@hub), :data_hub_id => @hub.id, :data_type => 'AddTagFilter', :tag_list => @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '), :class => 'add_filter_control hub_tag_filter' %></li> 
-    <li><span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= link_to 'Remove a tag from every item in this hub', hub_hub_tag_filters_path(@hub), :data_hub_id => @hub.id, :data_type => 'DeleteTagFilter', :tag_list => @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '), :class => 'add_filter_control hub_tag_filter' %></li> 
-    <li><span class="ui-silk ui-silk-tag-blue-edit inline"></span> <%= link_to 'Modify a tag for every item in this hub', hub_hub_tag_filters_path(@hub), :data_hub_id => @hub.id, :data_type => 'ModifyTagFilter', :tag_list => @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '), :class => 'add_filter_control hub_tag_filter' %></li> 
+<div class="nicely-padded">
+  <h1>Hub-wide filters</h1>
+
+  <% if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub) %>
+    <ul class="tag_filter_controls list-unstyled">
+      <li>
+      <%= link_to hub_hub_tag_filters_path(@hub),
+        data_hub_id: @hub.id,
+        data_type: 'AddTagFilter',
+        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        class: 'add_filter_control hub_tag_filter btn btn-success' do %>
+        <%= fa_icon 'plus-circle', text: 'Add a tag to all items in this hub' %>
+      <% end %>
+      </li> 
+
+      <li>
+      <%= link_to hub_hub_tag_filters_path(@hub),
+        data_hub_id: @hub.id,
+        data_type: 'DeleteTagFilter',
+        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        class: 'add_filter_control hub_tag_filter btn btn-danger' do %>
+        <%= fa_icon 'minus-circle', text: 'Remove a tag from every item in this hub' %>
+      <% end %>
+      </li> 
+
+      <li>
+      <%= link_to hub_hub_tag_filters_path(@hub),
+        data_hub_id: @hub.id,
+        data_type: 'ModifyTagFilter',
+        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        class: 'add_filter_control hub_tag_filter btn btn-default' do %>
+        <%= fa_icon 'pencil', text: 'Modify a tag for every item in this hub' %>
+      <% end %>
+      </li> 
+    </ul>
+  <% end %>
+
+  <h1 class="hub-filters-title">Active filters</h1>
+  <ul class="hub_tag_filters list-unstyled">
+    <%= render partial: 'hub_tag_filters/list_item', as: :hub_tag_filter, 
+      collection: @hub_tag_filters %>
   </ul>
-<% end %>
-<div class="hub_tag_filters">
-  <%= render :partial => 'shared/line_items/hub_tag_filter', :collection => @hub_tag_filters %>
 </div>
 <% end %>

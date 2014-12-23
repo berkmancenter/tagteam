@@ -26,7 +26,7 @@ class DeleteTagFilter < ActiveRecord::Base
   end
 
   def description
-    'Delete tag: '
+    'Delete'
   end
 
   # Does the actual "filtering" by removing a tag from the tag list.
