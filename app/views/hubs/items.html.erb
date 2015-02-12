@@ -7,7 +7,6 @@
 <% end %>
 
 <% content_for :tab_content do %>
-<%# documentation('hub-wide-item-list') %>
 <%= render partial: 'hubs/view', locals: { view: 'list', results: @search.results } %>
 
 <% if @search.total == 0 %>

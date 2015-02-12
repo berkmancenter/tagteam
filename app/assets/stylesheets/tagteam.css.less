@@ -63,6 +63,21 @@ th, dt, b, strong, label {
 
   > li {
     margin-top: 0;
+    height: @pill-height;
+    line-height: @pill-height;
+    vertical-align: middle;
+
+    &:hover {
+      background-color: @gray-lighter;
+      
+      > a {
+        &.doc-control {
+          .fa {
+            color: @gray-light;
+          }
+        }
+      }
+    }
 
     &:after {
       height: 1px;
@@ -75,6 +90,7 @@ th, dt, b, strong, label {
 
     &.active {
       font-weight: 500;
+      background-color: @brand-primary;
 
       &:after {
         height: 0;
@@ -82,17 +98,34 @@ th, dt, b, strong, label {
       .nav-pill-arrow {
         display: block;
       }
-      > a {
-        margin: 0;
-        padding-left: 2*@nav-pill-padding-horizontal;
+
+      .doc-control {
+        .fa {
+          color: white;
+        }
+      }
+
+      &:hover {
+        > a {
+          &.doc-control {
+            .fa {
+              color: white;
+            }
+          }
+        }
       }
     }
 
-    &.last-of-section:after {
-      height: 7px;
-      background: inherit;
-      border: @border;
-      border-width: 1px 0;
+    &.last-of-section {
+      + li {
+        margin-top: 7px;
+      }
+      &:after {
+        height: 7px;
+        background: transparent;
+        border: @border;
+        border-width: 1px 0;
+      }
     }
 
     &.hub-search {
@@ -105,9 +138,34 @@ th, dt, b, strong, label {
     }
 
     > a {
-      border-radius: 0;
-      padding: @nav-pill-padding-vertical @nav-pill-padding-horizontal;
-      margin: 0 2*@nav-pill-padding-horizontal 0 @nav-pill-padding-horizontal;
+      display: inline-block;
+      padding: 0 @nav-pill-padding-horizontal;
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &:nth-child(2) {
+        width: @nav-pill-link-percent-width;
+      }
+
+      &.doc-control {
+        float: right;
+        width: 100 - @nav-pill-link-percent-width;
+
+        &:hover {
+          .fa {
+            color: @gray;
+          }
+        }
+
+        .fa {
+          position: relative;
+          top: @font-size-base / 7;
+          color: transparent;
+
+        }
+      }
     }
   }
 }

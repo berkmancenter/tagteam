@@ -7,7 +7,6 @@
 <% end %>
 
 <% content_for :tab_content do %>
-<%# documentation('hub-bookmark_collections-list') %>
 <div class="hub_feeds nicely-padded">
   <h1>Bookmark Collections</h1>
   <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub))%>
