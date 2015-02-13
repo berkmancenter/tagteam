@@ -50,7 +50,8 @@
     </header>
 
     <div class="container">
-      <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
+
+      <%= fa_icon('spinner', class: 'fa-spin', alt: 'Spinner', id: 'spinner', style: 'display: none') %>
 
       <% if use_breadcrumbs? %>
       <section class='row breadcrumbs_holder'>
