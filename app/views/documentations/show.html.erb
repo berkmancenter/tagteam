@@ -1,8 +1,6 @@
 <div class="documentation" id="documentation_<%= @documentation.id %>">
-  <h2><%= @documentation.display_title %>
-    <% if current_user && current_user.is?([:superadmin, :documentation_admin]) %>
-      <sup><%= link_to('edit', edit_documentation_path(@documentation)) %></sup>
-    <% end %>
-  </h2>
   <div class="description"><%= raw((@documentation.description.blank?) ? 'Coming soon.' : @documentation.description)  %></div>
+  <% if current_user && current_user.is?([:superadmin, :documentation_admin]) %>
+    <%= link_to(raw(fa_icon('pencil')), edit_documentation_path(@documentation)) %>
+  <% end %>
 </div>

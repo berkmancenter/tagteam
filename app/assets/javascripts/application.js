@@ -113,16 +113,6 @@
               minWidth: 400,
               height: 'auto',
               title: windowTitle,
-              buttons: [
-                {
-                  text: 'Close',
-                  click: function(){
-                      $(dialogNode).dialog('close');
-                      $(dialogNode).remove();
-                    },
-                  class: 'btn btn-primary'
-                }
-              ]
             });
             $('.tabs').tabs({
               cookie: {

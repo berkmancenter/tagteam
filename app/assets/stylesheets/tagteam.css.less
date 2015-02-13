@@ -352,3 +352,64 @@ th, dt, b, strong, label {
     }
   }
 }
+
+.ui-widget-content {
+  border-width: 0;
+}
+
+.ui-dialog {
+  .ui-dialog-title {
+    float: none;
+    font-size: @font-size-large;
+    font-weight: normal;
+  }
+  .ui-dialog-titlebar {
+    padding: 0.8em 1em;
+    text-align: center;
+  }
+  .ui-dialog-titlebar-close {
+    width: 30px;
+    height: 30px;
+    top: 1em;
+    right: 0.6em;
+    padding: 0;
+
+    &.ui-state-hover {
+      border-width: 0;
+      background-image: none;
+      background-color: transparent;
+      color: @gray-lighter;
+    }
+    
+    span {
+      margin: 0;
+    }
+
+    .ui-icon-closethick {
+      background-image: none;
+      width: 30px;
+      height: 30px;
+      text-indent: 0;
+
+      &:before {
+        content: "×";
+        display: block;
+        font-size: 3em;
+        line-height: 30px;
+        font-weight: @headings-font-weight;
+      }
+    }
+  }
+  .documentation {
+    .description {
+      font-size: @font-size-base;
+      line-height: 2em;
+      padding: 2em 3em;
+    }
+    .fa {
+      float: right;
+      font-size: @font-size-h2;
+      padding: 0 0.3em 0.5em;
+    }
+  }
+}
