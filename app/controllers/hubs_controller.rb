@@ -16,6 +16,13 @@ class HubsController < ApplicationController
   before_filter :sanitize_params, :only => :index
   before_filter :find_slugged_hub, :only => :show
 
+  SORT_OPTIONS = {
+    'title' => lambda { |rel| rel.order('title') },
+    'date' => lambda { |rel| rel.order('created_at') },
+    'owner' => lambda { |rel| rel.by_first_owner }
+  }
+  SORT_DIR_OPTIONS = ['asc', 'desc']
+
   def about
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
@@ -363,14 +370,26 @@ class HubsController < ApplicationController
     end
   end
 
-  # All hubs, as html, json, or xml.
-  def index
+  def home
     unless current_user.blank?
       @my_hubs = current_user.my(Hub)
     end
     @hubs = Hub.paginate(:page => params[:page], :per_page => 5 ).order('title ASC') #get_per_page)
     respond_to do|format|
       format.html{ render :layout => ! request.xhr? }
+      format.json{ render_for_api :default, :json => @hubs }
+      format.xml{ render_for_api :default, :xml => @hubs }
+    end
+  end
+
+  # All hubs, as html, json, or xml.
+  def index
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+    @hubs = SORT_OPTIONS[sort].call(Hub.paginate(:page => params[:page], :per_page => 5 ))
+    @hubs = @hubs.reverse_order if order == 'desc'
+    respond_to do|format|
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @hubs }
       format.xml{ render_for_api :default, :xml => @hubs }
     end
@@ -398,6 +417,13 @@ class HubsController < ApplicationController
   def my
     @hubs = current_user.my(Hub)
     respond_to do |format|
+      format.html do
+        sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+        order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+        @hubs = SORT_OPTIONS[sort].call(Hub.where(id: @hubs.map(&:id)).paginate(:page => params[:page], :per_page => 5 ))
+        @hubs = @hubs.reverse_order if order == 'desc'
+        render layout: request.xhr? ? false : 'tabs'
+      end
       format.json{ render_for_api :default, :json => @hubs }
       format.xml{ render_for_api :default, :xml => @hubs }
     end
@@ -503,50 +529,10 @@ class HubsController < ApplicationController
     end
   end
 
-  # Not really used, needs to be updated.
   def search
-    @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
-    unless params[:q].blank?
-      @search = Sunspot.new_search ((params[:search_in].blank?) ? [HubFeed,FeedItem,ActsAsTaggableOn::Tag] : params[:search_in].collect{|si| si.constantize})
-      hub_id = @hub.id
-      @search.build do
-        fulltext params[:q]
-        with :hub_ids, hub_id
-        paginate :page => params[:page], :per_page => get_per_page
-      end
-
-      @search.execute!
-    end
-
-    if ! params[:include_tags].blank?
-      include_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:include_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
-    end
-
-    if ! include_tags.blank? 
-      @search = FeedItem.search(:select => FeedItem.columns_for_line_item, :include => [:tags, :taggings, :feeds, :hub_feeds])
-      hub_context = @hub.tagging_key
-      exclude_tags = ActsAsTaggableOn::Tag.find(:all, :conditions => {:name => params[:exclude_tags].split(',').collect{|t| t.downcase.strip}.uniq.compact.reject{|t| t == ''}})
-
-      @search.build do
-        any_of do
-          with :tag_contexts, include_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
-        end
-        unless exclude_tags.blank?
-          any_of do
-            without :tag_contexts, exclude_tags.collect{|it| %Q|#{hub_context}-#{it.id}|}
-          end
-        end
-        paginate :page => params[:page], :per_page => get_per_page
-      end
-
-      @search.execute!
-    end
-
+    # Perform hub search
     respond_to do|format|
-      format.html{
-        render :layout => ! request.xhr?
-      }
+      format.html{ render :layout => ! request.xhr?  }
       format.json{ render :json => @search }
     end
 

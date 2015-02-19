@@ -1,0 +1,67 @@
+<%= render partial: 'shared/logo' %>
+<div class="row">
+  <div id="app-description" class="col-md-6">
+    <h2>TagTeam lets you:</h2>
+    <ul>
+      <li>Tag online resources</li>
+      <li>Generate feeds of tagged items</li>
+      <li>Organize social-tagging projects</li>
+      <li>Curate tags through a flexible filtering system</li>
+      <li>Store tag records for deduping, preservation, export, modification, and search</li>
+      <li>Aggregate feeds from other sources, including other tagging platforms</li>
+      <li>Create custom feed remixes</li>
+      <li>and republish everything as HTML, Atom, RSS, and JSON.</li>
+    </ul>
+  </div>
+  <div id="hub-lists" class="col-md-6">
+    <% if user_signed_in? %>
+    <div id="user-hubs">
+      <h2>Your hubs</h2>
+      <% if current_user.my(Hub).empty? %>
+        <p>You do not currently have any hubs. <%= link_to "Start one now.", new_hub_path %></p>
+      <% else %>
+        <ul class="list-unstyled hub-list">
+          <%= render partial: 'hubs/list_item',
+            collection: current_user.my(Hub).slice(0, 3),
+            as: 'hub',
+            locals: {limit: 100}  %>
+            <li>
+            <%= link_to my_hubs_path do %>
+              <div class="row">
+                <div class="col-xs-1"><%= fa_icon "arrow-circle-right" %></div>
+                <div class="col-xs-11"><h3>See all your hubs</h3></div>
+              </div>
+            <% end %>
+            </li>
+        </ul>
+      <% end %>
+    </div>
+    <% end %>
+    <div id="active-hubs">
+      <div class="pull-right">Search</div>
+      <h2>Most active hubs</h2>
+      <ul class="list-unstyled hub-list">
+        <%= render partial: 'hubs/list_item',
+          collection: @hubs.limit(4),
+          as: 'hub',
+          locals: {limit: 50}  %>
+        <li>
+        <%= link_to hubs_path do %>
+          <div class="row">
+            <div class="col-xs-1"><%= fa_icon "arrow-circle-right" %></div>
+            <div class="col-xs-11"><h3>See all hubs</h3></div>
+          </div>
+        <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="github row">
+  <p class="text-center">Find the TagTeam code on GitHub: 
+    <iframe src="/github-btn.html?user=berkmancenter&repo=tagteam&type=watch&count=true"
+    allowtransparency="true" frameborder="0" scrolling="0" width="80" height="20"></iframe>
+    <iframe src="/github-btn.html?user=berkmancenter&repo=tagteam&type=fork&count=true"
+    allowtransparency="true" frameborder="0" scrolling="0" width="80" height="20"></iframe>
+  </p>
+</div>

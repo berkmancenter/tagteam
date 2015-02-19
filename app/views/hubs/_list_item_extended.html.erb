@@ -1,0 +1,9 @@
+<li class="hub row">
+  <div class="col-xs-10 col-xs-offset-1">
+    <h3>
+      <%= link_to hub.title, hub_path(hub) %>
+    </h3>
+    <div>Owner: <%= hub.owners.map(&:username).join(', ') %> Created: <%= hub.created_at %></div>
+    <p><%= raw hub.description %></p>
+  </div>
+</li>

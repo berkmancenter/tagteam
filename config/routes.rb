@@ -79,7 +79,6 @@ Tagteam::Application.routes.draw do
     member do
       get 'about'
       post 'recalc_all_tags'
-      get 'search'
       get 'item_search'
       post 'add_feed'
       get 'custom_republished_feeds'
@@ -102,6 +101,7 @@ Tagteam::Application.routes.draw do
       get 'my'
       get 'background_activity'
       get 'all_items'
+      get 'search'
     end
 
     resources :hub_feeds do
@@ -155,7 +155,7 @@ Tagteam::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  root :to => "hubs#index"
+  root :to => "hubs#home"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.

@@ -110,6 +110,7 @@ class FeedItem < ActiveRecord::Base
   has_many :hubs, :through => :hub_feeds
   has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => 'created_at desc'
   has_many :input_sources, :dependent => :destroy, :as => :item_source
+  before_create :set_image_url
   after_save :reindex_all_tags
 
   # Reindex all taggings on all facets into solr.
@@ -187,8 +188,6 @@ class FeedItem < ActiveRecord::Base
     tag_list_for_filtering
   end
 
-  def image
-  end
 
   def to_s
     "#{(title.blank?) ? 'untitled' : title}"
@@ -275,6 +274,35 @@ class FeedItem < ActiveRecord::Base
       # logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
     end
 
+  end
+
+  private
+
+  def parse_out_image_url
+    unless description.nil? || description.empty? || description.index('<img').nil?
+      doc = Nokogiri::HTML(description)
+      images = doc.css('img')
+      unless images.empty?
+        return images.first['src']
+      end
+    end
+
+    unless content.nil? || content.empty? || content.index('<img').nil?
+      doc = Nokogiri::HTML(content)
+      images = doc.css('img')
+      unless images.empty?
+        return images.first['src']
+      end
+    end
+  end
+
+  def set_image_url
+    image_url = parse_out_image_url
+    if image_url
+      self.content = content.gsub(/[[:cntrl:]]/,'') if content
+      self.description = description.gsub(/[[:cntrl:]]/,'') if description
+      self.image_url = image_url
+    end
   end
 
 end

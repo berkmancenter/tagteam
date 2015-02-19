@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141029173235) do
+ActiveRecord::Schema.define(:version => 20150213205538) do
 
   create_table "add_tag_filters", :force => true do |t|
     t.integer  "tag_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20141029173235) do
     t.datetime "last_updated"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+    t.text     "image_url"
   end
 
   add_index "feed_items", ["authors"], :name => "index_feed_items_on_authors"

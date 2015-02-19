@@ -1,5 +1,5 @@
 <% content_for :top_panel do %>
-  <h2 class="page-title">TagTeam hubs</h2>
+  <h2 class="page-title">My hubs</h2>
 <% end %>
 
 <% content_for :tabs do %>
@@ -12,7 +12,7 @@
         hubs: @hubs,
         order: params[:order] || 'asc',
         sort: params[:sort] || 'title',
-        path: 'hubs_path'
+        path: 'my_hubs_path'
       }
   %>
 <% end %>
