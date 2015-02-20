@@ -279,20 +279,34 @@ class FeedItem < ActiveRecord::Base
   private
 
   def parse_out_image_url
+    src = nil
     unless description.nil? || description.empty? || description.index('<img').nil?
       doc = Nokogiri::HTML(description)
-      images = doc.css('img')
-      unless images.empty?
-        return images.first['src']
-      end
+      src = pick_image_src(doc)
     end
 
-    unless content.nil? || content.empty? || content.index('<img').nil?
+    unless src || content.nil? || content.empty? || content.index('<img').nil?
       doc = Nokogiri::HTML(content)
-      images = doc.css('img')
-      unless images.empty?
-        return images.first['src']
-      end
+      src = pick_image_src(doc)
+    end
+    src
+  end
+
+  def pick_image_src(doc)
+    images = doc.css('img')
+    image_widths = images.map{|i| i['width'] ? i['width'].to_i : nil}
+    max_width = image_widths.compact.max
+    # if we have a width greater than 150, return that image
+    if max_width && max_width > 150
+      i = image_widths.index(max_width)
+      return images[i]['src']
+    end
+    # if some of the images don't have widths, pick one randomly
+    # because we don't know their widths, and picking the first
+    # often ends up with icons
+    nil_indices = image_widths.map.with_index{|w, j| j if w.nil?}.compact
+    if nil_indices.count > 0
+      return images[nil_indices.sample]['src']
     end
   end
 
