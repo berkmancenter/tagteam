@@ -1,0 +1,45 @@
+<% unless @feed_item.description.blank? %>
+  <h3>Summary</h3>
+<div class="description">
+  <%= raw @feed_item.description %>
+</div>
+<% end %>
+
+<h3>Link</h3>
+<%= link_to(@feed_item.url, @feed_item.url, target: '_blank', rel: 'nofollow') %>
+
+<% unless @feed_item.last_updated.blank? || @feed_item.last_updated == @feed_item.date_published %>
+  <h3>Updated</h3>
+<%= l(@feed_item.last_updated, format: :date_and_time_short)  %>
+<% end %>
+
+<h3>From <%= 'feed'.pluralize(@feed_item.hub_feeds) %></h3>
+<%= raw @feed_item.hub_feeds.collect{ |hf|
+  %Q|#{link_to(hf.hub, hf.hub)} &raquo; #{link_to(hf.display_title, [hf.hub,hf])}|
+  }.join('<br/>') %>
+
+<h3>Tags</h3>
+<%= raw @feed_item.all_tags(current_user,
+                            @hub_feed.hub.tagging_key).collect{ |t|
+  tag_display(t, :hub => @hub_feed.hub, :hub_feed_item => @feed_item)
+  }.join(' ') %>
+
+<% unless @feed_item.authors.blank? %>
+  <h3>Authors</h3>
+<%= @feed_item.authors %>
+<% end %>
+
+<% unless @feed_item.contributors.blank? %>
+  <h3>Contributors</h3>
+<%= @feed_item.contributors %>
+<% end %>
+
+<% unless @feed_item.rights.blank? %>
+  <h3>Copyright info</h3>
+<%= @feed_item.rights %>
+<% end %>
+
+<% unless @feed_item.date_published.blank? %>
+  <h3>Added</h3>
+<%= l(@feed_item.date_published, format: :date_and_time_short) %>
+<% end %>

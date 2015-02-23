@@ -1,16 +1,62 @@
-<%= documentation('feed-item-tag-filters') %>
-<% tag_list = @feed_item.all_tags(current_user, @hub.tagging_key).map(&:name).join(', ') %>
-<h3>Filters on this item</h3>
-<% if current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) %>
-  <ul class="tag_filter_controls">
-    <li><span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a tag to this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'AddTagFilter', :tag_list => tag_list, :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
-    <li><span class="ui-silk ui-silk-tag-blue-delete inline"></span> <%= link_to 'Remove a tag from this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'DeleteTagFilter',  :tag_list => tag_list, :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
-    <li><span class="ui-silk ui-silk-tag-blue-edit inline"></span> <%= link_to 'Modify a tag on this item', hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item), :data_hub_id => @hub.id, :data_type => 'ModifyTagFilter',  :tag_list => tag_list, :class => 'add_filter_control hub_feed_item_tag_filter' %></li> 
-  </ul>
+<% content_for :top_panel do %>
+<div class="col-sm-12">
+  <h1><%= @feed_item.title %></h1>
+  <h4><%= @hub_feed.feed.title %> <%= @feed_item.created_at.strftime('%F') %></h4>
+</div>
 <% end %>
-<div class="hub_feed_item_hub_feed_item_tag_filters">
-  <%= render :partial => 'shared/line_items/tag', :collection => @feed_item.tags_on(@hub.tagging_key)  %>
-</div>
-<div class="hub_feed_item_hub_feed_item_tag_filters">
-  <%= render :partial => 'shared/line_items/hub_feed_item_tag_filter', :collection => @hub_feed_item_tag_filters %>
-</div>
+
+<% content_for :tabs do %>
+  <%= render partial: 'feed_items/tabs', locals: { active: 'filters' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+  <div class="nicely-padded">
+    <% tag_list = @feed_item.all_tags(current_user, @hub.tagging_key).map(&:name).join(', ') %>
+    <% if current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) %>
+    <h1>Filters on this item</h1>
+      <ul class="tag_filter_controls list-unstyled">
+        <li>
+        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub, @feed_item),
+          data_hub_id: @hub.id,
+          data_type: 'AddTagFilter',
+          tag_list: tag_list,
+          class: 'add_filter_control hub_feed_item_tag_filter btn btn-success' do %>
+          <%= fa_icon 'plus-circle', text: 'Add a tag to this item' %>
+        <% end %>
+        </li> 
+
+        <li>
+        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item),
+          data_hub_id: @hub.id,
+          data_type: 'DeleteTagFilter',
+          tag_list: tag_list,
+          class: 'add_filter_control hub_feed_item_tag_filter btn btn-danger' do %>
+          <%= fa_icon 'minus-circle', text: 'Remove a tag from this item' %>
+        <% end %>
+        </li> 
+
+        <li>
+        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item),
+          data_hub_id: @hub.id,
+          data_type: 'ModifyTagFilter',
+          tag_list: tag_list,
+          class: 'add_filter_control hub_feed_item_tag_filter btn btn-default' do %>
+        <%= fa_icon 'pencil', text: 'Modify a tag on this item' %>
+        <% end %>
+        </li> 
+      </ul>
+    <% end %>
+
+    <h1>Tags</h1>
+    <div class="hub_feed_item_hub_feed_item_tag_filters">
+      <%= render :partial => 'shared/line_items/tag', :collection => @feed_item.tags_on(@hub.tagging_key)  %>
+    </div>
+
+    <h1>Active filters</h1>
+    <div class="hub_feed_item_hub_feed_item_tag_filters">
+      <%= render partial: 'list_item',
+        collection: @hub_feed_item_tag_filters,
+        as: :hub_feed_item_tag_filter %>
+    </div>
+  </div>
+<% end %>

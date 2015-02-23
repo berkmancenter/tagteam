@@ -20,9 +20,20 @@ class FeedItemsController < ApplicationController
     load_feed_item
     breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr?}
+      format.html{ render :layout => request.xhr? ? false : 'tabs'}
       format.json{ render_for_api :with_content, :json => @feed_item}
       format.xml{ render_for_api :with_content, :xml => @feed_item}
+    end
+  end
+
+  def about
+    load_hub_feed
+    load_feed_item
+    breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    respond_to do|format|
+      format.html{ render :layout => request.xhr? ? false : 'tabs'}
+      format.json{ render_for_api :default, :json => @feed_item}
+      format.xml{ render_for_api :default, :xml => @feed_item}
     end
   end
 
@@ -31,7 +42,6 @@ class FeedItemsController < ApplicationController
     load_hub_feed
     load_feed_item
     add_breadcrumbs
-    @hub_feed = nil
     hub_id = @hub.id
     @related = Sunspot.more_like_this(@feed_item) do
       fields :title, :tag_list
@@ -41,7 +51,7 @@ class FeedItemsController < ApplicationController
     end
 
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr?}
+      format.html{ render :layout => request.xhr? ? false : 'tabs'}
       format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }
       format.xml{ render_for_api :default, :xml => (@related.blank?) ? [] : @related.results }
     end
@@ -54,7 +64,7 @@ class FeedItemsController < ApplicationController
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render :layout => request.xhr? ? false : 'tabs' }
       format.atom{ }
       format.rss{ }
       format.json{ render_for_api :default,  :json => @feed_items }
@@ -74,7 +84,7 @@ class FeedItemsController < ApplicationController
         else
           breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
         end
-        render :layout => ! request.xhr?
+        render :layout => request.xhr? ? false : 'tabs'
       }
       format.json{ render_for_api :with_content, :json => @feed_item }
       format.xml{ render_for_api :with_content, :xml => @feed_item }

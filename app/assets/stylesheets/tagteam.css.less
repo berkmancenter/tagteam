@@ -16,6 +16,12 @@ th, dt, b, strong, label {
   color: @gray-light;
 }
 
+.btn {
+  .fa {
+    color: white !important;
+  }
+}
+
 .navbar {
   font-weight: normal;
   margin-bottom: 0;
@@ -115,7 +121,7 @@ th, dt, b, strong, label {
 
     &.last-of-section {
       + li {
-        margin-top: 7px;
+        margin-top: 6px;
       }
       &:after {
         height: 7px;
@@ -136,6 +142,7 @@ th, dt, b, strong, label {
 
     > a {
       display: inline-block;
+      white-space: nowrap;
       padding: 0 @nav-pill-padding-horizontal;
 
       &:hover {
@@ -178,6 +185,20 @@ th, dt, b, strong, label {
   border-left: @arrow-width solid @brand-primary;
   display: none;
   z-index: 10;
+  
+  &:before {
+    content: " ";
+    height: @pill-height - 3;
+    background-color: @brand-primary;
+    width: 5px;
+    position: absolute;
+    top: -1*@arrow-width - 4;
+    left: -1*@arrow-width - 4;
+  }
+}
+
+.nav-stacked > li + li {
+  margin-top: 0;
 }
 
 .tab-content {

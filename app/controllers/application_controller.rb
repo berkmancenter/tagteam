@@ -6,7 +6,9 @@ class ApplicationController < ActionController::Base
 
   # The per_page setting for pagination can be overrided by cgi parameters but will fall back to the cookie "per_page" or ultimately the default_tagteam_per_page config entry defined in config/tagteam.yml
   def get_per_page
-    params[:per_page] || cookies[:per_page] || Tagteam::Application.config.default_tagteam_per_page.to_s
+    per_page = params[:per_page] || cookies[:per_page] || Tagteam::Application.config.default_tagteam_per_page.to_s
+    per_page = (per_page.to_i - 1).to_s if params[:view] && params[:view] == 'grid' && per_page.to_i % 2 == 1
+    per_page
   end
 
   # Switch the layout when logging in via the bookmarklet.

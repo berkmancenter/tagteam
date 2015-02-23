@@ -16,7 +16,7 @@
     <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
   </ul>
   <div class="text-center">
-    <%= render partial: 'paginate', object: @search.results, as: :results %>
+    <%= render partial: 'shared/paginate', object: @search.results, as: :results %>
   </div>
 <% end %>
 

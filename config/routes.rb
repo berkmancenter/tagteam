@@ -45,6 +45,7 @@ Tagteam::Application.routes.draw do
     resources :feed_items do
       member do
         get 'content'
+        get 'about'
         get 'related'
         get 'controls'
       end

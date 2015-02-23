@@ -15,9 +15,11 @@ class HubFeedItemTagFiltersController < ApplicationController
   #A list of filters on this FeedItem in a Hub..
   def index
     load_feed_item
+    load_hub_feed
+    breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
     @hub_feed_item_tag_filters = @feed_item.hub_feed_item_tag_filters.all(:conditions => {:hub_id => @hub.id})
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render :layout => request.xhr? ? false : 'tabs'}
       format.json{ render_for_api :default,  :json => @hub_feed_item_tag_filters }
       format.xml{ render_for_api :default,  :xml => @hub_feed_item_tag_filters }
     end
@@ -101,6 +103,14 @@ class HubFeedItemTagFiltersController < ApplicationController
   def load_feed_item
     @hub = Hub.find(params[:hub_id]) 
     @feed_item = FeedItem.find(params[:feed_item_id])
+  end
+
+  def load_hub_feed
+    if params[:hub_feed_id]
+      @hub_feed = HubFeed.find(params[:hub_feed_id])
+    else
+      @hub_feed = HubFeed.where(feed_id: @feed_item.feeds.first.id, hub_id: @hub.id).first
+    end
   end
 
   def load_hub_feed_item_tag_filter

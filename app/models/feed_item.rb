@@ -27,7 +27,7 @@ class FeedItem < ActiveRecord::Base
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
   def self.columns_for_line_item
-    [:id,:date_published, :title, :url, :guid, :authors, :last_updated]
+    [:id,:date_published, :title, :image_url, :url, :guid, :authors, :last_updated]
   end
 
   api_accessible :default do |t|

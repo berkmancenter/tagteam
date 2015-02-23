@@ -3,7 +3,10 @@
     <h3>
       <%= link_to hub.title, hub_path(hub) %>
     </h3>
-    <div>Owner: <%= hub.owners.map(&:username).join(', ') %> Created: <%= hub.created_at %></div>
+    <dl>
+      <dt>Owner:</dt> <dd><%= hub.owners.map(&:username).join(', ') %></dd>
+      <dt>Created:</dt> <dd><%= hub.created_at.strftime('%F') %></dd>
+    </dl>
     <p><%= raw hub.description %></p>
   </div>
 </li>

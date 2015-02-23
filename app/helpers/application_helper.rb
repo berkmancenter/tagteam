@@ -62,7 +62,7 @@ module ApplicationHelper
   end
 
   def use_breadcrumbs?
-    blacklist = [['hubs', 'index'], ['hubs', 'new']]
+    blacklist = [['hubs', 'home'], ['hubs', 'new']]
     !(blacklist.include? [controller_name, action_name])
   end
 

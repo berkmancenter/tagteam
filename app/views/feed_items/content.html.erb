@@ -1,2 +1,16 @@
-<%= documentation('feed-item-content-tab') %>
-<%= raw @feed_item.content %>
+<% content_for :top_panel do %>
+<div class="col-sm-12">
+  <h1><%= @feed_item.title %></h1>
+  <h4><%= @hub_feed.feed.title %> <%= @feed_item.created_at.strftime('%F') %></h4>
+</div>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'content' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+  <div class="col-md-offset-1 col-sm-10">
+    <%= render partial: 'content' %>
+  </div>
+<% end %>

@@ -1,12 +1,27 @@
-<%= documentation('hub-feed-feed-item-related-list') %>
-<div id="items">
-  <h2>Related Items</h2>
-
-  <%= will_paginate @related.results %>
-
-  <table class="hub_feed feed_items">
-    <%= render :partial => 'shared/line_items/feed_item', :collection => @related.results %>
-  </table>
-
-  <%= will_paginate @related.results %>
+<% content_for :top_panel do %>
+<div class="col-sm-12">
+  <h1><%= @feed_item.title %></h1>
+  <h4>
+    <%= @hub_feed.feed.title if @hub_feed %>
+    <%= @feed_item.created_at.strftime('%F') %>
+  </h4>
 </div>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'related' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+    <div class="text-center">
+      <%= render partial: 'shared/paginate', object: @related.results, as: :results %>
+    </div>
+
+    <ul class="list-unstyled flush-top">
+      <%= render partial: 'list_item', collection: @related.results, as: :feed_item %>
+    </ul>
+
+    <div class="text-center">
+      <%= render partial: 'shared/paginate', object: @related.results, as: :results %>
+    </div>
+<% end %>

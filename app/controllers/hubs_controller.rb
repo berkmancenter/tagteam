@@ -384,6 +384,7 @@ class HubsController < ApplicationController
 
   # All hubs, as html, json, or xml.
   def index
+    breadcrumbs.add 'All hubs', hubs_path
     sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
     @hubs = SORT_OPTIONS[sort].call(Hub.paginate(:page => params[:page], :per_page => 5 ))
@@ -416,6 +417,7 @@ class HubsController < ApplicationController
   # A list of the current users' hubs, used mostly by the bookmarklet.
   def my
     @hubs = current_user.my(Hub)
+    breadcrumbs.add 'My hubs', my_hubs_path
     respond_to do |format|
       format.html do
         sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first

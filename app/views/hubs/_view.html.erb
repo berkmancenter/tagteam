@@ -1,6 +1,6 @@
 <div class="feed-item-view row <%= 'grid-view' if view and view == 'grid' %>">
   <div class="col-lg-offset-1 col-sm-3"><%= render partial: 'search_form' %></div>
-  <div class="col-lg-offset-1 col-xs-7 col-lg-6"><%= render partial: 'paginate', object: results, as: :results %></div>
+  <div class="col-lg-offset-1 col-xs-7 col-lg-6"><%= render partial: 'shared/paginate', object: results, as: :results %></div>
   <div class="views pull-right">
     <%= link_to items_hub_path(@hub, view: 'list'),
       class: (view and view == 'list') ? 'active' : '' do %>
