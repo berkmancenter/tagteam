@@ -532,9 +532,15 @@ class HubsController < ApplicationController
   end
 
   def search
-    # Perform hub search
+    @search = Hub.search do
+      paginate :page => params[:page], :per_page => get_per_page
+      unless params[:q].blank?
+          fulltext params[:q]
+      end
+    end
+
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr?  }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render :json => @search }
     end
 

@@ -12,10 +12,7 @@
   <% if @feed_retrievals.blank? %>
     <h2>None found.</h2>
   <% else %>
-    <%= will_paginate @feed_retrievals.results,
-        next_label: fa_icon('chevron-right'),
-        previous_label: fa_icon('chevron-left'),
-        renderer: BootstrapPagination::Rails %>
+    <%= render partial: 'shared/paginate', locals: { results: @feed_retrievals.results } %>
     <table class="table table-condensed">
       <tr>
         <th>Feed</th>
@@ -23,13 +20,10 @@
         <th>New Items</th>
         <th>Changed Items</th>
       </tr>
-      <%= render partial: 'feed_retrievals/list_item', as: :hub_feed_retrieval,
-        collection: @feed_retrievals.results %>
+      <%= render partial: 'feed_retrievals/list_item', as: :feed_retrieval,
+        collection: @feed_retrievals.results, locals: { show_feed: true } %>
     </table>
-    <%= will_paginate @feed_retrievals.results,
-        next_label: fa_icon('chevron-right'),
-        previous_label: fa_icon('chevron-left'),
-        renderer: BootstrapPagination::Rails %>
+    <%= render partial: 'shared/paginate', locals: { results: @feed_retrievals.results } %>
   <% end %>
 </div>
 <% end %>

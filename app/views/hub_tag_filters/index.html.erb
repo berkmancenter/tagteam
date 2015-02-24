@@ -8,9 +8,9 @@
 
 <% content_for :tab_content do %>
 <div class="nicely-padded">
-  <h1>Hub-wide filters</h1>
 
   <% if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub) %>
+    <h1>Hub-wide filters</h1>
     <ul class="tag_filter_controls list-unstyled">
       <li>
       <%= link_to hub_hub_tag_filters_path(@hub),
@@ -45,9 +45,13 @@
   <% end %>
 
   <h1 class="hub-filters-title">Active filters</h1>
+  <% if @hub_tag_filters.empty? %>
+    <p>No active filters</p>
+  <% else %>
   <ul class="hub_tag_filters list-unstyled nicely-padded">
     <%= render partial: 'hub_tag_filters/list_item', as: :hub_tag_filter, 
       collection: @hub_tag_filters %>
   </ul>
+  <% end %>
 </div>
 <% end %>

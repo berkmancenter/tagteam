@@ -33,20 +33,21 @@
     <% end %>
   </ul>
   <% end %>
+<% if @search.blank? || @search.results.length == 0 %>
+  <h3>Nothing. Please try a different term.</h3>
+</div>
+<% else %>
 </div>
 
 <div class="row">
-<% if @search.blank? || @search.results.length == 0 %>
-  <h3>Nothing. Please try a different term.</h3>
-<% else %>
-  <%= render partial: 'hubs/paginate', locals: { results: @search.results } %>
+  <%= render partial: 'shared/paginate', locals: { results: @search.results } %>
   <h2>Items: <%= @search.total %> total </h2>
   <ul class="hub list-unstyled">
     <% @search.results.each do|r| %>
       <%= render partial: 'feed_items/list_item', as: :feed_item, object: r %>
     <% end %>
   </ul>
-  <%= render partial: 'hubs/paginate', locals: { results: @search.results } %>
+  <%= render partial: 'shared/paginate', locals: { results: @search.results } %>
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){ $.observeSearchSelectControl(); });| %>

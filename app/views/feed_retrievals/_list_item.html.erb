@@ -1,7 +1,10 @@
 <tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'danger' %>">
+  <% if show_feed %>
+  <% @hub_feed = feed_retrieval.hub_feed_for_hub(@hub) %>
   <td>
     <%= link_to(@hub_feed.display_title, hub_hub_feed_path(@hub, @hub_feed)) %>
   </td>
+  <% end %>
   <td>
     <%= link_to(l(feed_retrieval.created_at, format: :date_and_time_short),
                 hub_feed_feed_retrieval_path(@hub_feed, feed_retrieval)) %>

@@ -116,6 +116,13 @@ class Hub < ActiveRecord::Base
     t.add :created_at
     t.add :updated_at
   end
+
+  searchable do
+    text :title
+    text :description
+    text :slug
+    text :nickname
+  end
   
   def clean_slug
     # work around FriendlyId bug that generates slugs for empty nicknames

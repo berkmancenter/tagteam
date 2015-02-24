@@ -131,12 +131,18 @@ th, dt, b, strong, label {
       }
     }
 
-    &.hub-search {
-      margin-top: @nav-pill-padding-vertical;
-      padding: 0 @nav-pill-padding-horizontal;
+    &.search-pill {
+      padding: @nav-pill-padding-vertical @nav-pill-padding-horizontal;
+
+      &:hover {
+        background-color: transparent;
+      }
 
       &:after {
         height: 0;
+      }
+      .input-group {
+        line-height: 100%;
       }
     }
 

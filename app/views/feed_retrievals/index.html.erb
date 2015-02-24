@@ -22,7 +22,10 @@
         </tr>
         </thead>
         <tbody>
-        <%= render partial: 'list_item', collection: @feed_retrievals, as: 'feed_retrieval' %>
+        <%= render partial: 'list_item',
+          collection: @feed_retrievals,
+          as: 'feed_retrieval',
+          locals: { show_feed: false } %>
         </tbody>
       </table>
       <%= render partial: 'shared/paginate', locals: { results: @feed_retrievals } %>

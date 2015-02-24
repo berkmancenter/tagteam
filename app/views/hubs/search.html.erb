@@ -1,36 +1,27 @@
-<%= documentation('hub-wide-item-search') %>
-<div style="margin-bottom: 1em;">
-  <h2>Search</h2>
-  <%= form_tag(item_search_hub_path(@hub), :method => :get, :id => 'hub_search_form') do %>
-    <%= text_field_tag :q, params[:q], :size => 50, :placeholder => 'Search this hub...' %> <br/>
-    <%= text_field_tag :include_tags, params[:include_tags], :size => 40, :placeholder => 'Include these tags...' %>
-    <%= text_field_tag :exclude_tags, params[:exclude_tags], :size => 40, :placeholder => 'Exclude these tags...' %>
-    <%= submit_tag('Search', :class => 'button') %>
-  <% end %>
-</div>
-
-<% if @search.blank? || @search.results.length == 0 %>
-  <h3>Nothing. Please try a different term.</h3>
-<% else %>
-  <%= will_paginate @search.results %>
-  <table class="hub search_results">
-    <% @search.results.each do|r| %>
-      <% if r.class == HubFeed %>
-        <%= render :partial => 'shared/line_items/hub_feed', :object => r %>
-      <% end %>
-      <% if r.class == FeedItem %>
-        <%= render :partial => 'shared/line_items/feed_item', :object => r %>
-      <% end %>
-      <% if r.class == ActsAsTaggableOn::Tag %>
-        <%= render :partial => 'shared/line_items/tag', :object => r %>
-      <% end %>
-      <div class="clear"></div>
-    <% end %>
-  </table>
-  <%= will_paginate @search.results %>
+<% content_for :top_panel do %>
+  <h2 class="page-title">
+    Search TagTeam hubs for &quot;<em><%= params[:q] %></em>&quot; &ndash;
+    <%= @search.total %> <%= 'result'.pluralize(@search.total) %>
+  </h2>
 <% end %>
 
-<%= javascript_tag %Q|$(document).ready(function(){
-$.observeTagAutocomplete(#{@hub.id},'#include_tags'); 
-$.observeTagAutocomplete(#{@hub.id},'#exclude_tags');
-});| %>
+<% content_for :tabs do %>
+  <%= render partial: 'hub_tabs', locals: { active: 'all' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+  <div class="row nicely-padded">
+    <h1>Search</h1>
+    <%= render partial: 'hub_search_form' %>
+<% if @search.blank? || @search.results.length == 0 %>
+  <h3>Nothing. Please try a different term.</h3>
+  </div>
+<% else %>
+  </div>
+  <%= render partial: 'shared/paginate', object: @search.results, as: :results %>
+  <ul class="list-unstyled">
+    <%= render partial: 'hubs/list_item_extended', collection: @search.results, as: :hub %>
+  </ul>
+  <%= render partial: 'shared/paginate', object: @search.results, as: :results %>
+<% end %>
+<% end %>
