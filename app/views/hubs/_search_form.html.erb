@@ -1,6 +1,6 @@
 <%= form_tag(item_search_hub_path(@hub), :method => :get) do %>
   <div class="input-group">
-  <%= text_field_tag :q, params[:q], size: 14, placeholder: 'Search hub', class: 'form-control' %>
+  <%= text_field_tag :q, params[:q], size: 14, placeholder: 'Search', class: 'form-control' %>
   <span class="input-group-btn">
     <%= submit_tag('Go', class: 'btn btn-success keyword_search_submit') %>
   </span>

@@ -13,8 +13,8 @@
 <% end %>
 
 <% content_for :tab_content do %>
-  <%= render partial: 'alter_view', locals: { view: 'list', results: @related.results } %>
+  <%= render partial: 'alter_view', locals: { view: 'grid', results: @related.results } %>
   <ul class="list-unstyled flush-top">
-    <%= render partial: 'list_item', collection: @related.results, as: :feed_item %>
+    <%= render partial: 'grid', object: @related.results, as: :feed_items %>
   </ul>
 <% end %>

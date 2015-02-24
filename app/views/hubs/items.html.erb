@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for :tab_content do %>
-<%= render partial: 'hubs/view', locals: { view: 'list', results: @search.results } %>
+<%= render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results } %>
 
 <% if @search.total == 0 %>
   <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>

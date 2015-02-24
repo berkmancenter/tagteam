@@ -8,8 +8,8 @@
 
 <% content_for :tab_content do %>
   <div class="nicely-padded">
-<h1>Feed-wide filters</h1>
 <% if current_user && current_user.is?([:owner, :hub_feed_tag_filterer], @hub) %>
+  <h1>Feed-wide filters</h1>
   <% tag_list = @hub_feed_tag_filters.map {|f| f.filter.tag.name}.join(', ') %>
       <ul class="tag_filter_controls list-unstyled">
         <li>
@@ -44,8 +44,12 @@
       </ul>
 <% end %>
 <h1>Active filters</h1>
+<% if @hub_feed_tag_filters.empty? %>
+  <h2>No active filters</h2>
+<% else %>
 <div class="hub_feed_tag_filters">
   <%= render :partial => 'shared/line_items/hub_feed_tag_filter', :collection => @hub_feed_tag_filters %>
 </div>
+<% end %>
 </div>
 <% end %>

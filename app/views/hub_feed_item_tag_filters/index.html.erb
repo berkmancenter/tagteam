@@ -53,10 +53,14 @@
     </div>
 
     <h1>Active filters</h1>
+    <% if @hub_feed_item_tag_filters.empty? %>
+      <h2>No active filters</h2>
+    <% else %>
     <div class="hub_feed_item_hub_feed_item_tag_filters">
       <%= render partial: 'list_item',
         collection: @hub_feed_item_tag_filters,
         as: :hub_feed_item_tag_filter %>
     </div>
+    <% end %>
   </div>
 <% end %>

@@ -51,7 +51,10 @@ class FeedItemsController < ApplicationController
     end
 
     respond_to do|format|
-      format.html{ render :layout => request.xhr? ? false : 'tabs'}
+      format.html do
+        template = params[:view] == 'grid' ? 'related_grid' : 'related'
+        render template, layout: request.xhr? ? false : 'tabs'
+      end
       format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }
       format.xml{ render_for_api :default, :xml => (@related.blank?) ? [] : @related.results }
     end
@@ -64,7 +67,10 @@ class FeedItemsController < ApplicationController
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     @feed_items = @hub_feed.feed_items.paginate(:include => [:feeds, :hub_feeds], :order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
     respond_to do |format|
-      format.html{ render :layout => request.xhr? ? false : 'tabs' }
+      format.html do
+        template = params[:view] == 'grid' ? 'feed_items/index_grid' : 'feed_items/index'
+        render template, layout: request.xhr? ? false : 'tabs'
+      end
       format.atom{ }
       format.rss{ }
       format.json{ render_for_api :default,  :json => @feed_items }

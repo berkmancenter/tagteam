@@ -83,7 +83,8 @@ class TagsController < ApplicationController
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
     @feed_items = FeedItem.tagged_with(@tag.name, :on => @hub.tagging_key).uniq.paginate(:order => 'date_published desc', :page => params[:page], :per_page => get_per_page)
-    render :layout => ! request.xhr?
+    template = params[:view] == 'grid' ? 'show_grid' : 'show'
+    render template, layout: request.xhr? ? false : 'tabs'
   end
 
   private

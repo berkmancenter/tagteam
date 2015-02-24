@@ -1,30 +1,18 @@
 <% content_for :top_panel do %>
-  <%= render partial: 'hubs/top_panel' %>
+  <%= render partial: 'top_panel' %>
 <% end %>
 
 <% content_for :tabs do %>
-  <%= render partial: 'hubs/tabs', locals: { active: 'items' } %>
+  <%= render partial: 'tabs', locals: { active: 'items' } %>
 <% end %>
 
 <% content_for :tab_content do %>
-<%= render partial: 'hubs/view', locals: { view: 'grid', results: @search.results } %>
+<%= render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @search.results } %>
 
 <% if @search.total == 0 %>
   <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
 <% else %>
-    <% @search.results.each_with_index do |feed_item, i| %>
-      <% if i % 2 == 0 %>
-        <div class="row feed-item-grid">
-      <% end %>
-      <%= render partial: 'feed_items/grid_item', as: :feed_item, object: feed_item %>
-      <% if (i + 1) % 2 == 0 %>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-  <div class="text-center">
-    <%= render partial: 'shared/paginate', object: @search.results, as: :results %>
-  </div>
+  <%= render partial: 'feed_items/grid', object: @search.results, as: :feed_items %>
 <% end %>
 
 <% end %>

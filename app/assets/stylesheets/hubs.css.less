@@ -54,12 +54,18 @@ li.hub {
     border: 0;
 
     &:first-child {
-      img {
+      .grid-image {
         border-right: 1px solid @gray;
       }
       .feed-item-content {
         border-right: @border;
       }
+    }
+
+    .grid-image {
+      height: 180px;
+      background-size: cover;
+      background-position: center 20%;
     }
 
     .feed-item-content {

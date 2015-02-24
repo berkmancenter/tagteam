@@ -5,8 +5,7 @@ hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feed
 %>
 <% cache("feed-item-tag-list-#{hub.id}-#{hub_feed.id}-#{feed_item.id}", :expires => 120.minutes ) do %>
 <div class="feed-item grid-item col-md-6">
-  <%= image_tag (feed_item.image_url or image_path('feed_item_placeholder.png')),
-    class: 'img-responsive' %>
+  <div class="grid-image" style="background-image: url('<%= feed_item.image_url or image_path('feed_item_placeholder.png') %>');"></div>
   <div class="feed-item-content equal-height">
     <h2>
       <%= link_to(raw(strip_tags(feed_item.title)),

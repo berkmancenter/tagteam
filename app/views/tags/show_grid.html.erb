@@ -11,8 +11,8 @@
 <% end %>
 
 <% content_for :tab_content do %>
-  <%= render partial: 'feed_items/alter_view', locals: { view: 'list', results: @feed_items } %>
+  <%= render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @feed_items } %>
   <ul class="list-unstyled">
-  <%= render partial: 'feed_items/list_item', collection: @feed_items, as: :feed_item %>
+  <%= render partial: 'feed_items/grid', object: @feed_items, as: :feed_items %>
   </ul>
 <% end %>

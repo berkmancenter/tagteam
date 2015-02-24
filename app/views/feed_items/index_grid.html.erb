@@ -7,11 +7,8 @@
 <% end %>
 
 <% content_for :tab_content do %>
-  <%= render partial: 'alter_view', locals: { view: 'list', results: @feed_items } %>
+  <%= render partial: 'alter_view', locals: { view: 'grid', results: @feed_items } %>
   <ul class="list-unstyled flush-top">
-    <%= render partial: 'list_item', collection: @feed_items, as: :feed_item %>
+    <%= render partial: 'grid', object: @feed_items, as: :feed_items %>
   </ul>
-  <div class="text-center">
-    <%= render partial: 'shared/paginate', object: @feed_items, as: :results %>
-  </div>
 <% end %>
