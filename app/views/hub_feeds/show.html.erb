@@ -1,75 +1,11 @@
-<h1>
-  Input Feed: <%= @hub_feed %>
-  <% if current_user && current_user.is?(:owner,@hub_feed) %>
-    <%= link_to('edit', edit_hub_hub_feed_path(@hub,@hub_feed), :class => 'ui-silk ui-silk-pencil inline hover gray', :title => "Edit this feed") %>
-    <%= link_to('delete', hub_hub_feed_path(@hub,@hub_feed), :method => :delete, :confirm => "Are you sure you want to delete this feed?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this feed") %>
-  <% end %>
-  <div class="export_menu">
-    <h4>Export</h4>
-    <div>
-      <%= link_to("RSS", hub_feed_feed_items_path(@hub_feed, :format => :rss), :title => "An RSS feed with tag filters applied to it.") %>
-      <%= link_to("Atom", hub_feed_feed_items_path(@hub_feed, :format => :atom), :title => "An Atom feed with tag filters applied to it.") %>
-      <%= link_to("jsonp", hub_feed_feed_items_path(@hub_feed, :format => :json, :callback => 'callback'), :title => "jsonp with tag filters applied to it.") %>
-    </div>
-  </div>
-</h1>
+<% content_for :top_panel do %>
+  <%= render partial: 'top_panel' %>
+<% end %>
 
-<div class="tabs hub_feed detailed" id="hub_feed_<%= @hub_feed.id %>">
-  <ul>
-    <li><%= link_to('Items', hub_feed_feed_items_path(@hub_feed)) %></li>
-    <li><a href="#about">About</a></li>
-    <li><%= link_to('Tags', hub_feed_tags_path(@hub_feed)) %></li>
-    <li><%= link_to('Filters', hub_feed_hub_feed_tag_filters_path(@hub_feed) )%></li>
-    <li><%= link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed) ) %></li>
-    <% if ! @hub_feed.blank? && ! current_user.blank? && (current_user.is?(:owner, @hub_feed.feed) || current_user.is?(:owner, @hub) ) && @hub_feed.feed.is_bookmarking_feed? %>
-      <li><a href="#import">Import Items</a></li>
-    <% end %>
-  </ul>
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'about' } %>
+<% end %>
 
-  <div id="about"> 
-    <%= documentation('hub-feed-about-tab') %>
-
-    <% unless @hub_feed.feed.is_bookmarking_feed? %>
-      <dl class="metadata">
-        <dt>Original title from feed:</dt>
-        <dd><%= @hub_feed.feed.title %></dd>
-        <dt>Description:</dt>
-        <dd><%= @hub_feed.feed.description %></dd>
-        <dt>URL:</dt>
-        <dd><%= link_to(@hub_feed.feed.link,@hub_feed.feed.link, :target => '_blank') %></dd>
-        <dt>RSS / Atom URL:</dt>
-        <dd><span class="ui-silk ui-silk-feed-go inline"></span> <%= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank') %></dd>
-        <dt>Last changed at:</dt>
-        <dd><%= @hub_feed.feed.items_changed_at.to_s(:long) %></dd>
-        <dt>Feed will be downloaded again at:</dt>
-        <dd><%= @hub_feed.feed.next_scheduled_retrieval.to_s(:long) %> 
-        <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, @hub_feed)) %>
-          <%= link_to('Schedule for immediate download', reschedule_immediately_hub_hub_feed_path(@hub,@hub_feed)) %>
-        <% end %>
-        </dd>
-        <% [:authors, :generator, :language, :rights].each do |att| %>
-          <dt><%= att.to_s.titleize %>:</dt>
-          <dd><%= @hub_feed.feed[att] %></dd>
-        <% end %>
-        <dt>
-      </dl>
-    <% end %>
-  </div>
-  <% if ! @hub_feed.blank? && ! current_user.blank? && (current_user.is?(:owner, @hub_feed.feed) || current_user.is?(:owner, @hub) ) && @hub_feed.feed.is_bookmarking_feed? %>
-    <div id="import">
-      <%= documentation('hub-feed-import-tab') %>
-      <h2>Import items from a file</h2>
-      <p>
-      <%= form_tag(import_hub_feed_path(@hub_feed), :multipart => true, :method => :post) do %>
-        <ul class="form_controls">
-          <li>
-          Type: <%= select_tag(:type, options_for_select([['Connotea RDF export',:connotea_rdf], ['Delicious','delicious']])) %>
-          </li>
-          <li>File: <%= file_field_tag(:import_file) %></li>
-          <li><%= submit_tag('Import items', :class => 'button') %></li>
-        </ul>
-      <% end %>
-      </p>
-    </div>
-  <% end %>
-</div>
+<% content_for :tab_content do %>
+  <%= render partial: 'about' %>
+<% end %>

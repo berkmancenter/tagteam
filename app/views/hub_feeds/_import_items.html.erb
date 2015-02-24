@@ -1,0 +1,15 @@
+<div id="import">
+  <%= documentation('hub-feed-import-tab') %>
+  <h2>Import items from a file</h2>
+  <p>
+  <%= form_tag(import_hub_feed_path(@hub_feed), :multipart => true, :method => :post) do %>
+    <ul class="form_controls">
+      <li>
+      Type: <%= select_tag(:type, options_for_select([['Connotea RDF export',:connotea_rdf], ['Delicious','delicious']])) %>
+      </li>
+      <li>File: <%= file_field_tag(:import_file) %></li>
+      <li><%= submit_tag('Import items', :class => 'button') %></li>
+    </ul>
+  <% end %>
+  </p>
+</div>

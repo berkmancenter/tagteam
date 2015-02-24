@@ -14,7 +14,7 @@ class HubFeedTagFiltersController < ApplicationController
   def index
     @hub_feed_tag_filters = @hub_feed.hub_feed_tag_filters
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @hub_feed_tag_filters }
       format.xml{ render_for_api :default, :xml => @hub_feed_tag_filters }
     end

@@ -1,9 +1,9 @@
 <% content_for :top_panel do %>
-  <%= render partial: 'hubs/header' %>
+  <%= render partial: (@hub_feed ? 'hub_feeds' : 'hubs') + '/top_panel' %>
 <% end %>
 
 <% content_for :tabs do %>
-  <%= render partial: 'hubs/tabs', locals: { active: 'tags' } %>
+  <%= render partial: (@hub_feed ? 'hub_feeds' : 'hubs') + '/tabs', locals: { active: 'tags' } %>
 <% end %>
 
 <% content_for :tab_content do %>

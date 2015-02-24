@@ -1,6 +1,3 @@
-<% feed_retrieval = hub_feed_retrieval 
-@hub_feed = hub_feed_retrieval.hub_feed_for_hub(@hub)
-%>
 <tr class="feed_retrieval <%= (feed_retrieval.success) ? 'success' : 'danger' %>">
   <td>
     <%= link_to(@hub_feed.display_title, hub_hub_feed_path(@hub, @hub_feed)) %>

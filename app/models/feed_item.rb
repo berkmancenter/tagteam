@@ -150,6 +150,14 @@ class FeedItem < ActiveRecord::Base
       GROUP BY tags.id', context, self.name])
   end
 
+  def self.tag_counts_on_items(item_ids)
+    ActsAsTaggableOn::Tag.find_by_sql([
+      'SELECT tags.*, count(*)
+      FROM tags JOIN taggings ON taggings.tag_id = tags.id
+      WHERE taggings.taggable_id IN (?) AND taggings.taggable_type = ?
+      GROUP BY tags.id', item_ids, self.name])
+  end
+
   # Re-render all tag facets for this FeedItem.
   def update_filtered_tags
     hs = self.hubs

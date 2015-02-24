@@ -88,6 +88,7 @@ class HubFeedsController < ApplicationController
     add_breadcrumbs
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
     breadcrumbs.add @hub_feed.display_title, hub_hub_feed_path(@hub,@hub_feed)
+    render layout: 'tabs'
   end
 
   def new

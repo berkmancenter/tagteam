@@ -45,7 +45,7 @@ class TagsController < ApplicationController
     if @hub_feed.blank?
       @tags = @hub.tag_counts
     else
-      @tags = @hub_feed.feed_items.tag_counts_on(@hub.tagging_key)
+      @tags = FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id))
     end
 
     if @tags.any?
@@ -99,6 +99,9 @@ class TagsController < ApplicationController
 
   def add_breadcrumbs
     breadcrumbs.add @hub.to_s, hub_path(@hub) 
+    if @hub_feed
+      breadcrumbs.add @hub_feed.feed.title, hub_feed_path(@hub_feed)
+    end
   end
 
   def load_tag_from_name
