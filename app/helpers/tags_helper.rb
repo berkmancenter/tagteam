@@ -45,4 +45,43 @@ module TagsHelper
     link_to(tag.name, hub_tag_show_path(hub_id, u(tag.name)), options)
   end
 
+  def hub_filter_possible?(params, current_user)
+    current_user.is?([:owner, :hub_tag_filterer], @hub) && !@already_filtered_for_hub
+  end
+
+  def feed_filter_possible?(params, current_user)
+    params[:hub_feed_id].to_i != 0 && 
+      current_user.is?([:owner,:hub_feed_tag_filterer], @hub) && 
+      !@already_filtered_for_hub_feed
+  end
+
+  def item_filter_possible?(params, current_user)
+    params[:hub_feed_item_id].to_i != 0 &&
+      current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) &&
+      !@already_filtered_for_hub_feed_item
+  end
+
+  def link_to_tag_filter(text, tag, type, context = {})
+    options = {
+      data_id: tag.id,
+      class: 'add_filter_control',
+      data_type: "#{type.to_s.capitalize}TagFilter"
+    }
+
+    if context[:feed]
+      path = hub_feed_hub_feed_tag_filters_path(context[:feed])
+      add_class = 'hub_feed_tag_filter'
+    elsif context[:hub] && context[:item]
+      path = hub_feed_item_hub_feed_item_tag_filters_path(context[:hub], context[:item])
+      add_class = 'hub_feed_item_tag_filter'
+    elsif context[:hub]
+      options[:data_hub_id] = context[:hub].id
+      path = hub_hub_tag_filters_path(context[:hub])
+      add_class = 'hub_tag_filter'
+    end
+
+    options[:class] += ' ' + add_class
+
+    link_to text, path, options
+  end
 end
