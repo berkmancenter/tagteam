@@ -61,17 +61,19 @@ module TagsHelper
       !@already_filtered_for_hub_feed_item
   end
 
-  def link_to_tag_filter(text, tag, type, context = {})
+  def link_to_tag_filter(text, type, context = {})
     options = {
-      data_id: tag.id,
       class: 'add_filter_control',
       data_type: "#{type.to_s.capitalize}TagFilter"
     }
+
+    options[:data_id] = context[:tag].id if context[:tab]
 
     if context[:feed]
       path = hub_feed_hub_feed_tag_filters_path(context[:feed])
       add_class = 'hub_feed_tag_filter'
     elsif context[:hub] && context[:item]
+      options[:data_hub_id] = context[:hub].id
       path = hub_feed_item_hub_feed_item_tag_filters_path(context[:hub], context[:item])
       add_class = 'hub_feed_item_tag_filter'
     elsif context[:hub]
