@@ -40,11 +40,18 @@ class UsersController < ApplicationController
   end
 
   def roles_on
-    @roles_on = @user.roles.select([:authorizable_type, :authorizable_id]).includes(:authorizable).where(:authorizable_type => params[:roles_on]).group(:authorizable_type, :authorizable_id).order(:authorizable_type, :authorizable_id).paginate(:page => params[:page], :per_page => get_per_page)
+    @roles_on = @user.roles
+    .select([:authorizable_type, :authorizable_id])
+    .includes(:authorizable)
+    .where(authorizable_type: params[:roles_on])
+    .group(:authorizable_type, :authorizable_id)
+    .order(:authorizable_type, :authorizable_id)
+    .paginate(page: params[:page], per_page: get_per_page)
+
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
-      format.json{ render_for_api :default, :json => @roles_on, :root => :role }
-      format.xml{ render_for_api :default, :xml => @roles_on, :root => :role }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
+      format.json{ render_for_api :default, json: @roles_on, root: :role }
+      format.xml{ render_for_api :default, xml: @roles_on, root: :role }
     end
   end
 
@@ -71,6 +78,7 @@ class UsersController < ApplicationController
   def show
     breadcrumbs.add 'Users', users_path
     @user = User.find(params[:id])
+    render layout: 'tabs'
   end
 
   def index

@@ -1,31 +1,56 @@
 <%= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url, :method => :post) do |f| %>
-  <div class="bookmarklet_tabs" id="bookmarklet_tabs">
-    <ul>
-      <li><a href="#basics">Basics</a></li>
-      <li><a href="#advanced">Advanced</a></li>
-    </ul>
-    <div id="basics">
+  <div class="tab-content">
+    <div class="tab-pane active" id="basics">
       <%= f.inputs do %>
-          <%= f.input :hub_id, :collection => current_user.my_bookmarkable_hubs, :label => 'Add to hub', :required => true, :include_blank => false %>
-        <%= f.input :bookmark_collection_id, :as => :select, :required => true, :label => "In bookmark collection" %>
-        <%= f.input :tag_list, :label => 'Tags', :hint => 'A comma separated list of tags.' %>
-        <%= f.input :title, :required => true %>
-        <%= f.input :url, :required => true %>
-        <%= f.input :description, :as => :text, :input_html => {:class => 'noNicEditor'}, :hint => "Select text on the page you're bookmarking to auto-populate the description field" %>
-        <%= f.input :date_published, :as => :string, :label => "Date added", :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
+        <div class="row">
+          <div class="col-xs-6">
+            <%= f.input :hub_id, collection: current_user.my_bookmarkable_hubs,
+              label: 'Add to hub', required: true, include_blank: false,
+              class: 'form-control' %>
+          </div>
+          <div class="col-xs-6">
+            <%= f.input :bookmark_collection_id, as: :select, required: true,
+              label: 'To collection', class: 'form-control' %>
+          </div>
+        </div>
+        <%= f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags.' %>
+        <%= f.input :title, required: true %>
+        <%= f.input :url, label: 'URL', required: true %>
+        <%= f.input :description, as: :text, input_html: { class: 'noNicEditor', rows: 4 },
+          hint: "Select text on the page you're bookmarking to auto-populate the description field" %>
+        <div class="row">
+          <div class="col-xs-3">
+          <%= f.input :date_published, as: :string, label: "Date added",
+            hint: 'yyyy-mm-dd format', input_html: {class: :datepicker} %>
+          </div>
+        </div>
       <% end %>
-      <%= f.actions %>
+      <%= f.actions do %>
+        <div class="text-center">
+        <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+        </div>
+      <% end %>
     </div>
-    <div id="advanced">
+    <div id="advanced" class="tab-pane">
     <%= f.inputs do %>
       <%= f.input :authors %>
       <%= f.input :contributors %>
       <%= f.input :rights %>
-      <%= f.input :last_updated, :as => :string, :hint => 'yyyy-mm-dd format', :input_html => {:class => :datepicker} %>
+      <div class="row">
+        <div class="col-xs-3">
+      <%= f.input :last_updated, as: :string, hint: 'yyyy-mm-dd format',
+        input_html: {class: :datepicker} %>
+        </div>
+      </div>
     <% end %>
-      <%= f.actions %>
+      <%= f.actions do %>
+        <div class="text-center">
+        <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+        </div>
+      <% end %>
     </div>
   </div>
+</div>
 <% end %>
 
 <%= 

@@ -1,1 +1,3 @@
-<%= render :partial => 'shared/line_items/hub_tag_filter', :object => hub_tag_filter.authorizable %>
+<%= render partial: 'hub_tag_filters/list_item',
+  object: hub_tag_filter.authorizable,
+  as: :hub_tag_filter %>

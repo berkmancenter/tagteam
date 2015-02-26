@@ -400,7 +400,7 @@
         yearRange: 'c-500',
         dateFormat: 'yy-mm-dd'
       });
-      $.initNicEditor($('#feed_item_description'));
+      //$.initNicEditor($('#feed_item_description'));
         // <span class="search_select tag"><input name="include_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
       $(tagJsonOutput).each(function(i,el){
         $('#feed_item_tag_list_input').append(

@@ -40,6 +40,12 @@ class HubFeedsController < ApplicationController
   def import
     load_hub_feed
     load_hub
+    render layout: 'tabs'
+  end
+
+  def import_items
+    load_hub_feed
+    load_hub
     if params[:type].blank? || params[:import_file].blank?
       flash[:notice] = 'Please select a file type and attach a file for importing.'
     else 
@@ -50,7 +56,7 @@ class HubFeedsController < ApplicationController
 
       flash[:notice] = 'The file has been uploaded and scheduled for import. Please see the "background jobs" link in the footer to track progress.'
     end
-    redirect_to :action => :show
+    redirect_to import_hub_feed_path(@hub_feed)
   end
 
   def more_details

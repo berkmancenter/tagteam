@@ -36,7 +36,8 @@ Tagteam::Application.routes.draw do
     member do
       get 'reschedule_immediately'
       get 'more_details'
-      post 'import'
+      get 'import'
+      post 'import' => 'hub_feeds#import_items'
       get 'controls'
     end
 

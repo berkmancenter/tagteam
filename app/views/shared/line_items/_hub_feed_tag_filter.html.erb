@@ -1,9 +1,0 @@
-<div class="tag_filter hub_feed_tag_filter <%= hub_feed_tag_filter.filter.css_class %>">
-  <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_feed_tag_filter)) %>
-    <%= link_to('Delete', hub_feed_hub_feed_tag_filter_path(hub_feed_tag_filter.hub_feed,hub_feed_tag_filter), :method => :delete, :title => 'Remove this filter', :confirm => 'Are you sure you want to remove this filter?', :class => 'ui-silk inline ui-silk-delete hover gray') %>
-  <% end %>
-  <%= hub_feed_tag_filter.filter.description %> <%= tag_display(hub_feed_tag_filter.filter.tag, :hub_feed => hub_feed_tag_filter.hub_feed, :hub => hub_feed_tag_filter.hub) %>
-  <% if hub_feed_tag_filter.filter.class == ModifyTagFilter %>
-    to <%= tag_display(hub_feed_tag_filter.filter.new_tag, :hub => hub_feed_tag_filter.hub) %>
-  <% end %>
-</div>

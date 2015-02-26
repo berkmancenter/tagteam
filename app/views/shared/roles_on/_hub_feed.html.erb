@@ -1,2 +1,2 @@
 <% @hub = hub_feed.authorizable.hub %>
-<%= render :partial => 'shared/line_items/hub_feed', :object => hub_feed.authorizable %>
+<%= render :partial => 'hub_feeds/list_item', object: hub_feed.authorizable, as: :hub_feed %>

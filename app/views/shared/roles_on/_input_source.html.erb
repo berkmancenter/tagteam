@@ -1,1 +1,3 @@
-<%= render :partial => 'shared/line_items/input_source', :object => input_source.authorizable %>
+<%= render partial: 'input_sources/list_item',
+  object: input_source.authorizable,
+  as: :input_source %>

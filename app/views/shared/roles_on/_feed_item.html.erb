@@ -1,4 +1,3 @@
 <% unless feed_item.authorizable.hubs.blank? %>
-  <% #FIXME This is horribly slow. %>
-  <%= render :partial => 'shared/line_items/feed_item', :object => feed_item.authorizable %>
+  <%= render partial: 'feed_items/list_item', object: feed_item.authorizable, as: :feed_item %>
 <% end %>

@@ -98,7 +98,7 @@ class BookmarkletsController < ApplicationController
     if !cookies[:bookmarklet_hub_choice].nil? && !Hub.exists?(cookies[:bookmarklet_hub_choice])
       cookies.delete(:bookmarklet_hub_choice)
     end
-    @mini_title = 'Add to bookmark collection'
+    @mini_title = 'Add to collection'
     @feed_item = FeedItem.find_or_initialize_by_url((params[:feed_item].blank?) ? nil : params[:feed_item][:url])
     [:hub_id, :bookmark_collection_id, :title,:description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
       unless params[:feed_item][col].blank?

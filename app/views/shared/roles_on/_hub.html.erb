@@ -1,8 +1,1 @@
-<tr class="hover_row">
-  <td>
-    <%= link_to(hub.authorizable.display_title, hub.authorizable) %>
-  </td>
-  <td>
-    <%= @user.roles_for(hub.authorizable).collect{|r| Hub::DELEGATABLE_ROLES_HASH[r.name.to_sym][:name]}.join(', ') %>
-  </td>
-</tr>
+<%= render partial: 'hubs/list_item_extended', object: hub.authorizable, as: :hub %>

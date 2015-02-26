@@ -13,7 +13,7 @@
   <% tag_list = @hub_feed_tag_filters.map {|f| f.filter.tag.name}.join(', ') %>
       <ul class="tag_filter_controls list-unstyled">
         <li>
-        <%= link_to hub_feed_hub_feed_tag_filters_path(@hub,@feed_item),
+        <%= link_to hub_feed_hub_feed_tag_filters_path(@hub_feed, @feed_item),
           data_hub_id: @hub.id,
           data_type: 'AddTagFilter',
           tag_list: tag_list,
@@ -47,9 +47,12 @@
 <% if @hub_feed_tag_filters.empty? %>
   <h2>No active filters</h2>
 <% else %>
-<div class="hub_feed_tag_filters">
-  <%= render :partial => 'shared/line_items/hub_feed_tag_filter', :collection => @hub_feed_tag_filters %>
-</div>
+<ul class="hub_feed_tag_filters list-unstyled nicely-padded">
+  <%= render partial: 'hub_feed_tag_filters/list_item',
+    collection: @hub_feed_tag_filters,
+    as: :hub_feed_tag_filter
+  %>
+</ul>
 <% end %>
 </div>
 <% end %>

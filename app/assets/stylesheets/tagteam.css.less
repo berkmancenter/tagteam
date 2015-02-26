@@ -62,7 +62,7 @@ th, dt, b, strong, label {
 .pill-container {
   padding: 0;
 }
-.nav-pills {
+.nav-pills.nav-stacked {
 
   > li {
     margin-top: 0;
@@ -207,77 +207,79 @@ th, dt, b, strong, label {
   margin-top: 0;
 }
 
-.tab-content {
-  padding-left: 0;
-  padding-right: 0;
-  border-left: @border;
-  border-right: @border;
-  min-height: 500px;
+.tab-layout {
+  .tab-content {
+    padding-left: 0;
+    padding-right: 0;
+    border-left: @border;
+    border-right: @border;
+    min-height: 500px;
 
-  h1 {
-    border-bottom: @border;
-    font-size: @font-size-h2;
-    padding-bottom: 2*@padding-large-vertical;
-    margin-bottom: 2*@padding-large-vertical;
-    margin-top: 6*@padding-large-vertical;
-    
-    &:first-child {
-      margin-top: 2*@padding-large-vertical;
+    h1 {
+      border-bottom: @border;
+      font-size: @font-size-h2;
+      padding-bottom: 2*@padding-large-vertical;
+      margin-bottom: 2*@padding-large-vertical;
+      margin-top: 6*@padding-large-vertical;
+      
+      &:first-child {
+        margin-top: 2*@padding-large-vertical;
+      }
     }
-  }
 
-  label {
-    font-weight: 300;
-    font-size: @font-size-h3;
-    padding-bottom: @padding-large-vertical;
-  }
+    label {
+      font-weight: 300;
+      font-size: @font-size-h3;
+      padding-bottom: @padding-large-vertical;
+    }
 
-  ul {
-    &.nicely-padded {
-      margin-top: 4*@padding-large-vertical;
-      li {
-        padding: 3*@padding-small-vertical 0 2*@padding-base-vertical;
-        border-bottom: @border;
-        overflow: hidden;
+    ul {
+      &.nicely-padded {
+        margin-top: 4*@padding-large-vertical;
+        li {
+          padding: 3*@padding-small-vertical 0 2*@padding-base-vertical;
+          border-bottom: @border;
+          overflow: hidden;
 
-        &:first-child {
-          border-top: @border;
+          &:first-child {
+            border-top: @border;
+          }
+
+          h2 {
+            margin: 0 0 @padding-small-vertical;
+            font-size: @font-size-h3;
+          }
+
+          .feed-item-tags {
+            margin-top: @padding-large-vertical;
+          }
         }
+      }
 
-        h2 {
-          margin: 0 0 @padding-small-vertical;
-          font-size: @font-size-h3;
-        }
+      &.flush-top {
+        margin-top: 0;
 
-        .feed-item-tags {
-          margin-top: @padding-large-vertical;
+        li:first-child {
+          border-top: 0;
         }
       }
     }
 
-    &.flush-top {
-      margin-top: 0;
-
-      li:first-child {
-        border-top: 0;
-      }
+    .row {
+      margin: 0;
     }
-  }
 
-  .row {
-    margin: 0;
-  }
+    div.nicely-padded {
+      padding-top: 2.5*@padding-large-vertical;
+      padding-bottom: 2*@padding-large-vertical;
+      .make-md-column-offset(1);
+      .make-md-column(11);
+      padding-right: percentage((1 / @grid-columns));
+    }
 
-  div.nicely-padded {
-    padding-top: 2.5*@padding-large-vertical;
-    padding-bottom: 2*@padding-large-vertical;
-    .make-md-column-offset(1);
-    .make-md-column(11);
-    padding-right: percentage((1 / @grid-columns));
-  }
-
-  .pagination {
-    margin-bottom: @padding-small-vertical;
+    .pagination {
+      margin-bottom: @padding-small-vertical;
+    }
   }
 }
 
@@ -380,65 +382,8 @@ th, dt, b, strong, label {
   }
 }
 
-.ui-widget-content {
-  border-width: 0;
-}
-
-.ui-dialog {
-  .ui-dialog-title {
-    float: none;
-    font-size: @font-size-large;
-    font-weight: normal;
-  }
-  .ui-dialog-titlebar {
-    padding: 0.8em 1em;
-    text-align: center;
-  }
-  .ui-dialog-titlebar-close {
-    width: 30px;
-    height: 30px;
-    top: 1em;
-    right: 0.6em;
-    padding: 0;
-
-    &.ui-state-hover {
-      border-width: 0;
-      background-image: none;
-      background-color: transparent;
-      color: @gray-lighter;
-    }
-    
-    span {
-      margin: 0;
-    }
-
-    .ui-icon-closethick {
-      background-image: none;
-      width: 30px;
-      height: 30px;
-      text-indent: 0;
-
-      &:before {
-        content: "×";
-        display: block;
-        font-size: 3em;
-        line-height: 30px;
-        font-weight: @headings-font-weight;
-      }
-    }
-  }
-  .documentation {
-    .description {
-      font-size: @font-size-base;
-      line-height: 2em;
-      padding: 2em 3em;
-    }
-    .fa {
-      float: right;
-      font-size: @font-size-h2;
-      padding: 0 0.3em 0.5em;
-    }
-  }
+#new_tag_container {
+  margin-bottom: 1em;
 }
 
 body > .container {
@@ -522,4 +467,20 @@ body > .container {
       }
     }
   }
+}
+
+abbr[title="required"] {
+  border: 0;
+  color: @gray-light;
+}
+
+.help-block {
+  color: @gray-lite;
+  font-size: 0.9em;
+  margin-top: 2px;
+}
+
+.control-label {
+  font-weight: 300;
+  margin-bottom: 2px;
 }

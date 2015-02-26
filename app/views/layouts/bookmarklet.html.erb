@@ -2,64 +2,25 @@
 <html>
   <head>
     <title><%= (@mini_title.blank?) ? 'TagTeam' : @mini_title %></title>
-    <%= stylesheet_link_tag ['formtastic', 'formtastic_changes', '660-10col', 'reset','silk-sprite','custom-theme/jquery-ui-1.9.2.custom', 'tagteam', 'bookmarklet' ] %>
-    <%= javascript_include_tag ['jquery.min', 'jquery.cookie', 'jquery.form', 'jquery.observe_field.js', 'jquery.hoverIntent.minified','jquery_ujs', 'jquery.ba-bbq.min', 'jquery-ui-1.9.2.custom.min', 'jquery.bt.js', 'jquery.bootpag.min.js', 'jquery.masonry.min.js', 'jquery.infinitescroll.min.js', 'nicEdit.js', 'application', 'modernizr.custom.15012', @javascripts_extras].compact.flatten %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tag %>
   </head>
-  <body>
-    <div id="outer_wrapper">
-      <header>
-        <div class="container_10">
-          <h1 class="grid_4"><a href="/">TagTeam</a></h1>
-          <nav class="user_meta grid_6">
-            <div>
-              <% unless current_user.blank? %>
-               Welcome, <%= current_user.username %> 
-                &ndash; <%= link_to('Log out', destroy_user_session_url(:protocol => protocol_resolver), :confirm => "Are you sure?", :method => :delete, :id => 'logged_in') %>
-              <% else %>
-                <%= link_to('Log in', new_user_session_url(:protocol => protocol_resolver)) %>
-              <% end %>
-            </div>
-          </nav>
-          <div class="clear"></div>
+  <body class="bookmarklet">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+      <%= fa_icon('spinner', class: 'fa-spin', alt: 'Spinner', id: 'spinner', style: 'display: none') %>
+
+      <%= render partial: 'shared/flashes' %>
+
+      <section id="content" class="row">
+        <div class="col-md-12">
+          <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
-      </header>
-    <div class="container_10">
-        <%= image_tag('spinner.gif', :id => 'spinner', :style => 'display: none;') %>
-        <div class="clear"></div>
-
-        <% unless flash.blank? %>
-          <section class="grid_10" id="notices">
-            <% unless flash[:notice].blank? %>
-              <div class="notice">
-                <%= flash[:notice] %>
-              </div>
-            <% end %>
-
-            <% unless flash[:error].blank? %>
-              <div class="error">
-                <%= flash[:error] %>
-              </div>
-            <% end %>
-            <% unless flash[:alert].blank? %>
-              <div class="alert">
-                <%= flash[:alert] %>
-              </div>
-            <% end %>
-          </section>
-        <div class="clear"></div>
-        <% end %>
-
-        <section class="grid_10" id="content">
-          <% unless @mini_title.blank? %>
-            <h1><%= @mini_title %></h1>
-          <% end %>
-          <%= yield %>
-        </section>
-        <div class="clear"></div>
-
-      </div><!-- wrapper -->
-    </div><!-- container_16 -->
-
+      </section>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
