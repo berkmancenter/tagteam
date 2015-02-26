@@ -1,40 +1,19 @@
-<h1><% if current_user && current_user.is?(:owner,@republished_feed) %>
-    <%= link_to('delete', hub_republished_feed_path(@hub, @republished_feed), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this item") %>
-    <%= link_to('edit', edit_hub_republished_feed_path(@hub,@republished_feed), :class => 'ui-silk ui-silk-application-edit inline hover gray', :title => "Edit this item") %>
-  <% end %>
-  Remixed Feed: <%= @republished_feed %> 
-  <div class="export_menu">
-    <h4>Export</h4>
-    <div>
-      <%= link_to('rss', remix_items_path(@republished_feed.url_key, :format => :rss)) %>
-      <%= link_to('atom', remix_items_path(@republished_feed.url_key, :format => :atom)) %>
-      <%= link_to('jsonp', remix_items_path(@republished_feed.url_key, :format => :json, :callback => 'callback')) %>
-    </div>
-  </div>
-</h1>
-<div class="republished_feed detailed tabs" id="republished_feed_<%= @republished_feed.id %>">
+<% content_for :top_panel do %>
+  <%= render partial: 'top_panel' %>
+<% end %>
 
-  <ul>
-    <li><%= link_to 'Items', remix_items_path(@republished_feed.url_key) %></li>
-    <li><a href="#about">About</a></li>
-    <li><%= link_to 'Inputs', inputs_hub_republished_feed_path(@hub,@republished_feed) %></li>
-    <li><%= link_to 'Removals', removals_hub_republished_feed_path(@hub,@republished_feed) %></li>
-  </ul>
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'about' } %>
+<% end %>
 
-  <div id="about">
-    <%= documentation('republished-feed-about-tab') %>
+<% content_for :tab_content do %>
+  <div class="nicely-padded">
+    <h3>Description:</h3>
     <% unless @republished_feed.description.blank? %>
-      <div class="description">
-        <%= raw(@republished_feed.description) %>
-      </div>
+      <%= raw(@republished_feed.description) %>
     <% end %>
-    <div class="metadata">
-      <h2>Meta</h2>
-      <dl>
-        <dt>Owners:</dt>
-        <dd><%= @republished_feed.owners.collect{|o| o.username}.join(', ') %></dd>
-      </dl>
-    </div>
-  </div>
 
-</div>
+    <h3>Owners:</h3>
+    <%= @republished_feed.owners.collect{|o| o.username}.join(', ') %>
+  </div>
+<% end %>

@@ -19,19 +19,14 @@
     <%= fa_icon 'plus-circle', text: 'New bookmark collection' %>
   <% end %>
 
-<%= will_paginate @bookmark_collections,
-    renderer: BootstrapPagination::Rails,
-    next_label: fa_icon('chevron-right'),
-    previous_label: fa_icon('chevron-left')
-%>
-<ul class="hub_feeds list-unstyled nicely-padded" id="hub_feed_list_<%= @hub.id %>">
-  <%= render partial: 'hub_feeds/list_item', collection: @bookmark_collections, as: :hub_feed %>
-</ul>
-<%= will_paginate @bookmark_collections,
-    renderer: BootstrapPagination::Rails,
-    next_label: fa_icon('chevron-right'),
-    previous_label: fa_icon('chevron-left')
-%>
-
+  <div class="text-right">
+    <%= render partial: 'shared/paginate', object: @bookmark_collections, as: :results %>
+  </div>
+  <ul class="hub_feeds list-unstyled nicely-padded" id="hub_feed_list_<%= @hub.id %>">
+    <%= render partial: 'hub_feeds/list_item', collection: @bookmark_collections, as: :hub_feed %>
+  </ul>
+  <div class="text-center">
+    <%= render partial: 'shared/paginate', object: @bookmark_collections, as: :results %>
+  </div>
 </div>
 <% end %>

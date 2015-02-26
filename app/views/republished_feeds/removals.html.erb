@@ -1,18 +1,24 @@
-<%= documentation('republished-feed-removals-tab') %>
-<h3>Remove</h3>
-<p>The feeds, tags, searches and items below are removed from this feed before publishing:</p>
-<% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'remove'} %>
-  <i>No items to display.</i>
-<% else %>
-  <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'} %>
+<% content_for :top_panel do %>
+  <%= render partial: 'top_panel' %>
 <% end %>
-<% if current_user && current_user.is?(:owner, @republished_feed) %>
-<br/>
-<p>Remove items from this remixed feed:</p>
 
-<% if @republished_feed.removable_inputs.empty? %>
-  <i>No items to display.</i>
-<% else %>
- <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.removable_inputs, :locals => {:effect => 'remove'} %>
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'removals' } %>
 <% end %>
+
+<% content_for :tab_content do %>
+  <div class="nicely-padded">
+    <h3>Removals</h3>
+    <p>These feeds, tags, searches and items are removed from this remix before publishing:</p>
+
+    <% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'remove'} %>
+      <i>No items to display.</i>
+    <% else %>
+      <ul class="list-unstyled">
+        <%= render partial: 'input_sources/list_item',
+          collection: @republished_feed.input_sources.reject{|ins| ins.effect != 'remove'},
+          as: :input_source %>
+      </ul>
+    <% end %>
+  </div>
 <% end %>

@@ -34,7 +34,7 @@ class RepublishedFeedsController < ApplicationController
   def show
     @show_auto_discovery_params = remix_items_url(@republished_feed.url_key, :format => :rss)
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @republished_feed }
       format.xml{ render_for_api :default, :xml => @republished_feed }
     end
@@ -51,7 +51,10 @@ class RepublishedFeedsController < ApplicationController
       @search.execute!
     end
     respond_to do |format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html do
+        template = params[:view] == 'grid' ? 'items_grid' : 'items'
+        render template, layout: request.xhr? ? false : 'tabs'
+      end
       format.rss{ }
       format.atom{ }
       format.json{ render_for_api :default,  :json => (@search.blank?) ? [] : @search.results }
@@ -61,12 +64,12 @@ class RepublishedFeedsController < ApplicationController
 
   # List the InputSource objects that add items to this RepublishedFeed.
   def inputs
-    render :layout => ! request.xhr?
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   # List the InputSource objects that remove items from this RepublishedFeed.
   def removals
-    render :layout => ! request.xhr?
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   def new

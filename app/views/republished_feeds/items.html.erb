@@ -1,16 +1,25 @@
-<%= documentation('republished-feed-items-tab') %>
-<script type="text/javascript">
- $.processReturnCookie();
-</script>
-<div id="items">
-  <% unless @search.blank? %>
-    <h2>Items: <%= @search.total %> total</h2>
-    <%= will_paginate @search.results %>
-    <table class="republished_feed feed_items" id="republished_feed_metadata_<%= @republished_feed.id %>">
-      <%= render :partial => 'shared/line_items/feed_item', :collection => @search.results %>
-    </table>
-    <%= will_paginate @search.results %>
+<% content_for :top_panel do %>
+  <%= render partial: 'top_panel' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'items' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+  <%= render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results } %>
+
+  <% if @search.total == 0 %>
+    <div class="nicely-padded">
+    <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
+    </div>
   <% else %>
-    <p>None yet. Please add some input sources from the "inputs" tab or from the <%= link_to('hub', hub_path(@hub)) %> proper.</p>
+    <ul class="list-unstyled flush-top">
+      <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
+    </ul>
+    <div class="text-center">
+      <%= render partial: 'shared/paginate', object: @search.results, as: :results %>
+    </div>
   <% end %>
 </div>
+<% end %>

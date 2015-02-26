@@ -1,6 +1,12 @@
 <tr class="user hover_row">
   <td nowrap="nowrap">
-    <%= link_to('delete', user_path(user), :method => :delete, :confirm => "Are you sure?", :class => 'ui-silk ui-silk-delete inline hover gray', :title => "Delete this user") %>
+    <%= link_to 'delete',
+      user_path(user),
+      method: :delete,
+      confirm: "Are you sure?",
+      title: "Delete this user" %>
+  </td>
+  <td>
     <%= link_to(user.username,user_path(user)) %>
   </td>
   <td>

@@ -1,17 +1,22 @@
 <div id="users">
   <h3>Users</h3>
   <div id="user_list">
-    <%= will_paginate @users %>
-    <table class="user_list">
+    <%= render partial: 'shared/paginate', object: @users, as: :results %>
+    <table class="table">
+      <thead>
       <tr>
         <th>&nbsp;</th>
-        <th>Owns these hubs:</th>
-        <th>App-wide rights:</th>
+        <th>User</th>
+        <th>Owns</th>
+        <th>App-wide rights</th>
         <th>Confirmed?</th>
         <th>Locked?</th>
       </tr>
-      <%= render :partial => 'shared/line_items/user', :collection => @users %>
+      </thead>
+      <tbody>
+      <%= render partial: 'shared/line_items/user', collection: @users %>
+      </tbody>
     </table>
-    <%= will_paginate @users %>
+    <%= render partial: 'shared/paginate', object: @users, as: :results %>
   </div>
 </div>

@@ -18,13 +18,17 @@
 
   <div id="republished_feed_list_<%= @hub.id %>">
 
-    <%= will_paginate @republished_feeds %>
+    <div class="text-right">
+      <%= render partial: 'shared/paginate', object: @republished_feeds, as: :results %>
+    </div>
     <ul class="republished_feeds list-unstyled nicely-padded">
       <%= render partial: 'republished_feeds/list_item',
         collection: @republished_feeds,
         as: :republished_feed %>
     </ul>
-    <%= will_paginate @republished_feeds %>
+    <div class="text-center">
+      <%= render partial: 'shared/paginate', object: @republished_feeds, as: :results %>
+    </div>
 
   </div>
 </div>

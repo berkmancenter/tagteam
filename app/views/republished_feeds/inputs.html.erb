@@ -1,19 +1,24 @@
-<%= documentation('republished-feed-inputs-tab') %>
-<h3>Inputs</h3>
-<p>The feeds, tags, searches, and items below serve as the sources used to create this feed:</p>
-<% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'add'} %>
-  <i>No items to display.</i>
-<% else %>
-  <%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.input_sources.reject{|ins| ins.effect != 'add'} %>
+<% content_for :top_panel do %>
+  <%= render partial: 'top_panel' %>
 <% end %>
-<% if current_user && current_user.is?(:owner, @republished_feed) %>
-<br/>
-<p>Add new inputs to this remixed feed:</p>
-<div>
-<span class="ui-silk ui-silk-tag-blue-add inline"></span> <%= link_to 'Add a new tag as input source', input_sources_path, :republished_feed_id => @republished_feed.id, :class => 'add_input_source_control' %></div>
-<% if @republished_feed.available_inputs.empty? %>
-  <i>No items to display.</i>
-<% else %>
-<%= render :partial => 'shared/line_items/input_source', :collection => @republished_feed.available_inputs.map{|i| InputSource.new(:item_source => i, :republished_feed => @republished_feed)}, :locals => {:effect => 'add'} %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'tabs', locals: { active: 'inputs' } %>
 <% end %>
+
+<% content_for :tab_content do %>
+  <div class="nicely-padded">
+  <h3>Inputs</h3>
+  <p>These feeds, tags, searches, and items serve are used to create this remix:</p>
+
+  <% if !@republished_feed.input_sources.any? {|ins| ins.effect == 'add'} %>
+    <i>No items to display.</i>
+  <% else %>
+    <ul class="list-unstyled">
+      <%= render partial: 'input_sources/list_item',
+        collection: @republished_feed.input_sources.reject{|ins| ins.effect != 'add'},
+        as: :input_source %>
+    </ul>
+  <% end %>
+  </div>
 <% end %>
