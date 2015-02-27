@@ -1,6 +1,8 @@
 <div class="hub-item-view row">
-  <div class="col-md-offset-1 col-xs-5 col-lg-4"><%= render partial: 'shared/paginate', object: hubs, as: :results %></div>
-  <div class="views pull-right">
+  <div class="col-md-offset-1 col-md-7 pagination-wrapper">
+    <%= render partial: 'shared/paginate', object: hubs, as: :results %>
+  </div>
+  <div class="alter-views col-md-4">
     Sort by:
     <%= sortable_link('title', sort, order, path) %>
     <%= sortable_link('date', sort, order, path) %>

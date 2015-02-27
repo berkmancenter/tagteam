@@ -6,7 +6,7 @@
       <span class="updated"> <%= feed.updated_at.to_s(:long) %></span>
     </div>
     <div class="grid_6">
-      <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= feed.feed_items.length %> items</span>
+      <span class="items"><span class="ui-silk inline ui-silk-application-view-list"></span> <%= feed.feed_items.count %> items</span>
     </div>
     <div class="grid_6 omega">
       <span class="feed_item_tags"><%= raw feed.feed_item_tags.collect{|t| link_to(t.tag, feed_item_tag_path(t), :class => 'tag')}[0,10].join(' ') %></span> 

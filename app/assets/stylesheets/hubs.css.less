@@ -115,12 +115,15 @@ form.hub {
 .feed-item-view, .hub-item-view {
   border-bottom: @border;
   height: @pill-height;
+  overflow-y: hidden;
+  white-space: nowrap;
 
   .input-group {
     margin-top: @pill-height/8;
   }
 
-  .views {
+  .alter-views {
+    text-align: right;
     a {
       line-height: @pill-height;
       vertical-align: middle;

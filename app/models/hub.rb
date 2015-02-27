@@ -142,6 +142,14 @@ class Hub < ActiveRecord::Base
     self.order('created_at DESC').limit(3)
   end
 
+  def self.most_active_hubs(limit = 4)
+    search = FeedItem.search do
+      facet :hub_ids, limit: limit
+      paginate per_page: 0
+    end
+    Hub.where(id: search.facet(:hub_ids).rows.map(&:value))
+  end
+
   def self.by_first_owner(dir = 'asc')
     rel = select(%q|"hubs".*, string_agg("users".username,',') as owners|).joins("INNER JOIN roles ON roles.authorizable_id = hubs.id AND roles.authorizable_type = 'Hub' AND roles.name = 'owner' INNER JOIN roles_users ON roles_users.role_id = roles.id INNER JOIN users ON roles_users.user_id = users.id").order('owners').group('hubs.id')
     return rel.reverse_order if dir == 'desc'

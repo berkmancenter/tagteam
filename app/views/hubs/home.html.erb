@@ -38,11 +38,13 @@
     </div>
     <% end %>
     <div id="active-hubs">
-      <div class="pull-right">Search</div>
+      <div class="col-xs-4 pull-right">
+        <%= render partial: 'hub_search_form' %>
+      </div>
       <h2>Most active hubs</h2>
       <ul class="list-unstyled hub-list">
         <%= render partial: 'hubs/list_item',
-          collection: @hubs.limit(4),
+          collection: Hub.most_active_hubs(4),
           as: 'hub',
           locals: {limit: 50}  %>
         <li>

@@ -150,7 +150,12 @@ class HubFeed < ActiveRecord::Base
   end
 
   def latest_feed_items(limit = 15)
-    self.feed.feed_items.limit(limit)
+    search = FeedItem.search do
+      with :hub_feed_ids, self.id
+      order_by :date_published
+      paginate per_page: limit
+    end
+    FeedItem.where(id: search.hits.map(&:primary_key)).order('date_published DESC, last_updated DESC')
   rescue Exception => e
     logger.warn(e.inspect)
     []
@@ -158,7 +163,15 @@ class HubFeed < ActiveRecord::Base
 
   # Around 15 (by default) of the latest tags. If tags appear more than once in the latest items, the limit will be off. This is a tradeoff for performance sake.
   def latest_tags(limit = 15)
-    tags = ActsAsTaggableOn::Tagging.find(:all, :include => [:tag], :conditions => {:taggable_type => 'FeedItem', :taggable_id => self.latest_feed_items.collect{|fi| fi.id}, :context => self.hub.tagging_key.to_s}, :limit => limit).collect{|tg| tg.tag}.uniq
+    tags = ActsAsTaggableOn::Tagging.find(
+      :all,
+      include: [:tag],
+      conditions: {
+        taggable_type: 'FeedItem',
+        taggable_id: self.latest_feed_items.collect(&:id),
+        context: self.hub.tagging_key.to_s
+      },
+      limit: limit).collect(&:tag).uniq
     return tags
   rescue Exception => e
     logger.warn(e.inspect)
