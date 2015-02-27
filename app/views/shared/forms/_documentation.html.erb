@@ -5,5 +5,7 @@
     <%= f.input :description, :as => :text %>
     <%= f.input :lang %>
   <% end %>
-  <%= f.actions %>
+  <%= f.actions do %>
+    <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+  <% end %>
 <% end %>

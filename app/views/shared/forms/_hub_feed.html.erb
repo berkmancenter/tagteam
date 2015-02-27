@@ -3,5 +3,7 @@
     <%= f.input :title, :label => 'New Title' %>
     <%= f.input :description, :as => :text %>
   <% end %>
-  <%= f.actions %>
+  <%= f.actions do %>
+    <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+  <% end %>
 <% end %>

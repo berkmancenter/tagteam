@@ -31,11 +31,15 @@
     </div> 
 <% end %>
 
+<% if @hub_feeds.empty? %>
+  <p>This hub currently has no input feeds.</p>
+<% else %>
 <%= render partial: 'shared/paginate', locals: { results: @hub_feeds } %>
 <ul class="list-unstyled nicely-padded">
   <%= render partial: 'hub_feeds/list_item', collection: @hub_feeds, as: :hub_feed %>
 </ul>
 <%= render partial: 'shared/paginate', locals: { results: @hub_feeds } %>
+<% end %>
 </div>
 <% end %>
 </div>

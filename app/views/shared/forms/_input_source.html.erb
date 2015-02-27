@@ -17,7 +17,9 @@
     <%= f.input :effect, :collection => InputSource::EFFECTS, :hint => '"Add" means this input source adds its items to this republished feed. "Remove" means this input source is used to remove items it matches.' %>
     <%= f.input :limit, :hint => 'How many maximum items to pull from this source?'  %>
   <% end %>
-  <%= f.actions %>
+  <%= f.actions do %>
+    <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+  <% end %>
 <% end %>
 </div>
 

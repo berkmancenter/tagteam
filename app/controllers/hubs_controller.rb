@@ -29,6 +29,11 @@ class HubsController < ApplicationController
     render layout: 'tabs'
   end
 
+  def created
+    @hub = Hub.find(params[:id])
+    breadcrumbs.add @hub, hub_path(@hub)
+  end
+
   def find_slugged_hub
     return unless params[:id]
     @hub = Hub.find params[:id]
@@ -449,11 +454,11 @@ class HubsController < ApplicationController
       if @hub.save
         current_user.has_role!(:owner, @hub)
         current_user.has_role!(:creator, @hub)
-        flash[:notice] = 'Added that Hub.'
         format.html {
           if session[:redirect_after].nil?
-            redirect_to hub_path(@hub)
+            redirect_to created_hub_path(@hub)
           else
+            flash[:notice] = 'Added that Hub.'
             redirect_path = session[:redirect_after]
             session[:redirect_after] = nil
             redirect_to redirect_path

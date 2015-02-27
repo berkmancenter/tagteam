@@ -8,13 +8,20 @@
 
 <% content_for :tab_content do %>
 <div class="republished_feeds nicely-padded">
-  <h1>Remixed Feeds</h1>
-
+  <h1>
   <% if current_user && current_user.is?([:owner, :remixer], @hub) %>
+      <div class="pull-right">
     <%= link_to new_hub_republished_feed_path(@hub), class: "new_object btn btn-success" do %>
       <%= fa_icon 'plus-circle', text: 'New remixed feed' %>
     <% end %>
+    </div>
   <% end %>
+    Remixed Feeds
+  </h1>
+  <% if @republished_feeds.empty? %>
+    <p>This hub currently has no republished feeds.</p>
+  <% end %>
+
 
   <div id="republished_feed_list_<%= @hub.id %>">
 

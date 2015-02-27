@@ -38,7 +38,7 @@
         'Create new feed remixes',
         'Manage tag filters'
       ] %>
-    <%= f.input :message, as: :text %>
+    <%= f.input :message, as: :text, input_html: { rows: 8 } %>
     <% end %>
 
     <%= f.actions do %>

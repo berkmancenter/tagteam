@@ -4,5 +4,7 @@
 		<%= f.input :title , :hint => 'automatically grabbed from a valid feed' %>
 		<%= f.input :description ,:hint => 'like title, automatically grabbed from a valid feed' %>
   <% end %>
-  <%= f.actions %>
+  <%= f.actions do %>
+    <%= f.action :submit, as: :button, button_html: { class: 'btn btn-primary' } %>
+  <% end %>
 <% end %>

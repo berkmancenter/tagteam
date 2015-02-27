@@ -1,0 +1,21 @@
+<div class="text-center">
+  <h1 class="title"><%= fa_icon 'bolt', text: 'TagTeam' %></h1>
+</div>
+<div class="row">
+  <div class="col-md-offset-3 col-md-6 text-center">
+    <h3>Congratulations! You've started your hub:</h3>
+    <h2><%= @hub %></h2>
+    <hr />
+    <h3>You can visit your hub here:</h3>
+    <h2><%= link_to hub_url(@hub), hub_url(@hub) %></h2>
+    <hr />
+    <p>
+    You can use a bookmarklet to add pages directly to your bookmark collections.
+    Drag the <em>Add to TagTeam</em> button below to your browser's bookmarks
+    bar to get started.
+    </p>
+    <div class="row text-center"><%= render partial: 'shared/bookmarklet_button' %></div>
+    <hr />
+    <%= link_to 'Go to my hub', hub_path(@hub), class: 'btn btn-primary btn-lg' %>
+  </div>
+</div>
