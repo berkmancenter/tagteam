@@ -17,6 +17,8 @@ class UpdateFeeds
 
   def other_updaters_running?
     workers = Sidekiq::Workers.new
-    workers.any?{ |process_id, thread_id, work| work['queue'] == 'updater' }
+    workers.any? do |process_id, thread_id, work|
+      work['payload']['jid'] != self.jid && work['queue'] == 'updater'
+    end
   end
 end
