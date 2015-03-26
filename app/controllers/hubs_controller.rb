@@ -5,7 +5,7 @@ class HubsController < ApplicationController
   }
 
   access_control do
-    allow all, :to => [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta]
+    allow all, :to => [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta, :home]
     allow logged_in, :to => [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
     allow :owner, :of => :hub, :to => [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
     allow :inputter, :of => :hub, :to => [:add_feed]
