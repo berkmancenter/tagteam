@@ -7,13 +7,12 @@
 <% end %>
 
 <% content_for :tab_content do %>
-  <%= render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results } %>
-
-  <% if @search.total == 0 %>
+  <% if @search.blank? || @search.total == 0 %>
     <div class="nicely-padded">
-    <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
+    <p>None yet. Please add items or tags from <%= link_to "the hub", items_hub_path(@hub) %>.</p>
     </div>
   <% else %>
+    <%= render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results } %>
     <ul class="list-unstyled flush-top">
       <%= render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item %>
     </ul>
