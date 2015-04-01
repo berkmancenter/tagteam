@@ -16,7 +16,7 @@
         <%= f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags.' %>
         <%= f.input :title, required: true %>
         <%= f.input :url, label: 'URL', required: true %>
-        <%= f.input :description, as: :text, input_html: { class: 'noNicEditor', rows: 4 },
+        <%= f.input :description, as: :text,
           hint: "Select text on the page you're bookmarking to auto-populate the description field" %>
         <div class="row">
           <div class="col-xs-3">

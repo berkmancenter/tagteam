@@ -11,7 +11,7 @@
 //= require jquery.bootpag.min
 //= require jquery.masonry.min
 //= require jquery.infinitescroll.min
-//= require nicEdit
+//= require ckeditor/ckeditor
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
 //= require twitter/bootstrap
@@ -291,14 +291,8 @@
         }
       });
     },
-    initNicEditor: function(textArea){
-      if($(textArea).attr('id') != undefined){
-        new nicEditor({
-          iconsPath: $.rootPath() + 'assets/nicEditorIcons.gif', 
-          maxHeight: 300,
-          buttonList: ['bold','italic','left','center','right','justify','ol','ul','subscript','superscript','strikethrough','removeformat','indent','outdent','hr','image','forecolor','link','unlink','fontFormat','xhtml']
-        }).panelInstance($(textArea).attr('id'));
-      }
+    initEditor: function(textArea){
+      CKEDITOR.replace(textArea);
     },
     initBookmarkCollectionChoices: function(hubChoiceId){
       $.cookie('bookmarklet_hub_choice', hubChoiceId, {expires: 365, path: $.rootPath()});
@@ -400,8 +394,6 @@
         yearRange: 'c-500',
         dateFormat: 'yy-mm-dd'
       });
-      //$.initNicEditor($('#feed_item_description'));
-        // <span class="search_select tag"><input name="include_tag_ids[]" type="hidden" value="<%= tag.id %>" /><%= tag.name %><span class="search_select_control"> X </span></span>
       $(tagJsonOutput).each(function(i,el){
         $('#feed_item_tag_list_input').append(
           $('<span class="search_select tag" />')
@@ -711,12 +703,11 @@ $(document).ready(function(){
   $('.tabs .ui-tabs-panel').addClass('grid_13');
   $('.tabs').append('<div class="clear"></div>');
 
+  $('textarea').not('.noEditor').each(function(){
+    $.initEditor(this);
+  });
+
   if($('#logged_in').length > 0){
-
-    $('textarea').not('.noNicEditor').each(function(){
-      $.initNicEditor(this);
-    });
-
     $('.tag').live({
       click: function(e){
         e.preventDefault();
