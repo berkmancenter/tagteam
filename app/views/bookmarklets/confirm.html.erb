@@ -1,3 +1,10 @@
 <h1>Item Added</h1>
-<p>We successfully added "<%= @feed_item.title %>" to your TagTeam bookmark collection.</p>
-<p><a href="javascript:window.close();">Close this window</a></p>
+<p>We successfully added <strong><%= @feed_item.title %></strong> to your TagTeam bookmark collection.</p>
+<p><a class="btn btn-primary" href="javascript:window.close();">Close this window</a></p>
+<script>
+$(document).on('keyup', function(e) {
+    if (e.keyCode === 13) {
+      window.close();
+    }
+});
+</script>
