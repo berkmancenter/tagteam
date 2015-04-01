@@ -1,7 +1,6 @@
 <% hub = (@hub.blank?) ? input_source.republished_feed.hub : @hub %>
 
 <li class="input_source">
-  <div class="grid_1 alpha">
     <% if current_user && current_user.is?(:owner, hub) && defined?(effect) %>
       <%= form_tag(input_source.new_record? ? input_sources_path : input_source_path(input_source),
                    method: input_source.new_record? ? :post : :put) do %>
@@ -19,47 +18,39 @@
     <% elsif current_user && current_user.is?(:owner, input_source) %>
 
       <% unless input_source.new_record? %>
-        <%= link_to 'delete',
-          input_source_path(input_source),
+        <%= link_to input_source_path(input_source),
           onclick: "$(this).attr('href', $(this).attr('href') + '?return_to=' + window.location.toString())",
           method: :delete,
           confirm: "Are you sure?",
-          title: "Delete this item" %>
-
-        <% if false %>
-          <%= link_to 'edit',
-            edit_input_source_path(input_source),
-            title: "Edit this item" %>
+          title: "Delete this item" do %>
+          <%= fa_icon 'times' %>
         <% end %>
       <% end %>
     <% end %>
-  </div>
 
-  <div class="grid_10 omega">
-    <% if input_source.item_source.class == FeedItem %>
-      <% p = input_source.item_source.hub_feed_for_hub(hub.id) %>
-      <% if p %>
+      <% if input_source.item_source.class == FeedItem %>
+        <% p = input_source.item_source.hub_feed_for_hub(hub.id) %>
+        <% if p %>
+          <%= raw input_source.item_source.mini_icon %>
+          <%= link_to input_source.item_source.to_s,
+            hub_feed_feed_item_path(p, input_source.item_source),
+            class: input_source.item_source.class.to_s.tableize.singularize %>
+        <% end %>
+
+      <% elsif input_source.item_source.class == SearchRemix %>
         <%= raw input_source.item_source.mini_icon %>
         <%= link_to input_source.item_source.to_s,
-          hub_feed_feed_item_path(p, input_source.item_source),
+          item_search_hub_path(@hub, q: input_source.item_source.search_string),
           class: input_source.item_source.class.to_s.tableize.singularize %>
+
+      <% elsif input_source.item_source.class == Feed %>
+        <%= raw input_source.item_source.mini_icon %>
+        <%= link_to input_source.item_source.to_s,
+          hub_hub_feed_path(hub,input_source.item_source.hub_feeds.where(:hub_id => hub.id).first),
+          class: input_source.item_source.class.to_s.tableize.singularize %>
+
+      <% else %>
+        <%= raw input_source.item_source.mini_icon %>
+        <%= tag_display(input_source.item_source, :hub => hub) %>
       <% end %>
-
-    <% elsif input_source.item_source.class == SearchRemix %>
-      <%= raw input_source.item_source.mini_icon %>
-      <%= link_to input_source.item_source.to_s,
-        item_search_hub_path(@hub, q: input_source.item_source.search_string),
-        class: input_source.item_source.class.to_s.tableize.singularize %>
-
-    <% elsif input_source.item_source.class == Feed %>
-      <%= raw input_source.item_source.mini_icon %>
-      <%= link_to input_source.item_source.to_s,
-        hub_hub_feed_path(hub,input_source.item_source.hub_feeds.where(:hub_id => hub.id).first),
-        class: input_source.item_source.class.to_s.tableize.singularize %>
-
-    <% else %>
-      <%= raw input_source.item_source.mini_icon %>
-      <%= tag_display(input_source.item_source, :hub => hub) %>
-    <% end %>
-  </div>
 </li>

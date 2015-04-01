@@ -105,7 +105,7 @@
           dataType: 'html',
           url: $(this).attr('href'),
           success: function(html){
-            var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+            var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
             $(dialogNode).append(html);
             $(dialogNode).dialog({
               modal: true,
@@ -740,7 +740,7 @@ $(document).ready(function(){
       click: function(e){
         e.preventDefault();
         var remix_id = $(this).attr('republished_feed_id');
-        var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+        var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
           var prepend = '';
           var message = "<h2>Please enter the tag you'd like to add<h2>";
           $(dialogNode).append(prepend + '<h2>' + message + '</h2><form method="post" action="/input_sources" accept-charset="UTF-8"><input type="hidden" value="' + $('[name=csrf-token]').attr('content') + '" name="authenticity_token"><input type="hidden" name="return_to" value="' + window.location+ '"><input type="text" id="new_tag_for_filter" name="input_source[item_source_attributes][name]" size="40" /><input type="hidden" value="ActsAsTaggableOn::Tag" name="input_source[item_source_attributes][type]" id="input_source_item_source_type"><input type="hidden" value="' + remix_id + '" name="input_source[republished_feed_id]" id="input_source_republished_feed_id"><input type="hidden" value="add" name="input_source[effect]" id="input_source_effect"></form>');        
@@ -778,7 +778,7 @@ $(document).ready(function(){
           tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
         }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
-          var dialogNode = $('<div><div id="dialog-error" class="error" style="display:none;"></div><div id="dialog-notice" class="notice" style="display:none;"></div></div>');
+          var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
           var message = '';
           var prepend = '';
           if(filter_type == 'AddTagFilter'){
@@ -931,17 +931,14 @@ $(document).ready(function(){
         data: args,
         beforeSend: function(){ 
           $.showSpinner();
-          $('#dialog-error,#dialog-notice').html('').hide();
+          $('.dialog-error,.dialog-notice').html('').hide();
         },
         complete: function(){ $.hideSpinner();},
         success: function(html){
-          eval("var results = " + html);
-          $('#dialog-notice').show().html(results.message);
-          $('#dialog-notice').parent().append(results.html);
-          $('div.empty-message').remove(); 
+          $('.dialog-notice').show().text(html);
         },
         error: function(jqXHR, textStatus, errorThrown){
-          $('#dialog-error').show().html(jqXHR.responseText);
+          $('.dialog-error').show().html(jqXHR.responseText);
         }
       });
     }

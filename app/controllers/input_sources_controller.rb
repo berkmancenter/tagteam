@@ -52,7 +52,7 @@ class InputSourcesController < ApplicationController
       if @input_source.save and (@input_source.item_source_type != 'SearchRemix' or @republished_feed)
         current_user.has_role!(:owner, @input_source)
         current_user.has_role!(:creator, @input_source)
-        flash[:notice] = 'Add that input source'
+        #flash[:notice] = 'Added that input source'
         format.html{
           unless request.xhr?
             if params[:return_to]
@@ -70,12 +70,12 @@ class InputSourcesController < ApplicationController
           end
         }
       else
-        flash[:error] = 'Could not add that input source'
+        #flash[:error] = 'Could not add that input source'
         format.html {
           unless request.xhr?
             render :action => :new
           else 
-            render :text => %Q|Could not add that input source. <br />#{@input_source.errors.full_messages.join('<br/>')} Sorry!|, :status => :unprocessable_entity
+            render :text => %Q|Could not add that input source. <br />#{@input_source.errors.full_messages.join('<br/>')}. Sorry!|, :status => :unprocessable_entity
           end
         }
       end
@@ -165,9 +165,9 @@ class InputSourcesController < ApplicationController
       @republished_feed = @input_source.republished_feed
       @hub = @republished_feed.hub
       @input_source.destroy
-      flash[:notice] = 'Removed that item'
+      flash[:notice] = 'Removed that input'
     rescue
-      flash[:notice] = 'Could not remove that item'
+      flash[:notice] = 'Could not remove that input'
     end
     redirect_to hub_republished_feed_url(@hub,@republished_feed)
   end

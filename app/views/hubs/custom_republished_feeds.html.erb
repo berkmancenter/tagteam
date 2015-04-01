@@ -1,15 +1,15 @@
-<div class="republished_feed hover_row" id="republished_feed_new %>">
-  <div class="grid_1 alpha">
-  </div>
-  <div class="grid_12"> 
-    <a title="Create new remix feed" data_id="0" id="republished_feed-0" class="ui-silk inline ui-silk-accept gray hover choose_republished_feed"></a> 
-    <span class="ui-silk inline ui-silk-feed-add"></span> 
-    <%= link_to("Create new remix feed", hub_republished_feed_path(@hub,0), :target => '_blank', :data_id => 0, :class => 'choose_republished_feed') %>
-  </div>
-  <div class="clear"></div>
-</div>
 <% if @republished_feeds.size > 0 %>
+  <h3>Remixed Feeds</h3>
+  <ul>
   <%= render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds %>
+  </ul>
 <% else %>
-  <div class="empty-message"><%= "None yet. You should create a remixed feed from the \"remixes\" tab on the hub page." %></div>
+  <div class="empty-message">
+    <%= "None yet. You should create a remixed feed from the \"remixes\" tab on the hub page." %>
+  </div>
 <% end %>
+
+<div class="republished_feed">
+<%= link_to "Create new remix feed", hub_republished_feed_path(@hub, 0),
+  target: '_blank', data_id: 0, class: 'btn btn-primary' %>
+</div>

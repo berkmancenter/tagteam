@@ -1,8 +1,3 @@
-<div class="republished_feed hover_row" id="republished_feed_<%= republished_feed_choice.id %>">
-  <div class="grid_1 alpha">
-  </div>
-  <div class="grid_12"> 
-    <a title="Add to <%= republished_feed_choice.title %>" data_id="<%= republished_feed_choice.id %>" id="republished_feed-<%= republished_feed_choice.id %>" class="ui-silk inline ui-silk-accept gray hover choose_republished_feed"></a> <span class="ui-silk inline ui-silk-feed-go"></span> <%= link_to(republished_feed_choice.title,hub_republished_feed_path(@hub,republished_feed_choice), :target => '_blank', :data_id => republished_feed_choice.id, :class => 'choose_republished_feed') %>
-  </div>
-  <div class="clear"></div>
-</div>
+<li class="republished_feed" id="republished_feed_<%= republished_feed_choice.id %>">
+<%= link_to(republished_feed_choice.title,hub_republished_feed_path(@hub,republished_feed_choice), :target => '_blank', :data_id => republished_feed_choice.id, :class => 'choose_republished_feed') %>
+</li>
