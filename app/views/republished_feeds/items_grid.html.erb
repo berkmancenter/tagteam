@@ -7,11 +7,10 @@
 <% end %>
 
 <% content_for :tab_content do %>
-<%= render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @search.results } %>
-
-<% if @search.total == 0 %>
-  <p>None yet. Please add some feeds from the <%= link_to "Inputs tab", hub_hub_feeds_path(@hub) %>.</p>
+<% if @search.blank? || @search.total == 0 %>
+  <p>None yet. Please add items or tags from <%= link_to "the hub", items_hub_path(@hub) %>.</p>
 <% else %>
+  <%= render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @search.results } %>
   <%= render partial: 'feed_items/grid', object: @search.results, as: :feed_items %>
 <% end %>
 
