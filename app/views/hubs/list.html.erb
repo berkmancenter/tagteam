@@ -1,7 +1,7 @@
  <div id="hub_list">
    <h2>Hubs</h2>
      <% unless current_user.blank? %>
-       <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New Hub'), new_hub_path, :class => 'new_object') %>
+       <%= link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New hub'), new_hub_path, :class => 'new_object') %>
      <% end %>
      <p></p>
      <div id="masonry" class="search_results">

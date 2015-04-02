@@ -41,7 +41,7 @@
                 <p class="navbar-text welcome">Welcome, <%= link_to current_user.username, edit_user_registration_path %> &ndash;
                 <%= link_to "Logout", destroy_user_session_path, method: :delete, id: 'logged_in' %></p>
               <% else %>
-                <%= link_to "Sign In", new_user_session_path, class: 'btn btn-default navbar-btn' %>
+                <%= link_to "Sign in", new_user_session_path, class: 'btn btn-default navbar-btn' %>
               <% end %>
             </div>
           </div>

@@ -204,7 +204,7 @@ class FeedItem < ActiveRecord::Base
   alias :display_title :to_s
 
   def self.title
-    'RSS Feed Item'
+    'RSS feed item'
   end
 
   # Used to emit this FeedItem as an array when it's included in at RepublishedFeed.

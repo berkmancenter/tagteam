@@ -42,7 +42,7 @@ class HubFeedItemTagFilter < ActiveRecord::Base
   end
 
   def self.title
-    'Feed Item Tag Filter'
+    'Feed item tag filter'
   end
 
 end

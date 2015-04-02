@@ -47,7 +47,7 @@ class Hub < ActiveRecord::Base
       }
     }, 
     :remixer => {
-      :name => 'Feed Remixer', 
+      :name => 'Feed remixer', 
       :description => 'Can remix items in this hub into new remixed feeds',
       :objects_of_concern => lambda{|user,hub|
         #Find all republished_feeds in this hub owned by this user.
@@ -55,7 +55,7 @@ class Hub < ActiveRecord::Base
       }
     },
     :hub_tag_filterer => {
-      :name => 'Hub-wide Tag Filter Manager', 
+      :name => 'Hub-wide tag filter manager', 
       :description => 'Can manage hub-wide tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
         #Find all hub_tag_filters in this hub owned by this user.
@@ -63,14 +63,14 @@ class Hub < ActiveRecord::Base
       }
     },
     :hub_feed_tag_filterer => {
-      :name => 'Feed-wide Tag Filter Manager', 
+      :name => 'Feed-wide tag filter manager', 
       :description => 'Can manage feed-level tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
         return user.my_objects_in(HubFeedTagFilter, hub)
       }
     },
     :hub_feed_item_tag_filterer => {
-      :name => 'Feed Item Tag Filter Manager', 
+      :name => 'Feed item tag filter manager', 
       :description => 'Can manage item-level tag filters in this hub',
       :objects_of_concern => lambda{|user,hub|
         #Find all hub_feed_item_tag_filters in this hub owned by this user.
@@ -78,7 +78,7 @@ class Hub < ActiveRecord::Base
       }
     },
     :inputter => {
-      :name => 'Input Feed Manager', 
+      :name => 'Input feed manager', 
       :description => 'Can manage input feeds',
       :objects_of_concern => lambda{|user,hub|
         #Find all hub_feeds that aren't bookmarking collections in this hub owned by this user.

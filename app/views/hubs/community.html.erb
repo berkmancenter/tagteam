@@ -13,7 +13,7 @@
   <% if current_user && current_user.is?(:owner, @hub) %> 
       <div class="grant_roles col-md-6">
     <%= form_tag(add_roles_hub_path(@hub)) do %>
-        <h3>Assign Roles</h3>
+        <h3>Assign roles</h3>
         <ul class="list-unstyled">
           <% Hub::DELEGATABLE_ROLES_FOR_FORMS.each do|r| %>
             <li class="role">
@@ -34,7 +34,7 @@
               <%= text_field_tag :find_user_autocomplete, '', size: 40, placeholder: "Username or email address", class: 'form-control' %>
           </div>
           <div id="user_id_container"></div>
-          <%= submit_tag('Grant Roles', class: 'btn btn-primary', id: 'add_roles') %>
+          <%= submit_tag('Grant roles', class: 'btn btn-primary', id: 'add_roles') %>
 
         <%= javascript_tag %Q|$(document).ready(function(){
   $.observeAutocomplete($.rootPath() + 'users/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container','search_select user'); 
@@ -45,7 +45,7 @@
   <% end %>
 
     <div class="remove_roles col-md-6">
-      <h3>Remove Roles</h3>
+      <h3>Remove roles</h3>
       <%= form_tag(remove_roles_hub_path(@hub)) do %>
         <table class="table table-condensed">
           <tr>
@@ -79,7 +79,7 @@
             <% end %>
           </div>
         </div>
-        <%= submit_tag 'Remove Roles', class: 'btn btn-primary', id: 'remove_roles' %>
+        <%= submit_tag 'Remove roles', class: 'btn btn-primary', id: 'remove_roles' %>
       <% end %>
     </div>
   </div>

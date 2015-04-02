@@ -8,7 +8,7 @@
 
 <% content_for :tab_content do %>
 <div class="feed_retrievals nicely-padded">
-  <h1>Update History</h1>
+  <h1>Update history</h1>
   <% if @feed_retrievals.blank? %>
     <h2>None found.</h2>
   <% else %>
@@ -17,8 +17,8 @@
       <tr>
         <th>Feed</th>
         <th>Time</th>
-        <th>New Items</th>
-        <th>Changed Items</th>
+        <th>New items</th>
+        <th>Changed items</th>
       </tr>
       <%= render partial: 'feed_retrievals/list_item', as: :feed_retrieval,
         collection: @feed_retrievals.results, locals: { show_feed: true } %>

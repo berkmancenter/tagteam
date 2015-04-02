@@ -104,7 +104,7 @@ class FeedRetrieval < ActiveRecord::Base
   alias :to_s :display_title
 
   def self.title
-    "Feed Update"
+    "Feed update"
   end
 
 end
