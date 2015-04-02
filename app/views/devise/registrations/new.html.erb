@@ -1,25 +1,36 @@
+<div class="center-block devise-form">
 <h2>Sign up</h2>
 <p><strong>Note:</strong> You will need to confirm your TagTeam account via a link sent to the email address you enter below.</p>
-<p><strong>Please check your email after you create an account.</strong></p>
+<p class="text-danger"><strong>Please check your email after you create an account.</strong></p>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
-  <div>
-    <%= f.label :username %><br/>
-    <%= f.text_field :username %></div>
+  <div class="form-group">
+    <%= f.label :username %>
+    <%= f.text_field :username, class: 'form-control' %>
+  </div>
 
-  <div>
-    <%= f.label :email %><br />
-  <%= f.email_field :email %></div>
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.email_field :email, class: 'form-control' %>
+  </div>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
+  <div class="form-group">
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+  </div>
 
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
+  <div class="form-group">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, class: 'form-control' %>
+  </div>
 
-  <div><%= f.submit "Sign up", :class => :button %></div>
+  <div class="form-group">
+    <%= f.submit "Sign up", class: 'btn btn-success btn-block' %>
+  </div>
 <% end %>
 
+<hr />
 <%= render "links" %>
+</div>

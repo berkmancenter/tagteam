@@ -1,17 +1,30 @@
-<h2>Sign in</h2>
+<div class="center-block devise-form">
+  <h2>Sign in</h2>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <div class="form-group">
+      <%= f.label :login %>
+      <%= f.text_field :login, class: 'form-control' %>
+    </div>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :login %><br />
-  <%= f.text_field :login %></div>
+    <div class="form-group">
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+    </div>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
+    <% if devise_mapping.rememberable? -%>
+    <div class="checkbox">
+      <%= f.label :remember_me do %>
+        <%= f.check_box :remember_me %> Remember me
+      <% end %>
+    </div>
+    <% end -%>
 
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%>
+    <div class="form-group">
+      <%= f.submit "Sign in", class: 'btn btn-primary btn-block' %>
+    </div>
+  <% end %>
 
-  <div><%= f.submit "Sign in", :class => :button %></div>
-<% end %>
+  <hr />
 
-<%= render "links" %>
+  <%= render "links" %>
+</div>
