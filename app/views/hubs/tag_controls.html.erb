@@ -45,18 +45,18 @@
     <hr />
     <ul>
       <li>
-    <%= link_to 'Add to a remixed feed',
+    <%= link_to 'Add to a remix feed',
       custom_republished_feeds_hub_path(@hub || @hub_feed.hub),
-      title: "Add #{@tag.name} to a remixed feed",
+      title: "Add #{@tag.name} to a remix feed",
       class: 'dialog-show add_item_source_to_custom_republished_feed',
       data_item_type: 'ActsAsTaggableOn::Tag',
       data_item_id: @tag.id %>
     </li>
 
       <li>
-    <%= link_to 'Remove from a remixed feed',
+    <%= link_to 'Remove from a remix feed',
       custom_republished_feeds_hub_path(@hub || @hub_feed.hub),
-      title: "Remove #{@tag.name} from a remixed feed",
+      title: "Remove #{@tag.name} from a remix feed",
       class: 'dialog-show remove_item_source_from_custom_republished_feed',
       data_item_type: 'ActsAsTaggableOn::Tag',
       data_item_id: @tag.id %>

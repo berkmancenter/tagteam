@@ -48,7 +48,7 @@ class Hub < ActiveRecord::Base
     }, 
     :remixer => {
       :name => 'Feed remixer', 
-      :description => 'Can remix items in this hub into new remixed feeds',
+      :description => 'Can remix items in this hub into new remix feeds',
       :objects_of_concern => lambda{|user,hub|
         #Find all republished_feeds in this hub owned by this user.
         return user.my_objects_in(RepublishedFeed, hub)

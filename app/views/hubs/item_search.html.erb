@@ -24,7 +24,7 @@
     <% unless @search.blank? || @search.results.length == 0 %>
       <%= link_to('Permalink', item_search_hub_path(@hub, q: params[:q])) %> &nbsp;
       <% if current_user %>
-        <%= link_to('Add to a remixed feed', custom_republished_feeds_hub_path(@hub), 
+        <%= link_to('Add to a remix feed', custom_republished_feeds_hub_path(@hub), 
           data_item_id: 0,
           data_item_type: 'SearchRemix', 
           title: "Choose the remix feed to add this search to",

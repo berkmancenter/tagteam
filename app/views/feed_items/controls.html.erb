@@ -8,20 +8,20 @@
     <% if current_user.is?([:owner, :remixer],@hub) %>
       <li>
       <%= link_to custom_republished_feeds_hub_path(@hub),
-        title: "Add #{@feed_item} to a remixed feed",
+        title: "Add #{@feed_item} to a remix feed",
         class: 'dialog-show add_item_source_to_custom_republished_feed',
         data_item_type: 'FeedItem',
         data_item_id: @feed_item.id do %>
-        <%= fa_icon 'plus-square', text: 'Add to a remixed feed', class: 'text-warning' %>
+        <%= fa_icon 'plus-square', text: 'Add to a remix feed', class: 'text-warning' %>
       <% end %>
       </li>
       <li>
       <%= link_to custom_republished_feeds_hub_path(@hub),
-        title: "Remove #{@feed_item} from a remixed feed",
+        title: "Remove #{@feed_item} from a remix feed",
         class: 'dialog-show remove_item_source_from_custom_republished_feed',
         data_item_type: 'FeedItem',
         data_item_id: @feed_item.id do %>
-        <%= fa_icon 'minus-square', text: 'Remove from a remixed feed', class: 'text-warning' %>
+        <%= fa_icon 'minus-square', text: 'Remove from a remix feed', class: 'text-warning' %>
       <% end %>
       </li>
     <% end %>

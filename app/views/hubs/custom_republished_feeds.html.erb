@@ -1,11 +1,11 @@
 <% if @republished_feeds.size > 0 %>
-  <h3>Remixed feeds</h3>
+  <h3>Remix feeds</h3>
   <ul>
   <%= render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds %>
   </ul>
 <% else %>
   <div class="empty-message">
-    <%= "None yet. You should create a remixed feed from the \"remixes\" tab on the hub page." %>
+    <%= "None yet. You should create a remix feed from the \"remixes\" tab on the hub page." %>
   </div>
 <% end %>
 
