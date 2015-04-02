@@ -4,21 +4,21 @@
     <div class="alert alert-success alert-dismissable col-md-12" role="alert">
       <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
         <span class="sr-only">Close</span></button>
-      <%= flash[:notice] %>
+        <strong><%= flash[:notice] %></strong>
     </div>
   <% end %>
   <% unless flash[:error].blank? %>
     <div class="alert alert-danger alert-dismissable col-md-12" role="alert">
       <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
         <span class="sr-only">Close</span></button>
-      <%= flash[:error] %>
+      <strong><%= flash[:error] %></strong>
     </div>
   <% end %>
   <% unless flash[:alert].blank? %>
     <div class="alert alert-warning alert-dismissable col-md-12" role="alert">
       <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span>
         <span class="sr-only">Close</span></button>
-      <%= flash[:alert] %>
+      <strong><%= flash[:alert] %></strong>
     </div>
   <% end %>
 </section>

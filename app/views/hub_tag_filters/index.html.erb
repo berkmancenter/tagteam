@@ -10,7 +10,7 @@
 <div class="nicely-padded">
 
   <% if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub) %>
-    <h1>Hub-wide filters</h1>
+    <h1>Add hub-wide filters</h1>
     <ul class="tag_filter_controls list-unstyled">
       <li>
       <%= link_to hub_hub_tag_filters_path(@hub),

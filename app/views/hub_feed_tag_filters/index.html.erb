@@ -9,7 +9,7 @@
 <% content_for :tab_content do %>
   <div class="nicely-padded">
 <% if current_user && current_user.is?([:owner, :hub_feed_tag_filterer], @hub) %>
-  <h1>Feed-wide filters</h1>
+  <h1>Add feed-wide filters</h1>
   <% tag_list = @hub_feed_tag_filters.map {|f| f.filter.tag.name}.join(', ') %>
       <ul class="tag_filter_controls list-unstyled">
         <li>
