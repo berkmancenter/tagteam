@@ -67,7 +67,7 @@ module ApplicationHelper
   end
 
   def show_liblab?
-    whitelist = [['hubs', 'index']]
+    whitelist = [['hubs', 'home']]
     whitelist.include? [controller_name, action_name]
   end
 end
