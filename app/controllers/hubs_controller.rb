@@ -499,7 +499,7 @@ class HubsController < ApplicationController
     flash[:notice] = 'Deleted that hub'
     respond_to do|format|
       format.html{
-        redirect_to :action => :index
+        redirect_to :back
       }
     end
   end
