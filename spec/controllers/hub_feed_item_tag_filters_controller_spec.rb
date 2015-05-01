@@ -1,7 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe HubFeedItemTagFiltersController do
-  include Devise::TestHelpers
+RSpec.describe HubFeedItemTagFiltersController, type: :controller do
   context "create" do
     before do
       @user = User.first

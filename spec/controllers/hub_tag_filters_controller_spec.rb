@@ -1,11 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe HubTagFiltersController do
-  include Devise::TestHelpers
   context "#create" do
     before do
       @user = User.first
-      @hub = Hub.find 3
+      @hub = Hub.first
       @user.has_role!(:owner, @hub)
       @user.has_role!(:creator, @hub)
       sign_in @user
