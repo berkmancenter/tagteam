@@ -27,6 +27,7 @@ gem 'sinatra', '>= 1.3.0', :require => false
 gem 'less-rails-bootstrap', '~> 3.0'
 gem 'font-awesome-rails'
 gem 'formtastic-bootstrap', git: 'https://github.com/mjbellantoni/formtastic-bootstrap.git'
+gem 'uglifier'
 
 group :development, :test do
   gem 'awesome_print'

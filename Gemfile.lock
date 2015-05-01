@@ -91,6 +91,7 @@ GEM
     erubis (2.7.0)
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
+    execjs (2.5.2)
     feed-abstract (0.0.13)
     ffi (1.9.6)
     font-awesome-rails (4.2.0.0)
@@ -243,6 +244,9 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.42)
+    uglifier (2.7.1)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     unicorn (4.8.3)
       kgio (~> 2.6)
       rack
@@ -298,6 +302,7 @@ DEPENDENCIES
   sunspot_rails
   sunspot_solr
   therubyracer
+  uglifier
   unicorn
   whenever
   will_paginate
