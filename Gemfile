@@ -47,5 +47,7 @@ group :test do
   gem 'selenium-client'
   gem 'selenium-webdriver'
   gem 'launchy'
+  gem 'webmock'
+  gem 'vcr'
 end
 
