@@ -4,6 +4,7 @@
 #
 class HubTagFilter < ActiveRecord::Base
   include AuthUtilities
+  include Orderable
   acts_as_authorization_object
   acts_as_api do |c|
     c.allow_jsonp_callback = true
