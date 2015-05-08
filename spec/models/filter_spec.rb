@@ -9,6 +9,27 @@ shared_context "User owns a hub with a feed and items" do
   end
 end
 
+shared_examples "a hub-level tag filter" do |filter_type|
+  context "other hubs exist" do
+    it "doesn't affect other hubs", wip: true do
+    end
+  end
+end
+
+shared_examples "a feed-level tag filter" do |filter_type|
+  context "other feeds exist" do
+    it "doesn't affect other feeds", wip: true do
+    end
+  end
+end
+
+shared_examples "an item-level tag filter" do |filter_type|
+  context "other items exist" do
+    it "doesn't affect other items", wip: true do
+    end
+  end
+end
+
 shared_examples "a tag filter" do |filter_type|
   include_context "User owns a hub with a feed and items"
 
@@ -47,23 +68,7 @@ shared_examples "a tag filter" do |filter_type|
         expect(filter_list.first).to eq @filter
       end
     end
-
-    context "other hubs exist and filter is scoped to a hub" do
-      it "doesn't affect other hubs", wip: true do
-      end
-    end
-
-    context "other feeds exist and filter is scoped to a feed" do
-      it "doesn't affect other feeds", wip: true do
-      end
-    end
-
-    context "other items exists and filter is scoped to an item" do
-      it "doesn't affect other items", wip: true do
-      end
-    end
   end
-
 
   context "A hub-level filter exists that adds a tag" do
     before(:each) do
@@ -91,9 +96,9 @@ describe AddTagFilter, "scoped to a hub" do
 
     it "adds tags" do
       new_tag = 'add-test'
-      add_filter(new_tag)
+      filter = add_filter(new_tag)
       tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
-      expect(tag_lists).to all( include new_tag )
+      expect(tag_lists).to be_consistent_with filter
     end
   end
 
@@ -128,9 +133,6 @@ describe ModifyTagFilter, "scoped to a hub" do
 
       new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key, true)
 
-      correct_tag_lists = old_tag_lists.map do |list|
-        list.map{ |tag| tag == old_tag ? new_tag : tag }.sort
-      end
 
       expect(new_tag_lists).to eq correct_tag_lists.sort
     end
