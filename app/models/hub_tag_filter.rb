@@ -13,7 +13,7 @@ class HubTagFilter < ActiveRecord::Base
   belongs_to :filter, :polymorphic => true, :dependent => :destroy
   attr_accessible :filter_type, :filter_id
   after_save :update_filtered_items
-  before_destroy :update_filtered_items
+  after_destroy :update_filtered_items
   before_validation :validate_filter_uniqueness
 
   api_accessible :default do |t|

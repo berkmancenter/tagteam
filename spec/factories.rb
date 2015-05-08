@@ -51,17 +51,15 @@ FactoryGirl.define do
     name { generate(:tag_name) }
   end
 
-  trait :tag_filter do
-    tag { association(:tag, name: tag_name) }
-    transient { tag_name }
+  factory :add_tag_filter do
+    tag
   end
-
-  factory :add_tag_filter, traits: [:tag_filter]
-  factory :delete_tag_filter, traits: [:tag_filter]
+  factory :delete_tag_filter do
+    tag
+  end
   factory :modify_tag_filter do
-    tag_filter
-    new_tag { association(:tag, name: new_tag_name) }
-    transient { new_tag_name }
+    tag
+    association :new_tag, factory: :tag
   end
 
   factory :hub_tag_filter, class: HubTagFilter do
@@ -69,16 +67,15 @@ FactoryGirl.define do
     filter do
       filter_class = "#{type}_tag_filter".to_sym
       if type == :modify
-        association(filter_class, tag: tag, new_tag_name: new_tag_name)
+        association(filter_class, tag: tag, new_tag: new_tag)
       else
-        association(filter_class, tag_name: tag_name)
+        association(filter_class, tag: tag)
       end
     end
 
     transient do
-      tag_name
-      new_tag_name
-      tag { build(:tag) }
+      tag { create(:tag) }
+      new_tag { create(:tag) }
       type :add
     end
 

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec::Matchers.define_negated_matcher :not_contain, :include
-
 shared_context "User owns a hub with a feed and items" do
   before(:each) do
     @user = create(:confirmed_user)
     @hub = create(:hub, :with_feed, :owned, owner: @user)
+    @hub_feed = @hub.hub_feeds.first
+    @feed_items = @hub_feed.feed_items
   end
 end
 
@@ -14,10 +14,6 @@ shared_examples "a tag filter" do |filter_type|
 
   context "The filter exists" do
     before(:each) do
-      @filter = create(:hub_tag_filter, type: filter_type, hub: @hub, tag_name: 'shared-test')
-    end
-
-    it "rolls back its changes when removed", wip: true do
     end
 
     it "regains precedence when renewed", wip: true do
@@ -62,38 +58,56 @@ describe AddTagFilter do
   include_context "User owns a hub with a feed and items"
 
   it "adds tags" do
-    @hub.hub_tag_filters << create(:hub_tag_filter, type: :add, tag_name: 'add-test')
-    feed_items = @hub.hub_feeds.first.feed_items
-    tag_lists = tag_lists_for(feed_items, @hub.tagging_key)
-    expect(tag_lists).to all( include 'add-test' )
+    new_tag = create(:tag, name: 'add-test')
+    @hub.hub_tag_filters << create(:hub_tag_filter, type: :add, tag: new_tag)
+    tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+    expect(tag_lists).to all( include new_tag.name )
+  end
+
+  it "rolls back its changes when removed" do
+    tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+
+    new_tag = create(:tag, name: 'add-test')
+    filter = create(:hub_tag_filter, type: :add, tag: new_tag)
+    @hub.hub_tag_filters << filter
+
+    filter.destroy
+
+    new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
+
+    expect(new_tag_lists).to eq tag_lists
   end
 end
 
 describe ModifyTagFilter do
-  it_behaves_like "a tag filter", ModifyTagFilter
+  it_behaves_like "a tag filter", :modify
   include_context "User owns a hub with a feed and items"
 
   it "modifies tags" do
     old_tag = ActsAsTaggableOn::Tag.find_by_name('social')
-    new_tag_name = 'not-social'
-    feed_items = @hub.hub_feeds.first.feed_items
-    old_tag_lists = tag_lists_for(feed_items, @hub.tagging_key)
+    new_tag = create(:tag, name: 'not-social')
+    old_tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
 
     @hub.hub_tag_filters << create(:hub_tag_filter, type: :modify,
-                                   tag: old_tag, new_tag_name: new_tag_name)
+                                   tag: old_tag, new_tag: new_tag)
 
-    new_tag_lists = tag_lists_for(feed_items.reload, @hub.tagging_key)
+    new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
     correct_tag_lists = old_tag_lists.map do |list|
-      list.map{ |tag| tag == old_tag.name ? new_tag_name : tag }
+      list.map{ |tag| tag == old_tag.name ? new_tag.name : tag }
     end
     expect(new_tag_lists).to eq correct_tag_lists
   end
 end
 
 describe DeleteTagFilter do
-  it_behaves_like "a tag filter", DeleteTagFilter
+  it_behaves_like "a tag filter", :delete
   include_context "User owns a hub with a feed and items"
 
-  it "removes tags", wip: true do
+  it "removes tags" do
+    deleted_tag = ActsAsTaggableOn::Tag.find_by_name('social')
+    @hub.hub_tag_filters << create(:hub_tag_filter,
+                                   type: :delete, tag: deleted_tag)
+    tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+    expect(tag_lists).to all( not_contain deleted_tag.name )
   end
 end
