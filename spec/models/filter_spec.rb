@@ -10,7 +10,15 @@ shared_context "User owns a hub with a feed and items" do
 end
 
 shared_examples "a hub-level tag filter" do |filter_type|
+  it "cannot conflict with other hub-level filters in same hub", wip: true do
+  end
+
   context "other hubs exist" do
+    before(:each) do
+      @hub2 = create(:hub, :with_feed)
+      @feed_items2 = @hub2.hub_feeds.first.feed_items
+    end
+
     it "doesn't affect other hubs", wip: true do
     end
   end
@@ -44,8 +52,6 @@ shared_examples "a tag filter" do |filter_type|
     expect(new_tag_lists).to eq tag_lists
   end
 
-  it "cannot conflict with other filters in a scope", wip: true do
-  end
 
   context "The filter exists" do
     before(:each) do
@@ -98,7 +104,7 @@ describe AddTagFilter, "scoped to a hub" do
       new_tag = 'add-test'
       filter = add_filter(new_tag)
       tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
-      expect(tag_lists).to be_consistent_with filter
+      expect(tag_lists).to show_effects_of filter
     end
   end
 
@@ -127,14 +133,11 @@ describe ModifyTagFilter, "scoped to a hub" do
     it "modifies tags" do
       old_tag = 'social'
       new_tag = 'not-social'
-      old_tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
 
-      add_filter(old_tag, new_tag)
-
+      filter = add_filter(old_tag, new_tag)
       new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key, true)
 
-
-      expect(new_tag_lists).to eq correct_tag_lists.sort
+      expect(new_tag_lists).to show_effects_of filter
     end
   end
 
@@ -159,10 +162,10 @@ describe DeleteTagFilter, "scoped to a hub" do
     it "removes tags" do
       deleted_tag = 'social'
 
-      add_filter(deleted_tag)
+      filter = add_filter(deleted_tag)
 
       tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
-      expect(tag_lists).to all( not_contain deleted_tag )
+      expect(tag_lists).to show_effects_of filter
     end
   end
 

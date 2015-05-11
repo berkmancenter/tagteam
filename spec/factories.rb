@@ -62,6 +62,7 @@ FactoryGirl.define do
     association :new_tag, factory: :tag
   end
 
+
   factory :hub_tag_filter, class: HubTagFilter do
     hub
     filter do
@@ -85,5 +86,12 @@ FactoryGirl.define do
       end
       after(:create) { |filter, evaluator| set_roles(filter, evaluator) }
     end
+  end
+
+  factory :feed_tag_filter, class: HubFeedTagFilter do
+    hub_feed
+  end
+
+  factory :item_tag_filter, class: HubFeedItemTagFilter do
   end
 end

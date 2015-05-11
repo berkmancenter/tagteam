@@ -1,36 +1,33 @@
 require 'rails_helper'
 
-describe Hub do
-
-  before :all do
-    @hub1 = Hub.create(
-      :title => 'Test hub', 
-      :description => 'Test description',
-      :tag_prefix => ''
-    )
-    @hub2 = Hub.create(
-      :title => 'Test hub', 
-      :description => 'Test description'
-    )
+describe Hub, "#apply_tag_filters" do
+  before(:each) do
+    @hub = create(:hub, :with_feed)
   end
 
-  before :each do
-    @hub = Hub.new
-  end
-
-  context do
-    it 'has basic attributes', :attributes => true do
-      should have_many(:hub_feeds)
-      should have_many(:hub_tag_filters)
-      should have_many(:republished_feeds)
-      should have_many(:feeds).through(:hub_feeds)
-      should respond_to(:owners)
-      should validate_presence_of(:title)
-      should ensure_length_of(:title).is_at_most(500.bytes)
-      should ensure_length_of(:description).is_at_most(2.kilobytes)
-      should have_db_index(:title)
-      should have_db_index(:tag_prefix)
+  it "makes item tags consistent with filters" do
+    Sidekiq::Testing.fake! do
+      new_tag = create(:tag, name: 'added-tag')
+      @hub.tag_filters << create(:hub_tag_filter, type: :add, tag: new_tag)
+      @hub << create(:hub_tag_filter, type: :add, tag: new_tag)
+      @hub.apply_tag_filters
     end
   end
 
+  it "returns the hub on success" do
+    expect(@hub.apply_tag_filters).to eq @hub
+  end
+end
+
+describe Hub, '#tag_filters' do
+  it "returns all tag filters in application order" do
+    hub = create(:hub, :with_feed)
+
+    filter1 = create(:hub_tag_filter, hub: hub)
+    filter2 = create(:feed_tag_filter, feed: hub.hub_feeds.first)
+    filter3 = create(:item_tag_filter, item: hub.hub_feeds.first.feed_items.first)
+    filter4 = create(:hub_tag_filter, hub: hub)
+
+    expect(hub.tag_filters).to eq [filter1, filter2, filter3]
+  end
 end
