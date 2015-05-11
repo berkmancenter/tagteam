@@ -3,8 +3,17 @@ def set_roles(object, evaluator)
   evaluator.owner.has_role!(:creator, object)
 end
 
+def filter_association(action, tag, new_tag = nil)
+  filter_class = "#{action}_tag_filter".to_sym
+  if :modify == action
+    association(filter_class, tag: tag, new_tag: new_tag)
+  else
+    association(filter_class, tag: tag)
+  end
+end
+
 FactoryGirl.define do
-  sequence :tag_name, aliases: [:new_tag_name] do |n|
+  sequence :tag_name do |n|
     "test-tag-#{n}"
   end
 
@@ -51,10 +60,17 @@ FactoryGirl.define do
   end
 
   factory :feed do
-    before(:create) { VCR.insert_cassette('feed_factory') }
+    before(:create) { |feed| VCR.insert_cassette("feed_factory-#{feed.feed_url}") }
     after(:create) { VCR.eject_cassette }
 
-    feed_url 'http://reagle.org/joseph/blog/?flav=atom'
+    sequence(:feed_url) do |n|
+      feeds = [
+       'http://reagle.org/joseph/blog/?flav=atom',
+       'http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/',
+       'http://feeds.feedburner.com/mfeldstein/feed/',
+      ]
+      feeds[n - 1]
+    end
   end
 
   factory :tag, class: ActsAsTaggableOn::Tag do
@@ -72,24 +88,19 @@ FactoryGirl.define do
     association :new_tag, factory: :tag
   end
 
-  trait :filter do
-    filter_class = "#{type}_tag_filter".to_sym
-    if type == :modify
-      association(filter_class, tag: tag, new_tag: new_tag)
-    else
-      association(filter_class, tag: tag)
-    end
-
+  trait :filter_transients do
     transient do
+      action :add
       tag { create(:tag) }
       new_tag { create(:tag) }
-      type :add
     end
   end
 
   factory :hub_tag_filter, class: HubTagFilter do
     hub
-    filter
+
+    filter { filter_association(action, tag, new_tag) }
+    filter_transients
 
     trait :owned do
       transient do
@@ -101,7 +112,9 @@ FactoryGirl.define do
 
   factory :feed_tag_filter, class: HubFeedTagFilter do
     hub_feed { association :hub_feed, hub: hub, feed: feed }
-    filter
+
+    filter { filter_association(action, tag, new_tag) }
+    filter_transients
 
     transient do
       hub
@@ -113,6 +126,7 @@ FactoryGirl.define do
     hub
     feed_item
 
-    filter
+    filter { filter_association(action, tag, new_tag) }
+    filter_transients
   end
 end

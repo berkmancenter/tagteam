@@ -88,7 +88,7 @@ end
 describe AddTagFilter, "scoped to a hub" do
   def add_filter(tag_name = 'add-test')
     new_tag = create(:tag, name: tag_name)
-    filter = create(:hub_tag_filter, type: :add, tag: new_tag)
+    filter = create(:hub_tag_filter, action: :add, tag: new_tag)
     @hub.hub_tag_filters << filter
     filter
   end
@@ -115,7 +115,7 @@ describe ModifyTagFilter, "scoped to a hub" do
   def add_filter(old_tag = 'social', new_tag = 'not-social')
     filter = create(
       :hub_tag_filter,
-      type: :modify,
+      action: :modify,
       tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
       new_tag: create(:tag, name: new_tag)
     )
@@ -146,7 +146,7 @@ end
 
 describe DeleteTagFilter, "scoped to a hub" do
   def add_filter(old_tag = 'social')
-    filter = create(:hub_tag_filter, type: :delete,
+    filter = create(:hub_tag_filter, action: :delete,
                     tag: ActsAsTaggableOn::Tag.find_by_name(old_tag))
     @hub.hub_tag_filters << filter
     filter

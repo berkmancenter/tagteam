@@ -14,7 +14,7 @@ module FeedUtilities
     begin
       response = fetch(feed.feed_url)
     rescue
-      self.errors.add(:feed_url, "couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
+      self.errors.add(:feed_url, "'#{feed.feed_url}' couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
       return false
     end
     parsed_feed = ''
