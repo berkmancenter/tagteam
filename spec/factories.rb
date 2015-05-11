@@ -40,6 +40,16 @@ FactoryGirl.define do
     end
   end
 
+  factory :hub_feed do
+    hub
+    feed
+  end
+
+  factory :feed_item do
+    title 'Test Title'
+    sequence(:url) { |n| "http://example.com/?tag=#{n}" }
+  end
+
   factory :feed do
     before(:create) { VCR.insert_cassette('feed_factory') }
     after(:create) { VCR.eject_cassette }
@@ -62,16 +72,12 @@ FactoryGirl.define do
     association :new_tag, factory: :tag
   end
 
-
-  factory :hub_tag_filter, class: HubTagFilter do
-    hub
-    filter do
-      filter_class = "#{type}_tag_filter".to_sym
-      if type == :modify
-        association(filter_class, tag: tag, new_tag: new_tag)
-      else
-        association(filter_class, tag: tag)
-      end
+  trait :filter do
+    filter_class = "#{type}_tag_filter".to_sym
+    if type == :modify
+      association(filter_class, tag: tag, new_tag: new_tag)
+    else
+      association(filter_class, tag: tag)
     end
 
     transient do
@@ -79,6 +85,11 @@ FactoryGirl.define do
       new_tag { create(:tag) }
       type :add
     end
+  end
+
+  factory :hub_tag_filter, class: HubTagFilter do
+    hub
+    filter
 
     trait :owned do
       transient do
@@ -89,9 +100,19 @@ FactoryGirl.define do
   end
 
   factory :feed_tag_filter, class: HubFeedTagFilter do
-    hub_feed
+    hub_feed { association :hub_feed, hub: hub, feed: feed }
+    filter
+
+    transient do
+      hub
+      feed
+    end
   end
 
   factory :item_tag_filter, class: HubFeedItemTagFilter do
+    hub
+    feed_item
+
+    filter
   end
 end

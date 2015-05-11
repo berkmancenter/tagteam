@@ -138,6 +138,12 @@ class Hub < ActiveRecord::Base
     nickname_changed?
   end   
 
+  def apply_tag_filters
+  end
+
+  def tag_filters
+  end
+
   def self.top_new_hubs
     self.order('created_at DESC').limit(3)
   end
