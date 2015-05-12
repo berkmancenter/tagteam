@@ -1,4 +1,3 @@
-RSpec::Matchers.define_negated_matcher :not_contain, :include
 RSpec::Matchers.define :show_effects_of do |filter|
   match do |tag_lists|
     case filter.filter.class.name
@@ -27,6 +26,9 @@ RSpec::Matchers.define :show_effects_of do |filter|
     end
   end
 end
+
+RSpec::Matchers.define_negated_matcher :not_contain, :include
+RSpec::Matchers.define_negated_matcher :not_show_effects_of, :show_effects_of
 
 def tag_lists_for(feed_items, context, sorted = false)
   lists = feed_items.map do |fi|

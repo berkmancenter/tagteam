@@ -5,7 +5,7 @@ describe Hub, "#apply_tag_filters" do
     @hub = create(:hub, :with_feed)
   end
 
-  it "makes item tags consistent with filters" do
+  it "makes item tags consistent with filters", wip: true do
     Sidekiq::Testing.fake! do
       new_tag = create(:tag, name: 'added-tag')
       filter = create(:hub_tag_filter, type: :add, tag: new_tag)
@@ -26,8 +26,9 @@ describe Hub, '#tag_filters' do
     hub = create(:hub, :with_feed)
 
     filter1 = create(:hub_tag_filter, hub: hub)
-    filter2 = create(:feed_tag_filter, feed: hub.hub_feeds.first)
-    filter3 = create(:item_tag_filter, item: hub.hub_feeds.first.feed_items.first)
+    filter2 = create(:feed_tag_filter, hub_feed: hub.hub_feeds.first)
+    filter3 = create(:item_tag_filter, hub: hub,
+                     feed_item: hub.hub_feeds.first.feed_items.first)
     filter4 = create(:hub_tag_filter, hub: hub)
 
     expect(hub.tag_filters).to eq [filter1, filter2, filter3, filter4]

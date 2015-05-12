@@ -17,7 +17,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 11 May 2015 20:07:03 GMT
+      - Tue, 12 May 2015 14:42:40 GMT
       Content-Type:
       - text/html; charset=iso-8859-1
       Content-Length:
@@ -39,7 +39,7 @@ http_interactions:
         <p>The document has moved <a href="http://reagle.org/joseph/pelican/feeds/all.atom.xml">here</a>.</p>
         </body></html>
     http_version: 
-  recorded_at: Mon, 11 May 2015 20:07:03 GMT
+  recorded_at: Tue, 12 May 2015 14:42:40 GMT
 - request:
     method: get
     uri: http://reagle.org/joseph/pelican/feeds/all.atom.xml
@@ -57,7 +57,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 11 May 2015 20:07:04 GMT
+      - Tue, 12 May 2015 14:42:41 GMT
       Content-Type:
       - application/xml
       Content-Length:
@@ -805,5 +805,5 @@ http_interactions:
         PjxjYXRlZ29yeSB0ZXJtPSJzb2NpYWwiPjwvY2F0ZWdvcnk+PGNhdGVnb3J5
         IHRlcm09ImZlbWluaXNtIj48L2NhdGVnb3J5PjwvZW50cnk+PC9mZWVkPg==
     http_version: 
-  recorded_at: Mon, 11 May 2015 20:07:04 GMT
+  recorded_at: Tue, 12 May 2015 14:42:41 GMT
 recorded_with: VCR 2.9.3

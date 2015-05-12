@@ -11,6 +11,7 @@
 class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
+  include TagFilterable
   extend FriendlyId
 
   before_validation do
@@ -105,9 +106,13 @@ class Hub < ActiveRecord::Base
   end
 
   has_many :hub_feeds, :dependent => :destroy
-  has_many :hub_tag_filters, :dependent => :destroy, :order => 'updated_at desc'
-  has_many :republished_feeds, :dependent => :destroy, :order => 'created_at desc'
+  has_many :feed_items, through: :hub_feeds
   has_many :feeds, :through => :hub_feeds
+  has_many :republished_feeds, :dependent => :destroy, :order => 'created_at desc'
+
+  has_many :hub_tag_filters, :dependent => :destroy, :order => 'updated_at desc'
+  has_many :hub_feed_tag_filters, through: :hub_feeds
+  has_many :hub_feed_item_tag_filters
 
   api_accessible :default do |t|
     t.add :id
@@ -137,12 +142,6 @@ class Hub < ActiveRecord::Base
   def should_generate_new_friendly_id?
     nickname_changed?
   end   
-
-  def apply_tag_filters
-  end
-
-  def tag_filters
-  end
 
   def self.top_new_hubs
     self.order('created_at DESC').limit(3)

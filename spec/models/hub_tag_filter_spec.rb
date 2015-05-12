@@ -1,15 +1,8 @@
 require 'rails_helper'
 
-shared_context "User owns a hub with a feed and items" do
-  before(:each) do
-    @user = create(:confirmed_user)
-    @hub = create(:hub, :with_feed, :owned, owner: @user)
-    @hub_feed = @hub.hub_feeds.first
-    @feed_items = @hub_feed.feed_items
-  end
-end
-
 shared_examples "a hub-level tag filter" do |filter_type|
+  include_context "user owns a hub with a feed and items"
+
   it "cannot conflict with other hub-level filters in same hub", wip: true do
   end
 
@@ -19,68 +12,14 @@ shared_examples "a hub-level tag filter" do |filter_type|
       @feed_items2 = @hub2.hub_feeds.first.feed_items
     end
 
-    it "doesn't affect other hubs", wip: true do
-    end
-  end
-end
+    it "doesn't affect other hubs" do
+      filter = add_filter
 
-shared_examples "a feed-level tag filter" do |filter_type|
-  context "other feeds exist" do
-    it "doesn't affect other feeds", wip: true do
-    end
-  end
-end
+      tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+      other_tag_lists = tag_lists_for(@feed_items2, @hub2.tagging_key)
 
-shared_examples "an item-level tag filter" do |filter_type|
-  context "other items exist" do
-    it "doesn't affect other items", wip: true do
-    end
-  end
-end
-
-shared_examples "a tag filter" do |filter_type|
-  include_context "User owns a hub with a feed and items"
-
-  it "rolls back its changes when removed" do
-    tag_lists = tag_lists_for(@feed_items, @hub.tagging_key, true)
-
-    filter = add_filter
-    filter.destroy
-
-    new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key, true)
-
-    expect(new_tag_lists).to eq tag_lists
-  end
-
-
-  context "The filter exists" do
-    before(:each) do
-      @filter = add_filter
-    end
-
-    it "loses precedence to more recent filters" do
-      @hub.hub_tag_filters << create(:hub_tag_filter)
-
-      expect(filter_list.first).to_not eq @filter
-    end
-
-    it "cannot be duplicated in a hub", wip: true do
-    end
-
-    context "it's older than another filter" do
-      it "regains precedence when renewed" do
-        @hub.hub_tag_filters << create(:hub_tag_filter)
-        @filter.renew
-        expect(filter_list.first).to eq @filter
-      end
-    end
-  end
-
-  context "A hub-level filter exists that adds a tag" do
-    before(:each) do
-    end
-
-    it "takes precedence over the existing filter", wip: true do
+      expect(tag_lists).to show_effects_of filter
+      expect(other_tag_lists).to not_show_effects_of filter
     end
   end
 end
@@ -97,8 +36,8 @@ describe AddTagFilter, "scoped to a hub" do
     @hub.hub_tag_filters
   end
 
-  context "User owns a hub with a feed and items" do
-    include_context "User owns a hub with a feed and items"
+  context "user owns a hub with a feed and items" do
+    include_context "user owns a hub with a feed and items"
 
     it "adds tags" do
       new_tag = 'add-test'
@@ -109,6 +48,7 @@ describe AddTagFilter, "scoped to a hub" do
   end
 
   it_behaves_like "a tag filter", :add
+  it_behaves_like "a hub-level tag filter"
 end
 
 describe ModifyTagFilter, "scoped to a hub" do
@@ -127,8 +67,8 @@ describe ModifyTagFilter, "scoped to a hub" do
     @hub.hub_tag_filters
   end
 
-  context "User owns a hub with a feed and items" do
-    include_context "User owns a hub with a feed and items"
+  context "user owns a hub with a feed and items" do
+    include_context "user owns a hub with a feed and items"
 
     it "modifies tags" do
       old_tag = 'social'
@@ -139,9 +79,11 @@ describe ModifyTagFilter, "scoped to a hub" do
 
       expect(new_tag_lists).to show_effects_of filter
     end
+
   end
 
   it_behaves_like "a tag filter", :modify
+  it_behaves_like "a hub-level tag filter"
 end
 
 describe DeleteTagFilter, "scoped to a hub" do
@@ -156,8 +98,8 @@ describe DeleteTagFilter, "scoped to a hub" do
     @hub.hub_tag_filters
   end
 
-  context "User owns a hub with a feed and items" do
-    include_context "User owns a hub with a feed and items"
+  context "user owns a hub with a feed and items" do
+    include_context "user owns a hub with a feed and items"
 
     it "removes tags" do
       deleted_tag = 'social'
@@ -167,7 +109,9 @@ describe DeleteTagFilter, "scoped to a hub" do
       tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
       expect(tag_lists).to show_effects_of filter
     end
+
   end
 
   it_behaves_like "a tag filter", :delete
+  it_behaves_like "a hub-level tag filter"
 end

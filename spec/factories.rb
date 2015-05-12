@@ -33,8 +33,11 @@ FactoryGirl.define do
     title 'My hub'
 
     trait :with_feed do
-      after(:create) do |hub|
-        hub.feeds << create(:feed)
+      after(:create) do |hub, evaluator|
+        hub.feeds << create(:feed, with_url: evaluator.with_feed_url)
+      end
+      transient do
+        with_feed_url 0
       end
     end
 
@@ -60,17 +63,22 @@ FactoryGirl.define do
   end
 
   factory :feed do
-    before(:create) { |feed| VCR.insert_cassette("feed_factory-#{feed.feed_url}") }
+    before(:create) { |feed| VCR.insert_cassette("feed_factory-#{URI(feed.feed_url).host}") }
     after(:create) { VCR.eject_cassette }
+    transient do
+      with_url 0
+    end
 
-    sequence(:feed_url) do |n|
+    feed_url do |feed|
       feeds = [
        'http://reagle.org/joseph/blog/?flav=atom',
        'http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/',
        'http://feeds.feedburner.com/mfeldstein/feed/',
       ]
-      feeds[n - 1]
+      feeds[feed.with_url % feeds.size]
     end
+
+    initialize_with { Feed.find_or_create_by_feed_url(feed_url) }
   end
 
   factory :tag, class: ActsAsTaggableOn::Tag do
@@ -117,8 +125,8 @@ FactoryGirl.define do
     filter_transients
 
     transient do
-      hub
-      feed
+      hub { create(:hub) }
+      feed { create(:feed) }
     end
   end
 

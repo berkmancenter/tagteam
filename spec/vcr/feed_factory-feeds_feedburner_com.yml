@@ -17,11 +17,11 @@ http_interactions:
       Content-Type:
       - text/xml; charset=UTF-8
       Last-Modified:
-      - Mon, 11 May 2015 19:11:21 GMT
+      - Tue, 12 May 2015 14:51:45 GMT
       Date:
-      - Mon, 11 May 2015 20:37:55 GMT
+      - Tue, 12 May 2015 15:10:53 GMT
       Expires:
-      - Mon, 11 May 2015 20:37:55 GMT
+      - Tue, 12 May 2015 15:10:53 GMT
       Cache-Control:
       - private, max-age=0
       X-Content-Type-Options:
@@ -2621,5 +2621,5 @@ http_interactions:
         LWJ1dC13aWxsLWl0LW1hdHRlci88L2ZlZWRidXJuZXI6b3JpZ0xpbms+PC9p
         dGVtPg0KCTwvY2hhbm5lbD4NCjwvcnNzPg0K
     http_version: 
-  recorded_at: Mon, 11 May 2015 20:37:55 GMT
+  recorded_at: Tue, 12 May 2015 15:10:53 GMT
 recorded_with: VCR 2.9.3
