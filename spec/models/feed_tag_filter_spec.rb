@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 shared_examples "a feed-level tag filter" do |filter_type|
+  include_context "user owns a hub with a feed and items" 
+
   context "other feeds exist" do
     before(:each) do
       @feed2 = create(:feed, with_url: 1)
-      @hub.hub_feeds << create(feed: @feed2)
-      @feed_items2 = @hub.hub_feeds.where(feed: @feed2).first.feed_items
+      @hub.hub_feeds << create(:hub_feed, feed: @feed2)
+      @feed_items2 = @hub.hub_feeds.where(feed_id: @feed2.id).first.feed_items
     end
 
     it "doesn't affect other feeds" do
@@ -81,7 +83,7 @@ describe ModifyTagFilter, "scoped to a feed" do
   it_behaves_like "a feed-level tag filter"
 end
 
-describe DeleteTagFilter, "scoped to a feed", wip: true do
+describe DeleteTagFilter, "scoped to a feed" do
   def add_filter(old_tag = 'social')
     filter = create(:feed_tag_filter, action: :delete,
                     tag: ActsAsTaggableOn::Tag.find_by_name(old_tag))
