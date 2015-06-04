@@ -77,6 +77,10 @@ ActsAsTaggableOn::Tag.instance_eval do
   
 end
 
+ActsAsTaggableOn::Tagging.instance_eval do
+  default_scope where(active: true)
+end
+
 ActsAsTaggableOn::Taggable.class_eval do
   def first_use_of_tag_in_context(tag, context)
     tagged_with(tag, :on => context).order("created_at").limit(1).first.created_at

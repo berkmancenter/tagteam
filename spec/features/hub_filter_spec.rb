@@ -1,12 +1,9 @@
 require "rails_helper"
 
-shared_examples "a tag filter" do
-end
-
 feature "Hub-level tag filtering" do
   #it_behaves_like "a tag filter"
 
-  context "User owns a hub with 10 items" do
+  context "User owns a hub with items", wip: true do
     scenario "User creates a new 'add' filter" do
       visit hub_hub_tag_filters_path @hub
       click_link ".add_filter_control"
@@ -20,8 +17,6 @@ feature "Hub-level tag filtering" do
 
     context "At least one item has tag 'test-tag'" do
       scenario "User creates a new 'modify' filter" do
-        visit hub_hub_tag_filters_path @hub
-        click_link "Modify a tag for every item in this hub"
       end
 
       scenario "User creates a new 'remove' filter" do

@@ -8,7 +8,7 @@ describe Hub, "#apply_tag_filters" do
   it "makes item tags consistent with filters", wip: true do
     Sidekiq::Testing.fake! do
       new_tag = create(:tag, name: 'added-tag')
-      filter = create(:hub_tag_filter, type: :add, tag: new_tag)
+      filter = create(:hub_tag_filter, action: :add, tag: new_tag)
       @hub.hub_tag_filters << filter
       @hub.apply_tag_filters
       feed_items = @hub.hub_feeds.first.feed_items

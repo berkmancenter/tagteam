@@ -1,41 +1,40 @@
-# An AddTagFilter lets you add a ActsAsTaggableOn::Tag to an object via a HubTagFilter, HubFeedTagFilter or HubFeedItemTagFilter.
-# 
-# Most validations are contained in the ModelExtensions mixin.
-#
-class AddTagFilter < ActiveRecord::Base
-  include ModelExtensions
-  acts_as_api do|c|
-    c.allow_jsonp_callback = true
+class AddTagFilter < TagFilter
+  def apply
+    items_in_scope.each do |item|
+      item.taggings.create(tag: tag, tagger: self, context: hub.tagging_key)
+    end
+    deactivate_taggings!
   end
 
-  has_one :hub_tag_filter, :as => :filter
-  has_one :hub_feed_tag_filter, :as => :filter
-  has_one :hub_feed_item_tag_filter, :as => :filter
-
-  belongs_to :tag, :class_name => 'ActsAsTaggableOn::Tag'
-  validates_presence_of :tag_id
-  attr_accessible :tag_id
-
-  api_accessible :default do|t|
-    t.add :id
-    t.add :tag
+  def rollback
+    # This needs to happen first so we can figure out which taggings to leave
+    # deactivated.
+    reactivate_taggings!
+    taggings.destroy_all
   end
 
-  def description
-    'Add'
+  def deactivates_taggings
+    ActsAsTaggableOn::Tagging.where(
+      context: hub.tagging_key, tag_id: tag.id, active: true
+    ).order('created_at DESC').limit(1)
   end
 
-  def css_class
-    'add'
-  end
+  def reactivates_taggings
+    # This filter's taggings still exist, so we have to make sure not to pick
+    # them
+    reactivatable = ActsAsTaggableOn::Tagging.where(
+      context: hub.tagging_key, tag_id: tag.id, active: false
+    ).where('tagger_id != ? AND tagger_type != ?', id, self.class.name).
+      order('created_at DESC').limit(1)
 
-  # Does the actual "filtering" by appending itself into the tag list.
-  def act(filtered_tags)
-    filtered_tags << self.tag.name
-  end
+    # We don't want to reactivate any taggings that shouldn't be reactived.
+    # For example, a filter might have been added later than this one.
+    if taggings.where(active: false).count > 0
+      # This could probably be done with some crazy join
+      deactivated_tag_ids = taggings.where(active: false).pluck(:tag_id)
+      reactivatable = reactivatable.where('tag_id NOT IN ?', deactivated_tag_ids)
+    end
 
-  def self.title
-    'Add tag filter'
+    return reactivatable
   end
-
 end

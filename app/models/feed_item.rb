@@ -87,6 +87,10 @@ class FeedItem < ActiveRecord::Base
     time :last_updated
   end
 
+  def taggable_items
+    FeedItem.where(id: id)
+  end
+
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
     self.taggings.collect{|tg| "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'}.compact

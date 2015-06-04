@@ -128,6 +128,8 @@ class Hub < ActiveRecord::Base
     text :slug
     text :nickname
   end
+
+  alias_method :taggable_items, :feed_items
   
   def clean_slug
     # work around FriendlyId bug that generates slugs for empty nicknames

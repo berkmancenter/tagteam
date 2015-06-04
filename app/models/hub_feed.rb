@@ -84,6 +84,8 @@ class HubFeed < ActiveRecord::Base
     'Feed'
   end
 
+  alias_method :taggable_items, :feed_items
+
   def display_title
     (self.title.blank?) ? self.feed.title : self.title
   end
