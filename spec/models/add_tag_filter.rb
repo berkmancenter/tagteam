@@ -25,7 +25,16 @@ describe AddTagFilter, '#rollback' do
 
   context 'a newer filter exists that deactivates some taggings' do
     it 'does not reactivate taggings it should not' do
-      # If this filter is in the middle of a chain and gets deleted
+      # Some items come in from the external feed with 'tag1'
+      # We add a hub filter that adds 'tag1' to all feed items
+      # We add a feed filter that adds 'tag1' to all feed items
+      # We rollback the hub filter
+      # It shouldn't reactivate external feed taggings for items affected
+      # by the feed filter
+      #
+      # We add a hub filter that adds 'tag1' to all items
+      # We add a modify filter that changes 'tag1' to 'tag2'
+      # We rollback the add filter
     end
   end
 end

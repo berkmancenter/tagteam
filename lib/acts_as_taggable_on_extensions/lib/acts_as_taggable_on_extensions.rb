@@ -84,6 +84,8 @@ ActsAsTaggableOn::Tagging.instance_eval do
       deactivated.update_attribute(:id, self.id)
       self.destroy
     end
+
+    deactivated
   end
 end
 

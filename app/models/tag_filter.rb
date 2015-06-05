@@ -6,9 +6,10 @@ class TagFilter < ActiveRecord::Base
   has_many :taggings, as: :tagger
   has_many :deactivated_taggings, as: :tagger
 
+  VALID_SCOPE_TYPES = ['Hub', 'HubFeed', 'FeedItem']
   include ModelExtensions
   validates_presence_of :tag_id
-  validates :scope_type, inclusion: { in: ['Hub', 'HubFeed', 'FeedItem'] }
+  validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
 
   attr_accessible :tag_id
 
@@ -40,17 +41,32 @@ class TagFilter < ActiveRecord::Base
     self.class.name.sub('TagFilter', '').downcase
   end
 
-  def apply
-    deactivate_taggings!
-    items_in_scope.each do |item|
-      item.taggings.create(tag: tag, tagger: self, context: hub.tagging_key)
-    end
-  end
-
   def rollback
+    # We rollback any filters ahead of this filter in the chain, so we can
+    # always assume that this is the most recent filter.
     reactivate_taggings!
     taggings.destroy_all
-    deactivated_taggings.destroy_all
+  end
+
+  # Somewhat surprisingly, this code is the same for the add and delete
+  # filters. In the add filter, it deactivates what would be duplicate
+  # taggings. In the delete filter, it deactivates the taggings it's supposed
+  # to.
+  #
+  # For example, if hub filter adds 'tag1', and now we create a feed filter
+  # that adds 'tag1', all the 'tag1' tags for items in this feed should be
+  # owned by the feed filter.
+  def deactivates_taggings
+    # Deactivates any taggings that are the same except in owner.
+    ActsAsTaggableOn::Tagging.
+      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
+      where('taggable_id IN ?', items_in_scope.pluck(:id))
+  end
+
+  def reactivates_taggings
+    DeactivatedTagging.
+      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
+      where('taggable_id IN ?', items_in_scope.pluck(:id))
   end
 
   def deactivate_taggings!

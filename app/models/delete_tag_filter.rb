@@ -1,7 +1,5 @@
 class DeleteTagFilter < TagFilter
   def apply
-  end
-
-  def rollback
+    deactivate_taggings!
   end
 end
