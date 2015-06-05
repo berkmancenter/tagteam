@@ -73,12 +73,18 @@ ActsAsTaggableOn::Tag.instance_eval do
   def self.title
     "Tag"
   end
-
-  
 end
 
 ActsAsTaggableOn::Tagging.instance_eval do
-  default_scope where(active: true)
+  def deactivate
+    deactivated = self.clone.becomes(DeactivatedTagging)
+
+    DeactivatedTagging.transaction do
+      deactivated.save
+      deactivated.update_attribute(:id, self.id)
+      self.destroy
+    end
+  end
 end
 
 ActsAsTaggableOn::Taggable.class_eval do
