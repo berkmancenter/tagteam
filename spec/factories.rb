@@ -3,15 +3,6 @@ def set_roles(object, evaluator)
   evaluator.owner.has_role!(:creator, object)
 end
 
-def filter_association(action, tag, new_tag = nil)
-  filter_class = "#{action}_tag_filter".to_sym
-  if :modify == action
-    association(filter_class, tag: tag, new_tag: new_tag)
-  else
-    association(filter_class, tag: tag)
-  end
-end
-
 FactoryGirl.define do
   sequence :tag_name do |n|
     "test-tag-#{n}"
@@ -60,6 +51,16 @@ FactoryGirl.define do
   factory :feed_item do
     title 'Test Title'
     sequence(:url) { |n| "http://example.com/?tag=#{n}" }
+
+    transient do
+      tag 'test-tag'
+    end
+
+    trait :tagged do
+      after(:create) do |item|
+        item.tag_list.add(tag)
+      end
+    end
   end
 
   factory :feed do
@@ -85,56 +86,25 @@ FactoryGirl.define do
     name { generate(:tag_name) }
   end
 
-  factory :add_tag_filter do
-    tag
-  end
-  factory :delete_tag_filter do
-    tag
-  end
-  factory :modify_tag_filter do
-    tag
-    association :new_tag, factory: :tag
-  end
-
-  trait :filter_transients do
-    transient do
-      action :add
-      tag { create(:tag) }
-      new_tag { create(:tag) }
-    end
-  end
-
-  factory :hub_tag_filter, class: HubTagFilter do
+  factory :tag_filter do
     hub
+    tag
+    scope { hub }
 
-    filter { filter_association(action, tag, new_tag) }
-    filter_transients
-
-    trait :owned do
-      transient do
-        owner create(:user)
-      end
-      after(:create) { |filter, evaluator| set_roles(filter, evaluator) }
+    factory :add_tag_filter
+    factory :delete_tag_filter
+    factory :modify_tag_filter do
+      association :new_tag, factory: :tag
     end
   end
 
-  factory :feed_tag_filter, class: HubFeedTagFilter do
-    hub_feed { association :hub_feed, hub: hub, feed: feed }
+  factory :tagging, class: ActsAsTaggableOn::Tagging do
+    tag
+    association :taggable, factory: :feed_item
+    tagger { create(:add_tag_filter, tag: tag) }
 
-    filter { filter_association(action, tag, new_tag) }
-    filter_transients
-
-    transient do
-      hub { create(:hub) }
-      feed { create(:feed) }
+    trait :with_context do
+      context { create(:hub).tagging_key }
     end
-  end
-
-  factory :item_tag_filter, class: HubFeedItemTagFilter do
-    hub
-    feed_item
-
-    filter { filter_association(action, tag, new_tag) }
-    filter_transients
   end
 end

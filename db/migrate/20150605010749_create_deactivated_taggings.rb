@@ -13,10 +13,11 @@ class CreateDeactivatedTaggings < ActiveRecord::Migration
       t.datetime :created_at
     end
 
-    add_index :deactivated_taggings, [:taggable_id, :taggable_type, :context]
+    add_index :deactivated_taggings, [:taggable_id, :taggable_type, :context],
+      name: 'd_taggings_type_idx'
     add_index :deactivated_taggings, [:taggable_type, :context]
-    add_index :deactivated_taggings, [:tag_id, :taggable_id, :taggable_type
+    add_index :deactivated_taggings, [:tag_id, :taggable_id, :taggable_type,
                           :context, :tagger_id, :tagger_type],
-                            unique: true, name: 'taggings_idx'
+                            unique: true, name: 'd_taggings_idx'
   end
 end

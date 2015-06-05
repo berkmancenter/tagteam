@@ -11,23 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150213205538) do
+ActiveRecord::Schema.define(:version => 20150605201636) do
 
-  create_table "add_tag_filters", :force => true do |t|
+  create_table "deactivated_taggings", :force => true do |t|
     t.integer  "tag_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context"
+    t.datetime "created_at"
   end
 
-  add_index "add_tag_filters", ["tag_id"], :name => "index_add_tag_filters_on_tag_id"
-
-  create_table "delete_tag_filters", :force => true do |t|
-    t.integer  "tag_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "delete_tag_filters", ["tag_id"], :name => "index_delete_tag_filters_on_tag_id"
+  add_index "deactivated_taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], :name => "d_taggings_idx", :unique => true
+  add_index "deactivated_taggings", ["taggable_id", "taggable_type", "context"], :name => "d_taggings_type_idx"
+  add_index "deactivated_taggings", ["taggable_type", "context"], :name => "index_deactivated_taggings_on_taggable_type_and_context"
 
   create_table "documentations", :force => true do |t|
     t.string   "match_key",   :limit => 100,                       :null => false
@@ -127,34 +125,6 @@ ActiveRecord::Schema.define(:version => 20150213205538) do
   add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
   add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
 
-  create_table "hub_feed_item_tag_filters", :force => true do |t|
-    t.integer  "hub_id"
-    t.integer  "feed_item_id"
-    t.string   "filter_type",     :limit => 100, :null => false
-    t.integer  "filter_id",                      :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.string   "created_by_type"
-    t.integer  "created_by_id"
-  end
-
-  add_index "hub_feed_item_tag_filters", ["feed_item_id"], :name => "index_hub_feed_item_tag_filters_on_feed_item_id"
-  add_index "hub_feed_item_tag_filters", ["filter_id"], :name => "index_hub_feed_item_tag_filters_on_filter_id"
-  add_index "hub_feed_item_tag_filters", ["filter_type"], :name => "index_hub_feed_item_tag_filters_on_filter_type"
-  add_index "hub_feed_item_tag_filters", ["hub_id"], :name => "index_hub_feed_item_tag_filters_on_hub_id"
-
-  create_table "hub_feed_tag_filters", :force => true do |t|
-    t.integer  "hub_feed_id"
-    t.string   "filter_type", :limit => 100, :null => false
-    t.integer  "filter_id",                  :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-  end
-
-  add_index "hub_feed_tag_filters", ["filter_id"], :name => "index_hub_feed_tag_filters_on_filter_id"
-  add_index "hub_feed_tag_filters", ["filter_type"], :name => "index_hub_feed_tag_filters_on_filter_type"
-  add_index "hub_feed_tag_filters", ["hub_feed_id"], :name => "index_hub_feed_tag_filters_on_hub_feed_id"
-
   create_table "hub_feeds", :force => true do |t|
     t.integer  "feed_id",                     :null => false
     t.integer  "hub_id",                      :null => false
@@ -167,18 +137,6 @@ ActiveRecord::Schema.define(:version => 20150213205538) do
   add_index "hub_feeds", ["feed_id"], :name => "index_hub_feeds_on_feed_id"
   add_index "hub_feeds", ["hub_id", "feed_id"], :name => "index_hub_feeds_on_hub_id_and_feed_id", :unique => true
   add_index "hub_feeds", ["hub_id"], :name => "index_hub_feeds_on_hub_id"
-
-  create_table "hub_tag_filters", :force => true do |t|
-    t.integer  "hub_id"
-    t.string   "filter_type", :limit => 100, :null => false
-    t.integer  "filter_id",                  :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
-  end
-
-  add_index "hub_tag_filters", ["filter_id"], :name => "index_hub_tag_filters_on_filter_id"
-  add_index "hub_tag_filters", ["filter_type"], :name => "index_hub_tag_filters_on_filter_type"
-  add_index "hub_tag_filters", ["hub_id"], :name => "index_hub_tag_filters_on_hub_id"
 
   create_table "hubs", :force => true do |t|
     t.string   "title",       :limit => 500,  :null => false
@@ -208,16 +166,6 @@ ActiveRecord::Schema.define(:version => 20150213205538) do
   add_index "input_sources", ["item_source_id"], :name => "index_input_sources_on_item_source_id"
   add_index "input_sources", ["item_source_type", "item_source_id", "effect", "republished_feed_id"], :name => "bob_the_index", :unique => true
   add_index "input_sources", ["republished_feed_id"], :name => "index_input_sources_on_republished_feed_id"
-
-  create_table "modify_tag_filters", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "new_tag_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "modify_tag_filters", ["new_tag_id"], :name => "index_modify_tag_filters_on_new_tag_id"
-  add_index "modify_tag_filters", ["tag_id"], :name => "index_modify_tag_filters_on_tag_id"
 
   create_table "republished_feeds", :force => true do |t|
     t.integer  "hub_id"
@@ -259,6 +207,23 @@ ActiveRecord::Schema.define(:version => 20150213205538) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
+
+  create_table "tag_filters", :force => true do |t|
+    t.integer  "hub_id",     :null => false
+    t.integer  "tag_id",     :null => false
+    t.integer  "new_tag_id"
+    t.integer  "scope_id"
+    t.string   "scope_type"
+    t.string   "type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "tag_filters", ["hub_id"], :name => "index_tag_filters_on_hub_id"
+  add_index "tag_filters", ["new_tag_id"], :name => "index_tag_filters_on_new_tag_id"
+  add_index "tag_filters", ["scope_type", "scope_id"], :name => "index_tag_filters_on_scope_type_and_scope_id"
+  add_index "tag_filters", ["tag_id"], :name => "index_tag_filters_on_tag_id"
+  add_index "tag_filters", ["type"], :name => "index_tag_filters_on_type"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
