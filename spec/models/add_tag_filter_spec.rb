@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe AddTagFilter do
   include_examples TagFilter
 end
@@ -50,9 +52,10 @@ end
 describe '#deactivates_taggings' do
   context 'the filter is scoped to a hub' do
     context 'the filter adds tag "a"' do
-      before(:all) do
+      before(:context) do
+        @tag = create(:tag, name: 'a')
         @filter = create(
-          :add_tag_filter, tag: create(:tag, name: 'a'), scope: create(:hub))
+          :add_tag_filter, tag: @tag, scope: create(:hub))
       end
 
       context 'no feed items exist' do
@@ -62,7 +65,7 @@ describe '#deactivates_taggings' do
       end
 
       context 'a feed item exists with tag "a"' do
-        before(:all) do
+        before(:context) do
           @feed_item = create(:feed_item, :tagged, tag: 'a')
         end
         it 'returns the tagging attaching tag "a" to that feed item' do
@@ -71,7 +74,7 @@ describe '#deactivates_taggings' do
       end
 
       context 'a feed item exists with tag "b"' do
-        before(:all) do
+        before(:context) do
           @feed_item = create(:feed_item, :tagged, tag: 'b')
         end
         it 'returns nothing' do

@@ -91,9 +91,9 @@ FactoryGirl.define do
     tag
     scope { hub }
 
-    factory :add_tag_filter
-    factory :delete_tag_filter
-    factory :modify_tag_filter do
+    factory :add_tag_filter, class: AddTagFilter
+    factory :delete_tag_filter, class: DeleteTagFilter
+    factory :modify_tag_filter, class: ModifyTagFilter do
       association :new_tag, factory: :tag
     end
   end
@@ -102,9 +102,6 @@ FactoryGirl.define do
     tag
     association :taggable, factory: :feed_item
     tagger { create(:add_tag_filter, tag: tag) }
-
-    trait :with_context do
-      context { create(:hub).tagging_key }
-    end
+    context 'tags'
   end
 end

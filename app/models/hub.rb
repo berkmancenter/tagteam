@@ -38,7 +38,6 @@ class Hub < ActiveRecord::Base
   end
 
   has_many :hub_feeds, dependent: :destroy
-  has_many :feed_items, through: :hub_feeds
   has_many :feeds, through: :hub_feeds
   has_many :republished_feeds, dependent: :destroy, order: 'created_at desc'
 
@@ -60,6 +59,10 @@ class Hub < ActiveRecord::Base
     text :nickname
   end
 
+
+  def feed_items
+    FeedItem.joins(:hubs).where(hubs: { id: id })
+  end
   alias_method :taggable_items, :feed_items
 
   def clean_slug

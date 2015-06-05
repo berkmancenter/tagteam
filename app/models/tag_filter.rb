@@ -62,6 +62,7 @@ class TagFilter < ActiveRecord::Base
   # owned by the feed filter.
   def deactivates_taggings(items: items_in_scope)
     # Deactivates any taggings that are the same except in owner.
+    return ActsAsTaggableOn::Tagging.where('1=2') if items.empty?
     ActsAsTaggableOn::Tagging.
       where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
       where('taggable_id IN ?', items.pluck(:id))

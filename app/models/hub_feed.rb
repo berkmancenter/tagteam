@@ -50,7 +50,7 @@ class HubFeed < ActiveRecord::Base
   # in TagTeam or not) are calculated.
   after_create do
     self.feed.solr_index
-    Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.id)
+     #Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
   after_destroy do
