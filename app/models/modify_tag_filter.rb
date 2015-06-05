@@ -24,26 +24,26 @@ class ModifyTagFilter < TagFilter
     items_in_scope.tagged_with(new_tag.name, on: hub.tagging_key, owned_by: self)
   end
 
-  def apply
-    deactivate_taggings!
-    affects_items.each do |item|
+  def apply(items: affects_items)
+    deactivate_taggings!(items: items)
+    items.each do |item|
       item.taggings.create(tag: new_tag, tagger: self, context: hub.tagging_key)
     end
   end
 
-  def deactivates_taggings
+  def deactivates_taggings(items: items_with_old_tag)
     taggings = ActsAsTaggableOn::Tagging.arel_table
 
     # Deactivates any taggings that have the old tag
     old_tag = taggings.
       where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
-      where('taggable_id IN ?', items_with_old_tag.pluck(:id))
+      where('taggable_id IN ?', items.pluck(:id))
 
     # Deactivates any taggings that result in the same tag on the same item
     duplicate_tag = taggings.
       where(context: hub.tagging_key, tag_id: new_tag.id,
             taggable_type: FeedItem).
-      where('taggable_id IN ?', items_with_old_tag.pluck(:id))
+      where('taggable_id IN ?', items.pluck(:id))
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end

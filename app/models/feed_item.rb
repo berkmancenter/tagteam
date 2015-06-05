@@ -18,6 +18,7 @@
 
 class FeedItem < ActiveRecord::Base
   include ModelExtensions
+  include TagScopable
 
   acts_as_taggable
   acts_as_authorization_object
@@ -102,6 +103,16 @@ class FeedItem < ActiveRecord::Base
     time :last_updated
   end
 
+  def apply_tag_filters
+    all_tag_filters.each do |tag_filter|
+      tag_filter.apply(items: [self])
+    end
+  end
+
+  def all_tag_filters
+    hubs.all.each(&:all_tag_filters).flatten
+  end
+  
   def taggable_items
     # We want to return an ActiveRecord object
     FeedItem.where(id: id)

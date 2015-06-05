@@ -1,5 +1,5 @@
 class DeleteTagFilter < TagFilter
-  def apply
-    deactivate_taggings!
+  def apply(items: items_in_scope)
+    deactivate_taggings!(items: items)
   end
 end

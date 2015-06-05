@@ -19,8 +19,9 @@
 class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
-  include TagFilterable
   include DelegatableRoles
+  include TagFilterable
+  include TagScopable
   extend FriendlyId
 
   attr_accessible :title, :description, :tag_prefix, :nickname
@@ -41,7 +42,8 @@ class Hub < ActiveRecord::Base
   has_many :feeds, through: :hub_feeds
   has_many :republished_feeds, dependent: :destroy, order: 'created_at desc'
 
-  has_many :tag_filters, dependent: :destroy, order: 'updated_at desc'
+  has_many :all_tag_filters, class_name: 'TagFilter',
+    dependent: :destroy, order: 'updated_at DESC'
 
   api_accessible :default do |t|
     t.add :id
@@ -83,6 +85,20 @@ class Hub < ActiveRecord::Base
   # Used as the key to track the tag facet for this Hub's tags in a FeedItem.
   def tagging_key
     "hub_#{self.id}".to_sym
+  end
+
+  def tag_filters_after(tag_filter)
+    all_tag_filters.where('updated_at > ?', tag_filter.updated_at)
+  end
+
+  # We rollback any filters ahead of the deleted filter in the chain so we can
+  # reapply and keep filters consistent.
+  def before_tag_filter_destroy(tag_filter)
+    tag_filters_after(tag_filter).each(&:rollback)
+  end
+
+  def after_tag_filter_destroy(tag_filter)
+    tag_filters_after(tag_filter).each(&:apply)
   end
 
   def tag_counts

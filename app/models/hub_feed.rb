@@ -8,6 +8,7 @@
 class HubFeed < ActiveRecord::Base
   include ModelExtensions
   include AuthUtilities
+  include TagScopable
 
   acts_as_authorization_object
   acts_as_api do|c|
