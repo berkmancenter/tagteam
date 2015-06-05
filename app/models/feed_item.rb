@@ -1,34 +1,49 @@
-# A FeedItem is an individual bit of content that's gotten into TagTeam via a Feed or the bookmarklet. It can belong to many Feeds, has many ActsAsTaggableOn::Tag objects, and uses a subset of Dublin Core metadata to track it's info.
+# A FeedItem is an individual bit of content that's gotten into TagTeam via
+# a Feed or the bookmarklet. It can belong to many Feeds, has many
+# ActsAsTaggableOn::Tag objects, and uses a subset of Dublin Core metadata to
+# track it's info.
 #
-# A FeedItem belongs to a Hub through the HubFeed model, which means a FeedItem can belong to multiple Hubs as well. It has a separate tag context for every Hub, which is a pre-calculated tag list with the filters applied within that Hub. This means a FeedItem can have a separate set of tags for every Hub it appears in after filters are applied.
+# A FeedItem belongs to a Hub through the HubFeed model, which means a FeedItem
+# can belong to multiple Hubs as well. It has a separate tag context for every
+# Hub, which is a pre-calculated tag list with the filters applied within that
+# Hub. This means a FeedItem can have a separate set of tags for every Hub it
+# appears in after filters are applied.
 #
 # A FeedItem is unique on its url.
 #
-# A FeedItem can belong to one or more FeedRetrieval objects if more than one Feed contains this item.
+# A FeedItem can belong to one or more FeedRetrieval objects if more than one
+# Feed contains this item.
 #
 # Most validations are contained in the ModelExtensions mixin.
-#
+
 class FeedItem < ActiveRecord::Base
+  include ModelExtensions
+
   acts_as_taggable
   acts_as_authorization_object
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
-  include ModelExtensions
+
+  before_create :set_image_url
+  after_save :reindex_all_tags
 
   before_validation do
     auto_sanitize_html(:content, :description)
-    auto_truncate_columns(:title,:url,:guid,:authors,:contributors,:description,:content,:rights)
+    auto_truncate_columns(:title,:url,:guid,:authors,:contributors,
+                          :description,:content,:rights)
   end
+  validates_uniqueness_of :url
 
-  attr_accessible :title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated
+  has_and_belongs_to_many :feed_retrievals
+  has_and_belongs_to_many :feeds
+  has_many :hub_feeds, through: :feeds
+  has_many :hubs, through: :hub_feeds
+  has_many :input_sources, dependent: :destroy, as: :item_source
+
+  attr_accessible :title, :url, :guid, :authors, :contributors,
+    :description, :content, :rights, :date_published, :last_updated
   attr_accessor :hub_id, :bookmark_collection_id, :skip_tag_indexing_after_save
-  
-  # Necessary because we don't want to pass the huge content
-  # column over the wire if we don't need to.
-  def self.columns_for_line_item
-    [:id,:date_published, :title, :image_url, :url, :guid, :authors, :last_updated]
-  end
 
   api_accessible :default do |t|
     t.add :id
@@ -40,7 +55,7 @@ class FeedItem < ActiveRecord::Base
     t.add :hub_feed_ids
     t.add :date_published
     t.add :last_updated
-    t.add :tag_context_hierarchy, :as => :tags
+    t.add :tag_context_hierarchy, as: :tags
   end
 
   api_accessible :with_content do |t|
@@ -53,28 +68,28 @@ class FeedItem < ActiveRecord::Base
     t.add :hub_feed_ids
     t.add :date_published
     t.add :last_updated
-    t.add :tag_context_hierarchy, :as => :tags
+    t.add :tag_context_hierarchy, as: :tags
     t.add :description
     t.add :content
   end
 
   searchable do
-    text :title, :more_like_this => true
-    text :description, :more_like_this => true
-    text :content, :more_like_this => true
-    text :url, :more_like_this => true
-    text :guid, :more_like_this => true
-    text :authors, :more_like_this => true
-    text :contributors, :more_like_this => true
-    text :rights, :more_like_this => true
-    text :tag_list, :using => :tag_list_string_for_indexing, :more_like_this => true
-    integer :hub_ids, :multiple => true
-    integer :hub_feed_ids, :multiple => true
+    text :title, more_like_this: true
+    text :description, more_like_this: true
+    text :content, more_like_this: true
+    text :url, more_like_this: true
+    text :guid, more_like_this: true
+    text :authors, more_like_this: true
+    text :contributors, more_like_this: true
+    text :rights, more_like_this: true
+    text :tag_list, using: :tag_list_string_for_indexing, more_like_this: true
+    integer :hub_ids, multiple: true
+    integer :hub_feed_ids, multiple: true
     integer :id
 
-    integer :feed_ids, :multiple => true
-    string :tag_list, :using => :tag_list_array_for_indexing, :multiple => true
-    string :tag_contexts, :multiple => true
+    integer :feed_ids, multiple: true
+    string :tag_list, using: :tag_list_array_for_indexing, multiple: true
+    string :tag_contexts, multiple: true
 
     string :title
     string :url
@@ -88,12 +103,14 @@ class FeedItem < ActiveRecord::Base
   end
 
   def taggable_items
+    # We want to return an ActiveRecord object
     FeedItem.where(id: id)
   end
 
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
-    self.taggings.collect{|tg| "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'}.compact
+    self.taggings.collect{|tg|
+      "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'}.compact
   end
 
   # A hash of arrays of tag contexts - used for the API.
@@ -106,100 +123,39 @@ class FeedItem < ActiveRecord::Base
     tags_for_api
   end
 
-  validates_uniqueness_of :url
-
-  has_and_belongs_to_many :feed_retrievals
-  has_and_belongs_to_many :feeds
-  has_many :hub_feeds, :through => :feeds
-  has_many :hubs, :through => :hub_feeds
-  has_many :hub_feed_item_tag_filters, :dependent => :destroy, :order => 'updated_at desc'
-  has_many :input_sources, :dependent => :destroy, :as => :item_source
-  before_create :set_image_url
-  after_save :reindex_all_tags
-
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
     unless skip_tag_indexing_after_save == true
       tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
-      ActsAsTaggableOn::Tag.where(:id => tags_of_concern).solr_index(:include => :taggings, :batch_commit => false)
+      ActsAsTaggableOn::Tag.where(id: tags_of_concern).
+        solr_index(:include => :taggings, batch_commit: false)
     end
   end
-  
+
   def all_tags(user, hub_key)
     tags = self.tags_on(hub_key)
     tags += self.owner_tags_on(user, hub_key) if user
     tags.uniq
   end
 
-  # Find the first HubFeed for this item in a Hub. Used for display within search results, tags, and other areas where the HubFeed context doesn't exist.
+  # Find the first HubFeed for this item in a Hub. Used for display within
+  # search results, tags, and other areas where the HubFeed context doesn't
+  # exist.
   def hub_feed_for_hub(hub_id)
     hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
   end
 
   def tag_list_array_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query. Construct the tag list correctly.
+    # tag_list as provided by ActsAsTaggableOn always does a sql query.
+    # Construct the tag list correctly.
     self.tags.collect{|t| t.name}
   end
 
   def tag_list_string_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query. Construct the tag list correctly.
+    # tag_list as provided by ActsAsTaggableOn always does a sql query.
+    # Construct the tag list correctly.
     self.tags.collect{|t| t.name}.join(', ')
   end
-
-  def self.tag_counts_on(context)
-    ActsAsTaggableOn::Tag.find_by_sql([
-      'SELECT tags.*, count(*)
-      FROM tags JOIN taggings ON taggings.tag_id = tags.id
-      WHERE taggings.context = ? AND taggings.taggable_type = ?
-      GROUP BY tags.id', context, self.name])
-  end
-
-  def self.tag_counts_on_items(item_ids)
-    ActsAsTaggableOn::Tag.find_by_sql([
-      'SELECT tags.*, count(*)
-      FROM tags JOIN taggings ON taggings.tag_id = tags.id
-      WHERE taggings.taggable_id IN (?) AND taggings.taggable_type = ?
-      GROUP BY tags.id', item_ids, self.name])
-  end
-
-  # Re-render all tag facets for this FeedItem.
-  def update_filtered_tags
-    hs = self.hubs
-    hs.each do |h|
-      self.render_filtered_tags_for_hub(h)
-    end
-    self.save
-  end
-
-  # Re-render tag facets by applying filters but only for this Hub.
-  def render_filtered_tags_for_hub(hub = Hub.first)
-    #"tag_list" is the source list of tags directly from RSS/Atom feeds.
-    tag_list_for_filtering = self.tag_list.dup
-
-    #Hub tags
-    if ! hub.hub_tag_filters.blank?
-      hub.hub_tag_filters.each do|htf|
-        htf.filter.act(tag_list_for_filtering)
-      end
-    end
-
-    #Hub feed tags
-    hfs = self.hub_feeds(hub)
-    hfs.each do|hf|
-      if ! hf.hub_feed_tag_filters.blank?
-        hf.hub_feed_tag_filters.each do |hftf|
-          hftf.filter.act(tag_list_for_filtering)
-        end
-      end
-    end
-    #Hub feed item filters
-    self.hub_feed_item_tag_filters.find(:all, :conditions => {:hub_id => hub.id, :feed_item_id => self.id}).each do|hfitf|
-      hfitf.filter.act(tag_list_for_filtering)
-    end
-    self.set_tag_list_on("hub_#{hub.id}".to_sym, tag_list_for_filtering.join(','))
-    tag_list_for_filtering
-  end
-
 
   def to_s
     "#{(title.blank?) ? 'untitled' : title}"
@@ -222,7 +178,7 @@ class FeedItem < ActiveRecord::Base
 
   # Used during the Feed#update_feed spidering process to de-duplicate and create a FeedItem if it doesn't exist. Tags from all sources are merged into a FeedItem. Changes are tracked and saved on the FeedRetrieval object passed into this method. If there are changes, a Resque job is created to re-calculate tag facets.
   def self.create_or_update_feed_item(feed,item,feed_retrieval)
-    fi = FeedItem.find_or_initialize_by_url(:url => item.link)
+    fi = FeedItem.find_or_initialize_by_url(url: item.link)
     item_changelog = {}
 
     fi.title = item.title
@@ -288,6 +244,29 @@ class FeedItem < ActiveRecord::Base
 
   end
 
+  # Necessary because we don't want to pass the huge content
+  # column over the wire if we don't need to.
+  def self.columns_for_line_item
+    [:id,:date_published, :title, :image_url, :url,
+     :guid, :authors, :last_updated]
+  end
+
+  def self.tag_counts_on(context)
+    ActsAsTaggableOn::Tag.find_by_sql([
+      'SELECT tags.*, count(*)
+      FROM tags JOIN taggings ON taggings.tag_id = tags.id
+      WHERE taggings.context = ? AND taggings.taggable_type = ?
+      GROUP BY tags.id', context, self.name])
+  end
+
+  def self.tag_counts_on_items(item_ids)
+    ActsAsTaggableOn::Tag.find_by_sql([
+      'SELECT tags.*, count(*)
+      FROM tags JOIN taggings ON taggings.tag_id = tags.id
+      WHERE taggings.taggable_id IN (?) AND taggings.taggable_type = ?
+      GROUP BY tags.id', item_ids, self.name])
+  end
+
   private
 
   def parse_out_image_url
@@ -330,5 +309,4 @@ class FeedItem < ActiveRecord::Base
       self.image_url = image_url
     end
   end
-
 end
