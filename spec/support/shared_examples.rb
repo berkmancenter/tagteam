@@ -1,4 +1,4 @@
-shared_examples TagFilter do |filter_type|
+shared_examples TagFilter do
   describe '#items_in_scope' do
     include_context "user owns a hub with a feed and items"
 

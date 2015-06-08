@@ -57,8 +57,8 @@ FactoryGirl.define do
     end
 
     trait :tagged do
-      after(:create) do |item|
-        item.tag_list.add(tag)
+      after(:create) do |item, evaluator|
+        item.tag_list.add(evaluator.tag)
       end
     end
   end
