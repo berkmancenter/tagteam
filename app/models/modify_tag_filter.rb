@@ -24,45 +24,60 @@ class ModifyTagFilter < TagFilter
     items_in_scope.tagged_with(new_tag.name, on: hub.tagging_key, owned_by: self)
   end
 
-  def apply(items: affects_items)
+  def apply(items: items_with_old_tag)
+    fetched_items = items.all
     deactivate_taggings!(items: items)
-    items.each do |item|
-      item.taggings.create(tag: new_tag, tagger: self, context: hub.tagging_key)
+    fetched_items.each do |item|
+      new_tagging = item.taggings.build(tag: new_tag, tagger: self,
+                                        context: hub.tagging_key)
+      new_tagging.save! if new_tagging.valid?
     end
+    self.update_attribute(:applied, true)
   end
 
   def deactivates_taggings(items: items_with_old_tag)
     taggings = ActsAsTaggableOn::Tagging.arel_table
+    selected_items_with_old_tag = items.tagged_with(tag.name,
+                                                    on: hub.tagging_key)
 
+    # From http://stackoverflow.com/questions/7976358/activerecord-arel-or-condition
     # Deactivates any taggings that have the old tag
-    old_tag = taggings.
-      where(context: hub.tagging_key, tag_id: tag.id,
-            taggable_type: FeedItem, taggable_id: items.pluck(:id))
+    old_tag = taggings.grouping(
+      taggings[:context].eq(hub.tagging_key).and(
+      taggings[:tag_id].eq(tag.id)).and(
+      taggings[:taggable_type].eq('FeedItem')).and(
+      taggings[:taggable_id].in(items.pluck(:id))))
 
     # Deactivates any taggings that result in the same tag on the same item
-    duplicate_tag = taggings.
-      where(context: hub.tagging_key, tag_id: new_tag.id,
-            taggable_type: FeedItem, taggable_id: items.pluck(:id))
+    duplicate_tag = taggings.grouping(
+      taggings[:context].eq(hub.tagging_key).and(
+      taggings[:tag_id].eq(new_tag.id)).and(
+      taggings[:taggable_type].eq('FeedItem')).and(
+      taggings[:taggable_id].in(selected_items_with_old_tag.pluck(:id))))
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end
 
   def reactivates_taggings
-    deactivated_taggings = DeactivatedTagging.arel_table
+    d_taggings = DeactivatedTagging.arel_table
 
     # Reactivates any taggings that resulted in the same tag on the same item.
     # For example, if an item came in with tags 'tag1' and 'tag2', and this
     # filter changed 'tag1' to 'tag2', this section reactivates 'tag2' while
     # the next section reactivates 'tag1'.
-    duplicate_tag = deactivated_taggings.
-      where(context: hub.tagging_key, tag_id: new_tag.id,
-            taggable_type: FeedItem, taggable_id: items_with_new_tag.pluck(:id))
+    duplicate_tag = d_taggings.grouping(
+      d_taggings[:context].eq(hub.tagging_key).and(
+      d_taggings[:tag_id].eq(new_tag.id)).and(
+      d_taggings[:taggable_type].eq('FeedItem')).and(
+      d_taggings[:taggable_id].in(items_with_new_tag.pluck(:id))))
 
     # Reactivates any taggings that had the old tag
-    old_tag = deactivated_taggings.
-      where(context: hub.tagging_key, tag_id: tag.id,
-            taggable_type: FeedItem, taggable_id: items_with_new_tag.pluck(:id))
+    old_tag = d_taggings.grouping(
+      d_taggings[:context].eq(hub.tagging_key).and(
+      d_taggings[:tag_id].eq(tag.id)).and(
+      d_taggings[:taggable_type].eq('FeedItem')).and(
+      d_taggings[:taggable_id].in(items_with_new_tag.pluck(:id))))
 
-    deactivated_taggings.where(old_tag.or(duplicate_tag))
+    DeactivatedTagging.where(old_tag.or(duplicate_tag))
   end
 end
