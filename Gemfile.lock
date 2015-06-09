@@ -130,6 +130,7 @@ GEM
     orm_adapter (0.5.0)
     pg (0.18.2)
     polyglot (0.3.5)
+    power_assert (0.2.2)
     pr_geohash (1.0.0)
     progress_bar (1.0.3)
       highline (~> 1.6.1)
@@ -221,6 +222,8 @@ GEM
       rails (>= 3)
       sunspot (= 2.2.0)
     sunspot_solr (2.2.0)
+    test-unit (3.0.8)
+      power_assert
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -291,6 +294,7 @@ DEPENDENCIES
   sqlite3
   sunspot_rails
   sunspot_solr
+  test-unit (~> 3.0)
   therubyracer
   uglifier
   unicorn

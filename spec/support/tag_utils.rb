@@ -2,7 +2,7 @@ RSpec::Matchers.define :show_effects_of do |filter|
   match do |tag_lists|
     case filter.class.name
     when 'AddTagFilter'
-      tag_lists.all? { |tag_list| tag_list.include? filter.filter.tag.name }
+      tag_lists.all? { |tag_list| tag_list.include? filter.tag.name }
     when 'ModifyTagFilter'
       old_tag = filter.tag.name
       new_tag = filter.new_tag.name
@@ -30,9 +30,13 @@ end
 RSpec::Matchers.define_negated_matcher :not_contain, :include
 RSpec::Matchers.define_negated_matcher :not_show_effects_of, :show_effects_of
 
-def tag_lists_for(feed_items, context, sorted = false)
+def tag_lists_for(feed_items, contexts, sorted = false)
   lists = feed_items.map do |fi|
-    fi_list = fi.all_tags_list_on(context)
+    if contexts.is_a? Array
+      fi_list = contexts.map{|context| fi.all_tags_list_on(context)}.flatten
+    else
+      fi_list = fi.all_tags_list_on(contexts)
+    end
     sorted ? fi_list.sort : fi_list
   end
   sorted ? lists.sort : lists

@@ -36,6 +36,7 @@ module ModelExtensions
     model.instance_eval do
       #Class methods go here.
       # Validate text and string column lengths automatically, and for existence.
+      break unless self.table_exists?
       to_validate = self.columns.reject{|col| ! [:string,:text].include?(col.type)}
       valid_output = ''
       to_validate.each do|val_col|

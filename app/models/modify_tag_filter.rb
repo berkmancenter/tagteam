@@ -36,14 +36,13 @@ class ModifyTagFilter < TagFilter
 
     # Deactivates any taggings that have the old tag
     old_tag = taggings.
-      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
-      where('taggable_id IN ?', items.pluck(:id))
+      where(context: hub.tagging_key, tag_id: tag.id,
+            taggable_type: FeedItem, taggable_id: items.pluck(:id))
 
     # Deactivates any taggings that result in the same tag on the same item
     duplicate_tag = taggings.
       where(context: hub.tagging_key, tag_id: new_tag.id,
-            taggable_type: FeedItem).
-      where('taggable_id IN ?', items.pluck(:id))
+            taggable_type: FeedItem, taggable_id: items.pluck(:id))
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end
@@ -57,13 +56,12 @@ class ModifyTagFilter < TagFilter
     # the next section reactivates 'tag1'.
     duplicate_tag = deactivated_taggings.
       where(context: hub.tagging_key, tag_id: new_tag.id,
-            taggable_type: FeedItem).
-      where('taggable_id IN ?', items_with_new_tag.pluck(:id))
+            taggable_type: FeedItem, taggable_id: items_with_new_tag.pluck(:id))
 
     # Reactivates any taggings that had the old tag
     old_tag = deactivated_taggings.
-      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
-      where('taggable_id IN ?', items_with_new_tag.pluck(:id))
+      where(context: hub.tagging_key, tag_id: tag.id,
+            taggable_type: FeedItem, taggable_id: items_with_new_tag.pluck(:id))
 
     deactivated_taggings.where(old_tag.or(duplicate_tag))
   end

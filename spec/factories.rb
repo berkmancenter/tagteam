@@ -24,11 +24,11 @@ FactoryGirl.define do
     title 'My hub'
 
     trait :with_feed do
-      after(:create) do |hub, evaluator|
-        hub.feeds << create(:feed, with_url: evaluator.with_feed_url)
-      end
       transient do
         with_feed_url 0
+      end
+      after(:create) do |hub, evaluator|
+        hub.feeds << create(:feed, with_url: evaluator.with_feed_url)
       end
     end
 
@@ -53,12 +53,25 @@ FactoryGirl.define do
     sequence(:url) { |n| "http://example.com/?tag=#{n}" }
 
     transient do
-      tag 'test-tag'
+      tag { generate(:tag_name) }
+      tag_context 'tags'
     end
 
     trait :tagged do
       after(:create) do |item, evaluator|
-        item.tag_list.add(evaluator.tag)
+        item.set_tag_list_on(evaluator.tag_context, evaluator.tag)
+        item.save!
+      end
+    end
+
+    factory :feed_item_from_feed do
+      transient do
+        feed { create(:feed) }
+      end
+
+      after(:create) do |item, evaluator|
+        item.feeds << evaluator.feed
+        item.save!
       end
     end
   end

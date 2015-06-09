@@ -6,7 +6,7 @@ class TagFilter < ActiveRecord::Base
   belongs_to :scope, polymorphic: true
   belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag'
   belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag'
-  has_many :taggings, as: :tagger
+  has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 
   before_destroy :rollback
@@ -29,6 +29,8 @@ class TagFilter < ActiveRecord::Base
     t.add :tag
   end
 
+  scope :applied, where(applied: true)
+
   def items_in_scope
     scope.taggable_items
   end
@@ -42,13 +44,21 @@ class TagFilter < ActiveRecord::Base
     self.class.name.sub('TagFilter', '').downcase
   end
 
+  def most_recent?
+    hub.all_tag_filters.applied.order('updated_at DESC').first == self
+  end
+
   # Filter application can occur on a subset of items in a scope (if a new
   # items comes in from a feed, for example), but filter rollback always
   # happens for all items at once, so we don't need an items argument here.
   def rollback
+    unless most_recent?
+      raise 'Can only rollback the most recently applied filter - this is not that'
+    end
     hub.before_tag_filter_destroy(self)
     reactivate_taggings!
     taggings.destroy_all
+    self.update_attribute(:applied, false)
     hub.after_tag_filter_destroy(self)
   end
 
@@ -61,17 +71,21 @@ class TagFilter < ActiveRecord::Base
   # that adds 'tag1', all the 'tag1' tags for items in this feed should be
   # owned by the feed filter.
   def deactivates_taggings(items: items_in_scope)
-    # Deactivates any taggings that are the same except in owner.
+    # Deactivates any taggings that are the same except in owner, and do not
+    # deactivate own taggings.
     return ActsAsTaggableOn::Tagging.where('1=2') if items.empty?
     ActsAsTaggableOn::Tagging.
-      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
-      where('taggable_id IN ?', items.pluck(:id))
+      where(context: hub.tagging_key, tag_id: tag.id,
+            taggable_type: FeedItem, taggable_id: items.pluck(:id)).
+      where('("taggings"."tagger_id" IS NULL OR "taggings"."tagger_id" != ?) AND
+            ("taggings"."tagger_type" IS NULL OR "taggings"."tagger_type" != ?)',
+            self.id, self.class.name)
   end
 
   def reactivates_taggings
     DeactivatedTagging.
-      where(context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem).
-      where('taggable_id IN ?', items_in_scope.pluck(:id))
+      where(context: hub.tagging_key, tag_id: tag.id,
+            taggable_type: FeedItem, taggable_id: items_in_scope.pluck(:id))
   end
 
   def deactivate_taggings!(items: items_in_scope)

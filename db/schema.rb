@@ -209,14 +209,15 @@ ActiveRecord::Schema.define(:version => 20150605201636) do
   end
 
   create_table "tag_filters", :force => true do |t|
-    t.integer  "hub_id",     :null => false
-    t.integer  "tag_id",     :null => false
+    t.integer  "hub_id",                        :null => false
+    t.integer  "tag_id",                        :null => false
     t.integer  "new_tag_id"
     t.integer  "scope_id"
     t.string   "scope_type"
+    t.boolean  "applied",    :default => false
     t.string   "type"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "tag_filters", ["hub_id"], :name => "index_tag_filters_on_hub_id"

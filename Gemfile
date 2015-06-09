@@ -28,6 +28,7 @@ gem 'less-rails-bootstrap', '~> 3.0'
 gem 'font-awesome-rails'
 gem 'formtastic-bootstrap', git: 'https://github.com/mjbellantoni/formtastic-bootstrap.git'
 gem 'uglifier'
+gem 'test-unit', '~> 3.0'
 
 group :development, :test do
   gem 'awesome_print'

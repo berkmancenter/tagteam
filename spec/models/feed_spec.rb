@@ -9,6 +9,8 @@ describe Feed do
     @feed = Feed.new
   end
 
+  it "owns all taggings that come in from its URL"
+
   context do
     it "has basic attributes", :attributes => true do
       should have_and_belong_to_many(:feed_items)

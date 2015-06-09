@@ -6,6 +6,7 @@ class CreateTagFilters < ActiveRecord::Migration
       t.references :new_tag
       t.references :scope, polymorphic: true
 
+      t.boolean :applied, default: false
       t.string :type
       t.timestamps
     end
@@ -22,6 +23,7 @@ class CreateTagFilters < ActiveRecord::Migration
         tag: filter.filter.tag,
         new_tag: filter.filter.new_tag,
         type: filter.filter_type,
+        applied: true,
         updated_at: filter.updated_at
       )
 
