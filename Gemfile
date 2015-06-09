@@ -47,5 +47,6 @@ group :test do
   gem 'launchy'
   gem 'webmock'
   gem 'vcr'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
 end
 

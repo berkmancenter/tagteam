@@ -58,9 +58,14 @@ FactoryGirl.define do
     end
 
     trait :tagged do
+      before(:create) do |item|
+        # The callbacks need to be run in the correct order
+        item.skip_tag_copy = true
+      end
       after(:create) do |item, evaluator|
         item.set_tag_list_on(evaluator.tag_context, evaluator.tag)
         item.save!
+        item.copy_tags_to_hubs
       end
     end
 

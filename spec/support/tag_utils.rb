@@ -30,13 +30,9 @@ end
 RSpec::Matchers.define_negated_matcher :not_contain, :include
 RSpec::Matchers.define_negated_matcher :not_show_effects_of, :show_effects_of
 
-def tag_lists_for(feed_items, contexts, sorted = false)
+def tag_lists_for(feed_items, context, sorted = false)
   lists = feed_items.map do |fi|
-    if contexts.is_a? Array
-      fi_list = contexts.map{|context| fi.all_tags_list_on(context)}.flatten
-    else
-      fi_list = fi.all_tags_list_on(contexts)
-    end
+    fi_list = fi.all_tags_list_on(context)
     sorted ? fi_list.sort : fi_list
   end
   sorted ? lists.sort : lists

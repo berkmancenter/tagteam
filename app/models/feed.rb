@@ -20,6 +20,7 @@ class Feed < ActiveRecord::Base
   include ModelExtensions
 
   acts_as_authorization_object
+  acts_as_tagger
   acts_as_api do|c|
     c.allow_jsonp_callback = true
   end
