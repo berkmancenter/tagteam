@@ -82,7 +82,7 @@ shared_examples 'a tag filter' do |filter_type|
         end
       end
     end
-     
+
     context 'this is the most recently applied filter' do
       it 'returns true' do
         @filter1 = create(:add_tag_filter)
@@ -154,6 +154,55 @@ shared_examples 'an existing tag filter in a populated hub' do
       it 'throws an error' do
         expect{ @filter.rollback }.to raise_error.with_message(/rollback/)
       end
+    end
+  end
+end
+
+shared_examples "a hub-level tag filter" do |filter_type|
+  include_context "user owns a hub with a feed and items"
+
+  it "cannot conflict with other hub-level filters in same hub"
+
+  context "other hubs exist" do
+    before(:each) do
+      @hub2 = create(:hub, :with_feed)
+      @feed_items2 = @hub2.hub_feeds.first.feed_items
+    end
+
+    it "doesn't affect other hubs" do
+      filter = add_filter
+      filter.apply
+
+      tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+      other_tag_lists = tag_lists_for(@feed_items2, @hub2.tagging_key)
+
+      expect(tag_lists).to show_effects_of filter
+      expect(other_tag_lists).to not_show_effects_of filter
+    end
+  end
+end
+
+shared_examples "a feed-level tag filter" do |filter_type|
+  include_context "user owns a hub with a feed and items"
+
+  context "another feed exists" do
+    before(:each) do
+      @feed2 = create(:feed, with_url: 1)
+      @hub_feed2 = create(:hub_feed, hub: @hub, feed: @feed2)
+      @feed_items2 = @hub_feed2.feed_items
+    end
+
+    it "doesn't affect the other feed's taggings" do
+      filter = add_filter
+      setup_other_feeds_tags(filter, @hub_feed2)
+
+      filter.apply
+
+      tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+      other_tag_lists = tag_lists_for(@feed_items2, @hub.tagging_key)
+
+      expect(tag_lists).to show_effects_of filter
+      expect(other_tag_lists).to not_show_effects_of filter
     end
   end
 end

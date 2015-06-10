@@ -27,7 +27,6 @@ class FeedItem < ActiveRecord::Base
   end
 
   before_create :set_image_url
-  after_create :copy_tags_to_hubs, unless: :skip_tag_copy
   after_save :reindex_all_tags
 
   before_validation do
@@ -118,17 +117,6 @@ class FeedItem < ActiveRecord::Base
   def taggable_items
     # We want to return an ActiveRecord object
     FeedItem.where(id: id)
-  end
-
-  def copy_tags_to_hubs
-    global_context = Rails.application.config.global_tag_context
-    hubs.each do |hub|
-      taggings.where(context: global_context).each do |tagging|
-        new_tagging = tagging.dup
-        new_tagging.context = hub.tagging_key
-        new_tagging.save! if new_tagging.valid?
-      end
-    end
   end
 
   # An array of all tag contexts for every tagging on this item.

@@ -104,6 +104,60 @@ describe AddTagFilter do
     end
   end
 
+  # These scope tests could be better integrated into the rest of the suite.
+  context "the filter is scoped to a hub" do
+    def add_filter(tag_name = 'add-test')
+      new_tag = create(:tag, name: tag_name)
+      create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+    end
+
+    def filter_list
+      @hub.tag_filters
+    end
+
+    context "user owns a hub with a feed and items" do
+      include_context "user owns a hub with a feed and items"
+
+      it "adds tags" do
+        new_tag = 'add-test'
+        filter = add_filter(new_tag)
+        filter.apply
+        tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+        expect(tag_lists).to show_effects_of filter
+      end
+    end
+
+    it_behaves_like "a hub-level tag filter"
+  end
+
+  context "the filter is scoped to a feed" do
+    def add_filter(tag_name = 'add-test')
+      new_tag = create(:tag, name: tag_name)
+      create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub_feed)
+    end
+
+    def filter_list
+      @hub_feed.tag_filters
+    end
+
+    def setup_other_feeds_tags(filter, hub_feed)
+    end
+
+    context "user owns a hub with a feed and items" do
+      include_context "user owns a hub with a feed and items"
+
+      it "adds tags" do
+        new_tag = 'add-test'
+        filter = add_filter(new_tag)
+        filter.apply
+        tag_lists = tag_lists_for(@feed_items, @hub.tagging_key)
+        expect(tag_lists).to show_effects_of filter
+      end
+    end
+
+    it_behaves_like "a feed-level tag filter"
+  end
+
   it_behaves_like 'a tag filter in an empty hub', :add_tag_filter
   it_behaves_like 'a tag filter', :add_tag_filter
 end

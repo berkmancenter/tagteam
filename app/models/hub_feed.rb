@@ -34,6 +34,7 @@ class HubFeed < ActiveRecord::Base
       Time.now]) }
 
   attr_accessible :title, :description
+  attr_accessor :skip_tag_copy
 
   api_accessible :default do|t|
     t.add :id

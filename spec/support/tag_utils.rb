@@ -25,6 +25,18 @@ RSpec::Matchers.define :show_effects_of do |filter|
       "expected #{tag_lists} to never include '#{filter.tag.name}'"
     end
   end
+
+  failure_message_when_negated do |tag_lists|
+    case filter.class.name
+    when 'AddTagFilter'
+      "expected #{tag_lists} to never include '#{filter.tag.name}'"
+    when 'ModifyTagFilter'
+      "expected at least one instance of '#{filter.tag.name}' " +
+      "and zero instances of '#{filter.new_tag.name}', but got #{tag_lists}"
+    when 'DeleteTagFilter'
+      "expected #{tag_lists} to include '#{filter.tag.name}'"
+    end
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_contain, :include
