@@ -14,7 +14,7 @@ describe DeleteTagFilter do
       @feed_items.each do |item|
         create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first)
         # This doesn't run on its own because items have already been created.
-        item.copy_tags_to_hubs
+        item.copy_global_tags_to_hubs
       end
     end
     context 'the filter deletes tag "a"' do
@@ -134,6 +134,39 @@ describe DeleteTagFilter do
     end
 
     it_behaves_like "a feed-level tag filter"
+  end
+
+  context "the filter is scoped to an item" do
+    def add_filter(old_tag = 'social')
+      create(:delete_tag_filter, tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
+             hub: @hub, scope: @feed_item)
+    end
+
+    def filter_list
+      @feed_item.tag_filters
+    end
+
+    def setup_other_items_tags(filter, item)
+      filter = create(:add_tag_filter, tag: filter.tag, hub: @hub, scope: item)
+      filter.apply
+    end
+
+    context "user owns a hub with a feed and items" do
+      include_context "user owns a hub with a feed and items"
+
+      it "removes tags" do
+        @feed_item = @feed_items.first
+        deleted_tag = 'social'
+
+        filter = add_filter(deleted_tag)
+
+        tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
+        expect(tag_lists).to show_effects_of filter
+      end
+
+    end
+
+    it_behaves_like "an item-level tag filter"
   end
 
   it_behaves_like 'a tag filter in an empty hub', :delete_tag_filter

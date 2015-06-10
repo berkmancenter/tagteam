@@ -44,8 +44,7 @@ class FeedItem < ActiveRecord::Base
 
   attr_accessible :title, :url, :guid, :authors, :contributors,
     :description, :content, :rights, :date_published, :last_updated
-  attr_accessor :hub_id, :bookmark_collection_id, :skip_tag_indexing_after_save,
-    :skip_tag_copy
+  attr_accessor :hub_id, :bookmark_collection_id, :skip_tag_indexing_after_save
 
   api_accessible :default do |t|
     t.add :id

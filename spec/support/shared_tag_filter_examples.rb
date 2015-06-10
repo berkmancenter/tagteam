@@ -206,3 +206,39 @@ shared_examples "a feed-level tag filter" do |filter_type|
     end
   end
 end
+
+shared_examples "an item-level tag filter" do |filter_type|
+  include_context "user owns a hub with a feed and items"
+
+  context "other items exist" do
+    before(:each) do
+      @feed_item = @feed_items.order(:id).first
+      @feed_item2 = @feed_items.order(:id).last
+    end
+
+    it "doesn't affect other items" do
+      filter = add_filter
+      setup_other_items_tags(filter, @feed_item2)
+
+      filter.apply
+
+      tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
+      other_tag_lists = tag_lists_for(@feed_item2, @hub.tagging_key)
+
+      expect(tag_lists).to show_effects_of filter
+      expect(other_tag_lists).to not_show_effects_of filter
+    end
+  end
+
+  context "the same item exists in another feed" do
+    before(:each) do
+      @feed2 = create(:feed, with_url: 0, copy: 1)
+      @hub_feed2 = create(:hub_feed, hub: @hub, feed: @feed2)
+      @feed_items2 = @hub_feed2.feed_items
+      @feed_item = @feed_items.order(:id).first
+      @feed_item2 = @feed_items2.order(:id).first
+    end
+    it 'does affect that item' do
+    end
+  end
+end

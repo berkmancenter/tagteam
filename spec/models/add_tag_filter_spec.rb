@@ -158,6 +158,36 @@ describe AddTagFilter do
     it_behaves_like "a feed-level tag filter"
   end
 
+  context "the filter is scoped to an item" do
+    def add_filter(tag_name = 'add-test')
+      new_tag = create(:tag, name: tag_name)
+      create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @feed_item)
+    end
+
+    def filter_list
+      @feed_item.tag_filters
+    end
+
+    def setup_other_items_tags(filter, item)
+    end
+
+    context "user owns a hub with a feed and items" do
+      include_context "user owns a hub with a feed and items"
+
+      it "adds tags" do
+        @feed_item = @feed_items.order(:id).first
+        new_tag = 'add-test'
+        filter = add_filter(new_tag)
+        filter.apply
+
+        tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
+        expect(tag_lists).to show_effects_of filter
+      end
+    end
+
+    it_behaves_like "an item-level tag filter"
+  end
+
   it_behaves_like 'a tag filter in an empty hub', :add_tag_filter
   it_behaves_like 'a tag filter', :add_tag_filter
 end

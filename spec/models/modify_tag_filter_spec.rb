@@ -14,7 +14,7 @@ describe ModifyTagFilter do
       @feed_items.limit(4).each do |item|
         create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first)
         # This doesn't run on its own because items have already been created.
-        item.copy_tags_to_hubs
+        item.copy_global_tags_to_hubs
       end
     end
     context 'the filter changes tag "a" to tag "b"' do
@@ -98,7 +98,7 @@ describe ModifyTagFilter do
 
   context "the filter is scoped to a hub" do
     def add_filter(old_tag = 'social', new_tag = 'not-social')
-      filter = create(:modify_tag_filter, 
+      filter = create(:modify_tag_filter,
         tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
         new_tag: create(:tag, name: new_tag),
         hub: @hub, scope: @hub
@@ -165,6 +165,45 @@ describe ModifyTagFilter do
     end
 
     it_behaves_like "a feed-level tag filter"
+  end
+
+  context "the filter is scoped to an item" do
+    def add_filter(old_tag = 'social', new_tag = 'not-social')
+      create(:modify_tag_filter,
+        tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
+        new_tag: create(:tag, name: new_tag),
+        hub: @hub, scope: @feed_item
+      )
+    end
+
+    def filter_list
+      @feed_item.tag_filters
+    end
+
+    def setup_other_items_tags(filter, item)
+      filter = create(:add_tag_filter, tag: filter.tag, hub: @hub,
+                      scope: item)
+      filter.apply
+    end
+
+    context "user owns a hub with a feed and items" do
+      include_context "user owns a hub with a feed and items"
+
+      it "modifies tags" do
+        @feed_item = @feed_items.first
+        old_tag = 'social'
+        new_tag = 'not-social'
+
+        filter = add_filter(old_tag, new_tag)
+        filter.apply
+
+        new_tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
+        expect(new_tag_lists).to show_effects_of filter
+      end
+
+    end
+
+    it_behaves_like "an item-level tag filter"
   end
 
   it_behaves_like 'a tag filter in an empty hub', :modify_tag_filter
