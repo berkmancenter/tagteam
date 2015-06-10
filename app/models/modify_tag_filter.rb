@@ -16,15 +16,15 @@ class ModifyTagFilter < TagFilter
     'Change'
   end
 
-  def items_with_old_tag
-    items_in_scope.tagged_with(tag.name, on: hub.tagging_key)
+  def items_with_old_tag(items = items_in_scope)
+    items.tagged_with(tag.name, on: hub.tagging_key)
   end
 
-  def items_with_new_tag
-    items_in_scope.tagged_with(new_tag.name, on: hub.tagging_key, owned_by: self)
+  def items_with_new_tag(items = items_in_scope)
+    items.tagged_with(new_tag.name, on: hub.tagging_key, owned_by: self)
   end
 
-  def apply(items: items_with_old_tag)
+  def apply(items: items_in_scope)
     fetched_items = items.all
     deactivate_taggings!(items: items)
     fetched_items.each do |item|
@@ -35,12 +35,10 @@ class ModifyTagFilter < TagFilter
     self.update_attribute(:applied, true)
   end
 
-  def deactivates_taggings(items: items_with_old_tag)
+  def deactivates_taggings(items: items_in_scope)
     taggings = ActsAsTaggableOn::Tagging.arel_table
-    selected_items_with_old_tag = items.tagged_with(tag.name,
-                                                    on: hub.tagging_key)
+    selected_items_with_old_tag = items_with_old_tag(items)
 
-    # From http://stackoverflow.com/questions/7976358/activerecord-arel-or-condition
     # Deactivates any taggings that have the old tag
     old_tag = taggings.grouping(
       taggings[:context].eq(hub.tagging_key).and(
@@ -49,6 +47,8 @@ class ModifyTagFilter < TagFilter
       taggings[:taggable_id].in(items.pluck(:id))))
 
     # Deactivates any taggings that result in the same tag on the same item
+    # For example, if an item came in with tags 'tag1' and 'tag2', and this
+    # filter changed 'tag1' to 'tag2', this deactivates 'tag2'.
     duplicate_tag = taggings.grouping(
       taggings[:context].eq(hub.tagging_key).and(
       taggings[:tag_id].eq(new_tag.id)).and(

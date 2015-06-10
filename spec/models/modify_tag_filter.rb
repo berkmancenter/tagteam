@@ -68,12 +68,13 @@ describe ModifyTagFilter do
       describe '#deactivates_taggings' do
         context 'a feed item exists with tag "a" and tag "b"' do
           before(:each) do
-            @feed_item = create(:feed_item, :tagged, tag: 'b',
+            @feed_item = create(:feed_item_from_feed, :tagged,
+                                feed: @hub_feed.feed, tag: 'b',
                                 tag_context: @hub.tagging_key)
             create(:tagging, taggable: @feed_item, tag: @tag,
                    context: @hub.tagging_key)
           end
-          it 'returns both taggings', wip: true do
+          it 'returns both taggings' do
             expect(@filter.deactivates_taggings).
               to include(*@feed_item.taggings.all)
           end
@@ -91,64 +92,10 @@ describe ModifyTagFilter do
         end
       end
 
-      context 'active taggings already exist between tag "b" and items' do
-        before(:each) do
-          @tagged_feed_items = create_list(
-            :feed_item_from_feed, 3, :tagged, feed: @hub_feed.feed,
-            tag: 'b', tag_context: @hub.tagging_key)
-        end
-
-        describe '#apply' do
-          it 'deactivates all previous tag "b" taggings' do
-            taggings = ActsAsTaggableOn::Tagging.
-              where(tag_id: @new_tag.id).all.
-              map{ |tagging| tagging.becomes DeactivatedTagging }
-
-            @filter.apply
-
-            expect(DeactivatedTagging.count).to be > 0
-            expect(DeactivatedTagging.unscoped).to match_array(taggings)
-          end
-
-          it 'does not deactivate irrelevant taggings' do
-            @filter.apply
-            expect(DeactivatedTagging.unscoped.pluck(:tag_id)).
-              to all(eq(@filter.tag_id))
-          end
-        end
-
-        describe '#rollback' do
-          it 'reactivates deactived taggings' do
-            @filter.apply
-            taggings = DeactivatedTagging.
-              where(tag_id: @new_tag.id).all.
-              map{ |tagging| tagging.becomes ActsAsTaggableOn::Tagging }
-            @filter.rollback
-            expect(DeactivatedTagging.count).to eq(0)
-            expect(ActsAsTaggableOn::Tagging.all).to include(*taggings)
-          end
-        end
-
-        describe '#deactivates_taggings' do
-          it 'returns the taggings attaching tag "b" to those feed items' do
-            expect(@filter.deactivates_taggings).
-              to match_array(@tagged_feed_items.map(&:taggings).flatten)
-          end
-        end
-      end
-
       it_behaves_like 'an existing tag filter in a populated hub'
     end
   end
 
   it_behaves_like 'a tag filter in an empty hub', :modify_tag_filter
   it_behaves_like 'a tag filter', :modify_tag_filter
-  # An item comes in from an external feed with tags 'tag1' and 'tag2'.
-  # We add a hub filter that changes 'tag1' to 'tag2'
-  # Both taggings on the item should be deactivated, as the 'tag2' tagging
-  # should now be owned by the filter, not the external feed.
-  #
-  # An item comes in from an external feed with tag 'tag2'.
-  # We add a hub filter that changes 'tag1' to 'tag2'
-  # We shouldn't touch the external feed's tagging of 'tag2'.
 end
