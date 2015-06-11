@@ -343,17 +343,21 @@ class HubsController < ApplicationController
     @hub_feed.hub = @hub
     @hub_feed.feed = @feed
 
-    respond_to do |format|
-      if @hub_feed.save
-        current_user.has_role!(:owner, @hub_feed)
-        current_user.has_role!(:creator, @hub_feed)
-        format.html{ 
-          render :text => 'Added that feed', :layout => ! request.xhr?
-        }
+    if @hub_feed.save
+      current_user.has_role!(:owner, @hub_feed)
+      current_user.has_role!(:creator, @hub_feed)
+      if request.xhr?
+        render text: 'Added that feed', layout: false
       else
-        format.html{ 
-          render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable)
-        }
+        flash[:notice] = 'Added that feed.'
+        redirect_to hub_hub_feeds_path(@hub)
+      end
+    else
+      if request.xhr?
+        render(:text => @hub_feed.errors.full_messages.join('<br />'), :status => :not_acceptable)
+      else
+        flash[:error] = 'There was a problem adding that feed.'
+        redirect_to hub_hub_feeds_path(@hub)
       end
     end
   end
