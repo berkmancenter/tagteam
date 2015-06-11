@@ -19,7 +19,7 @@ atom_feed(:root_url => hub_hub_feed_url(@hub,@hub_feed), :language => 'en-US') d
 # Probably not needed.
 #      entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
       entry.title item.title
-      item.tags_on(@hub_feed.hub.tagging_key).each do |tag|
+      item.all_tags_on(@hub_feed.hub.tagging_key).each do |tag|
         entry.category(:term => (@hub_feed.hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub_feed.hub.tag_prefix), :scheme => hub_hub_feed_url(@hub,@hub_feed))
       end
       unless item.rights.blank?

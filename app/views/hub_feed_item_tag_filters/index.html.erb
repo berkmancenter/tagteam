@@ -14,7 +14,7 @@
 
 <% content_for :tab_content do %>
   <div class="nicely-padded">
-    <% tag_list = @feed_item.all_tags(current_user, @hub.tagging_key).map(&:name).join(', ') %>
+    <% tag_list = @feed_item.all_tags_list_on(@hub.tagging_key).join(', ') %>
     <% if current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) %>
     <h1>Add filters on this item</h1>
       <ul class="tag_filter_controls list-unstyled">
@@ -53,7 +53,7 @@
     <h1>Tags</h1>
     <div class="hub_feed_item_hub_feed_item_tag_filters">
       <%= render partial: 'shared/line_items/tag',
-        collection: @feed_item.tags_on(@hub.tagging_key) %>
+        collection: @feed_item.all_tags_on(@hub.tagging_key) %>
     </div>
 
     <h1>Active filters</h1>

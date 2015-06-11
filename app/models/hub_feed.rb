@@ -103,10 +103,11 @@ class HubFeed < ActiveRecord::Base
     [self.hub_id]
   end
 
-  def display_title
+  def title 
     (self.title.blank?) ? self.feed.title : self.title
   end
-  alias :to_s :display_title
+  alias :display_title :title
+  alias :to_s :title
 
   def display_description
     (self.description.blank?) ? self.feed.description : self.description

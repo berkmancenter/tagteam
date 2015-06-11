@@ -18,7 +18,7 @@ atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US') d
       entry.content item.content, :type => 'html'
 #      entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
       entry.title item.title
-      item.tags_on(@hub.tagging_key).each do |tag|
+      item.all_tags_on(@hub.tagging_key).each do |tag|
         entry.category(:term => (@hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub.tag_prefix), :scheme => hub_tag_path(@hub,@tag))
       end
       unless item.rights.blank?

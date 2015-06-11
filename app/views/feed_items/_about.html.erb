@@ -19,8 +19,7 @@
   }.join('<br/>') %>
 
 <h3>Tags:</h3>
-<%= raw @feed_item.all_tags(current_user,
-                            @hub_feed.hub.tagging_key).collect{ |t|
+<%= raw @feed_item.all_tags_on(@hub_feed.hub.tagging_key).collect{ |t|
   tag_display(t, :hub => @hub_feed.hub, :hub_feed_item => @feed_item)
   }.join(' ') %>
 

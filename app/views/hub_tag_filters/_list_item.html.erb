@@ -12,7 +12,7 @@
   </div>
 
   <span class="filter-action"><%= filter_description(hub_tag_filter) %></span> tag
-  <%= tag_display(hub_tag_filter.tag, hub: hub_tag_filter.hub) %> 
+  <%= tag_display(hub_tag_filter.tag, hub: hub_tag_filter.hub) %>
   <% if hub_tag_filter.class == ModifyTagFilter %>
     <span class="filter-action">to</span>
     <%= tag_display(hub_tag_filter.new_tag, hub: hub_tag_filter.hub) %>

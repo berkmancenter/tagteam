@@ -9,8 +9,6 @@ class TagFilter < ActiveRecord::Base
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 
-  before_destroy :rollback
-
   VALID_SCOPE_TYPES = ['Hub', 'HubFeed', 'FeedItem']
   validates_presence_of :tag_id
   validates_inclusion_of :scope_type, in: VALID_SCOPE_TYPES
@@ -43,14 +41,14 @@ class TagFilter < ActiveRecord::Base
   # items comes in from a feed, for example), but filter rollback always
   # happens for all items at once, so we don't need an items argument here.
   def rollback
+    hub.before_tag_filter_rollback(self)
     unless most_recent?
       raise 'Can only rollback the most recently applied filter - this is not that'
     end
-    hub.before_tag_filter_destroy(self)
     reactivate_taggings!
     taggings.destroy_all
     self.update_attribute(:applied, false)
-    hub.after_tag_filter_destroy(self)
+    hub.after_tag_filter_rollback(self)
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
@@ -99,5 +97,15 @@ class TagFilter < ActiveRecord::Base
   # This is useful when we're using sidekiq.
   def self.apply_by_id(id)
     self.find(id).apply
+  end
+
+  def self.rollback_by_id(id)
+    self.find(id).rollback
+  end
+
+  def self.rollback_and_destroy_by_id(id)
+    filter = self.find(id)
+    filter.rollback
+    filter.destroy
   end
 end

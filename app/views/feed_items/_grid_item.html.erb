@@ -36,8 +36,8 @@ hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feed
     </p>
 
     <div>
-    <% unless feed_item.all_tags(current_user, hub.tagging_key).empty? %>
-      <%= raw feed_item.all_tags(current_user, hub.tagging_key).collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ') %>
+    <% unless feed_item.all_tags_on(hub.tagging_key).empty? %>
+      <%= raw feed_item.all_tags_on(hub.tagging_key).collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ') %>
     <% end %>
     </div>
   </div>

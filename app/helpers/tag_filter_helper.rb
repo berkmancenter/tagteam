@@ -1,22 +1,22 @@
 module TagFilterHelper
   def filter_css_class(filter)
-    case filter.class
-    when AddTagFilter
+    case filter.class.name
+    when 'AddTagFilter'
       'add'
-    when ModifyTagFilter
+    when 'ModifyTagFilter'
       'modify'
-    when DeleteTagFilter
+    when 'DeleteTagFilter'
       'delete'
     end
   end
 
   def filter_description(filter)
-    case filter.class
-    when AddTagFilter
+    case filter.class.name
+    when 'AddTagFilter'
       'Add'
-    when ModifyTagFilter
+    when 'ModifyTagFilter'
       'Change'
-    when DeleteTagFilter
+    when 'DeleteTagFilter'
       'Delete'
     end
   end

@@ -36,8 +36,12 @@ class TagFiltersController < ApplicationController
     else
       @tag = find_or_create_tag_by_name(params[:new_tag])
     end
-    @tag_filter = filter_type.new(hub: @hub, scope: @hub,
-                                  tag: @tag, new_tag: @new_tag)
+
+    @tag_filter = filter_type.new
+    @tag_filter.hub = @hub
+    @tag_filter.scope = @scope
+    @tag_filter.tag = @tag
+    @tag_filter.new_tag = @new_tag if @new_tag
 
     if @tag_filter.save
       current_user.has_role!(:owner, @tag_filter)
@@ -45,13 +49,20 @@ class TagFiltersController < ApplicationController
       flash[:notice] = 'Added that filter to this hub.'
 
       TagFilter.delay.apply_by_id(@tag_filter.id)
+      render text: "Added a filter for that tag to \"#{@scope.title}\"",
+        layout: !request.xhr?
     else
       flash[:error] = 'Could not add that tag filter.'
+      render text: @tag_filter.errors.full_messages.join('<br/>'),
+        status: :not_acceptable,
+        layout: !request.xhr?
     end
   end
 
   def destroy
-    @tag_filter.destroy
+    TagFilter.delay.rollback_and_destroy_by_id(@tag_filter.id)
+    flash[:notice] = 'Deleted that tag filter.'
+    redirect_to hub_path(@hub)
   end
 
   private
