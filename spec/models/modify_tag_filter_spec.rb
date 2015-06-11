@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 describe ModifyTagFilter do
-  describe '#description' do
-    it 'returns "Change"' do
-      expect(create(:modify_tag_filter).description).to eq('Change')
-    end
-  end
-
   context 'the filter is scoped to a hub with some items with tag "a"' do
     include_context 'user owns a hub with a feed and items'
     before(:each) do

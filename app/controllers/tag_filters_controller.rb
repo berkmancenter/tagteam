@@ -18,7 +18,7 @@ class TagFiltersController < ApplicationController
     @tag_filters = @scope.tag_filters.in_hub(@hub)
     #breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
     respond_to do |format|
-      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.html { render template, layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default,  json: @tag_filters }
       format.xml { render_for_api :default,  xml: @tag_filters }
     end
@@ -59,17 +59,20 @@ class TagFiltersController < ApplicationController
   def template
     case @scope.class.name
     when 'Hub'
+      'hub_tag_filters/index'
     when 'HubFeed'
+      'hub_feed_tag_filters/index'
     when 'FeedItem'
+      'hub_feed_item_tag_filters/index'
     end
   end
 
   def load_scope
     # This controller gets used in different contexts, so we need to figure out
     # what context we're in and instantiate variables appropriately.
-    @hub = Hub.find!(params[:hub_id]) if params[:hub_id]
-    @hub_feed = HubFeed.find!(params[:hub_feed_id]) if params[:hub_feed_id]
-    @feed_item = FeedItem.find!(params[:feed_item_id]) if params[:feed_item_id]
+    @hub = Hub.find(params[:hub_id]) if params[:hub_id]
+    @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
+    @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
 
     # We'll only get a hub feed id if we're scoped to a hub feed.
     if @hub_feed
@@ -82,7 +85,7 @@ class TagFiltersController < ApplicationController
         @scope = @feed_item
         # We could load a hub feed here, but it could be one of many (if the same
         # item comes in from multiple feeds), so I'd rather not.
-      else 
+      else
         @scope = @hub
       end
     end

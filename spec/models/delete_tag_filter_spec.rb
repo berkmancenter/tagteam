@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 describe DeleteTagFilter do
-  describe '#description' do
-    it 'returns "Delete"' do
-      expect(create(:delete_tag_filter).description).to eq('Delete')
-    end
-  end
-
   context 'the filter is scoped to a hub with items all with tag "a"' do
     include_context 'user owns a hub with a feed and items'
     before(:each) do

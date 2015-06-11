@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 describe AddTagFilter do
-  describe '#description' do
-    it 'returns "Add"' do
-      expect(create(:add_tag_filter).description).to eq('Add')
-    end
-  end
-
   context 'the filter is scoped to a hub with items' do
     include_context 'user owns a hub with a feed and items'
     context 'the filter adds tag "a"' do

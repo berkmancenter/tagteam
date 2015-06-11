@@ -103,19 +103,21 @@ class FeedItem < ActiveRecord::Base
     time :last_updated
   end
 
-  def apply_tag_filters
-    all_tag_filters.each do |tag_filter|
-      tag_filter.apply(items: [self])
-    end
-  end
-
-  def all_tag_filters
-    hubs.all.each(&:all_tag_filters).flatten
-  end
-
   def taggable_items
     # We want to return an ActiveRecord object
     FeedItem.where(id: id)
+  end
+
+  def apply_tag_filters(hub_ids = [])
+    # So we can pass a single hub id
+    hub_ids = [hub_ids] unless hub_ids.respond_to? :each
+    hubs = hub_ids.empty? ? self.hubs : Hub.where(id: hub_ids)
+
+    hubs.each do |hub|
+      hub.tag_filters.order('updated_at ASC').each do |filter|
+        filter.apply(items: FeedItem.where(id: self.id))
+      end
+    end
   end
 
   # An array of all tag contexts for every tagging on this item.
@@ -276,6 +278,11 @@ class FeedItem < ActiveRecord::Base
       FROM tags JOIN taggings ON taggings.tag_id = tags.id
       WHERE taggings.taggable_id IN (?) AND taggings.taggable_type = ?
       GROUP BY tags.id', item_ids, self.name])
+  end
+
+  def self.apply_tag_filters(item_id, hub_ids = [])
+    feed_item = self.find(id: item_id)
+    feed_item.apply_tag_filters(hub_ids)
   end
 
   private

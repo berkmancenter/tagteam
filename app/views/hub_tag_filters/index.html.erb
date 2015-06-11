@@ -16,7 +16,7 @@
       <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'AddTagFilter',
-        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
         class: 'add_filter_control hub_tag_filter btn btn-success' do %>
         <%= fa_icon 'plus-circle', text: 'Add a tag to all items in this hub' %>
       <% end %>
@@ -26,7 +26,7 @@
       <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'DeleteTagFilter',
-        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
         class: 'add_filter_control hub_tag_filter btn btn-danger' do %>
         <%= fa_icon 'minus-circle', text: 'Remove a tag from every item in this hub' %>
       <% end %>
@@ -36,7 +36,7 @@
       <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'ModifyTagFilter',
-        tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
+        tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
         class: 'add_filter_control hub_tag_filter btn btn-default' do %>
         <%= fa_icon 'pencil', text: 'Modify a tag for every item in this hub' %>
       <% end %>
@@ -45,12 +45,12 @@
   <% end %>
 
   <h1 class="hub-filters-title">Active filters</h1>
-  <% if @hub_tag_filters.empty? %>
+  <% if @tag_filters.empty? %>
     <p>No active filters</p>
   <% else %>
   <ul class="hub_tag_filters list-unstyled nicely-padded">
     <%= render partial: 'hub_tag_filters/list_item', as: :hub_tag_filter, 
-      collection: @hub_tag_filters %>
+      collection: @tag_filters %>
   </ul>
   <% end %>
 </div>

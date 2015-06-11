@@ -1,9 +1,9 @@
-<div class="tag_filter hub_feed_tag_filter <%= hub_feed_tag_filter.filter.css_class %>">
+<div class="tag_filter hub_feed_tag_filter <%= filter_css_class(hub_feed_tag_filter) %>">
   <div class="pull-right">
   <% if current_user &&
        (current_user.is?(:owner, @hub) ||
         current_user.is?(:owner, hub_feed_tag_filter)) %>
-      <%= link_to hub_feed_tag_filter_path(hub_feed_tag_filter.hub_feed, hub_feed_tag_filter),
+      <%= link_to hub_feed_tag_filter_path(hub_feed_tag_filter.scope, hub_feed_tag_filter),
         method: :delete,
         title: 'Remove this filter',
         confirm: 'Are you sure you want to remove this filter?' do %>
@@ -12,12 +12,12 @@
   <% end %>
   </div>
 
-  <span class="filter-action"><%= hub_feed_tag_filter.filter.description %></span> tag
-  <%= tag_display(hub_feed_tag_filter.filter.tag,
-                  hub_feed: hub_feed_tag_filter.hub_feed,
+  <span class="filter-action"><%= filter_description(hub_feed_tag_filter) %></span> tag
+  <%= tag_display(hub_feed_tag_filter.tag,
+                  hub_feed: hub_feed_tag_filter.scope,
                   hub: hub_feed_tag_filter.hub) %>
-  <% if hub_feed_tag_filter.filter.class == ModifyTagFilter %>
+  <% if hub_feed_tag_filter.class == ModifyTagFilter %>
     <span class="filter-action">to</span>
-    <%= tag_display(hub_feed_tag_filter.filter.new_tag, hub: hub_feed_tag_filter.hub) %>
+    <%= tag_display(hub_feed_tag_filter.new_tag, hub: hub_feed_tag_filter.hub) %>
   <% end %>
 </div>

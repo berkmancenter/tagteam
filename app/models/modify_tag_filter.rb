@@ -12,10 +12,6 @@ class ModifyTagFilter < TagFilter
     t.add :new_tag
   end
 
-  def description
-    'Change'
-  end
-
   def items_with_old_tag(items = items_in_scope)
     items.tagged_with(tag.name, on: hub.tagging_key)
   end

@@ -20,7 +20,6 @@ class Hub < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
   include DelegatableRoles
-  include TagFilterable
   include TagScopable
   extend FriendlyId
 

@@ -12,4 +12,8 @@ module HubsHelper
       raw "#{name.capitalize} #{fa_icon('caret-' + (has_name_and_asc || sort != name ? 'down' : 'up'))}"
     end
   end
+
+  def items_feed_titles(item, hub)
+    item.feeds.where(id: hub.feeds.pluck(:id)).map(&:title).join(', ')
+  end
 end

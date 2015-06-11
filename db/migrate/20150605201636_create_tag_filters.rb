@@ -1,4 +1,13 @@
 class CreateTagFilters < ActiveRecord::Migration
+  class HubTagFilter < ActiveRecord::Base
+  end
+
+  class HubFeedTagFilter < ActiveRecord::Base
+  end
+
+  class HubFeedItemTagFilter < ActiveRecord::Base
+  end
+
   def up
     create_table :tag_filters do |t|
       t.references :hub, null: false
@@ -34,6 +43,7 @@ class CreateTagFilters < ActiveRecord::Migration
         creator.has_role! :creator, new_filter
       end
     end
+
 
     HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
       translate_filter(filter, filter.hub)

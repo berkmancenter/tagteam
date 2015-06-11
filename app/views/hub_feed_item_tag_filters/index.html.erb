@@ -1,7 +1,10 @@
 <% content_for :top_panel do %>
 <div class="col-sm-12">
   <h1><%= @feed_item.title %></h1>
-  <h4><%= @hub_feed.feed.title %> <%= @feed_item.created_at.strftime('%F') %></h4>
+  <h4>
+    <%= items_feed_titles(@feed_item, @hub) %>
+    <%= @feed_item.created_at.strftime('%F') %>
+  </h4>
 </div>
 <% end %>
 
@@ -26,7 +29,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_item_tag_filters_path(@hub,@feed_item),
+        <%= link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
           data_hub_id: @hub.id,
           data_type: 'DeleteTagFilter',
           tag_list: tag_list,
@@ -36,7 +39,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_item_tag_filters_path(@hub,@feed_item),
+        <%= link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
           data_hub_id: @hub.id,
           data_type: 'ModifyTagFilter',
           tag_list: tag_list,
@@ -49,16 +52,17 @@
 
     <h1>Tags</h1>
     <div class="hub_feed_item_hub_feed_item_tag_filters">
-      <%= render :partial => 'shared/line_items/tag', :collection => @feed_item.tags_on(@hub.tagging_key)  %>
+      <%= render partial: 'shared/line_items/tag',
+        collection: @feed_item.tags_on(@hub.tagging_key) %>
     </div>
 
     <h1>Active filters</h1>
-    <% if @hub_feed_item_tag_filters.empty? %>
+    <% if @tag_filters.empty? %>
       <h2>No active filters</h2>
     <% else %>
     <div class="hub_feed_item_hub_feed_item_tag_filters">
       <%= render partial: 'list_item',
-        collection: @hub_feed_item_tag_filters,
+        collection: @tag_filters,
         as: :hub_feed_item_tag_filter %>
     </div>
     <% end %>

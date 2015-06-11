@@ -35,15 +35,6 @@ class TagFilter < ActiveRecord::Base
     scope.taggable_items
   end
 
-  def description
-    self.class.name.sub('TagFilter', '')
-  end
-
-  def css_class
-    # Not using description because they css_class and desc differ sometimes
-    self.class.name.sub('TagFilter', '').downcase
-  end
-
   def most_recent?
     hub.all_tag_filters.applied.order('updated_at DESC').first == self
   end
@@ -107,6 +98,6 @@ class TagFilter < ActiveRecord::Base
 
   # This is useful when we're using sidekiq.
   def self.apply_by_id(id)
-    self.find!(id).apply
+    self.find(id).apply
   end
 end
