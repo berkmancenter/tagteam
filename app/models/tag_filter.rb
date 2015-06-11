@@ -100,4 +100,13 @@ class TagFilter < ActiveRecord::Base
   def self.title
     "#{self.name.sub('TagFilter', '')} tag filter"
   end
+
+  def self.in_hub(hub)
+    where(hub_id: hub.id)
+  end
+
+  # This is useful when we're using sidekiq.
+  def self.apply_by_id(id)
+    self.find!(id).apply
+  end
 end

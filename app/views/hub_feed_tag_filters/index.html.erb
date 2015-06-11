@@ -10,10 +10,10 @@
   <div class="nicely-padded">
 <% if current_user && current_user.is?([:owner, :hub_feed_tag_filterer], @hub) %>
   <h1>Add feed-wide filters</h1>
-  <% tag_list = @hub_feed_tag_filters.map {|f| f.filter.tag.name}.join(', ') %>
+  <% tag_list = @tag_filters.map {|f| f.filter.tag.name}.join(', ') %>
       <ul class="tag_filter_controls list-unstyled">
         <li>
-        <%= link_to hub_feed_hub_feed_tag_filters_path(@hub_feed, @feed_item),
+        <%= link_to hub_feed_tag_filters_path(@hub_feed, @feed_item),
           data_hub_id: @hub.id,
           data_type: 'AddTagFilter',
           tag_list: tag_list,
@@ -23,7 +23,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_hub_feed_tag_filters_path(@hub_feed),
+        <%= link_to hub_feed_tag_filters_path(@hub_feed),
           data_hub_id: @hub.id,
           data_type: 'DeleteTagFilter',
           tag_list: tag_list,
@@ -33,7 +33,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_hub_feed_tag_filters_path(@hub_feed),
+        <%= link_to hub_feed_tag_filters_path(@hub_feed),
           data_hub_id: @hub.id,
           data_type: 'ModifyTagFilter',
           tag_list: tag_list,
@@ -44,12 +44,12 @@
       </ul>
 <% end %>
 <h1>Active filters</h1>
-<% if @hub_feed_tag_filters.empty? %>
+<% if @tag_filters.empty? %>
   <h2>No active filters</h2>
 <% else %>
 <ul class="hub_feed_tag_filters list-unstyled nicely-padded">
   <%= render partial: 'hub_feed_tag_filters/list_item',
-    collection: @hub_feed_tag_filters,
+    collection: @tag_filters,
     as: :hub_feed_tag_filter
   %>
 </ul>

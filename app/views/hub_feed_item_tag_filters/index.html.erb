@@ -16,7 +16,7 @@
     <h1>Add filters on this item</h1>
       <ul class="tag_filter_controls list-unstyled">
         <li>
-        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub, @feed_item),
+        <%= link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
           data_hub_id: @hub.id,
           data_type: 'AddTagFilter',
           tag_list: tag_list,
@@ -26,7 +26,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item),
+        <%= link_to hub_feed_item_tag_filters_path(@hub,@feed_item),
           data_hub_id: @hub.id,
           data_type: 'DeleteTagFilter',
           tag_list: tag_list,
@@ -36,7 +36,7 @@
         </li> 
 
         <li>
-        <%= link_to hub_feed_item_hub_feed_item_tag_filters_path(@hub,@feed_item),
+        <%= link_to hub_feed_item_tag_filters_path(@hub,@feed_item),
           data_hub_id: @hub.id,
           data_type: 'ModifyTagFilter',
           tag_list: tag_list,

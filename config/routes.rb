@@ -1,6 +1,10 @@
 Tagteam::Application.routes.draw do
 
-  resources :users, :constraints => { :protocol => ((Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts) ? {:protocol => 'https'} : {}) } do
+  resources :users, constraints: {
+    protocol: (
+      (Rails.env == 'production' &&
+       Tagteam::Application.config.ssl_for_user_accounts) ?
+       { protocol: 'https' } : {}) } do
     collection do
       get 'autocomplete'
     end
@@ -52,7 +56,7 @@ Tagteam::Application.routes.draw do
       end
     end
     resources :tags
-    resources :hub_feed_tag_filters
+    resources :tag_filters
   end
 
   match 'remix/:url_key' => 'republished_feeds#show', :as => 'remix'
@@ -133,11 +137,11 @@ Tagteam::Application.routes.draw do
       end
     end
 
-    resources :hub_tag_filters
+    resources :tag_filters
 
     resources :feed_items do
 
-      resources :hub_feed_item_tag_filters
+      resources :tag_filters
 
       member do
         get 'content'

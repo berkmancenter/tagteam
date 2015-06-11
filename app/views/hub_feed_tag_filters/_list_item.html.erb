@@ -3,7 +3,7 @@
   <% if current_user &&
        (current_user.is?(:owner, @hub) ||
         current_user.is?(:owner, hub_feed_tag_filter)) %>
-      <%= link_to hub_feed_hub_feed_tag_filter_path(hub_feed_tag_filter.hub_feed, hub_feed_tag_filter),
+      <%= link_to hub_feed_tag_filter_path(hub_feed_tag_filter.hub_feed, hub_feed_tag_filter),
         method: :delete,
         title: 'Remove this filter',
         confirm: 'Are you sure you want to remove this filter?' do %>

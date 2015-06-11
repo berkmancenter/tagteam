@@ -13,7 +13,7 @@
     <h1>Add hub-wide filters</h1>
     <ul class="tag_filter_controls list-unstyled">
       <li>
-      <%= link_to hub_hub_tag_filters_path(@hub),
+      <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'AddTagFilter',
         tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
@@ -23,7 +23,7 @@
       </li> 
 
       <li>
-      <%= link_to hub_hub_tag_filters_path(@hub),
+      <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'DeleteTagFilter',
         tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),
@@ -33,7 +33,7 @@
       </li> 
 
       <li>
-      <%= link_to hub_hub_tag_filters_path(@hub),
+      <%= link_to hub_tag_filters_path(@hub),
         data_hub_id: @hub.id,
         data_type: 'ModifyTagFilter',
         tag_list: @hub_tag_filters.map {|f| f.filter.tag.name}.join(', '),

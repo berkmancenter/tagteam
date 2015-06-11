@@ -1,7 +1,7 @@
 <div class="tag_filter hub_feed_item_tag_filter <%= hub_feed_item_tag_filter.filter.css_class %>">
   <% if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_feed_item_tag_filter)) %>
     <div class="pull-right">
-    <%= link_to hub_feed_item_hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter),
+    <%= link_to hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub,hub_feed_item_tag_filter.feed_item, hub_feed_item_tag_filter),
       method: :delete,
       title: 'Remove this filter',
       confirm: 'Are you sure you want to remove this filter?' do %>

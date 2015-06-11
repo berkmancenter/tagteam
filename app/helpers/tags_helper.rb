@@ -70,15 +70,15 @@ module TagsHelper
     options[:data_id] = context[:tag].id if context[:tab]
 
     if context[:feed]
-      path = hub_feed_hub_feed_tag_filters_path(context[:feed])
+      path = hub_feed_tag_filters_path(context[:feed])
       add_class = 'hub_feed_tag_filter'
     elsif context[:hub] && context[:item]
       options[:data_hub_id] = context[:hub].id
-      path = hub_feed_item_hub_feed_item_tag_filters_path(context[:hub], context[:item])
+      path = hub_feed_item_tag_filters_path(context[:hub], context[:item])
       add_class = 'hub_feed_item_tag_filter'
     elsif context[:hub]
       options[:data_hub_id] = context[:hub].id
-      path = hub_hub_tag_filters_path(context[:hub])
+      path = hub_tag_filters_path(context[:hub])
       add_class = 'hub_tag_filter'
     end
 
