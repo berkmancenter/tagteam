@@ -38,6 +38,14 @@ describe ModifyTagFilter do
           tag_lists = tag_lists_for(@hub.feed_items, @hub.tagging_key)
           expect(tag_lists).to show_effects_of @filter
         end
+        
+        it 'only changes taggings on items that had tag "a"' do
+          affected = @feed_items.tagged_with(@tag.name, on: @hub.tagging_key).all
+          @filter.apply
+          now_affected = @feed_items.tagged_with(@new_tag.name,
+                                                 on: @hub.tagging_key).all
+          expect(affected).to match_array(now_affected)
+        end
       end
 
       describe '#rollback' do
@@ -91,7 +99,7 @@ describe ModifyTagFilter do
   end
 
   context "the filter is scoped to a hub" do
-    def add_filter(old_tag = 'social', new_tag = 'not-social')
+    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
       filter = create(:modify_tag_filter,
         tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
         new_tag: create(:tag, name: new_tag),
@@ -108,8 +116,8 @@ describe ModifyTagFilter do
       include_context "user owns a hub with a feed and items"
 
       it "modifies tags" do
-        old_tag = 'social'
-        new_tag = 'not-social'
+        old_tag = 'praxis'
+        new_tag = 'not-praxis'
 
         filter = add_filter(old_tag, new_tag)
         filter.apply
@@ -124,7 +132,7 @@ describe ModifyTagFilter do
   end
 
   context "the filter is scoped to a feed" do
-    def add_filter(old_tag = 'social', new_tag = 'not-social')
+    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
       create(:modify_tag_filter,
         tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
         new_tag: create(:tag, name: new_tag),
@@ -146,8 +154,8 @@ describe ModifyTagFilter do
       include_context "user owns a hub with a feed and items"
 
       it "modifies tags" do
-        old_tag = 'social'
-        new_tag = 'not-social'
+        old_tag = 'praxis'
+        new_tag = 'not-praxis'
 
         filter = add_filter(old_tag, new_tag)
         filter.apply
@@ -162,7 +170,7 @@ describe ModifyTagFilter do
   end
 
   context "the filter is scoped to an item" do
-    def add_filter(old_tag = 'social', new_tag = 'not-social')
+    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
       create(:modify_tag_filter,
         tag: ActsAsTaggableOn::Tag.find_by_name(old_tag),
         new_tag: create(:tag, name: new_tag),
@@ -184,9 +192,9 @@ describe ModifyTagFilter do
       include_context "user owns a hub with a feed and items"
 
       it "modifies tags" do
-        @feed_item = @feed_items.first
-        old_tag = 'social'
-        new_tag = 'not-social'
+        @feed_item = @feed_items.order(:id).first
+        old_tag = 'praxis'
+        new_tag = 'not-praxis'
 
         filter = add_filter(old_tag, new_tag)
         filter.apply

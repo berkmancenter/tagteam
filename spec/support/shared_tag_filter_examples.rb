@@ -151,9 +151,7 @@ shared_examples 'an existing tag filter in a populated hub' do
       @filter2.apply
     end
     describe '#rollback' do
-      it 'throws an error' do
-        expect{ @filter.rollback }.to raise_error.with_message(/rollback/)
-      end
+      it 'rolls back the more recent filters'
     end
   end
 end

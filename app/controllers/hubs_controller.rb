@@ -301,22 +301,23 @@ class HubsController < ApplicationController
     @hub = Hub.find(params[:id])
     breadcrumbs.add @hub, hub_path(@hub)
 
-    @already_filtered_for_hub = HubTagFilter.where(:hub_id => @hub.id).includes(:filter).collect{|htf| htf.filter.tag_id == params[:tag_id].to_i}.flatten.include?(true)
+    @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    @already_filtered_for_hub = @hub.tag_filtered?(@tag)
 
     if params[:hub_feed_id].to_i != 0
       @hub_feed = HubFeed.find(params[:hub_feed_id])
-      @already_filtered_for_hub_feed = HubFeedTagFilter.where(:hub_feed_id => params[:hub_feed_id].to_i).includes(:filter).collect{|hftf| hftf.filter.tag_id == params[:tag_id].to_i}.flatten.include?(true)
+      @already_filtered_for_hub_feed = @hub_feed.tag_filtered?(@tag)
     end
 
     if params[:hub_feed_item_id].to_i != 0
-      @feed_item = FeedItem.find(params[:hub_feed_item_id], :select => FeedItem.columns_for_line_item)
-      @already_filtered_for_hub_feed_item = HubFeedItemTagFilter.where(:feed_item_id => params[:hub_feed_item_id].to_i).includes(:filter).collect{|hfitf| hfitf.filter.tag_id == params[:tag_id].to_i}.flatten.include?(true)
+      @feed_item = FeedItem.find(params[:hub_feed_item_id], select: FeedItem.columns_for_line_item)
+      @already_filtered_for_hub_feed_item = @feed_item.tag_filtered?(@tag)
     end
 
-    @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
-    respond_to do|format|
+    respond_to do |format|
       format.html{
-        render :layout => ! request.xhr?
+        render layout: !request.xhr?
       }
     end
   end
@@ -460,7 +461,7 @@ class HubsController < ApplicationController
         current_user.has_role!(:creator, @hub)
         format.html {
           if session[:redirect_after].nil?
-            redirect_to created_hub_path(@hub)
+            redirect_to hub_path(@hub)
           else
             flash[:notice] = 'Added that Hub.'
             redirect_path = session[:redirect_after]

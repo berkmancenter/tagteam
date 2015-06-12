@@ -85,20 +85,18 @@ class TagFiltersController < ApplicationController
     @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
     @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
 
-    # We'll only get a hub feed id if we're scoped to a hub feed.
-    if @hub_feed
+    # We'll only get a feed item id if we're scoped to an item.
+    if @feed_item
+      # We could load a hub feed here, but it could be one of many (if the same
+      # item comes in from multiple feeds), so I'd rather not.
+      @scope = @feed_item
+    # We'll get a hub feed if we're scoped to a feed item or a hub feed.
+    elsif @hub_feed
       @scope = @hub_feed
-      @hub = @hub_feed.feed
-    # We'll get a hub if we're scoped to a hub or a feed item.
-    elsif @hub
-      # We'll only get a feed item if we're scoped to a feed item.
-      if @feed_item
-        @scope = @feed_item
-        # We could load a hub feed here, but it could be one of many (if the same
-        # item comes in from multiple feeds), so I'd rather not.
-      else
-        @scope = @hub
-      end
+      @hub = @hub_feed.hub
+    else
+      # We'll get a hub if we're scoped to a hub or a feed item.
+      @scope = @hub
     end
   end
 

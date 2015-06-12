@@ -61,7 +61,7 @@
       <h2>No active filters</h2>
     <% else %>
     <div class="hub_feed_item_hub_feed_item_tag_filters">
-      <%= render partial: 'list_item',
+      <%= render partial: 'hub_feed_item_tag_filters/list_item',
         collection: @tag_filters,
         as: :hub_feed_item_tag_filter %>
     </div>

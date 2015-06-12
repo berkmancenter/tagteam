@@ -275,7 +275,7 @@ class FeedItem < ActiveRecord::Base
   end
 
   def self.apply_tag_filters(item_id, hub_ids = [])
-    feed_item = self.find(id: item_id)
+    feed_item = self.find(item_id)
     feed_item.apply_tag_filters(hub_ids)
   end
 

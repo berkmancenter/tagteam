@@ -8,6 +8,10 @@ module TagScopable
     attr_accessor :skip_global_tag_copy
   end
 
+  def tag_filtered?(tag)
+    tag_filters.exists?(tag_id: tag.id)
+  end
+
   def copy_global_tags_to_hubs
     global_context = Rails.application.config.global_tag_context
     taggable_items.each do |item|
