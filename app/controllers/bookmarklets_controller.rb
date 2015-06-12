@@ -36,7 +36,9 @@ class BookmarkletsController < ApplicationController
   def add_item
     @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by_url(params[:feed_item][:url])
-    [:hub_id, :bookmark_collection_id, :title, :description, :authors, :contributors, :rights].each do |col|
+    columns = [:hub_id, :bookmark_collection_id, :title, :description, :authors,
+             :contributors, :rights]
+    columns.each do |col|
       unless params[:feed_item][col].blank?
         @feed_item.send(%Q|#{col}=|, params[:feed_item][col])
       end
@@ -44,12 +46,18 @@ class BookmarkletsController < ApplicationController
 
     unless params[:feed_item][:date_published].blank?
       date_published = DateTime.parse(params[:feed_item][:date_published])
-      @feed_item.date_published = DateTime.new(date_published.year, date_published.month, date_published.day, Time.now.hour, Time.now.min)
+      @feed_item.date_published = DateTime.new(date_published.year,
+                                               date_published.month,
+                                               date_published.day,
+                                               Time.now.hour, Time.now.min)
     end
 
     unless params[:feed_item][:last_updated].blank?
       last_updated = DateTime.parse(params[:feed_item][:last_updated])
-      @feed_item.last_updated = DateTime.new(last_updated.year, last_updated.month, last_updated.day, Time.now.hour, Time.now.min)
+      @feed_item.last_updated = DateTime.new(last_updated.year,
+                                             last_updated.month,
+                                             last_updated.day,
+                                             Time.now.hour, Time.now.min)
     end
 
     # Merge tags.

@@ -25,7 +25,9 @@ class ImportFeedItems
       [:title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated].each do|col|
         feed_item.send(%Q|#{col}=|, item[col])
       end
-      feed_item.tag_list = [feed_item.tag_list, item[:tag_list].collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(',')
+      feed_item.set_owner_tag_list_on(current_user,
+                                      Rails.application.config.global_tag_context,
+                                      [feed_item.tag_list, item[:tag_list].collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(','))
 
       if feed_item.save
         feed_item.accepts_role!(:owner, current_user)

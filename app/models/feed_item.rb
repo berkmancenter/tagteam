@@ -183,8 +183,12 @@ class FeedItem < ActiveRecord::Base
     %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
   end
 
-  # Used during the Feed#update_feed spidering process to de-duplicate and create a FeedItem if it doesn't exist. Tags from all sources are merged into a FeedItem. Changes are tracked and saved on the FeedRetrieval object passed into this method. If there are changes, a Resque job is created to re-calculate tag facets.
-  def self.create_or_update_feed_item(feed,item,feed_retrieval)
+  # Used during the Feed#update_feed spidering process to de-duplicate and
+  # create a FeedItem if it doesn't exist. Tags from all sources are merged
+  # into a FeedItem. Changes are tracked and saved on the FeedRetrieval object
+  # passed into this method. If there are changes, a Resque job is created to
+  # re-calculate tag facets.
+  def self.create_or_update_feed_item(feed, item, feed_retrieval)
     fi = FeedItem.find_or_initialize_by_url(url: item.link)
     item_changelog = {}
 
@@ -213,25 +217,38 @@ class FeedItem < ActiveRecord::Base
     end
     fi.feed_retrievals << feed_retrieval
     fi.feeds << feed unless fi.feeds.include?(feed)
-    # Merge tags. . .
-    pre_update_tags = fi.tag_list.dup.sort
-    # Merge the existing and the new tags together, assign to the it's tag list, uniquify and join
-    # Autotruncate tags to be no longer than 255 characters. This would be better done at the model level.
-    fi.tag_list = [fi.tag_list,item.categories.collect{|t| t.mb_chars.downcase[0,255].gsub(/,/,'').strip}].flatten.uniq
-    if pre_update_tags != fi.tag_list.sort
+
+    # Merge tags...
+    tag_context = Rails.application.config.global_tag_context
+    pre_update_tags = fi.all_tags_list_on(tag_context).dup.sort
+
+    # Merge the existing and the new tags together, assign to the it's tag
+    # list, uniquify and join Autotruncate tags to be no longer than 255
+    # characters. This would be better done at the model level.
+    new_tag_list = item.categories.map do |tag|
+      tag.mb_chars.downcase[0, 255].gsub(/,/,'').strip
+    end
+
+    merged_tag_lists = [fi.all_tags_list_on(tag_cotext), new_tag_list].flatten.uniq
+
+    fi.set_owner_tag_list_on(feed, tag_context, merged_tag_lists)
+
+    if pre_update_tags != fi.all_tags_list_on(tag_context).sort
       # logger.warn('dirty because tags have changed')
       feed.dirty = true
       unless fi.new_record?
         # Be sure to update the feed changelog here in case
         # an item only has tag changes.
-        item_changelog[:tags] = [pre_update_tags, fi.tag_list]
+        item_changelog[:tags] = [pre_update_tags, fi.all_tags_list_on(tag_context)]
         feed.changelog[fi.id] = item_changelog
       end
     end
+
     if fi.valid?
       if feed.changelog.keys.include?(fi.id) or fi.new_record?
-        # This runs here because we're auto stripping and auto-truncating columns and
-        # want the change tracking to be relative to these fixed values.
+        # This runs here because we're auto stripping and auto-truncating
+        # columns and want the change tracking to be relative to these fixed
+        # values.
         # logger.warn('dirty because a feed item changed or was created.')
         # logger.warn('dirty Changes: ' + fi.changes.inspect)
         unless fi.new_record?
@@ -239,11 +256,8 @@ class FeedItem < ActiveRecord::Base
         end
         # logger.warn('dirty item_changelog: ' + item_changelog.inspect)
         feed.dirty = true
-        # Tags will be reindexed by resque.
-        fi.skip_tag_indexing_after_save = true
         fi.save
         feed.changelog[fi.id] = item_changelog
-        #Sidekiq::Client.enqueue(FeedItemTagRenderer, fi.id)
       end
     else
       # logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
