@@ -75,6 +75,14 @@ ActsAsTaggableOn::Tag.instance_eval do
   end
 end
 
+ActsAsTaggableOn::Tagging.class_eval do
+  def deactivates_taggings(items: taggable)
+    items = [items] unless items.respond_to? :map
+    self.class.where(tag_id: tag_id, context: context,
+                     taggable_id: items.map(&:id), taggable_type: 'FeedItem')
+  end
+end
+
 ActsAsTaggableOn::Tagging.instance_eval do
   include TaggingDeactivator
 end

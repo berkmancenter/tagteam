@@ -11,7 +11,8 @@ module TaggingDeactivator
     tagging.attributes.each do |key, value|
       deactivated.send("#{key}=", value)
     end
-    deactivated.deactivator = self
+
+    deactivated.deactivator = self unless self.new_record?
 
     DeactivatedTagging.transaction do
       deactivated.save!
@@ -23,8 +24,8 @@ module TaggingDeactivator
     deactivated
   end
 
-  def deactivate_taggings!(items: items_in_scope)
-    deactivates_taggings(items: items).each do |tagging|
+  def deactivate_taggings!
+    deactivates_taggings.map do |tagging|
       deactivate_tagging(tagging)
     end
   end

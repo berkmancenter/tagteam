@@ -1,6 +1,24 @@
 require 'rails_helper'
 
 describe FeedItem do
+  describe '#merge_tags' do
+    context 'a feed with with tag "a" exists' do
+      before(:each) do
+        @context = 'tags'
+        @tag = create(:tag, name: 'a')
+        @feed = create(:feed)
+        @feed_item = create(:feed_item_from_feed, :tagged, feed: @feed,
+                            tag: @tag.name, tag_context: @context)
+      end
+      it 'deactivates the old tag "a" tagging when a new one is added' do
+        pre_tagging = @feed_item.taggings.where(tag_id: @tag.id).first
+        @feed_item.merge_tags([@tag.name], @context, @feed)
+        post_tagging = @feed_item.taggings.where(tag_id: @tag.id).first
+        expect(pre_tagging).not_to eq(post_tagging)
+      end
+    end
+  end
+
   describe '#copy_global_tags_to_hubs' do
     context 'a feed item with tag "a" exists in two hubs' do
       before(:each) do

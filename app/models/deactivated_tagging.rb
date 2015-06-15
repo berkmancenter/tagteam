@@ -1,5 +1,5 @@
 class DeactivatedTagging < ActiveRecord::Base
-  belongs_to :deactivator, polymorphic: true
+  belongs_to :deactivator, polymorphic: true, autosave: false
 
   def reactivate
     tagging = ActsAsTaggableOn::Tagging.new

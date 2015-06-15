@@ -73,6 +73,12 @@ class TagFilter < ActiveRecord::Base
             self.id, self.class.base_class.name)
   end
 
+  def deactivate_taggings!(items: items_in_scope)
+    deactivates_taggings(items: items).each do |tagging|
+      deactivate_tagging(tagging)
+    end
+  end
+
   def self.title
     "#{self.name.sub('TagFilter', '')} tag filter"
   end

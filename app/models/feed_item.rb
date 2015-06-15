@@ -183,6 +183,29 @@ class FeedItem < ActiveRecord::Base
     %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
   end
 
+  def merge_tags(new_tags, context, tagger)
+    # Merge the existing and the new tags together. When new tags conflict with
+    # existing tags, new tags win.
+
+    new_taggings = new_tags.map do |new_tag|
+      ActsAsTaggableOn::Tagging.new(
+        tag: ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(new_tag),
+        taggable: self,
+        tagger: tagger,
+        context: context
+      )
+    end
+
+    new_taggings.each do |tagging|
+      deactivated_taggings = tagging.deactivate_taggings!
+      tagging.save!
+      deactivated_taggings.each do |deactivated_tagging|
+        deactivated_tagging.deactivator = tagging
+        deactivated_tagging.save!
+      end
+    end
+  end
+
   # Used during the Feed#update_feed spidering process to de-duplicate and
   # create a FeedItem if it doesn't exist. Tags from all sources are merged
   # into a FeedItem. Changes are tracked and saved on the FeedRetrieval object
@@ -218,28 +241,25 @@ class FeedItem < ActiveRecord::Base
     fi.feed_retrievals << feed_retrieval
     fi.feeds << feed unless fi.feeds.include?(feed)
 
-    # Merge tags...
-    tag_context = Rails.application.config.global_tag_context
-    pre_update_tags = fi.all_tags_list_on(tag_context).dup.sort
-
-    # Merge the existing and the new tags together, assign to the it's tag
-    # list, uniquify and join Autotruncate tags to be no longer than 255
-    # characters. This would be better done at the model level.
-    new_tag_list = item.categories.map do |tag|
+    # Autotruncate tags to be no longer than 255 characters. This would be
+    # better done at the model level.
+    new_tags = item.categories.map do |tag|
       tag.mb_chars.downcase[0, 255].gsub(/,/,'').strip
     end
 
-    merged_tag_lists = [fi.all_tags_list_on(tag_context), new_tag_list].flatten.uniq
+    # Merge tags...
+    tag_context = Rails.application.config.global_tag_context
+    old_tags = fi.all_tags_list_on(tag_context).dup.sort
 
-    fi.set_owner_tag_list_on(feed, tag_context, merged_tag_lists)
+    fi.merge_tags(new_tags, tag_context, feed)
 
-    if pre_update_tags != fi.all_tags_list_on(tag_context).sort
+    if old_tags != fi.all_tags_list_on(tag_context).sort
       # logger.warn('dirty because tags have changed')
       feed.dirty = true
       unless fi.new_record?
         # Be sure to update the feed changelog here in case
         # an item only has tag changes.
-        item_changelog[:tags] = [pre_update_tags, fi.all_tags_list_on(tag_context)]
+        item_changelog[:tags] = [old_tags, fi.all_tags_list_on(tag_context)]
         feed.changelog[fi.id] = item_changelog
       end
     end
