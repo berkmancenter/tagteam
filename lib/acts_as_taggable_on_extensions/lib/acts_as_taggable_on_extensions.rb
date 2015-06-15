@@ -17,7 +17,7 @@ ActsAsTaggableOn::Tag.class_eval do
   end
 
   def self.normalize_name(name)
-    name.to_s.sub(/,\s*$/, '').strip.downcase
+    name.to_s.mb_chars.downcase[0, 255].gsub(/,/, '_').strip
   end
 
   def contexts

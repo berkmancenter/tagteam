@@ -60,9 +60,10 @@ class BookmarkletsController < ApplicationController
                                              Time.now.hour, Time.now.min)
     end
 
-    # Merge tags.
-    @feed_item.tag_list = [@feed_item.tag_list, params[:feed_item][:tag_list].split(/,\s*/).collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(',')
-    @feed = Feed.find(:first, :conditions => {:id => params[:feed_item][:bookmark_collection_id], :bookmarking_feed => true})
+    @feed = Feed.find(:first, conditions: {
+      id: params[:feed_item][:bookmark_collection_id],
+      bookmarking_feed: true
+    })
 
     # Only add to a feed that the user can add to.
     if @feed.blank? || ! current_user.is?(:owner, @feed)
@@ -77,14 +78,15 @@ class BookmarkletsController < ApplicationController
         end
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
-        
-        # Assign ownership of the feed item and tag to the user.
-        tags = @feed_item.tag_list.uniq.map {|tag_name| ActsAsTaggableOn::Tag.find_or_create_by_name(tag_name)}
-        current_user.tag(@feed_item, :with => tags, :on => "hub_#{@hub.id}")
-        
-        Sidekiq::Client.enqueue(FeedItemTagRenderer, @feed_item.id)
+
+        new_tags = params[:feed_item][:tag_list].split(/,\s*/).map do |tag|
+          ActsAsTaggableOn::Tag.normalize_name(tag)
+        end
+        @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
+
+        #Sidekiq::Client.enqueue(FeedItemTagRenderer, @feed_item.id)
         format.html {
-          redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id) 
+          redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id)
         }
       else
         format.html{

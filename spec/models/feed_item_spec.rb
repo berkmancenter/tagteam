@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe FeedItem do
-  describe '#merge_tags' do
+  describe '#add_tags' do
     context 'a feed with with tag "a" exists' do
       before(:each) do
         @context = 'tags'
@@ -12,7 +12,7 @@ describe FeedItem do
       end
       it 'deactivates the old tag "a" tagging when a new one is added' do
         pre_tagging = @feed_item.taggings.where(tag_id: @tag.id).first
-        @feed_item.merge_tags([@tag.name], @context, @feed)
+        @feed_item.add_tags([@tag.name], @context, @feed)
         post_tagging = @feed_item.taggings.where(tag_id: @tag.id).first
         expect(pre_tagging).not_to eq(post_tagging)
       end

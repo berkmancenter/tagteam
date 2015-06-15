@@ -183,7 +183,7 @@ class FeedItem < ActiveRecord::Base
     %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
   end
 
-  def merge_tags(new_tags, context, tagger)
+  def add_tags(new_tags, context, tagger)
     # Merge the existing and the new tags together. When new tags conflict with
     # existing tags, new tags win.
 
@@ -241,17 +241,15 @@ class FeedItem < ActiveRecord::Base
     fi.feed_retrievals << feed_retrieval
     fi.feeds << feed unless fi.feeds.include?(feed)
 
-    # Autotruncate tags to be no longer than 255 characters. This would be
-    # better done at the model level.
+    # Merge tags...
     new_tags = item.categories.map do |tag|
-      tag.mb_chars.downcase[0, 255].gsub(/,/,'').strip
+      ActsAsTaggableOn::Tag.normalize_name(tag)
     end
 
-    # Merge tags...
     tag_context = Rails.application.config.global_tag_context
     old_tags = fi.all_tags_list_on(tag_context).dup.sort
 
-    fi.merge_tags(new_tags, tag_context, feed)
+    fi.add_tags(new_tags, tag_context, feed)
 
     if old_tags != fi.all_tags_list_on(tag_context).sort
       # logger.warn('dirty because tags have changed')
