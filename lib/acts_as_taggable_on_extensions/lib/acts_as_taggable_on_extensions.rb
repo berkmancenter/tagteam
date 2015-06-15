@@ -75,22 +75,8 @@ ActsAsTaggableOn::Tag.instance_eval do
   end
 end
 
-ActsAsTaggableOn::Tagging.class_eval do
-  def deactivate
-    deactivated = DeactivatedTagging.new
-    self.attributes.each do |key, value|
-      deactivated.send("#{key}=", value)
-    end
-
-    DeactivatedTagging.transaction do
-      deactivated.save!
-      deactivated.update_attribute(:id, self.id)
-      deactivated.update_attribute(:created_at, self.created_at)
-      self.destroy
-    end
-
-    deactivated
-  end
+ActsAsTaggableOn::Tagging.instance_eval do
+  include TaggingDeactivator
 end
 
 ActsAsTaggableOn::Taggable.class_eval do

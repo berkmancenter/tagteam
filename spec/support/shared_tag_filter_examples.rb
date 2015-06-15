@@ -150,9 +150,6 @@ shared_examples 'an existing tag filter in a populated hub' do
       @filter2 = create(:add_tag_filter, hub: @filter.hub)
       @filter2.apply
     end
-    describe '#rollback' do
-      it 'rolls back the more recent filters'
-    end
   end
 end
 

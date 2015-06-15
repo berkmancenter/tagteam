@@ -7,6 +7,7 @@ class CreateDeactivatedTaggings < ActiveRecord::Migration
       # long enough to store the required class names.
       t.references :taggable, :polymorphic => true
       t.references :tagger, :polymorphic => true
+      t.references :deactivator, :polymorphic => true
 
       t.string :context
 
@@ -19,5 +20,7 @@ class CreateDeactivatedTaggings < ActiveRecord::Migration
     add_index :deactivated_taggings, [:tag_id, :taggable_id, :taggable_type,
                           :context, :tagger_id, :tagger_type],
                             unique: true, name: 'd_taggings_idx'
+    add_index :deactivated_taggings, [:deactivator_id, :deactivator_type],
+      name: 'd_taggings_deactivator_idx'
   end
 end

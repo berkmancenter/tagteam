@@ -229,7 +229,7 @@ class FeedItem < ActiveRecord::Base
       tag.mb_chars.downcase[0, 255].gsub(/,/,'').strip
     end
 
-    merged_tag_lists = [fi.all_tags_list_on(tag_cotext), new_tag_list].flatten.uniq
+    merged_tag_lists = [fi.all_tags_list_on(tag_context), new_tag_list].flatten.uniq
 
     fi.set_owner_tag_list_on(feed, tag_context, merged_tag_lists)
 

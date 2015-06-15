@@ -1,7 +1,11 @@
 class DeactivatedTagging < ActiveRecord::Base
+  belongs_to :deactivator, polymorphic: true
+
   def reactivate
     tagging = ActsAsTaggableOn::Tagging.new
-    self.attributes.each do |key, value|
+    tagging_attrs = self.attributes.except('deactivator_id', 'deactivator_type')
+
+    tagging_attrs.each do |key, value|
       tagging.send("#{key}=", value)
     end
 

@@ -93,13 +93,7 @@ class Hub < ActiveRecord::Base
     all_tag_filters.where('updated_at > ?', tag_filter.updated_at)
   end
 
-  # We rollback any filters ahead of the deleted filter in the chain so we can
-  # reapply and keep filters consistent.
-  def before_tag_filter_rollback(tag_filter)
-    tag_filters_after(tag_filter).each(&:rollback)
-  end
-
-  def after_tag_filter_rollback(tag_filter)
+  def reapply_tag_filters_after(tag_filter)
     tag_filters_after(tag_filter).each(&:apply)
   end
 

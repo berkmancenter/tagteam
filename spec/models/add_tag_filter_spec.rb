@@ -50,9 +50,11 @@ describe AddTagFilter do
 
       context 'active taggings already exist between tag "a" and items' do
         before(:each) do
-          @tagged_feed_items = create_list(
-            :feed_item_from_feed, 3, :tagged, feed: @hub_feed.feed,
-            tag: 'a', tag_context: @hub.tagging_key)
+          Sidekiq::Testing.fake! do
+            @tagged_feed_items = create_list(
+              :feed_item_from_feed, 3, :tagged, feed: @hub_feed.feed,
+              tag: @tag.name, tag_context: @hub.tagging_key)
+          end
         end
 
         describe '#apply' do

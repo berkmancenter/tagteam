@@ -1,6 +1,7 @@
 class TagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions
+  include TaggingDeactivator
 
   belongs_to :hub
   belongs_to :scope, polymorphic: true
@@ -8,6 +9,8 @@ class TagFilter < ActiveRecord::Base
   belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag'
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
+
+  before_destroy :rollback
 
   VALID_SCOPE_TYPES = ['Hub', 'HubFeed', 'FeedItem']
   validates_presence_of :tag_id
@@ -41,14 +44,12 @@ class TagFilter < ActiveRecord::Base
   # items comes in from a feed, for example), but filter rollback always
   # happens for all items at once, so we don't need an items argument here.
   def rollback
-    hub.before_tag_filter_rollback(self)
-    unless most_recent?
-      raise 'Can only rollback the most recently applied filter - this is not that'
+    TagFilter.transaction do
+      taggings.destroy_all
+      reactivate_taggings!
+      self.update_attribute(:applied, false)
     end
-    reactivate_taggings!
-    taggings.destroy_all
-    self.update_attribute(:applied, false)
-    hub.after_tag_filter_rollback(self)
+    self.class.base_class.notify_observers :after_rollback, self
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
@@ -70,20 +71,6 @@ class TagFilter < ActiveRecord::Base
             '"taggings"."tagger_type" IS NULL) OR ' +
             '(NOT ("taggings"."tagger_id" = ? AND "taggings"."tagger_type" = ?))',
             self.id, self.class.base_class.name)
-  end
-
-  def reactivates_taggings
-    DeactivatedTagging.
-      where(context: hub.tagging_key, tag_id: tag.id,
-            taggable_type: FeedItem, taggable_id: items_in_scope.pluck(:id))
-  end
-
-  def deactivate_taggings!(items: items_in_scope)
-    deactivates_taggings(items: items).each(&:deactivate)
-  end
-
-  def reactivate_taggings!
-    reactivates_taggings.each(&:reactivate)
   end
 
   def self.title

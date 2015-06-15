@@ -19,10 +19,13 @@ ActiveRecord::Schema.define(:version => 20150605201636) do
     t.string   "taggable_type"
     t.integer  "tagger_id"
     t.string   "tagger_type"
+    t.integer  "deactivator_id"
+    t.string   "deactivator_type"
     t.string   "context"
     t.datetime "created_at"
   end
 
+  add_index "deactivated_taggings", ["deactivator_id", "deactivator_type"], :name => "d_taggings_deactivator_idx"
   add_index "deactivated_taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], :name => "d_taggings_idx", :unique => true
   add_index "deactivated_taggings", ["taggable_id", "taggable_type", "context"], :name => "d_taggings_type_idx"
   add_index "deactivated_taggings", ["taggable_type", "context"], :name => "index_deactivated_taggings_on_taggable_type_and_context"

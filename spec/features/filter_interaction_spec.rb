@@ -11,28 +11,21 @@ feature "Tag filter interactions" do
   end
 
   context "A hub-level filter exists" do
-    scenario "User adds a feed-level filter" do
-    end
+    scenario "User adds a feed-level filter"
 
-    scenario "User adds an item-level filter" do
-    end
+    scenario "User adds an item-level filter"
 
-    scenario "User adds a duplicate feed-level filter" do
-    end
+    scenario "User adds a duplicate feed-level filter"
 
-    scenario "User adds a duplicate item-level filter" do
-    end
+    scenario "User adds a duplicate item-level filter"
 
     context "A feed-level filter exists" do
-      scenario "User adds an item-level filter" do
-      end
-      scenario "User adds a duplicate item-level filter" do
-      end
+      scenario "User adds an item-level filter"
+      scenario "User adds a duplicate item-level filter"
     end
   end
 
   context "A feed-level filter exists" do
-    scenario "User adds an item-level filter" do
-    end
+    scenario "User adds an item-level filter"
   end
 end
