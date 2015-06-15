@@ -45,7 +45,8 @@ class TagsController < ApplicationController
     if @hub_feed.blank?
       @tags = @hub.tag_counts
     else
-      @tags = FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id))
+      @tags = FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id),
+                                           @hub.tagging_key).all
     end
 
     if @tags.any?

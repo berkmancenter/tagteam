@@ -30,6 +30,10 @@ gem 'formtastic-bootstrap', git: 'https://github.com/mjbellantoni/formtastic-boo
 gem 'uglifier'
 gem 'test-unit', '~> 3.0'
 
+group :development do
+  #gem 'sql-logging'
+end
+
 group :development, :test do
   gem 'awesome_print'
   gem 'rspec-rails'

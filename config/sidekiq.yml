@@ -9,4 +9,4 @@ production:
   - [file_cache, 1]
   - [importer, 1]
   - [reindexer, 1]
-  - [renderer, 2]
+  - [default, 2]

@@ -298,12 +298,12 @@ class FeedItem < ActiveRecord::Base
       GROUP BY tags.id', context, self.name])
   end
 
-  def self.tag_counts_on_items(item_ids)
-    ActsAsTaggableOn::Tag.find_by_sql([
-      'SELECT tags.*, count(*)
-      FROM tags JOIN taggings ON taggings.tag_id = tags.id
-      WHERE taggings.taggable_id IN (?) AND taggings.taggable_type = ?
-      GROUP BY tags.id', item_ids, self.name])
+  def self.tag_counts_on_items(item_ids, context = nil)
+    query = ActsAsTaggableOn::Tag.select('tags.*, count(*)').joins(:taggings).
+      where(taggings: { taggable_id: item_ids, taggable_type: self.name }).
+      group('tags.id')
+    query = query.where(taggings: { context: context }) if context
+    query
   end
 
   def self.apply_tag_filters(item_id, hub_ids = [])
