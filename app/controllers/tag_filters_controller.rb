@@ -30,11 +30,15 @@ class TagFiltersController < ApplicationController
 
   def create
     filter_type = params[:filter_type].constantize
-    if params[:modify_tag]
-      @tag = find_or_create_tag_by_name(params[:modify_tag])
+    unless params[:tag_id].blank?
+      @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+    end
+
+    if params[:filter_type] == 'ModifyTagFilter'
+      @tag ||= find_or_create_tag_by_name(params[:modify_tag])
       @new_tag = find_or_create_tag_by_name(params[:new_tag])
     else
-      @tag = find_or_create_tag_by_name(params[:new_tag])
+      @tag ||= find_or_create_tag_by_name(params[:new_tag])
     end
 
     @tag_filter = filter_type.new
@@ -46,10 +50,10 @@ class TagFiltersController < ApplicationController
     if @tag_filter.save
       current_user.has_role!(:owner, @tag_filter)
       current_user.has_role!(:creator, @tag_filter)
-      flash[:notice] = 'Added that filter to this hub.'
+      flash[:notice] = %Q|Added a filter for that tag to "#{@scope.title}"|
 
       TagFilter.delay.apply_by_id(@tag_filter.id)
-      render text: "Added a filter for that tag to \"#{@scope.title}\"",
+      render text: %Q|Added a filter for that tag to "#{@scope.title}"|,
         layout: !request.xhr?
     else
       flash[:error] = 'Could not add that tag filter.'

@@ -50,8 +50,8 @@ module TagsHelper
   end
 
   def feed_filter_possible?(params, current_user)
-    params[:hub_feed_id].to_i != 0 && 
-      current_user.is?([:owner,:hub_feed_tag_filterer], @hub) && 
+    params[:hub_feed_id].to_i != 0 &&
+      current_user.is?([:owner,:hub_feed_tag_filterer], @hub) &&
       !@already_filtered_for_hub_feed
   end
 
@@ -67,17 +67,16 @@ module TagsHelper
       data_type: "#{type.to_s.capitalize}TagFilter"
     }
 
-    options[:data_id] = context[:tag].id if context[:tab]
+    options[:data_id] = context[:tag].id if context[:tag]
+    options[:data_hub_id] = context[:hub].id
 
     if context[:feed]
       path = hub_feed_tag_filters_path(context[:feed])
       add_class = 'hub_feed_tag_filter'
     elsif context[:hub] && context[:item]
-      options[:data_hub_id] = context[:hub].id
       path = hub_feed_item_tag_filters_path(context[:hub], context[:item])
       add_class = 'hub_feed_item_tag_filter'
     elsif context[:hub]
-      options[:data_hub_id] = context[:hub].id
       path = hub_tag_filters_path(context[:hub])
       add_class = 'hub_tag_filter'
     end

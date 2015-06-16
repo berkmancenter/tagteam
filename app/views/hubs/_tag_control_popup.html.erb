@@ -12,7 +12,10 @@
   <% end %>
 
   <% if feed_filter_possible?(params, current_user) %>
-    <li><%= link_to_tag_filter 'all items in this feed', type, { feed: @hub_feed, tag: @tag } %></li>
+    <li>
+    <%= link_to_tag_filter 'all items in this feed', type,
+      { hub: @hub, feed: @hub_feed, tag: @tag } %>
+    </li>
   <% end %>
 
   <% if item_filter_possible?(params, current_user) && type != :add %>
