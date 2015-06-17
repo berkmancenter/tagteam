@@ -10,8 +10,6 @@ class TagFilter < ActiveRecord::Base
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 
-  before_destroy :rollback
-
   VALID_SCOPE_TYPES = ['Hub', 'HubFeed', 'FeedItem']
   validates_presence_of :tag_id
   validates_inclusion_of :scope_type, in: VALID_SCOPE_TYPES

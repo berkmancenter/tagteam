@@ -1,4 +1,6 @@
 shared_examples 'a tag filter' do |filter_type|
+  it_behaves_like 'a tagging deactivator', filter_type
+
   describe '#items_in_scope' do
     include_context "user owns a hub with a feed and items"
 

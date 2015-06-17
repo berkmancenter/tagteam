@@ -56,27 +56,4 @@ class ModifyTagFilter < TagFilter
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end
-
-  def reactivates_taggings
-    d_taggings = DeactivatedTagging.arel_table
-
-    # Reactivates any taggings that resulted in the same tag on the same item.
-    # For example, if an item came in with tags 'tag1' and 'tag2', and this
-    # filter changed 'tag1' to 'tag2', this section reactivates 'tag2' while
-    # the next section reactivates 'tag1'.
-    duplicate_tag = d_taggings.grouping(
-      d_taggings[:context].eq(hub.tagging_key).and(
-      d_taggings[:tag_id].eq(new_tag.id)).and(
-      d_taggings[:taggable_type].eq('FeedItem')).and(
-      d_taggings[:taggable_id].in(items_with_new_tag.pluck(:id))))
-
-    # Reactivates any taggings that had the old tag
-    old_tag = d_taggings.grouping(
-      d_taggings[:context].eq(hub.tagging_key).and(
-      d_taggings[:tag_id].eq(tag.id)).and(
-      d_taggings[:taggable_type].eq('FeedItem')).and(
-      d_taggings[:taggable_id].in(items_with_new_tag.pluck(:id))))
-
-    DeactivatedTagging.where(old_tag.or(duplicate_tag))
-  end
 end

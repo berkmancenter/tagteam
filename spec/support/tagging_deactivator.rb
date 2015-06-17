@@ -1,10 +1,12 @@
-shared_examples 'a tagging deactivator' do
+shared_examples 'a tagging deactivator' do |filter_type|
   describe '#deactivate_tagging' do
     it 'copies the tagging into the deactivated_taggings table' do
+      filter = create(filter_type)
       tagging = create(:tagging)
-      deactivate_tagging(tagging)
+      filter.deactivate_tagging(tagging)
       # We have to remove created_at for some weird reason. It's truncating off
       # the nanoseconds of the time object when it's copying over.
+      expect(DeactivatedTagging.count).to eq(1)
       expect(DeactivatedTagging.first.attributes.delete(:created_at)).
         to be == tagging.attributes.delete(:created_at)
     end
@@ -19,6 +21,15 @@ shared_examples 'a tagging deactivator' do
       tagging = create(:tagging)
       deactivated = tagging.deactivate
       expect(deactivated).to have_attributes(tagging.attributes)
+    end
+  end
+
+  describe '#self_deactivated_taggings', wip: true do
+    it 'returns all deactivated taggings deactivated by this deactivator' do
+      filter = create(filter_type)
+      tagging = create(:tagging)
+      filter.deactivate_tagging(tagging)
+      expect(filter.self_deactivated_taggings.count).to eq(1)
     end
   end
 end

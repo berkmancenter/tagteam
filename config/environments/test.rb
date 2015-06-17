@@ -38,4 +38,12 @@ Tagteam::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  Capybara.javascript_driver = :webkit
+
+  VCR.configure do |c|
+    c.cassette_library_dir = Rails.root.join('spec', 'vcr')
+    c.ignore_localhost = true
+    c.hook_into :webmock
+  end
 end
