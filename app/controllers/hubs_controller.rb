@@ -336,6 +336,10 @@ class HubsController < ApplicationController
         respond_to do |format|
           # Tell 'em why.
           format.json{ render(:text => @feed.errors.full_messages.join('<br/>'), :status => :not_acceptable) and return }
+          format.html { 
+            flash[:error] = 'There was a problem adding that feed.'
+            redirect_to hub_hub_feeds_path(@hub) and return
+          }
         end
       end
     end
