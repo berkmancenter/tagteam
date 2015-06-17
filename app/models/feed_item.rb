@@ -245,13 +245,15 @@ class FeedItem < ActiveRecord::Base
     new_tags = item.categories.map do |tag|
       ActsAsTaggableOn::Tag.normalize_name(tag)
     end
+    new_tags.sort_by!(&:to_s)
+    new_tags.uniq!(&:to_s)
 
     tag_context = Rails.application.config.global_tag_context
     old_tags = fi.all_tags_list_on(tag_context).dup.sort
 
-    fi.add_tags(new_tags, tag_context, feed)
+    if new_tags != old_tags
+      fi.add_tags(new_tags, tag_context, feed)
 
-    if old_tags != fi.all_tags_list_on(tag_context).sort
       # logger.warn('dirty because tags have changed')
       feed.dirty = true
       unless fi.new_record?
