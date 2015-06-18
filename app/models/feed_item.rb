@@ -27,7 +27,6 @@ class FeedItem < ActiveRecord::Base
   end
 
   before_create :set_image_url
-  after_save :reindex_all_tags
 
   before_validation do
     auto_sanitize_html(:content, :description)
@@ -44,7 +43,7 @@ class FeedItem < ActiveRecord::Base
 
   attr_accessible :title, :url, :guid, :authors, :contributors,
     :description, :content, :rights, :date_published, :last_updated
-  attr_accessor :hub_id, :bookmark_collection_id, :skip_tag_indexing_after_save
+  attr_accessor :hub_id, :bookmark_collection_id
 
   api_accessible :default do |t|
     t.add :id
@@ -138,11 +137,9 @@ class FeedItem < ActiveRecord::Base
 
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
-    unless skip_tag_indexing_after_save == true
-      tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
-      ActsAsTaggableOn::Tag.where(id: tags_of_concern).
-        solr_index(:include => :taggings, batch_commit: false)
-    end
+    tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
+    ActsAsTaggableOn::Tag.where(id: tags_of_concern).
+      solr_index(:include => :taggings, batch_commit: false)
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within
