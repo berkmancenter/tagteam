@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.21'
+gem 'rails', '~> 3.2.22'
 gem 'rack', '~> 1.4.5'
 gem 'pg'
 gem 'formtastic'
