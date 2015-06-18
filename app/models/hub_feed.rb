@@ -69,12 +69,12 @@ class HubFeed < ActiveRecord::Base
       destroy_all
 
     # TODO: Review
-    self.feed.solr_index
-    feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
-    tagging_key = self.hub.tagging_key.to_s
-    Sidekiq::Client.enqueue(
-      ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
-    Sidekiq::Client.enqueue(ReindexFeedRetrievals, self.feed.id)
+    #self.feed.solr_index
+    #feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
+    #tagging_key = self.hub.tagging_key.to_s
+    #Sidekiq::Client.enqueue(
+    #  ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
+    #Sidekiq::Client.enqueue(ReindexFeedRetrievals, self.feed.id)
   end
 
 

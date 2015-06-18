@@ -2,6 +2,101 @@ require 'rake_helper'
 include RakeHelper
 
 namespace :tagteam do
+  desc 'Migrate to new tag system'
+  task :migrate_tagging => :environment do |t|
+    puts 'Turning off indexing'
+    original_sunspot_session = Sunspot.session
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
+
+    #puts 'Destroying Hub 31'
+    #Hub.find(31).destroy
+    #Rake::Task['tagteam:clean_orphan_items'].invoke
+
+    #new_db = ActiveRecord::Base.establish_connection(:new_production)
+    #posts.each do |p|
+    # new_db.connection.execute("insert into taggings set")
+    #  NewPost.create(:name => p.name.downcase) #NewPost should add Post in A. (mynewapp_psql)
+    #end
+
+    class NewTagging < ActiveRecord::Base
+      establish_connection :new_production
+      self.table_name = 'taggings'
+      attr_accessible :id, :taggable_id, :taggable_type, :tag_id, :tagger_id,
+        :tagger_type, :context, :created_at
+    end
+
+    ## Do the global taggings first
+    # Delete the taggings from the global context that have a matching tagging
+    # in the hub context with an owner. Those are from bookmarkers.
+    current_db = ActiveRecord::Base.connection
+    results = current_db.execute("SELECT t1.id FROM taggings AS t1 JOIN
+                                 taggings AS t2 ON t1.taggable_id
+                                 = t2.taggable_id AND t1.tag_id = t2.tag_id
+                                 WHERE t1.context = 'tags' AND t2.context !=
+                                   'tags' AND t2.tagger_id IS NOT NULL;")
+    delete_ids = results.map{ |r| r['id'] }
+    puts "Deleting #{delete_ids.count} bookmarker taggings from global context"
+    ActsAsTaggableOn::Tagging.delete(delete_ids)
+
+
+    # Find an owner for all remaining taggings - really just the first feed.
+    # This will set a feed in some undetermined way, which is fine.
+    puts "Adding tagging owners to global tags"
+    current_db.execute("UPDATE taggings SET tagger_id
+    = feed_items_feeds.feed_id, tagger_type = 'Feed' FROM feed_items_feeds
+    WHERE feed_items_feeds.feed_item_id = taggings.taggable_id AND
+                       taggings.context = 'tags' AND taggings.tagger_id IS NULL;")
+
+    # Migrate over all the remaining taggings in the global context.
+    puts "Migrating global taggings over to new prod"
+    NewTagging.delete_all
+    bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
+    ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
+      NewTagging.create(tagging.attributes)
+      bar.increment!
+    end
+    
+    ## Now do the hub taggings
+    # Migrate all filters over.
+    
+    def translate_filter(filter, scope)
+      new_filter = TagFilter.create(
+        hub: filter.hub,
+        scope: scope,
+        tag: filter.filter.tag,
+        new_tag: filter.filter.new_tag,
+        type: filter.filter_type,
+        applied: true,
+        updated_at: filter.updated_at
+      )
+
+      filter.owners.each do |owner|
+        owner.has_role! :owner, new_filter
+      end
+      filter.creators.each do |creator|
+        creator.has_role! :creator, new_filter
+      end
+    end
+
+    HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
+      translate_filter(filter, filter.hub)
+    end
+
+    HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
+      translate_filter(filter, filter.hub_feed)
+    end
+
+    HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
+      translate_filter(filter, filter.feed_item)
+    end
+
+    # Delete any duplicate taggings.
+    
+    
+    puts 'Turning indexing back on'
+    Sunspot.session = original_sunspot_session
+  end
+
   desc 'Parse out image URLs from all feed items'
   task :set_image_urls => :environment do |t|
     bar = ProgressBar.new(FeedItem.count)
@@ -53,6 +148,9 @@ namespace :tagteam do
      
   desc 'clean up orphaned items'
   task :clean_orphan_items => :environment do
+    original_sunspot_session = Sunspot.session
+    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
+    
     conn = ActiveRecord::Base.connection
 
     results = conn.execute("select id from feeds where id not in(select feed_id from hub_feeds group by feed_id)")
@@ -69,6 +167,8 @@ namespace :tagteam do
         Role.destroy(r.id)
       end
     end
+
+    Sunspot.session = original_sunspot_session
   
   end
 
