@@ -25,13 +25,13 @@ class HubsController < ApplicationController
 
   def about
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     render layout: 'tabs'
   end
 
   def created
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
   end
 
   def find_slugged_hub
@@ -77,19 +77,18 @@ class HubsController < ApplicationController
 
   def contact
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     render layout: request.xhr? ? false : 'tabs'
   end
 
   def community
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     render layout: request.xhr? ? false : 'tabs'
   end
 
   def add_roles
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
     if ! params[:user_ids].blank? && ! params[:roles].blank?
       params[:user_ids].each do|u|
         user = User.find(u)
@@ -103,7 +102,6 @@ class HubsController < ApplicationController
 
   def remove_roles
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
     # TODO - Refactor this to work in a model-level after trigger, so that rights are properly revoked/reassigned when modified anywhere.
     messages = []
     params[:roles_to_remove] && params[:roles_to_remove].each do|r|
@@ -135,7 +133,7 @@ class HubsController < ApplicationController
   # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.
   def retrievals
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     hub_id = @hub.id
     @feed_retrievals = FeedRetrieval.search(:include => [:feed => {:hub_feeds => [:feed]}]) do
       with(:hub_ids, hub_id)
@@ -181,7 +179,7 @@ class HubsController < ApplicationController
   # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
   def bookmark_collections
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     @bookmark_collections = HubFeed.bookmark_collections.where(:hub_id => @hub.id).paginate(:page => params[:page], :per_page => get_per_page)
     respond_to do|format|
       format.html{ render layout: request.xhr? ? false : 'tabs' }
@@ -193,7 +191,7 @@ class HubsController < ApplicationController
   # Accessible via html, json, and xml. Pass in the date by appending "/" separated parameters to this action, so: /hubs/1/by_date/2012/03/28. If you put in "00" for the month or day parameter, we'll search for all items form that month or year.
   def by_date
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
 
     if params[:month] == '00'
       # Year search
@@ -240,7 +238,6 @@ class HubsController < ApplicationController
   # Recalculate all tag facets and re-apply all filters for all items in this hub. Only available to users with the "superadmin" privilege.
   def recalc_all_tags
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
     Sidekiq::Client.enqueue(RecalcAllItems,@hub.id)
     flash[:notice] = 'Re-rendering all tags. This will take a while.'
     redirect_to request.referer
@@ -254,7 +251,7 @@ class HubsController < ApplicationController
   def items
     unless params[:id].blank?
       @hub = Hub.find(params[:id])
-      breadcrumbs.add @hub, hub_path(@hub)
+      add_breadcrumbs
       hub_id = @hub.id
     end
 
@@ -299,7 +296,7 @@ class HubsController < ApplicationController
 
   def tag_controls
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
 
     @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
 
@@ -324,7 +321,6 @@ class HubsController < ApplicationController
 
   def add_feed
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
     @feed = Feed.find_or_initialize_by_feed_url(params[:feed_url])
 
     if @feed.new_record? 
@@ -370,7 +366,7 @@ class HubsController < ApplicationController
   # A list of all republished feeds(aka remixed feeds) that can be added to for the current user.
   def custom_republished_feeds
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     @republished_feeds =  RepublishedFeed.select('DISTINCT republished_feeds.*').joins(:accepted_roles => [:users]).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_id = ?','owner','RepublishedFeed', ((current_user.blank?) ? nil : current_user.id), @hub.id ]).order('updated_at')
  
     respond_to do|format|
@@ -385,7 +381,7 @@ class HubsController < ApplicationController
   end
 
   def home
-    unless current_user.blank?
+    if user_signed_in?
       @my_hubs = current_user.my(Hub)
     end
     @hubs = Hub.paginate(:page => params[:page], :per_page => 5 ).order('title ASC') #get_per_page)
@@ -413,7 +409,7 @@ class HubsController < ApplicationController
   # Available as html, json, or xml.
   def show
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     @show_auto_discovery_params = items_hub_url(@hub, :format => :rss)
     redirect_to items_hub_path(@hub)
     
@@ -448,7 +444,7 @@ class HubsController < ApplicationController
   # A list of the current users' bookmark collections for a specific hub, used mostly by the bookmarklet.
   def my_bookmark_collections
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     @bookmark_collections = current_user.my_bookmarking_bookmark_collections_in(@hub)
     respond_to do |format|
       format.json{ render_for_api :bookmarklet_choices, :json => @bookmark_collections }
@@ -459,6 +455,7 @@ class HubsController < ApplicationController
   def create
     @hub = Hub.new
     @hub.attributes = params[:hub]
+    add_breadcrumbs
     respond_to do|format|
       if @hub.save
         current_user.has_role!(:owner, @hub)
@@ -482,12 +479,12 @@ class HubsController < ApplicationController
 
   def edit
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
   end
 
   def update
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     @hub.attributes = params[:hub]
     respond_to do|format|
       if @hub.save
@@ -503,7 +500,6 @@ class HubsController < ApplicationController
 
   def destroy
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
     @hub.destroy
     flash[:notice] = 'Deleted that hub'
     respond_to do|format|
@@ -516,7 +512,7 @@ class HubsController < ApplicationController
   # Search results are available as html, json, or xml. 
   def item_search
     @hub = Hub.find(params[:id])
-    breadcrumbs.add @hub, hub_path(@hub)
+    add_breadcrumbs
     breadcrumbs.add "Search", request.url
  
     hub_id = @hub.id
@@ -566,4 +562,7 @@ class HubsController < ApplicationController
       params[:page] = params[:page] =~ /^\d*$/ ? params[:page] : 1
   end
 
+  def add_breadcrumbs
+    breadcrumbs.add @hub, hub_path(@hub)
+  end
 end

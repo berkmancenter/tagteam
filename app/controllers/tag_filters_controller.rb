@@ -16,7 +16,9 @@ class TagFiltersController < ApplicationController
     # Need to be careful and use #in_hub here because feed items can exist in
     # multiple hubs. We'll always get a hub variable.
     @tag_filters = @scope.tag_filters.in_hub(@hub)
-    #breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    breadcrumbs.add @hub, hub_path(@hub)
+    breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed) if @hub_feed
+    breadcrumbs.add @feed_item, hub_feed_item_path(@hub, @feed_item) if @feed_item
     respond_to do |format|
       format.html { render template, layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default,  json: @tag_filters }

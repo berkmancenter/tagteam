@@ -18,7 +18,7 @@ class FeedItemsController < ApplicationController
   def content
     load_hub_feed
     load_feed_item
-    breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    add_breadcrumbs
     respond_to do|format|
       format.html{ render :layout => request.xhr? ? false : 'tabs'}
       format.json{ render_for_api :with_content, :json => @feed_item}
@@ -29,7 +29,7 @@ class FeedItemsController < ApplicationController
   def about
     load_hub_feed
     load_feed_item
-    breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+    add_breadcrumbs
     respond_to do|format|
       format.html{ render :layout => request.xhr? ? false : 'tabs'}
       format.json{ render_for_api :default, :json => @feed_item}
@@ -71,6 +71,8 @@ class FeedItemsController < ApplicationController
       page: params[:page],
       per_page: get_per_page
     )
+    breadcrumbs.add @hub_feed.hub, hub_path(@hub_feed.hub)
+    breadcrumbs.add @hub_feed.feed, hub_hub_feed_path(@hub_feed.hub, @hub_feed)
     respond_to do |format|
       format.html do
         template = params[:view] == 'grid' ? 'feed_items/index_grid' : 'feed_items/index'
@@ -90,11 +92,6 @@ class FeedItemsController < ApplicationController
     add_breadcrumbs
     respond_to do |format|
       format.html{
-        if from_search?
-          breadcrumbs.add @feed_item.to_s 
-        else
-          breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
-        end
         render :layout => request.xhr? ? false : 'tabs'
       }
       format.json{ render_for_api :with_content, :json => @feed_item }
@@ -125,6 +122,11 @@ class FeedItemsController < ApplicationController
       unless @hub_feed.blank?
         breadcrumbs.add @hub.to_s, hub_path(@hub) 
         breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub,@hub_feed) 
+        if from_search?
+          breadcrumbs.add @feed_item.to_s 
+        else
+          breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+        end
       end
     end
   end

@@ -40,6 +40,7 @@ class HubFeedsController < ApplicationController
   def import
     load_hub_feed
     load_hub
+    add_breadcrumbs
     render layout: 'tabs'
   end
 
@@ -81,6 +82,7 @@ class HubFeedsController < ApplicationController
   def index
     load_hub
     @hub_feeds = @hub.hub_feeds.rss.paginate(:page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
+    add_breadcrumbs
     respond_to do|format|
       format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @hub_feeds }
@@ -93,7 +95,6 @@ class HubFeedsController < ApplicationController
     load_hub
     add_breadcrumbs
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
-    breadcrumbs.add @hub_feed.display_title, hub_hub_feed_path(@hub,@hub_feed)
     render layout: 'tabs'
   end
 
@@ -183,6 +184,7 @@ class HubFeedsController < ApplicationController
 
   def add_breadcrumbs
     breadcrumbs.add @hub.title, hub_path(@hub)
+    breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed) if @hub_feed
   end
 
 end
