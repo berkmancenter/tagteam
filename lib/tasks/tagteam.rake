@@ -1,21 +1,40 @@
 require 'rake_helper'
 include RakeHelper
-
-class HubTagFilter < ActiveRecord::Base
-end
-class HubFeedTagFilter < ActiveRecord::Base
-end
-class HubFeedItemTagFilter <ActiveRecord::Base
-end
+require 'auth_utilities'
 
 namespace :tagteam do
   desc 'Migrate to new tag system'
   task :migrate_tagging => :environment do |t|
+    module MockTagFilter
+      include AuthUtilities
+      def filter
+        filter_type.constantize.find_by_sql(
+          "SELECT * FROM #{filter_type.tableize} WHERE id = #{filter_id}"
+        ).first
+      end
+    end
+    class HubTagFilter < ActiveRecord::Base
+      belongs_to :hub
+      acts_as_authorization_object
+      include MockTagFilter
+    end
+    class HubFeedTagFilter < ActiveRecord::Base
+      belongs_to :hub
+      belongs_to :hub_feed
+      acts_as_authorization_object
+      include MockTagFilter
+    end
+    class HubFeedItemTagFilter < ActiveRecord::Base
+      belongs_to :hub
+      belongs_to :feed_item
+      acts_as_authorization_object
+      include MockTagFilter
+    end
     puts 'Make sure sunspot is disabled, or this will be really slow.'
 
     puts 'Destroying Hub 31'
     Hub.find(31).destroy unless Hub.where(id: 31).empty?
-    Rake::Task['tagteam:clean_orphan_items'].invoke # Took about 45 mins
+    Rake::Task['tagteam:clean_orphan_items'].invoke # Took about 2 hours 45 mins
 
     class NewTagging < ActiveRecord::Base
       establish_connection :new_production
@@ -47,15 +66,18 @@ namespace :tagteam do
                        taggings.context = 'tags' AND taggings.tagger_id IS NULL;")
 
     # Migrate over all the remaining taggings in the global context.
-    puts "Migrating global taggings over to new prod"
     NewTagging.delete_all
-    bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
-    ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
-      NewTagging.create(tagging.attributes)
-      tagging.delete
-      bar.increment!
+    unless ActsAsTaggableOn::Tagging.where(context: 'tags').empty?
+      puts "Migrating global taggings over to new prod"
+      bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
+      ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
+        NewTagging.create(tagging.attributes)
+        tagging.delete
+        bar.increment!
+      end
     end
     
+    puts 'Migrating filters'
     ## Now do the hub taggings
     # Migrate all filters over.
     def translate_filter(filter, scope)
@@ -78,21 +100,31 @@ namespace :tagteam do
       end
     end
 
-    HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
-      translate_filter(filter, filter.hub)
-      filter.destroy
+    filter_count = HubTagFilter.unscoped.count +
+      HubFeedTagFilter.unscoped.count +
+      HubFeedItemTagFilter.unscoped.count
+    unless filter_count == 0
+      bar = ProgressBar.new(filter_count)
+      HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
+        translate_filter(filter, filter.hub)
+        filter.destroy
+        bar.increment!
+      end
+
+      HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
+        translate_filter(filter, filter.hub_feed)
+        filter.destroy
+        bar.increment!
+      end
+
+      HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
+        translate_filter(filter, filter.feed_item)
+        filter.destroy
+        bar.increment!
+      end
     end
 
-    HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
-      translate_filter(filter, filter.hub_feed)
-      filter.destroy
-    end
-
-    HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
-      translate_filter(filter, filter.feed_item)
-      filter.destroy
-    end
-
+    puts 'Manipulating owned taggings'
     # Delete any taggings that are duplicates in favor of owned taggings. Do
     # not remove any owned taggings.
     current_db.execute("DELETE FROM taggings WHERE id IN (SELECT t2.id FROM
@@ -101,6 +133,7 @@ namespace :tagteam do
                        t1.context = t2.context AND t1.id != t2.id WHERE
                        t1.tagger_id IS NOT NULL AND t2.tagger_id IS NULL);")
     
+    puts 'Deactivating duplicate taggings'
     # If multiple users own the same tagging, create the most recent as
     # a tagging and the remainder as deactivated taggings.
     to_deactivate = ActsAsTaggableOn::Tagging.find_by_sql(
@@ -109,17 +142,29 @@ namespace :tagteam do
       taggable_id, context ORDER BY created_at DESC) ORDER BY first_value ASC,
       created_at DESC) AS ss WHERE row_number > 1;"
     )
+    count = to_deactivate.count
+    unless count == 0
+      bar = ProgressBar.new(count)
+      to_deactivate.each do |tagging|
+        deactivator = ActsAsTaggableOn::Tagging.find(tagging.first_value)
 
-    to_deactivate.each do |tagging|
-      deactivator = ActsAsTaggableOn::Tagging.find(tagging.first_value)
-      deactivator.deactivate_tagging(tagging)
+        attrs = tagging.attributes.except('row_number', 'first_value')
+        tagging.instance_variable_set(:@attributes, attrs)
+
+        deactivator.deactivate_tagging(tagging)
+        bar.increment!
+      end
     end
 
-    bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').count)
-    ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').each do |tagging|
-      NewTagging.create(tagging.attributes)
-      tagging.delete
-      bar.increment!
+    puts 'Migrating remaining owned taggings'
+    count = ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').count
+    unless count == 0
+      bar = ProgressBar.new(count)
+      ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').each do |tagging|
+        NewTagging.create(tagging.attributes)
+        tagging.delete
+        bar.increment!
+      end
     end
 
     # Locate all taggings that could have been applied by filters (in hub
@@ -154,7 +199,9 @@ namespace :tagteam do
 
     # Locate all owned taggings. These are from bookmarkers. Migrate them over
     # and delete the old.
+    puts 'Review remaining taggings'
 
+    # TODO: Replace taggings table in prod with taggings table in new prod
     puts 'Turn indexing back on'
   end
 
