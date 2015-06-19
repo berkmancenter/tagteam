@@ -170,7 +170,7 @@ namespace :tagteam do
     # Locate all taggings that could have been applied by filters (in hub
     # contexts). Delete them as they can be recreated appropriately and
     # consistently.
-    class AddTagFilter
+    AddTagFilter.class_eval do
       def potential_added_taggings
         ActsAsTaggableOn::Tagging.where(
           context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem,
@@ -179,7 +179,7 @@ namespace :tagteam do
       end
     end
 
-    class ModifyTagFilter
+    ModifyTagFilter.class_eval do
       def potential_added_taggings
         item_ids_with_old_tag = NewTagging.where(
           taggable_id: items_in_scope.pluck(:id),
@@ -190,10 +190,10 @@ namespace :tagteam do
           taggable_id: item_ids_with_old_tag).where('tagger_id IS NULL')
       end
     end
-    AddTagFilter.each do |filter|
+    AddTagFilter.all.each do |filter|
       filter.potential_added_taggings.delete_all
     end
-    ModifyTagFilter.each do |filter|
+    ModifyTagFilter.all.each do |filter|
       filter.potential_added_taggings.delete_all
     end
 
