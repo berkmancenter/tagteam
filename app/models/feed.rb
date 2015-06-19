@@ -31,15 +31,18 @@ class Feed < ActiveRecord::Base
     unless: Proc.new{|rec| rec.is_bookmarking_feed?}
   after_create :save_feed_items_on_create,
     unless: Proc.new{|rec| rec.is_bookmarking_feed?}
+  before_destroy :remove_feed_items_feeds
 
   attr_accessible :feed_url, :title, :description, :bookmarking_feed
   attr_accessor :raw_feed, :status_code, :dirty, :changelog, :dirty_feed_items
 
   has_many :hub_feeds, dependent: :destroy
   has_many :hubs, through: :hub_feeds
-  has_many :feed_retrievals, order: 'created_at desc', dependent: :destroy
-  has_many :input_sources, dependent: :destroy, as: :item_source
+  has_many :feed_retrievals, order: 'created_at desc', dependent: :delete_all
+  has_many :input_sources, dependent: :delete_all, as: :item_source
   has_and_belongs_to_many :feed_items, order: 'date_published desc'
+
+
 
   api_accessible :default do|t|
     t.add :authors
@@ -223,5 +226,11 @@ class Feed < ActiveRecord::Base
 
   def self.title
     'Feed'
+  end
+
+  private
+
+  def remove_feed_items_feeds
+    self.connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
   end
 end

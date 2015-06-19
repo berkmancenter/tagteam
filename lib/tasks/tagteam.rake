@@ -1,22 +1,21 @@
 require 'rake_helper'
 include RakeHelper
 
+class HubTagFilter < ActiveRecord::Base
+end
+class HubFeedTagFilter < ActiveRecord::Base
+end
+class HubFeedItemTagFilter <ActiveRecord::Base
+end
+
 namespace :tagteam do
   desc 'Migrate to new tag system'
   task :migrate_tagging => :environment do |t|
-    puts 'Turning off indexing'
-    original_sunspot_session = Sunspot.session
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new(original_sunspot_session)
+    puts 'Make sure sunspot is disabled, or this will be really slow.'
 
-    #puts 'Destroying Hub 31'
-    #Hub.find(31).destroy
-    #Rake::Task['tagteam:clean_orphan_items'].invoke
-
-    #new_db = ActiveRecord::Base.establish_connection(:new_production)
-    #posts.each do |p|
-    # new_db.connection.execute("insert into taggings set")
-    #  NewPost.create(:name => p.name.downcase) #NewPost should add Post in A. (mynewapp_psql)
-    #end
+    puts 'Destroying Hub 31'
+    Hub.find(31).destroy unless Hub.where(id: 31).empty?
+    Rake::Task['tagteam:clean_orphan_items'].invoke # Took about 45 mins
 
     class NewTagging < ActiveRecord::Base
       establish_connection :new_production
@@ -53,12 +52,12 @@ namespace :tagteam do
     bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
     ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
       NewTagging.create(tagging.attributes)
+      tagging.delete
       bar.increment!
     end
     
     ## Now do the hub taggings
     # Migrate all filters over.
-    
     def translate_filter(filter, scope)
       new_filter = TagFilter.create(
         hub: filter.hub,
@@ -67,6 +66,7 @@ namespace :tagteam do
         new_tag: filter.filter.new_tag,
         type: filter.filter_type,
         applied: true,
+        created_at: filter.created_at,
         updated_at: filter.updated_at
       )
 
@@ -80,21 +80,82 @@ namespace :tagteam do
 
     HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
       translate_filter(filter, filter.hub)
+      filter.destroy
     end
 
     HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
       translate_filter(filter, filter.hub_feed)
+      filter.destroy
     end
 
     HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
       translate_filter(filter, filter.feed_item)
+      filter.destroy
     end
 
-    # Delete any duplicate taggings.
+    # Delete any taggings that are duplicates in favor of owned taggings. Do
+    # not remove any owned taggings.
+    current_db.execute("DELETE FROM taggings WHERE id IN (SELECT t2.id FROM
+                       taggings AS t1 JOIN taggings AS t2 ON t1.taggable_id
+                       = t2.taggable_id AND t1.tag_id = t2.tag_id AND
+                       t1.context = t2.context AND t1.id != t2.id WHERE
+                       t1.tagger_id IS NOT NULL AND t2.tagger_id IS NULL);")
     
-    
-    puts 'Turning indexing back on'
-    Sunspot.session = original_sunspot_session
+    # If multiple users own the same tagging, create the most recent as
+    # a tagging and the remainder as deactivated taggings.
+    to_deactivate = ActsAsTaggableOn::Tagging.find_by_sql(
+      "SELECT * FROM (SELECT *, row_number() OVER w, first_value(id) OVER w FROM
+      taggings WHERE tagger_id IS NOT NULL WINDOW w AS (PARTITION BY tag_id,
+      taggable_id, context ORDER BY created_at DESC) ORDER BY first_value ASC,
+      created_at DESC) AS ss WHERE row_number > 1;"
+    )
+
+    to_deactivate.each do |tagging|
+      deactivator = ActsAsTaggableOn::Tagging.find(tagging.first_value)
+      deactivator.deactivate_tagging(tagging)
+    end
+
+    bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').count)
+    ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').each do |tagging|
+      NewTagging.create(tagging.attributes)
+      tagging.delete
+      bar.increment!
+    end
+
+    # Locate all taggings that could have been applied by filters (in hub
+    # contexts). Delete them as they can be recreated appropriately and
+    # consistently.
+    class AddTagFilter
+      def potential_added_taggings
+        ActsAsTaggableOn::Tagging.where(
+          context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem,
+          taggable_id: items_in_scope.pluck(:id)
+        ).where('tagger_id IS NULL')
+      end
+    end
+
+    class ModifyTagFilter
+      def potential_added_taggings
+        item_ids_with_old_tag = NewTagging.where(
+          taggable_id: items_in_scope.pluck(:id),
+          tag_id: tag.id
+        ).pluck(:id)
+        ActsAsTaggableOn::Tagging.where(
+          context: hub.tagging_key, tag_id: new_tag.id, taggable_type: FeedItem,
+          taggable_id: item_ids_with_old_tag).where('tagger_id IS NULL')
+      end
+    end
+    AddTagFilter.each do |filter|
+      filter.potential_added_taggings.delete_all
+    end
+    ModifyTagFilter.each do |filter|
+      filter.potential_added_taggings.delete_all
+    end
+
+    # Locate all owned taggings. These are from bookmarkers. Migrate them over
+    # and delete the old.
+
+    puts 'Turn indexing back on'
   end
 
   desc 'Parse out image URLs from all feed items'
@@ -157,8 +218,8 @@ namespace :tagteam do
     puts "Destroying Feeds #{results.collect{|r| r['id']}.join(',')}"
     Feed.destroy(results.collect{|r| r['id']})
 
-    results = conn.execute('select id from feed_items where id not in(select feed_item_id from feed_items_feeds group by feed_item_id)')
-    puts "Destroying FeedItems #{results.collect{|r| r['id']}.join(',')}"
+    results = conn.execute('select id from feed_items except (select distinct feed_item_id from feed_items_feeds)')
+    puts "Destroying #{results.count} FeedItems #{results.first(4).collect{|r| r['id']}.join(',')}"
     FeedItem.destroy(results.collect{|r| r['id']})
 
     Role.includes(:authorizable).where('authorizable_id is not null').all.each do|r|
