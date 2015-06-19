@@ -220,7 +220,7 @@ namespace :tagteam do
 
     results = conn.execute('select id from feed_items except (select distinct feed_item_id from feed_items_feeds)')
     puts "Destroying #{results.count} FeedItems #{results.first(4).collect{|r| r['id']}.join(',')}"
-    FeedItem.destroy(results.collect{|r| r['id']})
+    results.each{ |r| FeedItem.destroy(r['id']) }
 
     Role.includes(:authorizable).where('authorizable_id is not null').all.each do|r|
       if r.authorizable.blank?
