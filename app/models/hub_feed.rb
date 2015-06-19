@@ -103,7 +103,7 @@ class HubFeed < ActiveRecord::Base
     [self.hub_id]
   end
 
-  def title 
+  def title
     read_attribute(:title).blank? ? self.feed.title : self.read_attribute(:title)
   end
   alias :display_title :title
