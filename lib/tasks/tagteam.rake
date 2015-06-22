@@ -65,6 +65,11 @@ namespace :tagteam do
     WHERE feed_items_feeds.feed_item_id = taggings.taggable_id AND
                        taggings.context = 'tags' AND taggings.tagger_id IS NULL;")
 
+    # Delete any hub taggings that are duplicates of taggings in the global
+    # context and don't have an owner. These are from feeds.
+    puts 'Deleting duplicate taggings in hubs'
+    current_db.execute("DELETE FROM taggings WHERE id IN (SELECT sq.id FROM (SELECT taggings.*, count(*) OVER (PARTITION BY taggable_id, tag_id) FROM taggings WHERE tagger_id IS NULL) AS sq WHERE count > 1 AND context != 'tags')")
+
     # Migrate over all the remaining taggings in the global context.
     NewTagging.delete_all
     unless ActsAsTaggableOn::Tagging.where(context: 'tags').empty?
@@ -98,6 +103,7 @@ namespace :tagteam do
       filter.creators.each do |creator|
         creator.has_role! :creator, new_filter
       end
+      new_filter.save!
     end
 
     filter_count = HubTagFilter.unscoped.count +
@@ -106,20 +112,26 @@ namespace :tagteam do
     unless filter_count == 0
       bar = ProgressBar.new(filter_count)
       HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
-        translate_filter(filter, filter.hub)
-        filter.destroy
+        HubTagFilter.transaction do
+          translate_filter(filter, filter.hub)
+          filter.destroy
+        end
         bar.increment!
       end
 
       HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
-        translate_filter(filter, filter.hub_feed)
-        filter.destroy
+        HubTagFilter.transaction do
+          translate_filter(filter, filter.hub_feed)
+          filter.destroy
+        end
         bar.increment!
       end
 
       HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
-        translate_filter(filter, filter.feed_item)
-        filter.destroy
+        HubTagFilter.transaction do
+          translate_filter(filter, filter.feed_item)
+          filter.destroy
+        end
         bar.increment!
       end
     end
