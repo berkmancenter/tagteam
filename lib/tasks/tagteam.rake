@@ -35,31 +35,64 @@ namespace :tagteam do
       ## Now do the hub taggings
       # Migrate all filters over.
       def translate_filter(filter, scope)
-        new_filter = TagFilter.create
-        attrs = {
-          hub: filter.hub,
-          scope: scope,
-          tag: filter.filter.tag,
-          new_tag: filter.filter.new_tag,
-          type: filter.filter_type,
-          applied: true,
-          created_at: filter.created_at,
-          updated_at: filter.updated_at
-        }
-        attrs.each do |attr, value|
-          new_filter.send "#{attr}=", value
-        end
+        if filter.filter.tag.name.include? ','
+          tags = filter.filter.tag.name.split(',').map(&:strip)
+          #puts "Split #{filter.filter.tag.name} into #{tags}"
+          tags.each do |tag|
+            next if tag.empty?
+            puts filter.inspect unless filter.filter_type == 'AddTagFilter'
+            next unless filter.filter_type == 'AddTagFilter'
+            new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(tag)
+            new_filter = TagFilter.create
+            attrs = {
+              hub: filter.hub,
+              scope: scope,
+              tag: new_tag,
+              type: filter.filter_type,
+              applied: false,
+              created_at: filter.created_at,
+              updated_at: filter.updated_at
+            }
+            attrs.each do |attr, value|
+              new_filter.send "#{attr}=", value
+            end
 
-        filter.owners.each do |owner|
-          owner.has_role! :owner, new_filter
+            filter.owners.each do |owner|
+              owner.has_role! :owner, new_filter
+            end
+            filter.creators.each do |creator|
+              creator.has_role! :creator, new_filter
+            end
+            new_filter.save! if new_filter.valid? # Because we can end up
+            # with duplicates now that we're splitting
+          end
+        else
+          new_filter = TagFilter.create
+          attrs = {
+            hub: filter.hub,
+            scope: scope,
+            tag: filter.filter.tag,
+            new_tag: filter.filter.new_tag,
+            type: filter.filter_type,
+            applied: false,
+            created_at: filter.created_at,
+            updated_at: filter.updated_at
+          }
+          attrs.each do |attr, value|
+            new_filter.send "#{attr}=", value
+          end
+
+          filter.owners.each do |owner|
+            owner.has_role! :owner, new_filter
+          end
+          filter.creators.each do |creator|
+            creator.has_role! :creator, new_filter
+          end
+          #puts "Old filter: #{filter.inspect}"
+          #puts "Scope: #{scope.inspect}"
+          #puts "New filter: #{new_filter.inspect}"
+          new_filter.save! if new_filter.valid?
         end
-        filter.creators.each do |creator|
-          creator.has_role! :creator, new_filter
-        end
-        #puts "Old filter: #{filter.inspect}"
-        #puts "Scope: #{scope.inspect}"
-        #puts "New filter: #{new_filter.inspect}"
-        new_filter.save!
       end
 
       messages = []
@@ -111,6 +144,7 @@ namespace :tagteam do
         end
 
         puts messages.uniq.join("\n")
+        puts "Turned #{filter_count} old filters into #{TagFilter.count} new filters"
       end
     end
 
@@ -156,7 +190,7 @@ namespace :tagteam do
 
       current_db = ActiveRecord::Base.connection
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
       ## Do the global taggings first
       # Delete the taggings from the global context that have a matching tagging
       # in the hub context with an owner. Those are from bookmarkers.
@@ -169,7 +203,7 @@ namespace :tagteam do
         tagger_type IS NULL);"
       )
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       # Delete any hub taggings that are duplicates of taggings in the global
       # context and don't have an owner. These are from feeds.
@@ -181,7 +215,7 @@ namespace :tagteam do
           'tags')"
       )
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       # Find an owner for all remaining global taggings - really just the first
       # feed.  This will set a feed in some undetermined way, which is fine.
@@ -205,11 +239,11 @@ namespace :tagteam do
           bar.increment!
         end
 
-        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
       end
 
       ######## Now do hub taggings
-      
+
       puts 'Deleting unowned hub taggings with owned duplicates'
       # Delete any taggings that are duplicates in favor of owned taggings. Do
       # not remove any owned taggings.
@@ -220,7 +254,7 @@ namespace :tagteam do
         count > 1 AND tagger_id IS NULL AND bool_or IS true);"
       )
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       puts 'Deactivating duplicate taggings'
       # If multiple users own the same tagging, create the most recent as
@@ -245,7 +279,7 @@ namespace :tagteam do
         end
       end
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       # Migrate over all the remaining taggings owned by someone or something.
       puts 'Migrating remaining owned taggings'
@@ -259,7 +293,7 @@ namespace :tagteam do
         end
       end
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       Rake::Task['tagteam:migrate:tag_filters'].invoke
       # Locate all taggings that could have been applied by filters (in hub
@@ -297,7 +331,7 @@ namespace :tagteam do
           filter.potential_added_taggings.delete_all
           bar.increment!
         end
-        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
       end
 
       # Find any remaining taggings that are attached to a feed item which came
@@ -322,20 +356,59 @@ namespace :tagteam do
         end
       end
 
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
-      puts 'Review remaining taggings'
+      # For any taggings that could have come from a filter, assume they did
+      # even though we don't have an old tagging in the DB. Migrate.
+      puts 'Giving remaining taggings to modify tag filter candidates'
+      ActsAsTaggableOn::Tagging.all.each do |tagging|
+        tagger = ModifyTagFilter.where(new_tag_id: tagging.tag_id, hub_id:
+                              tagging.context.sub('hub_', '')).last
+        if tagger
+          tagging.tagger = tagger
+          NewTagging.create(tagging.attributes)
+          tagging.delete
+        end
+      end
+
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
+
+      # Delete taggings JSD created
+      puts 'Deleting test taggings'
+      ActsAsTaggableOn::Tagging.delete(3095895, 3095896, 3360595, 3360597)
+
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
+      
+      puts 'Giving any remaining taggings to their feeds'
+      ActsAsTaggableOn::Tagging.all.each do |tagging|
+        tagger = tagging.taggable.feeds.first
+        tagging.tagger = tagger
+        NewTagging.create(tagging.attributes)
+        tagging.delete
+      end
+
+      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
+
+      if ActsAsTaggableOn::Tagging.count == 0
+        puts 'Dropping taggings table'
+        current_db.execute("DROP TABLE taggings")
+      end
+
+      puts "Run: pg_dump -U postgres -t taggings tagteam_prod_new | psql -U postgres -d tagteam_prod"
+      puts "Then run: rake tagteam:migrate:setup_taggings"
+    end
+
+    desc 'Setup new taggings table'
+    task :setup_taggings => :environment do |t|
 
       # Copy global taggings back into hub contexts.
-      #puts 'Copying global taggings into hub contexts'
-      #HubFeed.all.each do |hub_feed|
-      #  hub_feed.copy_global_tags_to_hubs
-      #end
-      #
-      # Check to see if there are any filters that could have created these
-      # taggings, even if the old tags no longer exist
+      puts 'Copying global taggings into hub contexts'
+      HubFeed.all.each do |hub_feed|
+        hub_feed.copy_global_tags_to_hubs
+      end
+      
+      # TODO: Rerun tag filters
 
-      # TODO: Replace taggings table in prod with taggings table in new prod
       puts 'Turn indexing back on'
     end
   end
