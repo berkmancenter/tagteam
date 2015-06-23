@@ -194,7 +194,7 @@ namespace :tagteam do
       ## Do the global taggings first
       # Delete the taggings from the global context that have a matching tagging
       # in the hub context with an owner. Those are from bookmarkers.
-      puts "Deleting bookmarker taggings from global context"
+      puts "CHECK ON THIS - Deleting bookmarker taggings from global context"
       current_db.execute(
         "DELETE FROM taggings WHERE id IN (SELECT id FROM (SELECT *, count(*)
         OVER w, bool_or(context != 'tags' AND tagger_id IS NOT NULL) OVER
@@ -375,7 +375,7 @@ namespace :tagteam do
 
       # Delete taggings JSD created
       puts 'Deleting test taggings'
-      ActsAsTaggableOn::Tagging.delete(3095895, 3095896, 3360595, 3360597)
+      ActsAsTaggableOn::Tagging.delete([3095895, 3095896, 3360595, 3360597])
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
       
@@ -394,7 +394,8 @@ namespace :tagteam do
         current_db.execute("DROP TABLE taggings")
       end
 
-      puts "Run: pg_dump -U postgres -t taggings tagteam_prod_new | psql -U postgres -d tagteam_prod"
+      puts "Run: pg_dump -U tagteam -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
+      puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
       puts "Then run: rake tagteam:migrate:setup_taggings"
     end
 
@@ -403,13 +404,30 @@ namespace :tagteam do
 
       # Copy global taggings back into hub contexts.
       puts 'Copying global taggings into hub contexts'
-      HubFeed.all.each do |hub_feed|
-        hub_feed.copy_global_tags_to_hubs
+      count = ActsAsTaggableOn::Tagging.where(context: 'tags').count
+      bar = ProgressBar.new(count)
+      ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
+        tagging.taggable.hubs.each do |hub|
+          new_tagging = tagging.dup
+          new_tagging.context = hub.tagging_key
+          new_tagging.save! if new_tagging.valid?
+        end
+        bar.increment!
       end
       
       # TODO: Rerun tag filters
+      bar = ProgressBar.new(TagFilter.count)
+      Hub.all.each do |hub|
+        hub.hub_feeds.each do |hub_feed|
+          hub_feed.feed_items.each do |item|
+            item.tag_filters.each{ |f| f.apply; bar.increment! }
+          end
+          hub_feed.tag_filters.each{ |f| f.apply; bar.increment! }
+        end
+        hub.tag_filters.each{ |f| f.apply; bar.increment! }
+      end
 
-      puts 'Turn indexing back on'
+      puts 'Turn indexing back on and reindex'
     end
   end
 
