@@ -305,10 +305,11 @@ namespace :tagteam do
       # owner as the user who is the owner of the bookmark collection.
       puts "Assigning owners to bookmarker taggings and migrating"
       taggings = ActsAsTaggableOn::Tagging.find_by_sql(
-        "SELECT taggings.* FROM taggings JOIN feed_items ON taggable_id
-        = feed_items.id JOIN feed_items_feeds ON feed_items_feeds.feed_item_id
-        = feed_items.id JOIN feeds ON feed_items_feeds.feed_id = feeds.id WHERE
-        feeds.bookmarking_feed IS true;"
+        "SELECT DISTINCT taggings.* FROM taggings JOIN feed_items ON
+        taggable_id = feed_items.id JOIN feed_items_feeds ON
+        feed_items_feeds.feed_item_id = feed_items.id JOIN feeds ON
+        feed_items_feeds.feed_id = feeds.id WHERE feeds.bookmarking_feed IS
+        true;"
       )
       count = taggings.count
       unless count == 0
@@ -330,6 +331,9 @@ namespace :tagteam do
       #HubFeed.all.each do |hub_feed|
       #  hub_feed.copy_global_tags_to_hubs
       #end
+      #
+      # Check to see if there are any filters that could have created these
+      # taggings, even if the old tags no longer exist
 
       # TODO: Replace taggings table in prod with taggings table in new prod
       puts 'Turn indexing back on'
