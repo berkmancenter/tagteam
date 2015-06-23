@@ -154,39 +154,45 @@ namespace :tagteam do
           :tagger_type, :context, :created_at
       end
 
+      current_db = ActiveRecord::Base.connection
+
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
       ## Do the global taggings first
       # Delete the taggings from the global context that have a matching tagging
       # in the hub context with an owner. Those are from bookmarkers.
-      current_db = ActiveRecord::Base.connection
-      results = current_db.execute("SELECT DISTINCT t1.id FROM taggings AS t1 JOIN
-                                   taggings AS t2 ON t1.taggable_id
-                                   = t2.taggable_id AND t1.tag_id = t2.tag_id
-                                   WHERE t1.context = 'tags' AND t2.context !=
-                                     'tags' AND t2.tagger_id IS NOT NULL;")
-      delete_ids = results.map{ |r| r['id'] }
-      puts "Deleting #{delete_ids.count} bookmarker taggings from global context"
-      ActsAsTaggableOn::Tagging.delete(delete_ids)
+      puts "Deleting bookmarker taggings from global context"
+      current_db.execute(
+        "DELETE FROM taggings WHERE id IN (SELECT id FROM (SELECT *, count(*)
+        OVER w, bool_or(context != 'tags' AND tagger_id IS NOT NULL) OVER
+        w FROM taggings WINDOW w AS (PARTITION BY taggable_id, tag_id)) AS sq
+        WHERE count > 1 AND bool_or IS true AND context = 'tags' AND
+        tagger_type IS NULL);"
+      )
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
-
-      # Find an owner for all remaining taggings - really just the first feed.
-      # This will set a feed in some undetermined way, which is fine.
-      puts "Adding tagging owners to global tags"
-      current_db.execute("UPDATE taggings SET tagger_id
-      = feed_items_feeds.feed_id, tagger_type = 'Feed' FROM feed_items_feeds
-      WHERE feed_items_feeds.feed_item_id = taggings.taggable_id AND
-                         taggings.context = 'tags' AND taggings.tagger_id IS NULL;")
 
       # Delete any hub taggings that are duplicates of taggings in the global
       # context and don't have an owner. These are from feeds.
-      puts 'Deleting hub taggings from feeds'
-      current_db.execute("DELETE FROM taggings WHERE id IN (SELECT sq.id FROM
-                         (SELECT taggings.*, count(*) OVER (PARTITION BY
-                         taggable_id, tag_id) FROM taggings WHERE tagger_id IS NULL)
-                         AS sq WHERE count > 1 AND context != 'tags')")
+      puts 'Deleting feed taggings in hubs'
+      current_db.execute(
+        "DELETE FROM taggings WHERE id IN (SELECT sq.id FROM (SELECT
+        taggings.*, count(*) OVER (PARTITION BY taggable_id, tag_id) FROM
+        taggings WHERE tagger_id IS NULL) AS sq WHERE count > 1 AND context !=
+          'tags')"
+      )
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+
+      # Find an owner for all remaining global taggings - really just the first
+      # feed.  This will set a feed in some undetermined way, which is fine.
+      puts "Adding tagging owners to global tags"
+      current_db.execute(
+        "UPDATE taggings SET tagger_id = feed_items_feeds.feed_id, tagger_type
+        = 'Feed' FROM feed_items_feeds WHERE feed_items_feeds.feed_item_id
+        = taggings.taggable_id AND taggings.context = 'tags' AND
+        taggings.tagger_id IS NULL;"
+      )
+
 
       # Migrate over all the remaining taggings in the global context.
       unless ActsAsTaggableOn::Tagging.where(context: 'tags').empty?
@@ -198,14 +204,13 @@ namespace :tagteam do
           tagging.delete
           bar.increment!
         end
+
         puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
       end
 
-      ## Now do hub taggings
-
-      Rake::Task['tagteam:migrate:tag_filters'].invoke
-
-      puts 'Deleting unowned taggings with owned duplicates'
+      ######## Now do hub taggings
+      
+      puts 'Deleting unowned hub taggings with owned duplicates'
       # Delete any taggings that are duplicates in favor of owned taggings. Do
       # not remove any owned taggings.
       current_db.execute(
@@ -214,6 +219,7 @@ namespace :tagteam do
         WINDOW w AS (PARTITION BY taggable_id, tag_id, context)) AS sq WHERE
         count > 1 AND tagger_id IS NULL AND bool_or IS true);"
       )
+
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
 
       puts 'Deactivating duplicate taggings'
@@ -241,6 +247,7 @@ namespace :tagteam do
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
 
+      # Migrate over all the remaining taggings owned by someone or something.
       puts 'Migrating remaining owned taggings'
       count = ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').count
       unless count == 0
@@ -254,6 +261,7 @@ namespace :tagteam do
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
 
+      Rake::Task['tagteam:migrate:tag_filters'].invoke
       # Locate all taggings that could have been applied by filters (in hub
       # contexts). Delete them as they can be recreated appropriately and
       # consistently.
@@ -314,6 +322,7 @@ namespace :tagteam do
       end
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}"
+
       puts 'Review remaining taggings'
 
       # Copy global taggings back into hub contexts.
