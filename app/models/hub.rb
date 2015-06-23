@@ -105,6 +105,10 @@ class Hub < ActiveRecord::Base
       GROUP BY tags.id ORDER BY count(*) DESC', self.tagging_key, 'FeedItem'])
   end
 
+  def tag_filter_queue
+    "tag_filters_#{id % Rails.application.config.tag_filter_queue_count}"
+  end
+
   def self.top_new_hubs
     self.order('created_at DESC').limit(3)
   end
@@ -131,5 +135,23 @@ class Hub < ActiveRecord::Base
 
   def self.title
     'Hub'
+  end
+
+  # Used when a new item is created
+  def self.apply_all_tag_filters_to_item(item)
+    item.hubs.each do |hub|
+      args = { filter_ids: hub.all_tag_filters.pluck(:id), item_ids: [item.id] }
+      Sidekiq::Client.push(
+        class: ApplyTagFilters, args: args, queue: hub.tag_filter_queue
+      )
+    end
+  end
+
+  # Used when a new tag filter is created
+  def self.apply_tag_filter_to_all_items(filter)
+      args = { filter_ids: [filter.id] }
+      Sidekiq::Client.push(
+        class: ApplyTagFilters, args: args, queue: filter.hub.tag_filter_queue
+      )
   end
 end

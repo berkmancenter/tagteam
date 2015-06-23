@@ -54,7 +54,7 @@ class TagFiltersController < ApplicationController
       current_user.has_role!(:creator, @tag_filter)
       flash[:notice] = %Q|Added a filter for that tag to "#{@scope.title}"|
 
-      TagFilter.delay.apply_by_id(@tag_filter.id)
+      Hub.apply_tag_filter_to_all_items(@tag_filter)
       render text: %Q|Added a filter for that tag to "#{@scope.title}"|,
         layout: !request.xhr?
     else

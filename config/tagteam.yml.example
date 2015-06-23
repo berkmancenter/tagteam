@@ -2,6 +2,7 @@
 # Fix for your deployment
 
 hostname: tagteam.example.com
+hostport: 80
 default_sender: no_reply@example.com
 exceptions_mailed_to: exceptions@example.com
 ssl_for_user_accounts: true
@@ -102,6 +103,12 @@ social_links:
 - twitter
 - facebook
 - google_plus
+
+###################
+# Tagging
+
+global_tag_context: 'tags'
+tag_filter_queue_count: 5
 
 #################
 # Random
