@@ -46,6 +46,14 @@ describe ModifyTagFilter do
                                                  on: @hub.tagging_key).all
           expect(affected).to match_array(now_affected)
         end
+        
+        it 'only changes taggings on items that had tag "a" even if passed them' do
+          affected = @feed_items.tagged_with(@tag.name, on: @hub.tagging_key).all
+          @filter.apply(items: @feed_items)
+          now_affected = @feed_items.tagged_with(@new_tag.name,
+                                                 on: @hub.tagging_key).all
+          expect(affected).to match_array(now_affected)
+        end
       end
 
       describe '#rollback' do

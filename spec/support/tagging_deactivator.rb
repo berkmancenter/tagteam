@@ -12,14 +12,16 @@ shared_examples 'a tagging deactivator' do |filter_type|
     end
 
     it 'removes the tagging from the taggings table' do
+      filter = create(filter_type)
       tagging = create(:tagging)
-      tagging.deactivate
+      filter.deactivate_tagging(tagging)
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
     end
 
     it 'returns the deactivated copy of the tagging' do
+      filter = create(filter_type)
       tagging = create(:tagging)
-      deactivated = tagging.deactivate
+      deactivated = filter.deactivate_tagging(tagging)
       expect(deactivated).to have_attributes(tagging.attributes)
     end
   end

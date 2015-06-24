@@ -23,7 +23,7 @@ class ModifyTagFilter < TagFilter
   def apply(items: items_with_old_tag)
     # Fetch the items here because once we deactivate taggings,
     # #items_with_old_tag returns nothing.
-    fetched_items = items.all
+    fetched_items = items_with_old_tag(items).all
 
     deactivate_taggings!(items: items)
     fetched_items.each do |item|
