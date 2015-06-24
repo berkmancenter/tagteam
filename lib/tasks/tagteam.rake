@@ -396,6 +396,7 @@ namespace :tagteam do
 
       puts "Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
       puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
+      puts %q?Then run: echo "SELECT setval('deactivated_taggings_id_seq', (SELECT MAX(id) FROM deactivated_taggings));" | psql -U tagteamdev tagteam_prod?
       puts "Then run: rake tagteam:migrate:copy_global_taggings"
     end
 
