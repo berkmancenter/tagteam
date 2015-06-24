@@ -396,17 +396,17 @@ namespace :tagteam do
 
       puts "Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
       puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
-      puts "Then run: rake tagteam:migrate:setup_taggings"
+      puts "Then run: rake tagteam:migrate:copy_global_taggings"
     end
 
     desc 'Setup new taggings table'
-    task :setup_taggings => :environment do |t|
+    task :copy_global_taggings => :environment do |t|
 
       # Copy global taggings back into hub contexts.
       puts 'Copying global taggings into hub contexts'
       count = ActsAsTaggableOn::Tagging.where(context: 'tags').count
       bar = ProgressBar.new(count)
-      ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
+      ActsAsTaggableOn::Tagging.where(context: 'tags').find_each do |tagging|
         tagging.taggable.hubs.each do |hub|
           new_tagging = tagging.dup
           new_tagging.context = hub.tagging_key
@@ -415,8 +415,7 @@ namespace :tagteam do
         bar.increment!
       end
 
-      puts 'Reapply tag filters'
-      puts 'Turn indexing back on and reindex'
+      puts 'Run: rake tagteam:migrate:reapply_tag_filters'
     end
 
     desc 'Reapply all filters'
@@ -432,6 +431,8 @@ namespace :tagteam do
         end
         hub.tag_filters.each{ |f| f.apply; bar.increment! }
       end
+
+      puts 'Turn indexing back on and reindex'
     end
   end
 

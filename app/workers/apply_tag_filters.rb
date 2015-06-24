@@ -8,6 +8,12 @@ class ApplyTagFilters
     filters_by_id = TagFilter.find(filter_ids).index_by(&:id)
     ordered_filters = filter_ids.map { |id| filters_by_id[id] }
     ordered_filters.each do |filter|
+
+      unless filter.next_to_apply? 
+        raise "Not most recent unapplied filter (#{filter.id}) in " +
+          "hub (#{filter.hub_id})" 
+      end
+
       if item_ids.empty?
         filter.apply
       else
