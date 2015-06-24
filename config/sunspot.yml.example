@@ -1,0 +1,20 @@
+development:
+  solr:
+    hostname: localhost
+    port: 8983
+    log_level: INFO
+    path: '/solr/tagteam_dev'
+
+test:
+  solr:
+    hostname: localhost
+    port: 8983
+    log_level: WARNING
+    path: '/solr/tagteam_test'
+
+production:
+  solr:
+    hostname: localhost
+    port: 8983
+    log_level: WARNING
+    path: '/solr/tagteam_prod'
