@@ -394,7 +394,7 @@ namespace :tagteam do
         current_db.execute("DROP TABLE taggings")
       end
 
-      puts "Run: pg_dump -U tagteam -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
+      puts "Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
       puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
       puts "Then run: rake tagteam:migrate:setup_taggings"
     end
@@ -414,20 +414,24 @@ namespace :tagteam do
         end
         bar.increment!
       end
-      
+
+      puts 'Reapply tag filters'
+      puts 'Turn indexing back on and reindex'
+    end
+
+    desc 'Reapply all filters'
+    task :reapply_tag_filters => :environment do |t|
       # TODO: Rerun tag filters
       bar = ProgressBar.new(TagFilter.count)
       Hub.all.each do |hub|
         hub.hub_feeds.each do |hub_feed|
-          hub_feed.feed_items.each do |item|
+          hub_feed.feed_items.find_each do |item|
             item.tag_filters.each{ |f| f.apply; bar.increment! }
           end
           hub_feed.tag_filters.each{ |f| f.apply; bar.increment! }
         end
         hub.tag_filters.each{ |f| f.apply; bar.increment! }
       end
-
-      puts 'Turn indexing back on and reindex'
     end
   end
 

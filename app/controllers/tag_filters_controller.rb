@@ -54,7 +54,7 @@ class TagFiltersController < ApplicationController
       current_user.has_role!(:creator, @tag_filter)
       flash[:notice] = %Q|Added a filter for that tag to "#{@scope.title}"|
 
-      Hub.apply_tag_filter_to_all_items(@tag_filter)
+      @tag_filter.apply_async
       render text: %Q|Added a filter for that tag to "#{@scope.title}"|,
         layout: !request.xhr?
     else
@@ -66,7 +66,7 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
-    TagFilter.delay.rollback_and_destroy_by_id(@tag_filter.id)
+    @tag_filter.rollback_and_destroy_async
     flash[:notice] = 'Deleted that tag filter.'
     redirect_to hub_path(@hub)
   end

@@ -89,6 +89,10 @@ class Hub < ActiveRecord::Base
     "hub_#{self.id}".to_sym
   end
 
+  def tag_filters_before(tag_filter)
+    all_tag_filters.where('updated_at < ?', tag_filter.updated_at)
+  end
+
   def tag_filters_after(tag_filter)
     all_tag_filters.where('updated_at > ?', tag_filter.updated_at)
   end
@@ -103,10 +107,6 @@ class Hub < ActiveRecord::Base
       FROM tags JOIN taggings ON taggings.tag_id = tags.id
       WHERE taggings.context = ? AND taggings.taggable_type = ?
       GROUP BY tags.id ORDER BY count(*) DESC', self.tagging_key, 'FeedItem'])
-  end
-
-  def tag_filter_queue
-    "tag_filters_#{id % Rails.application.config.tag_filter_queue_count}"
   end
 
   def self.top_new_hubs

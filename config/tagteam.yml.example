@@ -108,7 +108,6 @@ social_links:
 # Tagging
 
 global_tag_context: 'tags'
-tag_filter_queue_count: 5
 
 #################
 # Random

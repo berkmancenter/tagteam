@@ -5,11 +5,7 @@ staging:
 production:
   :concurrency: 10
 :queues:
-  - [tag_filters_0, 1]
-  - [tag_filters_1, 1]
-  - [tag_filters_2, 1]
-  - [tag_filters_3, 1]
-  - [tag_filters_4, 1]
+  - [default, 2]
   - [updater, 1]
   - [file_cache, 1]
   - [importer, 1]

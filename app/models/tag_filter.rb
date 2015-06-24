@@ -38,6 +38,14 @@ class TagFilter < ActiveRecord::Base
     hub.all_tag_filters.applied.order('updated_at DESC').first == self
   end
 
+  def next_to_apply?
+    hub.tag_filters_before(self).count ==
+      hub.tag_filters_before(self).applied.count
+  end
+
+  def apply_async
+  end
+
   # Filter application can occur on a subset of items in a scope (if a new
   # items comes in from a feed, for example), but filter rollback always
   # happens for all items at once, so we don't need an items argument here.
@@ -48,6 +56,9 @@ class TagFilter < ActiveRecord::Base
       self.update_attribute(:applied, false)
     end
     self.class.base_class.notify_observers :after_rollback, self
+  end
+
+  def rollback_and_destroy_async
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
