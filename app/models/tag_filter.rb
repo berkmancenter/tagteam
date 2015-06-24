@@ -93,7 +93,10 @@ class TagFilter < ActiveRecord::Base
   def self.title
     "#{self.name.sub('TagFilter', '')} tag filter"
   end
-  alias_method :display_title, :title
+  
+  def self.display_title
+    self.title
+  end
 
   def self.in_hub(hub)
     where(hub_id: hub.id)
