@@ -5,6 +5,6 @@ class FeedItemObserver < ActiveRecord::Observer
   # https://github.com/mperham/sidekiq/wiki/Problems-and-Troubleshooting#cannot-find-modelname-with-id12345
   def after_commit(item)
     item.copy_global_tags_to_hubs unless item.skip_global_tag_copy
-    Hub.apply_all_tag_filters_to_item(item)
+    Hub.apply_all_tag_filters_to_item_async(item)
   end
 end

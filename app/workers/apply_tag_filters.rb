@@ -2,6 +2,9 @@ class ApplyTagFilters
   include Sidekiq::Worker
 
   def perform(filter_ids, item_ids = [])
+    filter_ids = [filter_ids] unless filter_ids.respond_to? :each
+    item_ids = [item_ids] unless item_ids.respond_to? :each
+
     filters_by_id = TagFilter.find(filter_ids).index_by(&:id)
     ordered_filters = filter_ids.map { |id| filters_by_id[id] }
     ordered_filters.each do |filter|

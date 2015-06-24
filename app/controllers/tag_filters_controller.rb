@@ -55,6 +55,7 @@ class TagFiltersController < ApplicationController
       flash[:notice] = %Q|Added a filter for that tag to "#{@scope.title}"|
 
       @tag_filter.apply_async
+
       render text: %Q|Added a filter for that tag to "#{@scope.title}"|,
         layout: !request.xhr?
     else
@@ -67,7 +68,8 @@ class TagFiltersController < ApplicationController
 
   def destroy
     @tag_filter.rollback_and_destroy_async
-    flash[:notice] = 'Deleted that tag filter.'
+
+    flash[:notice] = 'Deleting that tag filter.'
     redirect_to hub_path(@hub)
   end
 

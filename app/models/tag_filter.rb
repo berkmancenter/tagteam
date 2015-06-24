@@ -44,6 +44,7 @@ class TagFilter < ActiveRecord::Base
   end
 
   def apply_async
+    ApplyTagFilters.perform_async(id)
   end
 
   # Filter application can occur on a subset of items in a scope (if a new
@@ -59,6 +60,7 @@ class TagFilter < ActiveRecord::Base
   end
 
   def rollback_and_destroy_async
+    DestroyTagFilter.perform_async(id)
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
@@ -103,11 +105,5 @@ class TagFilter < ActiveRecord::Base
 
   def self.rollback_by_id(id)
     self.find(id).rollback
-  end
-
-  def self.rollback_and_destroy_by_id(id)
-    filter = self.find(id)
-    filter.rollback
-    filter.destroy
   end
 end

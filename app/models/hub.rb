@@ -138,20 +138,9 @@ class Hub < ActiveRecord::Base
   end
 
   # Used when a new item is created
-  def self.apply_all_tag_filters_to_item(item)
+  def self.apply_all_tag_filters_to_item_async(item)
     item.hubs.each do |hub|
-      args = { filter_ids: hub.all_tag_filters.pluck(:id), item_ids: [item.id] }
-      Sidekiq::Client.push(
-        class: ApplyTagFilters, args: args, queue: hub.tag_filter_queue
-      )
+      ApplyTagFilters.perform_async(hub.all_tag_filters.pluck(:id), item.id)
     end
-  end
-
-  # Used when a new tag filter is created
-  def self.apply_tag_filter_to_all_items(filter)
-      args = { filter_ids: [filter.id] }
-      Sidekiq::Client.push(
-        class: ApplyTagFilters, args: args, queue: filter.hub.tag_filter_queue
-      )
   end
 end
