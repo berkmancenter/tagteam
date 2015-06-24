@@ -124,7 +124,7 @@ class Feed < ActiveRecord::Base
     if feed_changed_this_long_ago > Tagteam::Application.config.spider_update_decay
       logger.warn("Feed #{self.id} looks old, pushing out next spidering " +
                   "event by spider_decay_interval, which is " +
-                  Tagteam::Application.config.spider_decay_interval)
+                  "#{Tagteam::Application.config.spider_decay_interval}")
       last_interval_was = self.next_scheduled_retrieval - self.updated_at
       next_spider_time = Time.now + last_interval_was +
         Tagteam::Application.config.spider_decay_interval
