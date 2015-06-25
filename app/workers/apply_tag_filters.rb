@@ -14,7 +14,7 @@ class ApplyTagFilters
     ordered_filters.each do |filter|
 
       # This filter might get deleted while it's in the queue to get applied.
-      return unless filter.persisted?
+      return if filter.nil?
       unless filter.next_to_apply? 
         raise "Not most recent unapplied filter (#{filter.id}) in " +
           "hub (#{filter.hub_id})" 
