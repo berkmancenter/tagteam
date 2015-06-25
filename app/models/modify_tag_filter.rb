@@ -31,7 +31,7 @@ class ModifyTagFilter < TagFilter
                                         context: hub.tagging_key)
       new_tagging.save! if new_tagging.valid?
     end
-    self.update_attribute(:applied, true)
+    self.update_column(:applied, true)
   end
 
   def deactivates_taggings(items: items_in_scope)

@@ -54,7 +54,7 @@ class TagFilter < ActiveRecord::Base
     TagFilter.transaction do
       taggings.destroy_all
       reactivate_taggings!
-      self.update_attribute(:applied, false)
+      self.update_column(:applied, false)
     end
     self.class.base_class.notify_observers :after_rollback, self
   end
