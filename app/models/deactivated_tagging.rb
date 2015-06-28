@@ -11,8 +11,6 @@ class DeactivatedTagging < ActiveRecord::Base
 
     DeactivatedTagging.transaction do
       tagging.save!
-      tagging.update_attribute(:id, self.id)
-      tagging.update_attribute(:created_at, self.created_at)
       self.destroy
     end
 

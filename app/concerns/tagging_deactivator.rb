@@ -16,8 +16,6 @@ module TaggingDeactivator
 
     DeactivatedTagging.transaction do
       deactivated.save!
-      deactivated.update_attribute(:id, tagging.id)
-      deactivated.update_attribute(:created_at, tagging.created_at)
       tagging.destroy
     end
 
