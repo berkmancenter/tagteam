@@ -104,6 +104,7 @@ namespace :tagteam do
         HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
           HubTagFilter.transaction do
             if filter.hub
+              filter.updated_at = Time.now
               translate_filter(filter, filter.hub)
             else
               messages << "Could not find hub #{filter.hub_id}"
@@ -116,6 +117,7 @@ namespace :tagteam do
         HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
           HubTagFilter.transaction do
             if filter.hub_feed && filter.hub
+              filter.updated_at = Time.now
               translate_filter(filter, filter.hub_feed)
             elsif !filter.hub_feed
               messages << "Could not find hub feed #{filter.hub_feed_id}"
@@ -132,6 +134,7 @@ namespace :tagteam do
         HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
           HubTagFilter.transaction do
             if filter.feed_item && filter.hub
+              filter.updated_at = Time.now
               translate_filter(filter, filter.feed_item)
             elsif !filter.feed_item
               messages << "Could not find item #{filter.feed_item_id}"

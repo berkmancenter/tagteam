@@ -40,8 +40,10 @@ class Hub < ActiveRecord::Base
   has_many :feeds, through: :hub_feeds
   has_many :republished_feeds, dependent: :destroy, order: 'created_at desc'
 
+  # We want to make sure we're always getting the oldest filter first in this
+  # list so if we happen to apply all these in order, it's the correct order.
   has_many :all_tag_filters, class_name: 'TagFilter',
-    dependent: :destroy, order: 'updated_at DESC'
+    dependent: :destroy, order: 'updated_at ASC'
 
   api_accessible :default do |t|
     t.add :id
