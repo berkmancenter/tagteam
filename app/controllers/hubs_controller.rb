@@ -563,6 +563,6 @@ class HubsController < ApplicationController
   end
 
   def add_breadcrumbs
-    breadcrumbs.add @hub, hub_path(@hub)
+    breadcrumbs.add @hub, hub_path(@hub) if @hub.id
   end
 end

@@ -373,19 +373,38 @@
         }
       });
     },
-    observeHubSelector: function(){
+    initHubFeedItemTagList: function(hubId, feedItemId) {
+      $('.feed-item-existing-tags').empty();
+      if (feedItemId >= 0) {
+        $.ajax({
+          type: 'GET',
+          cache: false,
+          url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
+          feedItemId + '/tag_list',
+          success: function(tagList){
+            if ($(tagList).find('a').length > 0) {
+              $('.feed-item-existing-tags').append(
+                '<p class="control-label">Existing Tags</p>' + tagList);
+            }
+          }
+        });
+      }
+    },
+    observeHubSelector: function(feedItemId){
       if($.cookie('bookmarklet_hub_choice') != undefined){
         // A selection! Set the defaults.
         $('#feed_item_hub_id').val($.cookie('bookmarklet_hub_choice'));
       }
       $.initBookmarkCollectionChoices($('#feed_item_hub_id').val());
+      $.initHubFeedItemTagList($('#feed_item_hub_id').val(), feedItemId);
       $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
+        $.initHubFeedItemTagList($(this).val(), feedItemId);
       });
     },
-    initBookmarklet: function(tagJsonOutput){
+    initBookmarklet: function(feedItemId){
       $('#feed_item_bookmark_collection_id_input').hide();
-      $.observeHubSelector();
+      $.observeHubSelector(feedItemId);
       $('.bookmarklet_tabs').tabs();
       $('.datepicker').datepicker({
         changeMonth: true,
@@ -393,14 +412,6 @@
         changeDay: true,
         yearRange: 'c-500',
         dateFormat: 'yy-mm-dd'
-      });
-      $(tagJsonOutput).each(function(i,el){
-        $('#feed_item_tag_list_input').append(
-          $('<span class="search_select tag" />')
-          .append($('<input name="tag_ids[]" type="hidden"/>').val(el.id))
-          .append(el.name)
-          .append('<span class="search_select_control"> X </span>')
-          );
       });
     },
     checkPlaceholders: function(){

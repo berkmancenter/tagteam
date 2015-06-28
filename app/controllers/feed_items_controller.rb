@@ -99,6 +99,16 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def tag_list
+    load_feed_item
+    @hub = Hub.find(params[:hub_id])
+    respond_to do |format|
+      format.html{
+        render layout: request.xhr? ? false : 'tabs'
+      }
+    end
+  end
+
   private
 
   def load_hub_feed

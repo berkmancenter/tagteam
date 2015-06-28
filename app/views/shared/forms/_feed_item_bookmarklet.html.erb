@@ -13,7 +13,10 @@
               label: 'To collection', class: 'form-control' %>
           </div>
         </div>
+
         <%= f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags.' %>
+        <div class="feed-item-existing-tags"></div>
+
         <%= f.input :title, required: true %>
         <%= f.input :url, label: 'URL', required: true %>
         <%= f.input :description, as: :text,
@@ -54,13 +57,8 @@
 <% end %>
 
 <%= 
-  if ! params[:tag_ids].blank?
-    tag_json = ActsAsTaggableOn::Tag.find(params[:tag_ids])
-  end
-
   javascript_tag %Q|
 $(document).ready(function(){
-  var tag_output = #{tag_json.to_json};
-  $.initBookmarklet(tag_output);
+  $.initBookmarklet(#{@feed_item.id || -1});
 });
 | %>

@@ -144,6 +144,7 @@ Tagteam::Application.routes.draw do
       resources :tag_filters
 
       member do
+        get 'tag_list'
         get 'content'
         get 'related'
       end
