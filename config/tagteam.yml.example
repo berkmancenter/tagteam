@@ -113,5 +113,5 @@ global_tag_context: 'tags'
 # Random
 
 redis_namespace: 'resque:TagTeam'
-redis_host: 'localhost:6379'
+redis_host: 'redis://localhost:6379'
 
