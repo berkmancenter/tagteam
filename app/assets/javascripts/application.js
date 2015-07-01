@@ -10,7 +10,9 @@
 //= require jquery.bt
 //= require jquery.bootpag.min
 //= require jquery.masonry.min
+//= require jquery.ba-detach
 //= require jquery.infinitescroll.min
+//= require ckeditor-setup
 //= require ckeditor/ckeditor
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
@@ -199,7 +201,9 @@
               return null;
             }
         };
-        $("#tag_cloud").sortChildren(mapping_function, compare_function);
+        $("#tag_cloud").detach(function() {
+          $(this).sortChildren(mapping_function, compare_function);
+        });
       };
       $('#sort_tags_by').change(sort_tags_on_change);
       $('#sort_tags_direction').change(sort_tags_on_change);
