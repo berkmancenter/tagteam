@@ -84,7 +84,8 @@ class BookmarkletsController < ApplicationController
         end
         @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
 
-        #Sidekiq::Client.enqueue(FeedItemTagRenderer, @feed_item.id)
+        @feed_item.reload.solr_index
+
         format.html {
           redirect_to bookmarklets_confirm_url(:feed_item_id => @feed_item.id)
         }
