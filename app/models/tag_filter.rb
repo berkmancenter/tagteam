@@ -85,7 +85,7 @@ class TagFilter < ActiveRecord::Base
   end
 
   def deactivate_taggings!(items: items_in_scope)
-    deactivates_taggings(items: items).each do |tagging|
+    deactivates_taggings(items: items).find_each do |tagging|
       deactivate_tagging(tagging)
     end
   end

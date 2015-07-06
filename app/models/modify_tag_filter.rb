@@ -23,10 +23,10 @@ class ModifyTagFilter < TagFilter
   def apply(items: items_with_old_tag)
     # Fetch the items here because once we deactivate taggings,
     # #items_with_old_tag returns nothing.
-    fetched_items = items_with_old_tag(items).all
+    fetched_items = items_with_old_tag(items)
 
     deactivate_taggings!(items: items)
-    fetched_items.each do |item|
+    fetched_items.find_each do |item|
       new_tagging = item.taggings.build(tag: new_tag, tagger: self,
                                         context: hub.tagging_key)
       new_tagging.save! if new_tagging.valid?

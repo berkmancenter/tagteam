@@ -10,7 +10,7 @@ class UpdateFeeds
   def perform
     return if other_updaters_running?
     feeds = HubFeed.need_updating
-    feeds.each do|hf|
+    feeds.find_each do |hf|
       hf.feed.update_feed
     end
   end
