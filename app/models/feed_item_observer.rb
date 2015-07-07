@@ -5,6 +5,7 @@ class FeedItemObserver < ActiveRecord::Observer
   # https://github.com/mperham/sidekiq/wiki/Problems-and-Troubleshooting#cannot-find-modelname-with-id12345
   def after_commit(item)
     return unless item.persisted? # We don't need to run if it's been destroyed
+    return if item.previous_changes.empty? # Don't run if nothing changed
     item.copy_global_tags_to_hubs unless item.skip_global_tag_copy
     Hub.apply_all_tag_filters_to_item_async(item)
   end
