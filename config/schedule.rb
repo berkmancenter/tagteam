@@ -29,7 +29,7 @@
 # 2 3 * * * /usr/bin/find /web/amy/rails3.2prod/docs/tagteam-1.5-prod/tmp/cache/ -type f -mtime +7 -exec rm {} \;
 # 2 5 * * * /usr/bin/find /web/amy/rails3.2prod/docs/tagteam-1.5-prod/tmp/cache/ -type d -depth -exec rmdir --ignore-fail-on-non-empty {} +
 
-job_type :job, "cd :path && :environment_variable=:environment bundle exec script/sidekiq_pusher.rb :task :queue :output"
+job_type :job, "cd :path 2> /dev/null && :environment_variable=:environment bundle exec script/sidekiq_pusher.rb :task :queue :output"
 
 every 10.minutes do
   job 'ExpireFileCache', queue: :file_cache
