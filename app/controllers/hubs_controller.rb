@@ -229,7 +229,7 @@ class HubsController < ApplicationController
 
     @feed_items = @search.results
     respond_to do|format|
-      format.html{ render :layout => ! request.xhr? }
+      format.html{ render layout: request.xhr? ? false : 'tabs' }
       format.json{ render_for_api :default, :json => @feed_items }
       format.xml{ render_for_api :default, :xml => @feed_items }
     end
