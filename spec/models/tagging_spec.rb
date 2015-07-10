@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ActsAsTaggableOn::Tagging do
+describe ActsAsTaggableOn::Tagging, needs_review: true do
   context "Tagging was created by a bookmarker" do
     it "is owned by the bookmarker"
   end

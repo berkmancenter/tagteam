@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SearchRemix do
+describe SearchRemix, needs_review: true do
 
   it "returns the ids for a given search string and hub" do
     feed_item = FeedItem.last

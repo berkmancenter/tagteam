@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Feed do
+describe Feed, needs_review: true do
   it "owns all taggings that come in from its URL"
 
   context 'a feed exists' do

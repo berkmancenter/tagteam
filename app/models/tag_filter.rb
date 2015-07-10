@@ -34,13 +34,11 @@ class TagFilter < ActiveRecord::Base
     scope.taggable_items
   end
 
-  def most_recent?
-    hub.all_tag_filters.applied.order('updated_at DESC').first == self
-  end
-
   def next_to_apply?
-    hub.tag_filters_before(self).count ==
-      hub.tag_filters_before(self).applied.count
+    self.applied == false &&
+      (hub.tag_filters_before(self).count ==
+        hub.tag_filters_before(self).applied.count) &&
+      (hub.tag_filters_after(self).applied.count == 0)
   end
 
   def apply_async

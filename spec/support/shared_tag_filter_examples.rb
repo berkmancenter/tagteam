@@ -49,13 +49,13 @@ shared_examples 'a tag filter' do |filter_type|
     end
   end
 
-  describe '#most_recent?' do
+  describe '#next_to_apply?' do
     context 'a newer filter exists but has not been applied' do
-      it 'returns true' do
+      it 'returns false' do
         @filter1 = create(:add_tag_filter)
         @filter1.apply
         @filter2 = create(:add_tag_filter, hub: @filter1.hub)
-        expect(@filter1.most_recent?).to be true
+        expect(@filter1.next_to_apply?).to be false
       end
     end
     context 'a newer filter has been applied' do
@@ -64,34 +64,42 @@ shared_examples 'a tag filter' do |filter_type|
         @filter1.apply
         @filter2 = create(:add_tag_filter, hub: @filter1.hub)
         @filter2.apply
-        expect(@filter1.most_recent?).to be false
+        expect(@filter1.next_to_apply?).to be false
       end
     end
 
     context 'no other filters exist' do
       context 'it has been applied' do
-        it 'returns true' do
+        it 'returns false' do
           @filter = create(:add_tag_filter)
           @filter.apply
-          expect(@filter.most_recent?).to be true
+          expect(@filter.next_to_apply?).to be false
         end
       end
 
       context 'it has not been applied' do
-        it 'returns false' do
+        it 'returns true' do
           @filter = create(:add_tag_filter)
-          expect(@filter.most_recent?).to be false
+          expect(@filter.next_to_apply?).to be true
         end
       end
     end
 
+    context 'older unapplied filters exist' do
+      it 'returns false' do
+        @filter1 = create(:add_tag_filter)
+        @filter2 = create(:add_tag_filter, hub: @filter1.hub)
+        expect(@filter2.next_to_apply?).to be false
+      end
+    end
+
     context 'this is the most recently applied filter' do
-      it 'returns true' do
+      it 'returns false' do
         @filter1 = create(:add_tag_filter)
         @filter1.apply
         @filter2 = create(:add_tag_filter, hub: @filter1.hub)
         @filter2.apply
-        expect(@filter2.most_recent?).to be true
+        expect(@filter2.next_to_apply?).to be false
       end
     end
   end
@@ -235,7 +243,6 @@ shared_examples "an item-level tag filter" do |filter_type|
       @feed_item = @feed_items.order(:id).first
       @feed_item2 = @feed_items2.order(:id).first
     end
-    it 'does affect that item' do
-    end
+    it 'does affect that item'
   end
 end
