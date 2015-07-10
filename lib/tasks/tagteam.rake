@@ -469,6 +469,23 @@ namespace :tagteam do
     end
   end
 
+  desc 'Make sure taggings are consistent with filters'
+  task :audit_taggings => :environment do
+    require 'rspec/rails'
+    require Rails.root.join('spec/support/tag_utils.rb')
+    group = RSpec.describe 'tagging consistency' do
+      it 'shows the effects of every tag filter' do
+        TagFilter.all.each do |filter|
+          puts "Testing #{filter} - #{filter.items_in_scope.count} items"
+          tag_lists = tag_lists_for(filter.items_in_scope, filter.hub.tagging_key)
+          result = expect(tag_lists).to show_effects_of filter
+          puts result
+        end
+      end
+    end
+    group.run
+  end
+
   desc 'auto import feeds from json'
   task :auto_import_from_json, [:json_url, :hub_title, :owner_email] => :environment do |t,args|
 
