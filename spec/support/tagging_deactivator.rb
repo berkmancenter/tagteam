@@ -26,7 +26,7 @@ shared_examples 'a tagging deactivator' do |filter_type|
     end
   end
 
-  describe '#self_deactivated_taggings', wip: true do
+  describe '#self_deactivated_taggings' do
     it 'returns all deactivated taggings deactivated by this deactivator' do
       filter = create(filter_type)
       tagging = create(:tagging)

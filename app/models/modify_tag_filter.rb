@@ -21,6 +21,7 @@ class ModifyTagFilter < TagFilter
   end
 
   def apply(items: items_with_old_tag)
+    items = filter_to_scope(items)
     # Fetch the items here because once we deactivate taggings,
     # #items_with_old_tag returns nothing.
     fetched_item_ids = items_with_old_tag(items).pluck(:id)

@@ -450,6 +450,25 @@ namespace :tagteam do
     end
   end
 
+  desc 'Remove taggings that should not exist'
+  task :destroy_spurious_taggings => :environment do
+    puts 'Destroying by SQL'
+    # Destroy the easy ones first to save time.
+    ActsAsTaggableOn::Tagging.find_by_sql("select taggings.* from taggings join
+    tag_filters on taggings.tagger_id = tag_filters.id where
+    taggings.tagger_type = 'TagFilter' and tag_filters.scope_type = 'FeedItem'
+    and tag_filters.scope_id != taggings.taggable_id;").map(&:destroy)
+
+    puts 'Destroying by ruby'
+    bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(tagger_type: 'TagFilter').count)
+    ActsAsTaggableOn::Tagging.where(tagger_type: 'TagFilter').find_each do |tagging|
+      unless tagging.tagger.items_in_scope.pluck(:id).include? tagging.taggable_id
+        tagging.destroy
+      end
+      bar.increment!
+    end
+  end
+
   desc 'auto import feeds from json'
   task :auto_import_from_json, [:json_url, :hub_title, :owner_email] => :environment do |t,args|
 

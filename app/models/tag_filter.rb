@@ -34,6 +34,10 @@ class TagFilter < ActiveRecord::Base
     scope.taggable_items
   end
 
+  def filter_to_scope(items)
+    items.where(id: items_in_scope.pluck(:id))
+  end
+
   def next_to_apply?
     self.applied == false &&
       (hub.tag_filters_before(self).count ==

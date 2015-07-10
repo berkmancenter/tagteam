@@ -221,6 +221,19 @@ shared_examples "an item-level tag filter" do |filter_type|
       @feed_item2 = @feed_items.order(:id).last
     end
 
+    it "cannot be compelled to affect items outside its scope" do
+      filter = add_filter
+      setup_other_items_tags(filter, @feed_item2)
+
+      filter.apply(items: FeedItem.where(id: [@feed_item.id, @feed_item2.id]))
+
+      tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
+      other_tag_lists = tag_lists_for(@feed_item2, @hub.tagging_key)
+
+      expect(tag_lists).to show_effects_of filter
+      expect(other_tag_lists).to not_show_effects_of filter
+    end
+
     it "doesn't affect other items" do
       filter = add_filter
       setup_other_items_tags(filter, @feed_item2)
