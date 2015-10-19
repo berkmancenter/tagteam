@@ -475,12 +475,24 @@ namespace :tagteam do
     require Rails.root.join('spec/support/tag_utils.rb')
     group = RSpec.describe 'tagging consistency' do
       it 'shows the effects of every tag filter' do
-        TagFilter.all.each do |filter|
-          puts "Testing #{filter} - #{filter.items_in_scope.count} items"
+        bar = ProgressBar.new(TagFilter.count)
+        results = []
+        TagFilter.order(:id).each do |filter|
           tag_lists = tag_lists_for(filter.items_in_scope, filter.hub.tagging_key)
-          result = expect(tag_lists).to show_effects_of filter
-          puts result
+          begin
+            expect(tag_lists).to(show_effects_of filter)
+            results << [true, filter.id]
+            #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results.last}"
+            bar.increment!
+          rescue Exception => e
+            #puts e.inspect
+            results << [false, filter.id]
+            #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results.last}"
+            bar.increment!
+            next
+          end
         end
+        puts results.inspect
       end
     end
     group.run
