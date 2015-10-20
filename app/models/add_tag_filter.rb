@@ -9,4 +9,8 @@ class AddTagFilter < TagFilter
     end
     self.update_column(:applied, true)
   end
+
+  def simulate(tag_list)
+    tag_list.include?(tag.name) ? tag_list : tag_list + [tag.name]
+  end
 end

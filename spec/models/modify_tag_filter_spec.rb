@@ -38,7 +38,7 @@ describe ModifyTagFilter do
           tag_lists = tag_lists_for(@hub.feed_items, @hub.tagging_key)
           expect(tag_lists).to show_effects_of @filter
         end
-        
+
         it 'only changes taggings on items that had tag "a"' do
           affected = @feed_items.tagged_with(@tag.name, on: @hub.tagging_key).all
           @filter.apply
@@ -46,7 +46,7 @@ describe ModifyTagFilter do
                                                  on: @hub.tagging_key).all
           expect(affected).to match_array(now_affected)
         end
-        
+
         it 'only changes taggings on items that had tag "a" even if passed them' do
           affected = @feed_items.tagged_with(@tag.name, on: @hub.tagging_key).all
           @filter.apply(items: @feed_items)
@@ -99,6 +99,18 @@ describe ModifyTagFilter do
             expect(@filter.deactivates_taggings).
               to not_contain @feed_item.taggings.first
           end
+        end
+      end
+
+      describe '#simulate' do
+        it 'changes "a" to "b" in a given tag list' do
+          list = ['a', 'c', 'd']
+          expect(@filter.simulate(list)).to match_array(['b', 'c', 'd'])
+        end
+
+        it 'prevents duplicate tags' do
+          list = ['a', 'b', 'c', 'd']
+          expect(@filter.simulate(list)).to match_array(['b', 'c', 'd'])
         end
       end
 

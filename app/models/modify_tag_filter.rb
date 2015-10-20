@@ -57,4 +57,8 @@ class ModifyTagFilter < TagFilter
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end
+
+  def simulate(tag_list)
+    tag_list.map{ |t| t == tag.name ? new_tag.name : t }.uniq
+  end
 end

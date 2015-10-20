@@ -92,6 +92,10 @@ class TagFilter < ActiveRecord::Base
     end
   end
 
+  def interacting_filters
+    hub.tag_filters_related_to(self)
+  end
+
   def self.title
     "#{self.name.sub('TagFilter', '')} tag filter"
   end

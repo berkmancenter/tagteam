@@ -48,6 +48,18 @@ describe AddTagFilter do
         end
       end
 
+      describe '#simulate' do
+        it 'adds tag "a" to the given tag list' do
+          list = ['b', 'c', 'd']
+          expect(@filter.simulate(list)).to match_array(['b', 'c', 'd', 'a'])
+        end
+
+        it 'does not add "a" if it already exists' do
+          list = ['a', 'b', 'c', 'd']
+          expect(@filter.simulate(list)).to match_array(list)
+        end
+      end
+
       context 'active taggings already exist between tag "a" and items' do
         before(:each) do
           Sidekiq::Testing.fake! do
@@ -183,6 +195,7 @@ describe AddTagFilter do
 
     it_behaves_like "an item-level tag filter"
   end
+
 
   it_behaves_like 'a tag filter in an empty hub', :add_tag_filter
   it_behaves_like 'a tag filter', :add_tag_filter

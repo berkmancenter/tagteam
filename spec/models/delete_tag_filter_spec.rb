@@ -61,6 +61,13 @@ describe DeleteTagFilter do
         end
       end
 
+      describe '#simulate' do
+        it 'removes "a" in a given tag list' do
+          list = ['a', 'b', 'c', 'd']
+          expect(@filter.simulate(list)).to match_array(['b', 'c', 'd'])
+        end
+      end
+
       it_behaves_like 'an existing tag filter in a populated hub'
     end
   end
