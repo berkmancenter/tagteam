@@ -114,6 +114,79 @@ describe ModifyTagFilter do
         end
       end
 
+      describe '#filter_chain' do
+        context 'no related filters exist' do
+          it 'returns the passed filter' do
+            related = @filter.filter_chain
+            expect(related).to eq([@filter])
+          end
+        end
+
+        context 'one newer related filter exists' do
+          it 'returns the correct chain' do
+            new_filter = create(:modify_tag_filter, hub: @hub,
+                                tag: @new_tag, scope: @hub)
+            related = @filter.filter_chain
+            expect(related).to eq([@filter, new_filter])
+          end
+        end
+
+        context 'many related filters exist and this is the oldest and first' do
+          it 'returns the correct chain' do
+            # a -> b, b -> c, c -> d, d -> e = a -> e
+            tag_1 = create(:tag, name: 'c')
+            tag_2 = create(:tag, name: 'd')
+            tag_3 = create(:tag, name: 'e')
+            filter_1 = create(:modify_tag_filter, hub: @hub, tag: @new_tag,
+                                new_tag: tag_1, scope: @hub)
+            filter_2 = create(:modify_tag_filter, hub: @hub, tag: tag_1,
+                                new_tag: tag_2, scope: @hub)
+            filter_3 = create(:modify_tag_filter, hub: @hub, tag: tag_2,
+                                new_tag: tag_3, scope: @hub)
+            related = @filter.filter_chain
+            chain = [@filter, filter_1, filter_2, filter_3]
+            expect(related).to eq(chain)
+          end
+        end
+
+        context 'many related filters exist and this is oldest but last' do
+          it 'returns only this because newer are not affected' do
+            # a -> b, x -> y, y -> z, z -> a = a -> b
+            tag_1 = create(:tag, name: 'x')
+            tag_2 = create(:tag, name: 'y')
+            tag_3 = create(:tag, name: 'z')
+            create(:modify_tag_filter, hub: @hub, tag: tag_1,
+                     new_tag: tag_2, scope: @hub)
+            create(:modify_tag_filter, hub: @hub, tag: tag_2,
+                     new_tag: tag_3, scope: @hub)
+            create(:modify_tag_filter, hub: @hub, tag: tag_3,
+                                new_tag: @tag, scope: @hub)
+            related = @filter.filter_chain
+            chain = [@filter]
+            expect(related).to eq(chain)
+          end
+        end
+
+        context 'many related filters exist and this is newest and in the middle' do
+          it 'returns the filter chain' do
+            # y -> z, z -> a, b -> c, a -> b = y -> b
+            tag_1 = create(:tag, name: 'y')
+            tag_2 = create(:tag, name: 'z')
+            tag_3 = create(:tag, name: 'c')
+            filter_1 = create(:modify_tag_filter, hub: @hub, tag: tag_1,
+                                new_tag: tag_2, scope: @hub)
+            filter_2 = create(:modify_tag_filter, hub: @hub, tag: tag_2,
+                                new_tag: @tag, scope: @hub)
+            create(:modify_tag_filter, hub: @hub, tag: @new_tag,
+                                new_tag: tag_3, scope: @hub)
+            @filter.touch
+            related = @filter.filter_chain
+            chain = [filter_1, filter_2, @filter]
+            expect(related).to eq(chain)
+          end
+        end
+      end
+
       it_behaves_like 'an existing tag filter in a populated hub'
     end
   end

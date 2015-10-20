@@ -61,4 +61,20 @@ class ModifyTagFilter < TagFilter
   def simulate(tag_list)
     tag_list.map{ |t| t == tag.name ? new_tag.name : t }.uniq
   end
+
+  def filter_chain
+    filters_before + [self] + filters_after
+  end
+
+  def filters_before
+    previous = hub.all_tag_filters.where('new_tag_id = ? AND updated_at < ?',
+                                         tag.id, updated_at).last
+    previous ? previous.filters_before + [previous] : []
+  end
+
+  def filters_after
+    subsequent = hub.all_tag_filters.where('tag_id = ? AND updated_at > ?',
+                                           new_tag.id, updated_at).first
+    subsequent ? [subsequent] + subsequent.filters_after : []
+  end
 end
