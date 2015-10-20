@@ -99,8 +99,22 @@ class Hub < ActiveRecord::Base
     all_tag_filters.where('updated_at > ?', tag_filter.updated_at)
   end
 
-  def reapply_tag_filters_after(tag_filter)
+  # Exclusive on both ends
+  def tag_filters_between(first, last)
+    all_tag_filters.where('updated_at > ? AND updated_at < ?',
+                          first.updated_at, last.updated_at)
+  end
+
+  def apply_tag_filters_after(tag_filter)
     tag_filters_after(tag_filter).each(&:apply)
+  end
+
+  def apply_tag_filters_until(tag_filter)
+    tag_filters_between(last_applied_tag_filter, tag_filter).each(&:apply)
+  end
+
+  def last_applied_tag_filter
+    all_tag_filters.applied.last
   end
 
   def tag_counts
