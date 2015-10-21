@@ -9,18 +9,13 @@ class RecalcAllItems
   def perform(hub_id)
     hub = Hub.find(hub_id)
     bar = ProgressBar.new(
-      hub.hub_feeds.map{|hf| hf.feed_items.count}.sum,
+      hub.all_tag_filters.count,
       :bar, :percentage, :counter, :elapsed, :rate, :eta
     )
 
-    hub.hub_feeds.each do |hf|
-      hf.feed_items.find_each(batch_size: 200) do |fi|
-        fi.render_filtered_tags_for_hub(hub)
-        fi.save
-        bar.increment!
-      end
+    hub.all_tag_filters.each do |filter|
+      filter.apply
+      bar.increment!
     end
-
   end
-
 end

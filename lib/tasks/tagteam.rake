@@ -3,443 +3,6 @@ include RakeHelper
 require 'auth_utilities'
 
 namespace :tagteam do
-  namespace :migrate do
-    desc 'Migrate tag filters over to new system'
-    task :tag_filters => :environment do |t|
-      module MockTagFilter
-        include AuthUtilities
-        def filter
-          filter_type.constantize.find_by_sql(
-            "SELECT * FROM #{filter_type.tableize} WHERE id = #{filter_id}"
-          ).first
-        end
-      end
-      class HubTagFilter < ActiveRecord::Base
-        belongs_to :hub
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      class HubFeedTagFilter < ActiveRecord::Base
-        belongs_to :hub_feed
-        has_one :hub, through: :hub_feed
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      class HubFeedItemTagFilter < ActiveRecord::Base
-        belongs_to :hub
-        belongs_to :feed_item
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      puts 'Migrating filters'
-      ## Now do the hub taggings
-      # Migrate all filters over.
-      def translate_filter(filter, scope)
-        if filter.filter.tag.name.include? ','
-          tags = filter.filter.tag.name.split(',').map(&:strip)
-          #puts "Split #{filter.filter.tag.name} into #{tags}"
-          tags.each do |tag|
-            next if tag.empty?
-            puts filter.inspect unless filter.filter_type == 'AddTagFilter'
-            next unless filter.filter_type == 'AddTagFilter'
-            new_tag = ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(tag)
-            new_filter = TagFilter.create
-            attrs = {
-              hub: filter.hub,
-              scope: scope,
-              tag: new_tag,
-              type: filter.filter_type,
-              applied: false,
-              created_at: filter.created_at,
-              updated_at: filter.updated_at
-            }
-            attrs.each do |attr, value|
-              new_filter.send "#{attr}=", value
-            end
-
-            filter.owners.each do |owner|
-              owner.has_role! :owner, new_filter
-            end
-            filter.creators.each do |creator|
-              creator.has_role! :creator, new_filter
-            end
-            new_filter.save! if new_filter.valid? # Because we can end up
-            # with duplicates now that we're splitting
-          end
-        else
-          new_filter = TagFilter.create
-          attrs = {
-            hub: filter.hub,
-            scope: scope,
-            tag: filter.filter.tag,
-            new_tag: filter.filter.new_tag,
-            type: filter.filter_type,
-            applied: false,
-            created_at: filter.created_at,
-            updated_at: filter.updated_at
-          }
-          attrs.each do |attr, value|
-            new_filter.send "#{attr}=", value
-          end
-
-          filter.owners.each do |owner|
-            owner.has_role! :owner, new_filter
-          end
-          filter.creators.each do |creator|
-            creator.has_role! :creator, new_filter
-          end
-          #puts "Old filter: #{filter.inspect}"
-          #puts "Scope: #{scope.inspect}"
-          #puts "New filter: #{new_filter.inspect}"
-          new_filter.save! if new_filter.valid?
-        end
-      end
-
-      messages = []
-      filter_count = HubTagFilter.unscoped.count +
-        HubFeedTagFilter.unscoped.count +
-        HubFeedItemTagFilter.unscoped.count
-      unless filter_count == 0
-        bar = ProgressBar.new(filter_count)
-        HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
-          HubTagFilter.transaction do
-            if filter.hub
-              filter.updated_at = Time.now
-              translate_filter(filter, filter.hub)
-            else
-              messages << "Could not find hub #{filter.hub_id}"
-            end
-            filter.destroy
-          end
-          bar.increment!
-        end
-
-        HubFeedTagFilter.unscoped.order('updated_at ASC').each do |filter|
-          HubTagFilter.transaction do
-            if filter.hub_feed && filter.hub
-              filter.updated_at = Time.now
-              translate_filter(filter, filter.hub_feed)
-            elsif !filter.hub_feed
-              messages << "Could not find hub feed #{filter.hub_feed_id}"
-            else
-              messages << "Could not find hub #{filter.hub_feed.hub_id}"
-              # puts "Filter: #{filter.inspect}"
-              # puts "Filter.filter: #{filter.filter.inspect}"
-            end
-            filter.destroy
-          end
-          bar.increment!
-        end
-
-        HubFeedItemTagFilter.unscoped.order('updated_at ASC').each do |filter|
-          HubTagFilter.transaction do
-            if filter.feed_item && filter.hub
-              filter.updated_at = Time.now
-              translate_filter(filter, filter.feed_item)
-            elsif !filter.feed_item
-              messages << "Could not find item #{filter.feed_item_id}"
-            else
-              messages << "Could not find hub #{filter.hub_id}"
-            end
-            filter.destroy
-          end
-          bar.increment!
-        end
-
-        puts messages.uniq.join("\n")
-        puts "Turned #{filter_count} old filters into #{TagFilter.count} new filters"
-      end
-    end
-
-    desc 'Migrate to new tag system'
-    task :taggings => :environment do |t|
-      module MockTagFilter
-        include AuthUtilities
-        def filter
-          filter_type.constantize.find_by_sql(
-            "SELECT * FROM #{filter_type.tableize} WHERE id = #{filter_id}"
-          ).first
-        end
-      end
-      class HubTagFilter < ActiveRecord::Base
-        belongs_to :hub
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      class HubFeedTagFilter < ActiveRecord::Base
-        belongs_to :hub
-        belongs_to :hub_feed
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      class HubFeedItemTagFilter < ActiveRecord::Base
-        belongs_to :hub
-        belongs_to :feed_item
-        acts_as_authorization_object
-        include MockTagFilter
-      end
-      puts 'Make sure sunspot is disabled, or this will be really slow.'
-
-      puts 'Destroying Hub 31'
-      Hub.find(31).destroy unless Hub.where(id: 31).empty?
-      Rake::Task['tagteam:clean_orphan_items'].invoke # Took about 2 hours 45 mins
-
-      class NewTagging < ActiveRecord::Base
-        establish_connection :new_production
-        self.table_name = 'taggings'
-        attr_accessible :id, :taggable_id, :taggable_type, :tag_id, :tagger_id,
-          :tagger_type, :context, :created_at
-      end
-
-      current_db = ActiveRecord::Base.connection
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-      ## Do the global taggings first
-      # Delete the taggings from the global context that have a matching tagging
-      # in the hub context with an owner. Those are from bookmarkers.
-      puts "CHECK ON THIS - Deleting bookmarker taggings from global context"
-      current_db.execute(
-        "DELETE FROM taggings WHERE id IN (SELECT id FROM (SELECT *, count(*)
-        OVER w, bool_or(context != 'tags' AND tagger_id IS NOT NULL) OVER
-        w FROM taggings WINDOW w AS (PARTITION BY taggable_id, tag_id)) AS sq
-        WHERE count > 1 AND bool_or IS true AND context = 'tags' AND
-        tagger_type IS NULL);"
-      )
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      # Delete any hub taggings that are duplicates of taggings in the global
-      # context and don't have an owner. These are from feeds.
-      puts 'Deleting feed taggings in hubs'
-      current_db.execute(
-        "DELETE FROM taggings WHERE id IN (SELECT sq.id FROM (SELECT
-        taggings.*, count(*) OVER (PARTITION BY taggable_id, tag_id) FROM
-        taggings WHERE tagger_id IS NULL) AS sq WHERE count > 1 AND context !=
-          'tags')"
-      )
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      # Find an owner for all remaining global taggings - really just the first
-      # feed.  This will set a feed in some undetermined way, which is fine.
-      puts "Adding tagging owners to global tags"
-      current_db.execute(
-        "UPDATE taggings SET tagger_id = feed_items_feeds.feed_id, tagger_type
-        = 'Feed' FROM feed_items_feeds WHERE feed_items_feeds.feed_item_id
-        = taggings.taggable_id AND taggings.context = 'tags' AND
-        taggings.tagger_id IS NULL;"
-      )
-
-
-      # Migrate over all the remaining taggings in the global context.
-      unless ActsAsTaggableOn::Tagging.where(context: 'tags').empty?
-        puts "Migrating global taggings over to new prod"
-        NewTagging.delete_all
-        bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
-        ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
-          NewTagging.create(tagging.attributes)
-          tagging.delete
-          bar.increment!
-        end
-
-        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-      end
-
-      ######## Now do hub taggings
-
-      puts 'Deleting unowned hub taggings with owned duplicates'
-      # Delete any taggings that are duplicates in favor of owned taggings. Do
-      # not remove any owned taggings.
-      current_db.execute(
-        "DELETE FROM taggings WHERE id IN (SELECT id FROM (SELECT taggings.*,
-        count(*) OVER w, bool_or(tagger_id IS NOT NULL) OVER w FROM taggings
-        WINDOW w AS (PARTITION BY taggable_id, tag_id, context)) AS sq WHERE
-        count > 1 AND tagger_id IS NULL AND bool_or IS true);"
-      )
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      puts 'Deactivating duplicate taggings'
-      # If multiple users own the same tagging, create the most recent as
-      # a tagging and the remainder as deactivated taggings.
-      to_deactivate = ActsAsTaggableOn::Tagging.find_by_sql(
-        "SELECT * FROM (SELECT *, row_number() OVER w, first_value(id) OVER w FROM
-        taggings WHERE tagger_id IS NOT NULL WINDOW w AS (PARTITION BY tag_id,
-        taggable_id, context ORDER BY created_at DESC) ORDER BY first_value ASC,
-        created_at DESC) AS ss WHERE row_number > 1;"
-      )
-      count = to_deactivate.count
-      unless count == 0
-        bar = ProgressBar.new(count)
-        to_deactivate.each do |tagging|
-          deactivator = ActsAsTaggableOn::Tagging.find(tagging.first_value)
-
-          attrs = tagging.attributes.except('row_number', 'first_value')
-          tagging.instance_variable_set(:@attributes, attrs)
-
-          deactivator.deactivate_tagging(tagging)
-          bar.increment!
-        end
-      end
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      # Migrate over all the remaining taggings owned by someone or something.
-      puts 'Migrating remaining owned taggings'
-      count = ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').count
-      unless count == 0
-        bar = ProgressBar.new(count)
-        ActsAsTaggableOn::Tagging.where('tagger_id IS NOT NULL').each do |tagging|
-          NewTagging.create(tagging.attributes)
-          tagging.delete
-          bar.increment!
-        end
-      end
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      Rake::Task['tagteam:migrate:tag_filters'].invoke
-      # Locate all taggings that could have been applied by filters (in hub
-      # contexts). Delete them as they can be recreated appropriately and
-      # consistently.
-      AddTagFilter.class_eval do
-        def potential_added_taggings
-          ActsAsTaggableOn::Tagging.where(
-            context: hub.tagging_key, tag_id: tag.id, taggable_type: FeedItem,
-            taggable_id: items_in_scope.pluck(:id)
-          ).where('tagger_id IS NULL')
-        end
-      end
-
-      ModifyTagFilter.class_eval do
-        def potential_added_taggings
-          item_ids_with_old_tag = NewTagging.where(
-            taggable_id: items_in_scope.pluck(:id),
-            tag_id: tag.id
-          ).pluck(:id)
-          ActsAsTaggableOn::Tagging.where(
-            context: hub.tagging_key, tag_id: new_tag.id, taggable_type: FeedItem,
-            taggable_id: item_ids_with_old_tag).where('tagger_id IS NULL')
-        end
-      end
-      count = AddTagFilter.count + ModifyTagFilter.count
-      unless count == 0
-        puts 'Removing taggings caused by filters'
-        bar = ProgressBar.new(count)
-        AddTagFilter.all.each do |filter|
-          filter.potential_added_taggings.delete_all
-          bar.increment!
-        end
-        ModifyTagFilter.all.each do |filter|
-          filter.potential_added_taggings.delete_all
-          bar.increment!
-        end
-        puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-      end
-
-      # Find any remaining taggings that are attached to a feed item which came
-      # in through a hub feed that's a bookmark collection. Mark the tagging
-      # owner as the user who is the owner of the bookmark collection.
-      puts "Assigning owners to bookmarker taggings and migrating"
-      taggings = ActsAsTaggableOn::Tagging.find_by_sql(
-        "SELECT DISTINCT taggings.* FROM taggings JOIN feed_items ON
-        taggable_id = feed_items.id JOIN feed_items_feeds ON
-        feed_items_feeds.feed_item_id = feed_items.id JOIN feeds ON
-        feed_items_feeds.feed_id = feeds.id WHERE feeds.bookmarking_feed IS
-        true;"
-      )
-      count = taggings.count
-      unless count == 0
-        bar = ProgressBar.new(count)
-        taggings.each do |tagging|
-          tagging.tagger = tagging.taggable.feeds.where(bookmarking_feed: true).first.owners.first
-          NewTagging.create(tagging.attributes)
-          tagging.delete
-          bar.increment!
-        end
-      end
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      # For any taggings that could have come from a filter, assume they did
-      # even though we don't have an old tagging in the DB. Migrate.
-      puts 'Giving remaining taggings to modify tag filter candidates'
-      ActsAsTaggableOn::Tagging.all.each do |tagging|
-        tagger = ModifyTagFilter.where(new_tag_id: tagging.tag_id, hub_id:
-                              tagging.context.sub('hub_', '')).last
-        if tagger
-          tagging.tagger = tagger
-          NewTagging.create(tagging.attributes)
-          tagging.delete
-        end
-      end
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      # Delete taggings JSD created
-      puts 'Deleting test taggings'
-      ActsAsTaggableOn::Tagging.delete([3095895, 3095896, 3360595, 3360597])
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-      
-      puts 'Giving any remaining taggings to their feeds'
-      ActsAsTaggableOn::Tagging.all.each do |tagging|
-        tagger = tagging.taggable.feeds.first
-        tagging.tagger = tagger
-        NewTagging.create(tagging.attributes)
-        tagging.delete
-      end
-
-      puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
-
-      if ActsAsTaggableOn::Tagging.count == 0
-        puts 'Dropping taggings table'
-        current_db.execute("DROP TABLE taggings")
-      end
-
-      puts "Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
-      puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
-      puts %q?Then run: echo "SELECT setval('deactivated_taggings_id_seq', (SELECT MAX(id) FROM deactivated_taggings));" | psql -U tagteamdev tagteam_prod?
-      puts "Then run: rake tagteam:migrate:copy_global_taggings"
-    end
-
-    desc 'Setup new taggings table'
-    task :copy_global_taggings => :environment do |t|
-
-      # Copy global taggings back into hub contexts.
-      puts 'Copying global taggings into hub contexts'
-      count = ActsAsTaggableOn::Tagging.where(context: 'tags').count
-      bar = ProgressBar.new(count)
-      ActsAsTaggableOn::Tagging.where(context: 'tags').find_each do |tagging|
-        tagging.taggable.hubs.each do |hub|
-          new_tagging = tagging.dup
-          new_tagging.context = hub.tagging_key
-          new_tagging.save! if new_tagging.valid?
-        end
-        bar.increment!
-      end
-
-      puts 'Run: rake tagteam:migrate:reapply_tag_filters'
-    end
-
-    desc 'Reapply all filters'
-    task :reapply_tag_filters => :environment do |t|
-      # TODO: Rerun tag filters
-      bar = ProgressBar.new(TagFilter.count)
-      Hub.all.each do |hub|
-        hub.hub_feeds.each do |hub_feed|
-          hub_feed.feed_items.find_each do |item|
-            item.tag_filters.each{ |f| f.apply; bar.increment! }
-          end
-          hub_feed.tag_filters.each{ |f| f.apply; bar.increment! }
-        end
-        hub.tag_filters.each{ |f| f.apply; bar.increment! }
-      end
-
-      puts 'Turn indexing back on and reindex'
-    end
-  end
-
   desc 'Parse out image URLs from all feed items'
   task :set_image_urls => :environment do |t|
     bar = ProgressBar.new(FeedItem.count)
@@ -469,33 +32,87 @@ namespace :tagteam do
     end
   end
 
+  desc 'Reapply all filters in a hib'
+  task :reapply_filters, [:hub_id] => :environment do |t, args|
+    RecalcAllItems.new.perform(args[:hub_id])
+  end
+
   desc 'Make sure taggings are consistent with filters'
   task :audit_taggings => :environment do
-    require 'rspec/rails'
-    require Rails.root.join('spec/support/tag_utils.rb')
-    group = RSpec.describe 'tagging consistency' do
-      it 'shows the effects of every tag filter' do
-        bar = ProgressBar.new(TagFilter.count)
-        results = []
-        TagFilter.order(:id).each do |filter|
-          tag_lists = tag_lists_for(filter.items_in_scope, filter.hub.tagging_key)
-          begin
-            expect(tag_lists).to(show_effects_of filter)
-            results << [true, filter.id]
-            #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results.last}"
-            bar.increment!
-          rescue Exception => e
-            #puts e.inspect
-            results << [false, filter.id]
-            #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results.last}"
-            bar.increment!
-            next
-          end
-        end
-        puts results.inspect
-      end
+
+    # Goal: Find taggings that are inconsistent with the current state of
+    # filters. Do this by trimming down the number of taggings as far as
+    # possible, and then looking through the remaining taggings for
+    # inconsistencies.
+
+    # Bring all tag filters into memory
+    add_tag_filters = AddTagFilter.all
+    mod_tag_filters = ModifyTagFilter.all
+    del_tag_filters = DeleteTagFilter.all
+
+    extra_taggings = []
+    missing_taggings = []
+    questionable_filters = []
+
+    ###
+    # First look for any taggings that should have been removed but weren't.
+    # This is the easier case. Modify filters and delete filters remove tags
+
+    # Find taggings with tags that some filters remove
+    maybe_extra_taggings = ActsAsTaggableOn::Tagging.find_by_sql(
+      "SELECT * FROM taggings WHERE tag_id IN
+      (SELECT DISTINCT(tag_id) FROM tag_filters
+      WHERE type IN ('ModifyTagFilter', 'DeleteTagFilter'));"
+    )
+
+    def relevant_filters(filters, tagging)
+      filters.select{|f| f.tag_id == tagging.tag_id}
     end
-    group.run
+
+    def tagging_in_scope?(filter, tagging)
+      filter.scope.taggable_items.where(id: tagging.taggable_id).any?
+    end
+
+    # TODO: Am I ignoring context incorrectly here?
+    bar = ProgressBar.new(maybe_extra_taggings.count)
+    maybe_extra_taggings.each do |tagging|
+      filters = relevant_filters(mod_tag_filters + del_tag_filters, tagging)
+      filters.each do |filter|
+        if tagging_in_scope?(filter, tagging)
+          extra_taggings << { tagging: tagging.id, filter: filter.id }
+          questionable_filters << filter.id
+        end
+      end
+      bar.increment!
+    end
+
+    ###
+    # Now look for the absence of taggings where they should exist. Add filters
+    # and modify filters both add taggings
+
+    bar = ProgressBar.new((add_tag_filters + mod_tag_filters).count)
+    (add_tag_filters + mod_tag_filters).each do |filter|
+      taggable_ids = filter.scope.taggable_items.pluck(:id)
+      tag_id = filter.is_a?(ModifyTagFilter) ? filter.new_tag_id : filter.tag_id
+
+      sql = 'SELECT id FROM
+            (SELECT feed_items.id, bool_or(taggings.tag_id = ' + tag_id.to_s + ')
+            AS has_tag FROM feed_items
+            JOIN "taggings" ON "feed_items"."id" = "taggings"."taggable_id"
+            WHERE feed_items.id IN (' + taggable_ids.join(', ') + ')
+            GROUP BY feed_items.id) AS t1
+            WHERE has_tag = false'
+      items_missing_tag = FeedItem.find_by_sql(sql)
+      items_missing_tag.each do |item|
+        missing_taggings << { tag: tag_id, filter: filter.id, item: item.id }
+        questionable_filters << filter.id
+      end
+      bar.increment!
+    end
+
+    puts "Possible extra tagging count: #{extra_taggings.count}"
+    puts "Possible missing tagging count: #{missing_taggings.count}"
+    puts "Questionable filters: #{questionable_filters.uniq}"
   end
 
   desc 'auto import feeds from json'
@@ -562,116 +179,4 @@ namespace :tagteam do
     Sunspot.session = original_sunspot_session
 
   end
-
-  desc 'tiny test hubs'
-  task :tiny_test_hubs => :environment do
-      u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
-      u.save!
-      u.confirm!
-
-      planet_feeds = %w|
-http://cyber.law.harvard.edu/news/feed
-http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/
-http://www.shirky.com/weblog/feed/
-http://reagle.org/joseph/blog/?flav=atom
-http://www.matthewhindman.com/index.php/component/option,com_rss/feed,RSS2.0/no_html,1/
-http://www.mediacloud.org/blog/feed/|
-
-    add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'jclark@cyber.law.harvard.edu')
-
-  end
-
-  desc 'test hubs'
-  task :test_hubs => :environment do
-    u = User.new(:username => 'jdcc', :email => 'jclark@cyber.law.harvard.edu', :password => 'password', :password_confirmation => "password")
-    u.save
-    u.confirm!
-
-    u = User.new(:username => 'ps', :email => 'peter.suber@gmail.com', :password => 'testpass', :password_confirmation => "testpass")
-    u.save
-    u.confirm!
-
-    planet_feeds = %w|
-http://fringethoughts.wordpress.com/feed/
-http://blogs.law.harvard.edu/andresmh/feed
-http://andyontheroad.wordpress.com/feed
-http://mako.cc/copyrighteous/?flav=atom
-http://cyber.law.harvard.edu/news/feed
-http://www.betsym.org/blog/feed/
-http://crcs.seas.harvard.edu/feed/
-http://blogs.law.harvard.edu/nesson/feed
-http://www.chillingeffects.org/weather.xml
-http://blogs.law.harvard.edu/niftyc/feed
-http://feeds.feedburner.com/CitizenMediaLawProject
-http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/
-http://www.shirky.com/weblog/feed/
-http://blogs.law.harvard.edu/cyberlawclinic/feed
-http://www.guardian.co.uk/profile/dangillmor/rss
-http://mediactive.com/feed/
-http://www.hyperorg.com/blogger/feed/
-http://d3nten.com/feed/
-http://blogs.law.harvard.edu/digitalnatives/feed
-http://theclatterofkeys.tumblr.com/rss
-http://www.esztersblog.com/feed/
-http://www.ethanzuckerman.com/blog/feed/
-http://blogs.law.harvard.edu/mossing/feed
-http://cyber.law.harvard.edu/views/minifeed/913/feed
-http://cyber.law.harvard.edu/views/minifeed/1112/feed
-http://blogs.law.harvard.edu/hroberts/feed
-http://harry-lewis.blogspot.com/feeds/posts/default?alt=rss
-http://www.herdict.org/blog/feed/
-http://feeds.feedburner.com/jakeshapiro/KalU
-http://cyber.law.harvard.edu/views/minifeed/912/feed
-http://www.stanford.edu/group/shl/cgi-bin/drupal/?q=blog/9/feed
-http://blogs.law.harvard.edu/palfrey/feed
-http://futureoftheinternet.org/feed
-http://reagle.org/joseph/blog/?flav=atom
-http://demartin.polito.it/blog/feed
-http://spoudaiospaizen.net/feed/
-http://blogs.law.harvard.edu/lawlab/feed
-http://www.matthewhindman.com/index.php/component/option,com_rss/feed,RSS2.0/no_html,1/
-http://www.mediacloud.org/blog/feed/
-http://blogs.law.harvard.edu/mediaberkman/feed
-http://www.miriammeckel.de/feed/
-http://opennet.net/blog/feed
-http://feeds.feedburner.com/prxblog?format=xml
-http://blogs.law.harvard.edu/vrm/feed
-http://publius.cc/essays/rss
-http://diy2.usc.edu/wordpress/?feed=rss2
-http://blogs.law.harvard.edu/pamphlet/feed
-http://blogs.law.harvard.edu/trunk/feed
-http://blogs.law.harvard.edu/surveillance/feed
-http://blog.pinang.org/feed/rss2
-http://blogs.law.harvard.edu/ugasser/feed
-http://wayneandwax.com/?feed=rss2
-http://wendy.seltzer.org/blog/feed
-http://technosociology.org/?feed=rss2
-http://cyber.law.harvard.edu/views/minifeed/740/feed
-http://metalab.harvard.edu/feed|
-
-  add_example_feeds('Berkman Planet Test Hub', planet_feeds, 'jclark@cyber.law.harvard.edu')
-
-  oa_feeds = %w|http://www.connotea.org/rss/tag/oa.new
-http://www.connotea.org/rss/tag/oa.mandates
-http://www.connotea.org/rss/tag/oa.policies
-http://www.connotea.org/rss/tag/oa.repositories
-http://www.connotea.org/rss/tag/oa.journals
-http://www.connotea.org/rss/tag/oa.green
-http://www.connotea.org/rss/tag/oa.gold
-http://www.connotea.org/rss/tag/oa.data
-http://www.connotea.org/rss/tag/oa.books
-http://www.connotea.org/rss/tag/oa.rwa
-http://www.connotea.org/rss/tag/oa.frpaa
-http://www.connotea.org/rss/tag/oa.boycotts
-http://www.connotea.org/rss/tag/oa.petitions
-http://www.connotea.org/rss/tag/oa.pledges
-http://www.connotea.org/rss/tag/oa.elsevier
-http://www.connotea.org/rss/tag/oa.usa
-http://www.connotea.org/rss/tag/oa.europe
-http://www.connotea.org/rss/tag/oa.south|
-
-  add_example_feeds('Open Access', oa_feeds, 'peter.suber@gmail.com')
-
-  end
-
 end
