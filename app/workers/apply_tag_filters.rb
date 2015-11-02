@@ -5,7 +5,7 @@ class ApplyTagFilters
     'Applying tag filters'
   end
 
-  def perform(filter_ids, item_ids = [])
+  def perform(filter_ids, item_ids = [], reapply = false)
     filter_ids = [filter_ids] unless filter_ids.respond_to? :each
     item_ids = [item_ids] unless item_ids.respond_to? :each
     return if filter_ids.empty?
@@ -15,9 +15,15 @@ class ApplyTagFilters
 
       # This filter might get deleted while it's in the queue to get applied.
       return if filter.nil?
+
+      # If a filter gets applied by another job because the other job was
+      # newer (see below), we don't want to needlessly apply this filter again.
+      if filter.applied && !reapply
+        raise "Filter #{filter.id} already applied and reapply not set"
+      end
+
       unless filter.next_to_apply?
-        raise "Not most recent unapplied filter (#{filter.id}) in " +
-          "hub (#{filter.hub_id})"
+        filter.hub.apply_tag_filters_until filter
       end
 
       if item_ids.empty?

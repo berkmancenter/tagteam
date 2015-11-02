@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150605201636) do
+ActiveRecord::Schema.define(:version => 20150618160651) do
 
   create_table "deactivated_taggings", :force => true do |t|
     t.integer  "tag_id"

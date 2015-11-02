@@ -45,8 +45,8 @@ class TagFilter < ActiveRecord::Base
       (hub.tag_filters_after(self).applied.count == 0)
   end
 
-  def apply_async
-    ApplyTagFilters.perform_async(id)
+  def apply_async(reapply)
+    ApplyTagFilters.perform_async(id, [], reapply)
   end
 
   # Filter application can occur on a subset of items in a scope (if a new
@@ -92,8 +92,8 @@ class TagFilter < ActiveRecord::Base
     end
   end
 
-  def interacting_filters
-    hub.tag_filters_related_to(self)
+  def filter_chain
+    filters_before + [self] + filters_after
   end
 
   def self.title

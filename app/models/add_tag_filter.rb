@@ -13,4 +13,14 @@ class AddTagFilter < TagFilter
   def simulate(tag_list)
     tag_list.include?(tag.name) ? tag_list : tag_list + [tag.name]
   end
+
+  def filters_before
+    []
+  end
+
+  def filters_after
+    subsequent = hub.all_tag_filters.where('tag_id = ? AND updated_at > ?',
+                                           tag.id, updated_at).first
+    subsequent ? [subsequent] + subsequent.filters_after : []
+  end
 end

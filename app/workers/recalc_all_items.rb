@@ -7,11 +7,10 @@ class RecalcAllItems
   end
 
   def perform(hub_id)
+    puts "Reapplying tag filters for hub #{hub_id}"
     hub = Hub.find(hub_id)
-    bar = ProgressBar.new(
-      hub.all_tag_filters.count,
-      :bar, :percentage, :counter, :elapsed, :rate, :eta
-    )
+    return if hub.all_tag_filters.count == 0
+    bar = ProgressBar.new(hub.all_tag_filters.count)
 
     hub.all_tag_filters.each do |filter|
       filter.apply

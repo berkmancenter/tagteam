@@ -62,19 +62,19 @@ class ModifyTagFilter < TagFilter
     tag_list.map{ |t| t == tag.name ? new_tag.name : t }.uniq
   end
 
-  def filter_chain
-    filters_before + [self] + filters_after
-  end
-
   def filters_before
-    previous = hub.all_tag_filters.where('new_tag_id = ? AND updated_at < ?',
-                                         tag.id, updated_at).last
+    previous = hub.all_tag_filters.where(
+      "((type = 'ModifyTagFilter' AND new_tag_id = :tag_id) OR
+        (type = 'AddTagFilter' AND tag_id = :tag_id))
+       AND updated_at < :updated_at",
+      { tag_id: tag.id, updated_at: updated_at}).last
     previous ? previous.filters_before + [previous] : []
   end
 
   def filters_after
-    subsequent = hub.all_tag_filters.where('tag_id = ? AND updated_at > ?',
-                                           new_tag.id, updated_at).first
+    subsequent = hub.all_tag_filters.where(
+      "type IN ('ModifyTagFilter', 'DeleteTagFilter') AND
+      tag_id = ? AND updated_at > ?", new_tag.id, updated_at).first
     subsequent ? [subsequent] + subsequent.filters_after : []
   end
 end

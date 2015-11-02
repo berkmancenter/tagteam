@@ -34,85 +34,13 @@ namespace :tagteam do
 
   desc 'Reapply all filters in a hib'
   task :reapply_filters, [:hub_id] => :environment do |t, args|
-    RecalcAllItems.new.perform(args[:hub_id])
-  end
-
-  desc 'Make sure taggings are consistent with filters'
-  task :audit_taggings => :environment do
-
-    # Goal: Find taggings that are inconsistent with the current state of
-    # filters. Do this by trimming down the number of taggings as far as
-    # possible, and then looking through the remaining taggings for
-    # inconsistencies.
-
-    # Bring all tag filters into memory
-    add_tag_filters = AddTagFilter.all
-    mod_tag_filters = ModifyTagFilter.all
-    del_tag_filters = DeleteTagFilter.all
-
-    extra_taggings = []
-    missing_taggings = []
-    questionable_filters = []
-
-    ###
-    # First look for any taggings that should have been removed but weren't.
-    # This is the easier case. Modify filters and delete filters remove tags
-
-    # Find taggings with tags that some filters remove
-    maybe_extra_taggings = ActsAsTaggableOn::Tagging.find_by_sql(
-      "SELECT * FROM taggings WHERE tag_id IN
-      (SELECT DISTINCT(tag_id) FROM tag_filters
-      WHERE type IN ('ModifyTagFilter', 'DeleteTagFilter'));"
-    )
-
-    def relevant_filters(filters, tagging)
-      filters.select{|f| f.tag_id == tagging.tag_id}
-    end
-
-    def tagging_in_scope?(filter, tagging)
-      filter.scope.taggable_items.where(id: tagging.taggable_id).any?
-    end
-
-    # TODO: Am I ignoring context incorrectly here?
-    bar = ProgressBar.new(maybe_extra_taggings.count)
-    maybe_extra_taggings.each do |tagging|
-      filters = relevant_filters(mod_tag_filters + del_tag_filters, tagging)
-      filters.each do |filter|
-        if tagging_in_scope?(filter, tagging)
-          extra_taggings << { tagging: tagging.id, filter: filter.id }
-          questionable_filters << filter.id
-        end
+    if args[:hub_id]
+      RecalcAllItems.new.perform(args[:hub_id])
+    else
+      Hub.order(:id).each do |hub|
+        RecalcAllItems.new.perform(hub.id)
       end
-      bar.increment!
     end
-
-    ###
-    # Now look for the absence of taggings where they should exist. Add filters
-    # and modify filters both add taggings
-
-    bar = ProgressBar.new((add_tag_filters + mod_tag_filters).count)
-    (add_tag_filters + mod_tag_filters).each do |filter|
-      taggable_ids = filter.scope.taggable_items.pluck(:id)
-      tag_id = filter.is_a?(ModifyTagFilter) ? filter.new_tag_id : filter.tag_id
-
-      sql = 'SELECT id FROM
-            (SELECT feed_items.id, bool_or(taggings.tag_id = ' + tag_id.to_s + ')
-            AS has_tag FROM feed_items
-            JOIN "taggings" ON "feed_items"."id" = "taggings"."taggable_id"
-            WHERE feed_items.id IN (' + taggable_ids.join(', ') + ')
-            GROUP BY feed_items.id) AS t1
-            WHERE has_tag = false'
-      items_missing_tag = FeedItem.find_by_sql(sql)
-      items_missing_tag.each do |item|
-        missing_taggings << { tag: tag_id, filter: filter.id, item: item.id }
-        questionable_filters << filter.id
-      end
-      bar.increment!
-    end
-
-    puts "Possible extra tagging count: #{extra_taggings.count}"
-    puts "Possible missing tagging count: #{missing_taggings.count}"
-    puts "Questionable filters: #{questionable_filters.uniq}"
   end
 
   desc 'auto import feeds from json'
