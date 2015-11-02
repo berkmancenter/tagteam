@@ -19,7 +19,8 @@ class ApplyTagFilters
       # If a filter gets applied by another job because the other job was
       # newer (see below), we don't want to needlessly apply this filter again.
       if filter.applied && !reapply
-        raise "Filter #{filter.id} already applied and reapply not set"
+        logger.debug "Filter #{filter.id} already applied and reapply not set"
+        return
       end
 
       unless filter.next_to_apply?
