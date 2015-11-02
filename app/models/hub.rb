@@ -110,7 +110,12 @@ class Hub < ActiveRecord::Base
   end
 
   def apply_tag_filters_until(tag_filter)
-    tag_filters_between(last_applied_tag_filter, tag_filter).each(&:apply)
+    first_filter = last_applied_tag_filter
+    unless first_filter
+      first_filter = all_tag_filters.first
+      first_filter.apply
+    end
+    tag_filters_between(first_filter, tag_filter).each(&:apply)
   end
 
   def last_applied_tag_filter
