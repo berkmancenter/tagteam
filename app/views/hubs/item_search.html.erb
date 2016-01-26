@@ -31,7 +31,6 @@
           class: "dialog-show add_item_source_to_custom_republished_feed") %>
       <% end %>
     <% end %>
-  </ul>
   <% end %>
 <% if @search.blank? || @search.results.length == 0 %>
   <h3>Nothing. Please try a different term.</h3>
@@ -40,14 +39,18 @@
 </div>
 
 <div class="row">
-  <%= render partial: 'shared/paginate', locals: { results: @search.results } %>
-  <h2>Items: <%= @search.total %> total </h2>
+  <div class="nicely-padded">
+    <%= render partial: 'shared/paginate', locals: { results: @search.results } %>
+    <h2>Items: <%= @search.total %> total </h2>
+  </div>
   <ul class="hub list-unstyled">
     <% @search.results.each do|r| %>
       <%= render partial: 'feed_items/list_item', as: :feed_item, object: r %>
     <% end %>
   </ul>
+  <div class="nicely-padded">
   <%= render partial: 'shared/paginate', locals: { results: @search.results } %>
+  </div>
 <% end %>
 
 <%= javascript_tag %Q|$(document).ready(function(){ $.observeSearchSelectControl(); });| %>

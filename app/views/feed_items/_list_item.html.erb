@@ -15,7 +15,7 @@ hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feed
           <% end %>
         </h2>
         <p class="text-nowrap">
-          <%= link_to feed_item.url %>
+          <%= link_to feed_item.url, feed_item.url, target: '_blank' %>
         </p>
 
         <p>
