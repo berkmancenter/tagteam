@@ -32,7 +32,7 @@ namespace :tagteam do
     end
   end
 
-  desc 'Reapply all filters in a hib'
+  desc 'Reapply all filters in a hub'
   task :reapply_filters, [:hub_id] => :environment do |t, args|
     if args[:hub_id]
       RecalcAllItems.new.perform(args[:hub_id])

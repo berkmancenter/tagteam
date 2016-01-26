@@ -4,7 +4,7 @@ require 'auth_utilities'
 
 namespace :tagteam do
   namespace :audit do
-    desc 'Make sure taggings are consistent with filters'
+    desc 'Make sure each tag filter is reflected in taggings'
     task :tag_filters, [:hub_id] => :environment do |t, args|
       require 'rspec/rails'
       require Rails.root.join('spec/support/tag_utils.rb')
@@ -50,7 +50,7 @@ namespace :tagteam do
               results << { result: true, filter: filter.id }
               #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
               bar.increment!
-            rescue Exception => e
+            rescue Exception #=> e
               #puts e.inspect
               results << { result: false, filter: filter.id }
               #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
@@ -66,7 +66,7 @@ namespace :tagteam do
       group.run
     end
 
-    desc 'Make sure taggings are consistent with filters'
+    desc 'Make sure taggings are consistent with filters (~30 mins)'
     task :taggings, [:context] => :environment do |t, args|
 
       # Goal: Find taggings that are inconsistent with the current state of
@@ -113,6 +113,7 @@ namespace :tagteam do
       end
 
       # TODO: Am I ignoring context incorrectly here?
+      puts 'Looking for spurious taggings'
       bar = ProgressBar.new(maybe_extra_taggings.count)
       maybe_extra_taggings.each do |tagging|
         filters = relevant_filters(mod_tag_filters + del_tag_filters, tagging)
@@ -129,27 +130,27 @@ namespace :tagteam do
       # Now look for the absence of taggings where they should exist. Add filters
       # and modify filters both add taggings
 
-     # bar = ProgressBar.new((add_tag_filters + mod_tag_filters).count)
-     # (add_tag_filters + mod_tag_filters).each do |filter|
-     #   taggable_ids = filter.scope.taggable_items.pluck(:id)
-     #   tag_id = filter.is_a?(ModifyTagFilter) ? filter.new_tag_id : filter.tag_id
+      puts 'Looking for missing taggings'
+      bar = ProgressBar.new((add_tag_filters + mod_tag_filters).count)
+      (add_tag_filters + mod_tag_filters).each do |filter|
+        taggable_ids = filter.scope.taggable_items.pluck(:id)
+        tag_id = filter.is_a?(ModifyTagFilter) ? filter.new_tag_id : filter.tag_id
 
-     #   sql = 'SELECT id FROM
-     #         (SELECT feed_items.id, bool_or(taggings.tag_id = ' + tag_id.to_s + ')
-     #         AS has_tag FROM feed_items
-     #         JOIN "taggings" ON "feed_items"."id" = "taggings"."taggable_id"
-     #         WHERE feed_items.id IN (' + taggable_ids.join(', ') + ')
-     #         GROUP BY feed_items.id) AS t1
-     #         WHERE has_tag = false'
-     #   items_missing_tag = FeedItem.find_by_sql(sql)
-     #   items_missing_tag.each do |item|
-     #     missing_taggings << { tag: tag_id, filter: filter.id, item: item.id }
-     #     questionable_filters << filter.id
-     #   end
-     #   bar.increment!
-     # end
+        sql = 'SELECT id FROM
+              (SELECT feed_items.id, bool_or(taggings.tag_id = ' + tag_id.to_s + ')
+              AS has_tag FROM feed_items
+              JOIN "taggings" ON "feed_items"."id" = "taggings"."taggable_id"
+              WHERE feed_items.id IN (' + taggable_ids.join(', ') + ')
+              GROUP BY feed_items.id) AS t1
+              WHERE has_tag = false'
+        items_missing_tag = FeedItem.find_by_sql(sql)
+        items_missing_tag.each do |item|
+          missing_taggings << { tag: tag_id, filter: filter.id, item: item.id }
+          questionable_filters << filter.id
+        end
+        bar.increment!
+      end
 
-      puts extra_taggings.inspect
       puts "Possible extra tagging count: #{extra_taggings.count}"
       puts "Possible missing tagging count: #{missing_taggings.count}"
       puts "Questionable filters: #{questionable_filters.uniq}"
