@@ -45,7 +45,7 @@ class TagFilter < ActiveRecord::Base
       (hub.tag_filters_after(self).applied.count == 0)
   end
 
-  def apply_async(reapply)
+  def apply_async(reapply = false)
     ApplyTagFilters.perform_async(id, [], reapply)
   end
 
