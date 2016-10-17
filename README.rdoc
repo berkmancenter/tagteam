@@ -40,6 +40,8 @@ TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis
 * git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle
 * Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough. 
 * Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption. 
+* Move sunspot.yml.example.yml to sunspot.yml
+* Make sure sunspot is running all on the same port in sunspot.yml and solr/conf/scripts.conf or else the test suite will not run.
 * Set up config/database.yml to connect to your postgres database.
 * export RAILS_ENV=production
 * Set up databases and docs via "rake db:setup && rake db:migrate && rake db:seed"
