@@ -115,7 +115,7 @@ GEM
       less (~> 2.6.0)
     less-rails-bootstrap (3.3.4.0)
       less-rails (>= 2.6, <= 2.8)
-    libv8 (3.16.14.7)
+    libv8 (3.16.14.15)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -303,3 +303,6 @@ DEPENDENCIES
   whenever
   will_paginate
   will_paginate-bootstrap
+
+BUNDLED WITH
+   1.13.5
