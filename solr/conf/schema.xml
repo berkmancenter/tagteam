@@ -15,10 +15,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<!--  
+<!--
  This is the Solr schema file. This file should be named "schema.xml" and
  should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
+ (i.e. ./solr/conf/schema.xml by default)
  or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
@@ -43,7 +43,7 @@
   - Remember to run the JVM in server mode, and use a higher logging level
     that avoids logging every request
 -->
-<schema name="sunspot" version="1.5">
+<schema name="sunspot" version="1.0">
   <types>
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
@@ -64,6 +64,7 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
     </fieldType>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -83,18 +84,24 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tfloat" class="solr.TrieFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
+    <fieldType name="tdate" class="solr.TrieDateField"
+               omitNorms="true"/>
 
+    <!-- Special field type for spell correction. Be careful about
+         adding filters here, as they apply *before* your values go in
+         the spellcheck. For example, the lowercase filter here means
+         all spelling suggestions will be lower case (without it,
+         though, you'd have duplicate suggestions for lower and proper
+         cased words). -->
+    <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-    <!--
-      Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types.
-    -->
-    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
   </types>
   <fields>
     <!-- Valid attributes for fields:
@@ -115,16 +122,13 @@
        given field.
        When using MoreLikeThis, fields used for similarity should be
        stored for best performance.
-     termPositions: Store position information with the term vector.  
+     termPositions: Store position information with the term vector.
        This will increase storage costs.
-     termOffsets: Store offset information with the term vector. This 
+     termOffsets: Store offset information with the term vector. This
        will increase storage costs.
      default: a value that should be used if no value is specified
        when adding a document.
    -->
-
-    <field name="_version_" type="long" indexed="true" stored="true"/>
-
     <!-- *** This field is used by Sunspot! *** -->
     <field name="id" stored="true" type="string" multiValued="false" indexed="true"/>
     <!-- *** This field is used by Sunspot! *** -->
@@ -246,7 +250,11 @@
     <dynamicField name="*_llm" stored="false" type="location" multiValued="true" indexed="true"/>
     <dynamicField name="*_lls" stored="true" type="location" multiValued="false" indexed="true"/>
     <dynamicField name="*_llms" stored="true" type="location" multiValued="true" indexed="true"/>
+    <field name="textSpell" stored="false" type="textSpell" multiValued="true" indexed="true"/>
+    <!-- required by Solr 4 -->
+    <field name="_version_" type="string" indexed="true" stored="true" multiValued="false" />
   </fields>
+
   <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
    -->
@@ -257,5 +265,11 @@
   <solrQueryParser defaultOperator="AND"/>
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
-        or to add multiple fields to the same field for easier/faster searching.  -->
+        or to add multiple fields to the same field for easier/faster
+        searching.  -->
+
+  <!-- Use copyField to copy the fields you want to run spell checking
+       on into one field. For example: -->
+  <copyField source="*_text"  dest="textSpell" />
+  <copyField source="*_s"  dest="textSpell" />
 </schema>

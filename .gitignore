@@ -7,7 +7,6 @@ bin
 config/database.yml
 config/initializers/tagteam_shared_key.rb
 config/resque_schedule.yml
-config/sunspot.yml
 config/tagteam.yml
 config/unicorn.rb
 db/*.sqlite3
