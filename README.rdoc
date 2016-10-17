@@ -27,25 +27,23 @@ TagTeam can be many things to many people, allowing you to ignore or utilize its
 * postgres - though mysql should work with minimal changes, it's just not tested,
 * redis - for resque background job processing,
 * java - for sunspot fulltext searching. This has been tested under openjdk-6-jre on multiple flavors of ubuntu,
-* ruby 1.9.3
+* ruby 2.1.9
 * wget
 
 == Installation
 
 TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis for job tracking / management. 
 
-* Install ruby 1.9.3, rvm is probably your best choice.
+* Install ruby 2.1.9, rvm is probably your best choice.
 * Install all requirements. Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
 * If you're using rvm, create a gemset to hold this application's gem environment
 * git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle
 * Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough. 
 * Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption. 
-* Copy config/tagteam.yml.example to config/tagteam.yml and edit it to reflect your deployment.
 * Set up config/database.yml to connect to your postgres database.
 * export RAILS_ENV=production
-* Set up databases and docs via "rake db:migrate && rake db:seed"
+* Set up databases and docs via "rake db:setup && rake db:migrate && rake db:seed"
 * rake sunspot:solr:start
-* Start up your resque workers via "resque-pool --daemon --environment production"
 * Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. Examples are in doc/crontab.in OR use the resque scheduler by calling "bundle exec rake resque:scheduler BACKGROUND=true MUTE=true PIDFILE=var/run/resque_scheduler.pid"
 
 == Cron jobs
@@ -101,4 +99,4 @@ TagTeam is licensed under the AGPL
 
 == Copyright
 
-2012 President and Fellows of Harvard College
+2016 President and Fellows of Harvard College

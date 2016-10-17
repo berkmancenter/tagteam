@@ -4,11 +4,10 @@
 .bundle
 .rvmrc
 bin
-config/database.yml
 config/initializers/tagteam_shared_key.rb
 config/resque_schedule.yml
-config/tagteam.yml
 config/unicorn.rb
+config/sunspot.yml
 db/*.sqlite3
 doc/app
 log/
