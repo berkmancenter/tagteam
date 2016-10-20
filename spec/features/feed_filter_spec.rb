@@ -16,6 +16,7 @@ feature "Feed-level tag filtering" do
   end
 
   scenario "adding a modify feed-level filter", wip: true, js: true do
+    pending("Not yet implemented")
     visit hub_feed_tags_path(@hub_feed)
 
     click_link 'claire mccarthy'
@@ -23,7 +24,7 @@ feature "Feed-level tag filtering" do
       click_on 'all items in this feed'
     end
 
-    fill_in '#new_tag_for_filter', with: 'claire mccarthy md'
+    fill_in 'new_tag_for_filter', with: 'claire mccarthy md'
 
     click_link 'Submit'
   end

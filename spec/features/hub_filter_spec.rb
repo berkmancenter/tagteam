@@ -5,6 +5,7 @@ feature "Hub-level tag filtering" do
 
   context "User owns a hub with items", wip: true do
     scenario "User creates a new 'add' filter" do
+      pending("Work in progress")
       visit hub_tag_filters_path @hub
       click_link ".add_filter_control"
       fill_in "#new_tag_for_filter", with: "test-tag"

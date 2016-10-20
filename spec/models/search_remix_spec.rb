@@ -3,6 +3,7 @@ require 'rails_helper'
 describe SearchRemix, needs_review: true do
 
   it "returns the ids for a given search string and hub" do
+    pending('This test is pending')
     feed_item = FeedItem.last
     hub_feed = feed_item.hub_feeds.first
     hub = hub_feed.hub

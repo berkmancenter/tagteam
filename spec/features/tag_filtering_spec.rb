@@ -1,4 +1,12 @@
+require "rails_helper"
+
 feature 'Tag filtering', wip: true do
+
+  def add_filter(tag_name = 'add-test')
+    new_tag = create(:tag, name: tag_name)
+    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+  end
+
   include_context "user owns a hub with a feed and items"
   it "rolls back its changes when removed" do
     tag_lists = tag_lists_for(@feed_items, @hub.tagging_key, true)
@@ -18,7 +26,8 @@ feature 'Tag filtering', wip: true do
     end
 
     it "loses precedence to more recent filters" do
-      @hub.hub_tag_filters << create(:hub_tag_filter)
+      pending('Not yet implemeneted')
+      @hub.tag_filters << create(:add_tag_filter)
 
       expect(@hub.tag_filters.last).to_not eq @filter
     end
@@ -28,7 +37,8 @@ feature 'Tag filtering', wip: true do
 
     context "it's older than another filter" do
       it "regains precedence when renewed" do
-        @hub.hub_tag_filters << create(:hub_tag_filter)
+        pending('Renew is not yet implemeneted')
+        @hub.tag_filters << create(:tag_filter)
         @filter.renew
         expect(@hub.tag_filters.last).to eq @filter
       end
