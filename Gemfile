@@ -36,6 +36,8 @@ end
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'pry'
+  gem 'pry-byebug'
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'therubyracer'

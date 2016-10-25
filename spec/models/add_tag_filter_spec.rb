@@ -114,6 +114,7 @@ describe AddTagFilter do
 
   # These scope tests could be better integrated into the rest of the suite.
   context "the filter is scoped to a hub" do
+    #This helper method should be added to a module at some point.
     def add_filter(tag_name = 'add-test')
       new_tag = create(:tag, name: tag_name)
       create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)

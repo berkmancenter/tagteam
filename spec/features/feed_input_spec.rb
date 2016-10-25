@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 feature "Hub input feed management" do
-  context "User owns a hub" do
+  context "User owns a hub", :vcr => { :cassette_name => "feed_factory_reagle_org" } do
 
     before(:each) do
       @user = create(:confirmed_user)
@@ -14,6 +14,7 @@ feature "Hub input feed management" do
     end
 
     scenario "User adds an input feed" do
+      # For unknown reasons there is a problem adding the feed
       @feed = build(:feed)
       visit hub_hub_feeds_path @hub
       fill_in "New input feed", with: @feed.feed_url
@@ -32,6 +33,7 @@ feature "Hub input feed management" do
       end
 
       scenario "User removes an input feed", wip: true do
+        pending("Not yet implemented")
         # items do not get removed
         visit items_hub_path @hub
         expect(page).to have_css '.feed-item', count: 10

@@ -9,5 +9,5 @@ describe ActsAsTaggableOn::Tagging, needs_review: true do
     it "is owned by something..."
   end
 
-  it_behaves_like "a tagging deactivator"
+  #it_behaves_like "a tagging deactivator"
 end

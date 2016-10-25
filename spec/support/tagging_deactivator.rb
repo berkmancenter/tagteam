@@ -1,4 +1,10 @@
 shared_examples 'a tagging deactivator' do |filter_type|
+
+  def add_filter(tag_name = 'add-test')
+    new_tag = create(:tag, name: tag_name)
+    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+  end
+  
   describe '#deactivate_tagging' do
     it 'copies the tagging into the deactivated_taggings table' do
       filter = create(filter_type)
