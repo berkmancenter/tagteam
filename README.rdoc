@@ -42,21 +42,11 @@ TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis
 * Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption. 
 * Move sunspot.yml.example.yml to sunspot.yml
 * Make sure sunspot is running all on the same port in sunspot.yml and solr/conf/scripts.conf or else the test suite will not run.
-* Set up config/database.yml to connect to your postgres database.
+* Copy config/database.yml.example to config/database.yml and set it up to connect to your postgres database.
 * export RAILS_ENV=production
 * Set up databases and docs via "rake db:setup && rake db:migrate && rake db:seed"
 * rake sunspot:solr:start
-* Set up the cron jobs that cause the file-based cache to expire and feeds to get updated. Examples are in doc/crontab.in OR use the resque scheduler by calling "bundle exec rake resque:scheduler BACKGROUND=true MUTE=true PIDFILE=var/run/resque_scheduler.pid"
-
-== Cron jobs
-
-Q: Why aren't you using redis-scheduler, DJCP?
-
-A: Aren't there enough daemons running for this app? Also, cron "just works." If you'd prefer support is now available for resque-scheduler. Start with "bundle exec rake resque:scheduler BACKGROUND=true MUTE=true PIDFILE=var/run/resque_scheduler.pid"
-
-By default, TagTeam assumes you're using cron to run scheduled tasks invoked via wget POSTs with a shared key.  When you run 'db:seed', the shared key is set up automatically for you in the correct location.
-
-See "docs/crontab.in" for example cron jobs. You can skip the wget POSTs and run the rake tasks "tagteam:update_feeds" and "tagteam:expire_file_cache" directly, but then you're invoking the entire rails framework and that's quite expensive.  You can also set up resque-scheduler on your own, as the cron jobs live in resque-compatible worker jobs under app/workers/.
+* Start sidekiq (bundle exec sidekiq) to run scheduled tasks
 
 == Caching
 
