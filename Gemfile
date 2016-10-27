@@ -1,4 +1,5 @@
 source 'http://rubygems.org'
+ruby "2.2.5"
 
 gem 'rails', '~> 3.2.22'
 gem 'rack', '~> 1.4.5'
@@ -32,6 +33,11 @@ gem 'test-unit', '~> 3.0'
 
 group :development do
   #gem 'sql-logging'
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'guard-rspec'
+  gem 'guard-livereload', '~> 2.5', require: false
+  gem 'guard-imageoptim'
 end
 
 group :development, :test do
