@@ -70,5 +70,7 @@ module Tagteam
 
     config.active_record.whitelist_attributes = true
 
+    config.log_tags = [:uuid, :remote_ip, lambda { |req| Time.now.httpdate }]
+
   end
 end
