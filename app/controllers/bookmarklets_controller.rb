@@ -20,7 +20,6 @@ class BookmarkletsController < ApplicationController
     if @feed.is_bookmarking_feed?
       @feed.feed_items.delete(@feed_item)
       flash[:notice] = %Q|Removed "#{@feed_item.title}" from that bookmark collection|
-      @feed_item.update_filtered_tags
     else
       flash[:notice] = %Q|Could not remove "#{@feed_item.title}" from that bookmark collection|
     end
