@@ -6,9 +6,9 @@ class TagFiltersController < ApplicationController
     allow all, to: [:index]
     allow :superadmin
     allow :owner, of: :hub
-    allow :hub_tag_filterer, to: [:new, :create] if @scope.is_a? Hub
-    allow :hub_feed_tag_filterer, to: [:new, :create] if @scope.is_a? HubFeed
-    allow :hub_feed_item_tag_filterer, to: [:new, :create] if @scope.is_a? FeedItem
+    allow :hub_tag_filterer, to: [:new, :create]
+    allow :hub_feed_tag_filterer, to: [:new, :create]
+    allow :hub_feed_item_tag_filterer, to: [:new, :create]
     allow :owner, of: :tag_filter, to: [:destroy]
   end
 
