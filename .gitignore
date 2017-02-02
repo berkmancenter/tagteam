@@ -5,9 +5,10 @@
 .rvmrc
 bin
 config/initializers/tagteam_shared_key.rb
-config/resque_schedule.yml
-config/unicorn.rb
+config/database.yml
 config/sunspot.yml
+config/tagteam.yml
+config/unicorn.rb
 db/*.sqlite3
 doc/app
 log/
