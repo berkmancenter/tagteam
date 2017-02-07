@@ -2,8 +2,7 @@ module TagScopable
   extend ActiveSupport::Concern
 
   included do
-    has_many :tag_filters, as: :scope,
-      dependent: :destroy, order: 'updated_at DESC'
+    has_many :tag_filters, -> { order(updated_at: :desc) }, as: :scope, dependent: :destroy
 
     attr_accessor :skip_global_tag_copy
   end

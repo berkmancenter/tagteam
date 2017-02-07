@@ -10,11 +10,11 @@ class TagFilter < ActiveRecord::Base
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 
-  VALID_SCOPE_TYPES = ['Hub', 'HubFeed', 'FeedItem']
-  validates_presence_of :tag_id
-  validates_inclusion_of :scope_type, in: VALID_SCOPE_TYPES
-  validates_uniqueness_of :tag_id, scope: [:scope_type, :scope_id],
-    message: 'Filter conflicts with existing filter.'
+  VALID_SCOPE_TYPES = %w(Hub HubFeed FeedItem).freeze
+  validates :tag_id, presence: true
+  validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
+  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id],
+                                   message: 'Filter conflicts with existing filter.' }
 
   attr_accessible :tag_id
 
@@ -28,7 +28,7 @@ class TagFilter < ActiveRecord::Base
     t.add :tag
   end
 
-  scope :applied, where(applied: true)
+  scope :applied, -> { where(applied: true) }
 
   def items_in_scope
     scope.taggable_items
@@ -39,7 +39,7 @@ class TagFilter < ActiveRecord::Base
   end
 
   def next_to_apply?
-    self.applied == false &&
+    applied == false &&
       (hub.tag_filters_before(self).count ==
         hub.tag_filters_before(self).applied.count) &&
       (hub.tag_filters_after(self).applied.count == 0)
@@ -56,7 +56,7 @@ class TagFilter < ActiveRecord::Base
     TagFilter.transaction do
       taggings.destroy_all
       reactivate_taggings!
-      self.update_column(:applied, false)
+      update_column(:applied, false)
     end
     self.class.base_class.notify_observers :after_rollback, self
   end
@@ -77,13 +77,13 @@ class TagFilter < ActiveRecord::Base
     # Deactivates any taggings that are the same except in owner, and do not
     # deactivate own taggings.
     return ActsAsTaggableOn::Tagging.where('1=2') if items.empty?
-    ActsAsTaggableOn::Tagging.
-      where(context: hub.tagging_key, tag_id: tag.id,
-            taggable_type: FeedItem, taggable_id: items.pluck(:id)).
-      where('("taggings"."tagger_id" IS NULL AND ' +
-            '"taggings"."tagger_type" IS NULL) OR ' +
+    ActsAsTaggableOn::Tagging
+      .where(context: hub.tagging_key, tag_id: tag.id,
+             taggable_type: FeedItem, taggable_id: items.pluck(:id))
+      .where('("taggings"."tagger_id" IS NULL AND ' \
+            '"taggings"."tagger_type" IS NULL) OR ' \
             '(NOT ("taggings"."tagger_id" = ? AND "taggings"."tagger_type" = ?))',
-            self.id, self.class.base_class.name)
+             id, self.class.base_class.name)
   end
 
   def deactivate_taggings!(items: items_in_scope)
@@ -97,7 +97,7 @@ class TagFilter < ActiveRecord::Base
   end
 
   def self.title
-    "#{self.name.sub('TagFilter', '')} tag filter"
+    "#{name.sub('TagFilter', '')} tag filter"
   end
 
   def self.in_hub(hub)
@@ -106,10 +106,10 @@ class TagFilter < ActiveRecord::Base
 
   # This is useful when we're using sidekiq.
   def self.apply_by_id(id)
-    self.find(id).apply
+    find(id).apply
   end
 
   def self.rollback_by_id(id)
-    self.find(id).rollback
+    find(id).rollback
   end
 end

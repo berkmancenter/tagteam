@@ -1,10 +1,10 @@
-shared_examples 'a tagging deactivator' do |filter_type|
-
+# frozen_string_literal: true
+RSpec.shared_examples 'a tagging deactivator' do |filter_type|
   def add_filter(tag_name = 'add-test')
     new_tag = create(:tag, name: tag_name)
     create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
   end
-  
+
   describe '#deactivate_tagging' do
     it 'copies the tagging into the deactivated_taggings table' do
       filter = create(filter_type)
@@ -13,8 +13,8 @@ shared_examples 'a tagging deactivator' do |filter_type|
       # We have to remove created_at for some weird reason. It's truncating off
       # the nanoseconds of the time object when it's copying over.
       expect(DeactivatedTagging.count).to eq(1)
-      expect(DeactivatedTagging.first.attributes.delete(:created_at)).
-        to be == tagging.attributes.delete(:created_at)
+      expect(DeactivatedTagging.first.attributes.delete(:created_at))
+        .to be == tagging.attributes.delete(:created_at)
     end
 
     it 'removes the tagging from the taggings table' do

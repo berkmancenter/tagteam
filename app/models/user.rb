@@ -1,20 +1,19 @@
 class User < ActiveRecord::Base
-
   acts_as_tagger
-  has_and_belongs_to_many :roles, :join_table => :roles_users
+  has_and_belongs_to_many :roles, join_table: :roles_users
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :username, :email, :password, :password_confirmation, :remember_me, :login
   attr_accessor :login
-  acts_as_authorization_subject :association_name => :roles, :join_table_name => :roles_users
-  validates_uniqueness_of :username
+  acts_as_authorization_subject association_name: :roles, join_table_name: :roles_users
+  validates :username, uniqueness: true
 
-  #This should be a url friendly username because it's used to see the user's tags
-  validates_format_of :username, :with => /\A[A-Za-z0-9_-]+\z/, :message => "Usernames may only contain letters, numbers, underscores, and hyphens."
+  # This should be a url friendly username because it's used to see the user's tags
+  validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
   searchable do
     text :first_name, :last_name, :email, :url, :username
@@ -27,37 +26,37 @@ class User < ActiveRecord::Base
   end
 
   def things_i_have_roles_on
-    roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')",'owner']).group(:authorizable_type).collect{|r| r.authorizable_type}.sort.collect{|r| r.constantize}
+    roles.select(:authorizable_type).where(["name = ? AND authorizable_id is not null AND authorizable_type not in('Feed')", 'owner']).group(:authorizable_type).collect(&:authorizable_type).sort.collect(&:constantize)
   end
 
   # Looks for objects of the class_of_interest owned by this user.
   def my(class_of_interest = Hub)
-    roles.includes(:authorizable).find(:all, :conditions => {:authorizable_type => class_of_interest.name, :name => 'owner'}).collect{|r| r.authorizable}
+    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable)
   end
 
   # Looks for objects of the class_of_interest in a specific hub owned by this user. Not all objects have a direct relationship to a hub so this won't necesssarily work everywhere.
   def my_objects_in(class_of_interest = Hub, hub = Hub.first)
-    roles.includes(:authorizable).find(:all, :conditions => {:authorizable_type => class_of_interest.name, :name => 'owner'}).collect{|r| r.authorizable}.reject{|o| o.hub_id != hub.id}
+    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable).reject { |o| o.hub_id != hub.id }
   end
 
   def my_bookmarkable_hubs
-    roles.find(:all, :conditions => {:authorizable_type => 'Hub', :name => [:owner,:bookmarker]}).collect{|r| r.authorizable}
+    roles.where(authorizable_type: 'Hub', name: [:owner, :bookmarker]).collect(&:authorizable)
   end
 
   def is?(role_name, obj = nil)
     # This allows us to accept strings or arrays.
     role_names = [role_name].flatten.uniq
     gen_role_cache
-    role_names.each do|r|
-      if ! @role_cache["#{(obj.nil?) ? '' : obj.class.name}-#{(obj.nil?) ? '' : obj.id}-#{r}"].nil?
+    role_names.each do |r|
+      unless @role_cache["#{obj.nil? ? '' : obj.class.name}-#{obj.nil? ? '' : obj.id}-#{r}"].nil?
         return true
       end
     end
-    return false
+    false
   end
 
   def my_bookmarking_bookmark_collections_in(hub_id)
-    Feed.select('DISTINCT feeds.*').joins(:accepted_roles => [:users]).joins(:hub_feeds).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_feeds.hub_id = ? and feeds.bookmarking_feed = ?','owner','Feed', ((self.blank?) ? nil : self.id), hub_id, true]).order('created_at desc')
+    Feed.select('DISTINCT feeds.*').joins(accepted_roles: [:users]).joins(:hub_feeds).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_feeds.hub_id = ? and feeds.bookmarking_feed = ?', 'owner', 'Feed', (blank? ? nil : id), hub_id, true]).order('created_at desc')
   end
 
   def get_default_bookmarking_bookmark_collection_for(hub_id)
@@ -87,13 +86,13 @@ class User < ActiveRecord::Base
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
+    # TODO: fix assignment where conditional should be
     if login = conditions.delete(:login)
-      where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+      where(conditions).where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }]).first
     else
       where(conditions).first
     end
   end
-
 
   def self.title
     'User account'
@@ -101,19 +100,18 @@ class User < ActiveRecord::Base
 
   def display_name
     tmp_name = "#{first_name} #{last_name}"
-    (tmp_name.blank?) ? email : tmp_name 
+    tmp_name.blank? ? email : tmp_name
   end
 
   protected
 
   def gen_role_cache
-    if @role_cache.nil?
-      logger.warn('regenerating role cache')
-      @role_cache = {}
-      roles.each do|r|
-        @role_cache["#{r.authorizable_type}-#{r.authorizable_id}-#{r.name}"] = 1
-      end
+    return if @role_cache.present?
+
+    logger.warn('regenerating role cache')
+    @role_cache = {}
+    roles.each do |r|
+      @role_cache["#{r.authorizable_type}-#{r.authorizable_id}-#{r.name}"] = 1
     end
   end
-
 end

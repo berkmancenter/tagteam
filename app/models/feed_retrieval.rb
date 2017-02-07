@@ -1,17 +1,17 @@
 # A FeedRetrieval tracks the results of the spidering of a Feed. It contains a YAML changelog of new or changed FeedItem objects, and some representation of what actually changed.
-# 
+#
 # FeedItem change tracking is used to calculate the spidering schedule for a Feed, and could be used in the future to calculate metrics and do some interesting analysis about what's getting posted when.  More on how scheduling works can be found in the Feed class.
 #
 class FeedRetrieval < ActiveRecord::Base
   belongs_to :feed
-  has_and_belongs_to_many :feed_items 
-  has_many :hubs, :through => :feed
+  has_and_belongs_to_many :feed_items, join_table: 'feed_items_feed_retrievals'
+  has_many :hubs, through: :feed
 
-  scope :successful, where(['success is true'])
+  scope :successful, -> { where(success: true) }
 
   # Find the HubFeed for this FeedRetrieval within a Hub. A Feed can live in multiple hubs, so this slightly contorted method is needed to find how this FeedRetrieval relates in the context of a Hub.
   def hub_feed_for_hub(hub = Hub.first)
-    self.feed.hub_feeds.reject{|hf| hf.hub_id != hub.id}.first
+    feed.hub_feeds.reject { |hf| hf.hub_id != hub.id }.first
   end
 
   after_save :update_feed_updated_at
@@ -21,7 +21,7 @@ class FeedRetrieval < ActiveRecord::Base
     c.allow_jsonp_callback = true
   end
 
-  api_accessible :default do|t|
+  api_accessible :default do |t|
     t.add :feed
     t.add :hubs
     t.add :status_code
@@ -34,7 +34,7 @@ class FeedRetrieval < ActiveRecord::Base
 
   searchable do
     integer :feed_id
-    integer :hub_ids, :multiple => true
+    integer :hub_ids, multiple: true
     boolean :success
     string :status_code
     time :updated_at
@@ -42,69 +42,68 @@ class FeedRetrieval < ActiveRecord::Base
 
   # We've got changes, so updates the updated_at value for the actual feed this FeedRetrieval references.
   def update_feed_updated_at
-    self.feed.updated_at = DateTime.now
-    self.feed.save
+    feed.updated_at = DateTime.current
+    feed.save
   end
 
   # de-YAMLize the changelog back into ruby objects.
   def parsed_changelog
     return nil if changelog.nil?
-    YAML.load(self.changelog)
+    # TODO: determine how to handle symbols in changelogs using YAML.safe_load
+    YAML.load(changelog)
   end
 
   # Extract the new FeedItem ids from the changelog.
   def new_feed_items
-    self.changelog_summary[:new_records]
+    changelog_summary[:new_records]
   end
 
   # Extract the changed FeedItem ids from the changelog.
   def changed_feed_items
-    self.changelog_summary[:changed_records]
+    changelog_summary[:changed_records]
   end
 
   # Returns true if this FeedRetrieval has resulted in FeedItems with changes.
   def has_changes?
-    return (new_feed_items.blank? && changed_feed_items.blank?) ? false : true
+    new_feed_items.blank? && changed_feed_items.blank? ? false : true
   end
 
   # Return a simple data structure of changes in this FeedRetrieval, if any. Use a simple in-object attribute cache to avoid parsing the same, non-changing YAML more than once per method call.
   def changelog_summary
+    return changelog_summary_cache unless changelog_summary_cache.nil?
 
-    return self.changelog_summary_cache unless self.changelog_summary_cache.nil?
-
-    changelog_yaml = self.parsed_changelog
+    changelog_yaml = parsed_changelog
     changes = {
-      :new_records => [],
-      :changed_records => []
+      new_records: [],
+      changed_records: []
     }
 
     return changes if changelog_yaml.nil?
 
-    changelog_yaml.keys.each do|ch|
+    changelog_yaml.keys.each do |ch|
       if changelog_yaml[ch].include?(:new_record)
         changes[:new_records] << ch
       else
         # Something happened to this item
         # FIXME
         changed_fields = [ch]
-        changelog_yaml[ch].keys.each do|change|
-         changed_fields << change.to_s.titleize
+        changelog_yaml[ch].keys.each do |change|
+          changed_fields << change.to_s.titleize
         end
         changes[:changed_records] << changed_fields
       end
     end
     self.changelog_summary_cache = changes
-    return changes
+    changes
   end
 
   def display_title
-    "#{created_at}"
+    created_at.to_s
   end
-  
-  alias :to_s :display_title
+
+  alias to_s display_title
 
   def self.title
-    "Feed update"
+    'Feed update'
   end
-
 end

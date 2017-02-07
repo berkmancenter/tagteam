@@ -89,7 +89,7 @@ class TagFiltersController < ApplicationController
   def load_scope
     # This controller gets used in different contexts, so we need to figure out
     # what context we're in and instantiate variables appropriately.
-    @hub = Hub.find(params[:hub_id]) if params[:hub_id]
+    @hub = Hub.find_by!(slug: params[:hub_id]) if params[:hub_id]
     @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
     @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
 

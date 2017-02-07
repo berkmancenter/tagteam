@@ -1,13 +1,14 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
-describe DeactivatedTagging do
+RSpec.describe DeactivatedTagging, type: :model do
   describe '#reactivate' do
     it 'copies itself into the taggings table' do
       tagging = create(:tagging)
       create(:delete_tag_filter).deactivate_tagging(tagging)
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
 
-      d_tagging = DeactivatedTagging.first
+      d_tagging = described_class.first
       d_tagging.reactivate
       expect(ActsAsTaggableOn::Tagging.first).to eq(tagging)
     end
@@ -17,10 +18,10 @@ describe DeactivatedTagging do
       create(:delete_tag_filter).deactivate_tagging(tagging)
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
 
-      d_tagging = DeactivatedTagging.first
+      d_tagging = described_class.first
       d_tagging.reactivate
 
-      expect(DeactivatedTagging.count).to eq(0)
+      expect(described_class.count).to eq(0)
     end
 
     it 'returns the reactivated copy of itself' do
@@ -28,7 +29,7 @@ describe DeactivatedTagging do
       create(:delete_tag_filter).deactivate_tagging(tagging)
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
 
-      d_tagging = DeactivatedTagging.first
+      d_tagging = described_class.first
       new_tagging = d_tagging.reactivate
 
       expect(new_tagging).to eq(tagging)

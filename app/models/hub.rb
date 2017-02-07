@@ -32,18 +32,17 @@ class Hub < ActiveRecord::Base
   after_validation :move_friendly_id_error_to_nickname
   before_save :clean_slug
 
-  acts_as_api do|c|
+  acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
 
   has_many :hub_feeds, dependent: :destroy
   has_many :feeds, through: :hub_feeds
-  has_many :republished_feeds, dependent: :destroy, order: 'created_at desc'
+  has_many :republished_feeds, -> { order(created_at: :desc) }, dependent: :destroy
 
   # We want to make sure we're always getting the oldest filter first in this
   # list so if we happen to apply all these in order, it's the correct order.
-  has_many :all_tag_filters, class_name: 'TagFilter',
-    dependent: :destroy, order: 'updated_at ASC'
+  has_many :all_tag_filters, -> { order(updated_at: :asc) }, class_name: 'TagFilter', dependent: :destroy
 
   api_accessible :default do |t|
     t.add :id
@@ -60,11 +59,10 @@ class Hub < ActiveRecord::Base
     text :nickname
   end
 
-
   def feed_items
     FeedItem.joins(:hubs).where(hubs: { id: id })
   end
-  alias_method :taggable_items, :feed_items
+  alias taggable_items feed_items
 
   def clean_slug
     # work around FriendlyId bug that generates slugs for empty nicknames
@@ -73,8 +71,9 @@ class Hub < ActiveRecord::Base
   end
 
   def move_friendly_id_error_to_nickname
-    errors.add :nickname,
-      *errors.delete(:friendly_id) if errors[:friendly_id].present?
+    return unless errors[:friendly_id].present?
+
+    errors.add :nickname, *errors.delete(:friendly_id)
   end
 
   def should_generate_new_friendly_id?
@@ -84,11 +83,11 @@ class Hub < ActiveRecord::Base
   def display_title
     title
   end
-  alias :to_s :display_title
+  alias to_s display_title
 
   # Used as the key to track the tag facet for this Hub's tags in a FeedItem.
   def tagging_key
-    "hub_#{self.id}".to_sym
+    "hub_#{id}".to_sym
   end
 
   def tag_filters_before(tag_filter)
@@ -123,15 +122,18 @@ class Hub < ActiveRecord::Base
   end
 
   def tag_counts
-    ActsAsTaggableOn::Tag.find_by_sql([
-      'SELECT tags.*, count(*)
-      FROM tags JOIN taggings ON taggings.tag_id = tags.id
-      WHERE taggings.context = ? AND taggings.taggable_type = ?
-      GROUP BY tags.id ORDER BY count(*) DESC', self.tagging_key, 'FeedItem'])
+    ActsAsTaggableOn::Tag.find_by_sql(
+      [
+        'SELECT tags.*, count(*)
+        FROM tags JOIN taggings ON taggings.tag_id = tags.id
+        WHERE taggings.context = ? AND taggings.taggable_type = ?
+        GROUP BY tags.id ORDER BY count(*) DESC', tagging_key, 'FeedItem'
+      ]
+    )
   end
 
   def self.top_new_hubs
-    self.order('created_at DESC').limit(3)
+    order('created_at DESC').limit(3)
   end
 
   def self.most_active_hubs(limit = 4)
@@ -143,13 +145,13 @@ class Hub < ActiveRecord::Base
   end
 
   def self.by_first_owner(dir = 'asc')
-    rel = select(%q|"hubs".*, string_agg("users".username,',') as owners|).
-      joins("INNER JOIN roles ON roles.authorizable_id = hubs.id
+    rel = select(%q|"hubs".*, string_agg("users".username,',') as owners|)
+          .joins("INNER JOIN roles ON roles.authorizable_id = hubs.id
             AND roles.authorizable_type = 'Hub'
             AND roles.name = 'owner'
             INNER JOIN roles_users ON roles_users.role_id = roles.id
-            INNER JOIN users ON roles_users.user_id = users.id").
-            order('owners').group('hubs.id')
+            INNER JOIN users ON roles_users.user_id = users.id")
+          .order('owners').group('hubs.id')
     return rel.reverse_order if dir == 'desc'
     rel
   end

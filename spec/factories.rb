@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def set_roles(object, evaluator)
   evaluator.owner.has_role!(:owner, object)
   evaluator.owner.has_role!(:creator, object)
@@ -6,46 +7,6 @@ end
 FactoryGirl.define do
   sequence :tag_name do |n|
     "test-tag-#{n}"
-  end
-
-  factory :user do
-    sequence(:username) { |n| "jdcc#{n}" }
-    sequence(:email) { |n| "jclark+#{n}@cyber.law.harvard.edu" }
-    password 'password'
-    password_confirmation 'password'
-
-    factory :confirmed_user do
-      after(:create) { |user| user.confirm! }
-    end
-  end
-
-
-  factory :hub do
-    title 'My hub'
-
-    trait :with_feed do
-      transient do
-        with_feed_url 0
-      end
-      after(:create) do |hub, evaluator|
-        hub.feeds << create(:feed, with_url: evaluator.with_feed_url)
-      end
-    end
-
-    trait :owned do
-      transient do
-        owner create(:user)
-      end
-      after(:create) { |hub, evaluator|
-        set_roles(hub, evaluator)
-        hub.feeds.each { |feed| set_roles(feed, evaluator) }
-      }
-    end
-  end
-
-  factory :hub_feed do
-    hub
-    feed
   end
 
   factory :feed_item do
@@ -96,14 +57,14 @@ FactoryGirl.define do
 
     feed_url do |feed|
       feeds = [
-       'http://reagle.org/joseph/blog/?flav=atom',
-       'http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/?1=1',
-       'http://feeds.feedburner.com/mfeldstein/feed/?1=1',
+        'http://reagle.org/joseph/blog/?flav=atom',
+        'http://childrenshospitalblog.org/category/claire-mccarthy-md/feed/?1=1',
+        'http://feeds.feedburner.com/mfeldstein/feed/?1=1'
       ]
       feeds[feed.with_url % feeds.size] + "&copy=#{feed.copy}"
     end
 
-    initialize_with { Feed.find_or_create_by_feed_url(feed_url) }
+    initialize_with { Feed.find_or_create_by(feed_url: feed_url) }
   end
 
   factory :tag, class: ActsAsTaggableOn::Tag do

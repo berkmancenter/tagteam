@@ -1,18 +1,19 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
-describe Feed, needs_review: true do
-  it "owns all taggings that come in from its URL"
+RSpec.describe Feed, needs_review: true, type: :model do
+  it 'owns all taggings that come in from its URL'
 
   context 'a feed exists' do
-    before(:each) do
+    before do
       @feed = create(:feed)
       subject { @feed }
     end
 
     describe '#valid?' do
-      it "is given invalid feed_urls" do
-        pending("Needs to be fixed")
-        #need to create a new feed not change the existing feed_url
+      it 'is given invalid feed_urls' do
+        pending('Needs to be fixed')
+        # need to create a new feed not change the existing feed_url
         @feed.feed_url = 'http://blogs.law.harvard.edu/asdf'
         expect(@feed).not_to be_valid
 
@@ -23,8 +24,8 @@ describe Feed, needs_review: true do
         expect(@feed).not_to be_valid
       end
 
-      it "should follow redirects" do
-        skip("Needs to be fixed")
+      it 'follows redirects' do
+        skip('Needs to be fixed')
         @feed.feed_url = 'http://blogs.law.harvard.edu/doc/feed'
         expect(@feed).to be_valid
 
@@ -34,8 +35,8 @@ describe Feed, needs_review: true do
         expect(@feed).to be_valid
       end
 
-      it "should work with SSL feeds" do
-        skip("Needs to be fixed")
+      it 'works with SSL feeds' do
+        skip('Needs to be fixed')
         @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed/'
         expect(@feed).to be_valid
 
@@ -45,8 +46,8 @@ describe Feed, needs_review: true do
         expect(@feed).to be_valid
       end
 
-      it "should work with redirected SSL feeds" do
-        skip("Needs to be fixed")
+      it 'works with redirected SSL feeds' do
+        skip('Needs to be fixed')
         @feed.feed_url = 'https://blogs.law.harvard.edu/doc/feed'
         expect(@feed).to be_valid
 
@@ -56,8 +57,8 @@ describe Feed, needs_review: true do
         expect(@feed).to be_valid
       end
 
-      it "is given valid feed_urls" do
-        skip("Needs to be fixed")
+      it 'is given valid feed_urls' do
+        skip('Needs to be fixed')
 
         @feed.feed_url = 'http://rss.slashdot.org/Slashdot/slashdot'
         expect(@feed).to be_valid

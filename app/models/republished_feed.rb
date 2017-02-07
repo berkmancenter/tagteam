@@ -28,7 +28,7 @@ class RepublishedFeed < ActiveRecord::Base
   has_many :input_sources, :dependent => :destroy, :order => 'created_at desc' 
 
   validates_uniqueness_of :url_key
-  validates_format_of :url_key, :with => /^[a-z\d\-]+/
+  validates_format_of :url_key, :with => /\A[a-z\d\-]+/
 
   api_accessible :default do |t|
     t.add :id

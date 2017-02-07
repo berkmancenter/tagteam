@@ -2,20 +2,16 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Tagteam
   class Application < Rails::Application
-
     tagteam_config = YAML.load_file("#{Rails.root}/config/tagteam.yml")
-    tagteam_config.keys.collect{|k| 
+    tagteam_config.keys.collect do |k|
       Tagteam::Application.config.send("#{k}=", tagteam_config[k])
-    }
+    end
 
     Sidekiq.configure_server do |sidekiq_config|
       sidekiq_config.redis = {
@@ -40,24 +36,15 @@ module Tagteam
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
 
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
-
     # Activate observers that should always be running.
-    config.active_record.observers = :feed_item_observer, :hub_feed_observer,
-      :tag_filter_observer
+    config.active_record.observers = :feed_item_observer, :hub_feed_observer, :tag_filter_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'America/New_York'
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
-
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :password_confirmation, 'SHARED_KEY_FOR_TASKS']
@@ -65,12 +52,6 @@ module Tagteam
     # Enable the asset pipeline
     config.assets.enabled = true
 
-    # Version of your assets, change this if you want to expire all your assets
-    # config.assets.version = '1.0'
-
-    config.active_record.whitelist_attributes = true
-
-    config.log_tags = [:uuid, :remote_ip, lambda { |req| Time.now.httpdate }]
-
+    config.log_tags = [:uuid, :remote_ip, ->(_req) { Time.now.httpdate }]
   end
 end

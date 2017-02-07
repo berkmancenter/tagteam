@@ -1,26 +1,26 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :init_breadcrumbs
+  before_action :init_breadcrumbs
 
   layout :layout_by_resource
 
   # The per_page setting for pagination can be overrided by cgi parameters but will fall back to the cookie "per_page" or ultimately the default_tagteam_per_page config entry defined in config/tagteam.yml
   def get_per_page
     per_page = params[:per_page] || cookies[:per_page] || Tagteam::Application.config.default_tagteam_per_page.to_s
-    per_page = (per_page.to_i - 1).to_s if params[:view] && params[:view] == 'grid' && per_page.to_i % 2 == 1
+    per_page = (per_page.to_i - 1).to_s if params[:view] && params[:view] == 'grid' && per_page.to_i.odd?
     per_page
   end
 
   # Switch the layout when logging in via the bookmarklet.
   def layout_by_resource
     if devise_controller? && resource_name == :user && action_name == 'new' && (session[:user_return_to] && session[:user_return_to].match(/bookmarklet/))
-      "bookmarklet"
+      'bookmarklet'
     else
-      "application"
+      'application'
     end
   end
 
-  rescue_from Acl9::AccessDenied do |exception|
+  rescue_from Acl9::AccessDenied do |_exception|
     if current_user.blank?
       flash[:notice] = 'Please log in'
       session[:user_return_to] = request.original_url
@@ -35,7 +35,8 @@ class ApplicationController < ActionController::Base
     ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(name)
   end
 
-  private 
+  private
+
   def init_breadcrumbs
     breadcrumbs.add 'Home', root_path
   end

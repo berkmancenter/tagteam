@@ -22,7 +22,7 @@ class FeedItem < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_authorization_object
-  acts_as_api do|c|
+  acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
 
@@ -30,19 +30,19 @@ class FeedItem < ActiveRecord::Base
 
   before_validation do
     auto_sanitize_html(:content, :description)
-    auto_truncate_columns(:title,:url,:guid,:authors,:contributors,
-                          :description,:content,:rights)
+    auto_truncate_columns(:title, :url, :guid, :authors, :contributors,
+                          :description, :content, :rights)
   end
-  validates_uniqueness_of :url
+  validates :url, uniqueness: true
 
-  has_and_belongs_to_many :feed_retrievals
+  has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals'
   has_and_belongs_to_many :feeds
   has_many :hub_feeds, through: :feeds
   has_many :hubs, through: :hub_feeds
   has_many :input_sources, dependent: :destroy, as: :item_source
 
   attr_accessible :title, :url, :guid, :authors, :contributors,
-    :description, :content, :rights, :date_published, :last_updated
+                  :description, :content, :rights, :date_published, :last_updated
   attr_accessor :hub_id, :bookmark_collection_id
 
   api_accessible :default do |t|
@@ -114,21 +114,22 @@ class FeedItem < ActiveRecord::Base
 
     hubs.each do |hub|
       hub.tag_filters.order('updated_at ASC').each do |filter|
-        filter.apply(items: FeedItem.where(id: self.id))
+        filter.apply(items: FeedItem.where(id: id))
       end
     end
   end
 
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
-    self.taggings.collect{|tg|
-      "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'}.compact
+    taggings.collect do |tg|
+      "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'
+    end.compact
   end
 
   # A hash of arrays of tag contexts - used for the API.
   def tag_context_hierarchy
     tags_for_api = {}
-    self.taggings.collect do|tg|
+    taggings.collect do |tg|
       tags_for_api[tg.context].nil? ? (tags_for_api[tg.context] = []) : ''
       tags_for_api[tg.context] << tg.tag.name
     end
@@ -137,47 +138,47 @@ class FeedItem < ActiveRecord::Base
 
   # Reindex all taggings on all facets into solr.
   def reindex_all_tags
-    tags_of_concern = self.taggings.collect{|tg| tg.tag_id}.uniq
-    ActsAsTaggableOn::Tag.where(id: tags_of_concern).
-      solr_index(:include => :taggings, batch_commit: false)
+    tags_of_concern = taggings.collect(&:tag_id).uniq
+    ActsAsTaggableOn::Tag.where(id: tags_of_concern)
+                         .solr_index(include: :taggings, batch_commit: false)
   end
 
   # Find the first HubFeed for this item in a Hub. Used for display within
   # search results, tags, and other areas where the HubFeed context doesn't
   # exist.
   def hub_feed_for_hub(hub_id)
-    hub_feeds.reject{|hf| hf.hub_id != hub_id}.uniq.compact.first
+    hub_feeds.reject { |hf| hf.hub_id != hub_id }.uniq.compact.first
   end
 
   def tag_list_array_for_indexing
     # tag_list as provided by ActsAsTaggableOn always does a sql query.
     # Construct the tag list correctly.
-    self.tags.collect{|t| t.name}
+    tags.collect(&:name)
   end
 
   def tag_list_string_for_indexing
     # tag_list as provided by ActsAsTaggableOn always does a sql query.
     # Construct the tag list correctly.
-    self.tags.collect{|t| t.name}.join(', ')
+    tags.collect(&:name).join(', ')
   end
 
   def to_s
-    "#{(title.blank?) ? 'untitled' : title}"
+    (title.blank? ? 'untitled' : title).to_s
   end
 
-  alias :display_title :to_s
+  alias display_title to_s
 
   def self.title
     'RSS feed item'
   end
 
   # Used to emit this FeedItem as an array when it's included in at RepublishedFeed.
-  def items(not_needed)
+  def items(_not_needed)
     [self]
   end
 
   def mini_icon
-    %q|<span class="ui-silk inline ui-silk-application-view-list"></span>|
+    '<span class="ui-silk inline ui-silk-application-view-list"></span>'
   end
 
   def add_tags(new_tags, context, tagger)
@@ -209,13 +210,11 @@ class FeedItem < ActiveRecord::Base
   # passed into this method. If there are changes, a Resque job is created to
   # re-calculate tag facets.
   def self.create_or_update_feed_item(feed, item, feed_retrieval)
-    fi = FeedItem.find_or_initialize_by_url(url: item.link)
+    fi = FeedItem.find_or_initialize_by(url: item.link)
     item_changelog = {}
 
     fi.title = item.title
-    unless item.summary.blank?
-      fi.description = item.summary
-    end
+    fi.description = item.summary unless item.summary.blank?
     if fi.new_record?
       # Instantiate only for new records.
       fi.guid = item.guid
@@ -225,10 +224,10 @@ class FeedItem < ActiveRecord::Base
       fi.description = item.summary
       fi.content = item.content
       fi.rights = item.rights
-      if ! item.published.blank? && item.published.year >= 1900
+      if !item.published.blank? && item.published.year >= 1900
         fi.date_published = item.published.to_datetime
       end
-      if ! item.updated.blank? && item.updated.year >= 1900
+      if !item.updated.blank? && item.updated.year >= 1900
         fi.last_updated = item.updated.to_datetime
       end
       # logger.warn('dirty because there is a new feed_item')
@@ -262,51 +261,47 @@ class FeedItem < ActiveRecord::Base
     end
 
     if fi.valid?
-      if feed.changelog.keys.include?(fi.id) or fi.new_record?
+      if feed.changelog.keys.include?(fi.id) || fi.new_record?
         # This runs here because we're auto stripping and auto-truncating
         # columns and want the change tracking to be relative to these fixed
         # values.
         # logger.warn('dirty because a feed item changed or was created.')
         # logger.warn('dirty Changes: ' + fi.changes.inspect)
-        unless fi.new_record?
-          item_changelog.merge!(fi.changes)
-        end
+        item_changelog.merge!(fi.changes) unless fi.new_record?
         # logger.warn('dirty item_changelog: ' + item_changelog.inspect)
         feed.dirty = true
         fi.save
         feed.changelog[fi.id] = item_changelog
       end
-    else
-      # logger.warn("Couldn't auto create feed_item: #{fi.errors.inspect}")
     end
-
   end
 
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
   def self.columns_for_line_item
-    [:id,:date_published, :title, :image_url, :url,
+    [:id, :date_published, :title, :image_url, :url,
      :guid, :authors, :last_updated]
   end
 
   def self.tag_counts_on(context)
     ActsAsTaggableOn::Tag.find_by_sql([
-      'SELECT tags.*, count(*)
-      FROM tags JOIN taggings ON taggings.tag_id = tags.id
-      WHERE taggings.context = ? AND taggings.taggable_type = ?
-      GROUP BY tags.id', context, self.name])
+                                        'SELECT tags.*, count(*)
+                                        FROM tags JOIN taggings ON taggings.tag_id = tags.id
+                                        WHERE taggings.context = ? AND taggings.taggable_type = ?
+                                        GROUP BY tags.id', context, name
+                                      ])
   end
 
   def self.tag_counts_on_items(item_ids, context = nil)
-    query = ActsAsTaggableOn::Tag.select('tags.*, count(*)').joins(:taggings).
-      where(taggings: { taggable_id: item_ids, taggable_type: self.name }).
-      group('tags.id')
+    query = ActsAsTaggableOn::Tag.select('tags.*, count(*)').joins(:taggings)
+                                 .where(taggings: { taggable_id: item_ids, taggable_type: name })
+                                 .group('tags.id')
     query = query.where(taggings: { context: context }) if context
     query
   end
 
   def self.apply_tag_filters(item_id, hub_ids = [])
-    feed_item = self.find(item_id)
+    feed_item = find(item_id)
     feed_item.apply_tag_filters(hub_ids)
   end
 
@@ -328,7 +323,7 @@ class FeedItem < ActiveRecord::Base
 
   def pick_image_src(doc)
     images = doc.css('img')
-    image_widths = images.map{|i| i['width'] ? i['width'].to_i : nil}
+    image_widths = images.map { |i| i['width'] ? i['width'].to_i : nil }
     max_width = image_widths.compact.max
     # if we have a width greater than 150, return that image
     if max_width && max_width > 150
@@ -338,17 +333,15 @@ class FeedItem < ActiveRecord::Base
     # if some of the images don't have widths, pick one randomly
     # because we don't know their widths, and picking the first
     # often ends up with icons
-    nil_indices = image_widths.map.with_index{|w, j| j if w.nil?}.compact
-    if nil_indices.count > 0
-      return images[nil_indices.sample]['src']
-    end
+    nil_indices = image_widths.map.with_index { |w, j| j if w.nil? }.compact
+    return images[nil_indices.sample]['src'] if nil_indices.count > 0
   end
 
   def set_image_url
     image_url = parse_out_image_url
     if image_url
-      self.content = content.gsub(/[[:cntrl:]]/,'') if content
-      self.description = description.gsub(/[[:cntrl:]]/,'') if description
+      self.content = content.gsub(/[[:cntrl:]]/, '') if content
+      self.description = description.gsub(/[[:cntrl:]]/, '') if description
       self.image_url = image_url
     end
   end

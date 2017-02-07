@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   def protocol_resolver
     if Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts == true
       'https'
@@ -9,12 +8,12 @@ module ApplicationHelper
   end
 
   def documentation(match_key, title = match_key, label_type = 'help')
-    doc_object = Documentation.find_or_initialize_by_match_key(match_key)
+    doc_object = Documentation.find_or_initialize_by(match_key: match_key)
     if doc_object.new_record?
       doc_object.title = title || match_key
       doc_object.save
     end
-    if ! doc_object.description.blank? || (current_user && current_user.is?([:superadmin,:documentation_admin]))
+    if !doc_object.description.blank? || (current_user && current_user.is?([:superadmin, :documentation_admin]))
       if label_type == 'help'
         link_to(
           raw(fa_icon('question-circle')),
@@ -30,14 +29,14 @@ module ApplicationHelper
     if breadcrumbs.items.length == 1
       'TagTeam'
     else
-     "TagTeam :: #{breadcrumbs.items.collect{|i| i[0]}.reject{|i| i == 'Home'}.reverse.flatten.compact.join(' - ')}"
+      "TagTeam :: #{breadcrumbs.items.collect { |i| i[0] }.reject { |i| i == 'Home' }.reverse.flatten.compact.join(' - ')}"
     end
   end
 
   def insert_social_links(url, options = {})
-    options.merge!({ rel: 'nofollow', target: '_blank', class: 'share_icon twitter'})
+    options.merge!(rel: 'nofollow', target: '_blank', class: 'share_icon twitter')
     output = []
-    Tagteam::Application.config.social_links.each do|social_network|
+    Tagteam::Application.config.social_links.each do |social_network|
       output << send("#{social_network}_share_link", url, options)
     end
     "<li>#{output.join('</li><li>')}</li>"
@@ -55,19 +54,19 @@ module ApplicationHelper
     end
   end
 
-  def google_plus_share_link(url,options = {})
+  def google_plus_share_link(url, options = {})
     link_to "https://plus.google.com/share?url=#{CGI.escape(url)}", options do
       fa_icon 'google-plus', text: 'Share on Google+'
     end
   end
 
   def use_breadcrumbs?
-    blacklist = [['hubs', 'home'], ['hubs', 'new']]
+    blacklist = [%w(hubs home), %w(hubs new)]
     !(blacklist.include? [controller_name, action_name])
   end
 
   def show_liblab?
-    whitelist = [['hubs', 'home']]
+    whitelist = [%w(hubs home)]
     whitelist.include? [controller_name, action_name]
   end
 end

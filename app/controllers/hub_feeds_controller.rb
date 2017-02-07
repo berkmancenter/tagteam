@@ -178,7 +178,7 @@ class HubFeedsController < ApplicationController
     unless @hub_feed.blank?
       @hub = @hub_feed.hub
     else
-      @hub = Hub.find(params[:hub_id])
+      @hub = Hub.find_by!(slug: params[:hub_id])
     end
   end
 

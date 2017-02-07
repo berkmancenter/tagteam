@@ -21,5 +21,6 @@ solr/pids/
 tmp/
 var/
 redis/
+spec/examples.txt
 add_test_mappings.vim
 run-test-listener.sh

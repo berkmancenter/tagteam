@@ -1,5 +1,6 @@
-shared_context "user owns a hub with a feed and items" do
-  before(:each) do
+# frozen_string_literal: true
+RSpec.shared_context 'user owns a hub with a feed and items' do
+  before do
     @user = create(:confirmed_user)
     @hub = create(:hub, :with_feed, :owned, with_feed_url: 0, owner: @user)
     @hub_feed = @hub.hub_feeds.first

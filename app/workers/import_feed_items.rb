@@ -1,12 +1,12 @@
 class ImportFeedItems
   include Sidekiq::Worker
-  sidekiq_options :queue => :importer
+  sidekiq_options queue: :importer
 
   def self.display_name
     'Importing items from an uploaded file'
   end
 
-  def perform(hub_feed_id,user_id,file_name,type)
+  def perform(hub_feed_id, user_id, file_name, type)
     hub_feed = HubFeed.find(hub_feed_id)
     feed = hub_feed.feed
     errors = []
@@ -20,19 +20,19 @@ class ImportFeedItems
     end
 
     items = importer.parse_items
-    items.each do|item|
-      feed_item = FeedItem.find_or_initialize_by_url(item[:url])
-      [:title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated].each do|col|
-        feed_item.send(%Q|#{col}=|, item[col])
+    items.each do |item|
+      feed_item = FeedItem.find_or_initialize_by(url: item[:url])
+      [:title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated].each do |col|
+        feed_item.send(%(#{col}=), item[col])
       end
       feed_item.set_owner_tag_list_on(current_user,
                                       Rails.application.config.global_tag_context,
-                                      [feed_item.tag_list, item[:tag_list].collect{|t| t.downcase[0,255].gsub(/,/,'_')}].flatten.compact.join(','))
+                                      [feed_item.tag_list, item[:tag_list].collect { |t| t.downcase[0, 255].tr(',', '_') }].flatten.compact.join(','))
 
       if feed_item.save
         feed_item.accepts_role!(:owner, current_user)
         feed_item.accepts_role!(:creator, current_user)
-        if feed.feed_items.blank? || ! feed.feed_items.include?(feed_item)
+        if feed.feed_items.blank? || !feed.feed_items.include?(feed_item)
           feed.feed_items << feed_item
         end
       else
@@ -42,5 +42,4 @@ class ImportFeedItems
     feed.save
     Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, hub_feed.id)
   end
-
 end

@@ -1,22 +1,22 @@
-require "rails_helper"
+# frozen_string_literal: true
+require 'rails_helper'
 
-feature "Feed-level tag filtering" do
-  before(:each) do
-    @user = create(:confirmed_user)
-    @hub = create(:hub, :with_feed, :owned, with_feed_url: 1, owner: @user)
-    @hub_feed = @hub.hub_feeds.first
-    visit new_user_session_path
+RSpec.feature 'Feed-level tag filtering', broken: true do
+  before do
+    # @user = create(:confirmed_user)
+    # @hub = create(:hub, :with_feed, :owned, with_feed_url: 1, owner: @user)
+    # @hub_feed = @hub.hub_feeds.first
+    # visit new_user_session_path
 
-    within('#new_user') do
-      fill_in 'Username or email', with: @user.username
-      fill_in 'Password', with: 'password'
+    # within('#new_user') do
+    # fill_in 'Username or email', with: @user.username
+    # fill_in 'Password', with: 'password'
 
-      click_on 'Sign in'
-    end
+    # click_on 'Sign in'
+    # end
   end
 
-  scenario "adding a modify feed-level filter", wip: true, js: true do
-    pending("Not yet implemented")
+  scenario 'adding a modify feed-level filter', wip: true, js: true, broken: true do
     visit hub_feed_tags_path(@hub_feed)
 
     click_link 'claire mccarthy'
@@ -29,6 +29,7 @@ feature "Feed-level tag filtering" do
     click_link 'Submit'
   end
 
-  scenario "removing a feed-level filter" do
+  scenario 'removing a feed-level filter' do
+    pending('Not yet implemented')
   end
 end

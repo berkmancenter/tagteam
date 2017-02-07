@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec::Matchers.define :show_effects_of do |filter|
   match do |tag_lists|
     case filter.class.name
@@ -6,11 +7,11 @@ RSpec::Matchers.define :show_effects_of do |filter|
     when 'ModifyTagFilter'
       old_tag = filter.tag.name
       new_tag = filter.new_tag.name
-      return false if tag_lists.any?{ |tag_list| tag_list.include? old_tag }
-      return false if tag_lists.none?{ |tag_list| tag_list.include? new_tag }
+      return false if tag_lists.any? { |tag_list| tag_list.include? old_tag }
+      return false if tag_lists.none? { |tag_list| tag_list.include? new_tag }
       true
     when 'DeleteTagFilter'
-      tag_lists.none?{ |tag_list| tag_list.include? filter.tag.name }
+      tag_lists.none? { |tag_list| tag_list.include? filter.tag.name }
     end
   end
 
@@ -19,8 +20,8 @@ RSpec::Matchers.define :show_effects_of do |filter|
     when 'AddTagFilter'
       "expected #{tag_lists} to all include '#{filter.tag.name}'"
     when 'ModifyTagFilter'
-      "expected at least one instance of '#{filter.new_tag.name}' " +
-      "and zero instances of '#{filter.tag.name}', but got #{tag_lists}"
+      "expected at least one instance of '#{filter.new_tag.name}' " \
+        "and zero instances of '#{filter.tag.name}', but got #{tag_lists}"
     when 'DeleteTagFilter'
       "expected #{tag_lists} to never include '#{filter.tag.name}'"
     end
@@ -31,8 +32,8 @@ RSpec::Matchers.define :show_effects_of do |filter|
     when 'AddTagFilter'
       "expected #{tag_lists} to never include '#{filter.tag.name}'"
     when 'ModifyTagFilter'
-      "expected at least one instance of '#{filter.tag.name}' " +
-      "and zero instances of '#{filter.new_tag.name}', but got #{tag_lists}"
+      "expected at least one instance of '#{filter.tag.name}' " \
+        "and zero instances of '#{filter.new_tag.name}', but got #{tag_lists}"
     when 'DeleteTagFilter'
       "expected #{tag_lists} to include '#{filter.tag.name}'"
     end

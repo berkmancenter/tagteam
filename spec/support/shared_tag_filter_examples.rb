@@ -1,8 +1,12 @@
-shared_examples 'a tag filter' do |filter_type|
+# frozen_string_literal: true
+require 'support/tagging_deactivator'
+require 'support/tag_utils'
+
+RSpec.shared_examples 'a tag filter' do |filter_type|
   it_behaves_like 'a tagging deactivator', filter_type
 
   describe '#items_in_scope' do
-    include_context "user owns a hub with a feed and items"
+    include_context 'user owns a hub with a feed and items'
 
     context 'scoped to hub' do
       it 'returns all items in the hub' do
@@ -36,7 +40,7 @@ shared_examples 'a tag filter' do |filter_type|
     it 'will not try to create duplicate taggings' do
       @filter = create(filter_type)
       @filter.apply
-      expect{ @filter.apply }.not_to raise_error
+      expect { @filter.apply }.not_to raise_error
     end
   end
 
@@ -105,8 +109,8 @@ shared_examples 'a tag filter' do |filter_type|
   end
 end
 
-shared_examples 'a tag filter in an empty hub' do |filter_type|
-  before(:each) do
+RSpec.shared_examples 'a tag filter in an empty hub' do |filter_type|
+  before do
     @hub = create(:hub)
     @filter = create(filter_type, hub: @hub, scope: @hub)
   end
@@ -118,13 +122,13 @@ shared_examples 'a tag filter in an empty hub' do |filter_type|
   end
 end
 
-shared_examples 'an existing tag filter in a populated hub' do
+RSpec.shared_examples 'an existing tag filter in a populated hub' do
   describe '#apply' do
     it 'can be applied to only a few items in its scope' do
       random_ids = @feed_items.order('RANDOM()').limit(3).pluck(:id)
       random_items = @feed_items.where(id: random_ids)
-      without_random_items = @feed_items.
-        where('feed_items.id NOT IN (?)', random_ids)
+      without_random_items = @feed_items
+                             .where('feed_items.id NOT IN (?)', random_ids)
 
       @filter.apply(items: random_items)
 
@@ -137,8 +141,8 @@ shared_examples 'an existing tag filter in a populated hub' do
 
     it 'owns all the taggings it creates' do
       @filter.apply
-      taggings = ActsAsTaggableOn::Tagging.
-        where(tag_id: @tag.id, context: @hub.tagging_key)
+      taggings = ActsAsTaggableOn::Tagging
+                 .where(tag_id: @tag.id, context: @hub.tagging_key)
       expect(taggings.map(&:tagger)).to all(eq(@filter))
     end
   end
@@ -146,8 +150,8 @@ shared_examples 'an existing tag filter in a populated hub' do
   describe '#deactivates_taggings' do
     it 'does not return its own taggings' do
       @filter.apply
-      expect(@filter.deactivates_taggings.map(&:tagger).uniq).
-        to not_contain @filter
+      expect(@filter.deactivates_taggings.map(&:tagger).uniq)
+        .to not_contain @filter
     end
   end
 
@@ -155,7 +159,7 @@ shared_examples 'an existing tag filter in a populated hub' do
   end
 
   context 'a more recent filter is applied' do
-    before(:each) do
+    before do
       @filter.apply
       @filter2 = create(:add_tag_filter, hub: @filter.hub)
       @filter2.apply
@@ -163,13 +167,13 @@ shared_examples 'an existing tag filter in a populated hub' do
   end
 end
 
-shared_examples "a hub-level tag filter" do |filter_type|
-  include_context "user owns a hub with a feed and items"
+RSpec.shared_examples 'a hub-level tag filter' do |_filter_type|
+  include_context 'user owns a hub with a feed and items'
 
-  it "cannot conflict with other hub-level filters in same hub"
+  it 'cannot conflict with other hub-level filters in same hub'
 
-  context "other hubs exist" do
-    before(:each) do
+  context 'other hubs exist' do
+    before do
       @hub2 = create(:hub, :with_feed)
       @feed_items2 = @hub2.hub_feeds.first.feed_items
     end
@@ -187,11 +191,11 @@ shared_examples "a hub-level tag filter" do |filter_type|
   end
 end
 
-shared_examples "a feed-level tag filter" do |filter_type|
-  include_context "user owns a hub with a feed and items"
+RSpec.shared_examples 'a feed-level tag filter' do |_filter_type|
+  include_context 'user owns a hub with a feed and items'
 
-  context "another feed exists" do
-    before(:each) do
+  context 'another feed exists' do
+    before do
       @feed2 = create(:feed, with_url: 1)
       @hub_feed2 = create(:hub_feed, hub: @hub, feed: @feed2)
       @feed_items2 = @hub_feed2.feed_items
@@ -212,16 +216,16 @@ shared_examples "a feed-level tag filter" do |filter_type|
   end
 end
 
-shared_examples "an item-level tag filter" do |filter_type|
-  include_context "user owns a hub with a feed and items"
+RSpec.shared_examples 'an item-level tag filter' do |_filter_type|
+  include_context 'user owns a hub with a feed and items'
 
-  context "other items exist" do
-    before(:each) do
+  context 'other items exist' do
+    before do
       @feed_item = @feed_items.order(:id).first
       @feed_item2 = @feed_items.order(:id).last
     end
 
-    it "cannot be compelled to affect items outside its scope" do
+    it 'cannot be compelled to affect items outside its scope' do
       filter = add_filter
       setup_other_items_tags(filter, @feed_item2)
 
@@ -248,8 +252,8 @@ shared_examples "an item-level tag filter" do |filter_type|
     end
   end
 
-  context "the same item exists in another feed" do
-    before(:each) do
+  context 'the same item exists in another feed' do
+    before do
       @feed2 = create(:feed, with_url: 0, copy: 1)
       @hub_feed2 = create(:hub_feed, hub: @hub, feed: @feed2)
       @feed_items2 = @hub_feed2.feed_items

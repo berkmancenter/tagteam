@@ -1,14 +1,15 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
-describe FeedItem do
+RSpec.describe FeedItem, type: :model do
   describe '#add_tags' do
     context 'a feed with with tag "a" exists' do
-      before(:each) do
+      before do
         @context = 'tags'
         @tag = create(:tag, name: 'a')
         @feed = create(:feed)
         @feed_item = create(:feed_item_from_feed, :tagged, feed: @feed,
-                            tag: @tag.name, tag_context: @context)
+                                                           tag: @tag.name, tag_context: @context)
       end
       it 'deactivates the old tag "a" tagging when a new one is added' do
         pre_tagging = @feed_item.taggings.where(tag_id: @tag.id).first
@@ -21,7 +22,7 @@ describe FeedItem do
 
   describe '#copy_global_tags_to_hubs' do
     context 'a feed item with tag "a" exists in two hubs' do
-      before(:each) do
+      before do
         @hub1 = create(:hub)
         @hub2 = create(:hub)
         @feed = create(:feed)
@@ -31,9 +32,9 @@ describe FeedItem do
       end
 
       def tags_in_context(feed_item, context)
-        feed_item.taggings.
-          where(context: context).
-          map{ |tagging| [tagging.tag_id, tagging.taggable, tagging.tagger] }
+        feed_item.taggings
+                 .where(context: context)
+                 .map { |tagging| [tagging.tag_id, tagging.taggable, tagging.tagger] }
       end
 
       it 'copies all taggings into each hub' do
@@ -50,9 +51,9 @@ describe FeedItem do
 
       it 'does not create duplicate taggings' do
         feed_item = create(:feed_item_from_feed, :tagged, tag: @tag, feed: @feed)
-        expect{
+        expect do
           feed_item.copy_global_tags_to_hubs
-        }.not_to raise_error
+        end.not_to raise_error
       end
     end
   end

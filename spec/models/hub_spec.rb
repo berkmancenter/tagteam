@@ -1,11 +1,12 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
-describe Hub do
+RSpec.describe Hub, type: :model do
   context 'it has items' do
     include_context 'user owns a hub with a feed and items'
 
     context 'it has tag filters' do
-      before(:each) do
+      before do
         @existing_tag_a = create(:tag, name: 'a')
         @existing_tag_b = create(:tag, name: 'b')
         @add_tag = create(:tag, name: 'c')
@@ -13,23 +14,23 @@ describe Hub do
 
         @feed_items.limit(4).each do |item|
           create(:tagging, tag: @existing_tag_a,
-                 taggable: item, tagger: item.feeds.first)
+                           taggable: item, tagger: item.feeds.first)
           # This doesn't run on its own because items have already been created.
           item.copy_global_tags_to_hubs
         end
 
         @feed_items.reverse_order.limit(4).each do |item|
           create(:tagging, tag: @existing_tag_b,
-                 taggable: item, tagger: item.feeds.first)
+                           taggable: item, tagger: item.feeds.first)
           # This doesn't run on its own because items have already been created.
           item.copy_global_tags_to_hubs
         end
 
         @add_filter = create(:add_tag_filter, hub: @hub, tag: @add_tag, scope: @hub)
         @mod_filter = create(:modify_tag_filter, hub: @hub, tag: @existing_tag_a,
-                             new_tag: @change_tag, scope: @hub)
+                                                 new_tag: @change_tag, scope: @hub)
         @del_filter = create(:delete_tag_filter, hub: @hub,
-                             tag: @existing_tag_b, scope: @hub)
+                                                 tag: @existing_tag_b, scope: @hub)
       end
 
       context 'no filters have been applied' do
@@ -43,13 +44,13 @@ describe Hub do
           it 'applies the first filter up to the given filter' do
             @hub.apply_tag_filters_until(@del_filter)
             applied = [@add_filter.reload.applied, @mod_filter.reload.applied]
-            expect(applied).to all( be_truthy )
+            expect(applied).to all(be_truthy)
           end
         end
       end
 
       context 'all filters have been applied' do
-        before(:each) do
+        before do
           [@add_filter, @mod_filter, @del_filter].each(&:apply)
         end
 

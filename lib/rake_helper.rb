@@ -1,7 +1,7 @@
 module RakeHelper
   def add_example_feeds(hub_name, feeds, user_email)
-    h = Hub.find_or_initialize_by_title(:title => hub_name)
-    u = User.find_by_email(user_email)
+    h = Hub.find_or_initialize_by(title: hub_name)
+    u = User.find_by(email: user_email)
 
     if h.new_record?
       h.save
@@ -9,9 +9,9 @@ module RakeHelper
       u.has_role!(:creator, h)
     end
 
-    feeds.each do|feed|
+    feeds.each do |feed|
       begin
-        f = Feed.find_or_initialize_by_feed_url(feed)
+        f = Feed.find_or_initialize_by(feed_url: feed)
         puts "Getting: #{feed}"
 
         if f.valid?
@@ -21,7 +21,7 @@ module RakeHelper
             u.has_role!(:creator, f)
           end
 
-          hf = HubFeed.find_or_initialize_by_hub_id_and_feed_id(h.id,f.id)
+          hf = HubFeed.find_or_initialize_by(hub_id: h.id, feed_id: f.id)
           if hf.valid? && hf.new_record?
             hf.save
             u.has_role!(:owner, hf)
@@ -34,6 +34,5 @@ module RakeHelper
       end
     end
     u.save
-
   end
 end

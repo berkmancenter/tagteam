@@ -11,7 +11,7 @@ class HubFeed < ActiveRecord::Base
   include TagScopable
 
   acts_as_authorization_object
-  acts_as_api do|c|
+  acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
 
@@ -22,23 +22,19 @@ class HubFeed < ActiveRecord::Base
   before_validation do
     auto_sanitize_html(:description)
   end
-  validates_uniqueness_of :feed_id, scope: :hub_id
-  validates_presence_of :feed_id, :hub_id
+  validates :feed_id, uniqueness: { scope: :hub_id }
+  validates :feed_id, :hub_id, presence: true
 
-  scope :bookmark_collections,
-    lambda { joins(:feed).where('feeds.bookmarking_feed' => true) }
-  scope :rss, lambda { joins(:feed).where('feeds.bookmarking_feed' => false) }
-  scope :need_updating,
-    lambda { joins(:feed).where([
-      'feeds.next_scheduled_retrieval <= ? AND bookmarking_feed IS false',
-      Time.now]) }
+  scope :bookmark_collections, -> { joins(:feed).where('feeds.bookmarking_feed' => true) }
+  scope :rss, -> { joins(:feed).where('feeds.bookmarking_feed' => false) }
+  scope :need_updating, -> { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? AND bookmarking_feed IS false', Time.current]) }
 
   attr_accessible :title, :description
 
-  api_accessible :default do|t|
+  api_accessible :default do |t|
     t.add :id
-    t.add :display_title, :as => :title
-    t.add :display_description, :as => :description
+    t.add :display_title, as: :title
+    t.add :display_description, as: :description
     t.add :link
     t.add :hub
     t.add :feed
@@ -49,41 +45,40 @@ class HubFeed < ActiveRecord::Base
   # the feed items it contains (whether those items exist already
   # in TagTeam or not) are calculated.
   after_create do
-    self.feed.solr_index
-     #Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.id)
+    feed.solr_index
+    # Sidekiq::Client.enqueue(HubFeedFeedItemTagRenderer, self.id)
   end
 
   after_destroy do
     # Clean up any input_sources that might've been using the feed
     # this points to.
-    InputSource.joins(:republished_feed).
-      where('republished_feeds.hub_id' => self.hub_id).
-      where(item_source_type: 'Feed', item_source_id: self.feed_id).
-      destroy_all
+    InputSource.joins(:republished_feed)
+               .where('republished_feeds.hub_id' => hub_id)
+               .where(item_source_type: 'Feed', item_source_id: feed_id)
+               .destroy_all
 
     # Clean up feed_item input sources
-    InputSource.joins(:republished_feed).
-      where('republished_feeds.hub_id' => self.hub_id).
-      where(item_source_type: 'FeedItem',
-            item_source_id: self.feed.feed_items.pluck(:id)).
-      destroy_all
+    InputSource.joins(:republished_feed)
+               .where('republished_feeds.hub_id' => hub_id)
+               .where(item_source_type: 'FeedItem',
+                      item_source_id: feed.feed_items.pluck(:id))
+               .destroy_all
 
     # TODO: Review
-    #self.feed.solr_index
-    #feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
-    #tagging_key = self.hub.tagging_key.to_s
-    #Sidekiq::Client.enqueue(
+    # self.feed.solr_index
+    # feed_items_of_concern = self.feed.feed_items.collect{|fi| fi.id}
+    # tagging_key = self.hub.tagging_key.to_s
+    # Sidekiq::Client.enqueue(
     #  ReindexFeedItemsAfterHubFeedDestroyed, feed_items_of_concern, tagging_key)
-    #Sidekiq::Client.enqueue(ReindexFeedRetrievals, self.feed.id)
+    # Sidekiq::Client.enqueue(ReindexFeedRetrievals, self.feed.id)
   end
 
-
-  searchable(:include => [:hub]) do
+  searchable(include: [:hub]) do
     text :display_title, :display_description,
-      :link, :guid, :rights, :authors, :feed_url, :generator
+         :link, :guid, :rights, :authors, :feed_url, :generator
 
     integer :hub_ids, multiple: true
-    integer :feed_item_ids, :multiple => true
+    integer :feed_item_ids, multiple: true
 
     string :title
     string :guid
@@ -97,70 +92,52 @@ class HubFeed < ActiveRecord::Base
     time :last_updated
   end
 
-  alias_method :taggable_items, :feed_items
+  alias taggable_items feed_items
 
   def hub_ids
-    [self.hub_id]
+    [hub_id]
   end
 
   def title
-    if read_attribute(:title).blank? 
-      self.feed ? self.feed.title : ''
+    if self[:title].blank?
+      feed ? feed.title : ''
     else
-      self.read_attribute(:title)
+      self[:title]
     end
   end
-  alias :display_title :title
-  alias :to_s :title
+  alias display_title title
+  alias to_s title
 
   def display_description
-    (self.description.blank?) ? self.feed.description : self.description
+    description.blank? ? feed.description : description
   end
 
   # Inherited from this HubFeed's feed.
-  def link
-    self.feed.link
-  end
+  delegate :link, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def guid
-    self.feed.guid
-  end
+  delegate :guid, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def rights
-    self.feed.rights
-  end
+  delegate :rights, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def authors
-    self.feed.authors
-  end
+  delegate :authors, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def feed_url
-    self.feed.feed_url
-  end
+  delegate :feed_url, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def generator
-    self.feed.generator
-  end
+  delegate :generator, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def last_updated
-    self.feed.last_updated
-  end
+  delegate :last_updated, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def flavor
-    self.feed.flavor
-  end
+  delegate :flavor, to: :feed
 
   # Inherited from this HubFeed's feed.
-  def language
-    self.feed.language
-  end
+  delegate :language, to: :feed
 
   def latest_successful_feed_retrieval
     feed.feed_retrievals.successful.last
@@ -175,12 +152,12 @@ class HubFeed < ActiveRecord::Base
 
   def latest_feed_items(limit = 15)
     search = FeedItem.search do
-      with :hub_feed_ids, self.id
+      with :hub_feed_ids, id
       order_by :date_published
       paginate per_page: limit
     end
-    FeedItem.where(id: search.hits.map(&:primary_key)).
-      order('date_published DESC, last_updated DESC')
+    FeedItem.where(id: search.hits.map(&:primary_key))
+            .order('date_published DESC, last_updated DESC')
   rescue Exception => e
     logger.warn(e.inspect)
     []
@@ -190,15 +167,17 @@ class HubFeed < ActiveRecord::Base
   # in the latest items, the limit will be off.
   # This is a tradeoff for performance sake.
   def latest_tags(limit = 15)
+    # TODO: convert .find to .where and handle the include parameter
     tags = ActsAsTaggableOn::Tagging.find(
       :all,
       include: [:tag],
       conditions: {
         taggable_type: 'FeedItem',
-        taggable_id: self.latest_feed_items.collect(&:id),
-        context: self.hub.tagging_key.to_s
+        taggable_id: latest_feed_items.collect(&:id),
+        context: hub.tagging_key.to_s
       },
-      limit: limit).collect(&:tag).uniq
+      limit: limit
+    ).collect(&:tag).uniq
     return tags
   rescue Exception => e
     logger.warn(e.inspect)

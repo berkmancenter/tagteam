@@ -1,10 +1,13 @@
+# frozen_string_literal: true
 require 'rails_helper'
+require 'support/shared_context'
+require 'support/shared_tag_filter_examples'
 
-describe AddTagFilter do
+RSpec.describe AddTagFilter, type: :model do
   context 'the filter is scoped to a hub with items' do
     include_context 'user owns a hub with a feed and items'
     context 'the filter adds tag "a"' do
-      before(:each) do
+      before do
         @tag = create(:tag, name: 'a')
         @filter = create(:add_tag_filter, hub: @hub, tag: @tag, scope: @hub)
       end
@@ -12,8 +15,8 @@ describe AddTagFilter do
       describe '#apply' do
         it 'creates taggings' do
           @filter.apply
-          taggings = ActsAsTaggableOn::Tagging.
-            where(tag_id: @tag.id, context: @hub.tagging_key)
+          taggings = ActsAsTaggableOn::Tagging
+                     .where(tag_id: @tag.id, context: @hub.tagging_key)
           expect(taggings.count).to be > 0
         end
 
@@ -37,43 +40,44 @@ describe AddTagFilter do
 
       describe '#deactivates_taggings' do
         context 'a feed item exists with tag "b"' do
-          before(:each) do
+          before do
             @feed_item = create(:feed_item, :tagged, tag: 'b',
-                                tag_context: @hub.tagging_key)
+                                                     tag_context: @hub.tagging_key)
           end
           it 'does not return that tagging' do
-            expect(@filter.deactivates_taggings).
-              to not_contain @feed_item.taggings.first
+            expect(@filter.deactivates_taggings)
+              .not_to include(@feed_item.taggings.first)
           end
         end
       end
 
       describe '#simulate' do
         it 'adds tag "a" to the given tag list' do
-          list = ['b', 'c', 'd']
-          expect(@filter.simulate(list)).to match_array(['b', 'c', 'd', 'a'])
+          list = %w(b c d)
+          expect(@filter.simulate(list)).to match_array(%w(b c d a))
         end
 
         it 'does not add "a" if it already exists' do
-          list = ['a', 'b', 'c', 'd']
+          list = %w(a b c d)
           expect(@filter.simulate(list)).to match_array(list)
         end
       end
 
       context 'active taggings already exist between tag "a" and items' do
-        before(:each) do
+        before do
           Sidekiq::Testing.fake! do
             @tagged_feed_items = create_list(
               :feed_item_from_feed, 3, :tagged, feed: @hub_feed.feed,
-              tag: @tag.name, tag_context: @hub.tagging_key)
+                                                tag: @tag.name, tag_context: @hub.tagging_key
+            )
           end
         end
 
         describe '#apply' do
           it 'deactivates all previous tag "a" taggings' do
-            taggings = ActsAsTaggableOn::Tagging.
-              where(tag_id: @tag.id).all.
-              map{ |tagging| tagging.becomes DeactivatedTagging }
+            taggings = ActsAsTaggableOn::Tagging
+                       .where(tag_id: @tag.id)
+                       .map { |tagging| tagging.becomes DeactivatedTagging }
 
             @filter.apply
 
@@ -83,17 +87,17 @@ describe AddTagFilter do
 
           it 'does not deactivate irrelevant taggings' do
             @filter.apply
-            expect(DeactivatedTagging.unscoped.pluck(:tag_id)).
-              to all(eq(@filter.tag_id))
+            expect(DeactivatedTagging.unscoped.pluck(:tag_id))
+              .to all(eq(@filter.tag_id))
           end
         end
 
         describe '#rollback' do
           it 'reactivates deactived taggings' do
             @filter.apply
-            taggings = DeactivatedTagging.
-              where(tag_id: @tag.id).all.
-              map{ |tagging| tagging.becomes ActsAsTaggableOn::Tagging }
+            taggings = DeactivatedTagging
+                       .where(tag_id: @tag.id)
+                       .map { |tagging| tagging.becomes ActsAsTaggableOn::Tagging }
             @filter.rollback
             expect(DeactivatedTagging.count).to eq(0)
             expect(ActsAsTaggableOn::Tagging.all).to include(*taggings)
@@ -102,8 +106,8 @@ describe AddTagFilter do
 
         describe '#deactivates_taggings' do
           it 'returns the taggings attaching tag "a" to those feed items' do
-            expect(@filter.deactivates_taggings).
-              to match_array(@tagged_feed_items.map(&:taggings).flatten)
+            expect(@filter.deactivates_taggings)
+              .to match_array(@tagged_feed_items.map(&:taggings).flatten)
           end
         end
       end
@@ -113,8 +117,8 @@ describe AddTagFilter do
   end
 
   # These scope tests could be better integrated into the rest of the suite.
-  context "the filter is scoped to a hub" do
-    #This helper method should be added to a module at some point.
+  context 'the filter is scoped to a hub' do
+    # This helper method should be added to a module at some point.
     def add_filter(tag_name = 'add-test')
       new_tag = create(:tag, name: tag_name)
       create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
@@ -124,10 +128,10 @@ describe AddTagFilter do
       @hub.tag_filters
     end
 
-    context "user owns a hub with a feed and items" do
-      include_context "user owns a hub with a feed and items"
+    context 'user owns a hub with a feed and items' do
+      include_context 'user owns a hub with a feed and items'
 
-      it "adds tags" do
+      it 'adds tags' do
         new_tag = 'add-test'
         filter = add_filter(new_tag)
         filter.apply
@@ -136,10 +140,10 @@ describe AddTagFilter do
       end
     end
 
-    it_behaves_like "a hub-level tag filter"
+    it_behaves_like 'a hub-level tag filter'
   end
 
-  context "the filter is scoped to a feed" do
+  context 'the filter is scoped to a feed' do
     def add_filter(tag_name = 'add-test')
       new_tag = create(:tag, name: tag_name)
       create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub_feed)
@@ -149,13 +153,12 @@ describe AddTagFilter do
       @hub_feed.tag_filters
     end
 
-    def setup_other_feeds_tags(filter, hub_feed)
-    end
+    def setup_other_feeds_tags(filter, hub_feed); end
 
-    context "user owns a hub with a feed and items" do
-      include_context "user owns a hub with a feed and items"
+    context 'user owns a hub with a feed and items' do
+      include_context 'user owns a hub with a feed and items'
 
-      it "adds tags" do
+      it 'adds tags' do
         new_tag = 'add-test'
         filter = add_filter(new_tag)
         filter.apply
@@ -164,10 +167,10 @@ describe AddTagFilter do
       end
     end
 
-    it_behaves_like "a feed-level tag filter"
+    it_behaves_like 'a feed-level tag filter'
   end
 
-  context "the filter is scoped to an item" do
+  context 'the filter is scoped to an item' do
     def add_filter(tag_name = 'add-test')
       new_tag = create(:tag, name: tag_name)
       create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @feed_item)
@@ -177,13 +180,12 @@ describe AddTagFilter do
       @feed_item.tag_filters
     end
 
-    def setup_other_items_tags(filter, item)
-    end
+    def setup_other_items_tags(filter, item); end
 
-    context "user owns a hub with a feed and items" do
-      include_context "user owns a hub with a feed and items"
+    context 'user owns a hub with a feed and items' do
+      include_context 'user owns a hub with a feed and items'
 
-      it "adds tags" do
+      it 'adds tags' do
         @feed_item = @feed_items.order(:id).first
         new_tag = 'add-test'
         filter = add_filter(new_tag)
@@ -194,9 +196,8 @@ describe AddTagFilter do
       end
     end
 
-    it_behaves_like "an item-level tag filter"
+    it_behaves_like 'an item-level tag filter'
   end
-
 
   it_behaves_like 'a tag filter in an empty hub', :add_tag_filter
   it_behaves_like 'a tag filter', :add_tag_filter
