@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 class FeedItemsController < ApplicationController
-  caches_action :controls, :content, :related, :index, :show, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
+  caches_action :controls, :content, :related, :index, :show, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+    Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
   access_control do
@@ -11,7 +12,7 @@ class FeedItemsController < ApplicationController
     load_hub_feed
     load_feed_item
     add_breadcrumbs
-    render :layout => ! request.xhr?
+    render layout: !request.xhr?
   end
 
   # Return the full content for a FeedItem,, this could potentially be a large amount of content. Returns html, json, or xml. Action cached for anonymous visitors.
@@ -19,10 +20,10 @@ class FeedItemsController < ApplicationController
     load_hub_feed
     load_feed_item
     add_breadcrumbs
-    respond_to do|format|
-      format.html{ render :layout => request.xhr? ? false : 'tabs'}
-      format.json{ render_for_api :with_content, :json => @feed_item}
-      format.xml{ render_for_api :with_content, :xml => @feed_item}
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render_for_api :with_content, json: @feed_item }
+      format.xml { render_for_api :with_content, xml: @feed_item }
     end
   end
 
@@ -30,10 +31,10 @@ class FeedItemsController < ApplicationController
     load_hub_feed
     load_feed_item
     add_breadcrumbs
-    respond_to do|format|
-      format.html{ render :layout => request.xhr? ? false : 'tabs'}
-      format.json{ render_for_api :default, :json => @feed_item}
-      format.xml{ render_for_api :default, :xml => @feed_item}
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render_for_api :default, json: @feed_item }
+      format.xml { render_for_api :default, xml: @feed_item }
     end
   end
 
@@ -47,24 +48,23 @@ class FeedItemsController < ApplicationController
       fields :title, :tag_list
       with :hub_ids, hub_id
       minimum_word_length 3
-      paginate :page => params[:page], :per_page => get_per_page
+      paginate page: params[:page], per_page: get_per_page
     end
 
-    respond_to do|format|
+    respond_to do |format|
       format.html do
         template = params[:view] == 'grid' ? 'related_grid' : 'related'
         render template, layout: request.xhr? ? false : 'tabs'
       end
-      format.json{ render_for_api :default, :json => (@related.blank?) ? [] : @related.results }
-      format.xml{ render_for_api :default, :xml => (@related.blank?) ? [] : @related.results }
+      format.json { render_for_api :default, json: @related.blank? ? [] : @related.results }
+      format.xml { render_for_api :default, xml: @related.blank? ? [] : @related.results }
     end
   end
-
 
   # A paginated list of FeedItems in a HubFeed. Returns html, atom, rss, json, or xml. Action cached for anonymous visitors.
   def index
     load_hub_feed
-    @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
+    @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
     @feed_items = @hub_feed.feed_items.paginate(
       include: [:feeds, :hub_feeds],
       order: 'date_published DESC, created_at DESC',
@@ -78,10 +78,10 @@ class FeedItemsController < ApplicationController
         template = params[:view] == 'grid' ? 'feed_items/index_grid' : 'feed_items/index'
         render template, layout: request.xhr? ? false : 'tabs'
       end
-      format.atom{ }
-      format.rss{ }
-      format.json{ render_for_api :default,  :json => @feed_items }
-      format.xml{ render_for_api :default,  :xml => @feed_items }
+      format.atom {}
+      format.rss {}
+      format.json { render_for_api :default, json: @feed_items }
+      format.xml { render_for_api :default, xml: @feed_items }
     end
   end
 
@@ -91,11 +91,11 @@ class FeedItemsController < ApplicationController
     load_feed_item
     add_breadcrumbs
     respond_to do |format|
-      format.html{
-        render :layout => request.xhr? ? false : 'tabs'
-      }
-      format.json{ render_for_api :with_content, :json => @feed_item }
-      format.xml{ render_for_api :with_content, :xml => @feed_item }
+      format.html do
+        render layout: request.xhr? ? false : 'tabs'
+      end
+      format.json { render_for_api :with_content, json: @feed_item }
+      format.xml { render_for_api :with_content, xml: @feed_item }
     end
   end
 
@@ -103,9 +103,9 @@ class FeedItemsController < ApplicationController
     load_feed_item
     @hub = Hub.find(params[:hub_id])
     respond_to do |format|
-      format.html{
+      format.html do
         render layout: request.xhr? ? false : 'tabs'
-      }
+      end
     end
   end
 
@@ -121,24 +121,23 @@ class FeedItemsController < ApplicationController
   end
 
   def from_search?
-   request.referer and request.referer.include?("item_search")
+    request.referer && request.referer.include?('item_search')
   end
 
   def add_breadcrumbs
     if from_search?
-      breadcrumbs.add @hub.to_s, hub_path(@hub) 
-      breadcrumbs.add "Search", request.referer
+      breadcrumbs.add @hub.to_s, hub_path(@hub)
+      breadcrumbs.add 'Search', request.referer
     else
       unless @hub_feed.blank?
-        breadcrumbs.add @hub.to_s, hub_path(@hub) 
-        breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub,@hub_feed) 
+        breadcrumbs.add @hub.to_s, hub_path(@hub)
+        breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub, @hub_feed)
         if from_search?
-          breadcrumbs.add @feed_item.to_s 
+          breadcrumbs.add @feed_item.to_s
         else
-          breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed,@feed_item)
+          breadcrumbs.add @feed_item.to_s, hub_feed_feed_item_path(@hub_feed, @feed_item)
         end
       end
     end
   end
-
 end

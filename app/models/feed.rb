@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A Hub contains many Feeds through the HubFeed class. A Feed belongs to many
 # HubFeeds (allowing it to be used in many Hubs) and is unique on the feed_url.
 #

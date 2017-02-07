@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplyTagFilters
   include Sidekiq::Worker
 
@@ -23,9 +24,7 @@ class ApplyTagFilters
         return
       end
 
-      unless filter.next_to_apply?
-        filter.hub.apply_tag_filters_until filter
-      end
+      filter.hub.apply_tag_filters_until filter unless filter.next_to_apply?
 
       if item_ids.empty?
         filter.apply

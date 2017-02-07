@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def protocol_resolver
     if Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts == true

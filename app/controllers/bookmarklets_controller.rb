@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A "bookmark" is just a FeedItem that's been manually added to a Bookmark Collection. Currently the only way to add bookmarks is through the bookmarklet available under a Hub's "bookmarks" tab.
 class BookmarkletsController < ApplicationController
   before_action :load_hub, only: [:add_item, :remove_item]

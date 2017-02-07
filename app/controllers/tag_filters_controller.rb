@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 class TagFiltersController < ApplicationController
-  before_filter :load_scope
-  before_filter :load_tag_filter, except: [:index, :new, :create]
+  before_action :load_scope
+  before_action :load_tag_filter, except: [:index, :new, :create]
 
   access_control do
     allow all, to: [:index]
@@ -21,8 +22,8 @@ class TagFiltersController < ApplicationController
     breadcrumbs.add @feed_item, hub_feed_item_path(@hub, @feed_item) if @feed_item
     respond_to do |format|
       format.html { render template, layout: request.xhr? ? false : 'tabs' }
-      format.json { render_for_api :default,  json: @tag_filters }
-      format.xml { render_for_api :default,  xml: @tag_filters }
+      format.json { render_for_api :default, json: @tag_filters }
+      format.xml { render_for_api :default, xml: @tag_filters }
     end
   end
 
@@ -52,17 +53,17 @@ class TagFiltersController < ApplicationController
     if @tag_filter.save
       current_user.has_role!(:owner, @tag_filter)
       current_user.has_role!(:creator, @tag_filter)
-      flash[:notice] = %Q|Added a filter for that tag to "#{@scope.title}"|
+      flash[:notice] = %(Added a filter for that tag to "#{@scope.title}")
 
       @tag_filter.apply_async
 
-      render text: %Q|Added a filter for that tag to "#{@scope.title}"|,
-        layout: !request.xhr?
+      render text: %(Added a filter for that tag to "#{@scope.title}"),
+             layout: !request.xhr?
     else
       flash[:error] = 'Could not add that tag filter.'
       render text: @tag_filter.errors.full_messages.join('<br/>'),
-        status: :not_acceptable,
-        layout: !request.xhr?
+             status: :not_acceptable,
+             layout: !request.xhr?
     end
   end
 

@@ -1,57 +1,55 @@
+# frozen_string_literal: true
 class UsersController < ApplicationController
-
-  before_filter :load_user, :only => [:roles_on]
+  before_action :load_user, only: [:roles_on]
 
   access_control do
-    allow all, :to => [:tags, :user_tags]
-    allow logged_in, :to => [:roles_on, :autocomplete]
+    allow all, to: [:tags, :user_tags]
+    allow logged_in, to: [:roles_on, :autocomplete]
     allow :superadmin
   end
 
   def tags
     @hub = Hub.find(params[:hub_id])
     breadcrumbs.add @hub, hub_path(@hub)
-    @user = User.find_by_username(params[:username])
+    @user = User.find_by(username: params[:username])
     @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
-    @feed_items = ActsAsTaggableOn::Tagging.where({
-      :context => "hub_#{@hub.id}",
-      :taggable_type => "FeedItem", 
-      :tagger_id => @user,
-      :tagger_type => "User"}).
-      paginate(:page => params[:page], :per_page => get_per_page)
-    render :layout => ! request.xhr?
+    @feed_items = ActsAsTaggableOn::Tagging.where(context: "hub_#{@hub.id}",
+                                                  taggable_type: 'FeedItem',
+                                                  tagger_id: @user,
+                                                  tagger_type: 'User')
+                                           .paginate(page: params[:page], per_page: get_per_page)
+    render layout: !request.xhr?
   end
-   
+
   def user_tags
     @hub = Hub.find(params[:hub_id])
 
     breadcrumbs.add @hub, hub_path(@hub)
-    @user = User.find_by_username(params[:username])
-    @tag = ActsAsTaggableOn::Tag.find_by_name(params[:tagname])
+    @user = User.find_by(username: params[:username])
+    @tag = ActsAsTaggableOn::Tag.find_by(name: params[:tagname])
     @show_auto_discovery_params = hub_user_tags_rss_url(@hub, @user)
-    @feed_items = ActsAsTaggableOn::Tagging.where({
-      :context => "hub_#{@hub.id}",
-      :tag_id => @tag, 
-      :taggable_type => "FeedItem", 
-      :tagger_id => @user,
-      :tagger_type => "User"}).
-      paginate(:page => params[:page], :per_page => get_per_page)
-    render :tags, :layout => ! request.xhr?
+    @feed_items = ActsAsTaggableOn::Tagging.where(context: "hub_#{@hub.id}",
+                                                  tag_id: @tag,
+                                                  taggable_type: 'FeedItem',
+                                                  tagger_id: @user,
+                                                  tagger_type: 'User')
+                                           .paginate(page: params[:page], per_page: get_per_page)
+    render :tags, layout: !request.xhr?
   end
 
   def roles_on
     @roles_on = @user.roles
-    .select([:authorizable_type, :authorizable_id])
-    .includes(:authorizable)
-    .where(authorizable_type: params[:roles_on])
-    .group(:authorizable_type, :authorizable_id)
-    .order(:authorizable_type, :authorizable_id)
-    .paginate(page: params[:page], per_page: get_per_page)
+                     .select([:authorizable_type, :authorizable_id])
+                     .includes(:authorizable)
+                     .where(authorizable_type: params[:roles_on])
+                     .group(:authorizable_type, :authorizable_id)
+                     .order(:authorizable_type, :authorizable_id)
+                     .paginate(page: params[:page], per_page: get_per_page)
 
-    respond_to do|format|
-      format.html{ render layout: request.xhr? ? false : 'tabs' }
-      format.json{ render_for_api :default, json: @roles_on, root: :role }
-      format.xml{ render_for_api :default, xml: @roles_on, root: :role }
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render_for_api :default, json: @roles_on, root: :role }
+      format.xml { render_for_api :default, xml: @roles_on, root: :role }
     end
   end
 
@@ -83,17 +81,17 @@ class UsersController < ApplicationController
 
   def index
     breadcrumbs.add 'Users', users_path
-    @users = User.paginate(:page => params[:page], :per_page => get_per_page)
+    @users = User.paginate(page: params[:page], per_page: get_per_page)
   end
 
   def destroy
     @user = User.find(params[:id])
     @user.destroy
     flash[:notice] = 'Deleted that user'
-    respond_to do|format|
-      format.html{
-        redirect_to :action => :index
-      }
+    respond_to do |format|
+      format.html do
+        redirect_to action: :index
+      end
     end
   end
 
@@ -102,23 +100,22 @@ class UsersController < ApplicationController
       fulltext params[:term]
     end
     respond_to do |format|
-      format.json { 
+      format.json do
         # Should probably change this to use render_for_api
-        render :json => @search.results.collect{|r| {:id => r.id, :label => "#{r.username}"} }
-      }
+        render json: @search.results.collect { |r| { id: r.id, label: r.username.to_s } }
+      end
     end
   rescue
-    render :text => "Please try a different search term", :layout => ! request.xhr?
+    render text: 'Please try a different search term', layout: !request.xhr?
   end
 
   private
 
   def load_user
-    if current_user.is?(:superadmin)
-      @user = User.find params[:id]
-    else 
-      @user = current_user
-    end
+    @user = if current_user.is?(:superadmin)
+              User.find params[:id]
+            else
+              current_user
+            end
   end
-
 end

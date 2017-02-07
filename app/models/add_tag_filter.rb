@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddTagFilter < TagFilter
   def apply(items: items_in_scope)
     items = filter_to_scope(items)
@@ -7,7 +8,7 @@ class AddTagFilter < TagFilter
                                         context: hub.tagging_key)
       new_tagging.save! if new_tagging.valid?
     end
-    self.update_column(:applied, true)
+    update_column(:applied, true)
   end
 
   def simulate(tag_list)

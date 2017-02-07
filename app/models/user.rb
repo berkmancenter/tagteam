@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User < ActiveRecord::Base
   acts_as_tagger
   has_and_belongs_to_many :roles, join_table: :roles_users

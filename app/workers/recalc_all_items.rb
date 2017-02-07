@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 class RecalcAllItems
   include Sidekiq::Worker
-  sidekiq_options :queue => :renderer
+  sidekiq_options queue: :renderer
 
   def self.display_name
-    "Updating all tags for an entire hub"
+    'Updating all tags for an entire hub'
   end
 
   def perform(hub_id)

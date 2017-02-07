@@ -1,22 +1,22 @@
+# frozen_string_literal: true
 # Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
-
-  caches_action :controls, :index, :show, :more_details, :autocomplete, :unless => Proc.new{|c| current_user }, :expires_in => Tagteam::Application.config.default_action_cache_time, :cache_path => Proc.new{ 
-    Digest::MD5.hexdigest(request.fullpath + "&per_page=" + get_per_page)
+  caches_action :controls, :index, :show, :more_details, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+    Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
   access_control do
-    allow all, :to => [:index, :show, :more_details, :autocomplete, :controls]
-    allow :owner, :of => :hub
-    allow :bookmarker, :of => :hub, :to => [:new, :create]
-    allow :owner, :of => :hub_feed, :to => [:edit, :update, :destroy, :import, :reschedule_immediately]
+    allow all, to: [:index, :show, :more_details, :autocomplete, :controls]
+    allow :owner, of: :hub
+    allow :bookmarker, of: :hub, to: [:new, :create]
+    allow :owner, of: :hub_feed, to: [:edit, :update, :destroy, :import, :reschedule_immediately]
     allow :superadmin
   end
 
   def controls
     load_hub_feed
     load_hub
-    render :layout => ! request.xhr?
+    render layout: !request.xhr?
   end
 
   def autocomplete
@@ -28,12 +28,12 @@ class HubFeedsController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { 
-        render :json => @search.results.collect{|r| {:id => r.id, :label => r.display_title} }
-      }
+      format.json do
+        render json: @search.results.collect { |r| { id: r.id, label: r.display_title } }
+      end
     end
   rescue
-    render :text => "Please try a different search term", :layout => ! request.xhr?
+    render text: 'Please try a different search term', layout: !request.xhr?
   end
 
   # Accepts an import upload in Connotea RDF and delicious bookmark export format. Creates a Resque job that does the actual importing, as it's pretty slow on larger collections - around 400 per minute or so.
@@ -49,11 +49,11 @@ class HubFeedsController < ApplicationController
     load_hub
     if params[:type].blank? || params[:import_file].blank?
       flash[:notice] = 'Please select a file type and attach a file for importing.'
-    else 
+    else
       file_name = Rails.root.to_s + '/tmp/incoming_import-' + Time.now.to_i.to_s
 
-      FileUtils.cp(params[:import_file].tempfile,file_name)
-      Sidekiq::Client.enqueue(ImportFeedItems,@hub_feed.id, current_user.id, file_name,params[:type])
+      FileUtils.cp(params[:import_file].tempfile, file_name)
+      Sidekiq::Client.enqueue(ImportFeedItems, @hub_feed.id, current_user.id, file_name, params[:type])
 
       flash[:notice] = 'The file has been uploaded and scheduled for import. Please see the "background jobs" link in the footer to track progress.'
     end
@@ -63,7 +63,7 @@ class HubFeedsController < ApplicationController
   def more_details
     load_hub_feed
     load_hub
-    render :layout => ! request.xhr?
+    render layout: !request.xhr?
   end
 
   def reschedule_immediately
@@ -73,20 +73,20 @@ class HubFeedsController < ApplicationController
     feed.next_scheduled_retrieval = Time.now
     feed.save
     flash[:notice] = 'Rescheduled that feed to be re-indexed at the next available opportunity.'
-    redirect_to hub_hub_feed_path(@hub,@hub_feed)
+    redirect_to hub_hub_feed_path(@hub, @hub_feed)
   rescue
     flash[:notice] = "We couldn't reschedule that feed."
-    redirect_to hub_hub_feed_path(@hub,@hub_feed)
+    redirect_to hub_hub_feed_path(@hub, @hub_feed)
   end
 
   def index
     load_hub
-    @hub_feeds = @hub.hub_feeds.rss.paginate(:page => params[:page], :per_page => get_per_page, :order => 'created_at desc' )
+    @hub_feeds = @hub.hub_feeds.rss.paginate(page: params[:page], per_page: get_per_page, order: 'created_at desc')
     add_breadcrumbs
-    respond_to do|format|
-      format.html{ render layout: request.xhr? ? false : 'tabs' }
-      format.json{ render_for_api :default, :json => @hub_feeds }
-      format.xml{ render_for_api :default, :xml => @hub_feeds }
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render_for_api :default, json: @hub_feeds }
+      format.xml { render_for_api :default, xml: @hub_feeds }
     end
   end
 
@@ -94,7 +94,7 @@ class HubFeedsController < ApplicationController
     load_hub_feed
     load_hub
     add_breadcrumbs
-    @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, :format => :rss)
+    @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
     render layout: 'tabs'
   end
 
@@ -122,15 +122,15 @@ class HubFeedsController < ApplicationController
 
     @hub_feed.feed = actual_feed
     @hub_feed.attributes = params[:hub_feed]
-    respond_to do|format|
+    respond_to do |format|
       if @hub_feed.save
         current_user.has_role!(:editor, @hub_feed)
         current_user.has_role!(:owner, @hub_feed)
         flash[:notice] = 'Created that bookmarking collection.'
-        format.html {redirect_to hub_path(@hub)}
+        format.html { redirect_to hub_path(@hub) }
       else
         flash[:error] = 'Couldn\'t create that bookmarking collection!'
-        format.html {render :action => :new}
+        format.html { render action: :new }
       end
     end
   end
@@ -139,14 +139,14 @@ class HubFeedsController < ApplicationController
     load_hub_feed
     load_hub
     @hub_feed.attributes = params[:hub_feed]
-    respond_to do|format|
+    respond_to do |format|
       if @hub_feed.save
         current_user.has_role!(:editor, @hub_feed)
         flash[:notice] = 'Updated that feed.'
-        format.html {redirect_to hub_path(@hub)}
+        format.html { redirect_to hub_path(@hub) }
       else
         flash[:error] = 'Couldn\'t update that feed!'
-        format.html {render :action => :new}
+        format.html { render action: :new }
       end
     end
   end
@@ -171,20 +171,19 @@ class HubFeedsController < ApplicationController
   private
 
   def load_hub_feed
-    @hub_feed = HubFeed.find_by_id(params[:id])
+    @hub_feed = HubFeed.find_by(id: params[:id])
   end
 
   def load_hub
-    unless @hub_feed.blank?
-      @hub = @hub_feed.hub
-    else
-      @hub = Hub.find_by!(slug: params[:hub_id])
-    end
+    @hub = if @hub_feed.blank?
+             Hub.find_by!(slug: params[:hub_id])
+           else
+             @hub_feed.hub
+           end
   end
 
   def add_breadcrumbs
     breadcrumbs.add @hub.title, hub_path(@hub)
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed) if @hub_feed
   end
-
 end

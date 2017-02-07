@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 module TaggingDeactivator
   extend ActiveSupport::Concern
 
   included do
     has_many :self_deactivated_taggings, class_name: 'DeactivatedTagging',
-      as: :deactivator
+                                         as: :deactivator
   end
 
   def deactivate_tagging(tagging)
@@ -12,7 +13,7 @@ module TaggingDeactivator
       deactivated.send("#{key}=", value)
     end
 
-    deactivated.deactivator = self unless self.new_record?
+    deactivated.deactivator = self unless new_record?
 
     DeactivatedTagging.transaction do
       deactivated.save!

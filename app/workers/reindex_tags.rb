@@ -1,13 +1,13 @@
+# frozen_string_literal: true
 class ReindexTags
   include Sidekiq::Worker
-  sidekiq_options :queue => :reindexer
+  sidekiq_options queue: :reindexer
 
   def self.display_name
-    "Reindexing tags"
+    'Reindexing tags'
   end
 
   def perform
-    ActsAsTaggableOn::Tag.solr_index(:batch_size => 500, :include => :taggings, :batch_commit => false)
+    ActsAsTaggableOn::Tag.solr_index(batch_size: 500, include: :taggings, batch_commit: false)
   end
-
 end

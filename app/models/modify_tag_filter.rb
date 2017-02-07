@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 class ModifyTagFilter < TagFilter
-  validates_presence_of :new_tag_id
+  validates :new_tag_id, presence: true
   validate :new_tag_id do
-    if self.new_tag_id == self.tag_id
-      self.errors.add(:new_tag_id, " can't be the same as the original tag")
+    if new_tag_id == tag_id
+      errors.add(:new_tag_id, " can't be the same as the original tag")
     end
   end
 
@@ -32,7 +33,7 @@ class ModifyTagFilter < TagFilter
                                         context: hub.tagging_key)
       new_tagging.save! if new_tagging.valid?
     end
-    self.update_column(:applied, true)
+    update_column(:applied, true)
   end
 
   def deactivates_taggings(items: items_in_scope)
@@ -42,24 +43,32 @@ class ModifyTagFilter < TagFilter
     # Deactivates any taggings that have the old tag
     old_tag = taggings.grouping(
       taggings[:context].eq(hub.tagging_key).and(
-      taggings[:tag_id].eq(tag.id)).and(
-      taggings[:taggable_type].eq('FeedItem')).and(
-      taggings[:taggable_id].in(items.pluck(:id))))
+        taggings[:tag_id].eq(tag.id)
+      ).and(
+        taggings[:taggable_type].eq('FeedItem')
+      ).and(
+        taggings[:taggable_id].in(items.pluck(:id))
+      )
+    )
 
     # Deactivates any taggings that result in the same tag on the same item
     # For example, if an item came in with tags 'tag1' and 'tag2', and this
     # filter changed 'tag1' to 'tag2', this deactivates 'tag2'.
     duplicate_tag = taggings.grouping(
       taggings[:context].eq(hub.tagging_key).and(
-      taggings[:tag_id].eq(new_tag.id)).and(
-      taggings[:taggable_type].eq('FeedItem')).and(
-      taggings[:taggable_id].in(selected_items_with_old_tag.pluck(:id))))
+        taggings[:tag_id].eq(new_tag.id)
+      ).and(
+        taggings[:taggable_type].eq('FeedItem')
+      ).and(
+        taggings[:taggable_id].in(selected_items_with_old_tag.pluck(:id))
+      )
+    )
 
     ActsAsTaggableOn::Tagging.where(old_tag.or(duplicate_tag))
   end
 
   def simulate(tag_list)
-    tag_list.map{ |t| t == tag.name ? new_tag.name : t }.uniq
+    tag_list.map { |t| t == tag.name ? new_tag.name : t }.uniq
   end
 
   def filters_before
@@ -67,14 +76,16 @@ class ModifyTagFilter < TagFilter
       "((type = 'ModifyTagFilter' AND new_tag_id = :tag_id) OR
         (type = 'AddTagFilter' AND tag_id = :tag_id))
        AND updated_at < :updated_at",
-      { tag_id: tag.id, updated_at: updated_at}).last
+      tag_id: tag.id, updated_at: updated_at
+    ).last
     previous ? previous.filters_before + [previous] : []
   end
 
   def filters_after
     subsequent = hub.all_tag_filters.where(
       "type IN ('ModifyTagFilter', 'DeleteTagFilter') AND
-      tag_id = ? AND updated_at > ?", new_tag.id, updated_at).first
+      tag_id = ? AND updated_at > ?", new_tag.id, updated_at
+    ).first
     subsequent ? [subsequent] + subsequent.filters_after : []
   end
 end

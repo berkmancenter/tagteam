@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FeedItemObserver < ActiveRecord::Observer
   # A feed item can get updated with new tags if it gets added by a second feed
   # who tagged it differently, so this needs to run after save, not just

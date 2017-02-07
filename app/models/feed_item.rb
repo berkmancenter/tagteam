@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A FeedItem is an individual bit of content that's gotten into TagTeam via
 # a Feed or the bookmarklet. It can belong to many Feeds, has many
 # ActsAsTaggableOn::Tag objects, and uses a subset of Dublin Core metadata to

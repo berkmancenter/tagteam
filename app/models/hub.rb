@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A Hub is the highest level of organization in TagTeam.
 # It has many HubFeed objects containing FeedItems.
 # These FeedItem objects have their ActsAsTaggableOn::Tag objects

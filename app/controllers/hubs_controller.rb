@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
   caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
@@ -42,9 +43,9 @@ class HubsController < ApplicationController
     # If an old id or a numeric id was used to find the record, then
     # the request path will not match the hub_path, and we should do
     # a 301 redirect that uses the current friendly id.
-    #if request.path != hub_path(@hub)
-      #return redirect_to @hub, status: :moved_permanently
-    #end
+    # if request.path != hub_path(@hub)
+    # return redirect_to @hub, status: :moved_permanently
+    # end
   end
 
   def meta

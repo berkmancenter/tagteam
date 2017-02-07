@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TagFilter < ActiveRecord::Base
   include AuthUtilities
   include ModelExtensions

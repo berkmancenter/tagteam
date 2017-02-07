@@ -108,7 +108,7 @@ class TagsController < ApplicationController
 
   def load_tag_from_name
     @tag = if !params[:name].blank?
-             ActsAsTaggableOn::Tag.find_by_name_normalized(params[:name])
+             ActsAsTaggableOn::Tag.find_by(name_normalized: params[:name])
            else
              ActsAsTaggableOn::Tag.find_by(id: params[:id])
            end
