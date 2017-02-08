@@ -75,20 +75,8 @@ class Feed < ActiveRecord::Base
     time :last_updated
   end
 
-  validates :feed_url,
-            uniqueness: { unless: proc { |rec| rec.is_bookmarking_feed? } }
-  validate :feed_url do
-    return if is_bookmarking_feed?
-    if feed_url.blank? || !feed_url.match(/https?:\/\/.+/i)
-      errors.add(:feed_url, "doesn't look like a url")
-      return false
-    end
-    if new_record?
-      # Only validate the actual RSS when the feed is created.
-      rss_feed = test_single_feed(self)
-      return false unless rss_feed
-    end
-  end
+  validates :feed_url, uniqueness: { unless: proc { |rec| rec.is_bookmarking_feed? } }
+  validate :feed_url_format
 
   # TagTeam uses a decaying update interval - the less a Feed changes, the
   # longer we go between spidering up to the maximum_feed_spider_interval (1
@@ -225,5 +213,20 @@ class Feed < ActiveRecord::Base
 
   def remove_feed_items_feeds
     connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
+  end
+
+  def feed_url_format
+    return if is_bookmarking_feed?
+
+    if feed_url.blank? || !feed_url.match(/https?:\/\/.+/i)
+      errors.add(:feed_url, "doesn't look like a url")
+      return false
+    end
+
+    return unless new_record?
+
+    # Only validate the actual RSS when the feed is created.
+    rss_feed = test_single_feed(self)
+    return false unless rss_feed
   end
 end

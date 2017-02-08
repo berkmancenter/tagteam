@@ -58,7 +58,7 @@ class InputSourcesController < ApplicationController
             if (@input_source.item_source_type == 'SearchRemix') && @republished_feed
               render json: { message: message, html: render_to_string(partial: 'shared/line_items/republished_feed_choice', locals: { republished_feed_choice: @republished_feed }) }
             else
-              render text: message
+              render plain: message
             end
           else
             if params[:return_to]
@@ -72,7 +72,7 @@ class InputSourcesController < ApplicationController
         # flash[:error] = 'Could not add that input source'
         format.html do
           if request.xhr?
-            render text: %(Could not add that input source. <br />#{@input_source.errors.full_messages.join('<br/>')}. Sorry!), status: :unprocessable_entity
+            render html: %(Could not add that input source. <br />#{@input_source.errors.full_messages.join('<br/>')}. Sorry!), status: :unprocessable_entity
           else
             render action: :new
           end

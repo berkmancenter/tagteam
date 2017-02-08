@@ -68,9 +68,9 @@ class HubsController < ApplicationController
 
     if @errors.blank?
       Contact.request_rights(params, @hub).deliver
-      render(text: '') && return
+      render(plain: '') && return
     else
-      render(text: @errors, status: :not_acceptable) && return
+      render(plain: @errors, status: :not_acceptable) && return
     end
   end
 
@@ -323,7 +323,7 @@ class HubsController < ApplicationController
         # Not valid.
         respond_to do |format|
           # Tell 'em why.
-          format.json { render(text: @feed.errors.full_messages.join('<br/>'), status: :not_acceptable) && return }
+          format.json { render(plain: @feed.errors.full_messages.join('<br/>'), status: :not_acceptable) && return }
           format.html do
             flash[:error] = 'There was a problem adding that feed.'
             redirect_to(hub_hub_feeds_path(@hub)) && return
@@ -340,14 +340,14 @@ class HubsController < ApplicationController
       current_user.has_role!(:owner, @hub_feed)
       current_user.has_role!(:creator, @hub_feed)
       if request.xhr?
-        render text: 'Added that feed', layout: false
+        render plain: 'Added that feed', layout: false
       else
         flash[:notice] = 'Added that feed.'
         redirect_to hub_hub_feeds_path(@hub)
       end
     else
       if request.xhr?
-        render(text: @hub_feed.errors.full_messages.join('<br />'), status: :not_acceptable)
+        render(html: @hub_feed.errors.full_messages.join('<br />'), status: :not_acceptable)
       else
         flash[:error] = 'There was a problem adding that feed.'
         redirect_to hub_hub_feeds_path(@hub)

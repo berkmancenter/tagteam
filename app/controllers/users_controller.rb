@@ -106,7 +106,7 @@ class UsersController < ApplicationController
       end
     end
   rescue
-    render text: 'Please try a different search term', layout: !request.xhr?
+    render plain: 'Please try a different search term', layout: !request.xhr?
   end
 
   private

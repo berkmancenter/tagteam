@@ -33,7 +33,7 @@ class HubFeedsController < ApplicationController
       end
     end
   rescue
-    render text: 'Please try a different search term', layout: !request.xhr?
+    render plain: 'Please try a different search term', layout: !request.xhr?
   end
 
   # Accepts an import upload in Connotea RDF and delicious bookmark export format. Creates a Resque job that does the actual importing, as it's pretty slow on larger collections - around 400 per minute or so.

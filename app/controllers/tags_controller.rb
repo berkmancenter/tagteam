@@ -37,7 +37,7 @@ class TagsController < ApplicationController
       end
     end
   rescue
-    render text: 'Please try a different search term', layout: !request.xhr?
+    render plain: 'Please try a different search term', layout: !request.xhr?
   end
 
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.

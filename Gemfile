@@ -21,7 +21,7 @@ gem 'pg'
 gem 'progress_bar'
 gem 'protected_attributes' # TODO: switch to strong parameters
 gem 'rack', '~> 1.5.5'
-gem 'rails', '~> 4.0.13'
+gem 'rails', '~> 4.1.16'
 gem 'rails-observers'
 gem 'sanitize'
 gem 'sidekiq'
@@ -37,6 +37,9 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
 group :development do
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen'
   # gem 'sql-logging'
 end
 

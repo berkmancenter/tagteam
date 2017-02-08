@@ -1,4 +1,5 @@
-Tagteam::Application.routes.draw do
+# frozen_string_literal: true
+Rails.application.routes.draw do
   # TODO: enforce SSL for UsersController in production
   resources :users do
     collection do
@@ -154,5 +155,5 @@ Tagteam::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  root to: 'hubs#home'
+  root 'hubs#home'
 end

@@ -57,11 +57,11 @@ class TagFiltersController < ApplicationController
 
       @tag_filter.apply_async
 
-      render text: %(Added a filter for that tag to "#{@scope.title}"),
+      render plain: %(Added a filter for that tag to "#{@scope.title}"),
              layout: !request.xhr?
     else
       flash[:error] = 'Could not add that tag filter.'
-      render text: @tag_filter.errors.full_messages.join('<br/>'),
+      render html: @tag_filter.errors.full_messages.join('<br/>'),
              status: :not_acceptable,
              layout: !request.xhr?
     end
