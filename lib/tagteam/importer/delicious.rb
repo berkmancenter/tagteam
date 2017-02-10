@@ -1,19 +1,18 @@
+# frozen_string_literal: true
 module Tagteam
   class Importer
     class Delicious < Importer
-
-      class NotValidFormat < Exception
+      class NotValidFormat < RuntimeError
       end
 
       # We have to set the Nokogiri::XML::ParseOptions::HUGE option because the quirky delicious export format
       # doesn't close tags and nokogiri deep nests them.
       def parse_items
-        
-        doc = Nokogiri::HTML(self.filehandle) do |c|
+        doc = Nokogiri::HTML(filehandle) do |c|
           c.options = Nokogiri::XML::ParseOptions::HUGE
         end
         output = []
-        doc.css('a').each do|i|
+        doc.css('a').each do |i|
           item_val = {}
           item_val[:title] = i.text
           item_val[:url] = i[:href]
@@ -29,16 +28,14 @@ module Tagteam
           item_val[:tag_list] = i[:tags].split(',')
           output << item_val
         end
-        self.filehandle.rewind
-        return output
+        filehandle.rewind
+        output
       end
 
       def verify_format
         # Here's where we'll verify the format.
         raise NotValidFormat
       end
-
-
     end
   end
 end

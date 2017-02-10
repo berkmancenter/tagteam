@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 require 'rake_helper'
 include RakeHelper
 require 'auth_utilities'
 namespace :tagteam do
   namespace :migrate do
     desc 'Migrate tag filters over to new system'
-    task :tag_filters => :environment do |t|
+    task tag_filters: :environment do |_t|
       module MockTagFilter
         include AuthUtilities
         def filter
@@ -36,7 +37,7 @@ namespace :tagteam do
       def translate_filter(filter, scope)
         if filter.filter.tag.name.include? ','
           tags = filter.filter.tag.name.split(',').map(&:strip)
-          #puts "Split #{filter.filter.tag.name} into #{tags}"
+          # puts "Split #{filter.filter.tag.name} into #{tags}"
           tags.each do |tag|
             next if tag.empty?
             puts filter.inspect unless filter.filter_type == 'AddTagFilter'
@@ -87,17 +88,17 @@ namespace :tagteam do
           filter.creators.each do |creator|
             creator.has_role! :creator, new_filter
           end
-          #puts "Old filter: #{filter.inspect}"
-          #puts "Scope: #{scope.inspect}"
-          #puts "New filter: #{new_filter.inspect}"
+          # puts "Old filter: #{filter.inspect}"
+          # puts "Scope: #{scope.inspect}"
+          # puts "New filter: #{new_filter.inspect}"
           new_filter.save! if new_filter.valid?
         end
       end
 
       messages = []
       filter_count = HubTagFilter.unscoped.count +
-        HubFeedTagFilter.unscoped.count +
-        HubFeedItemTagFilter.unscoped.count
+                     HubFeedTagFilter.unscoped.count +
+                     HubFeedItemTagFilter.unscoped.count
       unless filter_count == 0
         bar = ProgressBar.new(filter_count)
         HubTagFilter.unscoped.order('updated_at ASC').each do |filter|
@@ -151,7 +152,7 @@ namespace :tagteam do
     end
 
     desc 'Migrate to new tag system'
-    task :taggings => :environment do |t|
+    task taggings: :environment do |_t|
       module MockTagFilter
         include AuthUtilities
         def filter
@@ -187,7 +188,7 @@ namespace :tagteam do
         establish_connection :new_production
         self.table_name = 'taggings'
         attr_accessible :id, :taggable_id, :taggable_type, :tag_id, :tagger_id,
-          :tagger_type, :context, :created_at
+                        :tagger_type, :context, :created_at
       end
 
       current_db = ActiveRecord::Base.connection
@@ -196,7 +197,7 @@ namespace :tagteam do
       ## Do the global taggings first
       # Delete the taggings from the global context that have a matching tagging
       # in the hub context with an owner. Those are from bookmarkers.
-      puts "CHECK ON THIS - Deleting bookmarker taggings from global context"
+      puts 'CHECK ON THIS - Deleting bookmarker taggings from global context'
       current_db.execute(
         "DELETE FROM taggings WHERE id IN (SELECT id FROM (SELECT *, count(*)
         OVER w, bool_or(context != 'tags' AND tagger_id IS NOT NULL) OVER
@@ -221,7 +222,7 @@ namespace :tagteam do
 
       # Find an owner for all remaining global taggings - really just the first
       # feed.  This will set a feed in some undetermined way, which is fine.
-      puts "Adding tagging owners to global tags"
+      puts 'Adding tagging owners to global tags'
       current_db.execute(
         "UPDATE taggings SET tagger_id = feed_items_feeds.feed_id, tagger_type
         = 'Feed' FROM feed_items_feeds WHERE feed_items_feeds.feed_item_id
@@ -229,10 +230,9 @@ namespace :tagteam do
         taggings.tagger_id IS NULL;"
       )
 
-
       # Migrate over all the remaining taggings in the global context.
       unless ActsAsTaggableOn::Tagging.where(context: 'tags').empty?
-        puts "Migrating global taggings over to new prod"
+        puts 'Migrating global taggings over to new prod'
         NewTagging.delete_all
         bar = ProgressBar.new(ActsAsTaggableOn::Tagging.where(context: 'tags').count)
         ActsAsTaggableOn::Tagging.where(context: 'tags').each do |tagging|
@@ -318,7 +318,8 @@ namespace :tagteam do
           ).pluck(:id)
           ActsAsTaggableOn::Tagging.where(
             context: hub.tagging_key, tag_id: new_tag.id, taggable_type: FeedItem,
-            taggable_id: item_ids_with_old_tag).where('tagger_id IS NULL')
+            taggable_id: item_ids_with_old_tag
+          ).where('tagger_id IS NULL')
         end
       end
       count = AddTagFilter.count + ModifyTagFilter.count
@@ -339,7 +340,7 @@ namespace :tagteam do
       # Find any remaining taggings that are attached to a feed item which came
       # in through a hub feed that's a bookmark collection. Mark the tagging
       # owner as the user who is the owner of the bookmark collection.
-      puts "Assigning owners to bookmarker taggings and migrating"
+      puts 'Assigning owners to bookmarker taggings and migrating'
       taggings = ActsAsTaggableOn::Tagging.find_by_sql(
         "SELECT DISTINCT taggings.* FROM taggings JOIN feed_items ON
         taggable_id = feed_items.id JOIN feed_items_feeds ON
@@ -366,18 +367,17 @@ namespace :tagteam do
       ActsAsTaggableOn::Tagging.all.each do |tagging|
         tagger = ModifyTagFilter.where(new_tag_id: tagging.tag_id, hub_id:
                               tagging.context.sub('hub_', '')).last
-        if tagger
-          tagging.tagger = tagger
-          NewTagging.create(tagging.attributes)
-          tagging.delete
-        end
+        next unless tagger
+        tagging.tagger = tagger
+        NewTagging.create(tagging.attributes)
+        tagging.delete
       end
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
       # Delete taggings JSD created
       puts 'Deleting test taggings'
-      ActsAsTaggableOn::Tagging.delete([3095895, 3095896, 3360595, 3360597])
+      ActsAsTaggableOn::Tagging.delete([3_095_895, 3_095_896, 3_360_595, 3_360_597])
 
       puts "Remaining taggings: #{ActsAsTaggableOn::Tagging.count}\n\n"
 
@@ -393,18 +393,17 @@ namespace :tagteam do
 
       if ActsAsTaggableOn::Tagging.count == 0
         puts 'Dropping taggings table'
-        current_db.execute("DROP TABLE taggings")
+        current_db.execute('DROP TABLE taggings')
       end
 
-      puts "Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod"
+      puts 'Run: pg_dump -U tagteamdev -t taggings tagteam_prod_new | psql -U tagteamdev -d tagteam_prod'
       puts %q?Then run: echo "SELECT setval('taggings_id_seq', (SELECT MAX(id) FROM taggings));" | psql -U tagteamdev tagteam_prod?
       puts %q?Then run: echo "SELECT setval('deactivated_taggings_id_seq', (SELECT MAX(id) FROM deactivated_taggings));" | psql -U tagteamdev tagteam_prod?
-      puts "Then run: rake tagteam:migrate:copy_global_taggings"
+      puts 'Then run: rake tagteam:migrate:copy_global_taggings'
     end
 
     desc 'Setup new taggings table'
-    task :copy_global_taggings => :environment do |t|
-
+    task copy_global_taggings: :environment do |_t|
       # Copy global taggings back into hub contexts.
       puts 'Copying global taggings into hub contexts'
       count = ActsAsTaggableOn::Tagging.where(context: 'tags').count
@@ -422,17 +421,17 @@ namespace :tagteam do
     end
 
     desc 'Reapply all filters'
-    task :reapply_tag_filters => :environment do |t|
+    task reapply_tag_filters: :environment do |_t|
       # TODO: Rerun tag filters
       bar = ProgressBar.new(TagFilter.count)
       Hub.all.each do |hub|
         hub.hub_feeds.each do |hub_feed|
           hub_feed.feed_items.find_each do |item|
-            item.tag_filters.each{ |f| f.apply; bar.increment! }
+            item.tag_filters.each { |f| f.apply; bar.increment! }
           end
-          hub_feed.tag_filters.each{ |f| f.apply; bar.increment! }
+          hub_feed.tag_filters.each { |f| f.apply; bar.increment! }
         end
-        hub.tag_filters.each{ |f| f.apply; bar.increment! }
+        hub.tag_filters.each { |f| f.apply; bar.increment! }
       end
 
       puts 'Turn indexing back on and reindex'

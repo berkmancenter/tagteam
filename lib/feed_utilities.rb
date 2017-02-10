@@ -1,9 +1,9 @@
+# frozen_string_literal: true
 require 'net/http'
 require 'net/https'
 require 'uri'
 
 module FeedUtilities
-
   # Attempts to download and parse a single feed to see if we think it's RSS, Atom, or some other syndication format.
   #
   # === Parameters
@@ -14,19 +14,19 @@ module FeedUtilities
     begin
       response = fetch(feed.feed_url)
     rescue
-      self.errors.add(:feed_url, "'#{feed.feed_url}' couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
+      errors.add(:feed_url, "'#{feed.feed_url}' couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
       return false
     end
     parsed_feed = ''
-    begin 
+    begin
       parsed_feed = FeedAbstract::Feed.new(response.body)
     rescue Exception
       logger.warn "ERROR: test_single_feed failed to parse feed with url: #{feed.feed_url}"
-      self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
+      errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
       return false
     end
 
-    feed.title = (parsed_feed.channel.title.blank?) ? 'untitled' : parsed_feed.channel.title
+    feed.title = parsed_feed.channel.title.blank? ? 'untitled' : parsed_feed.channel.title
     feed.description = parsed_feed.channel.description
     feed.guid = parsed_feed.channel.guid
     if parsed_feed.channel.updated.respond_to?(:to_datetime)
@@ -39,27 +39,27 @@ module FeedUtilities
     feed.language = parsed_feed.channel.language
     feed.raw_feed = parsed_feed
   end
-  
+
   def fetch_and_parse_feed(feed)
     begin
       response = fetch(feed.feed_url)
     rescue
-      self.errors.add(:feed_url, "couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
+      errors.add(:feed_url, "couldn't be downloaded. Please check the URL to ensure it's a supported syndication format.")
       feed.status_code = "couldn't download"
       return false
     end
     parsed_feed = ''
-    begin 
+    begin
       parsed_feed = FeedAbstract::Feed.new(response.body)
     rescue Exception
       logger.warn "ERROR: test_single_feed failed to parse feed with url: #{feed.feed_url}"
       feed.status_code = "couldn't parse"
-      self.errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
+      errors.add(:feed_url, "didn't look like a syndication feed in a supported format- RSS or Atom, for instance.")
       return false
     end
     feed.raw_feed = parsed_feed
   end
-  
+
   # Downloads a URL
   # === Parameters
   # [uri] The URI to download.
@@ -70,17 +70,17 @@ module FeedUtilities
   def fetch(uri, redirect_limit = 10, sleep_seconds = 1)
     raise ArgumentError, 'HTTP redirect too deep' if redirect_limit == 0
     if redirect_limit < 10
-      #On subsequent requests in a request with redirections, wait a second
+      # On subsequent requests in a request with redirections, wait a second
       sleep sleep_seconds
     end
     url = URI.parse(uri)
-    req = Net::HTTP::Get.new(url.request_uri + ((url.fragment.blank?) ? '' : '#' + url.fragment ))
-    req.initialize_http_header({"User-Agent" => Tagteam::Application.config.robot_user_agent})
+    req = Net::HTTP::Get.new(url.request_uri + (url.fragment.blank? ? '' : '#' + url.fragment))
+    req.initialize_http_header('User-Agent' => Tagteam::Application.config.robot_user_agent)
 
     # logger.warn(url.inspect)
     # logger.warn(url.port)
     # logger.warn(url.host)
-    http = Net::HTTP::new(url.host,url.port)
+    http = Net::HTTP.new(url.host, url.port)
     if url.scheme == 'https'
       http.use_ssl = true
       # Get rid of these errors:
@@ -97,5 +97,4 @@ module FeedUtilities
       raise "Couldn't retrieve feed."
     end
   end
-
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RakeHelper
   def add_example_feeds(hub_name, feeds, user_email)
     h = Hub.find_or_initialize_by(title: hub_name)

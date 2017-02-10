@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rake_helper'
 include RakeHelper
 require 'auth_utilities'
@@ -5,7 +6,7 @@ require 'auth_utilities'
 namespace :tagteam do
   namespace :audit do
     desc 'Make sure each tag filter is reflected in taggings'
-    task :tag_filters, [:hub_id] => :environment do |t, args|
+    task :tag_filters, [:hub_id] => :environment do |_t, args|
       require 'rspec/rails'
       require Rails.root.join('spec/support/tag_utils.rb')
 
@@ -20,7 +21,7 @@ namespace :tagteam do
         bar = ProgressBar.new(hub.feed_items.count)
         cached_tag_lists = hub.feed_items.map do |item|
           bar.increment!
-          [ item.id, item.all_tags_list_on(hub.tagging_key) ]
+          [item.id, item.all_tags_list_on(hub.tagging_key)]
         end
       end
 
@@ -29,7 +30,7 @@ namespace :tagteam do
         if items.count == cached_tag_lists.count
           return cached_tag_lists.map(&:last)
         end
-        cached_tag_lists.select{ |list| item_ids.include?(list[0]) }.map(&:last)
+        cached_tag_lists.select { |list| item_ids.include?(list[0]) }.map(&:last)
       end
 
       group = RSpec.describe 'tagging consistency' do
@@ -38,22 +39,22 @@ namespace :tagteam do
           results = []
           tag_filters.each do |filter|
             begin
-              if args[:hub_id]
-                tag_lists = cached_tag_lists_for(filter.items_in_scope, cached_tag_lists)
-              else
-                tag_lists = tag_lists_for(filter.items_in_scope, filter.hub.tagging_key)
-              end
-              #TODO: Take into consideration filter chains (the first filters
-              #will show up as false because their tags aren't showing
-              #TODO: Take into consideration conflicting filters
-              expect(tag_lists).to(show_effects_of filter)
+              tag_lists = if args[:hub_id]
+                            cached_tag_lists_for(filter.items_in_scope, cached_tag_lists)
+                          else
+                            tag_lists_for(filter.items_in_scope, filter.hub.tagging_key)
+                          end
+              # TODO: Take into consideration filter chains (the first filters
+              # will show up as false because their tags aren't showing
+              # TODO: Take into consideration conflicting filters
+              expect(tag_lists).to(show_effects_of(filter))
               results << { result: true, filter: filter.id }
-              #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
+              # puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
               bar.increment!
             rescue Exception #=> e
-              #puts e.inspect
+              # puts e.inspect
               results << { result: false, filter: filter.id }
-              #puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
+              # puts "Tested #{filter.id} - #{filter.items_in_scope.count} items - #{results}"
               bar.increment!
               next
             end
@@ -67,8 +68,7 @@ namespace :tagteam do
     end
 
     desc 'Make sure taggings are consistent with filters (~30 mins)'
-    task :taggings, [:context] => :environment do |t, args|
-
+    task :taggings, [:context] => :environment do |_t, args|
       # Goal: Find taggings that are inconsistent with the current state of
       # filters. Do this by trimming down the number of taggings as far as
       # possible, and then looking through the remaining taggings for
@@ -157,5 +157,3 @@ namespace :tagteam do
     end
   end
 end
-
-

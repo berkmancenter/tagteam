@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ActsAsTaggableOn::Tag.class_eval do
   after_initialize do |_tag|
     name.try(:strip!)
