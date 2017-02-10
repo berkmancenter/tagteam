@@ -1,6 +1,6 @@
 = TagTeam
 
-TagTeam is an RSS / Atom / RDF aggregator with the ability to filter and remix its input feeds with a high degree of flexibility. 
+TagTeam is an RSS / Atom / RDF aggregator with the ability to filter and remix its input feeds with a high degree of flexibility.
 
 Items can be added directly to TagTeam "bookmarking collections" via the provided delicious-like bookmarklet, and these items can be remixed and filtered like any other item.
 
@@ -10,7 +10,7 @@ TagTeam can import Delicious and Connotea backups directly into a bookmark colle
 
 Remixed feeds are available as RSS 2.0, Atom, and jsonp output and can be viewed directly in a hub. Feeds, FeedItems, and Tags can be added and removed from a Remixed feed contextually within the application.
 
-Tag filters can be applied at different levels to allow hub owners to maintain a consistent collection of tags - you can take messy tags in and give clean tags out. 
+Tag filters can be applied at different levels to allow hub owners to maintain a consistent collection of tags - you can take messy tags in and give clean tags out.
 
 TagTeam can be many things to many people, allowing you to ignore or utilize its many features depending on what you need. Examples:
 
@@ -27,19 +27,19 @@ TagTeam can be many things to many people, allowing you to ignore or utilize its
 * postgres - though mysql should work with minimal changes, it's just not tested,
 * redis - for resque background job processing,
 * java - for sunspot fulltext searching. This has been tested under openjdk-6-jre on multiple flavors of ubuntu,
-* ruby 2.1.9
+* ruby 2.3.3
 * wget
 
 == Installation
 
-TagTeam is a fairly traditional rails 3.2 app that needs a java daemon and redis for job tracking / management. 
+TagTeam is a fairly traditional rails 5.0 app that needs a java daemon and redis for job tracking / management.
 
-* Install ruby 2.1.9, rvm is probably your best choice.
+* Install ruby 2.3.3, rvm is probably your best choice.
 * Install all requirements. Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
 * If you're using rvm, create a gemset to hold this application's gem environment
 * git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle
-* Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough. 
-* Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption. 
+* Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough.
+* Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption.
 * Move sunspot.yml.example.yml to sunspot.yml
 * Make sure sunspot is running all on the same port in sunspot.yml and solr/conf/scripts.conf or else the test suite will not run.
 * Copy config/database.yml.example to config/database.yml and set it up to connect to your postgres database.
@@ -87,7 +87,7 @@ More info can be found in the rdoc-generated API docs (check out this repo and r
 
 == License
 
-TagTeam is licensed under the AGPL 
+TagTeam is licensed under the AGPL
 
 == Copyright
 
