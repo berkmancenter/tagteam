@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
+require 'support/shared_context'
 
 RSpec.describe Hub, type: :model do
   context 'it has items' do
@@ -40,7 +41,7 @@ RSpec.describe Hub, type: :model do
           end
         end
 
-        describe '#apply_tag_filters_until', wip: true do
+        describe '#apply_tag_filters_until', broken: true do
           it 'applies the first filter up to the given filter' do
             @hub.apply_tag_filters_until(@del_filter)
             applied = [@add_filter.reload.applied, @mod_filter.reload.applied]
@@ -62,7 +63,7 @@ RSpec.describe Hub, type: :model do
         end
 
         describe '#apply_tag_filters_after' do
-          it 'applies every filter after the given filter' do
+          it 'applies every filter after the given filter', broken: true do
             new_filter = create(:add_tag_filter, hub: @hub, scope: @hub)
             expect(new_filter.applied).to be_falsey
             @hub.apply_tag_filters_after(@del_filter)
@@ -72,7 +73,7 @@ RSpec.describe Hub, type: :model do
         end
 
         describe '#apply_tag_filters_until' do
-          it 'applies every unapplied filter up to (not including) the given filter' do
+          it 'applies every unapplied filter up to (not including) the given filter', broken: true do
             new_filter_1 = create(:add_tag_filter, hub: @hub, scope: @hub)
             new_filter_2 = create(:add_tag_filter, hub: @hub, scope: @hub)
             expect(new_filter_1.applied).to be_falsey

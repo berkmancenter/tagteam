@@ -14,7 +14,7 @@ RSpec.describe ModifyTagFilter, type: :model do
         item.copy_global_tags_to_hubs
       end
     end
-    context 'the filter changes tag "a" to tag "b"', broken: true do
+    context 'the filter changes tag "a" to tag "b"' do
       before do
         @new_tag = create(:tag, name: 'b')
         @filter = create(:modify_tag_filter, hub: @hub, tag: @tag,

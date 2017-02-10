@@ -9,10 +9,12 @@ require 'rspec/rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
+require 'support/database_cleaner'
 require 'support/devise'
 require 'support/factory_girl'
 require 'support/sidekiq'
 require 'support/sunspot'
+require 'support/vcr'
 require 'webmock/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

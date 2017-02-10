@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+def set_roles(object, evaluator)
+  evaluator.owner.has_role!(:owner, object)
+  evaluator.owner.has_role!(:creator, object)
+end
+
 FactoryGirl.define do
   factory :hub do
     title 'My hub'
@@ -16,6 +21,7 @@ FactoryGirl.define do
       transient do
         owner create(:user)
       end
+
       after(:create) do |hub, evaluator|
         set_roles(hub, evaluator)
         hub.feeds.each { |feed| set_roles(feed, evaluator) }

@@ -1,30 +1,31 @@
 <div class="center-block devise-form">
   <h2>Sign in</h2>
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="form-group">
-      <%= f.label :login %>
-      <%= f.text_field :login, class: 'form-control' %>
+      <%= f.label :login %><br />
+      <%= f.text_field :login, autofocus: true, class: "form-control" %>
     </div>
 
     <div class="form-group">
-    <%= f.label :password %>
-    <%= f.password_field :password, class: 'form-control' %>
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
     </div>
 
     <% if devise_mapping.rememberable? -%>
-    <div class="checkbox">
-      <%= f.label :remember_me do %>
-        <%= f.check_box :remember_me %> Remember me
-      <% end %>
-    </div>
+      <div class="checkbox">
+        <%= f.label :remember_me do %>
+          <%= f.check_box :remember_me %> Remember me
+        <% end %>
+      </div>
     <% end -%>
 
     <div class="form-group">
-      <%= f.submit "Sign in", class: 'btn btn-primary btn-block' %>
+      <%= f.submit "Log in", class: "btn btn-primary btn-block" %>
     </div>
   <% end %>
 
   <hr />
 
-  <%= render "links" %>
+  <%= render "devise/shared/links" %>
 </div>

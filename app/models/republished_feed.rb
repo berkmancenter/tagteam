@@ -25,7 +25,7 @@ class RepublishedFeed < ActiveRecord::Base
   SORTS_FOR_SELECT = [['Date Published', 'date_published'], %w(Title title)].freeze
 
   belongs_to :hub
-  has_many :input_sources, dependent: :destroy, order: 'created_at desc'
+  has_many :input_sources, -> { order(created_at: :desc) }, dependent: :destroy
 
   validates :url_key, uniqueness: true
   validates :url_key, format: { with: /\A[a-z\d\-]+/ }

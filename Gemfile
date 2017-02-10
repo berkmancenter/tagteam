@@ -7,7 +7,7 @@ gem 'actionpack-action_caching'
 gem 'acts-as-taggable-on', '~> 3.4.1'
 gem 'acts_as_api'
 gem 'breadcrumbs'
-gem 'devise', '~> 3.5.10'
+gem 'devise', '~> 4.2.0'
 gem 'exception_notification', '~> 2.6.1'
 gem 'feed-abstract', '~> 0.0.13'
 gem 'font-awesome-rails'
@@ -20,8 +20,7 @@ gem 'nokogiri'
 gem 'pg'
 gem 'progress_bar'
 gem 'protected_attributes' # TODO: switch to strong parameters
-gem 'rack', '~> 1.5.5'
-gem 'rails', '~> 4.1.16'
+gem 'rails', '~> 4.2.7'
 gem 'rails-observers'
 gem 'sanitize'
 gem 'sidekiq'
@@ -40,7 +39,7 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
-  # gem 'sql-logging'
+  gem 'web-console', '3.3.0'
 end
 
 group :development, :test do
@@ -54,6 +53,7 @@ end
 
 group :test do
   gem 'capybara-webkit', '~> 1.3.1'
+  gem 'database_cleaner'
   gem 'factory_girl_rails', '~> 4.8.0'
   gem 'fuubar'
   gem 'headless'

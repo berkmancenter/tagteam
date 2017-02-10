@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require 'support/vcr'
 
 RSpec.feature 'Hub input feed management', type: :feature do
   context 'User owns a hub', vcr: { cassette_name: 'feed_factory_reagle_org' } do
@@ -11,7 +10,7 @@ RSpec.feature 'Hub input feed management', type: :feature do
       visit new_user_session_path
       fill_in 'Username or email', with: @user.username
       fill_in 'Password', with: @user.password
-      click_button 'Sign in'
+      click_button 'Log in'
     end
 
     scenario 'User adds an input feed' do
