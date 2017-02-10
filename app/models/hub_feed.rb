@@ -6,7 +6,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 
-class HubFeed < ActiveRecord::Base
+class HubFeed < ApplicationRecord
   include ModelExtensions
   include AuthUtilities
   include TagScopable

@@ -13,18 +13,18 @@ namespace :tagteam do
           ).first
         end
       end
-      class HubTagFilter < ActiveRecord::Base
+      class HubTagFilter < ApplicationRecord
         belongs_to :hub
         acts_as_authorization_object
         include MockTagFilter
       end
-      class HubFeedTagFilter < ActiveRecord::Base
+      class HubFeedTagFilter < ApplicationRecord
         belongs_to :hub_feed
         has_one :hub, through: :hub_feed
         acts_as_authorization_object
         include MockTagFilter
       end
-      class HubFeedItemTagFilter < ActiveRecord::Base
+      class HubFeedItemTagFilter < ApplicationRecord
         belongs_to :hub
         belongs_to :feed_item
         acts_as_authorization_object
@@ -160,18 +160,18 @@ namespace :tagteam do
           ).first
         end
       end
-      class HubTagFilter < ActiveRecord::Base
+      class HubTagFilter < ApplicationRecord
         belongs_to :hub
         acts_as_authorization_object
         include MockTagFilter
       end
-      class HubFeedTagFilter < ActiveRecord::Base
+      class HubFeedTagFilter < ApplicationRecord
         belongs_to :hub
         belongs_to :hub_feed
         acts_as_authorization_object
         include MockTagFilter
       end
-      class HubFeedItemTagFilter < ActiveRecord::Base
+      class HubFeedItemTagFilter < ApplicationRecord
         belongs_to :hub
         belongs_to :feed_item
         acts_as_authorization_object
@@ -183,7 +183,7 @@ namespace :tagteam do
       Hub.find(31).destroy unless Hub.where(id: 31).empty?
       Rake::Task['tagteam:clean_orphan_items'].invoke # Took about 2 hours 45 mins
 
-      class NewTagging < ActiveRecord::Base
+      class NewTagging < ApplicationRecord
         establish_connection :new_production
         self.table_name = 'taggings'
         attr_accessible :id, :taggable_id, :taggable_type, :tag_id, :tagger_id,

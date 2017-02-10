@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class DeactivatedTagging < ActiveRecord::Base
+class DeactivatedTagging < ApplicationRecord
   belongs_to :deactivator, polymorphic: true, autosave: false
 
   def reactivate

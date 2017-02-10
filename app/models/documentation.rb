@@ -3,7 +3,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 #
-class Documentation < ActiveRecord::Base
+class Documentation < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
   before_validation do

@@ -81,11 +81,12 @@ class TagsController < ApplicationController
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
-    @feed_items = FeedItem.tagged_with(@tag.name, on: @hub.tagging_key).uniq.paginate(
-      order: 'date_published DESC, created_at DESC',
-      page: params[:page],
-      per_page: get_per_page
-    )
+    @feed_items =
+      FeedItem
+      .tagged_with(@tag.name, on: @hub.tagging_key)
+      .uniq
+      .order(date_published: :desc, created_at: :desc)
+      .paginate(page: params[:page], per_page: get_per_page)
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
     render template, layout: request.xhr? ? false : 'tabs'
   end
@@ -108,7 +109,7 @@ class TagsController < ApplicationController
 
   def load_tag_from_name
     @tag = if !params[:name].blank?
-             ActsAsTaggableOn::Tag.find_by(name_normalized: params[:name])
+             ActsAsTaggableOn::Tag.find_by_name_normalized(params[:name])
            else
              ActsAsTaggableOn::Tag.find_by(id: params[:id])
            end

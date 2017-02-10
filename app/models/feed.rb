@@ -15,7 +15,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 
-class Feed < ActiveRecord::Base
+class Feed < ApplicationRecord
   include FeedUtilities
   include AuthUtilities
   include ModelExtensions

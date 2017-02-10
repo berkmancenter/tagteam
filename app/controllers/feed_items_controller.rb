@@ -65,12 +65,12 @@ class FeedItemsController < ApplicationController
   def index
     load_hub_feed
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
-    @feed_items = @hub_feed.feed_items.paginate(
-      include: [:feeds, :hub_feeds],
-      order: 'date_published DESC, created_at DESC',
-      page: params[:page],
-      per_page: get_per_page
-    )
+    @feed_items =
+      @hub_feed
+      .feed_items
+      .includes(:feeds, :hub_feeds)
+      .order(date_published: :desc, created_at: :desc)
+      .paginate(page: params[:page], per_page: get_per_page)
     breadcrumbs.add @hub_feed.hub, hub_path(@hub_feed.hub)
     breadcrumbs.add @hub_feed.feed, hub_hub_feed_path(@hub_feed.hub, @hub_feed)
     respond_to do |format|

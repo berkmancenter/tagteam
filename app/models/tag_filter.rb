@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class TagFilter < ActiveRecord::Base
+class TagFilter < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
   include TaggingDeactivator
@@ -80,7 +80,7 @@ class TagFilter < ActiveRecord::Base
     return ActsAsTaggableOn::Tagging.where('1=2') if items.empty?
     ActsAsTaggableOn::Tagging
       .where(context: hub.tagging_key, tag_id: tag.id,
-             taggable_type: FeedItem, taggable_id: items.pluck(:id))
+             taggable_type: 'FeedItem', taggable_id: items.pluck(:id))
       .where('("taggings"."tagger_id" IS NULL AND ' \
             '"taggings"."tagger_type" IS NULL) OR ' \
             '(NOT ("taggings"."tagger_id" = ? AND "taggings"."tagger_type" = ?))',

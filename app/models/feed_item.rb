@@ -17,7 +17,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 
-class FeedItem < ActiveRecord::Base
+class FeedItem < ApplicationRecord
   include ModelExtensions
   include TagScopable
 

@@ -24,8 +24,19 @@ class FeedRetrievalsController < ApplicationController
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed)
     @feed_retrieval = FeedRetrieval.find(params[:id])
 
-    @new_items = FeedItem.paginate(include: [:tags, :taggings, :feeds, :hub_feeds], conditions: { id: @feed_retrieval.new_feed_items }, order: 'created_at desc', page: params[:page], per_page: get_per_page)
-    @changed_items = FeedItem.paginate(include: [:tags, :taggings, :feeds, :hub_feeds], conditions: { id: @feed_retrieval.changed_feed_items }, order: 'created_at desc', page: params[:page], per_page: get_per_page)
+    @new_items =
+      FeedItem
+      .where(id: @feed_retrieval.new_feed_items)
+      .order(created_at: :desc)
+      .includes(:tags, :taggings, :feeds, :hub_feeds)
+      .paginate(page: params[:page], per_page: get_per_page)
+
+    @changed_items =
+      FeedItem
+      .where(id: @feed_retrieval.changed_feed_items)
+      .order(created_at: :desc)
+      .includes(:tags, :taggings, :feeds, :hub_feeds)
+      .paginate(page: params[:page], per_page: get_per_page)
 
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }

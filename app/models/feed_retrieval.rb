@@ -3,7 +3,7 @@
 #
 # FeedItem change tracking is used to calculate the spidering schedule for a Feed, and could be used in the future to calculate metrics and do some interesting analysis about what's getting posted when.  More on how scheduling works can be found in the Feed class.
 #
-class FeedRetrieval < ActiveRecord::Base
+class FeedRetrieval < ApplicationRecord
   belongs_to :feed
   has_and_belongs_to_many :feed_items, join_table: 'feed_items_feed_retrievals'
   has_many :hubs, through: :feed
@@ -51,7 +51,7 @@ class FeedRetrieval < ActiveRecord::Base
   def parsed_changelog
     return nil if changelog.nil?
     # TODO: determine how to handle symbols in changelogs using YAML.safe_load
-    YAML.safe_load(changelog)
+    YAML.load(changelog)
   end
 
   # Extract the new FeedItem ids from the changelog.

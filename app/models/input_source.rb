@@ -7,7 +7,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 #
-class InputSource < ActiveRecord::Base
+class InputSource < ApplicationRecord
   include AuthUtilities
   acts_as_authorization_object
   include ModelExtensions

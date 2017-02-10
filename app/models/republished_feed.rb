@@ -7,7 +7,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 #
-class RepublishedFeed < ActiveRecord::Base
+class RepublishedFeed < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
   before_validation do

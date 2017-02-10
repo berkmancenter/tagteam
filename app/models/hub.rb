@@ -17,7 +17,7 @@
 #
 # Most validations are contained in the ModelExtensions mixin.
 
-class Hub < ActiveRecord::Base
+class Hub < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
   include DelegatableRoles

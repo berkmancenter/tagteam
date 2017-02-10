@@ -81,7 +81,7 @@ class HubFeedsController < ApplicationController
 
   def index
     load_hub
-    @hub_feeds = @hub.hub_feeds.rss.paginate(page: params[:page], per_page: get_per_page, order: 'created_at desc')
+    @hub_feeds = @hub.hub_feeds.rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
     add_breadcrumbs
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }

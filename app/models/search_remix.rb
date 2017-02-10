@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SearchRemix < ActiveRecord::Base
+class SearchRemix < ApplicationRecord
   has_many :input_sources, dependent: :destroy, as: :item_source
   belongs_to :hub
   attr_accessible :search_string, :hub
