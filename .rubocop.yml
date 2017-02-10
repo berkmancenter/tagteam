@@ -1,0 +1,7 @@
+Metrics/LineLength:
+  Max: 999
+Rails:
+  Enabled: true
+require: rubocop-rspec
+AllCops:
+  TargetRubyVersion: 2.3
