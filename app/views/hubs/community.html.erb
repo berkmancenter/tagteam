@@ -82,6 +82,25 @@
         <%= submit_tag 'Remove roles', class: 'btn btn-primary', id: 'remove_roles' %>
       <% end %>
     </div>
+    
+    <div class="notifications col-md-6">
+      <h3>Notifications</h3>
+
+      <%= form_tag(set_notifications_hub_path(@hub)) do %>
+        <ul class="list-unstyled">
+          <li>
+            <div class="checkbox">
+              <%= label_tag 'notify_taggers' do %>
+                <%= check_box_tag('notify_taggers', @hub.notify_taggers, @hub.notify_taggers, {id: 'notify_taggers'}) %>
+                Notify taggers when their tags modify
+              <% end %>
+            </div>
+          </li>
+        </ul>
+
+        <%= submit_tag 'Save notifications', class: 'btn btn-primary', id: 'save_notifications' %>
+      <% end %>
+    </div>
   </div>
 </div>
 <% end %>

@@ -8,7 +8,7 @@ class HubsController < ApplicationController
   access_control do
     allow all, to: [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta, :home, :about]
     allow logged_in, to: [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
-    allow :owner, of: :hub, to: [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles]
+    allow :owner, of: :hub, to: [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles, :set_notifications]
     allow :inputter, of: :hub, to: [:add_feed]
     allow :remixer, of: :hub, to: [:custom_republished_feeds]
     allow :superadmin
@@ -124,6 +124,21 @@ class HubsController < ApplicationController
       @hub.accepts_no_role!(data[0], user)
       messages << "We deleted #{user.email}'s role as a #{Hub::DELEGATABLE_ROLES_HASH[data[0].to_sym][:name]} in this hub."
     end
+    flash[:notice] = messages.join(' ')
+    redirect_to request.referer
+  end
+
+  def set_notifications
+    messages = []
+    @hub.notify_taggers = params[:notify_taggers]
+
+    messages << if @hub.save
+                  'Notifications saved successfully.'
+                else
+                  'Something went wrong, try again.'
+                end
+
+    messages = []
     flash[:notice] = messages.join(' ')
     redirect_to request.referer
   end
@@ -528,7 +543,6 @@ class HubsController < ApplicationController
       format.json { render json: @search }
     end
   end
-
   private
 
   def sanitize_params
@@ -538,7 +552,7 @@ class HubsController < ApplicationController
   def add_breadcrumbs
     breadcrumbs.add @hub, hub_path(@hub) if @hub.id
   end
-
+  
   def find_hub
     @hub = Hub.find(params[:id])
   end

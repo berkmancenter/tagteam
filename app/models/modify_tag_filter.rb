@@ -34,6 +34,8 @@ class ModifyTagFilter < TagFilter
       new_tagging.save! if new_tagging.valid?
     end
     update_column(:applied, true)
+
+    notify_taggers('modified', items)
   end
 
   def deactivates_taggings(items: items_in_scope)
@@ -87,5 +89,14 @@ class ModifyTagFilter < TagFilter
       tag_id = ? AND updated_at > ?", new_tag.id, updated_at
     ).first
     subsequent ? [subsequent] + subsequent.filters_after : []
+  end
+
+  def notify_taggers(type, items)
+    old_tag = tag.name
+    taggers_ids = items_with_old_tag(items).pluck(:tagger_id).uniq
+
+    taggers = User.where(id: taggers_ids)
+
+    NotifyTaggers.process(taggers, hub, old_tag, type).deliver_now
   end
 end

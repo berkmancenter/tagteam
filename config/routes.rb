@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       post 'request_rights'
       get 'contact'
       get 'created'
+      post 'set_notifications'
     end
 
     collection do
