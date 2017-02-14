@@ -7,9 +7,9 @@ class TagFiltersController < ApplicationController
     allow all, to: [:index]
     allow :superadmin
     allow :owner, of: :hub
-    allow all, to: [:new, :create]
-    allow all, to: [:new, :create]
-    allow all, to: [:new, :create]
+    allow :hub_tag_filterer, to: [:new, :create]
+    allow :hub_feed_tag_filterer, to: [:new, :create]
+    allow :hub_feed_item_tag_filterer, to: [:new, :create]
     allow :owner, of: :tag_filter, to: [:destroy]
   end
 
