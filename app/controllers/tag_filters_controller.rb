@@ -7,9 +7,9 @@ class TagFiltersController < ApplicationController
     allow all, to: [:index]
     allow :superadmin
     allow :owner, of: :hub
-    allow :hub_tag_filterer, to: [:new, :create]
-    allow :hub_feed_tag_filterer, to: [:new, :create]
-    allow :hub_feed_item_tag_filterer, to: [:new, :create]
+    allow all, to: [:new, :create]
+    allow all, to: [:new, :create]
+    allow all, to: [:new, :create]
     allow :owner, of: :tag_filter, to: [:destroy]
   end
 
@@ -54,6 +54,17 @@ class TagFiltersController < ApplicationController
       current_user.has_role!(:owner, @tag_filter)
       current_user.has_role!(:creator, @tag_filter)
       flash[:notice] = %(Added a filter for that tag to "#{@scope.title}")
+
+      if @hub.notify_taggers && @new_tag
+        @tag_filter.notify_taggers(
+          @tag,
+          @new_tag,
+          @scope,
+          @hub,
+          @hub_feed,
+          current_user
+        )
+      end
 
       @tag_filter.apply_async
 
