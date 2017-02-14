@@ -19,7 +19,7 @@ RSpec.describe ApplyTagFilters, type: :worker do
 
     describe 'receiving a single filter' do
       context 'filters prior to given filter are unapplied' do
-        it 'applies all unapplied filters and then applies the given filter', broken: true do
+        it 'applies all unapplied filters and then applies the given filter' do
           described_class.perform_async(@filter_c.id)
           @filters.each(&:reload)
           expect(@filters.map(&:applied)).to all(be_truthy)
@@ -86,7 +86,7 @@ RSpec.describe ApplyTagFilters, type: :worker do
 
     describe 'receiving multiple filters' do
       describe 'receiving unapplied filters out of order' do
-        it 'applies them all in order', broken: true do
+        it 'applies them all in order' do
           described_class.perform_async(@filters.reverse.map(&:id))
           @filters.each(&:reload)
           expect(@filters.map(&:applied)).to all(be_truthy)
