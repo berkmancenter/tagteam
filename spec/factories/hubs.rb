@@ -19,7 +19,7 @@ FactoryGirl.define do
 
     trait :owned do
       transient do
-        owner create(:user)
+        owner { create(:user) }
       end
 
       after(:create) do |hub, evaluator|
