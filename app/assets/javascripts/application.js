@@ -16,7 +16,7 @@
 //= require ckeditor/ckeditor
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
-//= require twitter/bootstrap
+//= require bootstrap-sprockets
 //= require_tree .
 //
 ( function($){

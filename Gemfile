@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 source 'http://rubygems.org'
 
 ruby '2.3.3'
@@ -6,6 +7,7 @@ gem 'acl9', git: 'https://github.com/be9/acl9.git', branch: 'finalist-update-rai
 gem 'actionpack-action_caching', '~> 1.2'
 gem 'acts-as-taggable-on', '~> 4.0'
 gem 'acts_as_api', '~> 0.4'
+gem 'bootstrap-sass', '~> 3.3'
 gem 'breadcrumbs', '~> 0.1'
 gem 'devise', '~> 4.2'
 gem 'exception_notification', '~> 2.6'
@@ -15,7 +17,6 @@ gem 'formtastic', '~> 3.1'
 gem 'formtastic-bootstrap', git: 'https://github.com/mjbellantoni/formtastic-bootstrap.git'
 gem 'friendly_id', '~> 5.2'
 gem 'jquery-rails', '~> 4.2'
-gem 'less-rails-bootstrap', '~> 3.3'
 gem 'nokogiri', '~> 1.7'
 gem 'pg', '~> 0.19'
 gem 'progress_bar', '~> 1.1'
@@ -23,6 +24,7 @@ gem 'protected_attributes_continued', '~> 1.2' # TODO: switch to strong paramete
 gem 'rails', '~> 5.0'
 gem 'rails-observers', git: 'https://github.com/rails/rails-observers.git'
 gem 'sanitize', '~> 4.4'
+gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 3.5'
 gem 'sinatra', '~> 2.0.0.beta2', require: false
 gem 'sprockets', '~> 3.7'

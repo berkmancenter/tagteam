@@ -1,10 +1,8 @@
-@import "my_vars.less";
-
 .bookmarklet {
   h1 {
-    font-size: @font-size-h2;
+    font-size: $font-size-h2;
     .fa {
-      font-size: @font-size-h2;
+      font-size: $font-size-h2;
       color: black;
     }
   }

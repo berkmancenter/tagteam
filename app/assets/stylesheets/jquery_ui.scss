@@ -1,5 +1,3 @@
-@import "my_vars.less";
-
 .ui-widget-header {
   border: 0;
 }
@@ -22,7 +20,7 @@
 .ui-dialog {
   .ui-dialog-title {
     float: none;
-    font-size: @font-size-large;
+    font-size: $font-size-large;
     font-weight: normal;
   }
   .ui-dialog-titlebar {
@@ -40,7 +38,7 @@
       border-width: 0;
       background-image: none;
       background-color: transparent;
-      color: @gray-lighter;
+      color: $gray-lighter;
     }
     
     span {
@@ -58,19 +56,19 @@
         display: block;
         font-size: 3em;
         line-height: 30px;
-        font-weight: @headings-font-weight;
+        font-weight: $headings-font-weight;
       }
     }
   }
   .documentation {
     .description {
-      font-size: @font-size-base;
+      font-size: $font-size-base;
       line-height: 2em;
       padding: 2em 3em;
     }
     .fa {
       float: right;
-      font-size: @font-size-h2;
+      font-size: $font-size-h2;
       padding: 0 0.3em 0.5em;
     }
   }
@@ -81,25 +79,25 @@
 }
 
 .ui-autocomplete {
-  border: 1px solid @gray-lightish !important;
-  background: lighten(@brand-primary, 55%) !important;
+  border: 1px solid $gray-lightish !important;
+  background: lighten($brand-primary, 55%) !important;
   box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
 .ui-datepicker {
   padding: 0;
-  background: @gray-lightest;
-  border: 1px solid @gray-lightish;
+  background: $gray-lightest;
+  border: 1px solid $gray-lightish;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
-  border-radius: @border-radius-base;
+  border-radius: $border-radius-base;
 
   th {
     font-weight: 400;
   }
 
   select.ui-datepicker-month, select.ui-datepicker-year {
-    background: @gray-lightest;
-    color: @gray-dark;
+    background: $gray-lightest;
+    color: $gray-dark;
    font-weight: 300;
   }
 }

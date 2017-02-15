@@ -1,24 +1,22 @@
-@import "my_vars.less";
-
 .hub-header {
-  padding: 3*@padding-large-vertical 0;
-  font-size: @font-size-small;
-  border-bottom: @border;
+  padding: 3*$padding-large-vertical 0;
+  font-size: $font-size-small;
+  border-bottom: $border;
 
   h1 {
-    font-size: @font-size-h2;
+    font-size: $font-size-h2;
   }
 }
 
 .export_menu {
   position: relative;
-  top: @padding-large-vertical;
+  top: $padding-large-vertical;
 }
 
 .hub {
   &.detailed {
-    margin-top: @padding-small-vertical;
-    border-top: @border;
+    margin-top: $padding-small-vertical;
+    border-top: $border;
   }
 }
 
@@ -32,7 +30,7 @@ li.hub {
     }
     dd {
       margin-right: 1em;
-      color: @gray;
+      color: $gray;
     }
     > p {
       margin-top: 1.5em;
@@ -41,7 +39,7 @@ li.hub {
 }
 
 .feed-item-grid {
-  border-bottom: 1px solid @gray;
+  border-bottom: 1px solid $gray;
   overflow: hidden;
 }
 
@@ -50,8 +48,8 @@ form.hub {
 }
 
 .feed-item, .hub {
-  border-bottom: @border;
-  padding-bottom: @padding-large-vertical;
+  border-bottom: $border;
+  padding-bottom: $padding-large-vertical;
 
   &.grid-item {
     padding: 0;
@@ -59,10 +57,10 @@ form.hub {
 
     &:first-child {
       .grid-image {
-        border-right: 1px solid @gray;
+        border-right: 1px solid $gray;
       }
       .feed-item-content {
-        border-right: @border;
+        border-right: $border;
       }
     }
 
@@ -73,10 +71,10 @@ form.hub {
     }
 
     .feed-item-content {
-      padding: 2*@padding-large-vertical @padding-base-horizontal;
+      padding: 2*$padding-large-vertical $padding-base-horizontal;
 
       &.equal-height {
-        margin-bottom: -99999 + 2*@padding-large-vertical;
+        margin-bottom: -99999 + 2*$padding-large-vertical;
         padding-bottom: 99999px;
       }
 
@@ -87,84 +85,84 @@ form.hub {
   }
 
   h2 {
-    font-size: @font-size-h3;
+    font-size: $font-size-h3;
   }
   p {
     overflow-x: hidden;
     text-overflow: ellipsis;
 
     a {
-      color: @gray;
+      color: $gray;
     }
   }
   .date {
-    margin-left: @padding-large-horizontal;
+    margin-left: $padding-large-horizontal;
   }
   .fa {
-    color: @gray-lightish;
+    color: $gray-lightish;
   }
   a {
     .fa {
       &:hover {
-        color: @gray;
+        color: $gray;
       }
     }
   }
 }
 
 .feed-item-view, .hub-item-view {
-  border-bottom: @border;
-  height: @pill-height;
+  border-bottom: $border;
+  height: $pill-height;
   overflow-y: hidden;
   white-space: nowrap;
 
   .input-group {
-    margin-top: @pill-height/8;
+    margin-top: $pill-height/8;
   }
 
   .alter-views {
     text-align: right;
     a {
-      line-height: @pill-height;
+      line-height: $pill-height;
       vertical-align: middle;
-      margin-right: @padding-base-horizontal;
+      margin-right: $padding-base-horizontal;
 
       &.active {
         .fa {
-          color: @brand-primary;
+          color: $brand-primary;
         }
       }
     }
   }
 
   .pagination {
-    margin: @pill-height/8 0 0;
+    margin: $pill-height/8 0 0;
   }
 
   .fa {
-    color: @gray-light;
+    color: $gray-light;
   }
 
   &.grid-view {
-    border-color: @gray;
+    border-color: $gray;
   }
 }
 
 #tag_cloud {
-  margin-top: 6*@padding-large-vertical;
+  margin-top: 6*$padding-large-vertical;
 
   li {
     border: 0;
-    margin-bottom: @padding-large-vertical;
+    margin-bottom: $padding-large-vertical;
   }
 
   .tag-count {
-    color: @gray;
+    color: $gray;
   }
 
   .tag-graph-bar {
     height: 6px;
-    background-color: @brand-success;
+    background-color: $brand-success;
   }
 }
 #reset_filter {
@@ -177,7 +175,7 @@ form.hub {
 
   li {
     border: 0;
-    padding: @padding-base-vertical 0 0;
+    padding: $padding-base-vertical 0 0;
 
     &:first-child {
       border: 0;
@@ -191,25 +189,25 @@ form.hub {
 
 .tag_filter {
   .fa {
-    font-size: @font-size-h2;
+    font-size: $font-size-h2;
     line-height: 1.3em;
   }
 
   &.delete {
     .filter-action {
-      color: @brand-danger;
+      color: $brand-danger;
     }
   }
 
   &.modify {
     .filter-action {
-      color: @gray;
+      color: $gray;
     }
   }
 
   &.add {
     .filter-action {
-      color: @brand-success;
+      color: $brand-success;
     }
   }
 }
@@ -223,7 +221,7 @@ form.hub {
 
 .community {
   label {
-    font-size: @font-size-base;
+    font-size: $font-size-base;
     padding-bottom: 0;
   }
 }

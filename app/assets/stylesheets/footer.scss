@@ -1,5 +1,3 @@
-@import "variables.less";
-
 .footer {
   margin: 25px auto 10px;
   width: 940px;
@@ -17,6 +15,6 @@
   }
   a {
     text-decoration: underline;
-    color: @brand-primary;
+    color: $brand-primary;
   }
 }
