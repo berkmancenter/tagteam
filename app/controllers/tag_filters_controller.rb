@@ -83,6 +83,7 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
+    @tag_filter.notify_about_items_modification(@hub, current_user)
     @tag_filter.rollback_and_destroy_async
 
     flash[:notice] = 'Deleting that tag filter.'
