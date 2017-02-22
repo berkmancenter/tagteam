@@ -90,12 +90,14 @@ Rails.application.routes.draw do
       get 'my_bookmark_collections'
       get 'bookmark_collections'
       get 'community'
+      get 'notifications'
       post 'add_roles'
       post 'remove_roles'
       post 'request_rights'
       get 'contact'
       get 'created'
       post 'set_notifications'
+      post 'set_user_notifications'
     end
 
     collection do

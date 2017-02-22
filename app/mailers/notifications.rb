@@ -11,4 +11,14 @@ class Notifications < ActionMailer::Base
     subject = 'Tag update in the ' + @hub.title + ' hub'
     mail(bcc: taggers.collect(&:email), subject: subject)
   end
+
+  def item_change_notification(hub, modified_item, item_users, current_user)
+    @hub = hub
+    @hub_url = hub_url(@hub)
+    @modified_item = modified_item
+    @updated_by = current_user
+
+    subject = 'Item update in the ' + @hub.title + ' hub'
+    mail(bcc: item_users.collect(&:email), subject: subject)
+  end
 end

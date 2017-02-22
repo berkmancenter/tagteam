@@ -66,6 +66,10 @@ class TagFiltersController < ApplicationController
         )
       end
 
+      if @hub.allow_taggers_to_sign_up_for_notifications
+        @tag_filter.notify_about_items_modification(@hub, current_user)
+      end
+
       @tag_filter.apply_async
 
       render plain: %(Added a filter for that tag to "#{@scope.title}"),

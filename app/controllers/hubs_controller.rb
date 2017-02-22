@@ -7,7 +7,7 @@ class HubsController < ApplicationController
 
   access_control do
     allow all, to: [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta, :home, :about]
-    allow logged_in, to: [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls]
+    allow logged_in, to: [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls, :notifications, :set_user_notifications]
     allow :owner, of: :hub, to: [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles, :set_notifications]
     allow :inputter, of: :hub, to: [:add_feed]
     allow :remixer, of: :hub, to: [:custom_republished_feeds]
@@ -36,7 +36,10 @@ class HubsController < ApplicationController
     :retrievals,
     :show,
     :tag_controls,
-    :update
+    :update,
+    :set_notifications,
+    :notifications,
+    :set_user_notifications
   ]
 
   SORT_OPTIONS = {
@@ -90,6 +93,17 @@ class HubsController < ApplicationController
     render layout: request.xhr? ? false : 'tabs'
   end
 
+  def notifications
+    add_breadcrumbs
+
+    @notifications_setup = HubUserNotification.where(
+      user_id: current_user,
+      hub_id: @hub
+    ).first_or_initialize
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
   def add_roles
     if !params[:user_ids].blank? && !params[:roles].blank?
       params[:user_ids].each do |u|
@@ -131,15 +145,31 @@ class HubsController < ApplicationController
   def set_notifications
     messages = []
     @hub.notify_taggers = params[:notify_taggers]
+    @hub.allow_taggers_to_sign_up_for_notifications = params[:allow_taggers_to_sign_up_for_notifications]
 
-    messages << if @hub.save
-                  'Notifications saved successfully.'
-                else
-                  'Something went wrong, try again.'
-                end
+    if @hub.save
+      flash[:notice] = 'Saved successfully.'
+    else
+      flash[:error] = 'Something went wrong, try again.'
+    end
 
-    messages = []
-    flash[:notice] = messages.join(' ')
+    redirect_to request.referer
+  end
+
+  def set_user_notifications
+    notifications_setup = HubUserNotification.where(
+      user_id: current_user,
+      hub_id: @hub
+    ).first_or_initialize
+
+    notifications_setup.notify_about_modifications = params[:notify_about_modifications]
+
+    if @hub.save
+      flash[:notice] = 'Saved successfully.'
+    else
+      flash[:error] = 'Something went wrong, try again.'
+    end
+
     redirect_to request.referer
   end
 

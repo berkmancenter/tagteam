@@ -96,6 +96,15 @@
               <% end %>
             </div>
           </li>
+          
+          <li>
+            <div class="checkbox">
+              <%= label_tag 'allow_taggers_to_sign_up_for_notifications' do %>
+                <%= check_box_tag('allow_taggers_to_sign_up_for_notifications', @hub.allow_taggers_to_sign_up_for_notifications, @hub.allow_taggers_to_sign_up_for_notifications, {id: 'allow_taggers_to_sign_up_for_notifications'}) %>
+                Allow taggers to sign up for notifications of an item modification
+              <% end %>
+            </div>
+          </li>
         </ul>
 
         <%= submit_tag 'Save notifications', class: 'btn btn-primary', id: 'save_notifications' %>
