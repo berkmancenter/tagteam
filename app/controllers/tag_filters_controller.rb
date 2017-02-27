@@ -55,6 +55,21 @@ class TagFiltersController < ApplicationController
       current_user.has_role!(:creator, @tag_filter)
       flash[:notice] = %(Added a filter for that tag to "#{@scope.title}")
 
+      if @hub.notify_taggers && @new_tag
+        @tag_filter.notify_taggers(
+          @tag,
+          @new_tag,
+          @scope,
+          @hub,
+          @hub_feed,
+          current_user
+        )
+      end
+
+      if @hub.allow_taggers_to_sign_up_for_notifications
+        @tag_filter.notify_about_items_modification(@hub, current_user)
+      end
+
       @tag_filter.apply_async
 
       render plain: %(Added a filter for that tag to "#{@scope.title}"),
@@ -68,6 +83,7 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
+    @tag_filter.notify_about_items_modification(@hub, current_user)
     @tag_filter.rollback_and_destroy_async
 
     flash[:notice] = 'Deleting that tag filter.'

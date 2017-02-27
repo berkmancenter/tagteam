@@ -44,6 +44,13 @@
   <div class="nav-pill-arrow"></div>
 </li>
 <% end %>
+<% if current_user && @hub.allow_taggers_to_sign_up_for_notifications %> 
+<li class="<%= 'active' if active == 'notifications' %>">
+  <%= documentation('notifications') %>
+  <%= link_to('Notifications', notifications_hub_path(@hub) )%>
+  <div class="nav-pill-arrow"></div>
+</li>
+<% end %>
 <li class="<%= 'active' if active == 'about' %>">
   <%= documentation('hub_about') %>
   <%= link_to('About', about_hub_path(@hub))%>

@@ -40,6 +40,7 @@ class Hub < ApplicationRecord
   has_many :hub_feeds, dependent: :destroy
   has_many :feeds, through: :hub_feeds
   has_many :republished_feeds, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :hub_user_notifications
 
   # We want to make sure we're always getting the oldest filter first in this
   # list so if we happen to apply all these in order, it's the correct order.

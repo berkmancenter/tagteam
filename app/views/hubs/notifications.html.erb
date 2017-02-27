@@ -1,0 +1,30 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/top_panel' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'notifications' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<div class="nicely-padded notifications">
+  <h1>Notifications</h1>
+  
+  <div class="col-md-6">
+    <%= form_tag(set_user_notifications_hub_path()) do %>
+      <ul class="list-unstyled">
+        <li>
+          <div class="checkbox">
+            <%= label_tag 'notify_about_modifications' do %>
+              <%= check_box_tag('notify_about_modifications', @notifications_setup.notify_about_modifications, @notifications_setup.notify_about_modifications, {id: 'notify_about_modifications'}) %>
+              Notify me when any of my items modifies
+            <% end %>
+          </div>
+        </li>
+      </ul>
+
+      <%= submit_tag 'Save', class: 'btn btn-primary', id: 'save_notifications' %>
+    <% end %>
+  </div>
+</div>
+<% end %>

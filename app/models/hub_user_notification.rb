@@ -1,0 +1,2 @@
+class HubUserNotification < ApplicationRecord
+end
