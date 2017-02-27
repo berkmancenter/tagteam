@@ -103,6 +103,9 @@ class HubsController < ApplicationController
 
   def community
     add_breadcrumbs
+
+    @allowed_to_tag = @hub.users_with_roles.size
+
     render layout: request.xhr? ? false : 'tabs'
   end
 
