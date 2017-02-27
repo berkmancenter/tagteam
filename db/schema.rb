@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210165315) do
+ActiveRecord::Schema.define(version: 20170222162304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,14 +135,26 @@ ActiveRecord::Schema.define(version: 20170210165315) do
     t.index ["hub_id"], name: "index_hub_feeds_on_hub_id", using: :btree
   end
 
+  create_table "hub_user_notifications", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "hub_id"
+    t.boolean  "notify_about_modifications"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["hub_id"], name: "index_hub_user_notifications_on_hub_id", using: :btree
+    t.index ["user_id"], name: "index_hub_user_notifications_on_user_id", using: :btree
+  end
+
   create_table "hubs", force: :cascade do |t|
-    t.string   "title",       limit: 500,  null: false
-    t.string   "description", limit: 2048
-    t.string   "tag_prefix",  limit: 25
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.string   "nickname",    limit: 255
-    t.string   "slug",        limit: 255
+    t.string   "title",                                      limit: 500,  null: false
+    t.string   "description",                                limit: 2048
+    t.string   "tag_prefix",                                 limit: 25
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.string   "nickname",                                   limit: 255
+    t.string   "slug",                                       limit: 255
+    t.boolean  "notify_taggers"
+    t.boolean  "allow_taggers_to_sign_up_for_notifications"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree
