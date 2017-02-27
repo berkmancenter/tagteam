@@ -4,10 +4,6 @@ class FeedItemsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  access_control do
-    allow all
-  end
-
   def controls
     load_hub_feed
     load_feed_item

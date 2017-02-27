@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery
   before_action :init_breadcrumbs
 
@@ -21,6 +22,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   rescue_from Acl9::AccessDenied do |_exception|
     if current_user.blank?
       flash[:notice] = 'Please log in'
@@ -40,5 +43,10 @@ class ApplicationController < ActionController::Base
 
   def init_breadcrumbs
     breadcrumbs.add 'Home', root_path
+  end
+
+  def user_not_authorized
+    flash[:alert] = "You can't access that - sorry!"
+    redirect_to(request.referer || root_path)
   end
 end

@@ -6,27 +6,29 @@ class DocumentationsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  access_control do
-    allow all, to: [:index, :show]
-    allow :superadmin, :documentation_admin
-  end
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_documentation, only: [:show, :edit, :update, :destroy]
+
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   def index
-    @documentation = Documentation.find(:all)
+    @documentation = policy_scope(Documentation)
   end
 
   def show
-    @documentation = Documentation.find(params[:id])
     render layout: !request.xhr?
   end
 
   def new
     @documentation = Documentation.new
+    authorize @documentation
     render layout: !request.xhr?
   end
 
   def create
     @documentation = Documentation.new
+    authorize @documentation
     @documentation.attributes = params[:documentation]
     respond_to do |format|
       if @documentation.save
@@ -42,12 +44,10 @@ class DocumentationsController < ApplicationController
   end
 
   def edit
-    @documentation = Documentation.find(params[:id])
     render layout: !request.xhr?
   end
 
   def update
-    @documentation = Documentation.find(params[:id])
     @documentation.attributes = params[:documentation]
     respond_to do |format|
       if @documentation.save
@@ -62,7 +62,6 @@ class DocumentationsController < ApplicationController
   end
 
   def destroy
-    @documentation = Documentation.find(params[:id])
     @documentation.destroy
     flash[:notice] = 'Deleted that bit of documentation'
     respond_to do |format|
@@ -70,5 +69,12 @@ class DocumentationsController < ApplicationController
         redirect_to action: :index
       end
     end
+  end
+
+  private
+
+  def find_documentation
+    @documentation = Documentation.find(params[:id])
+    authorize @documentation
   end
 end

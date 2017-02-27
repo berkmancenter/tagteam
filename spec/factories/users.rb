@@ -9,5 +9,13 @@ FactoryGirl.define do
     factory :confirmed_user do
       after(:create, &:confirm)
     end
+
+    trait :superadmin do
+      after(:create) { |user| user.has_role!(:superadmin) }
+    end
+
+    trait :documentation_admin do
+      after(:create) { |user| user.has_role!(:documentation_admin) }
+    end
   end
 end

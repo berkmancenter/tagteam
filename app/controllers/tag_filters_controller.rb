@@ -1,17 +1,10 @@
 # frozen_string_literal: true
 class TagFiltersController < ApplicationController
+  before_action :authenticate_user!, except: [:index]
   before_action :load_scope
   before_action :load_tag_filter, except: [:index, :new, :create]
 
-  access_control do
-    allow all, to: [:index]
-    allow :superadmin
-    allow :owner, of: :hub
-    allow :hub_tag_filterer, to: [:new, :create]
-    allow :hub_feed_tag_filterer, to: [:new, :create]
-    allow :hub_feed_item_tag_filterer, to: [:new, :create]
-    allow :owner, of: :tag_filter, to: [:destroy]
-  end
+  after_action :verify_authorized, except: :index
 
   def index
     # Need to be careful and use #in_hub here because feed items can exist in
@@ -29,9 +22,11 @@ class TagFiltersController < ApplicationController
 
   def new
     @tag_filter = TagFilter.new(hub: @hub, scope: @scope)
+    authorize @tag_filter
   end
 
   def create
+    authorize TagFilter
     filter_type = params[:filter_type].constantize
     unless params[:tag_id].blank?
       @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
@@ -106,7 +101,7 @@ class TagFiltersController < ApplicationController
   def load_scope
     # This controller gets used in different contexts, so we need to figure out
     # what context we're in and instantiate variables appropriately.
-    @hub = Hub.find_by!(slug: params[:hub_id]) if params[:hub_id]
+    @hub = Hub.find(params[:hub_id]) if params[:hub_id]
     @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
     @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
 
@@ -127,5 +122,6 @@ class TagFiltersController < ApplicationController
 
   def load_tag_filter
     @tag_filter = TagFilter.find(params[:id])
+    authorize @tag_filter
   end
 end

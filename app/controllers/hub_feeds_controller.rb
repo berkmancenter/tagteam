@@ -5,22 +5,17 @@ class HubFeedsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  access_control do
-    allow all, to: [:index, :show, :more_details, :autocomplete, :controls]
-    allow :owner, of: :hub
-    allow :bookmarker, of: :hub, to: [:new, :create]
-    allow :owner, of: :hub_feed, to: [:edit, :update, :destroy, :import, :reschedule_immediately]
-    allow :superadmin
-  end
+  before_action :authenticate_user!, except: [:autocomplete, :controls, :index, :more_details, :show]
+  before_action :find_hub
+  before_action :find_hub_feed, except: [:autocomplete, :create, :index, :new]
+
+  after_action :verify_authorized, except: [:autocomplete, :controls, :index, :more_details, :show]
 
   def controls
-    load_hub_feed
-    load_hub
     render layout: !request.xhr?
   end
 
   def autocomplete
-    load_hub
     hub_id = @hub.id
     @search = HubFeed.search do
       with :hub_ids, hub_id
@@ -38,15 +33,11 @@ class HubFeedsController < ApplicationController
 
   # Accepts an import upload in Connotea RDF and delicious bookmark export format. Creates a Resque job that does the actual importing, as it's pretty slow on larger collections - around 400 per minute or so.
   def import
-    load_hub_feed
-    load_hub
     add_breadcrumbs
     render layout: 'tabs'
   end
 
   def import_items
-    load_hub_feed
-    load_hub
     if params[:type].blank? || params[:import_file].blank?
       flash[:notice] = 'Please select a file type and attach a file for importing.'
     else
@@ -61,14 +52,10 @@ class HubFeedsController < ApplicationController
   end
 
   def more_details
-    load_hub_feed
-    load_hub
     render layout: !request.xhr?
   end
 
   def reschedule_immediately
-    load_hub_feed
-    load_hub
     feed = @hub_feed.feed
     feed.next_scheduled_retrieval = Time.now
     feed.save
@@ -80,7 +67,6 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    load_hub
     @hub_feeds = @hub.hub_feeds.rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
     add_breadcrumbs
     respond_to do |format|
@@ -91,26 +77,24 @@ class HubFeedsController < ApplicationController
   end
 
   def show
-    load_hub_feed
-    load_hub
     add_breadcrumbs
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
     render layout: 'tabs'
   end
 
   def new
-    load_hub
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
+    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
   end
 
   def create
-    load_hub
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
+    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
 
     actual_feed = Feed.new
@@ -136,8 +120,6 @@ class HubFeedsController < ApplicationController
   end
 
   def update
-    load_hub_feed
-    load_hub
     @hub_feed.attributes = params[:hub_feed]
     respond_to do |format|
       if @hub_feed.save
@@ -152,14 +134,11 @@ class HubFeedsController < ApplicationController
   end
 
   def edit
-    load_hub_feed
-    load_hub
+    authorize @hub_feed
     add_breadcrumbs
   end
 
   def destroy
-    load_hub_feed
-    load_hub
     @hub_feed.destroy
     flash[:notice] = 'Removed it. It\'ll take a few minutes depending on how many items were in this feed.'
     redirect_to(hub_path(@hub))
@@ -170,16 +149,13 @@ class HubFeedsController < ApplicationController
 
   private
 
-  def load_hub_feed
-    @hub_feed = HubFeed.find_by(id: params[:id])
+  def find_hub_feed
+    @hub_feed = HubFeed.find(params[:id])
+    authorize @hub_feed
   end
 
-  def load_hub
-    @hub = if @hub_feed.blank?
-             Hub.find_by!(slug: params[:hub_id])
-           else
-             @hub_feed.hub
-           end
+  def find_hub
+    @hub = @hub_feed.blank? ? Hub.find(params[:hub_id]) : @hub_feed.hub
   end
 
   def add_breadcrumbs

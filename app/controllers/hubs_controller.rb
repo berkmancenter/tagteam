@@ -5,14 +5,26 @@ class HubsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  access_control do
-    allow all, to: [:index, :list, :items, :show, :search, :by_date, :retrievals, :item_search, :bookmark_collections, :all_items, :contact, :request_rights, :meta, :home, :about]
-    allow logged_in, to: [:new, :create, :my, :my_bookmark_collections, :background_activity, :tag_controls, :notifications, :set_user_notifications]
-    allow :owner, of: :hub, to: [:edit, :update, :destroy, :add_feed, :my_bookmark_collections, :custom_republished_feeds, :community, :add_roles, :remove_roles, :set_notifications]
-    allow :inputter, of: :hub, to: [:add_feed]
-    allow :remixer, of: :hub, to: [:custom_republished_feeds]
-    allow :superadmin
-  end
+  before_action :authenticate_user!, except: [
+    :about,
+    :all_items,
+    :bookmark_collections,
+    :by_date,
+    :contact,
+    :home,
+    :index,
+    :item_search,
+    :items,
+    :list,
+    :meta,
+    :request_rights,
+    :retrievals,
+    :search,
+    :show
+  ]
+
+  after_action :verify_authorized, except: [:index, :home]
+  after_action :verify_policy_scoped, only: [:index, :home]
 
   before_action :sanitize_params, only: :index
   before_action :find_hub, only: [
@@ -63,6 +75,7 @@ class HubsController < ApplicationController
   end
 
   def list
+    authorize Hub
     @hubs = Hub.paginate(page: params[:p] || 1, per_page: 25).order('title ASC')
   end
 
@@ -411,7 +424,7 @@ class HubsController < ApplicationController
 
   def home
     @my_hubs = current_user.my(Hub) if user_signed_in?
-    @hubs = Hub.paginate(page: params[:page], per_page: 5).order('title ASC') # get_per_page)
+    @hubs = policy_scope(Hub).paginate(page: params[:page], per_page: 5).order('title ASC') # get_per_page)
     respond_to do |format|
       format.html { render layout: !request.xhr? }
       format.json { render_for_api :default, json: @hubs }
@@ -424,7 +437,7 @@ class HubsController < ApplicationController
     breadcrumbs.add 'All hubs', hubs_path
     sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
-    @hubs = SORT_OPTIONS[sort].call(Hub.paginate(page: params[:page], per_page: 5))
+    @hubs = SORT_OPTIONS[sort].call(policy_scope(Hub).paginate(page: params[:page], per_page: 5))
     @hubs = @hubs.reverse_order if order == 'desc'
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
@@ -448,10 +461,12 @@ class HubsController < ApplicationController
 
   def new
     @hub = Hub.new
+    authorize @hub
   end
 
   # A list of the current users' hubs, used mostly by the bookmarklet.
   def my
+    authorize Hub
     @hubs = current_user.my(Hub)
     breadcrumbs.add 'My hubs', my_hubs_path
     respond_to do |format|
@@ -479,6 +494,7 @@ class HubsController < ApplicationController
 
   def create
     @hub = Hub.new
+    authorize @hub
     @hub.attributes = params[:hub]
     add_breadcrumbs
     respond_to do |format|
@@ -563,6 +579,8 @@ class HubsController < ApplicationController
   end
 
   def search
+    authorize Hub
+
     @search = Hub.search do
       paginate page: params[:page], per_page: get_per_page
       fulltext params[:q] unless params[:q].blank?
@@ -585,5 +603,6 @@ class HubsController < ApplicationController
   
   def find_hub
     @hub = Hub.find(params[:id])
+    authorize @hub
   end
 end

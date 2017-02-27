@@ -1,7 +1,10 @@
+require: rubocop-rspec
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
 Metrics/LineLength:
   Max: 999
 Rails:
   Enabled: true
-require: rubocop-rspec
 AllCops:
   TargetRubyVersion: 2.3

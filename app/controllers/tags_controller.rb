@@ -18,10 +18,6 @@ class TagsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  access_control do
-    allow all
-  end
-
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
     hub_id = @hub.id

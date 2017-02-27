@@ -1,21 +1,16 @@
 # frozen_string_literal: true
 class RepublishedFeedsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show, :items, :inputs, :removals, :more_details]
   before_action :load_republished_feed, except: [:new, :create, :index]
   before_action :load_hub, only: [:new, :create, :index]
   before_action :register_breadcrumb
+
+  after_action :verify_authorized, except: :index
 
   # Beef up cache rules.
   caches_action :index, :show, :items, :inputs, :removals, :more_details, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
-
-  access_control do
-    allow all, to: [:index, :show, :items, :inputs, :removals, :more_details]
-    allow :owner, of: :hub
-    allow :remixer, of: :hub, to: [:new, :create]
-    allow :owner, of: :republished_feed, to: [:edit, :update, :destroy]
-    allow :superadmin
-  end
 
   def more_details
     render layout: !request.xhr?
@@ -75,10 +70,13 @@ class RepublishedFeedsController < ApplicationController
 
   def new
     @republished_feed = RepublishedFeed.new(hub_id: @hub.id)
+    authorize @republished_feed
   end
 
   def create
+    authorize RepublishedFeed
     @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, params)
+
     respond_to do |format|
       if @republished_feed
         flash[:notice] = 'Created a new remix. You should switch to the "inputs" tab and add items for publishing.'
@@ -121,7 +119,7 @@ class RepublishedFeedsController < ApplicationController
 
   def load_hub
     hub_id = params[:republished_feed].blank? ? params[:hub_id] : params[:republished_feed][:hub_id]
-    @hub = Hub.find_by!(slug: hub_id)
+    @hub = Hub.find(hub_id)
   end
 
   def load_republished_feed
@@ -130,6 +128,8 @@ class RepublishedFeedsController < ApplicationController
                         else
                           RepublishedFeed.find_by!(url_key: params[:url_key])
                         end
+    authorize @republished_feed
+
     @hub = @republished_feed.hub
   end
 
