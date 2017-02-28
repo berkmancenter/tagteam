@@ -212,4 +212,9 @@ class TagFilter < ApplicationRecord
       end
     end
   end
+
+  # Fix Pundit policy lookup for STI classes that inherit from TagFilter
+  def self.policy_class
+    TagFilterPolicy
+  end
 end
