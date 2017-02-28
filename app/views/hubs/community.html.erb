@@ -9,6 +9,16 @@
 <% content_for :tab_content do %>
 <div class="nicely-padded community">
   <h1>Community</h1>
+
+  <div class="row">
+    <h2>
+      There <%= @allowed_to_tag == 1 ? 'is' : 'are' %>
+      <span class="badge"><%= @allowed_to_tag %></span>
+      <%= 'person'.pluralize(@allowed_to_tag) %> currently authorized to tag
+      for this hub.
+    </h2>
+  </div>
+
   <div class="row">
   <% if current_user && current_user.is?(:owner, @hub) %> 
       <div class="grant_roles col-md-6">
