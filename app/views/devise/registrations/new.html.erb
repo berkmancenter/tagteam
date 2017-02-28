@@ -30,6 +30,17 @@
     </div>
 
     <div class="form-group">
+      <label>Terms of Service</label>
+      <br>
+        <%= f.label :terms_of_service, style: 'font-weight: 300' do %>
+          <%= f.check_box :terms_of_service %>
+          I have read and agree to the
+          <a href="https://cyber.harvard.edu/hoap/TagTeam_terms_of_service" target="_blank">TagTeam Terms of Service</a>.
+         <% end %>
+      </label>
+    </div>
+
+    <div class="form-group">
       <%= f.submit "Sign up", class: "btn btn-success btn-block" %>
     </div>
   <% end %>

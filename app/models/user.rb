@@ -8,14 +8,16 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :username, :email, :password, :password_confirmation, :remember_me, :login
+  # Virtual attribute for authenticating by either username or email
   attr_accessor :login
+
   acts_as_authorization_subject association_name: :roles, join_table_name: :roles_users
   validates :username, uniqueness: true
 
   # This should be a url friendly username because it's used to see the user's tags
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
+
+  validates :terms_of_service, acceptance: true
 
   searchable do
     text :first_name, :last_name, :email, :url, :username
@@ -88,11 +90,13 @@ class User < ApplicationRecord
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
-    # TODO: fix assignment where conditional should be
+
     if login = conditions.delete(:login)
-      where(conditions).where(['lower(username) = :value OR lower(email) = :value', { value: login.downcase }]).first
-    else
-      where(conditions).first
+      where(conditions.to_h).find_by(
+        ['lower(username) = :value OR lower(email) = :value', { value: login.downcase }]
+      )
+    elsif conditions.key?(:username) || conditions.key?(:email)
+      find_by(conditions.to_h)
     end
   end
 

@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
 
   def configure_devise_permitted_parameters
     actions = [:account_update, :sign_in, :sign_up]
-    keys = [:username, :email]
+    keys = [:email, :terms_of_service, :username]
 
     actions.each { |action| devise_parameter_sanitizer.permit(action, keys: keys) }
   end
