@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :init_breadcrumbs
 
   layout :layout_by_resource
@@ -40,5 +41,12 @@ class ApplicationController < ActionController::Base
 
   def init_breadcrumbs
     breadcrumbs.add 'Home', root_path
+  end
+
+  def configure_devise_permitted_parameters
+    actions = [:account_update, :sign_in, :sign_up]
+    keys = [:username, :email]
+
+    actions.each { |action| devise_parameter_sanitizer.permit(action, keys: keys) }
   end
 end
