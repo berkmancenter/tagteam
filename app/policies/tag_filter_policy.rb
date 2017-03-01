@@ -15,6 +15,7 @@ class TagFilterPolicy < ApplicationPolicy
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||
-      user.has_role?(:owner, record)
+      user.has_role?(:owner, record) ||
+      user.has_role?(:hub_tag_filterer, record.hub)
   end
 end
