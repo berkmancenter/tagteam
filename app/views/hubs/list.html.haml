@@ -1,0 +1,9 @@
+#hub_list
+  %h2 Hubs
+  - unless current_user.blank?
+    = link_to(raw('<span class="inline ui-silk ui-silk-add"></span> New hub'), new_hub_path, :class => 'new_object')
+  %p
+  #masonry.search_results
+    = render :partial => 'shared/line_items/hub', :collection => @hubs
+  %nav#page-nav{:style => "display: none;"}
+    %a{:href => "?p=2"}

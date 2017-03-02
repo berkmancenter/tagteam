@@ -1,0 +1,21 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'about' }
+- content_for :tab_content do
+  #about.nicely-padded
+    %h1 About this hub
+    .metadata
+      %p.description
+        = raw(@hub.description)
+      %dl
+        - unless @hub.tag_prefix.blank?
+          %dt Prefix all tags emitted from the hub with
+          %dd= @hub.tag_prefix
+        %dt Owners:
+        %dd= @hub.owners.collect{|o| o.username}.join(', ')
+    - if current_user && current_user.is?(:superadmin)
+      = link_to 'Re-create all tags for this hub',
+        recalc_all_tags_hub_path(@hub), method: :post,
+        class: 'btn btn-warning',
+        confirm: 'Are you sure? This should be needed in very rare circumstances'

@@ -1,0 +1,10 @@
+- if @republished_feeds.size > 0
+  %h3 Remix feeds
+  %ul
+    = render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
+- else
+  .empty-message
+    = "None yet. You should create a remix feed from the \"remixes\" tab on the hub page."
+.republished_feed
+  = link_to "Create new remix feed", hub_republished_feed_path(@hub, 0),
+    target: '_blank', data_id: 0, class: 'btn btn-primary'

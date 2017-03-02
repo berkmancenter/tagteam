@@ -1,0 +1,14 @@
+%li{:class => "tag_filter hub_tag_filter #{filter_css_class(hub_tag_filter)}"}
+  .pull-right
+    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_tag_filter))
+      = link_to hub_tag_filter_path(hub_tag_filter.hub, hub_tag_filter),
+        method: :delete,
+        title: 'Remove this filter',
+        confirm: 'Are you sure you want to remove this filter?' do
+        = fa_icon 'times'
+  %span.filter-action= filter_description(hub_tag_filter)
+  tag
+  \#{tag_display(hub_tag_filter.tag, hub: hub_tag_filter.hub)}
+  - if hub_tag_filter.class == ModifyTagFilter
+    %span.filter-action to
+    = tag_display(hub_tag_filter.new_tag, hub: hub_tag_filter.hub)

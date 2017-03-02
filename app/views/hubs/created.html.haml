@@ -1,0 +1,19 @@
+.text-center
+  %h1.title= fa_icon 'bolt', text: 'TagTeam'
+.row
+  .col-md-offset-3.col-md-6.text-center
+    %h3 Congratulations! You've started your hub:
+    %h2= @hub
+    %hr/
+    %h3 You can visit your hub here:
+    %h2= link_to hub_url(@hub), hub_url(@hub)
+    %hr/
+    %p
+      You can use a bookmarklet to add pages directly to your bookmark collections.
+      Drag the
+      %em Add to TagTeam
+      button below to your browser's bookmarks
+      bar to get started.
+    .row.text-center= render partial: 'shared/bookmarklet_button'
+    %hr/
+    = link_to 'Go to my hub', hub_path(@hub), class: 'btn btn-primary btn-lg'

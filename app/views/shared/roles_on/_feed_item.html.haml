@@ -1,0 +1,2 @@
+- unless feed_item.authorizable.hubs.blank?
+  = render partial: 'feed_items/list_item', object: feed_item.authorizable, as: :feed_item

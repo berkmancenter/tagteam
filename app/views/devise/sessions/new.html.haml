@@ -1,0 +1,20 @@
+.center-block.devise-form
+  %h2 Sign in
+  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    .form-group
+      = f.label :login
+      %br/
+      = f.text_field :login, autofocus: true, class: "form-control"
+    .form-group
+      = f.label :password
+      %br/
+      = f.password_field :password, autocomplete: "off", class: "form-control"
+    - if devise_mapping.rememberable?
+      .checkbox
+        = f.label :remember_me do
+          = f.check_box :remember_me
+          Remember me
+    .form-group
+      = f.submit "Log in", class: "btn btn-primary btn-block"
+  %hr/
+  = render "devise/shared/links"

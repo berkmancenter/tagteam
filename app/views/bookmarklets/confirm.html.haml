@@ -1,0 +1,13 @@
+%h1 Item added
+%p
+  We successfully added
+  %strong= @feed_item.title
+  to your TagTeam bookmark collection.
+%p
+  %a.btn.btn-primary{:href => "javascript:window.close();"} Close this window
+:javascript
+  $(document).on('keyup', function(e) {
+      if (e.keyCode === 13) {
+        window.close();
+      }
+  });

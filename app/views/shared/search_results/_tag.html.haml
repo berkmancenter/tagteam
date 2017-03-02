@@ -1,0 +1,5 @@
+.search_result{:id => "tag#{tag.id}"}
+  .grid_2.alpha
+    %span.ui-silk.inline.ui-silk-add.add_item_source{:id => "Tag-#{tag.id}", :title => "add this tag as an input source"}
+    Tag:
+  .grid_6.omega= tag_display(tag, :hub => @hub, :id => "Tag-#{tag.id}-link")

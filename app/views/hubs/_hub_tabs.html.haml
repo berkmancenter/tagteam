@@ -1,0 +1,9 @@
+%li{:class => "#{'active' if active == 'all'}"}
+  = documentation('hubs-all-hubs')
+  = link_to 'All hubs', hubs_path
+  .nav-pill-arrow
+%li{:class => "#{'active' if active == 'mine'} last-of-section"}
+  = documentation('hubs-my-hubs')
+  = link_to 'My hubs', my_hubs_path
+  .nav-pill-arrow
+%li.search-pill= render partial: 'hub_search_form'

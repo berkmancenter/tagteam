@@ -1,0 +1,7 @@
+%h1
+  Edit the feed: "#{@hub_feed}"
+- unless @hub_feed.feed.is_bookmarking_feed?
+  %dl.metadata
+    %dt Feed URL:
+    %dd= link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank')
+= render :partial => 'shared/forms/hub_feed'

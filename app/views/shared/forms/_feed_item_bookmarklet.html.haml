@@ -1,0 +1,37 @@
+= semantic_form_for(@feed_item, :url => bookmarklets_add_item_url, :method => :post) do |f|
+  .tab-content
+    #basics.tab-pane.active
+      = f.inputs do
+        .row
+          .col-xs-6
+            = f.input :hub_id, collection: current_user.my_bookmarkable_hubs,
+              label: 'Add to hub', required: true, include_blank: false,
+              class: 'form-control'
+          .col-xs-6
+            = f.input :bookmark_collection_id, as: :select, required: true, label: 'To collection', class: 'form-control'
+        = f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags.'
+        .feed-item-existing-tags
+        = f.input :title, required: true
+        = f.input :url, label: 'URL', required: true
+        = f.input :description, as: :text, hint: "Select text on the page you're bookmarking to auto-populate the description field"
+        .row
+          .col-xs-3
+            = f.input :date_published, as: :string, label: "Date added", hint: 'yyyy-mm-dd format', input_html: {class: :datepicker}
+      = f.actions do
+        .text-center
+          = f.action :submit, label: 'Add to TagTeam', as: :button, button_html: { class: 'btn btn-primary' }
+    #advanced.tab-pane
+      = f.inputs do
+        = f.input :authors
+        = f.input :contributors
+        = f.input :rights
+        .row
+          .col-xs-3
+            = f.input :last_updated, as: :string, hint: 'yyyy-mm-dd format', input_html: {class: :datepicker}
+      = f.actions do
+        .text-center
+          = f.action :submit, label: 'Add to TagTeam', as: :button, button_html: { class: 'btn btn-primary' }
+:javascript
+  $(document).ready(function(){
+    $.initBookmarklet(#{@feed_item.id || -1});
+  });

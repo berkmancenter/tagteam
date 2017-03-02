@@ -1,0 +1,20 @@
+= @params[:contact][:name]
+(#{@params[:contact][:email]}) has sent
+you a message about your hub: "#{@hub}" at:
+\#{@hub_url}
+
+Reason: #{@params[:contact][:reason]}
+- unless @params[:contact][:rights].length == 1
+  Rights they are requesting:#{@params[:contact][:rights].join("\n")}
+  
+  Please go the the "community" tab within your hub and grant them whatever
+  rights you feel appropriate.
+  - u = User.find_by_email(@params[:contact][:email])
+  - if u
+    They already have an account under the username "#{u.username}", so no need to ask them to set one up.
+  - else
+    They don't have an account yet under this email address, so you should ask
+    them to create one first.
+Message:
+= @params[:contact][:message]
+\-- TagTeam

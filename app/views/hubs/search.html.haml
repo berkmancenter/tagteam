@@ -1,0 +1,19 @@
+- content_for :top_panel do
+  %h2.page-title
+    Search TagTeam hubs for "
+    %em>= params[:q]
+    " –
+    \#{@search.total} #{'result'.pluralize(@search.total)}
+- content_for :tabs do
+  = render partial: 'hub_tabs', locals: { active: 'all' }
+- content_for :tab_content do
+  .row.nicely-padded
+    %h1 Search
+    = render partial: 'hub_search_form'
+    - if @search.blank? || @search.results.length == 0
+      %h3 Nothing. Please try a different term.
+    - else
+      = render partial: 'shared/paginate', object: @search.results, as: :results
+      %ul.list-unstyled
+        = render partial: 'hubs/list_item_extended', collection: @search.results, as: :hub
+      = render partial: 'shared/paginate', object: @search.results, as: :results

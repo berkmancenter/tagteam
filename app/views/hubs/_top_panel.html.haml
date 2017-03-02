@@ -1,0 +1,23 @@
+.col-sm-10
+  %h1
+    = @hub.title
+    %span.actions
+      - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:superadmin))
+        = link_to edit_hub_path(@hub), title: 'Edit this hub' do
+          = fa_icon 'pencil'
+        = link_to hub_path(@hub), method: :delete, confirm: 'Are you sure you want to delete this hub?', title: 'Delete this hub' do
+          = fa_icon 'remove'
+.col-sm-2
+  .export_menu.row.text-center
+    .col-xs-4
+      = link_to items_hub_path(@hub, format: :rss), title: "An RSS feed of all items in this hub, with tag filters applied." do
+        = image_tag image_path('protocol_rss.png')
+        %p RSS
+    .col-xs-4
+      = link_to items_hub_path(@hub, format: :atom), title: "An Atom feed of all items in this hub, with tag filters applied." do
+        = image_tag image_path('protocol_atom.png')
+        %p ATOM
+    .col-xs-4
+      = link_to items_hub_path(@hub, format: :json, callback: 'callback'), title: "jsonp of all items in this hub, with tag filters applied." do
+        = image_tag image_path('protocol_json.png')
+        %p JSON

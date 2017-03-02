@@ -1,0 +1,20 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'history' }
+- content_for :tab_content do
+  .feed_retrievals.nicely-padded
+    %h1 Update history
+    - if @feed_retrievals.blank?
+      %h2 None found.
+    - else
+      = render partial: 'shared/paginate', locals: { results: @feed_retrievals.results }
+      %table.table.table-condensed
+        %tr
+          %th Feed
+          %th Time
+          %th New items
+          %th Changed items
+        = render partial: 'feed_retrievals/list_item', as: :feed_retrieval,
+          collection: @feed_retrievals.results, locals: { show_feed: true }
+      = render partial: 'shared/paginate', locals: { results: @feed_retrievals.results }

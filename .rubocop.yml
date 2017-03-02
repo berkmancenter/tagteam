@@ -3,7 +3,7 @@ Metrics/BlockLength:
   Exclude:
     - '**/*_spec.rb'
 Metrics/LineLength:
-  Max: 999
+  Enabled: false
 Rails:
   Enabled: true
 AllCops:

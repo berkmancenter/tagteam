@@ -1,0 +1,16 @@
+#users
+  %h3 Users
+  #user_list
+    = render partial: 'shared/paginate', object: @users, as: :results
+    %table.table
+      %thead
+        %tr
+          %th  
+          %th User
+          %th Owns
+          %th App-wide rights
+          %th Confirmed?
+          %th Locked?
+      %tbody
+        = render partial: 'shared/line_items/user', collection: @users
+    = render partial: 'shared/paginate', object: @users, as: :results

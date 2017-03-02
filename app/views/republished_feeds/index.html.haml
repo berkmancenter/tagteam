@@ -1,0 +1,23 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'remixes' }
+- content_for :tab_content do
+  .republished_feeds.nicely-padded
+    %h1
+      - if current_user && current_user.is?([:owner, :remixer], @hub)
+        .pull-right
+          = link_to new_hub_republished_feed_path(@hub), class: "new_object btn btn-success" do
+            = fa_icon 'plus-circle', text: 'New remix feed'
+      Remix feeds
+    - if @republished_feeds.empty?
+      %p This hub currently has no republished feeds.
+    %div{:id => "republished_feed_list_#{@hub.id}"}
+      .text-right
+        = render partial: 'shared/paginate', object: @republished_feeds, as: :results
+      %ul.republished_feeds.list-unstyled.nicely-padded
+        = render partial: 'republished_feeds/list_item',
+          collection: @republished_feeds,
+          as: :republished_feed
+      .text-center
+        = render partial: 'shared/paginate', object: @republished_feeds, as: :results

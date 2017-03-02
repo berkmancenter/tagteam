@@ -1,0 +1,77 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'community' }
+- content_for :tab_content do
+  .nicely-padded.community
+    %h1 Community
+    .row
+      %h2
+        There #{@allowed_to_tag == 1 ? 'is' : 'are'}
+        %span.badge= @allowed_to_tag
+        = 'person'.pluralize(@allowed_to_tag)
+        currently authorized to tag
+        for this hub.
+    .row
+      - if current_user && current_user.is?(:owner, @hub)
+        .grant_roles.col-md-6
+          = form_tag(add_roles_hub_path(@hub)) do
+            %h3 Assign roles
+            %ul.list-unstyled
+              - Hub::DELEGATABLE_ROLES_FOR_FORMS.each do|r|
+                %li.role
+                  .checkbox
+                    = label_tag "role_#{r[0]}" do
+                      = check_box_tag('roles[]', r[0], false, {id: "role_#{r[0]}"})
+                      = r[1]
+                      %span.help-block
+                        = Hub::DELEGATABLE_ROLES_HASH[r[0]][:description]
+            .form-group
+              %label Users
+              = text_field_tag :find_user_autocomplete, '', size: 40, placeholder: "Username or email address", class: 'form-control'
+            #user_id_container
+            = submit_tag('Grant roles', class: 'btn btn-primary', id: 'add_roles')
+            :javascript
+              $(document).ready(function(){
+                $.observeAutocomplete($.rootPath() + 'users/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container', 'search_select user');
+                $.observeSearchSelectControl();
+              });
+      .remove_roles.col-md-6
+        %h3 Remove roles
+        = form_tag(remove_roles_hub_path(@hub)) do
+          %table.table.table-condensed
+            %tr
+              %th Username
+              %th Roles
+            = render partial: 'hubs/user', as: :hub_user, collection: @hub.users_with_roles
+          %p What should we do with items managed by these users?
+          .form-inline
+            .form-group
+              .radio
+                = label_tag 'revocation_reassign' do
+                  = radio_button_tag :revocation_action, 'reassign', true, id: "revocation_reassign"
+                  Reassign them to
+                = select_tag :reassign_to,
+                  options_from_collection_for_select(@hub.owners, 'id','username'),
+                  class: 'form-control input-sm'
+          .form-group
+            .radio
+              = label_tag 'revocation_delete' do
+                = radio_button_tag :revocation_action, 'delete', false, id: "revocation_delete"
+                Delete them permanently
+          = submit_tag 'Remove roles', class: 'btn btn-primary', id: 'remove_roles'
+      .notifications.col-md-6
+        %h3 Notifications
+        = form_tag(set_notifications_hub_path(@hub)) do
+          %ul.list-unstyled
+            %li
+              .checkbox
+                = label_tag 'notify_taggers' do
+                  = check_box_tag('notify_taggers', @hub.notify_taggers, @hub.notify_taggers, {id: 'notify_taggers'})
+                  Notify taggers when their tags modify
+            %li
+              .checkbox
+                = label_tag 'allow_taggers_to_sign_up_for_notifications' do
+                  = check_box_tag('allow_taggers_to_sign_up_for_notifications', @hub.allow_taggers_to_sign_up_for_notifications, @hub.allow_taggers_to_sign_up_for_notifications, {id: 'allow_taggers_to_sign_up_for_notifications'})
+                  Allow taggers to sign up for notifications of an item modification
+          = submit_tag 'Save notifications', class: 'btn btn-primary', id: 'save_notifications'

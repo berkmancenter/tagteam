@@ -1,0 +1,11 @@
+= semantic_form_for([@hub,@republished_feed]) do |f|
+  = f.inputs do
+    = f.input :hub_id, :as => :hidden
+    = f.input :title
+    = f.input :url_key, :hint => 'This is the unique identifier that\'s used to create the URL for this remix, in the form of "/remix/<url_key>". It should be lowercase and contain letters, digits, and the hyphen only.' + ((@republished_feed.new_record?) ? '' : ' If you change this after users have subscribed to this remix feed, you WILL break URLs. Please be sure.')
+    = f.input :description, :as => :text, input_html: { rows: 4 }
+    = f.input :limit, :hint => 'How many items to show in this feed?'
+  = f.actions do
+    = f.action :submit,
+      label: f.object.new_record? ? 'Create new remix feed' : 'Update this remix feed',
+      button_html: { class: 'btn btn-primary' }

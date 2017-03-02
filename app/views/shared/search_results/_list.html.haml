@@ -1,0 +1,8 @@
+- list.results.each do|r|
+  - if r.class == Feed
+    = render :partial => 'shared/search_results/feed', :object => r
+  - if r.class == FeedItem
+    = render :partial => 'shared/search_results/feed_item', :object => r
+  - if r.class == ActsAsTaggableOn::Tag
+    = render :partial => 'shared/search_results/tag', :object => r
+  .clear

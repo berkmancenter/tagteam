@@ -1,0 +1,47 @@
+- content_for :top_panel do
+  .col-sm-12
+    %h1= @feed_item.title
+    %h4
+      = items_feed_titles(@feed_item, @hub)
+      = @feed_item.created_at.strftime('%F')
+- content_for :tabs do
+  = render partial: 'feed_items/tabs', locals: { active: 'filters' }
+- content_for :tab_content do
+  .nicely-padded
+    - tag_list = @feed_item.all_tags_list_on(@hub.tagging_key).join(', ')
+    - if current_user && current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub)
+      %h1 Add filters on this item
+      %ul.tag_filter_controls.list-unstyled
+        %li
+          = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
+            data_hub_id: @hub.id,
+            data_type: 'AddTagFilter',
+            tag_list: tag_list,
+            class: 'add_filter_control hub_feed_item_tag_filter btn btn-success' do
+            = fa_icon 'plus-circle', text: 'Add a tag to this item'
+        %li
+          = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
+            data_hub_id: @hub.id,
+            data_type: 'DeleteTagFilter',
+            tag_list: tag_list,
+            class: 'add_filter_control hub_feed_item_tag_filter btn btn-danger' do
+            = fa_icon 'minus-circle', text: 'Remove a tag from this item'
+        %li
+          = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
+            data_hub_id: @hub.id,
+            data_type: 'ModifyTagFilter',
+            tag_list: tag_list,
+            class: 'add_filter_control hub_feed_item_tag_filter btn btn-default' do
+            = fa_icon 'pencil', text: 'Modify a tag on this item'
+    %h1 Tags
+    .hub_feed_item_hub_feed_item_tag_filters
+      = render partial: 'shared/line_items/tag',
+        collection: @feed_item.all_tags_on(@hub.tagging_key)
+    %h1 Active filters
+    - if @tag_filters.empty?
+      %h2 No active filters
+    - else
+      .hub_feed_item_hub_feed_item_tag_filters
+        = render partial: 'hub_feed_item_tag_filters/list_item',
+          collection: @tag_filters,
+          as: :hub_feed_item_tag_filter

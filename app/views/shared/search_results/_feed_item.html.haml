@@ -1,0 +1,8 @@
+.feed_item.search_result{:id => "feed_item_#{feed_item.id}"}
+  .grid_2.alpha
+    %span.ui-silk.inline.ui-silk-add.add_item_source{:id => "FeedItem-#{feed_item.id}", :title => "Add this item as an input source"}
+    Item:
+  .grid_6.omega
+    %span{:id => "FeedItem-#{feed_item.id}-link"}
+      = raw feed_item.mini_icon
+      = link_to(raw(strip_tags(feed_item.to_s)), feed_item_path(feed_item))

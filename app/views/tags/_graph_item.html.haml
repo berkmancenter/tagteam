@@ -1,0 +1,5 @@
+%li
+  = tag_display(tag, show_count: true, use_count: true, hub: hub, hub_feed: hub_feed)
+  %span.tag-count
+    = tag.count
+  .tag-graph-bar{:style => "width: #{tag.count.to_f / max_count * 100}%"}

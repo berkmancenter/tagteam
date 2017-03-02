@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title= (@mini_title.blank?) ? 'TagTeam' : @mini_title
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tag
+    %link{:href => "#{root_url}humans.txt", :rel => "author"}/
+    %link{:href => "#{asset_path 'favicon.png'}", :rel => "icon", :type => "image/png"}/
+  %body.bookmarklet
+    .container
+      .row
+        .col-xs-offset-1.col-xs-10
+          = fa_icon('spinner', class: 'fa-spin', alt: 'Spinner', id: 'spinner', style: 'display: none')
+          = render partial: 'shared/flashes'
+          %section#content.row
+            .col-md-12
+              = content_for?(:content) ? yield(:content) : yield

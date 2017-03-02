@@ -1,0 +1,52 @@
+= render partial: 'shared/logo'
+.row
+  #app-description.col-md-6
+    %h2 TagTeam lets you:
+    %ul
+      %li Tag online resources
+      %li Generate feeds of tagged items
+      %li Organize social-tagging projects
+      %li Curate tags through a flexible filtering system
+      %li Store tag records for deduping, preservation, export, modification, and search
+      %li Aggregate feeds from other sources, including other tagging platforms
+      %li Create custom feed remixes
+      %li and republish everything as HTML, Atom, RSS, and JSON.
+  #hub-lists.col-md-6
+    - if user_signed_in?
+      #user-hubs
+        %h2 Your hubs
+        - if current_user.my(Hub).empty?
+          %p
+            You do not currently have any hubs. #{link_to "Start one now.", new_hub_path}
+        - else
+          %ul.list-unstyled.hub-list
+            = render partial: 'hubs/list_item',
+              collection: current_user.my(Hub).slice(0, 3),
+              as: 'hub',
+              locals: {limit: 100}
+            %li
+              = link_to my_hubs_path do
+                .row
+                  .col-xs-1= fa_icon "arrow-circle-right"
+                  .col-xs-11
+                    %h3 See all your hubs
+    #active-hubs
+      .col-xs-4.pull-right
+        = render partial: 'hub_search_form'
+      %h2 Most active hubs
+      %ul.list-unstyled.hub-list
+        = render partial: 'hubs/list_item',
+          collection: Hub.most_active_hubs(4),
+          as: 'hub',
+          locals: {limit: 50}
+        %li
+          = link_to hubs_path do
+            .row
+              .col-xs-1= fa_icon "arrow-circle-right"
+              .col-xs-11
+                %h3 See all hubs
+.github.row
+  %p.text-center
+    Find the TagTeam code on GitHub:
+    %iframe{:allowtransparency => "true", :frameborder => "0", :height => "20", :scrolling => "0", :src => "/github-btn.html?user=berkmancenter&repo=tagteam&type=watch&count=true", :width => "80"}
+    %iframe{:allowtransparency => "true", :frameborder => "0", :height => "20", :scrolling => "0", :src => "/github-btn.html?user=berkmancenter&repo=tagteam&type=fork&count=true", :width => "80"}

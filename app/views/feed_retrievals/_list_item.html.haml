@@ -1,0 +1,21 @@
+%tr{:class => "feed_retrieval #{(feed_retrieval.success) ? 'success' : 'danger'}"}
+  - if show_feed
+    - @hub_feed = feed_retrieval.hub_feed_for_hub(@hub)
+    %td
+      = link_to(@hub_feed.display_title, hub_hub_feed_path(@hub, @hub_feed))
+  %td
+    = link_to(l(feed_retrieval.created_at, format: :date_and_time_short),
+      hub_feed_feed_retrieval_path(@hub_feed, feed_retrieval))
+  - if feed_retrieval.has_changes?
+    %td
+      - unless feed_retrieval.new_feed_items.empty?
+        = feed_retrieval.new_feed_items.length
+        new
+        %br/
+    %td
+      - unless feed_retrieval.changed_feed_items.empty?
+        = feed_retrieval.changed_feed_items.length
+        updated
+        %br/
+  - else
+    %td.no_changes{:colspan => "2"}

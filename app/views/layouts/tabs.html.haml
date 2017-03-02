@@ -1,0 +1,10 @@
+- content_for :content do
+  .hub-header.row
+    = yield :top_panel
+  .row.hub.detailed.tab-layout
+    .col-md-2.pill-container
+      %ul.nav.nav-pills.nav-stacked
+        = yield :tabs
+    .col-md-10.tab-content
+      = yield :tab_content
+= render template: 'layouts/application'

@@ -1,0 +1,12 @@
+%li.hub.row
+  .col-xs-10.col-xs-offset-1
+    %h3
+      = link_to hub.title, hub_path(hub)
+    %dl
+      %dt
+        = 'Owner'.pluralize(hub.owners)
+        \:
+      %dd= hub.owners.map(&:username).join(', ')
+      %dt Created:
+      %dd= hub.created_at.strftime('%F')
+    %p= raw hub.description

@@ -1,0 +1,23 @@
+.nicely-padded
+  - unless @hub_feed.feed.is_bookmarking_feed?
+    %h3 Original title from feed:
+    = @hub_feed.feed.title
+    - unless @hub_feed.feed.description.blank?
+      %h3 Description:
+      = @hub_feed.feed.description
+    %h3 URL:
+    = link_to(@hub_feed.feed.link,@hub_feed.feed.link, :target => '_blank')
+    %h3 RSS / Atom URL:
+    = link_to(@hub_feed.feed.feed_url,@hub_feed.feed.feed_url, :target => '_blank')
+    %h3 Last changed at:
+    = @hub_feed.feed.items_changed_at.to_s(:long)
+    %h3 Feed will be downloaded again at:
+    = @hub_feed.feed.next_scheduled_retrieval.to_s(:long)
+    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, @hub_feed))
+      = link_to('Schedule for immediate download', reschedule_immediately_hub_hub_feed_path(@hub,@hub_feed))
+    - [:authors, :generator, :language, :rights].each do |att|
+      - unless @hub_feed.feed[att].blank?
+        %h3
+          = att.to_s.titleize
+          \:
+        = @hub_feed.feed[att]

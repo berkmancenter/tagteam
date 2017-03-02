@@ -1,0 +1,36 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'filters' }
+- content_for :tab_content do
+  .nicely-padded
+    - if current_user && current_user.is?([:owner, :hub_tag_filterer], @hub)
+      %h1 Create hub-wide filters
+      %ul.tag_filter_controls.list-unstyled
+        %li
+          = link_to hub_tag_filters_path(@hub),
+            data_hub_id: @hub.id,
+            data_type: 'AddTagFilter',
+            tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
+            class: 'add_filter_control hub_tag_filter btn btn-success' do
+            = fa_icon 'plus-circle', text: 'Add a tag to all items in this hub'
+        %li
+          = link_to hub_tag_filters_path(@hub),
+            data_hub_id: @hub.id,
+            data_type: 'DeleteTagFilter',
+            tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
+            class: 'add_filter_control hub_tag_filter btn btn-danger' do
+            = fa_icon 'minus-circle', text: 'Remove a tag from every item in this hub'
+        %li
+          = link_to hub_tag_filters_path(@hub),
+            data_hub_id: @hub.id,
+            data_type: 'ModifyTagFilter',
+            tag_list: @tag_filters.map {|f| f.tag.name}.join(', '),
+            class: 'add_filter_control hub_tag_filter btn btn-default' do
+            = fa_icon 'pencil', text: 'Modify a tag for every item in this hub'
+    %h1.hub-filters-title Active filters
+    - if @tag_filters.empty?
+      %p No active filters
+    - else
+      %ul.hub_tag_filters.list-unstyled.nicely-padded
+        = render partial: 'hub_tag_filters/list_item', as: :hub_tag_filter, collection: @tag_filters

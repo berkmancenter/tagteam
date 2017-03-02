@@ -1,0 +1,40 @@
+.center-block.devise-form
+  %h2 Sign up
+  %p
+    %strong Note:
+    You will need to confirm your TagTeam account via a link sent to the email address you enter below.
+  %p.text-danger
+    %strong Please check your email after you create an account.
+  = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+    = devise_error_messages!
+    .form-group
+      = f.label :username
+      %br/
+      = f.text_field :username, autofocus: true, class: "form-control"
+    .form-group
+      = f.label :email
+      %br/
+      = f.email_field :email, class: "form-control"
+    .form-group
+      = f.label :password
+      - if @minimum_password_length
+        %em
+          (#{@minimum_password_length} characters minimum)
+      %br/
+      = f.password_field :password, autocomplete: "off", class: "form-control"
+    .form-group
+      = f.label :password_confirmation
+      %br/
+      = f.password_field :password_confirmation, autocomplete: "off", class: "form-control"
+    .form-group
+      %label Terms of Service
+      %br/
+      = f.label :terms_of_service, style: 'font-weight: 300' do
+        = f.check_box :terms_of_service
+        I have read and agree to the
+        = succeed "." do
+          %a{:href => "https://cyber.harvard.edu/hoap/TagTeam_terms_of_service", :target => "_blank"} TagTeam Terms of Service
+    .form-group
+      = f.submit "Sign up", class: "btn btn-success btn-block"
+  %hr/
+  = render "devise/shared/links"

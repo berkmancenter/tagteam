@@ -1,0 +1,14 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'items' }
+- content_for :tab_content do
+  = render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results }
+  .nicely-padded
+    %h1
+      Items From
+      \#{breadcrumbs.items.collect{|i| i[0]}.reject{|i| ! i.match(/^\d+$/)}.join('-')}
+  %ul.list-unstyled.flush-top
+    = render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item
+  .text-center
+    = render partial: 'shared/paginate', object: @search.results, as: :results

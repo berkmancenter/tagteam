@@ -1,0 +1,5 @@
+= form_tag(search_hubs_path, method: :get) do
+  .input-group
+    = text_field_tag :q, params[:q], size: 14, placeholder: 'Search', class: 'form-control'
+    %span.input-group-btn
+      = submit_tag('Go', class: 'btn btn-success keyword_search_submit')
