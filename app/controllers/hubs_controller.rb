@@ -180,7 +180,7 @@ class HubsController < ApplicationController
 
     notifications_setup.notify_about_modifications = params[:notify_about_modifications]
 
-    if @hub.save
+    if notifications_setup.save
       flash[:notice] = 'Saved successfully.'
     else
       flash[:error] = 'Something went wrong, try again.'
