@@ -210,5 +210,7 @@ class Hub < ApplicationRecord
         tagging_key, 'FeedItem'
       ]
     )
+  def settings
+    OpenStruct.new(attributes.slice('tags_delimiter'))
   end
 end

@@ -1,0 +1,32 @@
+<% content_for :top_panel do %>
+  <%= render partial: 'hubs/top_panel' %>
+<% end %>
+
+<% content_for :tabs do %>
+  <%= render partial: 'hubs/tabs', locals: { active: 'settings' } %>
+<% end %>
+
+<% content_for :tab_content do %>
+<div class="nicely-padded settings">
+  <h1>Settings</h1>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= form_tag(set_settings_hub_path(@hub)) do %>
+        <ul class="list-unstyled">
+          <li>
+            <%= label_tag 'tags_delimiter', 'Character or multiple characters separating tags (default is ",", leave empty to use default)' %>
+            <div class="row">
+              <div class="col-md-12">
+                <%= text_field_tag('tags_delimiter', @settings.tags_delimiter, {id: 'tags_delimiter'}) %>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <%= submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -51,7 +51,9 @@ class HubsController < ApplicationController
     :update,
     :set_notifications,
     :notifications,
-    :set_user_notifications
+    :set_user_notifications,
+    :settings,
+    :set_settings
   ]
 
   SORT_OPTIONS = {
@@ -120,6 +122,14 @@ class HubsController < ApplicationController
     render layout: request.xhr? ? false : 'tabs'
   end
 
+  def settings
+    add_breadcrumbs
+
+    @settings = @hub.settings
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
   def add_roles
     if !params[:user_ids].blank? && !params[:roles].blank?
       params[:user_ids].each do |u|
@@ -181,6 +191,18 @@ class HubsController < ApplicationController
     notifications_setup.notify_about_modifications = params[:notify_about_modifications]
 
     if notifications_setup.save
+      flash[:notice] = 'Saved successfully.'
+    else
+      flash[:error] = 'Something went wrong, try again.'
+    end
+
+    redirect_to request.referer
+  end
+
+  def set_settings
+    @hub.tags_delimiter = params[:tags_delimiter]
+
+    if @hub.save
       flash[:notice] = 'Saved successfully.'
     else
       flash[:error] = 'Something went wrong, try again.'

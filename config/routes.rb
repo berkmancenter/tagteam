@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       get 'bookmark_collections'
       get 'community'
       get 'notifications'
+      get 'settings'
       post 'add_roles'
       post 'remove_roles'
       post 'request_rights'
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
       get 'created'
       post 'set_notifications'
       post 'set_user_notifications'
+      post 'set_settings'
     end
 
     collection do

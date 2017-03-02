@@ -99,6 +99,12 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
+  def settings?
+    return false unless user.present?
+
+    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+  end
+
   def remove_roles?
     return false unless user.present?
     return true if user.has_role?(:superadmin)
@@ -126,6 +132,12 @@ class HubPolicy < ApplicationPolicy
 
   def set_user_notifications?
     user.present?
+  end
+
+  def set_settings?
+    return false unless user.present?
+
+    user.has_role?(:superadmin) || user.has_role?(:owner, record)
   end
 
   def tag_controls?

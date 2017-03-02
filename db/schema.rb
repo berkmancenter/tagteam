@@ -17,13 +17,13 @@ ActiveRecord::Schema.define(version: 20170311175714) do
 
   create_table "deactivated_taggings", force: :cascade do |t|
     t.integer  "tag_id"
+    t.string   "taggable_type"
     t.integer  "taggable_id"
-    t.string   "taggable_type",    limit: 255
+    t.string   "tagger_type"
     t.integer  "tagger_id"
-    t.string   "tagger_type",      limit: 255
+    t.string   "deactivator_type"
     t.integer  "deactivator_id"
-    t.string   "deactivator_type", limit: 255
-    t.string   "context",          limit: 255
+    t.string   "context"
     t.datetime "created_at"
     t.index ["deactivator_id", "deactivator_type"], name: "d_taggings_deactivator_idx", using: :btree
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "d_taggings_idx", using: :btree
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "title",       limit: 500,                    null: false
     t.string   "description", limit: 1048576
     t.string   "lang",        limit: 2,       default: "en"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["lang"], name: "index_documentations_on_lang", using: :btree
     t.index ["match_key"], name: "index_documentations_on_match_key", unique: true, using: :btree
     t.index ["title"], name: "index_documentations_on_title", using: :btree
@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "rights",         limit: 500
     t.datetime "date_published"
     t.datetime "last_updated"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "image_url"
     t.index ["authors"], name: "index_feed_items_on_authors", using: :btree
     t.index ["contributors"], name: "index_feed_items_on_contributors", using: :btree
@@ -83,8 +83,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "info",        limit: 5120
     t.string   "status_code", limit: 25
     t.string   "changelog",   limit: 1048576
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "feeds", force: :cascade do |t|
@@ -102,8 +102,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "language",                 limit: 25
     t.boolean  "bookmarking_feed",                      default: false
     t.datetime "next_scheduled_retrieval"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["authors"], name: "index_feeds_on_authors", using: :btree
     t.index ["bookmarking_feed"], name: "index_feeds_on_bookmarking_feed", using: :btree
     t.index ["feed_url"], name: "index_feeds_on_feed_url", using: :btree
@@ -114,8 +114,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
-    t.string   "slug",           limit: 255, null: false
-    t.integer  "sluggable_id",               null: false
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
     t.string   "sluggable_type", limit: 40
     t.datetime "created_at"
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", unique: true, using: :btree
@@ -128,8 +128,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.integer  "hub_id",                   null: false
     t.string   "title",       limit: 500
     t.string   "description", limit: 2048
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["feed_id"], name: "index_hub_feeds_on_feed_id", using: :btree
     t.index ["hub_id", "feed_id"], name: "index_hub_feeds_on_hub_id_and_feed_id", unique: true, using: :btree
     t.index ["hub_id"], name: "index_hub_feeds_on_hub_id", using: :btree
@@ -149,12 +149,13 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "title",                                      limit: 500,  null: false
     t.string   "description",                                limit: 2048
     t.string   "tag_prefix",                                 limit: 25
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.string   "nickname",                                   limit: 255
-    t.string   "slug",                                       limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "nickname"
+    t.string   "slug"
     t.boolean  "notify_taggers"
     t.boolean  "allow_taggers_to_sign_up_for_notifications"
+    t.string   "tags_delimiter"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree
@@ -166,8 +167,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "item_source_type",    limit: 100,                 null: false
     t.string   "effect",              limit: 25,  default: "add", null: false
     t.integer  "limit"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "created_by_only_id"
     t.index ["effect"], name: "index_input_sources_on_effect", using: :btree
     t.index ["item_source_id"], name: "index_input_sources_on_item_source_id", using: :btree
@@ -180,8 +181,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "title",       limit: 500,               null: false
     t.string   "description", limit: 5120
     t.integer  "limit",                    default: 50
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "url_key",     limit: 50,                null: false
     t.index ["hub_id"], name: "index_republished_feeds_on_hub_id", using: :btree
     t.index ["title"], name: "index_republished_feeds_on_title", using: :btree
@@ -192,8 +193,8 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "name",              limit: 40
     t.string   "authorizable_type", limit: 40
     t.integer  "authorizable_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["authorizable_id"], name: "index_roles_on_authorizable_id", using: :btree
     t.index ["authorizable_type"], name: "index_roles_on_authorizable_type", using: :btree
     t.index ["name"], name: "index_roles_on_name", using: :btree
@@ -209,20 +210,20 @@ ActiveRecord::Schema.define(version: 20170311175714) do
   create_table "search_remixes", force: :cascade do |t|
     t.integer  "hub_id"
     t.text     "search_string"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tag_filters", force: :cascade do |t|
-    t.integer  "hub_id",                                 null: false
-    t.integer  "tag_id",                                 null: false
+    t.integer  "hub_id",                     null: false
+    t.integer  "tag_id",                     null: false
     t.integer  "new_tag_id"
+    t.string   "scope_type"
     t.integer  "scope_id"
-    t.string   "scope_type", limit: 255
-    t.boolean  "applied",                default: false
-    t.string   "type",       limit: 255
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.boolean  "applied",    default: false
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["hub_id"], name: "index_tag_filters_on_hub_id", using: :btree
     t.index ["new_tag_id"], name: "index_tag_filters_on_new_tag_id", using: :btree
     t.index ["scope_type", "scope_id"], name: "index_tag_filters_on_scope_type_and_scope_id", using: :btree
@@ -232,11 +233,11 @@ ActiveRecord::Schema.define(version: 20170311175714) do
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
+    t.string   "taggable_type"
     t.integer  "taggable_id"
-    t.string   "taggable_type", limit: 255
+    t.string   "tagger_type"
     t.integer  "tagger_id"
-    t.string   "tagger_type",   limit: 255
-    t.string   "context",       limit: 255
+    t.string   "context"
     t.datetime "created_at"
     t.index ["context"], name: "index_taggings_on_context", using: :btree
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
@@ -251,7 +252,7 @@ ActiveRecord::Schema.define(version: 20170311175714) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.string "name", limit: 255
+    t.string "name"
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
@@ -259,24 +260,24 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "first_name",             limit: 100
     t.string   "last_name",              limit: 100
     t.string   "url",                    limit: 250
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                              default: "",    null: false
+    t.string   "encrypted_password",                 default: "",    null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                      default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "confirmation_token",     limit: 255
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.integer  "failed_attempts",                    default: 0
-    t.string   "unlock_token",           limit: 255
+    t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "username",               limit: 150
     t.string   "unconfirmed_email"
     t.boolean  "approved",                           default: false, null: false
