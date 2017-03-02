@@ -26,7 +26,6 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    authorize TagFilter
     filter_type = params[:filter_type].constantize
     unless params[:tag_id].blank?
       @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
@@ -44,6 +43,8 @@ class TagFiltersController < ApplicationController
     @tag_filter.scope = @scope
     @tag_filter.tag = @tag
     @tag_filter.new_tag = @new_tag if @new_tag
+
+    authorize @tag_filter
 
     if @tag_filter.save
       current_user.has_role!(:owner, @tag_filter)
