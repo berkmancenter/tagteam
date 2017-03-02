@@ -23,7 +23,7 @@ class HubsController < ApplicationController
     :show
   ]
 
-  after_action :verify_authorized, except: [:index, :home]
+  after_action :verify_authorized, except: [:index, :home, :meta]
   after_action :verify_policy_scoped, only: [:index, :home]
 
   before_action :sanitize_params, only: :index
