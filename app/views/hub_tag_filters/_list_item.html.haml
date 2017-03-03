@@ -1,6 +1,6 @@
 %li{ class: "tag_filter hub_tag_filter #{filter_css_class(hub_tag_filter)}" }
   .pull-right
-    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_tag_filter)) || current_user.is?(:hub_tag_filterer, @hub)
+    - if policy(hub_tag_filter).destroy?
       = link_to hub_tag_filter_path(hub_tag_filter.hub, hub_tag_filter),
         method: :delete,
         title: 'Remove this filter',
