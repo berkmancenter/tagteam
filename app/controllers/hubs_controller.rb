@@ -355,7 +355,7 @@ class HubsController < ApplicationController
     end
 
     if params[:hub_feed_item_id].to_i != 0
-      @feed_item = FeedItem.find(params[:hub_feed_item_id], select: FeedItem.columns_for_line_item)
+      @feed_item = FeedItem.select(FeedItem.columns_for_line_item).find(params[:hub_feed_item_id])
       @already_filtered_for_hub_feed_item = @feed_item.tag_filtered?(@tag)
     end
 
