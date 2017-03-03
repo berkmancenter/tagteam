@@ -243,58 +243,6 @@
         }
       });
     },
-
-    observeSearchSelectControl: function(){
-      $('.search_select_control').live({
-        click: function(e){
-          e.preventDefault();
-          $(this).closest('span.search_select').remove();
-        }
-      });
-    },
-
-    observeAutocomplete: function(url, rootId, paramName, containerId, elementClass){
-      function split( val ) {
-        return val.split( /,\s*/ );
-      }
-      function extractLast( term ) {
-        return split( term ).pop();
-      }
-      $( rootId )
-      .bind( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-        $( this ).data( "autocomplete" ).menu.active ) {
-          event.preventDefault();
-        }
-      })
-      .autocomplete({
-        source: function( request, response ) {
-          $.getJSON( url, {
-            term: extractLast( request.term )
-          }, response );
-        },
-        search: function() {
-          // custom minLength
-          var term = extractLast( this.value );
-          if ( term.length < 2 ) {
-            return false;
-          }
-        },
-        focus: function() {
-          // prevent value inserted on focus
-          return false;
-        },
-        select: function( event, ui ) {
-          var node = $('<span />').attr('class', elementClass);
-          $(node).html($('<input name="' + paramName + '[]" type="hidden" />').val(ui.item.id));
-          $(node).append(ui.item.label);
-          $(node).append('<span class="search_select_control"> X </span>');
-          $(containerId).show().append(node);
-          this.value = "";
-          return false;
-        }
-      });
-    },
     initEditor: function(textArea){
       CKEDITOR.replace(textArea);
     },

@@ -99,22 +99,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def autocomplete
-    authorize User
-
-    @search = User.search do
-      fulltext params[:term]
-    end
-    respond_to do |format|
-      format.json do
-        # Should probably change this to use render_for_api
-        render json: @search.results.collect { |r| { id: r.id, label: r.username.to_s } }
-      end
-    end
-  rescue
-    render plain: 'Please try a different search term', layout: !request.xhr?
-  end
-
   private
 
   def load_user

@@ -1,0 +1,22 @@
+.grant_roles.col-md-6
+  = form_tag(add_roles_hub_path(@hub)) do
+    %h3 Assign roles
+    %ul.list-unstyled
+      - Hub::DELEGATABLE_ROLES_FOR_FORMS.each do |r|
+        %li.role
+          .checkbox
+            = label_tag "role_#{r[0]}" do
+              = check_box_tag('roles[]', r[0], false, id: "role_#{r[0]}")
+              = r[1]
+              %span.help-block
+                = Hub::DELEGATABLE_ROLES_HASH[r[0]][:description]
+    .form-group
+      %label Select users
+      %ul#user_id_container
+      = text_field_tag :find_user_autocomplete, '', size: 40, placeholder: 'Username or email address', class: 'form-control'
+    = submit_tag('Grant roles', class: 'btn btn-primary', id: 'add_roles', disabled: true)
+    :javascript
+      $(document).ready(function(){
+        $.observeAutocomplete($.rootPath() + 'users/search/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container','search_select user');
+        $.observeSearchSelectControl();
+      });

@@ -1,0 +1,24 @@
+.remove_roles.col-md-6
+  %h3 Remove roles
+  = form_tag(remove_roles_hub_path(@hub)) do
+    %table.table.table-condensed
+      %tr
+        %th Username
+        %th Roles
+      = render partial: 'hubs/user', as: :hub_user, collection: @hub.users_with_roles
+    %p What should we do with items managed by these users?
+    .form-inline
+      .form-group
+        .radio
+          = label_tag 'revocation_reassign' do
+            = radio_button_tag :revocation_action, 'reassign', true, id: 'revocation_reassign'
+            Reassign them to
+          = select_tag :reassign_to,
+            options_from_collection_for_select(@hub.owners, 'id', 'username'),
+            class: 'form-control input-sm'
+    .form-group
+      .radio
+        = label_tag 'revocation_delete' do
+          = radio_button_tag :revocation_action, 'delete', false, id: 'revocation_delete'
+          Delete them permanently
+    = submit_tag 'Remove roles', class: 'btn btn-primary', id: 'remove_roles'

@@ -2,14 +2,15 @@
 Rails.application.routes.draw do
   # TODO: enforce SSL for UsersController in production
   resources :users do
-    collection do
-      get 'autocomplete'
-    end
     member do
       post 'resend_confirmation_token'
       post 'resend_unlock_token'
       get 'roles_on'
     end
+  end
+
+  namespace :users do
+    get 'search/autocomplete'
   end
 
   post 'bookmarklets/add_item'
