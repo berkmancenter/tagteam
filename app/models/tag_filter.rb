@@ -17,7 +17,8 @@ class TagFilter < ApplicationRecord
   validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id],
                                    message: 'Filter conflicts with existing filter.' }
 
-  attr_accessible :tag_id
+  attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,
+                  :applied
 
   acts_as_authorization_object
   acts_as_api do |c|
@@ -216,5 +217,9 @@ class TagFilter < ApplicationRecord
   # Fix Pundit policy lookup for STI classes that inherit from TagFilter
   def self.policy_class
     TagFilterPolicy
+  end
+
+  def as_json(options = {})
+    super(options.merge(methods: :type))
   end
 end
