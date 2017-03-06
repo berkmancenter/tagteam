@@ -159,7 +159,7 @@ class TagFilter < ApplicationRecord
     taggers_to_notify = taggers_to_notify.uniq - [current_user]
 
     unless taggers_to_notify.empty?
-      Notifications.notify_taggers_modification(
+      Notifications.tag_change_notification(
         taggers_to_notify,
         hub,
         old_tag,
