@@ -1,0 +1,28 @@
+%h1 Users Awaiting Approval
+
+- if @unapproved_users.any?
+  %table.table.table-hover
+    %thead
+      %tr
+        %th Username
+        %th Email
+        %th Signup Reason
+        %th
+        %th
+    %tbody
+      - @unapproved_users.find_each do |user|
+        %tr
+          %td= user.username
+          %td= user.email
+          %td= user.signup_reason
+          %td
+            = link_to admin_user_approval_approve_path(user), class: 'btn btn-success' do
+              %span.glyphicon.glyphicon-ok
+              Approve
+          %td
+            = link_to admin_user_approval_deny_path(user), class: 'btn btn-danger',
+              confirm: 'Are you sure you want to delete this user?' do
+              %span.glyphicon.glyphicon-remove
+              Deny
+- else
+  .alert.alert-info No users are currently waiting for approval.

@@ -152,11 +152,20 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, path: 'accounts'
+  devise_for :users, path: 'accounts', controllers: {
+    registrations: 'users/registrations'
+  }
 
   require 'sidekiq/web'
   authenticate :user, ->(u) { u.has_role? :superadmin } do
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  namespace :admin do
+    resources :user_approvals, only: [:index] do
+      get :approve
+      get :deny
+    end
   end
 
   root 'hubs#home'

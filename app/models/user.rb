@@ -18,6 +18,13 @@ class User < ApplicationRecord
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
   validates :terms_of_service, acceptance: true
+  validates :signup_reason, presence: true, unless: 'edu_email?', on: :create
+
+  # automatically approve .edu signups
+  before_create { self.approved = edu_email? }
+
+  scope :unapproved, -> { where(approved: false) }
+  scope :superadmin, -> { joins(:roles).where('roles.name = ?', :superadmin).distinct }
 
   searchable do
     text :first_name, :last_name, :email, :url, :username
@@ -111,6 +118,20 @@ class User < ApplicationRecord
   def display_name
     tmp_name = "#{first_name} #{last_name}"
     tmp_name.blank? ? email : tmp_name
+  end
+
+  # Override Devise to include support for user approval
+  def active_for_authentication?
+    super && approved?
+  end
+
+  # Override Devise to include support for user approval
+  def inactive_message
+    approved? ? super : :unapproved
+  end
+
+  def edu_email?
+    email.strip.end_with?('edu')
   end
 
   protected

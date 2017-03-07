@@ -5,6 +5,8 @@ FactoryGirl.define do
     sequence(:email) { |n| "jclark+#{n}@cyber.law.harvard.edu" }
     password 'password'
     password_confirmation 'password'
+    approved true
+    signup_reason 'MyString'
 
     factory :confirmed_user do
       after(:create, &:confirm)

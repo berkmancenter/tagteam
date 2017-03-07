@@ -70,6 +70,7 @@ group :test do
   gem 'pundit-matchers', '~> 1.1'
   gem 'selenium-client', '~> 1.2'
   gem 'selenium-webdriver', '~> 3.0'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'vcr', '~> 3.0'
   gem 'webmock', '~> 2.3'
 end

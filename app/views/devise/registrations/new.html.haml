@@ -1,5 +1,8 @@
 .center-block.devise-form
   %h2 Sign up
+  %p Thanks for requesting a TagTeam account. The Harvard instance of TagTeam now limits new accounts to academic or research projects.
+  %p The TagTeam project is open source and you're free to host an instance of TagTeam elsewhere: #{link_to('https://github.com/berkmancenter/tagteam')}
+  %p If signing up with a non-.edu address, please tell us more about your reasons for wishing to open an account on the Harvard instance of TagTeam.
   %p
     %strong Note:
     You will need to confirm your TagTeam account via a link sent to the email address you enter below.
@@ -10,31 +13,35 @@
     .form-group
       = f.label :username
       %br/
-      = f.text_field :username, autofocus: true, class: "form-control"
+      = f.text_field :username, autofocus: true, class: 'form-control'
     .form-group
       = f.label :email
       %br/
-      = f.email_field :email, class: "form-control"
+      = f.email_field :email, class: 'form-control'
     .form-group
       = f.label :password
       - if @minimum_password_length
         %em
           (#{@minimum_password_length} characters minimum)
       %br/
-      = f.password_field :password, autocomplete: "off", class: "form-control"
+      = f.password_field :password, autocomplete: 'off', class: 'form-control'
     .form-group
       = f.label :password_confirmation
       %br/
-      = f.password_field :password_confirmation, autocomplete: "off", class: "form-control"
+      = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control'
+    .form-group
+      = f.label :signup_reason do
+        Reason for signup <em>(required for non-.edu users)</em>
+      = f.text_area :signup_reason, class: 'form-control noEditor'
     .form-group
       %label Terms of Service
       %br/
       = f.label :terms_of_service, style: 'font-weight: 300' do
         = f.check_box :terms_of_service
         I have read and agree to the
-        = succeed "." do
-          %a{:href => "https://cyber.harvard.edu/hoap/TagTeam_terms_of_service", :target => "_blank"} TagTeam Terms of Service
+        = succeed '.' do
+          %a{ href: 'https://cyber.harvard.edu/hoap/TagTeam_terms_of_service', target: '_blank' } TagTeam Terms of Service
     .form-group
-      = f.submit "Sign up", class: "btn btn-success btn-block"
+      = f.submit 'Sign up', class: 'btn btn-success btn-block'
   %hr/
-  = render "devise/shared/links"
+  = render 'devise/shared/links'
