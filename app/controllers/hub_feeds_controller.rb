@@ -86,16 +86,18 @@ class HubFeedsController < ApplicationController
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
-    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
+
+    authorize @hub_feed
   end
 
   def create
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
-    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
+
+    authorize @hub_feed
 
     actual_feed = Feed.new
     actual_feed.bookmarking_feed = true

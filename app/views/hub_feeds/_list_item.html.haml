@@ -7,8 +7,12 @@
       = link_to more_details_hub_hub_feed_path(@hub,hub_feed), class: "hub_feed_more_control", data_hub_feed_id: hub_feed.id do
         = fa_icon('caret-right')
     .media-body
-      = link_to hub_hub_feed_path(@hub,hub_feed) do
-        %h2= raw(strip_tags(hub_feed.to_s))
+      - if hub_feed.feed.is_bookmarking_feed?
+        = link_to hub_feed_feed_items_path(hub_feed) do
+          %h2= raw(strip_tags(hub_feed.to_s))
+      -else
+        = link_to hub_hub_feed_path(@hub,hub_feed) do
+          %h2= raw(strip_tags(hub_feed.to_s))
       - if defined?(show_hubs) && show_hubs == true
         %span.smaller
           in #{link_to(hub_feed.hub, hub_path(hub_feed.hub) )}

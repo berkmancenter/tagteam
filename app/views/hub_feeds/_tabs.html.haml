@@ -1,7 +1,8 @@
-%li{:class => "#{'active' if active == 'about'}"}
-  = documentation('hub-feed-about-tab')
-  = link_to('About', hub_feed_path(@hub_feed))
-  .nav-pill-arrow
+- unless @hub_feed.feed.is_bookmarking_feed?
+  %li{:class => "#{'active' if active == 'about'}"}
+    = documentation('hub-feed-about-tab')
+    = link_to('About', hub_hub_feed_path(@hub, @hub_feed))
+    .nav-pill-arrow
 %li{:class => "#{'active' if active == 'items'}"}
   = documentation('hub-feed-feed-item-list')
   = link_to('Items', hub_feed_feed_items_path(@hub_feed))
@@ -22,4 +23,9 @@
   %li{:class => "#{'active' if active == 'import'}"}
     = documentation('hub-feed-import-tab')
     = link_to('Import items', import_hub_feed_path(@hub_feed))
+    .nav-pill-arrow
+- if @hub_feed.feed.is_bookmarking_feed?
+  %li{:class => "#{'active' if active == 'about'}"}
+    = documentation('hub-feed-about-tab')
+    = link_to('About', hub_hub_feed_path(@hub, @hub_feed))
     .nav-pill-arrow
