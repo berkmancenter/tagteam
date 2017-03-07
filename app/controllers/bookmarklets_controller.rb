@@ -43,7 +43,9 @@ class BookmarkletsController < ApplicationController
       end
     end
 
-    unless params[:feed_item][:date_published].blank?
+    if params[:feed_item][:date_published].blank?
+      @feed_item.date_published = DateTime.now
+    else
       date_published = DateTime.parse(params[:feed_item][:date_published])
       @feed_item.date_published = DateTime.new(
         date_published.year,
