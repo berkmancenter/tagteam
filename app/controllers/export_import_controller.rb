@@ -1,3 +1,5 @@
+require 'tempfile'
+
 class ExportImportController < ApplicationController
   def index
     breadcrumbs.add 'Export/import', export_import_path
@@ -13,14 +15,13 @@ class ExportImportController < ApplicationController
     if params[:file].nil?
       flash[:error] = 'File is missing, please try again.'
     else
-      content = File.read(params[:file].tempfile)
-      result = Tagteam::ExportImport.import content
+      temp_file = Tempfile.new('tagteam_import')
+      temp_file.write(File.read(params[:file].tempfile))
+      ObjectSpace.undefine_finalizer(temp_file)
 
-      if result
-        flash[:notice] = 'Successfully imported user data.'
-      else
-        flash[:error] = 'File is not properly structured or empty, please try again.'
-      end
+      Sidekiq::Client.enqueue(ImportUserData, temp_file.path)
+
+      flash[:notice] = 'Import is in progress. You will get an email notification when the import is done.'
     end
 
     redirect_to request.referer

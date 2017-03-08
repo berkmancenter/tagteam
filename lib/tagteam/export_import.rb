@@ -55,7 +55,6 @@ module Tagteam
           input_sources: input_sources,
           feed_items: feed_items,
           tags: hub.tags,
-          taggings: hub.taggings,
           users: users
         }
 
@@ -133,6 +132,8 @@ module Tagteam
 
         Sidekiq::Client.enqueue(RecalcAllItems, imported_hub[:new_id])
       end
+
+      Notifications.user_data_import_completion_notification(email, true)
     end
 
     def self.import_hub(hub)
