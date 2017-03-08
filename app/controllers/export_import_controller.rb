@@ -21,7 +21,7 @@ class ExportImportController < ApplicationController
       temp_file.write(File.read(params[:file].tempfile))
       ObjectSpace.undefine_finalizer(temp_file)
 
-      Sidekiq::Client.enqueue(ImportUserData, temp_file.path)
+      Sidekiq::Client.enqueue(ImportUserData, temp_file.path, current_user.email)
 
       flash[:notice] = 'Import is in progress. You will get an email notification when the import is done.'
     end

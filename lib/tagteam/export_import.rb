@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 
 module Tagteam
   class ExportImport
@@ -65,14 +66,26 @@ module Tagteam
       JSON.pretty_generate(data_structure)
     end
 
-    def self.import(content)
-      data = JSON.parse(content, symbolize_names: true)
+    def self.import(content, user_email)
+      begin
+        data = JSON.parse(content, symbolize_names: true)
 
-      if validate_data(data) && !data[:hubs].empty?
-        return process_data_import(data)
+        ActiveRecord::Base.transaction do
+          process_data_import(data) if validate_data(data) && !data[:hubs].empty?
+        end
+      rescue => ex
+        deliver_email(false, user_email)
+
+        return
       end
 
-      false
+      deliver_email(true, user_email)
+    end
+
+    def self.deliver_email(status, user_email)
+      Notifications.user_data_import_completion_notification(
+        user_email, status
+      ).deliver_later
     end
 
     def self.validate_data(data)
@@ -132,8 +145,6 @@ module Tagteam
 
         Sidekiq::Client.enqueue(RecalcAllItems, imported_hub[:new_id])
       end
-
-      Notifications.user_data_import_completion_notification(email, true)
     end
 
     def self.import_hub(hub)
@@ -376,6 +387,9 @@ module Tagteam
           new_user = User.new
 
           new_user.attributes = user[:user].except(:id)
+
+          new_user.password = SecureRandom.urlsafe_base64
+          new_user.signup_reason = 'import'
 
           new_user.save!
         else

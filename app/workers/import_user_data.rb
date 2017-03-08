@@ -7,11 +7,11 @@ class ImportUserData
     'Importing user data'
   end
 
-  def perform(file_path)
+  def perform(file_path, user_email)
     file_content = File.read(file_path)
 
     File.delete(file_path)
 
-    Tagteam::ExportImport.import(file_content)
+    Tagteam::ExportImport.import(file_content, user_email)
   end
 end
