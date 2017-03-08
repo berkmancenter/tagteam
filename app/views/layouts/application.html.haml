@@ -26,7 +26,8 @@
               %li.active= link_to 'Hubs', hubs_path
               - if user_signed_in? && current_user.is?(:superadmin)
                 %li= link_to('Users', users_url(protocol: protocol_resolver))
-              %li= link_to('Export/import', export_import_path)
+              - if user_signed_in?
+                %li= link_to('Export/import', export_import_path)
             .nav.navbar-nav.navbar-right
               - if user_signed_in?
                 %p.navbar-text.welcome

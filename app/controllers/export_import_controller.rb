@@ -1,6 +1,8 @@
 require 'tempfile'
 
 class ExportImportController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     breadcrumbs.add 'Export/import', export_import_path
   end
