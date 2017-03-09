@@ -1,12 +1,15 @@
-.metadata{:id => "hub_feed_metadata_#{@hub_feed.id}"}
-  %span.updated{:title => "Last updated"}
-    = @hub_feed.feed.updated_at.to_s(:long)
-   | 
-  %span.items
-    = pluralize(@hub_feed.feed.feed_items.count, 'item')
-   | 
-  \#{link_to('RSS', hub_feed_feed_items_path(@hub_feed, format: :rss), title: 'An RSS feed with tag filters applied to it.')} 
-  \#{link_to('ATOM', hub_feed_feed_items_path(@hub_feed, format: :atom), title: 'An Atom feed with tag filters applied to it.')} 
-  \#{link_to('JSON', hub_feed_feed_items_path(@hub_feed, format: :json, callback: 'callback'), title: 'jsonp with tag filters applied to it.')}
+.metadata{ id: "hub_feed_metadata_#{@hub_feed.id}" }
+  %span.updated{ title: 'Last updated' } Updated #{@hub_feed.latest_feed_items.first.updated_at.to_s(:long)}
+
+  |&nbsp;
+
+  %span.items= pluralize(@hub_feed.feed.feed_items.count, 'item')
+
+  |&nbsp;
+
+  = link_to('RSS', hub_feed_feed_items_path(@hub_feed, format: :rss), title: 'An RSS feed with tag filters applied to it.')
+  = link_to('ATOM', hub_feed_feed_items_path(@hub_feed, format: :atom), title: 'An Atom feed with tag filters applied to it.')
+  = link_to('JSON', hub_feed_feed_items_path(@hub_feed, format: :json, callback: 'callback'), title: 'jsonp with tag filters applied to it.')
+
   .feed-item-tags
-    = raw @hub_feed.latest_tags(10).collect{|t| tag_display(t, :hub => @hub, :hub_feed => @hub_feed) }.join(' ')
+    = raw @hub_feed.latest_tags(10).collect { |t| tag_display(t, hub: @hub, hub_feed: @hub_feed) }.join(' ')
