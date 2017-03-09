@@ -4,17 +4,16 @@ class FeedItemsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
+  before_action :set_hub_feed, except: [:tag_list]
+  before_action :set_feed_item, except: [:index]
+
   def controls
-    load_hub_feed
-    load_feed_item
     add_breadcrumbs
     render layout: !request.xhr?
   end
 
   # Return the full content for a FeedItem,, this could potentially be a large amount of content. Returns html, json, or xml. Action cached for anonymous visitors.
   def content
-    load_hub_feed
-    load_feed_item
     add_breadcrumbs
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
@@ -24,8 +23,6 @@ class FeedItemsController < ApplicationController
   end
 
   def about
-    load_hub_feed
-    load_feed_item
     add_breadcrumbs
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
@@ -36,8 +33,6 @@ class FeedItemsController < ApplicationController
 
   # Uses a solr more_like_this query to find items to related to this one by comparing the title and tag list. Returns html, json, or xml. Action cached for anonymous visitors.
   def related
-    load_hub_feed
-    load_feed_item
     add_breadcrumbs
     hub_id = @hub.id
     @related = Sunspot.more_like_this(@feed_item) do
@@ -59,7 +54,6 @@ class FeedItemsController < ApplicationController
 
   # A paginated list of FeedItems in a HubFeed. Returns html, atom, rss, json, or xml. Action cached for anonymous visitors.
   def index
-    load_hub_feed
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
     @feed_items =
       @hub_feed
@@ -83,8 +77,6 @@ class FeedItemsController < ApplicationController
 
   # A FeedItem. Returns html, json, or xml. Action cached for anonymous visitors.
   def show
-    load_hub_feed
-    load_feed_item
     add_breadcrumbs
     respond_to do |format|
       format.html do
@@ -96,7 +88,6 @@ class FeedItemsController < ApplicationController
   end
 
   def tag_list
-    load_feed_item
     @hub = Hub.find(params[:hub_id])
     respond_to do |format|
       format.html do
@@ -105,14 +96,32 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def edit
+    authorize @feed_item
+
+    add_breadcrumbs
+
+    render layout: 'tabs'
+  end
+
+  def update
+    authorize @feed_item
+
+    if @feed_item.update(feed_item_params)
+      redirect_to hub_feed_feed_item_path(@hub_feed, @feed_item)
+    else
+      render :edit
+    end
+  end
+
   private
 
-  def load_hub_feed
+  def set_hub_feed
     @hub_feed = HubFeed.find(params[:hub_feed_id])
     @hub = @hub_feed.hub
   end
 
-  def load_feed_item
+  def set_feed_item
     @feed_item = FeedItem.find(params[:id])
   end
 
@@ -135,5 +144,9 @@ class FeedItemsController < ApplicationController
         end
       end
     end
+  end
+
+  def feed_item_params
+    params.require(:feed_item).permit(:description, :title, :url)
   end
 end

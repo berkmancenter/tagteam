@@ -1,0 +1,12 @@
+= form_for @feed_item, url: hub_feed_feed_item_path(@hub_feed, @feed_item) do |f|
+  - text_field_size = 80
+  %h3 Title:
+  = f.text_field :title, size: text_field_size
+  %h3 Summary:
+  = f.text_area :description
+  %h3 Link:
+  = f.text_field :url, size: text_field_size
+  %br
+  %br
+  = f.submit 'Update', class: 'btn btn-success'
+  = link_to 'Cancel', hub_feed_feed_item_path(@hub_feed, @feed_item), class: 'btn btn-default'
