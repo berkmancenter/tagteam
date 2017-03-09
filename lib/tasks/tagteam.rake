@@ -113,12 +113,17 @@ namespace :tagteam do
 
     affected_tags.each do |tag|
       tag_name = tag.name
+
+      puts "Starting a fix of the '#{tag_name}' tag"
+
       name_tags = tag_name.split(',') - ['', nil]
       is_multiple = name_tags.length > 1
       filters_with_tag = TagFilter.where(tag: tag)
       filter_with_new_as_tag = TagFilter.where(new_tag: tag)
 
       if is_multiple
+        puts 'It\'s a complex tag, splitting and fixing'
+
         taggings = tag.taggings
 
         name_tags.each do |name_tag|
@@ -146,6 +151,8 @@ namespace :tagteam do
           end
 
           unless filters_with_tag.empty?
+            puts 'Recreating tag filters'
+
             filters_with_tag.each do |filter_with_tag|
               new_filter = filter_with_tag.dup
 
@@ -156,6 +163,8 @@ namespace :tagteam do
           end
 
           unless filter_with_new_as_tag.empty?
+            puts 'Recreating tag filters (modified)'
+
             filter_with_new_as_tag.each do |filter_with_tag|
               new_filter = filter_with_tag.dup
 
@@ -170,9 +179,13 @@ namespace :tagteam do
         filters_with_tag.destroy_all
         filter_with_new_as_tag.destroy_all
       else
+        puts 'It\' just a typo, renaming'
+
         tag.name = tag.name.gsub(',', '').strip
         tag.save!
       end
+
+      puts "Fixed the #{tag_name} tag"
     end
   end
 end
