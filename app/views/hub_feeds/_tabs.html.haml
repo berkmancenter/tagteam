@@ -1,31 +1,26 @@
-- unless @hub_feed.feed.is_bookmarking_feed?
-  %li{:class => "#{'active' if active == 'about'}"}
-    = documentation('hub-feed-about-tab')
-    = link_to('About', hub_hub_feed_path(@hub, @hub_feed))
-    .nav-pill-arrow
-%li{:class => "#{'active' if active == 'items'}"}
+%li{ class: ('active' if active == 'items') }
   = documentation('hub-feed-feed-item-list')
   = link_to('Items', hub_feed_feed_items_path(@hub_feed))
   .nav-pill-arrow
-%li{:class => "#{'active' if active == 'tags'}"}
+%li{ class: ('active' if active == 'tags') }
   = documentation('hub-feed-tag-cloud')
   = link_to('Tags', hub_feed_tags_path(@hub_feed))
   .nav-pill-arrow
-%li{:class => "last-of-section #{'active' if active == 'filters'}"}
+%li{ class: ('active' if active == 'filters') }
   = documentation('hub-feed-filter-tab')
-  = link_to('Filters', hub_feed_tag_filters_path(@hub_feed) )
+  = link_to('Filters', hub_feed_tag_filters_path(@hub_feed))
   .nav-pill-arrow
-%li{:class => "last-of-section #{'active' if active == 'updates'}"}
+%li{ class: ('active' if active == 'updates') }
   = documentation('hub-feed-retrievals-list')
-  = link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed) )
+  = link_to('Updates', hub_feed_feed_retrievals_path(@hub_feed))
   .nav-pill-arrow
 - if !@hub_feed.blank? && !current_user.blank? && (current_user.is?(:owner, @hub_feed.feed) || current_user.is?(:owner, @hub)) && @hub_feed.feed.is_bookmarking_feed?
-  %li{:class => "#{'active' if active == 'import'}"}
+  %li{ class: ('active' if active == 'import') }
     = documentation('hub-feed-import-tab')
     = link_to('Import items', import_hub_feed_path(@hub_feed))
     .nav-pill-arrow
 - if @hub_feed.feed.is_bookmarking_feed?
-  %li{:class => "#{'active' if active == 'about'}"}
+  %li{ class: ['last-of-section', ('active' if active == 'about')] }
     = documentation('hub-feed-about-tab')
     = link_to('About', hub_hub_feed_path(@hub, @hub_feed))
     .nav-pill-arrow
