@@ -52,18 +52,28 @@ class TagFiltersController < ApplicationController
       flash[:notice] = %(Added a filter for that tag to "#{@scope.title}")
 
       if @hub.notify_taggers && @new_tag
-        @tag_filter.notify_taggers(
-          @tag,
-          @new_tag,
-          @scope,
-          @hub,
-          @hub_feed,
-          current_user
+        hub_feed_to_notify = @hub_feed.nil? ? nil : @hub_feed.id
+
+        Sidekiq::Client.enqueue(
+          SendTagChangeNotifications,
+          @tag_filter.id,
+          @tag.id,
+          @new_tag.id,
+          @scope.class.name,
+          @scope.id,
+          @hub.id,
+          hub_feed_to_notify,
+          current_user.id
         )
       end
 
       if @hub.allow_taggers_to_sign_up_for_notifications
-        @tag_filter.notify_about_items_modification(@hub, current_user)
+        Sidekiq::Client.enqueue(
+          SendItemChangeNotifications,
+          @tag_filter.id,
+          @hub.id,
+          current_user.id
+        )
       end
 
       @tag_filter.apply_async
@@ -80,7 +90,12 @@ class TagFiltersController < ApplicationController
 
   def destroy
     if @hub.allow_taggers_to_sign_up_for_notifications
-      @tag_filter.notify_about_items_modification(@hub, current_user)
+      Sidekiq::Client.enqueue(
+        SendItemChangeNotifications,
+        @tag_filter.id,
+        @hub.id,
+        current_user.id
+      )
     end
     @tag_filter.rollback_and_destroy_async
 
