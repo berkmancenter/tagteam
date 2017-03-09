@@ -1,10 +1,16 @@
 .nicely-padded
-  - unless @hub_feed.feed.is_bookmarking_feed?
+  - if @hub_feed.feed.is_bookmarking_feed?
+    %h3 Title:
+    = @hub_feed.feed.title
+    - unless @hub_feed.display_description.blank?
+      %h3 Description:
+      = @hub_feed.display_description.html_safe
+  - else
     %h3 Original title from feed:
     = @hub_feed.feed.title
-    - unless @hub_feed.feed.description.blank?
+    - unless @hub_feed.display_description.blank?
       %h3 Description:
-      = @hub_feed.feed.description
+      = @hub_feed.display_description.html_safe
     %h3 URL:
     = link_to(@hub_feed.feed.link,@hub_feed.feed.link, :target => '_blank')
     %h3 RSS / Atom URL:

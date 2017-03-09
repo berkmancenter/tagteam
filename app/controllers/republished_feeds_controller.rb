@@ -74,8 +74,9 @@ class RepublishedFeedsController < ApplicationController
   end
 
   def create
-    authorize RepublishedFeed
     @republished_feed = RepublishedFeed.create_with_user(current_user, @hub, params)
+
+    authorize @republished_feed
 
     respond_to do |format|
       if @republished_feed
