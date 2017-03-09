@@ -1,5 +1,5 @@
 .metadata{ id: "hub_feed_metadata_#{@hub_feed.id}" }
-  %span.updated{ title: 'Last updated' } Updated #{@hub_feed.latest_feed_items.first.updated_at.to_s(:long)}
+  %span.updated{ title: 'Last updated' } Updated #{hub_feed_updated(@hub_feed)}
 
   |&nbsp;
 
