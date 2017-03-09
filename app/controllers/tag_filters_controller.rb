@@ -68,7 +68,12 @@ class TagFiltersController < ApplicationController
       end
 
       if @hub.allow_taggers_to_sign_up_for_notifications
-        @tag_filter.notify_about_items_modification(@hub, current_user)
+        Sidekiq::Client.enqueue(
+          SendItemChangeNotifications,
+          @tag_filter.id,
+          @hub.id,
+          current_user.id
+        )
       end
 
       @tag_filter.apply_async
@@ -85,7 +90,12 @@ class TagFiltersController < ApplicationController
 
   def destroy
     if @hub.allow_taggers_to_sign_up_for_notifications
-      @tag_filter.notify_about_items_modification(@hub, current_user)
+      Sidekiq::Client.enqueue(
+        SendItemChangeNotifications,
+        @tag_filter.id,
+        @hub.id,
+        current_user.id
+      )
     end
     @tag_filter.rollback_and_destroy_async
 
