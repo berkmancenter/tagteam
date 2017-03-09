@@ -21,4 +21,11 @@ class Notifications < ActionMailer::Base
     subject = 'Item update in the ' + @hub.title + ' hub'
     mail(bcc: item_users.collect(&:email), subject: subject)
   end
+
+  def user_data_import_completion_notification(email, status)
+    @status = status
+
+    subject = 'Import status'
+    mail(cc: email, subject: subject)
+  end
 end

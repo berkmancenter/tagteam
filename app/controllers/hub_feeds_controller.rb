@@ -6,8 +6,8 @@ class HubFeedsController < ApplicationController
   }
 
   before_action :authenticate_user!, except: [:autocomplete, :controls, :index, :more_details, :show]
-  before_action :find_hub
   before_action :find_hub_feed, except: [:autocomplete, :create, :index, :new]
+  before_action :find_hub
 
   after_action :verify_authorized, except: [:autocomplete, :controls, :index, :more_details, :show]
 

@@ -1,0 +1,18 @@
+#export-import
+  .row
+    %h3 Export
+  .row
+    %p Click below to download your account data. You can use it to import in an another TagTeam installation.
+  .row
+    %a.btn.btn-success{ title: 'Download data', href: export_import_download_path }
+      Download data
+  .row
+    %h3 Import
+  .row
+    %p Use the form below to upload data previously exported.
+  .row
+    = form_tag(export_import_path, method: 'post', multipart: true) do
+      = label_tag 'file', 'Select to upload'
+      = file_field_tag 'file'
+      %br
+      = submit_tag 'Import data', class: 'btn btn-success'

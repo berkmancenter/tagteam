@@ -24,7 +24,8 @@ class Hub < ApplicationRecord
   include TagScopable
   extend FriendlyId
 
-  attr_accessible :title, :description, :tag_prefix, :nickname
+  attr_accessible :title, :description, :tag_prefix, :nickname, :slug,
+                  :notify_taggers, :allow_taggers_to_sign_up_for_notifications
   acts_as_authorization_object
 
   friendly_id :nickname, use: [:slugged, :history]
@@ -167,5 +168,47 @@ class Hub < ApplicationRecord
     item.hubs.each do |hub|
       ApplyTagFilters.perform_async(hub.all_tag_filters.pluck(:id), item.id, true)
     end
+  end
+
+  # all tags used in the hub
+  def tags
+    filters_applied = (
+      all_tag_filters.pluck(:tag_id) +
+      all_tag_filters.pluck(:new_tag_id) -
+      ['', nil]
+    ).uniq.join(',')
+
+    tags_hub = ActsAsTaggableOn::Tag.find_by_sql(
+      [
+        'SELECT tags.*
+        FROM tags JOIN taggings ON taggings.tag_id = tags.id
+        WHERE taggings.context = ? AND taggings.taggable_type = ?
+        GROUP BY tags.id', tagging_key, 'FeedItem'
+      ]
+    )
+
+    tags_filters = []
+    unless filters_applied.empty?
+      tags_filters = ActsAsTaggableOn::Tag.find_by_sql(
+        [
+          'SELECT tags.*
+          FROM tags WHERE tags.id IN (' + filters_applied + ')'
+        ]
+      )
+    end
+
+    tags_hub + tags_filters
+  end
+
+  # all taggings related to the hub
+  def taggings
+    tags_hub = ActsAsTaggableOn::Tagging.find_by_sql(
+      [
+        'SELECT taggings.*
+        FROM taggings
+        WHERE taggings.context = ? AND taggings.taggable_type = ?',
+        tagging_key, 'FeedItem'
+      ]
+    )
   end
 end
