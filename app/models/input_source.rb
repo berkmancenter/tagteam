@@ -12,7 +12,7 @@ class InputSource < ApplicationRecord
   acts_as_authorization_object
   include ModelExtensions
 
-  validates :item_source_type, uniqueness: { scope: [:item_source_id, :effect, :republished_feed_id] }
+  validates :item_source_type, uniqueness: { scope: [:item_source_id, :effect, :republished_feed_id, :created_by_only_id] }
 
   EFFECTS = %w(add remove).freeze
 
