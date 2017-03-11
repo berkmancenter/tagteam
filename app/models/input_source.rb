@@ -24,7 +24,9 @@ class InputSource < ApplicationRecord
   end
   validates :effect, inclusion: { in: EFFECTS }
   accepts_nested_attributes_for :item_source
-  attr_accessible :item_source, :item_source_attributes, :republished_feed, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
+  attr_accessible :item_source, :item_source_attributes, :republished_feed,
+                  :republished_feed_id, :item_source_id, :item_source_type, 
+                  :effect, :limit, :search_in, :created_by_only_id
   attr_accessor :search_in
 
   api_accessible :default do |t|

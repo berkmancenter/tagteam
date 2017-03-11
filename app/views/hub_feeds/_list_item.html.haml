@@ -1,7 +1,7 @@
 %li{ id: "hub_feed-#{hub_feed.id}" }
   .media
     .pull-right
-      = link_to controls_hub_feed_path(hub_feed), class: 'control', title: 'Feed actions' do
+      = link_to controls_hub_hub_feed_path(@hub, hub_feed), class: 'control', title: 'Feed actions' do
         = fa_icon 'cog'
     .media-left
       = link_to more_details_hub_hub_feed_path(@hub, hub_feed),

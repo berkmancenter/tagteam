@@ -91,6 +91,7 @@ class FeedItem < ApplicationRecord
     integer :feed_ids, multiple: true
     string :tag_list, using: :tag_list_array_for_indexing, multiple: true
     string :tag_contexts, multiple: true
+    string :tag_contexts_by_users, multiple: true
 
     string :title
     string :url
@@ -124,6 +125,20 @@ class FeedItem < ApplicationRecord
   def tag_contexts
     taggings.collect do |tg|
       "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'
+    end.compact
+  end
+
+  def tag_contexts_by_users
+    taggings.collect do |tg|
+      next if tg.context.eql? 'tags'
+
+      auth_user = Role.where(
+        authorizable_id: tg.tagger_id,
+        authorizable_type: 'TagFilter',
+        name: 'creator'
+      ).first.users.first
+
+      "#{tg.context}-#{tg.tag.name}-user_#{auth_user.id}"
     end.compact
   end
 
