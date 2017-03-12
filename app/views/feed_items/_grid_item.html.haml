@@ -2,7 +2,7 @@
 :ruby
   hub = @hub || feed_item.hubs.first
   hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feeds.first
-- cache("feed-item-tag-list-#{hub.id}-#{hub_feed.id}-#{feed_item.id}", :expires => 120.minutes ) do
+- cache("feed-item-tag-list-#{hub.id}-#{hub_feed.id}-#{feed_item.id}-grid", :expires => 120.minutes ) do
   .feed-item.grid-item.col-md-6
     .grid-image{ :style => "background-image: url('#{feed_item.image_url or image_path('feed_item_placeholder.png')}');" }
     .feed-item-content.equal-height
