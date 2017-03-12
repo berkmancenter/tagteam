@@ -15,10 +15,10 @@
       <%= form_tag(set_settings_hub_path(@hub)) do %>
         <ul class="list-unstyled">
           <li>
-            <%= label_tag 'tags_delimiter', 'Character or multiple characters separating tags (default is ",", leave empty to use default)' %>
+            <%= label_tag 'tags_delimiter', 'Tags delimiter' %>
             <div class="row">
               <div class="col-md-12">
-                <%= text_field_tag('tags_delimiter', @settings.tags_delimiter, {id: 'tags_delimiter'}) %>
+                <%= text_field_tag('tags_delimiter', @settings[:tags_delimiter], {id: 'tags_delimiter'}) %>
               </div>
             </div>
           </li>

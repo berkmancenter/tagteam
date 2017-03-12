@@ -30,6 +30,11 @@
   = link_to('History', retrievals_hub_path(@hub) )
   .nav-pill-arrow
 - if current_user && current_user.is?(:owner, @hub)
+  %li{:class => "#{'active' if active == 'settings'}"}
+    = documentation('hub-settings')
+    = link_to('Settings', settings_hub_path(@hub) )
+    .nav-pill-arrow
+- if current_user && current_user.is?(:owner, @hub)
   %li{:class => "#{'active' if active == 'community'}"}
     = documentation('hub-community')
     = link_to('Community', community_hub_path(@hub) )
