@@ -670,7 +670,7 @@ $(document).ready(function(){
     $.initEditor(this);
   });
 
-  if($('#logged_in').length > 0){
+  if($('#logged_in').length > 0 || $('#bookmarklet_allowed').length > 0){
     $('.tag').live({
       click: function(e){
         e.preventDefault();
