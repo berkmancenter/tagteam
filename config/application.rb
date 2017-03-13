@@ -36,6 +36,7 @@ module Tagteam
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir.glob("#{config.root}/app/interactions/*")
 
     # Activate observers that should always be running.
     config.active_record.observers = :feed_item_observer, :hub_feed_observer, :tag_filter_observer

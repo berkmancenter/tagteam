@@ -5,6 +5,7 @@ ruby '2.3.3'
 
 gem 'acl9', git: 'https://github.com/be9/acl9.git', branch: 'finalist-update-rails'
 gem 'actionpack-action_caching', '~> 1.2'
+gem 'active_interaction', '~> 3.4'
 gem 'acts-as-taggable-on', '~> 4.0'
 gem 'acts_as_api', '~> 0.4'
 gem 'bootstrap-sass', '~> 3.3'
