@@ -6,7 +6,7 @@
   - cache("feed-item-tag-list-#{hub.try(:id)}-#{hub_feed.try(:id)}-#{feed_item.try(:id)}", :expires => 120.minutes ) do
     .col-xs-10.col-xs-offset-1
       %h2
-        = link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item))
+        = link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed, feed_item))
         = link_to controls_hub_feed_feed_item_path(hub_feed,feed_item), class: 'control', title: 'Item actions' do
           = fa_icon 'cog'
       %p.text-nowrap

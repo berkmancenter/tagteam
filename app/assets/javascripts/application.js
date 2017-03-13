@@ -872,6 +872,7 @@ $(document).ready(function(){
       var item_source_id = $('body').data('item_source_id_for_republishing');
       var item_source_type = $('body').data('item_source_type_for_republishing');
       var item_effect = $('body').data('item_effect_for_republishing');
+      var user_id = $('input[name="user_ids[]"]').val();
       var search_query = $('#q').val();
       var hub_id = $('body').data('hub_id');
       var args = { 
@@ -881,7 +882,8 @@ $(document).ready(function(){
           republished_feed_id: republished_feed_id, 
           item_source_type: item_source_type, 
           item_source_id: item_source_id, 
-          effect: item_effect
+          effect: item_effect,
+          created_by_only_id: (typeof user_id === 'undefined' ? false : user_id)
         }
       };
 

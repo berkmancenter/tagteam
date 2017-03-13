@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307193237) do
+ActiveRecord::Schema.define(version: 20170311175714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,9 +168,10 @@ ActiveRecord::Schema.define(version: 20170307193237) do
     t.integer  "limit"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.integer  "created_by_only_id"
     t.index ["effect"], name: "index_input_sources_on_effect", using: :btree
     t.index ["item_source_id"], name: "index_input_sources_on_item_source_id", using: :btree
-    t.index ["item_source_type", "item_source_id", "effect", "republished_feed_id"], name: "bob_the_index", unique: true, using: :btree
+    t.index ["item_source_type", "item_source_id", "effect", "republished_feed_id", "created_by_only_id"], name: "bob_the_index", unique: true, using: :btree
     t.index ["republished_feed_id"], name: "index_input_sources_on_republished_feed_id", using: :btree
   end
 
