@@ -26,7 +26,10 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    authorize TagFilter
+    # dummy filter to authorize properly
+    dummy_tag_filter = TagFilter.new
+    dummy_tag_filter.hub = @hub
+    authorize dummy_tag_filter
 
     # Allow multiple TagFilters to be created from a comma-separated string of tags
     tag_filters =
