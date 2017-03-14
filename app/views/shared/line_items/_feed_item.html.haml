@@ -1,0 +1,16 @@
+- # So, sometimes a feed item will be called outside the context of a hub, mainly for the homepage.
+- hub = @hub || feed_item.hubs.first
+- hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feeds.first
+%tr.feed_item{:id => "feed_item_#{feed_item.id}"}
+  %td
+    - cache("feed-item-tag-list-#{hub.id}-#{hub_feed.id}-#{feed_item.id}", :expires => 120.minutes ) do
+      .feed_item_title
+        = link_to(raw(strip_tags(feed_item.title)), hub_feed_feed_item_path(hub_feed,feed_item))
+        %a{:name => feed_item.id}
+      .feed_item_feed
+        %span.hub_feed_title= link_to(hub_feed.display_title, hub_hub_feed_path(hub,hub_feed))
+        - unless feed_item.date_published.blank?
+          (#{link_to(l(feed_item.date_published, :format => :date_short),by_date_hub_path(hub, :year => feed_item.date_published.year, :month => feed_item.date_published.month, :day => feed_item.date_published.day) )})
+      .feed_item_tags
+        - unless feed_item.tags.empty?
+          = raw feed_item.tags.collect{|t| tag_display(t, :hub => hub, :hub_feed => hub_feed, :hub_feed_item => feed_item) }.join(' ')
