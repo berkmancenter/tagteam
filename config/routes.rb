@@ -76,11 +76,11 @@ Rails.application.routes.draw do
     get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { name: /.+/ }
     get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { name: /.+/ }
 
-    get 'user/:username/tag/:tagname' => 'users#tags', :as => 'user_tags_name', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/json' => 'users#tags_json', :as => 'user_tags_name_json', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/xml' => 'users#tags_xml', :as => 'user_tags_name_xml', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname' => 'users#user_tags', :as => 'user_tags_name', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname/rss' => 'users#user_tags_rss', :as => 'user_tags_name_rss', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname/atom' => 'users#user_tags_atom', :as => 'user_tags_name_atom', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname/json' => 'users#user_tags_json', :as => 'user_tags_name_json', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname/xml' => 'users#user_tags_xml', :as => 'user_tags_name_xml', :constraints => { name: /.+/ }
 
     member do
       get 'about'

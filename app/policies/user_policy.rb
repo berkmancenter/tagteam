@@ -45,16 +45,4 @@ class UserPolicy < ApplicationPolicy
   def user_tags?
     true
   end
-
-  def tags_json?
-    true
-  end
-
-  def tags_rss?
-    true
-  end
-
-  def tags_atom?
-    true
-  end
 end
