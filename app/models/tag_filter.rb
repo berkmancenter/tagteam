@@ -116,6 +116,8 @@ class TagFilter < ApplicationRecord
 
   # Informing taggers about changes in their tags
   def notify_taggers(old_tag, new_tag, scope, hub, hub_feed, current_user)
+    logger.info('Trying to nofity about changes in tags')
+
     case scope.class.name
     when 'Hub'
       tag_filters = TagFilter.where(
@@ -171,6 +173,8 @@ class TagFilter < ApplicationRecord
 
   # Informing taggers about changes in their items
   def notify_about_items_modification(hub, current_user)
+    logger.info('Trying to nofity about changes in items')
+
     # Get configs for notifications
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
