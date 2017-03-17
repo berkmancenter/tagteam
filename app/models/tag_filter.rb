@@ -116,8 +116,6 @@ class TagFilter < ApplicationRecord
 
   # Informing taggers about changes in their tags
   def notify_taggers(old_tag, new_tag, scope, hub, hub_feed, current_user)
-    logger.info('Trying to nofity about changes in tags')
-
     case scope.class.name
     when 'Hub'
       tag_filters = TagFilter.where(
@@ -172,14 +170,19 @@ class TagFilter < ApplicationRecord
   end
 
   # Informing taggers about changes in their items
-  def notify_about_items_modification(hub, current_user)
-    logger.info('Trying to nofity about changes in items')
-
+  def notify_about_items_modification(hub, current_user, items_to_process_joined)
     # Get configs for notifications
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
+    items_to_process = if items_to_process_joined == 'reprocess'
+                         logger.debug('XXXW - ' + items_to_process_joined)
+                         items_to_modify
+                       else
+                         FeedItem.where(id: items_to_process_joined.split(','))
+                       end
+
     # loop through scoped items
-    items_in_scope.each do |modified_item|
+    items_to_process.each do |modified_item|
       users_to_notify = []
       tag_filters_applied = TagFilter.where(
         id: modified_item.taggings.pluck(:tagger_id)
@@ -215,6 +218,22 @@ class TagFilter < ApplicationRecord
         ).deliver_later
       end
     end
+  end
+
+  def items_to_modify
+    items_to_process = []
+
+    if type == 'AddTagFilter'
+      items_to_process = items_in_scope
+    elsif type == 'DeleteTagFilter' || type == 'ModifyTagFilter'
+      items_in_scope.each do |scope_item|
+        unless scope_item.taggings.where(tag_id: tag).empty?
+          items_to_process << scope_item
+        end
+      end
+    end
+
+    items_to_process
   end
 
   # Fix Pundit policy lookup for STI classes that inherit from TagFilter
