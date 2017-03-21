@@ -63,8 +63,8 @@ class TagFilter < ApplicationRecord
     self.class.base_class.notify_observers :after_rollback, self
   end
 
-  def rollback_and_destroy_async
-    DestroyTagFilter.perform_async(id)
+  def rollback_and_destroy_async(user)
+    DestroyTagFilter.perform_async(id, user.id)
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
@@ -171,12 +171,19 @@ class TagFilter < ApplicationRecord
   end
 
   # Informing taggers about changes in their items
-  def notify_about_items_modification(hub, current_user)
+  def notify_about_items_modification(hub, current_user, items_to_process_joined)
     # Get configs for notifications
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
+    items_to_process = if items_to_process_joined == 'reprocess'
+                         logger.debug('XXXW - ' + items_to_process_joined)
+                         items_to_modify
+                       else
+                         FeedItem.where(id: items_to_process_joined.split(','))
+                       end
+
     # loop through scoped items
-    items_in_scope.each do |modified_item|
+    items_to_process.each do |modified_item|
       users_to_notify = []
       tag_filters_applied = TagFilter.where(
         id: modified_item.taggings.pluck(:tagger_id)
@@ -212,6 +219,22 @@ class TagFilter < ApplicationRecord
         ).deliver_later
       end
     end
+  end
+
+  def items_to_modify
+    items_to_process = []
+
+    if type == 'AddTagFilter'
+      items_to_process = items_in_scope
+    elsif type == 'DeleteTagFilter' || type == 'ModifyTagFilter'
+      items_to_process = FeedItem
+                         .joins(:taggings)
+                         .where(id: items_in_scope.pluck(:id))
+                         .group('feed_items.id,taggings.id')
+                         .having('taggings.tag_id=' + tag.id.to_s)
+    end
+
+    items_to_process
   end
 
   # Fix Pundit policy lookup for STI classes that inherit from TagFilter
