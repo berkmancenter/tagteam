@@ -4,8 +4,16 @@ module Users
   class RegistrationsController < Devise::RegistrationsController
     def create
       super do |resource|
-        Admin::UserApprovalsMailer.notify_admin_of_signup(resource).deliver_later unless resource.edu_email?
+        if notify_for_resource?(resource)
+          Admin::UserApprovalsMailer.notify_admin_of_signup(resource).deliver_later
+        end
       end
+    end
+
+    private
+
+    def notify_for_resource?(resource)
+      resource.persisted? && !resource.edu_email?
     end
   end
 end
