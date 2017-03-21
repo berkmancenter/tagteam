@@ -48,5 +48,7 @@ module Tagteam
     config.filter_parameters += [:password, :password_confirmation, 'SHARED_KEY_FOR_TASKS']
 
     config.log_tags = [:uuid, :remote_ip, ->(_req) { Time.current.httpdate }]
+    
+    config.active_job.queue_adapter = :sidekiq
   end
 end
