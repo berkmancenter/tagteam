@@ -38,15 +38,7 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
-    if @hub.allow_taggers_to_sign_up_for_notifications
-      Sidekiq::Client.enqueue(
-        SendItemChangeNotifications,
-        @tag_filter.id,
-        @hub.id,
-        current_user.id
-      )
-    end
-    @tag_filter.rollback_and_destroy_async
+    @tag_filter.rollback_and_destroy_async(current_user)
 
     flash[:notice] = 'Deleting that tag filter.'
     redirect_to hub_tag_filters_path(@hub)
