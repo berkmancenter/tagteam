@@ -9,3 +9,4 @@ production:
   - [updater, 1]
   - [file_cache, 1]
   - [importer, 1]
+  - [mailers, 1]
