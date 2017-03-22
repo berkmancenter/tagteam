@@ -118,19 +118,37 @@ class TagFilter < ApplicationRecord
   def notify_taggers(old_tag, new_tag, scope, hub, hub_feed, current_user)
     case scope.class.name
     when 'Hub'
-      tag_filters = TagFilter.where(
+      tag_filters_add = TagFilter.where(
         hub_id: hub,
         tag_id: old_tag,
         type: 'AddTagFilter'
       )
+
+      tag_filters_mod = TagFilter.where(
+        hub_id: hub,
+        new_tag_id: old_tag,
+        type: 'ModifyTagFilter'
+      )
+
+      tag_filters = tag_filters_add + tag_filters_mod
     when 'HubFeed'
-      hub_feed_tag_filters = TagFilter.where(
+      hub_feed_tag_filters_add = TagFilter.where(
         hub_id: hub,
         tag_id: old_tag,
         scope_type: 'HubFeed',
         scope_id: hub_feed,
         type: 'AddTagFilter'
       )
+
+      hub_feed_tag_filters_mod = TagFilter.where(
+        hub_id: hub,
+        tag_id: old_tag,
+        scope_type: 'HubFeed',
+        scope_id: hub_feed,
+        type: 'ModifyTagFilter'
+      )
+
+      hub_feed_tag_filters = hub_feed_tag_filters_add + hub_feed_tag_filters_mod
 
       feed_item_tag_filters = TagFilter
                               .joins('LEFT JOIN feed_items_feeds on tag_filters.scope_id = feed_items_feeds.feed_item_id')
