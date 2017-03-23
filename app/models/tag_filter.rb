@@ -116,6 +116,7 @@ class TagFilter < ApplicationRecord
 
   # Informing taggers about changes in their tags
   def notify_taggers(old_tag, new_tag, scope, hub, hub_feed, current_user)
+    # by tag filter
     case scope.class.name
     when 'Hub'
       tag_filters_add = TagFilter.where(
@@ -154,7 +155,7 @@ class TagFilter < ApplicationRecord
                               .joins('LEFT JOIN feed_items_feeds on tag_filters.scope_id = feed_items_feeds.feed_item_id')
                               .where(
                                 feed_items_feeds: {
-                                  feed_id: hub_feed
+                                  feed_id: hub_feed.feed
                                 },
                                 hub_id: hub,
                                 tag_id: old_tag,
@@ -163,9 +164,26 @@ class TagFilter < ApplicationRecord
 
       tag_filters = hub_feed_tag_filters + feed_item_tag_filters
     when 'FeedItem'
-      return
+      tag_filters_add = TagFilter.where(
+        hub_id: hub,
+        tag_id: old_tag,
+        scope_id: scope.id,
+        scope_type: 'FeedItem',
+        type: 'AddTagFilter'
+      )
+
+      tag_filters_mod = TagFilter.where(
+        hub_id: hub,
+        new_tag_id: old_tag,
+        scope_id: scope.id,
+        scope_type: 'FeedItem',
+        type: 'ModifyTagFilter'
+      )
+
+      tag_filters = tag_filters_add + tag_filters_mod
     end
 
+    # collect related users
     taggers_to_notify = []
     tag_filters.each do |tag_filter|
       taggers_to_notify.concat(Role.where(
@@ -174,8 +192,46 @@ class TagFilter < ApplicationRecord
       ).first.users)
     end
 
+    # by user tag
+    case scope.class.name
+    when 'Hub'
+      taggings = ActsAsTaggableOn::Tagging.where(
+        tagger_type: 'User',
+        tag_id: old_tag,
+        taggable_type: 'FeedItem',
+        context: 'hub_' + hub.id.to_s
+      )
+    when 'HubFeed'
+      taggings = ActsAsTaggableOn::Tagging
+                 .joins('LEFT JOIN feed_items_feeds on taggings.taggable_id = feed_items_feeds.feed_item_id')
+                 .where(
+                   feed_items_feeds: {
+                     feed_id: hub_feed.feed
+                   },
+                   tagger_type: 'User',
+                   tag_id: old_tag,
+                   taggable_type: 'FeedItem',
+                   context: 'hub_' + hub.id.to_s
+                 )
+    when 'FeedItem'
+      taggings = ActsAsTaggableOn::Tagging.where(
+        tagger_type: 'User',
+        tag_id: old_tag,
+        taggable_id: scope.id,
+        taggable_type: 'FeedItem',
+        context: 'hub_' + hub.id.to_s
+      )
+    end
+
+    # notify basic taggers also
+    taggers_to_notify += User.where(
+      id: taggings.pluck(:tagger_id)
+    )
+
+    # we don't want to notify ourselves
     taggers_to_notify = taggers_to_notify.uniq - [current_user]
 
+    # send notifications
     unless taggers_to_notify.empty?
       Notifications.tag_change_notification(
         taggers_to_notify,
