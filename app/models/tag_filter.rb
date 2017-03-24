@@ -249,7 +249,6 @@ class TagFilter < ApplicationRecord
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
     items_to_process = if items_to_process_joined == 'reprocess'
-                         logger.debug('XXXW - ' + items_to_process_joined)
                          items_to_modify
                        else
                          FeedItem.where(id: items_to_process_joined.split(','))
@@ -257,9 +256,12 @@ class TagFilter < ApplicationRecord
 
     # loop through scoped items
     items_to_process.each do |modified_item|
+      # tag filter creators
       users_to_notify = []
       tag_filters_applied = TagFilter.where(
-        id: modified_item.taggings.pluck(:tagger_id)
+        id: modified_item.taggings.where(
+          tagger_type: 'TagFilter'
+        ).pluck(:tagger_id)
       )
 
       # find and match filters owners
@@ -269,6 +271,18 @@ class TagFilter < ApplicationRecord
           authorizable_type: 'TagFilter'
         ).first.users)
       end
+
+      # simple taggers
+      taggings = ActsAsTaggableOn::Tagging.where(
+        tagger_type: 'User',
+        taggable_id: modified_item.id,
+        taggable_type: 'FeedItem',
+        context: 'hub_' + hub.id.to_s
+      )
+
+      users_to_notify += User.where(
+        id: taggings.pluck(:tagger_id)
+      )
 
       users_to_notify_allowed = []
       users_to_notify = users_to_notify.uniq - [current_user]

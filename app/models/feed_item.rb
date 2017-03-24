@@ -306,6 +306,62 @@ class FeedItem < ApplicationRecord
     feed_item.apply_tag_filters(hub_ids)
   end
 
+  # Informing taggers about changes in their items
+  def notify_about_items_modification(hub, current_user, items_to_process_joined)
+    # Get configs for notifications
+    hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
+
+    # tag filter creators
+    users_to_notify = []
+    tag_filters_applied = TagFilter.where(
+      id: taggings.where(
+        tagger_type: 'TagFilter'
+      ).pluck(:tagger_id)
+    )
+
+    # find and match filters owners
+    tag_filters_applied.each do |tag_filter|
+      users_to_notify.concat(Role.where(
+        authorizable_id: tag_filter,
+        authorizable_type: 'TagFilter'
+      ).first.users)
+    end
+
+    # simple taggers
+    taggings = ActsAsTaggableOn::Tagging.where(
+      tagger_type: 'User',
+      taggable_id: id,
+      taggable_type: 'FeedItem',
+      context: 'hub_' + hub.id.to_s
+    )
+
+    users_to_notify += User.where(
+      id: taggings.pluck(:tagger_id)
+    )
+
+    users_to_notify_allowed = []
+    users_to_notify = users_to_notify.uniq - [current_user]
+    users_to_notify.each do |user|
+      user_setup = hub_user_notifications_setup.select do |setup|
+        setup.user_id == user.id
+      end
+
+      # check if a user wants to reveive notifications
+      if !user_setup.empty? && user_setup.first.notify_about_modifications
+        users_to_notify_allowed << user
+      end
+    end
+
+    unless users_to_notify_allowed.empty?
+      Notifications.item_change_notification(
+        hub,
+        self,
+        users_to_notify_allowed,
+        current_user
+      ).deliver_later
+    end
+  end
+
   private
 
   def parse_out_image_url

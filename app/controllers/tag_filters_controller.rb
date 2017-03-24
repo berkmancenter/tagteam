@@ -72,6 +72,7 @@ class TagFiltersController < ApplicationController
 
         Sidekiq::Client.enqueue(
           SendItemChangeNotifications,
+          'TagFilter',
           @tag_filter.id,
           @hub.id,
           current_user.id,
