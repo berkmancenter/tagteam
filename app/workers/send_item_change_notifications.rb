@@ -6,11 +6,12 @@ class SendItemChangeNotifications
     'Sending an email notification of a modified item'
   end
 
-  def perform(tag_filter_id, hub_id, current_user_id, items_to_process)
-    tag_filter = TagFilter.find(tag_filter_id)
+  def perform(scope_class, scope_id, hub_id, current_user_id, items_to_process)
     hub = Hub.find(hub_id)
     user = User.find(current_user_id)
+    scope_model = scope_class.constantize
+    scope = scope_model.find(scope_id)
 
-    tag_filter.notify_about_items_modification(hub, user, items_to_process)
+    scope.notify_about_items_modification(hub, user, items_to_process)
   end
 end
