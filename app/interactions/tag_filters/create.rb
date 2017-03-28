@@ -58,6 +58,7 @@ module TagFilters
 
         Sidekiq::Client.enqueue(
           SendItemChangeNotifications,
+          'TagFilter',
           tag_filter.id,
           hub.id,
           user.id,

@@ -88,6 +88,17 @@ class BookmarkletsController < ApplicationController
         end
         @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
 
+        if new_tags
+          Sidekiq::Client.enqueue(
+            SendItemChangeNotifications,
+            'FeedItem',
+            @feed_item.id,
+            @hub.id,
+            current_user.id,
+            @feed_item.id
+          )
+        end
+
         @feed_item.reload.solr_index
 
         format.html do
