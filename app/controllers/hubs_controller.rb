@@ -208,6 +208,7 @@ class HubsController < ApplicationController
 
   # Looks through the currently running resque jobs and returns a json response talking about what's going on.
   def background_activity
+    authorize Hub
     require 'sidekiq/api'
     @output = { running: [] }
     workers = Sidekiq::Workers.new
