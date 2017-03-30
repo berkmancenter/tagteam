@@ -6,7 +6,7 @@
         .checkbox
           = label_tag 'notify_taggers' do
             = check_box_tag('notify_taggers', @hub.notify_taggers, @hub.notify_taggers, id: 'notify_taggers')
-            Notify taggers when their tags modify
+            Notify taggers when their tags are modified
       %li
         .checkbox
           = label_tag 'allow_taggers_to_sign_up_for_notifications' do
