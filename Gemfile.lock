@@ -199,7 +199,7 @@ GEM
     minitest (5.10.1)
     mustermann (1.0.0.beta2)
     nio4r (1.2.1)
-    nokogiri (1.7.0.1)
+    nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
       nokogiri
@@ -470,4 +470,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.14.5
+   1.14.6
