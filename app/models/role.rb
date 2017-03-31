@@ -4,7 +4,7 @@ class Role < ApplicationRecord
   acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
-  has_and_belongs_to_many :users, join_table: :roles_users
+
   api_accessible :default do |t|
     t.add :id
     t.add :name
