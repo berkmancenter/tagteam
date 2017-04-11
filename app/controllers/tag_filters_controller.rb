@@ -26,13 +26,18 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    authorize TagFilter
+    authorize_tag_filter = TagFilter.new
+    authorize_tag_filter.hub = @hub
+    authorize authorize_tag_filter
 
     # Allow multiple TagFilters to be created from a comma-separated string of tags
-    tag_filters =
-      params[:new_tag].split(',').map do |tag|
-        TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
-      end
+    tag_filters = if params[:new_tag].empty?
+                    [TagFilters::Create.run(tag_filter_params)]
+                  else
+                    params[:new_tag].split(',').map do |tag|
+                      TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
+                    end
+                  end
 
     tag_filters.all?(&:valid?) ? process_successful_create(tag_filters) : process_failed_create(tag_filters)
   end
@@ -92,7 +97,8 @@ class TagFiltersController < ApplicationController
       modify_tag_name: params[:modify_tag],
       new_tag_name: params[:new_tag],
       scope: @scope,
-      user: current_user
+      user: current_user,
+      tag_id: params[:tag_id]
     }
   end
 
