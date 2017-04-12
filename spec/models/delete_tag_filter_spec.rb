@@ -2,6 +2,11 @@
 require 'rails_helper'
 
 RSpec.describe DeleteTagFilter, type: :model do
+  def new_add_filter(tag_name = 'just-a-tag')
+    new_tag = create(:tag, name: tag_name)
+    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+  end
+
   context 'the filter is scoped to a hub with items all with tag "a"' do
     include_context 'user owns a hub with a feed and items'
     before do

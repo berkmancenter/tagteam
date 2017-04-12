@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require 'support/shared_context'
-require 'support/shared_tag_filter_examples'
 
 RSpec.describe ModifyTagFilter, type: :model do
+  def new_add_filter(tag_name = 'just-a-tag')
+    new_tag = create(:tag, name: tag_name)
+    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+  end
+
   context 'the filter is scoped to a hub with some items with tag "a"' do
     include_context 'user owns a hub with a feed and items'
     before do
@@ -192,7 +195,11 @@ RSpec.describe ModifyTagFilter, type: :model do
   end
 
   context 'the filter is scoped to a hub' do
-    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
+    def add_filter(old_tag = 'just-a-tag', new_tag = 'not-just-a-tag')
+      unless ActsAsTaggableOn::Tag.find_by(name: old_tag)
+        create(:tag, name: old_tag)
+      end
+
       filter = create(:modify_tag_filter,
                       tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
                       new_tag: create(:tag, name: new_tag),
@@ -208,12 +215,17 @@ RSpec.describe ModifyTagFilter, type: :model do
       include_context 'user owns a hub with a feed and items'
 
       it 'modifies tags' do
-        old_tag = 'praxis'
-        new_tag = 'not-praxis'
+        old_tag_name = 'just-a-tag'
+        new_tag_name = 'not-just-a-tag'
 
-        filter = add_filter(old_tag, new_tag)
+        old_tag = create(:tag, name: old_tag_name)
+        create(:tagging, tag: old_tag, taggable: @feed_items.first,
+                         context: @hub.tagging_key)
+
+        filter = add_filter(old_tag_name, new_tag_name)
         filter.apply
-        new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key, true)
+
+        new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
 
         expect(new_tag_lists).to show_effects_of filter
       end
@@ -223,7 +235,11 @@ RSpec.describe ModifyTagFilter, type: :model do
   end
 
   context 'the filter is scoped to a feed' do
-    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
+    def add_filter(old_tag = 'just-a-tag', new_tag = 'not-just-a-tag')
+      unless ActsAsTaggableOn::Tag.find_by(name: old_tag)
+        create(:tag, name: old_tag)
+      end
+
       create(:modify_tag_filter,
              tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
              new_tag: create(:tag, name: new_tag),
@@ -244,11 +260,15 @@ RSpec.describe ModifyTagFilter, type: :model do
       include_context 'user owns a hub with a feed and items'
 
       it 'modifies tags' do
-        old_tag = 'praxis'
-        new_tag = 'not-praxis'
+        old_tag = 'just-a-tag'
+        new_tag = 'not-just-a-tag'
+
+        filer_old = new_add_filter(old_tag)
+        filer_old.apply
 
         filter = add_filter(old_tag, new_tag)
         filter.apply
+
         new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key, true)
 
         expect(new_tag_lists).to show_effects_of filter
@@ -259,7 +279,11 @@ RSpec.describe ModifyTagFilter, type: :model do
   end
 
   context 'the filter is scoped to an item' do
-    def add_filter(old_tag = 'praxis', new_tag = 'not-praxis')
+    def add_filter(old_tag = 'just-a-tag', new_tag = 'not-just-a-tag')
+      unless ActsAsTaggableOn::Tag.find_by(name: old_tag)
+        create(:tag, name: old_tag)
+      end
+
       create(:modify_tag_filter,
              tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
              new_tag: create(:tag, name: new_tag),
@@ -281,8 +305,11 @@ RSpec.describe ModifyTagFilter, type: :model do
 
       it 'modifies tags' do
         @feed_item = @feed_items.order(:id).first
-        old_tag = 'praxis'
-        new_tag = 'not-praxis'
+        old_tag = 'just-a-tag'
+        new_tag = 'not-just-a-tag'
+
+        filer_old = new_add_filter(old_tag)
+        filer_old.apply
 
         filter = add_filter(old_tag, new_tag)
         filter.apply

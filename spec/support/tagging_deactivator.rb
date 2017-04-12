@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'a tagging deactivator' do |filter_type|
-  def add_filter(tag_name = 'add-test')
-    new_tag = create(:tag, name: tag_name)
-    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
-  end
-
   describe '#deactivate_tagging' do
     it 'copies the tagging into the deactivated_taggings table' do
       filter = create(filter_type)
@@ -18,10 +13,11 @@ RSpec.shared_examples 'a tagging deactivator' do |filter_type|
     end
 
     it 'removes the tagging from the taggings table' do
+      count = ActsAsTaggableOn::Tagging.count
       filter = create(filter_type)
       tagging = create(:tagging)
       filter.deactivate_tagging(tagging)
-      expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+      expect(ActsAsTaggableOn::Tagging.count).to eq(count)
     end
 
     it 'returns the deactivated copy of the tagging' do
