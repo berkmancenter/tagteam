@@ -130,15 +130,15 @@ end
 RSpec.shared_examples 'an existing tag filter in a populated hub' do
   describe '#apply' do
     it 'can be applied to only a few items in its scope' do
-      random_ids = @feed_items.order('RANDOM()').limit(3).pluck(:id)
-      random_items = @feed_items.where(id: random_ids)
-      without_random_items = @feed_items
-                             .where('feed_items.id NOT IN (?)', random_ids)
+      some_ids = @feed_items.order(:id).limit(3).pluck(:id)
+      some_items = @feed_items.where(id: some_ids)
+      without_some_items = @feed_items
+                             .where('feed_items.id NOT IN (?)', some_ids)
 
-      @filter.apply(items: random_items)
+      @filter.apply(items: some_items)
 
-      tag_lists = tag_lists_for(random_items, @hub.tagging_key)
-      without_tag_lists = tag_lists_for(without_random_items, @hub.tagging_key)
+      tag_lists = tag_lists_for(some_items, @hub.tagging_key)
+      without_tag_lists = tag_lists_for(without_some_items, @hub.tagging_key)
 
       expect(tag_lists).to show_effects_of @filter
       expect(without_tag_lists).to not_show_effects_of @filter

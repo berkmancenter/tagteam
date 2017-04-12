@@ -11,7 +11,7 @@ RSpec.describe ModifyTagFilter, type: :model do
     include_context 'user owns a hub with a feed and items'
     before do
       @tag = create(:tag, name: 'a')
-      @feed_items.limit(4).each do |item|
+      @feed_items.order(:id).limit(4).each do |item|
         create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first)
         # This doesn't run on its own because items have already been created.
         item.copy_global_tags_to_hubs
