@@ -30,13 +30,11 @@ class TagFiltersController < ApplicationController
     authorize_tag_filter.hub = @hub
     authorize authorize_tag_filter
 
-    name_delimiter = @hub.tags_delimiter_with_default
-
     # Allow multiple TagFilters to be created from a comma-separated string of tags
     tag_filters = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
-                    params[:new_tag].split(name_delimiter).map do |tag|
+                    TagFilterHelper.split_tags(params[:new_tag], @hub).map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end
                   end

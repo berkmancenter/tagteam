@@ -83,11 +83,12 @@ class BookmarkletsController < ApplicationController
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
 
-        new_tags = params[:feed_item][:tag_list].split(
-          @hub.tags_delimiter_with_default
+        new_tags = TagFilterHelper.split_tags(
+          params[:feed_item][:tag_list], @hub
         ).map do |tag|
           ActsAsTaggableOn::Tag.normalize_name(tag)
         end
+
         @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
 
         if new_tags
