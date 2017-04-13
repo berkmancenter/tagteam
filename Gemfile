@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 source 'http://rubygems.org'
 
-ruby '2.3.3'
+ruby '2.3.0'
 
 gem 'acl9', git: 'https://github.com/be9/acl9.git', branch: 'finalist-update-rails'
 gem 'actionpack-action_caching', '~> 1.2'
