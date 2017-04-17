@@ -24,4 +24,8 @@ class AddTagFilter < TagFilter
                                            tag.id, updated_at).first
     subsequent ? [subsequent] + subsequent.filters_after : []
   end
+
+  def tag_changes
+    { tags_added: [new_tag] }
+  end
 end

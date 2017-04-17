@@ -88,4 +88,8 @@ class ModifyTagFilter < TagFilter
     ).first
     subsequent ? [subsequent] + subsequent.filters_after : []
   end
+
+  def tag_changes
+    { tags_modified: [tag, new_tag] }
+  end
 end

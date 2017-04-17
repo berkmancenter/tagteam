@@ -55,6 +55,7 @@ module TagFilters
 
       if hub.allow_taggers_to_sign_up_for_notifications
         items_to_process = tag_filter.items_to_modify.collect(&:id).join(',')
+        changes = modify_tag_name.present? ? { tags_modified: [modify_tag_name, new_tag_name] } : {}
 
         Sidekiq::Client.enqueue(
           SendItemChangeNotifications,
@@ -62,7 +63,8 @@ module TagFilters
           tag_filter.id,
           hub.id,
           user.id,
-          items_to_process
+          items_to_process,
+          changes
         )
       end
 
