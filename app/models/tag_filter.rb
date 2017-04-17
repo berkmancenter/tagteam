@@ -303,7 +303,8 @@ class TagFilter < ApplicationRecord
           hub,
           modified_item,
           users_to_notify_allowed,
-          current_user
+          current_user,
+          tag_changes
         ).deliver_later
       end
     end

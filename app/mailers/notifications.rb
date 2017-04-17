@@ -14,13 +14,14 @@ class Notifications < ActionMailer::Base
     mail(bcc: taggers.collect(&:email), subject: subject)
   end
 
-  def item_change_notification(hub, modified_item, item_users, current_user)
+  def item_change_notification(hub, modified_item, item_users, current_user, changes)
     logger.info('Sending a notification about an items change to ' + item_users.collect(&:email).join(','))
 
     @hub = hub
     @hub_url = hub_url(@hub)
     @modified_item = modified_item
     @updated_by = current_user
+    @changes = parse_changes(changes)
 
     subject = 'Item update in the ' + @hub.title + ' hub'
     mail(bcc: item_users.collect(&:email), subject: subject)
@@ -31,5 +32,20 @@ class Notifications < ActionMailer::Base
 
     subject = 'Import status'
     mail(cc: email, subject: subject)
+  end
+
+  private
+
+  def parse_changes(changes)
+    change_type, tags = changes.first
+
+    case change_type
+    when :tags_added
+      "Tags added: #{tags.join(', ')}"
+    when :tags_modified
+      "Tags modified: #{tags.first} was changed to #{tags.last}"
+    when :tags_deleted
+      "Tags deleted: #{tags.join(', ')}"
+    end
   end
 end

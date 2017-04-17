@@ -322,7 +322,7 @@ class FeedItem < ApplicationRecord
   end
 
   # Informing taggers about changes in their items
-  def notify_about_items_modification(hub, current_user, items_to_process_joined)
+  def notify_about_items_modification(hub, current_user, items_to_process_joined, changes)
     # Get configs for notifications
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
@@ -372,7 +372,8 @@ class FeedItem < ApplicationRecord
         hub,
         self,
         users_to_notify_allowed,
-        current_user
+        current_user,
+        changes
       ).deliver_later
     end
   end
