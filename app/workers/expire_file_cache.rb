@@ -10,16 +10,10 @@ class ExpireFileCache
 
   def perform
     return if other_expirers_running?
+    return unless Rails.cache.class == ActiveSupport::Cache::FileStore
+
     # A no-op unless we're using a file cache store.
-    # Also, Marshal is pretty damned fast.
-    if Rails.cache.class == ActiveSupport::Cache::FileStore
-      Find.find(Rails.cache.cache_path) do |path|
-        if FileTest.file?(path)
-          c = Marshal.load(File.read(path))
-          File.unlink(path) if c.expired?
-        end
-      end
-    end
+    Rails.cache.cleanup
   end
 
   def other_expirers_running?

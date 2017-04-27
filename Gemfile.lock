@@ -142,7 +142,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    feed-abstract (0.0.13)
+    feed-abstract (0.0.15)
     ffi (1.9.17)
     font-awesome-rails (4.7.0.1)
       railties (>= 3.2, < 5.1)
@@ -416,7 +416,7 @@ DEPENDENCIES
   drg (~> 1.5)
   exception_notification (~> 2.6)
   factory_girl_rails (~> 4.8)
-  feed-abstract (= 0.0.13)
+  feed-abstract (= 0.0.15)
   font-awesome-rails (~> 4.7)
   formtastic (~> 3.1)
   formtastic-bootstrap!
