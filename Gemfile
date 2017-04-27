@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 source 'http://rubygems.org'
 
-ruby '2.3.3'
+ruby '2.3.0'
 
 gem 'acl9', git: 'https://github.com/be9/acl9.git', branch: 'finalist-update-rails'
 gem 'actionpack-action_caching', '~> 1.2'
@@ -38,6 +38,7 @@ gem 'unicorn', '~> 4.9'
 gem 'whenever', '~> 0.9'
 gem 'will_paginate', '~> 3.1'
 gem 'will_paginate-bootstrap', '~> 1.0'
+gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 
 group :development do
   gem 'drg', '~> 1.5'

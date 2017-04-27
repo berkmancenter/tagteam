@@ -201,6 +201,8 @@ GEM
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
       nokogiri
+    non-stupid-digest-assets (1.0.9)
+      sprockets (>= 2.0)
     options (2.3.2)
     orm_adapter (0.5.0)
     parser (2.4.0.0)
@@ -425,6 +427,7 @@ DEPENDENCIES
   jquery-rails (~> 4.2)
   launchy (~> 2.4)
   nokogiri (~> 1.7)
+  non-stupid-digest-assets (~> 1.0, >= 1.0.9)
   pg (~> 0.19)
   progress_bar (~> 1.1)
   protected_attributes_continued (~> 1.2)
@@ -464,7 +467,7 @@ DEPENDENCIES
   will_paginate-bootstrap (~> 1.0)
 
 RUBY VERSION
-   ruby 2.3.3p222
+   ruby 2.3.0p0
 
 BUNDLED WITH
-   1.14.3
+   1.14.5
