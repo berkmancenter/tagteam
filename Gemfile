@@ -39,6 +39,7 @@ gem 'unicorn', '~> 4.9'
 gem 'whenever', '~> 0.9'
 gem 'will_paginate', '~> 3.1'
 gem 'will_paginate-bootstrap', '~> 1.0'
+gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 
 group :development do
   gem 'drg', '~> 1.5'
