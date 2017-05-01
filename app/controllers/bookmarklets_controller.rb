@@ -96,7 +96,7 @@ class BookmarkletsController < ApplicationController
             @hub.id,
             current_user.id,
             @feed_item.id,
-            tags_added: new_tags.map(&:name)
+            tags_added: new_tags
           )
         end
 
