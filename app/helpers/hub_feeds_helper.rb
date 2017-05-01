@@ -4,7 +4,7 @@ module HubFeedsHelper
   def hub_feed_updated(hub_feed)
     updated_at =
       if hub_feed.latest_feed_items.any?
-        hub_feed.latest_feed_items.first.updated_at
+        hub_feed.latest_feed_items.first.date_published
       else
         hub_feed.feed.updated_at
       end

@@ -4,8 +4,11 @@ class FeedItemsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
+  protect_from_forgery except: :index
+
   before_action :set_hub_feed, except: [:tag_list]
   before_action :set_feed_item, except: [:index]
+
 
   def controls
     add_breadcrumbs
