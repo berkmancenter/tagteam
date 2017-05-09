@@ -1,7 +1,6 @@
-- feed_items.each_with_index do |feed_item, i|
-  - if i % 2 == 0
-    .row.feed-item-grid
+- feed_items.each_slice(2) do |sliced_items|
+  .row.feed-item-grid
+    - sliced_items.each do |feed_item|
       = render partial: 'feed_items/grid_item', as: :feed_item, object: feed_item
-      - if (i + 1) % 2 == 0
 .text-center
   = render partial: 'shared/paginate', object: feed_items, as: :results
