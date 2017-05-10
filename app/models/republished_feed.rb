@@ -28,7 +28,7 @@ class RepublishedFeed < ApplicationRecord
   has_many :input_sources, -> { order(created_at: :desc) }, dependent: :destroy
 
   validates :url_key, uniqueness: true
-  validates :url_key, format: { with: /\A[a-z\d\-]+/ }
+  validates :url_key, format: { with: /\A[a-z\d\-]+\z/ }
 
   api_accessible :default do |t|
     t.add :id
