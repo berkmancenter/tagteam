@@ -7,7 +7,6 @@ RSpec.configure do |config|
     if Rails.env.test?
       begin
         DatabaseCleaner.start
-        FactoryGirl.lint(traits: true)
       ensure
         DatabaseCleaner.clean
       end
