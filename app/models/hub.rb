@@ -211,4 +211,14 @@ class Hub < ApplicationRecord
       ]
     )
   end
+
+  def settings
+    {
+      tags_delimiter: tags_delimiter_with_default
+    }
+  end
+
+  def tags_delimiter_with_default
+    tags_delimiter.presence || ','
+  end
 end

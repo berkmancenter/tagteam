@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 20170311175714) do
     t.string   "slug",                                       limit: 255
     t.boolean  "notify_taggers"
     t.boolean  "allow_taggers_to_sign_up_for_notifications"
+    t.string   "tags_delimiter"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree

@@ -34,7 +34,7 @@ class TagFiltersController < ApplicationController
     tag_filters = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
-                    params[:new_tag].split(',').map do |tag|
+                    TagFilterHelper.split_tags(params[:new_tag], @hub).map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end
                   end
