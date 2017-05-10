@@ -7,7 +7,7 @@
     %h1 About this hub
     .metadata
       %p.description
-        = raw(@hub.description)
+        = sanitize @hub.description
       %dl
         - unless @hub.tag_prefix.blank?
           %dt Prefix all tags emitted from the hub with

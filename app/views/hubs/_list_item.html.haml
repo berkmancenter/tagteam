@@ -15,4 +15,4 @@
         - if defined?(limit) and hub.description.length > limit
           .description= raw(limit_html(hub.description, limit)) + "..."
         - else
-          .description= raw(hub.description)
+          .description= sanitize hub.description

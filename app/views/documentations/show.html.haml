@@ -1,4 +1,4 @@
 .documentation{:id => "documentation_#{@documentation.id}"}
-  .description= raw((@documentation.description.blank?) ? 'Coming soon.' : @documentation.description)
+  .description= sanitize((@documentation.description.blank?) ? 'Coming soon.' : @documentation.description)
   - if current_user && current_user.is?([:superadmin, :documentation_admin])
     = link_to(raw(fa_icon('pencil')), edit_documentation_path(@documentation))

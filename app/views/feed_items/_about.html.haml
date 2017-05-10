@@ -1,7 +1,7 @@
 - unless @feed_item.description.blank?
   %h3 Summary:
   .description
-    = raw @feed_item.description
+    = sanitize @feed_item.description
 %h3 Link:
 = link_to(@feed_item.url, @feed_item.url, target: '_blank', rel: 'nofollow')
 - unless @feed_item.last_updated.blank? || @feed_item.last_updated == @feed_item.date_published
