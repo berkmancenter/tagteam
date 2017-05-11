@@ -19,4 +19,3 @@
       %table.hub_feed.feed_items
         = render :partial => 'shared/line_items/feed_item', :collection => @feed_items.map(&:taggable)
       = will_paginate(@feed_items)
-      - unless request.xhr?
