@@ -17,7 +17,7 @@ class FeedRetrieval < ApplicationRecord
 
   after_save :update_feed_updated_at
   attr_accessor :changelog_summary_cache
-  attr_accessible :feed_id, :success, :status_code
+
   acts_as_api do |c|
     c.allow_jsonp_callback = true
   end
