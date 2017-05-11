@@ -81,6 +81,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    brakeman (3.6.1)
     breadcrumbs (0.1.7)
       i18n
     builder (3.2.3)
@@ -411,6 +412,7 @@ DEPENDENCIES
   acts_as_api (~> 0.4)
   awesome_print (~> 1.7)
   bootstrap-sass (~> 3.3)
+  brakeman (~> 3.6)
   breadcrumbs (~> 0.1)
   capybara-webkit (~> 1.12)
   database_cleaner (~> 1.5)

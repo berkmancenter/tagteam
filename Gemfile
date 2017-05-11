@@ -42,6 +42,7 @@ gem 'will_paginate-bootstrap', '~> 1.0'
 gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 
 group :development do
+  gem 'brakeman', '~> 3.6'
   gem 'drg', '~> 1.5'
   gem 'haml_lint', '~> 0.21'
   gem 'rubocop', '~> 0.47'
