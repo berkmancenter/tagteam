@@ -27,4 +27,4 @@
     %hr/
   %li
     = link_to(raw(fa_icon('link', text: 'Original link')), @feed_item.url, rel: 'nofollow', target: '_blank')
-  = raw insert_social_links(@feed_item.url)
+  = sanitize insert_social_links(@feed_item.url)

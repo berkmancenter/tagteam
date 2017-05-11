@@ -8,7 +8,7 @@
   %td
     = link_to(user.username,user_path(user))
   %td
-    = raw user.my(Hub).collect{|h| link_to(h.display_title, hub_path(h))}.join(', ')
+    = sanitize user.my(Hub).collect{|h| link_to(h.display_title, hub_path(h))}.join(', ')
   %td
     = user.roles.where(:authorizable_type => nil).collect{|r| r.name}.join(', ' )
   %td

@@ -9,4 +9,4 @@
       %dd= hub.owners.map(&:username).join(', ')
       %dt Created:
       %dd= hub.created_at.strftime('%F')
-    %p= raw hub.description
+    %p= sanitize hub.description

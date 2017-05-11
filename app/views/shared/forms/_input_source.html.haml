@@ -16,7 +16,7 @@
           id="item_source_remove"&gt;
         %span#ajax_item_source_selection
           - unless @input_source.new_record?
-            = raw @input_source.item_source.mini_icon
+            = sanitize @input_source.item_source.mini_icon
             = link_to(raw(strip_tags(@input_source.item_source.to_s)), @input_source)
       = f.input :search_in, as: :radio, collection: [%w(Feeds Feed), %w(Items FeedItem), ['Tags', 'ActsAsTaggableOn::Tag']]
       = f.input :item_source_id, as: :hidden

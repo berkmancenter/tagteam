@@ -6,6 +6,6 @@
   .nicely-padded
     %h3 Description:
     - unless @republished_feed.description.blank?
-      = raw(@republished_feed.description)
+      = sanitize @republished_feed.description
     %h3 Owners:
     = @republished_feed.owners.collect{|o| o.username}.join(', ')
