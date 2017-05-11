@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include Pundit
-  protect_from_forgery
+  protect_from_forgery with: :exception
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :init_breadcrumbs
 
