@@ -199,7 +199,7 @@ GEM
     minitest (5.10.1)
     mustermann (1.0.0.beta2)
     nio4r (1.2.1)
-    nokogiri (1.7.1)
+    nokogiri (1.7.2)
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
       nokogiri
