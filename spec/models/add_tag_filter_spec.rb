@@ -33,8 +33,7 @@ RSpec.describe AddTagFilter, type: :model do
       describe '#rollback' do
         it 'deletes any owned taggings' do
           @filter.apply
-          query = ActsAsTaggableOn::Tagging.where(tagger_id: @filter.id,
-                                                  tagger_type: TagFilter)
+          query = ActsAsTaggableOn::Tagging.where(tagger_id: @filter.id, tagger_type: 'TagFilter')
           expect(query.count).to be > 0
           @filter.rollback
           expect(query.count).to eq(0)
