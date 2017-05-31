@@ -3,8 +3,8 @@
 module HubFeedsHelper
   def hub_feed_updated(hub_feed)
     updated_at =
-      if hub_feed.latest_feed_items.any?
-        hub_feed.latest_feed_items.first.created_at
+      if hub_feed.most_recent_tagging.present?
+        hub_feed.most_recent_tagging.created_at
       else
         hub_feed.feed.updated_at
       end
