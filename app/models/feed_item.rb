@@ -132,15 +132,19 @@ class FeedItem < ApplicationRecord
     taggings.collect do |tg|
       next if tg.context.eql? 'tags'
 
-      role = Role.where(
-        authorizable_id: tg.tagger_id,
-        authorizable_type: 'TagFilter',
-        name: 'creator'
-      ).first
+      if tg.tagger_type.eql? 'User'
+        auth_user = User.where(id: tg.tagger_id).first
+      else
+        role = Role.where(
+          authorizable_id: tg.tagger_id,
+          authorizable_type: 'TagFilter',
+          name: 'creator'
+        ).first
 
-      next if role.nil?
+        next if role.nil?
 
-      auth_user = role.users.first
+        auth_user = role.users.first
+      end
 
       next if auth_user.nil?
 

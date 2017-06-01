@@ -209,6 +209,10 @@ class Feed < ApplicationRecord
     'Feed'
   end
 
+  def most_recent_tagging
+    owned_taggings.last
+  end
+
   private
 
   def remove_feed_items_feeds

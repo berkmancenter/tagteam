@@ -54,7 +54,7 @@ $.extend({
               }
               
               const node = $('<li>').attr('class', elementClass);
-              $(node).html($(`<input name="${paramName}[]" type="hidden" />`).val(ui.item.value));
+              $(node).html($('<input name="' + paramName + '[]" type="hidden" />').val(ui.item.value))
               $(node).append(ui.item.label);
               $(node).append('<span class="search_select_control"> X </span>');
               $(containerId).show().append(node);

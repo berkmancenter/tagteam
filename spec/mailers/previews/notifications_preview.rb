@@ -9,4 +9,23 @@ class NotificationsPreview < ActionMailer::Preview
 
     Notifications.item_change_notification(hub, modified_item, item_users, current_user, changes)
   end
+
+  def tag_change_notification
+    modify_tag_filter = ModifyTagFilter.last
+    taggers_to_notify = [User.first]
+    hub = Hub.first
+    old_tag = modify_tag_filter.tag
+    new_tag = modify_tag_filter.new_tag
+    current_user = User.first
+    scope = hub.hub_feeds.last
+
+    Notifications.tag_change_notification(
+      taggers_to_notify,
+      hub,
+      old_tag,
+      new_tag,
+      current_user,
+      scope
+    )
+  end
 end

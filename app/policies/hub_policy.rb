@@ -150,4 +150,11 @@ class HubPolicy < ApplicationPolicy
 
     user.has_role?(:owner, record)
   end
+
+  def recalc_all_tags?
+    return false unless user.present?
+    return true if user.has_role?(:superadmin)
+
+    false
+  end
 end
