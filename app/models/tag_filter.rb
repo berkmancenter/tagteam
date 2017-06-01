@@ -239,7 +239,8 @@ class TagFilter < ApplicationRecord
         hub,
         old_tag,
         new_tag,
-        current_user
+        current_user,
+        scope
       ).deliver_later
     end
   end

@@ -1,7 +1,7 @@
 class Notifications < ActionMailer::Base
   default from: Tagteam::Application.config.default_sender
 
-  def tag_change_notification(taggers, hub, old_tag, new_tag, updated_by)
+  def tag_change_notification(taggers, hub, old_tag, new_tag, updated_by, scope)
     logger.info('Sending a notification about a tags change to ' + taggers.collect(&:email).join(','))
 
     @hub = hub
@@ -9,6 +9,8 @@ class Notifications < ActionMailer::Base
     @old_tag = old_tag
     @new_tag = new_tag
     @updated_by = updated_by
+    @scope = scope
+    @scope_url = determine_url(@hub, @scope)
 
     subject = 'Tag update in the ' + @hub.title + ' hub'
     mail(bcc: taggers.collect(&:email), subject: subject)
@@ -46,6 +48,17 @@ class Notifications < ActionMailer::Base
       "Tags modified: #{tags.first} was changed to #{tags.last}"
     when :tags_deleted
       "Tags deleted: #{tags.join(', ')}"
+    end
+  end
+
+  def determine_url(hub, scope)
+    case scope
+    when Hub
+      hub_url(scope)
+    when HubFeed
+      hub_feed_feed_items_url(scope)
+    when FeedItem
+      hub_feed_item_url(hub, scope)
     end
   end
 end
