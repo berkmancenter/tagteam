@@ -111,9 +111,8 @@ class TagsController < ApplicationController
            end
     unless @tag
       flash.now[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
-      @my_hubs = current_user.my(Hub) unless current_user.blank?
-      @hubs = Hub.paginate(page: params[:page], per_page: get_per_page)
-      render 'hubs/index', layout: !request.xhr?, status: 404
+
+      redirect_to hub_path(@hub)
     end
   end
 
