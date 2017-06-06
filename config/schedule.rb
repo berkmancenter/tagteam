@@ -38,3 +38,11 @@ end
 every 30.minutes do
   job 'UpdateFeeds', queue: :updater
 end
+
+every 1.days do
+  job 'ClearFeedVisitors', queue: :subscribers
+end
+
+every 1.days do
+  job 'ProcessFeedVisitors', queue: :subscribers
+end

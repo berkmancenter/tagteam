@@ -38,6 +38,14 @@ class RepublishedFeedsController < ApplicationController
 
   # A paginated list of FeedItems in this RepublishedFeed. Returns html, rss, atom, json, and xml.
   def items
+    Sidekiq::Client.enqueue(
+      StoreFeedVisitor,
+      request.path,
+      request.format.symbol.to_s,
+      request.remote_ip,
+      request.user_agent
+    )
+
     @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, format: :rss)
     @search = @republished_feed.item_search
     unless @search.blank?

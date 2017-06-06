@@ -1,0 +1,2 @@
+class FeedVisitor < ApplicationRecord
+end
