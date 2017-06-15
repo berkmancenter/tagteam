@@ -211,4 +211,8 @@ class Hub < ApplicationRecord
       ]
     )
   end
+
+  def hub_feed_for_feed_item(feed_item)
+    hub_feeds.find_by(feed: feed_item.feeds)
+  end
 end
