@@ -209,8 +209,10 @@ class Feed < ApplicationRecord
     'Feed'
   end
 
+  # Return the most recent tagging on any of the items in this feed
   def most_recent_tagging
-    owned_taggings.last
+    feed_item_ids = feed_items.pluck(:id)
+    ActsAsTaggableOn::Tagging.where(taggable_type: 'FeedItem', taggable_id: feed_item_ids).last
   end
 
   private
