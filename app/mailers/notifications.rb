@@ -22,6 +22,7 @@ class Notifications < ActionMailer::Base
     @hub = hub
     @hub_url = hub_url(@hub)
     @modified_item = modified_item
+    @hub_feed = @hub.hub_feed_for_feed_item(@modified_item)
     @updated_by = current_user
     @changes = parse_changes(changes)
 

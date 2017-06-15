@@ -26,6 +26,6 @@ class AddTagFilter < TagFilter
   end
 
   def tag_changes
-    { tags_added: [new_tag] }
+    { tags_added: [tag] }
   end
 end
