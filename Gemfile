@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source 'http://rubygems.org'
 
 ruby '2.3.0'
@@ -20,6 +21,7 @@ gem 'friendly_id', '~> 5.2'
 gem 'haml-rails', '~> 0.9'
 gem 'jquery-rails', '~> 4.2'
 gem 'nokogiri', '~> 1.7'
+gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 gem 'pg', '~> 0.19'
 gem 'progress_bar', '~> 1.1'
 gem 'protected_attributes_continued', '~> 1.2' # TODO: switch to strong parameters
@@ -39,7 +41,6 @@ gem 'unicorn', '~> 4.9'
 gem 'whenever', '~> 0.9'
 gem 'will_paginate', '~> 3.1'
 gem 'will_paginate-bootstrap', '~> 1.0'
-gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 
 group :development do
   gem 'brakeman', '~> 3.6'
