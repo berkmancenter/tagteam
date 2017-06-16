@@ -44,7 +44,7 @@ gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 group :development do
   gem 'brakeman', '~> 3.6'
   gem 'drg', '~> 1.5'
-  gem 'haml_lint', '~> 0.21'
+  gem 'haml_lint', '~> 0.26'
   gem 'rubocop', '~> 0.49'
   gem 'rubocop-rspec', '~> 1.15'
   gem 'spring', '~> 2.0'
