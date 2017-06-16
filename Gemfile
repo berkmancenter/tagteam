@@ -45,7 +45,7 @@ group :development do
   gem 'brakeman', '~> 3.6'
   gem 'drg', '~> 1.5'
   gem 'haml_lint', '~> 0.21'
-  gem 'rubocop', '~> 0.47'
+  gem 'rubocop', '~> 0.49'
   gem 'rubocop-rspec', '~> 1.10'
   gem 'spring', '~> 2.0'
   gem 'spring-commands-rspec', '~> 1.0'
