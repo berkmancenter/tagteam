@@ -48,7 +48,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_interaction (3.4.0)
+    active_interaction (3.5.1)
       activemodel (>= 4, < 6)
     activejob (5.0.3)
       activesupport (= 5.0.3)
@@ -411,7 +411,7 @@ PLATFORMS
 DEPENDENCIES
   acl9!
   actionpack-action_caching (~> 1.2)
-  active_interaction (~> 3.4)
+  active_interaction (~> 3.5)
   acts-as-taggable-on (~> 4.0)
   acts_as_api (~> 0.4)
   awesome_print (~> 1.7)
