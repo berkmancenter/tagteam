@@ -46,7 +46,7 @@ group :development do
   gem 'drg', '~> 1.5'
   gem 'haml_lint', '~> 0.21'
   gem 'rubocop', '~> 0.49'
-  gem 'rubocop-rspec', '~> 1.10'
+  gem 'rubocop-rspec', '~> 1.15'
   gem 'spring', '~> 2.0'
   gem 'spring-commands-rspec', '~> 1.0'
   gem 'spring-commands-rubocop', '~> 0.2'
