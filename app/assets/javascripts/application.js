@@ -815,29 +815,6 @@ $(document).ready(function(){
     }
   });
 
-  $('.hub_feed_more_control,.republished_feed_more_control').live({
-    click: function(e){
-      e.preventDefault();
-      if($(this).hasClass('more_details_included')){
-        $(this).closest('li').find('.metadata').remove();
-        $(this).removeClass('more_details_included');
-        $(this).find('.fa').removeClass('fa-caret-down');
-        $(this).find('.fa').addClass('fa-caret-right');
-        return;
-      }
-      var elem = this;
-      $.ajax({
-        url: $(this).attr('href'),
-        success: function(html){
-          $(elem).addClass('more_details_included');
-          $(elem).closest('li').find('.media-body').append(html);
-          $(elem).find('.fa').removeClass('fa-caret-right');
-          $(elem).find('.fa').addClass('fa-caret-down');
-        }
-      });
-    }
-  });
-
   if($('.ui-widget-content').length > 0){
     $('#hub_search_form,#hub_tag_search_form').live({
       submit: function(e){

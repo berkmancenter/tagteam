@@ -14,6 +14,7 @@
       - else
         = link_to hub_hub_feed_path(@hub, hub_feed) do
           %h2= raw(strip_tags(hub_feed.to_s))
+      .metadata
       - if defined?(show_hubs) && show_hubs == true
         %span.smaller
           in #{link_to(hub_feed.hub, hub_path(hub_feed.hub))}
