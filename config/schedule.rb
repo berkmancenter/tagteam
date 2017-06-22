@@ -43,6 +43,6 @@ every 1.days do
   job 'ClearFeedVisitors', queue: :subscribers
 end
 
-every 1.days do
-  job 'ProcessFeedVisitors', queue: :subscribers
+every 1.day do
+  runner 'Feeds::ProcessVisitorsJob.perform_later'
 end
