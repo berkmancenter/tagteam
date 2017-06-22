@@ -91,6 +91,7 @@ class FeedItem < ApplicationRecord
     integer :feed_ids, multiple: true
     string :tag_list, using: :tag_list_array_for_indexing, multiple: true
     string :tag_contexts, multiple: true
+    string :tag_contexts_by_users, multiple: true
 
     string :title
     string :url
@@ -124,6 +125,30 @@ class FeedItem < ApplicationRecord
   def tag_contexts
     taggings.collect do |tg|
       "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'
+    end.compact
+  end
+
+  def tag_contexts_by_users
+    taggings.collect do |tg|
+      next if tg.context.eql? 'tags'
+
+      if tg.tagger_type.eql? 'User'
+        auth_user = User.where(id: tg.tagger_id).first
+      else
+        role = Role.where(
+          authorizable_id: tg.tagger_id,
+          authorizable_type: 'TagFilter',
+          name: 'creator'
+        ).first
+
+        next if role.nil?
+
+        auth_user = role.users.first
+      end
+
+      next if auth_user.nil?
+
+      "#{tg.context}-#{tg.tag.name}-user_#{auth_user.id}"
     end.compact
   end
 
@@ -307,7 +332,7 @@ class FeedItem < ApplicationRecord
   end
 
   # Informing taggers about changes in their items
-  def notify_about_items_modification(hub, current_user, items_to_process_joined)
+  def notify_about_items_modification(hub, current_user, items_to_process_joined, changes)
     # Get configs for notifications
     hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
 
@@ -357,7 +382,8 @@ class FeedItem < ApplicationRecord
         hub,
         self,
         users_to_notify_allowed,
-        current_user
+        current_user,
+        changes
       ).deliver_later
     end
   end

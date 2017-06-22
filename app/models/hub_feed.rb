@@ -32,6 +32,8 @@ class HubFeed < ApplicationRecord
 
   attr_accessible :title, :description
 
+  delegate :most_recent_tagging, to: :feed
+
   api_accessible :default do |t|
     t.add :id
     t.add :display_title, as: :title

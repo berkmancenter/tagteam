@@ -22,7 +22,7 @@ RSpec.describe TagFilterPolicy do
     before { user.has_role!(:hub_tag_filterer, hub) }
 
     it { is_expected.to permit_action(:create) }
-    it { is_expected.to forbid_action(:destroy) }
+    it { is_expected.to permit_action(:destroy) }
     it { is_expected.to permit_action(:new) }
   end
 

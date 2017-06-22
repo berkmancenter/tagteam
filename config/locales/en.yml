@@ -30,6 +30,13 @@ en:
     attributes:
       user:
         login: "Username or email"
+  tag_filters:
+    added:
+      one: "Added a filter for that tag to \"%{scope_title}\"."
+      other: "Added %{count} filters for those tags to \"%{scope_title}\"."
+    error_when_adding:
+      one: "Could not add that tag filter."
+      other: "Errors occurred when adding some tag filters."
 
   will_paginate:
     page_entries_info:

@@ -1,5 +1,11 @@
-= @updated_by.email
-has updated the "#{@modified_item.title}" item in the "#{@hub}" hub at:
-\#{@hub_url}
+Hello,
+\
+#{@updated_by.username} has updated the tag record for an item you've previously tagged. You can find the current version of the record at this URL:
+\
+= hub_feed_feed_item_url(@hub_feed, @modified_item)
 
-\-- TagTeam
+- if @changes.present?
+  \
+  Here are the recent updates to the record:
+  \
+  \  * #{@changes}

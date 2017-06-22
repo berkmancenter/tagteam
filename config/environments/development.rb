@@ -51,7 +51,13 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_mailer.delivery_method = :sendmail
+  if config.hostname.include?('tagteam.berkman.temphost')
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+  else
+    config.action_mailer.delivery_method = :sendmail
+  end
+
   config.action_mailer.default_url_options = {
     host: config.hostname,
     port: config.hostport

@@ -23,9 +23,14 @@
           .collapse.navbar-collapse#navbar
             %ul.nav.navbar-nav
               %li= link_to('About', meta_hubs_path, class: 'dialog-show', id: 'meta_about')
-              %li.active= link_to 'Hubs', hubs_path
+              %li{class: (current_page?(hubs_path) ? 'active' : '')}
+                = link_to 'Hubs', hubs_path
               - if user_signed_in? && current_user.is?(:superadmin)
-                %li= link_to('Users', users_url(protocol: protocol_resolver))
+                %li{class: (current_page?(users_url(protocol: protocol_resolver)) ? 'active' : '')}
+                  = link_to('Users', users_url(protocol: protocol_resolver))
+              - if user_signed_in?
+                %li{class: (current_page?(export_import_path) ? 'active' : '')}
+                  = link_to('Export/import', export_import_path)
             .nav.navbar-nav.navbar-right
               - if user_signed_in?
                 %p.navbar-text.welcome

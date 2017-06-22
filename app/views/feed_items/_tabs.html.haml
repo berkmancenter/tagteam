@@ -1,17 +1,21 @@
 - unless @feed_item.content.blank?
-  %li{:class => "#{'active' if active == 'content'}"}
+  %li{ class: ('active' if active == 'content') }
     = documentation('feed-item-content-tab')
     = link_to('Item', content_hub_feed_feed_item_path(@hub_feed, @feed_item))
     .nav-pill-arrow
-%li{:class => "#{'active' if active == 'about'}"}
+%li{ class: ('active' if active == 'about') }
   = documentation('feed-item-about-tab')
   = link_to('About', about_hub_feed_feed_item_path(@hub_feed, @feed_item))
   .nav-pill-arrow
-%li{:class => "#{'active' if active == 'filters'}"}
+%li{ class: ('active' if active == 'edit') }
+  = documentation('feed-item-edit-tab')
+  = link_to('Edit', edit_hub_feed_feed_item_path(@hub_feed, @feed_item))
+  .nav-pill-arrow
+%li{ class: ('active' if active == 'filters') }
   = documentation('feed-item-tag-filters')
   = link_to('Filters', hub_feed_item_tag_filters_path(@hub, @feed_item, hub_feed_id: @hub_feed.id))
   .nav-pill-arrow
-%li{:class => "last-of-section #{'active' if active == 'related'}"}
+%li{ class: ['last-of-section', ('active' if active == 'related')] }
   = documentation('hub-feed-feed-item-related-list')
   = link_to('Related items', related_hub_feed_feed_item_path(@hub_feed, @feed_item))
   .nav-pill-arrow

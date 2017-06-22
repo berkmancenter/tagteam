@@ -21,4 +21,8 @@ class DeleteTagFilter < TagFilter
   def filters_after
     []
   end
+
+  def tag_changes
+    { tags_deleted: [tag] }
+  end
 end

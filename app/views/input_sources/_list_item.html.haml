@@ -39,3 +39,6 @@
   - else
     = raw input_source.item_source.mini_icon
     = tag_display(input_source.item_source, :hub => hub)
+    - if input_source.created_by_only_id.try :nonzero?
+      created by
+      = User.find(input_source.created_by_only_id).username

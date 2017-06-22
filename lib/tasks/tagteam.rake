@@ -106,4 +106,70 @@ namespace :tagteam do
 
     Sunspot.session = original_sunspot_session
   end
+
+  desc 'Fix tag names with commas in them'
+  task fix_tag_names_with_commas: :environment do
+    split_patterns = [',']
+
+    split_patterns.each do |split_pattern|
+      affected_tags = ActsAsTaggableOn::Tag.where('name LIKE \'%' + split_pattern + '%\'')
+
+      affected_tags.each do |tag|
+        tag_name = tag.name
+        taggings = tag.taggings
+
+        puts "Starting a fix of the '#{tag_name}' tag"
+
+        name_tags = tag_name.split(split_pattern)
+        filters_with_tag = TagFilter.where(tag: tag)
+        filter_with_new_as_tag = TagFilter.where(new_tag: tag)
+
+        name_tags.each do |name_tag|
+          name_tag = name_tag.strip
+
+          unless name_tag.empty?
+            existing_tag = ActsAsTaggableOn::Tag
+                           .where('name=?', name_tag).first
+
+            tag_to_tag = if existing_tag.nil?
+                           ActsAsTaggableOn::Tag.create(
+                             name: name_tag
+                           )
+                         else
+                           existing_tag
+                         end
+
+             taggings.each do |tagging|
+               new_tagging = tagging.dup
+
+               new_tagging.tag_id = tag_to_tag.id
+
+               begin
+                 new_tagging.save
+               rescue
+                 puts 'Duplicated tagging - continue...'
+               end
+             end
+          end
+        end
+
+        tag.destroy
+        filters_with_tag.destroy_all
+        filter_with_new_as_tag.destroy_all
+        taggings.destroy_all
+
+        puts "Fixed the '#{tag_name}' tag"
+      end
+    end
+
+    puts "Recalculating taggings"
+
+    Hub.order(:id).each do |hub|
+      RecalcAllItems.new.perform(hub.id)
+    end
+
+    puts "Regenerating the search index"
+
+    Rake::Task['sunspot:solr:reindex'].invoke
+  end
 end

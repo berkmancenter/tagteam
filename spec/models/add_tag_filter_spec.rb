@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 require 'rails_helper'
-require 'support/shared_context'
-require 'support/shared_tag_filter_examples'
 
 RSpec.describe AddTagFilter, type: :model do
+  def new_add_filter(tag_name = 'just-a-tag')
+    new_tag = create(:tag, name: tag_name)
+    create(:add_tag_filter, tag: new_tag, hub: @hub, scope: @hub)
+  end
+
   context 'the filter is scoped to a hub with items' do
     include_context 'user owns a hub with a feed and items'
     context 'the filter adds tag "a"' do

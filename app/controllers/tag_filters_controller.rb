@@ -26,70 +26,20 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    filter_type = params[:filter_type].constantize
-    unless params[:tag_id].blank?
-      @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
-    end
+    authorize_tag_filter = TagFilter.new
+    authorize_tag_filter.hub = @hub
+    authorize authorize_tag_filter
 
-    if params[:filter_type] == 'ModifyTagFilter'
-      @tag ||= find_or_create_tag_by_name(params[:modify_tag])
-      @new_tag = find_or_create_tag_by_name(params[:new_tag])
-    else
-      @tag ||= find_or_create_tag_by_name(params[:new_tag])
-    end
+    # Allow multiple TagFilters to be created from a comma-separated string of tags
+    tag_filters = if params[:new_tag].empty?
+                    [TagFilters::Create.run(tag_filter_params)]
+                  else
+                    params[:new_tag].split(',').map do |tag|
+                      TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
+                    end
+                  end
 
-    @tag_filter = filter_type.new
-    @tag_filter.hub = @hub
-    @tag_filter.scope = @scope
-    @tag_filter.tag = @tag
-    @tag_filter.new_tag = @new_tag if @new_tag
-
-    authorize @tag_filter
-
-    if @tag_filter.save
-      current_user.has_role!(:owner, @tag_filter)
-      current_user.has_role!(:creator, @tag_filter)
-      flash[:notice] = %(Added a filter for that tag to "#{@scope.title}")
-
-      if @hub.notify_taggers && @new_tag
-        hub_feed_to_notify = @hub_feed.nil? ? nil : @hub_feed.id
-
-        Sidekiq::Client.enqueue(
-          SendTagChangeNotifications,
-          @tag_filter.id,
-          @tag.id,
-          @new_tag.id,
-          @scope.class.name,
-          @scope.id,
-          @hub.id,
-          hub_feed_to_notify,
-          current_user.id
-        )
-      end
-
-      if @hub.allow_taggers_to_sign_up_for_notifications
-        items_to_process = @tag_filter.items_to_modify.collect(&:id).join(',')
-
-        Sidekiq::Client.enqueue(
-          SendItemChangeNotifications,
-          'TagFilter',
-          @tag_filter.id,
-          @hub.id,
-          current_user.id,
-          items_to_process
-        )
-      end
-
-      @tag_filter.apply_async
-
-      render plain: %(Added a filter for that tag to "#{@scope.title}"),
-             layout: !request.xhr?
-    else
-      flash[:error] = 'Could not add that tag filter.'
-      render html: @tag_filter.errors.full_messages.join('<br/>'),
-             status: :not_acceptable,
-             layout: !request.xhr?
-    end
+    tag_filters.all?(&:valid?) ? process_successful_create(tag_filters) : process_failed_create(tag_filters)
   end
 
   def destroy
@@ -137,5 +87,34 @@ class TagFiltersController < ApplicationController
   def load_tag_filter
     @tag_filter = TagFilter.find(params[:id])
     authorize @tag_filter
+  end
+
+  def tag_filter_params
+    {
+      filter_type: params[:filter_type],
+      hub: @hub,
+      hub_feed: @hub_feed,
+      modify_tag_name: params[:modify_tag],
+      new_tag_name: params[:new_tag],
+      scope: @scope,
+      user: current_user,
+      tag_id: params[:tag_id]
+    }
+  end
+
+  def process_successful_create(tag_filters)
+    notice = t('tag_filters.added', count: tag_filters.size, scope_title: @scope.title)
+
+    flash[:notice] = notice
+
+    render plain: notice, layout: !request.xhr?
+  end
+
+  def process_failed_create
+    flash[:error] = t('tag_filters.errors_when_adding', count: tag_filters.size)
+
+    errors = tag_filters.map { |tag_filter| tag_filter.errors.full_messages.join('<br/>') }
+
+    render html: errors.join(' '), status: :not_acceptable, layout: !request.xhr?
   end
 end

@@ -85,10 +85,12 @@ class RepublishedFeed < ApplicationRecord
     add_feeds = []
     add_feed_items = []
     add_tags = []
+    add_tags_by_users = []
 
     remove_feeds = []
     remove_feed_items = []
     remove_tags = []
+    remove_tags_by_users = []
 
     return nil if input_sources.blank?
 
@@ -100,7 +102,14 @@ class RepublishedFeed < ApplicationRecord
         when 'FeedItem'
           add_feed_items << input_source.item_source_id
         when 'ActsAsTaggableOn::Tag'
-          add_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          if input_source.created_by_only_id.try :nonzero?
+            add_tags_by_users << {
+              tag: ActsAsTaggableOn::Tag.find(input_source.item_source_id),
+              user: User.find(input_source.created_by_only_id)
+            }
+          else
+            add_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          end
         when 'SearchRemix'
           add_feed_items << SearchRemix.search_results_for(input_source.item_source_id, limit)
         end
@@ -111,7 +120,14 @@ class RepublishedFeed < ApplicationRecord
         when 'FeedItem'
           remove_feed_items << input_source.item_source_id
         when 'ActsAsTaggableOn::Tag'
-          remove_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          if input_source.created_by_only_id.try :nonzero?
+            remove_tags_by_users << {
+              tag: ActsAsTaggableOn::Tag.find(input_source.item_source_id),
+              user: User.find(input_source.created_by_only_id)
+            }
+          else
+            remove_tags << ActsAsTaggableOn::Tag.find(input_source.item_source_id)
+          end
         end
       end
     end
@@ -126,12 +142,18 @@ class RepublishedFeed < ApplicationRecord
         unless add_tags.blank?
           with(:tag_contexts, add_tags.collect { |t| "hub_#{hub_id}-#{t.name}" })
         end
+        unless add_tags_by_users.blank?
+          with(:tag_contexts_by_users, add_tags_by_users.collect { |t| "hub_#{hub_id}-#{t[:tag].name}-user_#{t[:user].id}" })
+        end
       end
       any_of do
         without(:feed_ids, remove_feeds) unless remove_feeds.blank?
         without(:id, remove_feed_items) unless remove_feed_items.blank?
         unless remove_tags.blank?
           without(:tag_contexts, remove_tags.collect { |t| "hub_#{hub_id}-#{t.name}" })
+        end
+        unless remove_tags_by_users.blank?
+          without(:tag_contexts_by_users, remove_tags_by_users.collect { |t| "hub_#{hub_id}-#{t[:tag].name}-user_#{t[:user].id}" })
         end
       end
       order_by('date_published', :desc)

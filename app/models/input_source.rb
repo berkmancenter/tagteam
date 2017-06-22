@@ -12,7 +12,7 @@ class InputSource < ApplicationRecord
   acts_as_authorization_object
   include ModelExtensions
 
-  validates :item_source_type, uniqueness: { scope: [:item_source_id, :effect, :republished_feed_id] }
+  validates :item_source_type, uniqueness: { scope: [:item_source_id, :effect, :republished_feed_id, :created_by_only_id] }
 
   EFFECTS = %w(add remove).freeze
 
@@ -24,7 +24,9 @@ class InputSource < ApplicationRecord
   end
   validates :effect, inclusion: { in: EFFECTS }
   accepts_nested_attributes_for :item_source
-  attr_accessible :item_source, :item_source_attributes, :republished_feed, :republished_feed_id, :item_source_id, :item_source_type, :effect, :limit, :search_in
+  attr_accessible :item_source, :item_source_attributes, :republished_feed,
+                  :republished_feed_id, :item_source_id, :item_source_type, 
+                  :effect, :limit, :search_in, :created_by_only_id
   attr_accessor :search_in
 
   api_accessible :default do |t|

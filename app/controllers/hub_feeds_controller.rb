@@ -6,8 +6,8 @@ class HubFeedsController < ApplicationController
   }
 
   before_action :authenticate_user!, except: [:autocomplete, :controls, :index, :more_details, :show]
-  before_action :find_hub
   before_action :find_hub_feed, except: [:autocomplete, :create, :index, :new]
+  before_action :find_hub
 
   after_action :verify_authorized, except: [:autocomplete, :controls, :index, :more_details, :show]
 
@@ -86,16 +86,18 @@ class HubFeedsController < ApplicationController
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
-    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
+
+    authorize @hub_feed
   end
 
   def create
     # Only used to create bookmarking collections.
     # Actual rss feeds are added through the hub controller. Yeah, probably not optimal
     @hub_feed = HubFeed.new
-    authorize @hub_feed
     @hub_feed.hub_id = @hub.id
+
+    authorize @hub_feed
 
     actual_feed = Feed.new
     actual_feed.bookmarking_feed = true

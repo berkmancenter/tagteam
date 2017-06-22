@@ -95,7 +95,8 @@ class BookmarkletsController < ApplicationController
             @feed_item.id,
             @hub.id,
             current_user.id,
-            @feed_item.id
+            @feed_item.id,
+            tags_added: new_tags
           )
         end
 

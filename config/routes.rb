@@ -59,6 +59,10 @@ Rails.application.routes.draw do
   get 'remix/:url_key' => 'republished_feeds#show', :as => 'remix'
   get 'remix/:url_key/items' => 'republished_feeds#items', :as => 'remix_items'
 
+  get 'export_import' => 'export_import#index'
+  get 'export_import/download' => 'export_import#download'
+  post 'export_import' => 'export_import#import'
+
   resources :hubs do
     get 'tag/rss/:name' => 'tags#rss', :as => 'tag_rss', :constraints => { name: /.+/ }
     get 'tag/atom/:name' => 'tags#atom', :as => 'tag_atom', :constraints => { name: /.+/ }

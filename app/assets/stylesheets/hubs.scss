@@ -106,6 +106,12 @@ form.hub {
       &:hover {
         color: $gray;
       }
+
+      &.fa-plus {
+        margin-top: 2px;
+        color: #8dc63f;
+        vertical-align: middle;
+      }
     }
   }
 }

@@ -208,6 +208,7 @@ class HubsController < ApplicationController
 
   # Looks through the currently running resque jobs and returns a json response talking about what's going on.
   def background_activity
+    authorize Hub
     require 'sidekiq/api'
     @output = { running: [] }
     workers = Sidekiq::Workers.new
@@ -545,7 +546,7 @@ class HubsController < ApplicationController
     flash[:notice] = 'Deleted that hub'
     respond_to do |format|
       format.html do
-        redirect_to :back
+        redirect_to my_hubs_path
       end
     end
   end

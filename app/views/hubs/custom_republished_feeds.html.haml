@@ -2,6 +2,29 @@
   %h3 Remix feeds
   %ul
     = render :partial => 'shared/line_items/republished_feed_choice', :collection => @republished_feeds
+  #republised-feeds-user-select.hide
+    %h3 Only when applied by a certain user
+    %ul#user_id_container
+    = text_field_tag :find_user_autocomplete, '', size: 40, placeholder: 'Username or email address', class: 'form-control'
+  :javascript
+    $(document).ready(function(){
+      $.observeAutocomplete($.rootPath() + 'users/search/autocomplete','#find_user_autocomplete', 'user_ids', '#user_id_container','search_select user', true);
+      $.observeSearchSelectControl();
+
+      $('#republised-feeds-user-select').remove();
+
+      if ($('body').data('item_source_type_for_republishing') == 'ActsAsTaggableOn::Tag') {
+        var showUserForm = function () {
+          if ($('#republised-feeds-user-select').length == 0) {
+            setTimeout(showUserForm, 50);
+          } else {
+            $('#republised-feeds-user-select').removeClass('hide');
+          }
+        }
+        showUserForm();
+      }
+    });
+  %hr
 - else
   .empty-message
     = "None yet. You should create a remix feed from the \"remixes\" tab on the hub page."

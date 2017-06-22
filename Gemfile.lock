@@ -48,6 +48,8 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_interaction (3.4.0)
+      activemodel (>= 4, < 6)
     activejob (5.0.1)
       activesupport (= 5.0.1)
       globalid (>= 0.3.6)
@@ -140,7 +142,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    feed-abstract (0.0.13)
+    feed-abstract (0.0.15)
     ffi (1.9.17)
     font-awesome-rails (4.7.0.1)
       railties (>= 3.2, < 5.1)
@@ -197,9 +199,9 @@ GEM
     minitest (5.10.1)
     mustermann (1.0.0.beta2)
     nio4r (1.2.1)
-    nokogiri (1.7.0.1)
+    nokogiri (1.7.2)
       mini_portile2 (~> 2.1.0)
-    nokogumbo (1.4.10)
+    nokogumbo (1.4.11)
       nokogiri
     non-stupid-digest-assets (1.0.9)
       sprockets (>= 2.0)
@@ -404,6 +406,7 @@ PLATFORMS
 DEPENDENCIES
   acl9!
   actionpack-action_caching (~> 1.2)
+  active_interaction (~> 3.4)
   acts-as-taggable-on (~> 4.0)
   acts_as_api (~> 0.4)
   awesome_print (~> 1.7)
@@ -415,7 +418,7 @@ DEPENDENCIES
   drg (~> 1.5)
   exception_notification (~> 2.6)
   factory_girl_rails (~> 4.8)
-  feed-abstract (= 0.0.13)
+  feed-abstract (= 0.0.15)
   font-awesome-rails (~> 4.7)
   formtastic (~> 3.1)
   formtastic-bootstrap!
@@ -470,4 +473,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.14.5
+   1.14.6
