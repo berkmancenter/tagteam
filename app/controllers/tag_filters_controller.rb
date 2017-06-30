@@ -52,7 +52,8 @@ class TagFiltersController < ApplicationController
     @tag_filter.rollback_and_destroy_async(current_user)
 
     flash[:notice] = 'Deleting that tag filter.'
-    redirect_to hub_tag_filters_path(@hub)
+
+    redirect_back fallback_location: hub_tag_filters_path(@hub)
   end
 
   private
