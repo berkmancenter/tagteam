@@ -113,7 +113,7 @@ class HubFeedsController < ApplicationController
         current_user.has_role!(:editor, @hub_feed)
         current_user.has_role!(:owner, @hub_feed)
         flash[:notice] = 'Created that bookmarking collection.'
-        format.html { redirect_to hub_path(@hub) }
+        format.html { redirect_to bookmark_collections_hub_path(@hub) }
       else
         flash[:error] = 'Couldn\'t create that bookmarking collection!'
         format.html { render action: :new }
