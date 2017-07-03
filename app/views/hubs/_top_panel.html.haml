@@ -15,17 +15,18 @@
         %p
           RSS
           %br
-          = FeedSubscriber.count_for(items_hub_path(@hub, format: :rss))
-          = 'subscriber'.pluralize(FeedSubscriber.count_for(items_hub_path(@hub, format: :rss)))
+          = pluralize(FeedSubscriber.count_for(items_hub_path(@hub, format: :rss)), 'subscriber')
     .col-xs-4
       = link_to items_hub_path(@hub, format: :atom), title: 'An Atom feed of all items in this hub, with tag filters applied.' do
         = image_tag image_path('protocol_atom.png')
         %p
           ATOM
           %br
-          = FeedSubscriber.count_for(items_hub_path(@hub, format: :atom))
-          = 'subscriber'.pluralize(FeedSubscriber.count_for(items_hub_path(@hub, format: :atom)))
+          = pluralize(FeedSubscriber.count_for(items_hub_path(@hub, format: :atom)), 'subscriber')
     .col-xs-4
       = link_to items_hub_path(@hub, format: :json, callback: 'callback'), title: 'jsonp of all items in this hub, with tag filters applied.' do
         = image_tag image_path('protocol_json.png')
-        %p JSON
+        %p
+          JSON
+          %br
+          = pluralize(FeedSubscriber.count_for(items_hub_path(@hub, format: :json)), 'subscriber')
