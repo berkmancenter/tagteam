@@ -84,7 +84,7 @@ module DelegatableRoles
       end
     },
     hub_feed_item_tag_filterer: {
-      name: 'Feed item tag filter manager',
+      name: 'Item-level tag filter manager',
       description: 'Can manage item-level tag filters in this hub',
       objects_of_concern: lambda do |user, hub|
         # Find all hub_feed_item_tag_filters in this hub owned by this user.
