@@ -6,7 +6,7 @@ class TagsController < ApplicationController
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, unless: proc { |_c| current_user && current_user.is?(:owner, @hub) }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
       params[:format] = :rss
     elsif request.fullpath =~ /tag\/atom/
@@ -127,9 +127,9 @@ class TagsController < ApplicationController
              ActsAsTaggableOn::Tag.find_by(id: params[:id])
            end
     unless @tag
-      flash.now[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
+      flash[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
 
-      redirect_to hub_path(@hub)
+      redirect_to hub_path(@hub) + '?no_cache=true'
     end
   end
 

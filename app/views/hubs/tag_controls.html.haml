@@ -1,6 +1,6 @@
 .controls
   .text-center
-    = link_to hub_tag_show_path(@hub,u(@tag.name)) do
+    = link_to hub_tag_show_path(@hub, @tag.name) do
       View items tagged with
       %span.tag-name
         "
@@ -8,9 +8,9 @@
         "
   .row.export-formats
     %hr/
-    .col-xs-4= link_to "RSS", hub_tag_rss_path(@hub,u(@tag.name))
-    .col-xs-4= link_to 'ATOM', hub_tag_atom_path(@hub,u(@tag.name))
-    .col-xs-4= link_to 'JSON', hub_tag_json_path(@hub,u(@tag.name), :callback => 'callback')
+    .col-xs-4= link_to "RSS", hub_tag_rss_path(@hub, @tag.name)
+    .col-xs-4= link_to 'ATOM', hub_tag_atom_path(@hub, @tag.name)
+    .col-xs-4= link_to 'JSON', hub_tag_json_path(@hub, @tag.name, :callback => 'callback')
   - if current_user.is?([:owner, :hub_tag_filterer, :hub_feed_tag_filterer, :hub_feed_item_tag_filterer], @hub)
     %h3 Filtering
     %hr/

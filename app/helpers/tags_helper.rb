@@ -41,7 +41,7 @@ module TagsHelper
       options.delete(:show_count)
     end
 
-    link_to(tag.name, hub_tag_show_path(hub_id, u(tag.name)), options)
+    link_to(tag.name, hub_tag_show_path(hub_id, tag.name), options)
   end
 
   def hub_filter_possible?(_params, current_user)
