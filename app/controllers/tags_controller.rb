@@ -4,6 +4,7 @@ class TagsController < ApplicationController
   before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
   before_action :add_breadcrumbs
+  before_action :set_prefixed_tags, only: [:index]
 
   caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, unless: proc { |_c| current_user && current_user.is?(:owner, @hub) }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
@@ -119,5 +120,9 @@ class TagsController < ApplicationController
   def load_feed_items_for_rss
     @feed_items = FeedItem.tagged_with(@tag.name, on: @hub.tagging_key)
                           .limit(50).order('date_published DESC, created_at DESC')
+  end
+
+  def set_prefixed_tags
+    @prefixed_tags = Statistics::HubPrefixedTags.run!(tag_counts: @hub.tag_counts)
   end
 end

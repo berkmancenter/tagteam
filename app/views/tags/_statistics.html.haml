@@ -1,0 +1,16 @@
+%h2 Statistics
+%p
+  There #{'is'.pluralize(tags.count)} currently
+  %span.badge= tags.count
+  = 'tag'.pluralize(tags.count)
+  in use in this hub.
+
+- if prefixed_tags.any?
+  - prefixed_tags.each do |tag_prefix, tag_count|
+    %p
+      There #{'is'.pluralize(tag_count)} currently
+      %span.badge= tag_count
+      = 'tag'.pluralize(tag_count)
+      prefixed with
+      %span.badge= tag_prefix + '.'
+      in use in this hub.

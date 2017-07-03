@@ -172,8 +172,8 @@
     },
     observeTagCloudControls: function(){
       var sort_tags_on_change = function(e){
-        var sort_by = $('#sort_tags_by').val();
-        var sort = $("#sort_tags_direction").val();
+        var sort_by = $('#sort-tags-by').val();
+        var sort = $("#sort-tags-direction").val();
         var mapping_function = function(elem) {
           var tag_frequency = $(elem).find('.tag').data('tag-frequency'),
               tag_text = $(elem).find('.tag').data('tag-name'),
@@ -201,34 +201,34 @@
               return null;
             }
         };
-        $("#tag_cloud").detach(function() {
+        $("#tag-cloud").detach(function() {
           $(this).sortChildren(mapping_function, compare_function);
         });
       };
-      $('#sort_tags_by').change(sort_tags_on_change);
-      $('#sort_tags_direction').change(sort_tags_on_change);
+      $('#sort-tags-by').change(sort_tags_on_change);
+      $('#sort-tags-direction').change(sort_tags_on_change);
 
-      $('#reset_filter').click(function(e){
-        $('#tag_cloud li').show();
-        $('#filter_by').val('');
+      $('#reset-filter').click(function(e){
+        $('#tag-cloud li').show();
+        $('#filter-by').val('');
       });
 
       var filterStuff = function(e){
         if(e != ''){
           e.preventDefault();
         }
-        $('#tag_cloud li').show();
-        var filterVal = $('#filter_by').val();
+        $('#tag-cloud li').show();
+        var filterVal = $('#filter-by').val();
         var filterregex = new RegExp(filterVal,'i');
-        $('#tag_cloud li').each(function(){
+        $('#tag-cloud li').each(function(){
           if(! $(this).find('.tag').html().match(filterregex)){
             $(this).hide();
           }
         });
       };
 
-      $('#filter_button').click(filterStuff);
-      $('#filter_by').observe_field(1,filterStuff);
+      $('#filter-button').click(filterStuff);
+      $('#filter-by').observe_field(1,filterStuff);
 
       $('#tag_slider').slider({
         value: 0,
@@ -438,7 +438,7 @@
       $('.filter_control').live({click: function(){
         $(objectSelector + '.' + $(this).attr('id')).toggle();
       }});
-      $('#reset_filter').live({click: function(){
+      $('#reset-filter').live({click: function(){
         $(objectSelector).show();
       }});
 
@@ -450,7 +450,7 @@
         $(filterContainer).append($('<span/> ').attr({id: key, 'class': 'filter_control'}).html(key + ' '));
       });
 
-      $(filterContainer).append($('<span/> ').attr({id: 'reset_filter' }).html("<strong>Show all</strong>"));
+      $(filterContainer).append($('<span/> ').attr({id: 'reset-filter' }).html("<strong>Show all</strong>"));
 
 
     },
@@ -458,6 +458,7 @@
 });
 
 })(jQuery);
+
 
 $(document).ready(function(){
   $('#pagination').bootpag({total:$("#pagination").attr("data-total-pages"), maxVisible:5}).on("page", function(event, num){
