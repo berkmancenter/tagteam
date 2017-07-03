@@ -38,8 +38,7 @@ class RepublishedFeedsController < ApplicationController
 
   # A paginated list of FeedItems in this RepublishedFeed. Returns html, rss, atom, json, and xml.
   def items
-    Sidekiq::Client.enqueue(
-      StoreFeedVisitor,
+    Feeds::StoreFeedVisitorJob.perform_later(
       request.path,
       request.format.symbol.to_s,
       request.remote_ip,

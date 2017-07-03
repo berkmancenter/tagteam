@@ -57,8 +57,7 @@ class FeedItemsController < ApplicationController
 
   # A paginated list of FeedItems in a HubFeed. Returns html, atom, rss, json, or xml. Action cached for anonymous visitors.
   def index
-    Sidekiq::Client.enqueue(
-      StoreFeedVisitor,
+    Feeds::StoreFeedVisitorJob.perform_later(
       request.path,
       request.format.symbol.to_s,
       request.remote_ip,

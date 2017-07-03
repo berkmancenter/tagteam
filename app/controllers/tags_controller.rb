@@ -61,8 +61,7 @@ class TagsController < ApplicationController
 
   # A paginated RSS feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag. This doesn't use the normal respond_to / format system because we use names instead of IDs to identify a tag.
   def rss
-    Sidekiq::Client.enqueue(
-      StoreFeedVisitor,
+    Feeds::StoreFeedVisitorJob.perform_later(
       request.path,
       'rss',
       request.remote_ip,
@@ -72,8 +71,7 @@ class TagsController < ApplicationController
 
   # A paginated Atom feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def atom
-    Sidekiq::Client.enqueue(
-      StoreFeedVisitor,
+    Feeds::StoreFeedVisitor.perform_later(
       request.path,
       'atom',
       request.remote_ip,
