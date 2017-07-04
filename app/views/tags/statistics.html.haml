@@ -1,0 +1,31 @@
+- content_for :top_panel do
+  = render partial: 'top_panel'
+- content_for :tabs do
+  = render partial: 'tabs', locals: { active: 'statistics' }
+- content_for :tab_content do
+  .nicely-padded
+    %h1 Statistics
+    %h2 Taggers
+    - if @taggings_by_user.count == 0
+      %p None
+    - else
+      %ul.list-unstyled
+        - @taggings_by_user.each do |tagging_by_user|
+          %li
+            Tagged
+            %span.badge= tagging_by_user['count']
+            = 'time'.pluralize(tagging_by_user['count'])
+            by
+            %span.badge= User.find(tagging_by_user['tagger_id']).username
+    %h2 Taggers before deactivation
+    - if @deprecated_taggings_by_user.count == 0
+      %p None
+    - else
+      %ul.list-unstyled
+        - @deprecated_taggings_by_user.each do |tagging_by_user|
+          %li
+            Tagged
+            %span.badge= tagging_by_user['count']
+            = 'time'.pluralize(tagging_by_user['count'])
+            by
+            %span.badge= User.find(tagging_by_user['tagger_id']).username

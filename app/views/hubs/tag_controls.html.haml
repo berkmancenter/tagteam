@@ -53,3 +53,12 @@
           class: 'dialog-show remove_item_source_from_custom_republished_feed',
           data_item_type: 'ActsAsTaggableOn::Tag',
           data_item_id: @tag.id
+  %h3 Statistics
+  %hr/
+  %ul
+    %li
+      %span.badge= @tagged_by_taggers
+      tagged by taggers
+    %li
+      %span.badge= @tagged_by_filters
+      converted from deprecated tags by hub-wide filters

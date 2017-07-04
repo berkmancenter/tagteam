@@ -53,7 +53,9 @@ class HubsController < ApplicationController
     :set_user_notifications,
     :settings,
     :set_settings,
-    :team
+    :team,
+    :statistics,
+    :active_taggers
   ]
 
   protect_from_forgery except: :items
@@ -111,6 +113,42 @@ class HubsController < ApplicationController
     @allowed_to_tag = @hub.users_with_roles.size
 
     render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def statistics
+    add_breadcrumbs
+
+    @tags = @hub.tags
+
+    @taggers = Statistics::HubTaggers.run!(hub: @hub)
+
+    @prefixed_tags = Statistics::HubPrefixedTags.run!(hub: @hub)
+
+    @hub_wide_filters = @hub.all_tag_filters.where(scope_type: 'Hub')
+
+    @items_with_empty_description = @hub.feed_items.where(description: '')
+
+    @tags_that_use_prefix = Statistics::HubTagsThatUsePrefix.run!(hub: @hub)
+    @tags_that_have_no_prefix = Statistics::HubTagsThatHaveNoPrefix.run!(hub: @hub)
+
+    @tags_used_not_approved = Statistics::TagsUsedNotApproved.run!(
+      hub: @hub,
+      limit: 10
+    )
+
+    @altered_items = Statistics::AlteredItems.run!(hub: @hub)
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def active_taggers
+    @taggers = Statistics::HubTaggers.run!(
+      hub: @hub,
+      month: params[:month],
+      year: params[:year]
+    )
+
+    render json: @taggers
   end
 
   def notifications
@@ -203,6 +241,16 @@ class HubsController < ApplicationController
 
   def set_settings
     @hub.tags_delimiter = params[:tags_delimiter]
+    @hub.official_tag_prefix = params[:official_tag_prefix]
+    @hub.suggest_only_approved_tags = params[:suggest_only_approved_tags]
+    @hub.hub_approved_tags = params[:hub_approved_tags]
+                             .split("\r\n")
+                             .uniq
+                             .map {
+                               |approved_tag| HubApprovedTag.new(
+                                 tag: approved_tag, hub_id: @hub.id
+                               )
+                             }
 
     if @hub.save
       flash[:notice] = 'Saved successfully.'
@@ -390,6 +438,15 @@ class HubsController < ApplicationController
       @feed_item = FeedItem.select(FeedItem.columns_for_line_item).find(params[:hub_feed_item_id])
       @already_filtered_for_hub_feed_item = @feed_item.tag_filtered?(@tag)
     end
+
+    @tagged_by_taggers = Statistics::TagTaggedByTaggers.run!(
+      tag: @tag,
+      hub: @hub
+    ).count
+    @tagged_by_filters = Statistics::TagTaggedByFilters.run!(
+      tag: @tag,
+      hub: @hub
+    ).count
 
     respond_to do |format|
       format.html do

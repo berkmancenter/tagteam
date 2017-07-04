@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     get 'tag/atom/:name' => 'tags#atom', :as => 'tag_atom', :constraints => { name: /.+/ }
     get 'tag/json/:name' => 'tags#json', :as => 'tag_json', :constraints => { name: /.+/ }
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
+    get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
     get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }
 
     get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { username: /[^\/]+/ }
@@ -82,6 +83,9 @@ Rails.application.routes.draw do
     get 'user/:username/tag/:tagname/json' => 'users#tags_json', :as => 'user_tags_name_json', :constraints => { tagname: /[^\/]+/, username: /.+/ }
     get 'user/:username/tag/:tagname/xml' => 'users#tags_xml', :as => 'user_tags_name_xml', :constraints => { tagname: /[^\/]+/, username: /.+/ }
 
+    get 'tags_used_not_approved' => 'tags#tags_used_not_approved'
+    get 'deprecated_tags' => 'tags#deprecated_tags'
+
     member do
       get 'about'
       post 'recalc_all_tags'
@@ -95,6 +99,7 @@ Rails.application.routes.draw do
       get 'my_bookmark_collections'
       get 'bookmark_collections'
       get 'team'
+      get 'statistics'
       get 'notifications'
       get 'settings'
       post 'add_roles'
@@ -105,6 +110,7 @@ Rails.application.routes.draw do
       post 'set_notifications'
       post 'set_user_notifications'
       post 'set_settings'
+      get 'active_taggers'
     end
 
     collection do

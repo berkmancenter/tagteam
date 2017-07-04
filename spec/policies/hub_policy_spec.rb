@@ -41,6 +41,9 @@ RSpec.describe HubPolicy do
     it { is_expected.to forbid_action(:tag_controls) }
     it { is_expected.to forbid_action(:team) }
     it { is_expected.to forbid_action(:update) }
+    it { is_expected.to forbid_action(:statistics) }
+    it { is_expected.to forbid_action(:active_taggers) }
+    it { is_expected.to forbid_action(:tags_used_not_approved) }
   end
 
   context 'for a logged in user' do
@@ -69,6 +72,9 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:set_user_notifications) }
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:tag_controls) }
+    it { is_expected.to forbid_action(:statistics) }
+    it { is_expected.to forbid_action(:active_taggers) }
+    it { is_expected.to forbid_action(:tags_used_not_approved) }
 
     context 'with an owner role on the hub' do
       before { user.has_role!(:owner, hub) }
@@ -82,6 +88,9 @@ RSpec.describe HubPolicy do
       it { is_expected.to permit_action(:set_notifications) }
       it { is_expected.to permit_action(:team) }
       it { is_expected.to permit_action(:update) }
+      it { is_expected.to permit_action(:statistics) }
+      it { is_expected.to permit_action(:active_taggers) }
+      it { is_expected.to permit_action(:tags_used_not_approved) }
     end
 
     context 'with an inputter role on the hub' do
@@ -158,5 +167,8 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:tag_controls) }
     it { is_expected.to permit_action(:team) }
     it { is_expected.to permit_action(:update) }
+    it { is_expected.to permit_action(:statistics) }
+    it { is_expected.to permit_action(:active_taggers) }
+    it { is_expected.to permit_action(:tags_used_not_approved) }
   end
 end

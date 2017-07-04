@@ -4,7 +4,6 @@
   = render partial: (@hub_feed ? 'hub_feeds' : 'hubs') + '/tabs', locals: { active: 'tags' }
 - content_for :tab_content do
   .nicely-padded
-    = render partial: 'statistics', locals: { tags: @tags, prefixed_tags: @prefixed_tags }
     %h2 Filter tags
     .form-group
       .row

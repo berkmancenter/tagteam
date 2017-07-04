@@ -12,10 +12,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def add_roles?
-    return false unless user.present?
-    return true if user.has_role?(:superadmin)
-
-    user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def all_items?
@@ -35,10 +32,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def team?
-    return false unless user.present?
-    return true if user.has_role?(:superadmin)
-
-    user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def contact?
@@ -57,10 +51,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return false unless user.present?
-    return true if user.has_role?(:superadmin)
-
-    user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def home?
@@ -106,10 +97,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def remove_roles?
-    return false unless user.present?
-    return true if user.has_role?(:superadmin)
-
-    user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def request_rights?
@@ -125,9 +113,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def set_notifications?
-    return false unless user.present?
-
-    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def set_user_notifications?
@@ -135,9 +121,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def set_settings?
-    return false unless user.present?
-
-    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def tag_controls?
@@ -145,10 +129,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
-    return true if user.has_role?(:superadmin)
-
-    user.has_role?(:owner, record)
+    is_owner_or_admin
   end
 
   def recalc_all_tags?
@@ -156,5 +137,26 @@ class HubPolicy < ApplicationPolicy
     return true if user.has_role?(:superadmin)
 
     false
+  end
+
+  def statistics?
+    is_owner_or_admin
+  end
+
+  def active_taggers?
+    is_owner_or_admin
+  end
+
+  def tags_used_not_approved?
+    is_owner_or_admin
+  end
+
+  private
+
+  def is_owner_or_admin
+    return false unless user.present?
+    return true if user.has_role?(:superadmin)
+
+    user.has_role?(:owner, record)
   end
 end

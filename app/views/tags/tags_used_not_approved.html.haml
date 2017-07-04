@@ -1,0 +1,12 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'statistics' }
+- content_for :tab_content do
+  .nicely-padded.statistics
+    %h1 Tags not listed on the approved tags list
+    .row
+      - if @hub.hub_approved_tags.any? && @tags_used_not_approved.any?
+        %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
+          = render partial: 'tags/graph_item', as: :tag, collection: @tags_used_not_approved,
+            locals: { hub: @hub, hub_feed: nil, max_count: @tags_used_not_approved.first.count }

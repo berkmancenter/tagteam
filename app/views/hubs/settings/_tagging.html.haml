@@ -10,6 +10,24 @@
           settings[:tags_delimiter],
           id: 'tags_delimiter',
           class: 'form-control')
+        - unless settings[:tags_delimiter].empty?
+          Current value
+          %span.badge= settings[:tags_delimiter].gsub(' ', '&nbsp;').html_safe
 
       .form-group
-        = submit_tag 'Save tags delimiter', class: 'btn btn-primary', id: 'save_settings'
+        = label_tag 'official_tag_prefix', 'Official tag prefix'
+        = text_field_tag('official_tag_prefix', settings[:official_tag_prefix], {id: 'official_tag_prefix'})
+        - unless settings[:official_tag_prefix].empty?
+          Current value
+          %span.badge= settings[:official_tag_prefix].gsub(' ', '&nbsp;').html_safe
+
+      .form-group
+        = label_tag 'hub_approved_tags', 'Approved tags (one per line)'
+        = text_area_tag('hub_approved_tags', settings[:hub_approved_tags].map(&:tag).join("\n"), {id: 'hub_approved_tags', class: 'noEditor', cols: 32, rows: 12})
+
+      .form-group.checkbox
+        = label_tag 'suggest_only_approved_tags', 'Suggest only approved tags in the bookmarklet form'
+        = check_box_tag('suggest_only_approved_tags', settings[:suggest_only_approved_tags], settings[:suggest_only_approved_tags], {id: 'suggest_only_approved_tags'})
+
+      .form-group
+        = submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings'

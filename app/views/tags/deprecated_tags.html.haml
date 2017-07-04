@@ -1,0 +1,25 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel'
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'statistics' }
+- content_for :tab_content do
+  .nicely-padded.statistics
+    %h1 Deprecated tags
+    .row
+      %form{ method: 'GET', action: hub_deprecated_tags_path(@hub) }
+        %select#deprecated-tags-month{ name: 'month' }
+          %option{ value: 'false', selected: @month == 'false' } All months
+          - (Date::MONTHNAMES).each do |month|
+            - unless month.nil?
+              %option{ value: month, selected: @month == month }= month
+        %select#deprecated-tags-year{ name: 'year' }
+          %option{ value: 'false', selected: @year == 'false' } Select year
+          - ( 2012..Time.current.year ).each do |year|
+            %option{ value: year, selected: @year == year.to_s }= year
+        %button
+          Search
+    .row
+      - if @deprecated_hub_tags.any?
+        %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
+          = render partial: 'tags/graph_item', as: :tag, collection: @deprecated_hub_tags,
+            locals: { hub: @hub, hub_feed: nil, max_count: @deprecated_hub_tags.first.count }

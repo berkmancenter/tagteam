@@ -1,0 +1,9 @@
+%li{:class => "#{'active' if active == 'show' || active == 'show-grid'}"}
+  = documentation('tagged-item-list')
+  = link_to('Items', hub_tag_show_path(@hub, @tag.name))
+  .nav-pill-arrow
+- if current_user && current_user.is?(:owner, @hub)
+  %li{:class => "#{'active' if active == 'statistics'}"}
+    = documentation('tag-statistics')
+    = link_to('Statistics', hub_tag_statistics_path(@hub, @tag.name))
+    .nav-pill-arrow
