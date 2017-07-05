@@ -12,4 +12,4 @@
   = link_to('JSON', hub_feed_feed_items_path(@hub_feed, format: :json, callback: 'callback'), title: 'jsonp with tag filters applied to it.')
 
   .feed-item-tags
-    = sanitize @hub_feed.latest_tags(10).collect { |t| tag_display(t, hub: @hub, hub_feed: @hub_feed) }.join(' ')
+    = raw @hub_feed.latest_tags(10).collect { |t| tag_display(t, hub: @hub, hub_feed: @hub_feed) }.join(' ')

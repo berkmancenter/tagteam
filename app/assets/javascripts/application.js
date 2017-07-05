@@ -671,35 +671,7 @@ $(document).ready(function(){
     $.initEditor(this);
   });
 
-  if($('#logged_in').length > 0 || $('#bookmarklet_allowed').length > 0){
-    $('.tag').live({
-      click: function(e){
-        e.preventDefault();
-
-        var tag_id = $(this).attr('data-tag-id') || 0;
-        if(tag_id == 0){
-          return false;
-        }
-        var hub_id = $(this).attr('data-hub-id') || 0;
-        var hub_feed_id = $(this).attr('data-hub-feed-id') || 0;
-        var hub_feed_item_id = $(this).attr('data-hub-feed-item-id') || 0;
-        
-        var anchor = $(this).parents('td').find('div a').first();
-        if (anchor) {
-          var anchor = anchor.html();
-          if (anchor != "" && anchor != null && anchor != undefined) {
-            document.cookie = 'return_to=' + anchor;
-          }
-        }
- $(this).bt({
-          ajaxPath: $.rootPath() + 'hubs/' + hub_id + '/tag_controls/?tag_id=' + tag_id + '&hub_feed_id=' + hub_feed_id + '&hub_feed_item_id=' + hub_feed_item_id,
-          trigger: 'none',
-          closeWhenOthersOpen: true,
-          clickAnywhereToClose: true
-        });
-        $(this).btOn();
-      }
-    });
+  if($('#logged_in, #bookmarklet-tag-controls-allowed').length > 0){
     $('.add_input_source_control').live({
       click: function(e){
         e.preventDefault();
