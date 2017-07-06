@@ -57,6 +57,13 @@ class FeedItemsController < ApplicationController
 
   # A paginated list of FeedItems in a HubFeed. Returns html, atom, rss, json, or xml. Action cached for anonymous visitors.
   def index
+    Feeds::StoreFeedVisitorJob.perform_later(
+      request.path,
+      request.format.symbol.to_s,
+      request.remote_ip,
+      request.user_agent
+    )
+
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
     @feed_items =
       @hub_feed

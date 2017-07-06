@@ -9,11 +9,19 @@
     .col-xs-4
       = link_to hub_tag_rss_path(@hub, u(@tag.name)), title: "An RSS feed of all items in this hub, with tag filters applied." do
         = image_tag image_path('protocol_rss.png')
-        %p RSS
+        %p
+          RSS
+          %br
+          = FeedSubscriber.count_for(hub_tag_rss_path(@hub, u(@tag.name)))
+          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_tag_rss_path(@hub, u(@tag.name))))
     .col-xs-4
       = link_to hub_tag_atom_path(@hub, u(@tag.name)), title: "An Atom feed of all items in this hub, with tag filters applied." do
         = image_tag image_path('protocol_atom.png')
-        %p ATOM
+        %p 
+          ATOM
+          %br
+          = FeedSubscriber.count_for(hub_tag_atom_path(@hub, u(@tag.name)))
+          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_tag_atom_path(@hub, u(@tag.name))))
     .col-xs-4
       = link_to hub_tag_json_path(@hub, u(@tag.name), callback: 'callback'), title: "jsonp of all items in this hub, with tag filters applied." do
         = image_tag image_path('protocol_json.png')

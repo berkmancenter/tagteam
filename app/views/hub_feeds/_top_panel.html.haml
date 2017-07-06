@@ -13,11 +13,19 @@
     .col-xs-4
       = link_to hub_feed_feed_items_path(@hub_feed, format: :rss), title: "An RSS feed with tag filters applied to it." do
         = image_tag image_path('protocol_rss.png')
-        %p RSS
+        %p
+          RSS
+          %br
+          = FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :rss))
+          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :rss)))
     .col-xs-4
       = link_to hub_feed_feed_items_path(@hub_feed, format: :atom), title: "An Atom feed with tag filters applied to it." do
         = image_tag image_path('protocol_atom.png')
-        %p ATOM
+        %p 
+          ATOM
+          %br
+          = FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :atom))
+          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :atom)))
     .col-xs-4
       = link_to hub_feed_feed_items_path(@hub_feed, format: :json, callback: 'callback'), title: "jsonp with tag filters applied to it." do
         = image_tag image_path('protocol_json.png')

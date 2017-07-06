@@ -327,6 +327,13 @@ class HubsController < ApplicationController
 
   # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml.
   def items
+    Feeds::StoreFeedVisitorJob.perform_later(
+      request.path,
+      request.format.symbol.to_s,
+      request.remote_ip,
+      request.user_agent
+    )
+
     add_breadcrumbs
     hub_id = @hub.id
 

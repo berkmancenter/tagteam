@@ -60,10 +60,24 @@ class TagsController < ApplicationController
   end
 
   # A paginated RSS feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag. This doesn't use the normal respond_to / format system because we use names instead of IDs to identify a tag.
-  def rss; end
+  def rss
+    Feeds::StoreFeedVisitorJob.perform_later(
+      request.path,
+      'rss',
+      request.remote_ip,
+      request.user_agent
+    )
+   end
 
   # A paginated Atom feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
-  def atom; end
+  def atom
+    Feeds::StoreFeedVisitor.perform_later(
+      request.path,
+      'atom',
+      request.remote_ip,
+      request.user_agent
+    )
+  end
 
   # A paginated json list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def json

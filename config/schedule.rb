@@ -38,3 +38,11 @@ end
 every 30.minutes do
   job 'UpdateFeeds', queue: :updater
 end
+
+every 1.day do
+  runner 'Feeds::ExpireFeedVisitorsJob.perform_later'
+end
+
+every 1.day do
+  runner 'Feeds::ProcessVisitorsJob.perform_later'
+end
