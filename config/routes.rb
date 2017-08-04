@@ -70,17 +70,17 @@ Rails.application.routes.draw do
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
     get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }
 
-    get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { name: /.+/ }
-    get 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { name: /.+/ }
-    get 'user/:username/atom' => 'users#tags_atom', :as => 'user_tags_atom', :constraints => { name: /.+/ }
-    get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { name: /.+/ }
-    get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { name: /.+/ }
+    get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/atom' => 'users#tags_atom', :as => 'user_tags_atom', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { username: /[^\/]+/ }
 
-    get 'user/:username/tag/:tagname' => 'users#user_tags', :as => 'user_tags_name', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/rss' => 'users#user_tags_rss', :as => 'user_tags_name_rss', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/atom' => 'users#user_tags_atom', :as => 'user_tags_name_atom', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/json' => 'users#user_tags_json', :as => 'user_tags_name_json', :constraints => { name: /.+/ }
-    get 'user/:username/tag/:tagname/xml' => 'users#user_tags_xml', :as => 'user_tags_name_xml', :constraints => { name: /.+/ }
+    get 'user/:username/tag/:tagname' => 'users#tags', :as => 'user_tags_name', :constraints => { tagname: /[^\/]+/, username: /.+/ }
+    get 'user/:username/tag/:tagname/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { tagname: /[^\/]+/, username: /.+/ }
+    get 'user/:username/tag/:tagname/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { tagname: /[^\/]+/, username: /.+/ }
+    get 'user/:username/tag/:tagname/json' => 'users#tags_json', :as => 'user_tags_name_json', :constraints => { tagname: /[^\/]+/, username: /.+/ }
+    get 'user/:username/tag/:tagname/xml' => 'users#tags_xml', :as => 'user_tags_name_xml', :constraints => { tagname: /[^\/]+/, username: /.+/ }
 
     member do
       get 'about'

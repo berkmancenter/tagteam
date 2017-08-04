@@ -1,21 +1,11 @@
-- unless request.xhr?
-  %h1
-    Tags for "#{@user.username}"
-    .export_menu
-      %h4 Export
-      %div
-        = link_to('rss', hub_user_tags_rss_path(@hub, @user))
-        = link_to('atom', hub_user_tags_atom_path(@hub, @user))
-        = link_to('json', hub_user_tags_json_path(@hub, @user, :callback => 'callback'))
-  #tags_tabs.tabs
-    %ul
-      %li
-        %a{:href => "#tagged_items"} Items
-    #tagged_items
-      = documentation('tagged-item-list')
-      %h2
-        Items - #{@feed_items.total_entries} total
-      = will_paginate(@feed_items)
-      %table.hub_feed.feed_items
-        = render :partial => 'shared/line_items/feed_item', :collection => @feed_items.map(&:taggable)
-      = will_paginate(@feed_items)
+- content_for :top_panel do
+  = render partial: 'tags_top_panel'
+- content_for :tabs do
+  %li.active
+    = documentation('tagged-item-list')
+    = link_to('Items', @home_url)
+    .nav-pill-arrow
+- content_for :tab_content do
+  = render partial: 'feed_items/alter_view', locals: { view: 'list', results: @feed_items }
+  %ul.list-unstyled
+    = render partial: 'feed_items/list_item', collection: @feed_items, as: :feed_item
