@@ -56,6 +56,8 @@ class HubsController < ApplicationController
     :set_settings
   ]
 
+  protect_from_forgery except: :items
+
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
     'date' => ->(rel) { rel.order('created_at') },

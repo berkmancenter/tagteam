@@ -12,6 +12,8 @@ class RepublishedFeedsController < ApplicationController
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
+  protect_from_forgery except: :items
+
   def more_details
     render layout: !request.xhr?
   end
