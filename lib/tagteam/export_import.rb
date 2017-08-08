@@ -83,7 +83,7 @@ module Tagteam
     end
 
     def self.deliver_email(status, user_email)
-      Notifications.user_data_import_completion_notification(
+      NotificationsMailer.user_data_import_completion_notification(
         user_email, status
       ).deliver_later
     end

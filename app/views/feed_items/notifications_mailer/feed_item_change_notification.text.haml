@@ -1,0 +1,12 @@
+Hello,
+\
+#{@updated_by.username} has modified an item you've previously tagged. You can find the current version of the record at this URL:
+\
+= hub_feed_feed_item_url(@hub_feed, @modified_item)
+
+- if @changes.present?
+  \
+  Here are the recent updates to the record:
+  \
+  - @changes.each do |change|
+    \  * #{change}

@@ -92,14 +92,11 @@ class BookmarkletsController < ApplicationController
         @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
 
         if new_tags
-          Sidekiq::Client.enqueue(
-            SendItemChangeNotifications,
-            'FeedItem',
-            @feed_item.id,
-            @hub.id,
-            current_user.id,
-            @feed_item.id,
-            tags_added: new_tags
+          TaggingNotifications::SendNotificationJob.perform_later(
+            @feed_item,
+            @hub,
+            current_user,
+            tags_added: new_tags.map(&:to_s)
           )
         end
 

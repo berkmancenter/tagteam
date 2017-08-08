@@ -32,6 +32,9 @@ class TagFilter < ApplicationRecord
 
   scope :applied, -> { where(applied: true) }
 
+  delegate :name, to: :tag, prefix: true
+  delegate :name, to: :new_tag, prefix: true
+
   def items_in_scope
     scope.taggable_items
   end
@@ -63,8 +66,8 @@ class TagFilter < ApplicationRecord
     self.class.base_class.notify_observers :after_rollback, self
   end
 
-  def rollback_and_destroy_async(user)
-    DestroyTagFilter.perform_async(id, user.id)
+  def rollback_and_destroy_async(current_user)
+    TagFilters::DestroyJob.perform_later(self, current_user)
   end
 
   # Somewhat surprisingly, this code is the same for the add and delete
@@ -115,202 +118,6 @@ class TagFilter < ApplicationRecord
     find(id).rollback
   end
 
-  # Informing taggers about changes in their tags
-  def notify_taggers(old_tag, new_tag, scope, hub, hub_feed, current_user)
-    # by tag filter
-    case scope.class.name
-    when 'Hub'
-      tag_filters_add = TagFilter.where(
-        hub_id: hub,
-        tag_id: old_tag,
-        type: 'AddTagFilter'
-      )
-
-      tag_filters_mod = TagFilter.where(
-        hub_id: hub,
-        new_tag_id: old_tag,
-        type: 'ModifyTagFilter'
-      )
-
-      tag_filters = tag_filters_add + tag_filters_mod
-    when 'HubFeed'
-      hub_feed_tag_filters_add = TagFilter.where(
-        hub_id: hub,
-        tag_id: old_tag,
-        scope_type: 'HubFeed',
-        scope_id: hub_feed,
-        type: 'AddTagFilter'
-      )
-
-      hub_feed_tag_filters_mod = TagFilter.where(
-        hub_id: hub,
-        tag_id: old_tag,
-        scope_type: 'HubFeed',
-        scope_id: hub_feed,
-        type: 'ModifyTagFilter'
-      )
-
-      hub_feed_tag_filters = hub_feed_tag_filters_add + hub_feed_tag_filters_mod
-
-      feed_item_tag_filters = TagFilter
-                              .joins('LEFT JOIN feed_items_feeds on tag_filters.scope_id = feed_items_feeds.feed_item_id')
-                              .where(
-                                feed_items_feeds: {
-                                  feed_id: hub_feed.feed
-                                },
-                                hub_id: hub,
-                                tag_id: old_tag,
-                                scope_type: 'FeedItem'
-                              )
-
-      tag_filters = hub_feed_tag_filters + feed_item_tag_filters
-    when 'FeedItem'
-      tag_filters_add = TagFilter.where(
-        hub_id: hub,
-        tag_id: old_tag,
-        scope_id: scope.id,
-        scope_type: 'FeedItem',
-        type: 'AddTagFilter'
-      )
-
-      tag_filters_mod = TagFilter.where(
-        hub_id: hub,
-        new_tag_id: old_tag,
-        scope_id: scope.id,
-        scope_type: 'FeedItem',
-        type: 'ModifyTagFilter'
-      )
-
-      tag_filters = tag_filters_add + tag_filters_mod
-    end
-
-    # collect related users
-    taggers_to_notify = []
-    tag_filters.each do |tag_filter|
-      taggers_to_notify.concat(Role.where(
-        authorizable_id: tag_filter,
-        authorizable_type: 'TagFilter'
-      ).first.users)
-    end
-
-    # by user tag
-    case scope.class.name
-    when 'Hub'
-      taggings = ActsAsTaggableOn::Tagging.where(
-        tagger_type: 'User',
-        tag_id: old_tag,
-        taggable_type: 'FeedItem',
-        context: 'hub_' + hub.id.to_s
-      )
-    when 'HubFeed'
-      taggings = ActsAsTaggableOn::Tagging
-                 .joins('LEFT JOIN feed_items_feeds on taggings.taggable_id = feed_items_feeds.feed_item_id')
-                 .where(
-                   feed_items_feeds: {
-                     feed_id: hub_feed.feed
-                   },
-                   tagger_type: 'User',
-                   tag_id: old_tag,
-                   taggable_type: 'FeedItem',
-                   context: 'hub_' + hub.id.to_s
-                 )
-    when 'FeedItem'
-      taggings = ActsAsTaggableOn::Tagging.where(
-        tagger_type: 'User',
-        tag_id: old_tag,
-        taggable_id: scope.id,
-        taggable_type: 'FeedItem',
-        context: 'hub_' + hub.id.to_s
-      )
-    end
-
-    # notify basic taggers also
-    taggers_to_notify += User.where(
-      id: taggings.pluck(:tagger_id)
-    )
-
-    # we don't want to notify ourselves
-    taggers_to_notify = taggers_to_notify.uniq - [current_user]
-
-    # send notifications
-    unless taggers_to_notify.empty?
-      Notifications.tag_change_notification(
-        taggers_to_notify,
-        hub,
-        old_tag,
-        new_tag,
-        current_user,
-        scope
-      ).deliver_later
-    end
-  end
-
-  # Informing taggers about changes in their items
-  def notify_about_items_modification(hub, current_user, items_to_process_joined, changes = {})
-    # Get configs for notifications
-    hub_user_notifications_setup = HubUserNotification.where(hub_id: hub)
-
-    items_to_process = if items_to_process_joined == 'reprocess'
-                         items_to_modify
-                       else
-                         FeedItem.where(id: items_to_process_joined.split(','))
-                       end
-
-    # loop through scoped items
-    items_to_process.each do |modified_item|
-      # tag filter creators
-      users_to_notify = []
-      tag_filters_applied = TagFilter.where(
-        id: modified_item.taggings.where(
-          tagger_type: 'TagFilter'
-        ).pluck(:tagger_id)
-      )
-
-      # find and match filters owners
-      tag_filters_applied.each do |tag_filter|
-        users_to_notify.concat(Role.where(
-          authorizable_id: tag_filter,
-          authorizable_type: 'TagFilter'
-        ).first.users)
-      end
-
-      # simple taggers
-      taggings = ActsAsTaggableOn::Tagging.where(
-        tagger_type: 'User',
-        taggable_id: modified_item.id,
-        taggable_type: 'FeedItem',
-        context: 'hub_' + hub.id.to_s
-      )
-
-      users_to_notify += User.where(
-        id: taggings.pluck(:tagger_id)
-      )
-
-      users_to_notify_allowed = []
-      users_to_notify = users_to_notify.uniq - [current_user]
-      users_to_notify.each do |user|
-        user_setup = hub_user_notifications_setup.select do |setup|
-          setup.user_id == user.id
-        end
-
-        # check if a user wants to reveive notifications
-        if !user_setup.empty? && user_setup.first.notify_about_modifications
-          users_to_notify_allowed << user
-        end
-      end
-
-      unless users_to_notify_allowed.empty?
-        Notifications.item_change_notification(
-          hub,
-          modified_item,
-          users_to_notify_allowed,
-          current_user,
-          tag_changes
-        ).deliver_later
-      end
-    end
-  end
-
   def items_to_modify
     items_to_process = []
 
@@ -334,5 +141,9 @@ class TagFilter < ApplicationRecord
 
   def as_json(options = {})
     super(options.merge(methods: :type))
+  end
+
+  def users
+    Role.find_by(authorizable_id: self, authorizable_type: 'TagFilter').users
   end
 end

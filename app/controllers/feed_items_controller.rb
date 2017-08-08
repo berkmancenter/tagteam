@@ -117,9 +117,14 @@ class FeedItemsController < ApplicationController
   def update
     authorize @feed_item
 
-    if @feed_item.update(feed_item_params)
+    inputs = { feed_item: @feed_item, hub: @hub, user: current_user }.reverse_merge(feed_item_params)
+    outcome = FeedItems::Update.run(inputs)
+
+    if outcome.valid?
       redirect_to hub_feed_feed_item_path(@hub_feed, @feed_item)
     else
+      @feed_item = outcome
+
       render :edit
     end
   end

@@ -37,35 +37,27 @@ module TagFilters
       user.has_role!(:owner, tag_filter)
       user.has_role!(:creator, tag_filter)
 
-      if hub.notify_taggers && new_tag
-        hub_feed_to_notify = hub_feed.nil? ? nil : hub_feed.id
+      if hub.notify_taggers?
+        changes =
+          case filter_type
+          when 'AddTagFilter'
+            { tags_added: [tag.name] }
+          when 'DeleteTagFilter'
+            { tags_deleted: [tag.name] }
+          when 'ModifyTagFilter'
+            { tags_modified: [tag.name, new_tag.name] }
+          end
 
-        Sidekiq::Client.enqueue(
-          SendTagChangeNotifications,
-          tag_filter.id,
-          tag.id,
-          new_tag.id,
-          scope.class.name,
-          scope.id,
-          hub.id,
-          hub_feed_to_notify,
-          user.id
+        TaggingNotifications::SendNotificationJob.perform_later(
+          tag_filter,
+          hub,
+          user,
+          changes
         )
       end
 
       if hub.allow_taggers_to_sign_up_for_notifications
-        items_to_process = tag_filter.items_to_modify.collect(&:id).join(',')
-        changes = modify_tag_name.present? ? { tags_modified: [modify_tag_name, new_tag_name] } : {}
-
-        Sidekiq::Client.enqueue(
-          SendItemChangeNotifications,
-          'TagFilter',
-          tag_filter.id,
-          hub.id,
-          user.id,
-          items_to_process,
-          changes
-        )
+        # Send item change notifications here
       end
 
       tag_filter.apply_async
