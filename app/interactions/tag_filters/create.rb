@@ -56,10 +56,6 @@ module TagFilters
         )
       end
 
-      if hub.allow_taggers_to_sign_up_for_notifications
-        # Send item change notifications here
-      end
-
       tag_filter.apply_async
 
       tag_filter
