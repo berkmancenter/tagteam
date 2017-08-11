@@ -1,3 +1,4 @@
+- show_per_page_select = true if local_assigns[:show_per_page_select].nil?
 = will_paginate results,
   renderer: BootstrapPagination::Rails,
   inner_window: 1,
@@ -6,3 +7,7 @@
   previous_label: fa_icon('chevron-left')
 - if results.total_pages > 1
   %span.pagination-counts= page_entries_info results
+  - if results.count > get_per_page.to_i && show_per_page_select != false
+    %span.pagination-per-page
+      = select_tag :per_page, options_for_select([25, 50, 100], params[:per_page].to_i || get_per_page),
+        onchange: "if(this.value){ window.location='?per_page='+this.value; }"

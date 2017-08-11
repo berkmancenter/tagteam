@@ -89,7 +89,7 @@ class HubsController < ApplicationController
 
   def list
     authorize Hub
-    @hubs = Hub.paginate(page: params[:p] || 1, per_page: 25).order('title ASC')
+    @hubs = Hub.paginate(page: params[:p] || 1, per_page: get_per_page).order('title ASC')
   end
 
   def request_rights
