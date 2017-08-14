@@ -18,7 +18,7 @@ module FeedItems
         compose(FeedItems::LocateTaggingUsersByHub, feed_item: feed_item, hub: hub)
       )
 
-      users_to_notify.uniq.delete(current_user)
+      users_to_notify.uniq!.delete(current_user)
 
       # remove users who don't have modification notifications enabled
       users_to_notify.select do |user|
