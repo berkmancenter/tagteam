@@ -1,32 +1,30 @@
-.col-sm-10
+.col-sm-8
   %h1
-    Input feed: #{@hub_feed}
-    - if current_user && current_user.is?(:owner,@hub_feed)
+    Input feed: #{hub_feed}
+    - if current_user && current_user.is?(:owner, hub_feed)
       %span.actions
-        = link_to edit_hub_hub_feed_path(@hub,@hub_feed), title: "Edit this feed" do
+        = link_to edit_hub_hub_feed_path(hub, hub_feed), title: 'Edit this feed' do
           = fa_icon 'pencil'
-        = link_to hub_hub_feed_path(@hub,@hub_feed), method: :delete,
-          confirm: "Are you sure you want to delete this feed?", title: "Delete this feed" do
+        = link_to hub_hub_feed_path(hub, hub_feed), method: :delete,
+          confirm: 'Are you sure you want to delete this feed?', title: 'Delete this feed' do
           = fa_icon 'remove'
-.col-sm-2
-  .export_menu.row.text-center
-    .col-xs-4
-      = link_to hub_feed_feed_items_path(@hub_feed, format: :rss), title: "An RSS feed with tag filters applied to it." do
-        = image_tag image_path('protocol_rss.png')
-        %p
-          RSS
-          %br
-          = FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :rss))
-          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :rss)))
-    .col-xs-4
-      = link_to hub_feed_feed_items_path(@hub_feed, format: :atom), title: "An Atom feed with tag filters applied to it." do
-        = image_tag image_path('protocol_atom.png')
-        %p 
-          ATOM
-          %br
-          = FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :atom))
-          = 'subscriber'.pluralize(FeedSubscriber.count_for(hub_feed_feed_items_path(@hub_feed, format: :atom)))
-    .col-xs-4
-      = link_to hub_feed_feed_items_path(@hub_feed, format: :json, callback: 'callback'), title: "jsonp with tag filters applied to it." do
-        = image_tag image_path('protocol_json.png')
-        %p JSON
+
+.col-sm-4
+  .export-menu.text-right
+    = link_to hub_feed_feed_items_path(hub_feed, format: :rss), title: 'An RSS feed with tag filters applied to it.', class: 'btn btn-default' do
+      = image_tag('protocol_rss.png', width: 12, height: 12)
+      RSS
+      %span.badge
+        = FeedSubscriber.count_for(hub_feed_feed_items_path(hub_feed, format: :rss))
+
+    = link_to hub_feed_feed_items_path(hub_feed, format: :atom), title: 'An Atom feed with tag filters applied to it.', class: 'btn btn-default' do
+      = image_tag('protocol_atom.png', width: 12, height: 12)
+      ATOM
+      %span.badge
+        = FeedSubscriber.count_for(hub_feed_feed_items_path(hub_feed, format: :atom))
+
+    = link_to hub_feed_feed_items_path(hub_feed, format: :json, callback: 'callback'), title: 'jsonp with tag filters applied to it.', class: 'btn btn-default' do
+      =image_tag('protocol_json.png', width: 12, height: 12)
+      JSON
+      %span.badge
+        = FeedSubscriber.count_for(hub_feed_feed_items_path(hub_feed, format: :json))

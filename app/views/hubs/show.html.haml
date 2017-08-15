@@ -9,7 +9,7 @@
           = link_to hub_path(@hub), method: :delete, confirm: 'Are you sure you want to delete this hub?', title: 'Delete this hub' do
             = fa_icon 'remove'
   .col-sm-2
-    .export_menu.row.text-center
+    .export-menu.row.text-center
       .col-xs-4
         = link_to items_hub_path(@hub, format: :rss), title: "An RSS feed of all items in this hub, with tag filters applied." do
           = image_tag image_path('protocol_rss.png')

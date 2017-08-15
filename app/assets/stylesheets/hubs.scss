@@ -1,3 +1,6 @@
+$white: #fff;
+$dark-gray: #777;
+
 .hub-header {
   padding: 3*$padding-large-vertical 0;
   font-size: $font-size-small;
@@ -8,9 +11,20 @@
   }
 }
 
-.export_menu {
+.export-menu {
   position: relative;
   top: $padding-large-vertical;
+
+  .btn-default {
+    background: $white;
+    border-color: $dark-gray;
+    color: $dark-gray;
+  }
+
+  .badge {
+    background: $dark-gray;
+    color: $white;
+  }
 }
 
 .hub {
