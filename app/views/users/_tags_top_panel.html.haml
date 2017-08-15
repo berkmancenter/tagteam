@@ -1,34 +1,29 @@
-.col-sm-10
+.col-sm-8
   %h1
     User "
-    %em>= @user.username
+    %em>= user.username
     " –
-    \#{@feed_items.count} #{'item'.pluralize(@feed_items.count)}
-.col-sm-2
-  .export_menu.row.text-center
-    - if @tag
-      .col-xs-4
-        = link_to hub_user_tags_name_rss_path(@hub, @user.username, @tag.name), title: "An RSS feed of all items in this hub, added by a specific user tagged with a specific tag." do
-          = image_tag image_path('protocol_rss.png')
-          %p RSS
-      .col-xs-4
-        = link_to hub_user_tags_name_atom_path(@hub, @user.username, @tag.name), title: "An Atom feed of all items in this hub, added by a specific user tagged with a specific tag." do
-          = image_tag image_path('protocol_atom.png')
-          %p ATOM
-      .col-xs-4
-        = link_to hub_user_tags_name_json_path(@hub, @user.username, @tag.name), title: "jsonp of all items in this hub, added by a specific user tagged with a specific tag." do
-          = image_tag image_path('protocol_json.png')
-          %p JSON
+    \#{feed_items.count} #{'item'.pluralize(feed_items.count)}
+
+.col-sm-4
+  .export-menu.text-right
+    - if tagteam_tag
+      = link_to hub_user_tags_name_rss_path(hub, user.username, tagteam_tag.name), title: 'An RSS feed of all items in this hub, added by a specific user tagged with a specific tag.', class: 'btn btn-default' do
+        = image_tag('protocol_rss.png', width: 12, height: 12)
+        RSS
+      = link_to hub_user_tags_name_atom_path(hub, user.username, tagteam_tag.name), title: 'An Atom feed of all items in this hub, added by a specific user tagged with a specific tag.', class: 'btn btn-default' do
+        = image_tag('protocol_atom.png', width: 12, height: 12)
+        ATOM
+      = link_to hub_user_tags_name_json_path(hub, user.username, tagteam_tag.name), title: 'jsonp of all items in this hub, added by a specific user tagged with a specific tag.', class: 'btn btn-default' do
+        = image_tag('protocol_json.png', width: 12, height: 12)
+        JSON
     - else
-      .col-xs-4
-        = link_to hub_user_tags_rss_path(@hub, @user.username), title: "An RSS feed of all items in this hub, added by a specific user." do
-          = image_tag image_path('protocol_rss.png')
-          %p RSS
-      .col-xs-4
-        = link_to hub_user_tags_atom_path(@hub, @user.username), title: "An Atom feed of all items in this hub, added by a specific user." do
-          = image_tag image_path('protocol_atom.png')
-          %p ATOM
-      .col-xs-4
-        = link_to hub_user_tags_json_path(@hub, @user.username), title: "jsonp of all items in this hub, added by a specific user." do
-          = image_tag image_path('protocol_json.png')
-          %p JSON
+      = link_to hub_user_tags_rss_path(hub, user.username), title: 'An RSS feed of all items in this hub, added by a specific user.', class: 'btn btn-default' do
+        = image_tag('protocol_rss.png', width: 12, height: 12)
+        RSS
+      = link_to hub_user_tags_atom_path(hub, user.username), title: 'An Atom feed of all items in this hub, added by a specific user.', class: 'btn btn-default' do
+        = image_tag('protocol_atom.png', width: 12, height: 12)
+        ATOM
+      = link_to hub_user_tags_json_path(hub, user.username), title: 'jsonp of all items in this hub, added by a specific user.', class: 'btn btn-default' do
+        = image_tag('protocol_json.png', width: 12, height: 12)
+        JSON
