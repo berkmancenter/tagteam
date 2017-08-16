@@ -6,11 +6,16 @@
   in use in this hub.
 
 - if prefixed_tags.any?
-  - prefixed_tags.each do |tag_prefix, tag_count|
-    %p
-      There #{'is'.pluralize(tag_count)} currently
-      %span.badge= tag_count
-      = 'tag'.pluralize(tag_count)
-      prefixed with
-      %span.badge= tag_prefix + '.'
-      in use in this hub.
+  = render partial: 'tag_statistics', locals: { tag_prefix: prefixed_tags.first[0], tag_count: prefixed_tags.first[1] }
+
+  - if prefixed_tags.size > 1
+    .panel-group#accordion{ role: 'tabllist', 'aria-multiselectable' => 'true' }
+      .panel.panel-default
+        .panel-heading#additional-tags-heading{ role: 'tab' }
+          %h4.panel-title
+            %a{ role: 'button', 'data-toggle' => 'collapse', 'data-parent' => '#accordion', href: '#additional-tags', 'aria-expanded' => 'true', 'aria-controls' => 'additional-tags' }
+              Additional Tag Statistics
+        .panel-collapse.collapse#additional-tags{ role: 'tabpanel', 'aria-labelledby' => 'additional-tags-heading' }
+          .panel-body
+            - prefixed_tags.drop(1).each do |tag_prefix, tag_count|
+              = render partial: 'tag_statistics', locals: { tag_prefix: tag_prefix, tag_count: tag_count }
