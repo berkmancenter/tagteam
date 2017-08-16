@@ -29,9 +29,11 @@
       A filter affecting "
       %em>= @tag
       " already exists on this item.
-  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :add, params: params, current_user: current_user }
+  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :modify, params: params, current_user: current_user }
+  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :delete, params: params, current_user: current_user }
   - if current_user.is?([:owner, :remixer], @hub)
     %h3 Publishing
