@@ -133,6 +133,10 @@ class User < ApplicationRecord
     email.strip.end_with?('edu')
   end
 
+  def notifications_for_hub?(hub)
+    hub_user_notifications.find_by(hub: hub).try(:notify_about_modifications?)
+  end
+
   protected
 
   def gen_role_cache

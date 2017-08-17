@@ -37,4 +37,27 @@ RSpec.describe User, type: :model do
       it { is_expected.to validate_presence_of(:signup_reason) }
     end
   end
+
+  describe '#notifications_for_hub?' do
+    subject { user.notifications_for_hub?(hub) }
+
+    let(:user) { create(:user) }
+    let(:hub) { create(:hub) }
+
+    before do
+      create(:hub_user_notification, user: user, hub: hub, notify_about_modifications: notify_about_modifications)
+    end
+
+    context 'when notifications are enabled for the hub' do
+      let(:notify_about_modifications) { true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'when notifications are disabled for the hub' do
+      let(:notify_about_modifications) { false }
+
+      it { is_expected.to be(false) }
+    end
+  end
 end
