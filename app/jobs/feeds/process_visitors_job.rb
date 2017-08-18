@@ -20,7 +20,6 @@ module Feeds
         'feed_visitors.ip = feed_subscribers.ip AND '\
         'feed_visitors.user_agent = feed_subscribers.user_agent')
         .group(:route, :ip, :user_agent)
-        .having('count(*) > ?', 1)
         .where('feed_subscribers.id IS NULL')
     end
 
