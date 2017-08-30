@@ -94,7 +94,7 @@ Rails.application.routes.draw do
       get 'retrievals'
       get 'my_bookmark_collections'
       get 'bookmark_collections'
-      get 'community'
+      get 'team'
       get 'notifications'
       get 'settings'
       post 'add_roles'

@@ -33,7 +33,6 @@ class HubsController < ApplicationController
     :add_roles,
     :bookmark_collections,
     :by_date,
-    :community,
     :contact,
     :created,
     :custom_republished_feeds,
@@ -53,7 +52,8 @@ class HubsController < ApplicationController
     :notifications,
     :set_user_notifications,
     :settings,
-    :set_settings
+    :set_settings,
+    :team
   ]
 
   protect_from_forgery except: :items
@@ -105,7 +105,7 @@ class HubsController < ApplicationController
     render layout: request.xhr? ? false : 'tabs'
   end
 
-  def community
+  def team
     add_breadcrumbs
 
     @allowed_to_tag = @hub.users_with_roles.size

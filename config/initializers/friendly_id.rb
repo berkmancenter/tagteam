@@ -20,7 +20,7 @@ FriendlyId.defaults do |config|
   config.reserved_words = %w(
     new edit index session login logout users admin
     stylesheets assets javascripts images meta list request_rights contact
-    community add_roles remove_roles retrievals background_activity
+    team add_roles remove_roles retrievals background_activity
     bookmark_collections by_date all_items items my my_bookmark_collections
     item_search search
   )

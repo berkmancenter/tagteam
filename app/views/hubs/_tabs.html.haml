@@ -35,9 +35,9 @@
     = link_to('Settings', settings_hub_path(@hub) )
     .nav-pill-arrow
 - if current_user && current_user.is?(:owner, @hub)
-  %li{:class => "#{'active' if active == 'community'}"}
-    = documentation('hub-community')
-    = link_to('Community', community_hub_path(@hub) )
+  %li{:class => "#{'active' if active == 'team'}"}
+    = documentation('hub-team')
+    = link_to('Team', team_hub_path(@hub) )
     .nav-pill-arrow
 - if current_user && @hub.allow_taggers_to_sign_up_for_notifications
   %li{:class => "#{'active' if active == 'notifications'}"}
