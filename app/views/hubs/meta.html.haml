@@ -34,6 +34,10 @@
         \- Funding and support
 %h2 Documentation
 %dl
+  %p
+    = link_to('TagTeam home page', 'https://cyber.harvard.edu/hoap/TagTeam')
+    (including a FAQ, introduction, user manual, terms of service)
+
   %dt Introduction
   %dd
     = succeed "." do
@@ -55,6 +59,10 @@
     and
     %a{:href => "https://github.com/berkmancenter/tagteam/raw/master/doc/ddl.png", :target => "_blank"} the DDL
     for an overview of how all the pieces fit together.
+
+%h2 Contact Us
+%p= mail_to('tagteam@cyber.harvard.edu')
+
 %h2 Bugs
 %p
   Please report them
