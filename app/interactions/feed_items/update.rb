@@ -32,11 +32,15 @@ module FeedItems
     def detect_changes(feed_item, description, title, url)
       changes = {}
 
-      changes[:description] = [feed_item.description, description] if feed_item.description != description
+      changes[:description] = [strip_tags(feed_item.description), strip_tags(description)] if feed_item.description != description
       changes[:title] = [feed_item.title, title] if feed_item.title != title
       changes[:url] = [feed_item.url, url] if feed_item.url != url
 
       changes
+    end
+
+    def strip_tags(string)
+      ActionController::Base.helpers.strip_tags(string)
     end
   end
 end
