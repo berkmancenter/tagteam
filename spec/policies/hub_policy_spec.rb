@@ -16,7 +16,6 @@ RSpec.describe HubPolicy do
     it { is_expected.to forbid_action(:background_activity) }
     it { is_expected.to permit_action(:bookmark_collections) }
     it { is_expected.to permit_action(:by_date) }
-    it { is_expected.to forbid_action(:community) }
     it { is_expected.to permit_action(:contact) }
     it { is_expected.to forbid_action(:create) }
     it { is_expected.to forbid_action(:custom_republished_feeds) }
@@ -40,6 +39,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to forbid_action(:set_user_notifications) }
     it { is_expected.to permit_action(:show) }
     it { is_expected.to forbid_action(:tag_controls) }
+    it { is_expected.to forbid_action(:team) }
     it { is_expected.to forbid_action(:update) }
   end
 
@@ -75,12 +75,12 @@ RSpec.describe HubPolicy do
 
       it { is_expected.to permit_action(:add_feed) }
       it { is_expected.to permit_action(:add_roles) }
-      it { is_expected.to permit_action(:community) }
       it { is_expected.to permit_action(:custom_republished_feeds) }
       it { is_expected.to permit_action(:destroy) }
       it { is_expected.to permit_action(:edit) }
       it { is_expected.to permit_action(:remove_roles) }
       it { is_expected.to permit_action(:set_notifications) }
+      it { is_expected.to permit_action(:team) }
       it { is_expected.to permit_action(:update) }
     end
 
@@ -89,11 +89,11 @@ RSpec.describe HubPolicy do
 
       it { is_expected.to permit_action(:add_feed) }
       it { is_expected.to forbid_action(:add_roles) }
-      it { is_expected.to forbid_action(:community) }
       it { is_expected.to forbid_action(:custom_republished_feeds) }
       it { is_expected.to forbid_action(:destroy) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:remove_roles) }
+      it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
     end
 
@@ -102,23 +102,23 @@ RSpec.describe HubPolicy do
 
       it { is_expected.to forbid_action(:add_feed) }
       it { is_expected.to forbid_action(:add_roles) }
-      it { is_expected.to forbid_action(:community) }
       it { is_expected.to permit_action(:custom_republished_feeds) }
       it { is_expected.to forbid_action(:destroy) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:remove_roles) }
+      it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
     end
 
     context "for a hub they don't have a role on" do
       it { is_expected.to forbid_action(:add_feed) }
       it { is_expected.to forbid_action(:add_roles) }
-      it { is_expected.to forbid_action(:community) }
       it { is_expected.to forbid_action(:custom_republished_feeds) }
       it { is_expected.to forbid_action(:destroy) }
       it { is_expected.to forbid_action(:edit) }
       it { is_expected.to forbid_action(:remove_roles) }
       it { is_expected.to forbid_action(:set_notifications) }
+      it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
     end
   end
@@ -133,7 +133,6 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:background_activity) }
     it { is_expected.to permit_action(:bookmark_collections) }
     it { is_expected.to permit_action(:by_date) }
-    it { is_expected.to permit_action(:community) }
     it { is_expected.to permit_action(:contact) }
     it { is_expected.to permit_action(:create) }
     it { is_expected.to permit_action(:custom_republished_feeds) }
@@ -157,6 +156,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:set_user_notifications) }
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:tag_controls) }
+    it { is_expected.to permit_action(:team) }
     it { is_expected.to permit_action(:update) }
   end
 end

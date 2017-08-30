@@ -1,10 +1,10 @@
 - content_for :top_panel do
   = render partial: 'hubs/top_panel', locals: { hub: @hub }
 - content_for :tabs do
-  = render partial: 'hubs/tabs', locals: { active: 'community' }
+  = render partial: 'hubs/tabs', locals: { active: 'team' }
 - content_for :tab_content do
-  .nicely-padded.community
-    %h1 Community
+  .nicely-padded.team
+    %h1 Team
     .row
       %h2
         There #{@allowed_to_tag == 1 ? 'is' : 'are'}
@@ -14,8 +14,8 @@
         for this hub.
     .row
       - if current_user && current_user.is?(:owner, @hub)
-        = render('hubs/community/assign_roles')
+        = render('hubs/team/assign_roles')
 
-      = render('hubs/community/remove_roles')
+      = render('hubs/team/remove_roles')
 
-      = render('hubs/community/notifications')
+      = render('hubs/team/notifications')

@@ -7,7 +7,7 @@ Reason: #{@params[:contact][:reason]}
 - unless @params[:contact][:rights].length == 1
   Rights they are requesting:#{@params[:contact][:rights].join("\n")}
   
-  Please go the the "community" tab within your hub and grant them whatever
+  Please go the the "team" tab within your hub and grant them whatever
   rights you feel appropriate.
   - u = User.find_by_email(@params[:contact][:email])
   - if u

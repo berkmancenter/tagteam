@@ -34,7 +34,7 @@ class HubPolicy < ApplicationPolicy
     show?
   end
 
-  def community?
+  def team?
     return false unless user.present?
     return true if user.has_role?(:superadmin)
 
