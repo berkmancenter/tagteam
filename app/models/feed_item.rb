@@ -179,13 +179,14 @@ class FeedItem < ApplicationRecord
   def tag_list_array_for_indexing
     # tag_list as provided by ActsAsTaggableOn always does a sql query.
     # Construct the tag list correctly.
-    tags.collect(&:name)
+    item_tags.collect(&:name)
   end
 
   def tag_list_string_for_indexing
     # tag_list as provided by ActsAsTaggableOn always does a sql query.
     # Construct the tag list correctly.
-    tags.collect(&:name).join(', ')
+
+    item_tags.collect(&:name).join(', ')
   end
 
   def to_s
@@ -257,6 +258,12 @@ class FeedItem < ApplicationRecord
   def self.apply_tag_filters(item_id, hub_ids = [])
     feed_item = find(item_id)
     feed_item.apply_tag_filters(hub_ids)
+  end
+
+  def item_tags
+    taggings.collect do |tg|
+      tg.tag
+    end.compact
   end
 
   private
