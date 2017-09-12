@@ -134,7 +134,7 @@ class Feed < ApplicationRecord
   # content. A FeedRetrieval object documenting this event is created with
   # a changelog of new or changed FeedItem objects that were seen. This may
   # spawn Resque jobs if/when items change or are added. The meat of updating
-  # a FeedItem lives in the FeedItem#create_or_update_feed_item method.
+  # a FeedItem lives in the FeedItems::CreateOrUpdate interaction.
   def update_feed
     return if bookmarking_feed?
 
@@ -153,7 +153,7 @@ class Feed < ApplicationRecord
     fr.success = true
     fr.status_code = '200'
     raw_feed.items.each do |item|
-      FeedItem.create_or_update_feed_item(self, item, fr)
+      FeedItems::CreateOrUpdate.run!(feed: self, item: item, feed_retrieval: fr)
     end
     fr.changelog = changelog.to_yaml
     fr.save
@@ -183,7 +183,7 @@ class Feed < ApplicationRecord
     fr.status_code = '200'
     fr.save
     raw_feed.items.each do |item|
-      FeedItem.create_or_update_feed_item(self, item, fr)
+      FeedItems::CreateOrUpdate.run!(feed: self, item: item, feed_retrieval: fr)
     end
     fr.changelog = changelog.to_yaml
     fr.save
