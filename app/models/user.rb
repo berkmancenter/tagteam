@@ -137,6 +137,10 @@ class User < ApplicationRecord
     hub_user_notifications.find_by(hub: hub).try(:notify_about_modifications?)
   end
 
+  def application_roles
+    roles.where(authorizable_type: nil).order(:name)
+  end
+
   protected
 
   def gen_role_cache

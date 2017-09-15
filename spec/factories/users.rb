@@ -7,6 +7,7 @@ FactoryGirl.define do
     password_confirmation 'password'
     approved true
     signup_reason 'MyString'
+    confirmed_at Time.current
 
     factory :confirmed_user do
       after(:create, &:confirm)

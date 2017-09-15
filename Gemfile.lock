@@ -86,7 +86,7 @@ GEM
       i18n
     browser (2.4.0)
     builder (3.2.3)
-    byebug (9.0.6)
+    byebug (9.1.0)
     capybara (2.12.0)
       addressable
       mime-types (>= 1.16)
@@ -423,6 +423,7 @@ DEPENDENCIES
   brakeman (~> 3.6)
   breadcrumbs (~> 0.1)
   browser (~> 2.4)
+  byebug (~> 9.1)
   capybara-webkit (~> 1.12)
   database_cleaner (~> 1.5)
   devise (~> 4.2)

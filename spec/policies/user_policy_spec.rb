@@ -4,7 +4,12 @@ require 'rails_helper'
 RSpec.describe UserPolicy do
   subject { described_class.new(user, user_resource) }
 
+  let(:scope) { described_class::Scope.new(user, User).resolve }
   let(:user_resource) { create(:user) }
+
+  before do
+    create_list(:user, 5)
+  end
 
   context 'anonymous user' do
     let(:user) { nil }
@@ -18,6 +23,12 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action(:show) }
     it { is_expected.to permit_action(:tags) }
     it { is_expected.to permit_action(:user_tags) }
+
+    describe 'scope' do
+      it 'returns no users' do
+        expect(scope).to be_empty
+      end
+    end
   end
 
   context 'user with no roles' do
@@ -32,6 +43,12 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action(:show) }
     it { is_expected.to permit_action(:tags) }
     it { is_expected.to permit_action(:user_tags) }
+
+    describe 'scope' do
+      it 'returns only the current user' do
+        expect(scope).to contain_exactly(user)
+      end
+    end
   end
 
   context 'superadmin' do
@@ -46,5 +63,11 @@ RSpec.describe UserPolicy do
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:tags) }
     it { is_expected.to permit_action(:user_tags) }
+
+    describe 'scope' do
+      it 'returns all users' do
+        expect(scope.size).to eq(6)
+      end
+    end
   end
 end

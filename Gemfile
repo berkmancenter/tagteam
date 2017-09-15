@@ -57,6 +57,7 @@ end
 
 group :development, :test do
   gem 'awesome_print', '~> 1.7'
+  gem 'byebug', '~> 9.1'
   gem 'pry', '~> 0.10'
   gem 'pry-byebug', '~> 3.4'
   gem 'pry-rails', '~> 0.3'

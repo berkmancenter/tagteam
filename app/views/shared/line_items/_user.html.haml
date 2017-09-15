@@ -1,17 +1,27 @@
 %tr.user.hover_row
-  %td{:nowrap => "nowrap"}
+  %td{ nowrap: 'nowrap' }
     = link_to 'delete',
       user_path(user),
       method: :delete,
-      confirm: "Are you sure?",
-      title: "Delete this user"
+      confirm: 'Are you sure?',
+      title: 'Delete this user'
   %td
-    = link_to(user.username,user_path(user))
+    = link_to(user.username, user)
   %td
-    = sanitize user.my(Hub).collect{|h| link_to(h.display_title, hub_path(h))}.join(', ')
+    = sanitize user.my(Hub).collect { |h| link_to(h.display_title, hub_path(h)) }.join(', ')
   %td
-    = user.roles.where(:authorizable_type => nil).collect{|r| r.name}.join(', ' )
+    = user.application_roles.pluck(:name).join(', ')
   %td
-    = raw user.confirmed? ? '' : %Q|No. #{link_to('resend confirmation', resend_confirmation_token_user_path(user), :method => :post, :confirm => 'Resend confirmation email to user?')}|
+    - unless user.confirmed?
+      No.
+      = link_to 'resend confirmation',
+        resend_confirmation_token_user_path(user),
+        method: :post,
+        confirm: 'Resend confirmation email to user?'
   %td
-    = raw user.access_locked? ? %Q|Yes! #{link_to('resend unlock request', resend_unlock_token_user_path(user), :method => :post, :confirm => 'Resend unlock email to user?')}| : ''
+    - if user.access_locked?
+      Yes!
+      = link_to 'resend unlock request',
+        resend_unlock_token_user_path(user),
+        method: :post,
+        confirm: 'Resend unlock email to user?'

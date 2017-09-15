@@ -5,12 +5,22 @@
     %table.table
       %thead
         %tr
-          %th  
-          %th User
-          %th Owns
-          %th App-wide rights
-          %th Confirmed?
-          %th Locked?
+          %th
+          %th
+            = link_to(sort: 'username') do
+              User#{'&nbsp;&#9662;'.html_safe if @sort == 'username'}
+          %th
+            = link_to(sort: 'owned_hubs') do
+              Owns#{'&nbsp;&#9662;'.html_safe if @sort == 'owned_hubs'}
+          %th
+            = link_to(sort: 'application_roles') do
+              App&#8209;wide&nbsp;rights#{'&nbsp;&#9662;'.html_safe if @sort == 'application_roles'}
+          %th
+            = link_to(sort: 'confirmed') do
+              Confirmed?#{'&nbsp;&#9662;'.html_safe if @sort == 'confirmed'}
+          %th
+            = link_to(sort: 'locked') do
+              Locked?#{'&nbsp;&#9662;'.html_safe if @sort == 'locked'}
       %tbody
         = render partial: 'shared/line_items/user', collection: @users
     = render partial: 'shared/paginate', object: @users, as: :results

@@ -1,29 +1,30 @@
 # frozen_string_literal: true
+
 class UserPolicy < ApplicationPolicy
   def autocomplete?
     user.present?
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin)
   end
 
   def index?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin)
   end
 
   def resend_confirmation_token?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin)
   end
 
   def resend_unlock_token?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin)
   end
@@ -33,7 +34,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin)
   end
@@ -56,5 +57,14 @@ class UserPolicy < ApplicationPolicy
 
   def tags_atom?
     true
+  end
+
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      return User.none if user.blank?
+      return User.all if user.has_role?(:superadmin)
+
+      User.where(id: user.id)
+    end
   end
 end
