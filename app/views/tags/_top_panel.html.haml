@@ -7,18 +7,18 @@
 
 .col-sm-4
   .export-menu.text-right
-    = link_to hub_tag_rss_path(hub, u(tag.name)), title: 'An RSS feed of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
+    = link_to hub_tag_rss_path(hub, tag.name), title: 'An RSS feed of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
       = image_tag('protocol_rss.png', width: 12, height: 12)
       RSS
       %span.badge
-        = FeedSubscriber.count_for(hub_tag_rss_path(hub, u(tag.name)))
-    = link_to hub_tag_atom_path(hub, u(tag.name)), title: 'An Atom feed of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
+        = FeedSubscriber.count_for(hub_tag_rss_path(hub, tag.name))
+    = link_to hub_tag_atom_path(hub, tag.name), title: 'An Atom feed of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
       = image_tag('protocol_atom.png', width: 12, height: 12)
       ATOM
       %span.badge
-        = FeedSubscriber.count_for(hub_tag_atom_path(hub, u(tag.name)))
-    = link_to hub_tag_json_path(hub, u(tag.name), callback: 'callback'), title: 'jsonp of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
+        = FeedSubscriber.count_for(hub_tag_atom_path(hub, tag.name))
+    = link_to hub_tag_json_path(hub, tag.name, callback: 'callback'), title: 'jsonp of all items in this hub, with tag filters applied.', class: 'btn btn-default' do
       = image_tag('protocol_json.png', width: 12, height: 12)
       JSON
       %span.badge
-        = FeedSubscriber.count_for(hub_tag_json_path(hub, u(tag.name)))
+        = FeedSubscriber.count_for(hub_tag_json_path(hub, tag.name))
