@@ -1,5 +1,7 @@
 %h1 Users Awaiting Approval
 
+= render('admin/shared/nav_menu')
+
 - if @unapproved_users.any?
   %table.table.table-hover
     %thead

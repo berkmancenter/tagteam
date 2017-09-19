@@ -10,6 +10,8 @@ module Admin
     def index
       authorize :user_approval
 
+      breadcrumbs.add 'User Approvals', admin_user_approvals_path
+
       @unapproved_users = User.unapproved
     end
 

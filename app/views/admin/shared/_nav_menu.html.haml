@@ -1,0 +1,11 @@
+%ul.nav.nav-tabs
+  %li{ role: 'presentation', class: ('active' if controller_name == 'home') }
+    = link_to 'Admin Home', admin_root_path
+  %li{ role: 'presentation', class: ('active' if controller_name == 'users') }
+    = link_to 'Users', admin_users_path
+  %li{ role: 'presentation', class: ('active' if controller_name == 'user_approvals') }
+    = link_to 'User Approvals', admin_user_approvals_path
+  %li{ role: 'presentation' }
+    = link_to 'Sidekiq', sidekiq_web_path, target: '_blank'
+  %li{ role: 'presentation' }
+    = link_to 'Background Jobs', nil, id: 'background_jobs'

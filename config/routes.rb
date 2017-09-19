@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
   # TODO: enforce SSL for UsersController in production
-  resources :users do
+  resources :users, except: :index do
     member do
       post 'resend_confirmation_token'
       post 'resend_unlock_token'
@@ -168,10 +168,14 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    root 'home#index'
+
     resources :user_approvals, only: [:index] do
       get :approve
       get :deny
     end
+    
+    resources :users, only: :index
   end
 
   root 'hubs#home'

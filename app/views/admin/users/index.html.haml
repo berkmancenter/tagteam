@@ -1,5 +1,8 @@
+%h1 Users
+
+= render('admin/shared/nav_menu')
+
 #users
-  %h3 Users
   #user_list
     = render partial: 'shared/paginate', object: @users, as: :results
     %table.table

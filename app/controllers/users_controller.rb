@@ -8,8 +8,6 @@ class UsersController < ApplicationController
                                          :tags_atom]
   before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
                                       :tags_atom]
-  before_action :set_sort, only: :index
-
   after_action :verify_authorized
 
   def tags
@@ -89,19 +87,10 @@ class UsersController < ApplicationController
   end
 
   def show
-    breadcrumbs.add 'Users', users_path
+    breadcrumbs.add 'Users', admin_users_path
     @user = User.find(params[:id])
     authorize @user
     render layout: 'tabs'
-  end
-
-  def index
-    authorize User
-    breadcrumbs.add 'Users', users_path
-
-    @users =
-      Users::Sort.run!(users: policy_scope(User), sort_method: @sort)
-                 .paginate(page: params[:page], per_page: get_per_page)
   end
 
   def destroy
@@ -111,7 +100,7 @@ class UsersController < ApplicationController
     flash[:notice] = 'Deleted that user'
     respond_to do |format|
       format.html do
-        redirect_to action: :index
+        redirect_to admin_users_path
       end
     end
   end
@@ -165,14 +154,5 @@ class UsersController < ApplicationController
 
     @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
                           .paginate(page: params[:page], per_page: get_per_page)
-  end
-
-  def set_sort
-    @sort =
-      if %w[application_roles confirmed locked owned_hubs username].include?(params[:sort])
-        params[:sort]
-      else
-        'username'
-      end
   end
 end
