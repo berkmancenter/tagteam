@@ -1,0 +1,15 @@
+.row
+  .col-md-6
+    = form_tag(set_settings_hub_path(hub)) do
+      %h2
+        %strong Tagging
+
+      .form-group
+        = label_tag 'tags_delimiter', 'Tags delimiter'
+        = text_field_tag('tags_delimiter',
+          settings[:tags_delimiter],
+          id: 'tags_delimiter',
+          class: 'form-control')
+
+      .form-group
+        = submit_tag 'Save tags delimiter', class: 'btn btn-primary', id: 'save_settings'

@@ -1,0 +1,12 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
+
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'settings' }
+
+- content_for :tab_content do
+  .nicely-padded.settings
+    %h1 Settings
+
+    = render partial: 'hubs/settings/tagging', locals: { hub: @hub, settings: @settings }
+    = render partial: 'hubs/settings/notifications', locals: { hub: @hub }
