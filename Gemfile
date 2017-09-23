@@ -21,7 +21,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/mjbellantoni/formtastic-boo
 gem 'friendly_id', '~> 5.2'
 gem 'haml-rails', '~> 0.9'
 gem 'jquery-rails', '~> 4.2'
-gem 'nokogiri', '~> 1.7'
+gem 'nokogiri', '~> 1.8'
 gem 'non-stupid-digest-assets', '~> 1.0', '>= 1.0.9'
 gem 'pg', '~> 0.19'
 gem 'progress_bar', '~> 1.1'
