@@ -1,5 +1,5 @@
 - content_for :top_panel do
-  = render partial: 'hubs/top_panel'
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'statistics' }
 - content_for :tab_content do
@@ -35,6 +35,9 @@
             - ( 2012..Time.current.year ).each do |year|
               %option{ value: year }= year
       - if @hub.hub_approved_tags.any? && @tags_used_not_approved.any?
+        %p
+          %a{ href: hub_tags_approved_path(@hub) }
+            Tags on the approved list
         %p
           %a{ href: hub_tags_used_not_approved_path(@hub) }
             Tags not listed on the approved tags list

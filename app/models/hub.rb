@@ -248,7 +248,7 @@ class Hub < ApplicationRecord
   end
 
   def tags_delimiter_with_default
-    tags_delimiter.presence || ','
+    tags_delimiter || ','
   end
 
   def hub_feed_for_feed_item(feed_item)

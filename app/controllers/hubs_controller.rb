@@ -118,6 +118,8 @@ class HubsController < ApplicationController
   def statistics
     add_breadcrumbs
 
+    authorize @hub
+
     @tags = @hub.tags
 
     @taggers = Statistics::HubTaggers.run!(hub: @hub)
@@ -692,7 +694,7 @@ class HubsController < ApplicationController
   def add_breadcrumbs
     breadcrumbs.add @hub, hub_path(@hub) if @hub.id
   end
-  
+
   def find_hub
     @hub = Hub.find(params[:id])
     authorize @hub

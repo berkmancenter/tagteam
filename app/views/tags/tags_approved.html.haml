@@ -4,9 +4,9 @@
   = render partial: 'hubs/tabs', locals: { active: 'statistics' }
 - content_for :tab_content do
   .nicely-padded.statistics
-    %h1 Tags not listed on the approved tags list
+    %h1 Tags on the approved list
     .row
-      - if @hub.hub_approved_tags.any? && @tags_used_not_approved.any?
+      - if @tags_approved.any?
         %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
-          = render partial: 'tags/graph_item', as: :tag, collection: @tags_used_not_approved,
-            locals: { hub: @hub, hub_feed: nil, max_count: @tags_used_not_approved.first.count }
+          = render partial: 'tags/graph_item', as: :tag, collection: @tags_approved,
+            locals: { hub: @hub, hub_feed: nil, max_count: @tags_approved.first.count }

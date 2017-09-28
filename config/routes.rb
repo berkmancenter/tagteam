@@ -77,14 +77,15 @@ Rails.application.routes.draw do
     get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { username: /[^\/]+/ }
     get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { username: /[^\/]+/ }
 
-    get 'user/:username/tag/:tagname' => 'users#tags', :as => 'user_tags_name', :constraints => { tagname: /[^\/]+/, username: /.+/ }
-    get 'user/:username/tag/:tagname/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { tagname: /[^\/]+/, username: /.+/ }
-    get 'user/:username/tag/:tagname/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { tagname: /[^\/]+/, username: /.+/ }
-    get 'user/:username/tag/:tagname/json' => 'users#tags_json', :as => 'user_tags_name_json', :constraints => { tagname: /[^\/]+/, username: /.+/ }
-    get 'user/:username/tag/:tagname/xml' => 'users#tags_xml', :as => 'user_tags_name_xml', :constraints => { tagname: /[^\/]+/, username: /.+/ }
+    get 'user/:username/tag/:tagname(/:deprecated)' => 'users#tags', :as => 'user_tags_name', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
+    get 'user/:username/tag/:tagname(/:deprecated)/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
+    get 'user/:username/tag/:tagname(/:deprecated)/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
+    get 'user/:username/tag/:tagname(/:deprecated)/json' => 'users#tags_json', :as => 'user_tags_name_json', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
+    get 'user/:username/tag/:tagname(/:deprecated)/xml' => 'users#tags_xml', :as => 'user_tags_name_xml', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
 
     get 'tags_used_not_approved' => 'tags#tags_used_not_approved'
     get 'deprecated_tags' => 'tags#deprecated_tags'
+    get 'tags_approved' => 'tags#tags_approved'
 
     member do
       get 'about'

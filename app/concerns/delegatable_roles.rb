@@ -74,6 +74,11 @@ module DelegatableRoles
         hub_feeds_of_concern = user.my_objects_in(HubFeed, hub)
         return hub_feeds_of_concern.reject { |hf| hf.feed.is_bookmarking_feed? == true }
       end
+    },
+    stats_viewer: {
+      name: 'Statistics viewer',
+      description: 'Can browse hub statistics',
+      objects_of_concern: ->(_user, _hub) { return [] }
     }
   }.freeze
 

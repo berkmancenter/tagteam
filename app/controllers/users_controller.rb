@@ -138,12 +138,21 @@ class UsersController < ApplicationController
     if params[:tagname]
       @tag = ActsAsTaggableOn::Tag.where(name: params[:tagname]).first
 
-      taggings = ActsAsTaggableOn::Tagging.select('DISTINCT ON ("context") *')
-                                          .where(context: "hub_#{@hub.id}",
-                                                 taggable_type: 'FeedItem',
-                                                 tag_id: @tag,
-                                                 tagger_id: @user,
-                                                 tagger_type: 'User')
+      taggings = if params[:deprecated].nil?
+                   ActsAsTaggableOn::Tagging.select('DISTINCT ON ("context") *')
+                                            .where(context: "hub_#{@hub.id}",
+                                                   taggable_type: 'FeedItem',
+                                                   tag_id: @tag,
+                                                   tagger_id: @user,
+                                                   tagger_type: 'User')
+                 else
+                   Statistics::TaggingsOfUser.run!(
+                     user: @user,
+                     hub: @hub,
+                     tag: @tag,
+                     deprecated: true
+                   ).map(&:deep_symbolize_keys!)
+                 end
     else
       taggings = ActsAsTaggableOn::Tagging.select('DISTINCT ON ("context") *')
                                           .where(context: "hub_#{@hub.id}",

@@ -112,6 +112,8 @@ class TagsController < ApplicationController
   end
 
   def statistics
+    authorize @hub
+
     @taggings_by_user = Statistics::TaggingsByUser.run!(
       hub: @hub,
       tag: @tag
@@ -127,6 +129,8 @@ class TagsController < ApplicationController
   end
 
   def tags_used_not_approved
+    authorize @hub
+
     @tags_used_not_approved = Statistics::TagsUsedNotApproved.run!(
       hub: @hub
     )
@@ -134,7 +138,19 @@ class TagsController < ApplicationController
     render layout: request.xhr? ? false : 'tabs'
   end
 
+  def tags_approved
+    authorize @hub
+
+    @tags_approved = Statistics::TagsApproved.run!(
+      hub: @hub
+    )
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
   def deprecated_tags
+    authorize @hub
+
     @year = params[:year]
     @month = params[:month]
 
