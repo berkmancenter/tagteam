@@ -159,6 +159,22 @@ class HubPolicy < ApplicationPolicy
     stats_user?
   end
 
+  def approve_tag?
+    owner_or_admin?
+  end
+
+  def unapprove_tag?
+    owner_or_admin?
+  end
+
+  def deprecate_tag?
+    owner_or_admin?
+  end
+
+  def undeprecate_tag?
+    owner_or_admin?
+  end
+
   private
 
   def owner_or_admin?

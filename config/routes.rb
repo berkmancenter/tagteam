@@ -112,6 +112,10 @@ Rails.application.routes.draw do
       post 'set_user_notifications'
       post 'set_settings'
       get 'active_taggers'
+      post 'approve_tag'
+      post 'unapprove_tag'
+      post 'deprecate_tag'
+      post 'undeprecate_tag'
     end
 
     collection do

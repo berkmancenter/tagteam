@@ -55,7 +55,11 @@ class HubsController < ApplicationController
     :set_settings,
     :team,
     :statistics,
-    :active_taggers
+    :active_taggers,
+    :approve_tag,
+    :unapprove_tag,
+    :deprecate_tag,
+    :undeprecate_tag
   ]
 
   protect_from_forgery except: :items
@@ -450,6 +454,16 @@ class HubsController < ApplicationController
       hub: @hub
     ).count
 
+    @deprecated = Tags::CheckDeprecated.run!(
+      tag: @tag,
+      hub: @hub
+    )
+
+    @approved = Tags::CheckApproved.run!(
+      tag: @tag,
+      hub: @hub
+    )
+
     respond_to do |format|
       format.html do
         render layout: !request.xhr?
@@ -685,6 +699,127 @@ class HubsController < ApplicationController
       format.json { render json: @search }
     end
   end
+
+  def approve_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    approved = HubApprovedTag.new(
+      tag: tag,
+      hub_id: @hub.id
+    )
+
+    @hub.hub_approved_tags << approved
+
+    if @hub.save
+      if request.xhr?
+        render(html: 'Successfully approved.', layout: false)
+      else
+        flash[:notice] = 'Successfully approved.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem approving that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem approving that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def unapprove_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    to_unapproved = HubApprovedTag.where(
+      tag: tag.name,
+      hub_id: @hub.id
+    ).first
+
+    if to_unapproved.destroy
+      if request.xhr?
+        render(html: 'Successfully unapproved.', layout: false)
+      else
+        flash[:notice] = 'Successfully unapproved.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem unapproving that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem unapproving that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def deprecate_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    add_filter = TagFilter.where(
+      tag_id: tag.id,
+      type: 'AddTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    ).first
+
+    deprecation_filter = TagFilters::Create.run(
+      tag_id: tag.id,
+      filter_type: 'DeleteTagFilter',
+      hub: @hub,
+      scope: @hub,
+      new_tag_name: '',
+      user: current_user
+    )
+
+    if (add_filter.nil? || add_filter.rollback_and_destroy_async(current_user)) && deprecation_filter.valid?
+      if request.xhr?
+        render(html: 'Successfully deprecated.', layout: false)
+      else
+        flash[:notice] = 'Successfully deprecated.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem deprecating that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem deprecating that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def undeprecate_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+    removed_params = {
+      tag_id: tag.id,
+      type: 'DeleteTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    }
+    replaced_params = {
+      tag_id: tag.id,
+      type: 'ModifyTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    }
+
+    removed_filters = TagFilter.where(removed_params)
+    replaced_filters = TagFilter.where(replaced_params)
+
+    removed_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+    replaced_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+
+    if request.xhr?
+      render(html: 'Successfully undeprecated.', layout: false)
+    else
+      flash[:notice] = 'Successfully undeprecated.'
+      redirect_to hub_tags_path(@hub)
+    end
+  end
+
   private
 
   def sanitize_params
