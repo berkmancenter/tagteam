@@ -1,0 +1,112 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'statistics' }
+- content_for :tab_content do
+  .nicely-padded.statistics
+    %h1 Statistics
+    .row
+      %h2
+        Tags
+      %p
+        There #{'is'.pluralize(@tags.count)}
+        %span.badge= @tags.count
+        = 'tag'.pluralize(@tags.count)
+        in use.
+      %p
+        There #{'is'.pluralize(@taggers)}
+        %span.badge= @taggers
+        active
+        = 'tagger'.pluralize(@taggers) + '.'
+      %form{ action: active_taggers_hub_path(@hub) }
+        %p
+          %span.badge#active-taggers-period
+            0
+          %span#active-taggers-label
+            taggers
+          in
+          %select#active-taggers-month
+            %option{ value: 'false' } All months
+            - (Date::MONTHNAMES).each do |month|
+              - unless month.nil?
+                %option{ value: month }= month
+          %select#active-taggers-year
+            %option{ value: 'false' } Select year
+            - ( 2012..Time.current.year ).each do |year|
+              %option{ value: year }= year
+      - if @hub.hub_approved_tags.any? && @tags_used_not_approved.any?
+        %p
+          %a{ href: hub_tags_approved_path(@hub) }
+            Tags on the approved list
+        %p
+          %a{ href: hub_tags_used_not_approved_path(@hub) }
+            Tags not listed on the approved tags list
+      - if @hub.deprecated_tags.any?
+        %p
+          %a{ href: hub_deprecated_tags_path(@hub) }
+            Deprecated tags
+      %h2
+        Items
+      %p
+        There #{'is'.pluralize(@items_with_empty_description.count)}
+        %span.badge= @items_with_empty_description.count
+        = 'item'.pluralize(@items_with_empty_description.count)
+        with an empty description.
+      %p
+        There #{'is'.pluralize(@altered_items[:all])}
+        %span.badge= @altered_items[:all]
+        = 'item'.pluralize(@altered_items[:all])
+        = @altered_items[:all] != 1 ? 'were altered after they were first tagged.' : 'was altered after it was first tagged.'
+      %p
+        There #{'is'.pluralize(@altered_items[:added])}
+        %span.badge= @altered_items[:added]
+        = 'item'.pluralize(@altered_items[:added])
+        = @altered_items[:added] != 1 ? 'were altered by a subsequent tagger adding new tags.' : 'was altered by a subsequent tagger adding new tags.'
+      %p
+        There #{'is'.pluralize(@altered_items[:modified])}
+        %span.badge= @altered_items[:modified]
+        = 'item'.pluralize(@altered_items[:modified])
+        = @altered_items[:modified] != 1 ? 'were altered by a subsequent tagger modifying tags originally applied.' : 'were altered by a subsequent tagger modifying tags originally applied.'
+      %p
+        There #{'is'.pluralize(@altered_items[:deleted])}
+        %span.badge= @altered_items[:deleted]
+        = 'item'.pluralize(@altered_items[:deleted])
+        = @altered_items[:deleted] != 1 ? 'were altered by a subsequent tagger deleting tags originally applied.' : 'were altered by a subsequent tagger deleting tags originally applied.'
+      %p
+        There #{'is'.pluralize(@altered_items[:hub_wide])}
+        %span.badge= @altered_items[:hub_wide]
+        = 'item'.pluralize(@altered_items[:hub_wide])
+        = @altered_items[:hub_wide] != 1 ? 'were altered by hub-wide filters.' : 'was altered by hub-wide filters.'
+      %h2
+        Filters
+      %p
+        There #{'is'.pluralize(@hub_wide_filters.count)}
+        %span.badge= @hub_wide_filters.count
+        hub-wide
+        = 'filter'.pluralize(@hub_wide_filters.count) + '.'
+      - if !@hub.settings[:official_tag_prefix].empty? || @prefixed_tags.any?
+        %h2
+          Prefixes
+        - unless @hub.settings[:official_tag_prefix].empty?
+          %p
+            There #{'is'.pluralize(@tags_that_use_prefix.count)}
+            %span.badge= @tags_that_use_prefix.count
+            = 'tag'.pluralize(@tags_that_use_prefix.count)
+            that #{'use'.pluralize(@tags_that_use_prefix.count)}
+            the official tag prefix.
+          %p
+            There #{'is'.pluralize(@tags_that_have_no_prefix.count)}
+            %span.badge= @tags_that_have_no_prefix.count
+            = 'tag'.pluralize(@tags_that_have_no_prefix.count)
+            that #{'omit'.pluralize(@tags_that_have_no_prefix.count)}
+            the official tag prefix.
+          %br
+        - if @prefixed_tags.any?
+          - @prefixed_tags.each do |tag_prefix, tag_count|
+            %p
+              There #{'is'.pluralize(tag_count)}
+              %span.badge= tag_count
+              = 'tag'.pluralize(tag_count)
+              prefixed with
+              %span.badge= tag_prefix
+              in use.

@@ -41,7 +41,8 @@ class Hub < ApplicationRecord
   has_many :hub_feeds, dependent: :destroy
   has_many :feeds, through: :hub_feeds
   has_many :republished_feeds, -> { order(created_at: :desc) }, dependent: :destroy
-  has_many :hub_user_notifications
+  has_many :hub_user_notifications, dependent: :destroy
+  has_many :hub_approved_tags, dependent: :destroy
 
   # We want to make sure we're always getting the oldest filter first in this
   # list so if we happen to apply all these in order, it's the correct order.
@@ -127,10 +128,19 @@ class Hub < ApplicationRecord
   def tag_counts
     ActsAsTaggableOn::Tag.find_by_sql(
       [
-        'SELECT tags.*, count(*)
-        FROM tags JOIN taggings ON taggings.tag_id = tags.id
-        WHERE taggings.context = ? AND taggings.taggable_type = ?
-        GROUP BY tags.id ORDER BY count(*) DESC', tagging_key, 'FeedItem'
+        'SELECT
+          ta.*, count(*)
+        FROM
+          tags ta
+        JOIN
+          taggings AS tg ON tg.tag_id = ta.id
+        WHERE
+          tg.context = ? AND
+          tg.taggable_type = ?
+        GROUP BY
+          ta.id
+        ORDER BY count(*) DESC',
+        tagging_key, 'FeedItem'
       ]
     )
   end
@@ -180,10 +190,18 @@ class Hub < ApplicationRecord
 
     tags_hub = ActsAsTaggableOn::Tag.find_by_sql(
       [
-        'SELECT tags.*
-        FROM tags JOIN taggings ON taggings.tag_id = tags.id
-        WHERE taggings.context = ? AND taggings.taggable_type = ?
-        GROUP BY tags.id', tagging_key, 'FeedItem'
+        'SELECT
+           ta.*
+         FROM
+           tags AS ta
+         JOIN
+           taggings AS tg ON tg.tag_id = ta.id
+         WHERE
+           tg.context = ? AND
+           tg.taggable_type = ?
+         GROUP BY
+           ta.id',
+        tagging_key, 'FeedItem'
       ]
     )
 
@@ -191,8 +209,12 @@ class Hub < ApplicationRecord
     unless filters_applied.empty?
       tags_filters = ActsAsTaggableOn::Tag.find_by_sql(
         [
-          'SELECT tags.*
-          FROM tags WHERE tags.id IN (' + filters_applied + ')'
+          'SELECT
+             t.*
+           FROM
+             tags AS t
+           WHERE
+             t.id IN (' + filters_applied + ')'
         ]
       )
     end
@@ -202,11 +224,15 @@ class Hub < ApplicationRecord
 
   # all taggings related to the hub
   def taggings
-    tags_hub = ActsAsTaggableOn::Tagging.find_by_sql(
+    ActsAsTaggableOn::Tagging.find_by_sql(
       [
-        'SELECT taggings.*
-        FROM taggings
-        WHERE taggings.context = ? AND taggings.taggable_type = ?',
+        'SELECT
+           t.*
+         FROM
+           taggings AS t
+         WHERE
+           t.context = ? AND
+           t.taggable_type = ?',
         tagging_key, 'FeedItem'
       ]
     )
@@ -214,15 +240,27 @@ class Hub < ApplicationRecord
 
   def settings
     {
-      tags_delimiter: tags_delimiter_with_default
+      tags_delimiter: tags_delimiter_with_default,
+      official_tag_prefix: official_tag_prefix,
+      hub_approved_tags: hub_approved_tags,
+      suggest_only_approved_tags: suggest_only_approved_tags
     }
   end
 
   def tags_delimiter_with_default
-    tags_delimiter.presence || ','
+    tags_delimiter || ','
   end
 
   def hub_feed_for_feed_item(feed_item)
     hub_feeds.find_by(feed: feed_item.feeds)
+  end
+
+  def deprecated_tags
+    filters = all_tag_filters.select(:tag_id)
+                             .where(scope_type: 'Hub')
+                             .where.not(new_tag_id: nil)
+                             .group(:tag_id).reorder('')
+
+    ActsAsTaggableOn::Tag.where(id: filters.map(&:tag_id))
   end
 end

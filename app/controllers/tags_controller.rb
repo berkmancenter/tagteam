@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 class TagsController < ApplicationController
   before_action :load_hub
-  before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml]
+  before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
+  before_action :load_feed_items, only: [:show, :statistics]
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
       params[:format] = :rss
     elsif request.fullpath =~ /tag\/atom/
@@ -24,15 +25,26 @@ class TagsController < ApplicationController
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
     hub_id = @hub.id
-    @search = ActsAsTaggableOn::Tag.search do
-      with :hub_ids, hub_id
-      fulltext params[:term]
+
+    if @hub.settings[:suggest_only_approved_tags]
+      approved_tags = @hub.hub_approved_tags.map(&:tag)
+      @search = ActsAsTaggableOn::Tag.where(name: approved_tags)
+                                     .where('name LIKE \'%' + params[:term] + '%\'')
+
+      result = @search - @hub.deprecated_tags
+    else
+      @search = ActsAsTaggableOn::Tag.search do
+        with :hub_ids, hub_id
+        fulltext params[:term]
+      end
+
+      result = @search.results - @hub.deprecated_tags
     end
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
-        render json: @search.results.collect { |r| { id: r.id, label: r.name } }
+        render json: result.collect { |r| { id: r.id, label: r.name } }
       end
     end
   rescue
@@ -94,14 +106,61 @@ class TagsController < ApplicationController
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
-    @feed_items =
-      FeedItem
-      .tagged_with(@tag.name, on: @hub.tagging_key)
-      .uniq
-      .order(date_published: :desc, created_at: :desc)
-      .paginate(page: params[:page], per_page: get_per_page)
+
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
     render template, layout: request.xhr? ? false : 'tabs'
+  end
+
+  def statistics
+    authorize @hub
+
+    @taggings_by_user = Statistics::TaggingsByUser.run!(
+      hub: @hub,
+      tag: @tag
+    )
+
+    @deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
+      hub: @hub,
+      tag: @tag,
+      deprecated: true
+    )
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def tags_used_not_approved
+    authorize @hub
+
+    @tags_used_not_approved = Statistics::TagsUsedNotApproved.run!(
+      hub: @hub
+    )
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def tags_approved
+    authorize @hub
+
+    @tags_approved = Statistics::TagsApproved.run!(
+      hub: @hub
+    )
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def deprecated_tags
+    authorize @hub
+
+    @year = params[:year]
+    @month = params[:month]
+
+    @deprecated_hub_tags = Statistics::DeprecatedTags.run!(
+      hub: @hub,
+      month: params[:month],
+      year: params[:year]
+    )
+
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   private
@@ -138,7 +197,16 @@ class TagsController < ApplicationController
                           .limit(50).order('date_published DESC, created_at DESC')
   end
 
+  def load_feed_items
+    @feed_items =
+      FeedItem
+      .tagged_with(@tag.name, on: @hub.tagging_key)
+      .uniq
+      .order(date_published: :desc, created_at: :desc)
+      .paginate(page: params[:page], per_page: get_per_page)
+  end
+
   def set_prefixed_tags
-    @prefixed_tags = Statistics::HubPrefixedTags.run!(tag_counts: @hub.tag_counts)
+    @prefixed_tags = Statistics::HubPrefixedTags.run!(hub: @hub)
   end
 end

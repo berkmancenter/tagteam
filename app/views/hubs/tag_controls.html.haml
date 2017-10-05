@@ -53,3 +53,50 @@
           class: 'dialog-show remove_item_source_from_custom_republished_feed',
           data_item_type: 'ActsAsTaggableOn::Tag',
           data_item_id: @tag.id
+  - if current_user.is?([:owner], @hub)
+    %h3 Status
+    %hr/
+    %p
+      %em= @tag.name
+      is
+      - unless @deprecated
+        not
+      deprecated
+    %p
+      %em= @tag.name
+      is
+      - unless @approved
+        not
+      approved
+    %ul
+      %li
+        - if @deprecated
+          = link_to undeprecate_tag_hub_path(@hub.id, tag_id: @tag.id), method: 'post' do
+            Undeprecate
+            %em
+              = @tag.name
+        - else
+          = link_to deprecate_tag_hub_path(@hub.id, tag_id: @tag.id), method: 'post' do
+            Deprecate
+            %em
+              = @tag.name
+      %li
+        - if @approved
+          = link_to unapprove_tag_hub_path(@hub.id, tag_id: @tag.id), method: 'post' do
+            Unapprove
+            %em
+              = @tag.name
+        - else
+          = link_to approve_tag_hub_path(@hub.id, tag_id: @tag.id), method: 'post' do
+            Approve
+            %em
+              = @tag.name
+  %h3 Statistics
+  %hr/
+  %ul
+    %li
+      %span.badge= @tagged_by_taggers
+      tagged by taggers
+    %li
+      %span.badge= @tagged_by_filters
+      converted from deprecated tags by hub-wide filters

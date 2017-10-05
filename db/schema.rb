@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424201008) do
+ActiveRecord::Schema.define(version: 20170809173959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,13 @@ ActiveRecord::Schema.define(version: 20170424201008) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
   end
 
+  create_table "hub_approved_tags", force: :cascade do |t|
+    t.integer "hub_id"
+    t.string  "tag"
+    t.index ["hub_id"], name: "index_hub_approved_tags_on_hub_id", using: :btree
+    t.index ["tag"], name: "index_hub_approved_tags_on_tag", using: :btree
+  end
+
   create_table "hub_feeds", force: :cascade do |t|
     t.integer  "feed_id",                  null: false
     t.integer  "hub_id",                   null: false
@@ -170,9 +177,12 @@ ActiveRecord::Schema.define(version: 20170424201008) do
     t.datetime "updated_at",                                              null: false
     t.string   "nickname",                                   limit: 255
     t.string   "slug",                                       limit: 255
+    t.text     "tag_count"
     t.boolean  "notify_taggers"
     t.boolean  "allow_taggers_to_sign_up_for_notifications"
     t.string   "tags_delimiter"
+    t.string   "official_tag_prefix"
+    t.string   "suggest_only_approved_tags"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree
@@ -183,6 +193,7 @@ ActiveRecord::Schema.define(version: 20170424201008) do
     t.integer  "item_source_id",                                  null: false
     t.string   "item_source_type",    limit: 100,                 null: false
     t.string   "effect",              limit: 25,  default: "add", null: false
+    t.integer  "position"
     t.integer  "limit"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
@@ -190,6 +201,7 @@ ActiveRecord::Schema.define(version: 20170424201008) do
     t.index ["effect"], name: "index_input_sources_on_effect", using: :btree
     t.index ["item_source_id"], name: "index_input_sources_on_item_source_id", using: :btree
     t.index ["item_source_type", "item_source_id", "effect", "republished_feed_id", "created_by_only_id"], name: "bob_the_index", unique: true, using: :btree
+    t.index ["position"], name: "index_input_sources_on_position", using: :btree
     t.index ["republished_feed_id"], name: "index_input_sources_on_republished_feed_id", using: :btree
   end
 
@@ -278,7 +290,7 @@ ActiveRecord::Schema.define(version: 20170424201008) do
     t.string   "last_name",              limit: 100
     t.string   "url",                    limit: 250
     t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
+    t.string   "encrypted_password",     limit: 128, default: "",    null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

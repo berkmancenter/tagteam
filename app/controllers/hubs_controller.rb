@@ -53,7 +53,13 @@ class HubsController < ApplicationController
     :set_user_notifications,
     :settings,
     :set_settings,
-    :team
+    :team,
+    :statistics,
+    :active_taggers,
+    :approve_tag,
+    :unapprove_tag,
+    :deprecate_tag,
+    :undeprecate_tag
   ]
 
   protect_from_forgery except: :items
@@ -111,6 +117,44 @@ class HubsController < ApplicationController
     @allowed_to_tag = @hub.users_with_roles.size
 
     render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def statistics
+    add_breadcrumbs
+
+    authorize @hub
+
+    @tags = @hub.tags
+
+    @taggers = Statistics::HubTaggers.run!(hub: @hub)
+
+    @prefixed_tags = Statistics::HubPrefixedTags.run!(hub: @hub)
+
+    @hub_wide_filters = @hub.all_tag_filters.where(scope_type: 'Hub')
+
+    @items_with_empty_description = @hub.feed_items.where(description: '')
+
+    @tags_that_use_prefix = Statistics::HubTagsThatUsePrefix.run!(hub: @hub)
+    @tags_that_have_no_prefix = Statistics::HubTagsThatHaveNoPrefix.run!(hub: @hub)
+
+    @tags_used_not_approved = Statistics::TagsUsedNotApproved.run!(
+      hub: @hub,
+      limit: 10
+    )
+
+    @altered_items = Statistics::AlteredItems.run!(hub: @hub)
+
+    render layout: request.xhr? ? false : 'tabs'
+  end
+
+  def active_taggers
+    @taggers = Statistics::HubTaggers.run!(
+      hub: @hub,
+      month: params[:month],
+      year: params[:year]
+    )
+
+    render json: @taggers
   end
 
   def notifications
@@ -203,6 +247,16 @@ class HubsController < ApplicationController
 
   def set_settings
     @hub.tags_delimiter = params[:tags_delimiter]
+    @hub.official_tag_prefix = params[:official_tag_prefix]
+    @hub.suggest_only_approved_tags = params[:suggest_only_approved_tags]
+    @hub.hub_approved_tags = params[:hub_approved_tags]
+                             .split("\r\n")
+                             .uniq
+                             .map {
+                               |approved_tag| HubApprovedTag.new(
+                                 tag: approved_tag, hub_id: @hub.id
+                               )
+                             }
 
     if @hub.save
       flash[:notice] = 'Saved successfully.'
@@ -390,6 +444,25 @@ class HubsController < ApplicationController
       @feed_item = FeedItem.select(FeedItem.columns_for_line_item).find(params[:hub_feed_item_id])
       @already_filtered_for_hub_feed_item = @feed_item.tag_filtered?(@tag)
     end
+
+    @tagged_by_taggers = Statistics::TagTaggedByTaggers.run!(
+      tag: @tag,
+      hub: @hub
+    ).count
+    @tagged_by_filters = Statistics::TagTaggedByFilters.run!(
+      tag: @tag,
+      hub: @hub
+    ).count
+
+    @deprecated = Tags::CheckDeprecated.run!(
+      tag: @tag,
+      hub: @hub
+    )
+
+    @approved = Tags::CheckApproved.run!(
+      tag: @tag,
+      hub: @hub
+    )
 
     respond_to do |format|
       format.html do
@@ -626,6 +699,127 @@ class HubsController < ApplicationController
       format.json { render json: @search }
     end
   end
+
+  def approve_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    approved = HubApprovedTag.new(
+      tag: tag,
+      hub_id: @hub.id
+    )
+
+    @hub.hub_approved_tags << approved
+
+    if @hub.save
+      if request.xhr?
+        render(html: 'Successfully approved.', layout: false)
+      else
+        flash[:notice] = 'Successfully approved.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem approving that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem approving that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def unapprove_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    to_unapproved = HubApprovedTag.where(
+      tag: tag.name,
+      hub_id: @hub.id
+    ).first
+
+    if to_unapproved.destroy
+      if request.xhr?
+        render(html: 'Successfully unapproved.', layout: false)
+      else
+        flash[:notice] = 'Successfully unapproved.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem unapproving that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem unapproving that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def deprecate_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+
+    add_filter = TagFilter.where(
+      tag_id: tag.id,
+      type: 'AddTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    ).first
+
+    deprecation_filter = TagFilters::Create.run(
+      tag_id: tag.id,
+      filter_type: 'DeleteTagFilter',
+      hub: @hub,
+      scope: @hub,
+      new_tag_name: '',
+      user: current_user
+    )
+
+    if (add_filter.nil? || add_filter.rollback_and_destroy_async(current_user)) && deprecation_filter.valid?
+      if request.xhr?
+        render(html: 'Successfully deprecated.', layout: false)
+      else
+        flash[:notice] = 'Successfully deprecated.'
+        redirect_to hub_tags_path(@hub)
+      end
+    elsif
+      if request.xhr?
+        render(html: 'There was a problem deprecating that tag.', status: :not_acceptable)
+      else
+        flash[:error] = 'There was a problem deprecating that tag.'
+        redirect_to hub_tags_path(@hub)
+      end
+    end
+  end
+
+  def undeprecate_tag
+    tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
+    removed_params = {
+      tag_id: tag.id,
+      type: 'DeleteTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    }
+    replaced_params = {
+      tag_id: tag.id,
+      type: 'ModifyTagFilter',
+      hub_id: @hub.id,
+      scope_type: 'Hub',
+      scope_id: @hub.id
+    }
+
+    removed_filters = TagFilter.where(removed_params)
+    replaced_filters = TagFilter.where(replaced_params)
+
+    removed_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+    replaced_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+
+    if request.xhr?
+      render(html: 'Successfully undeprecated.', layout: false)
+    else
+      flash[:notice] = 'Successfully undeprecated.'
+      redirect_to hub_tags_path(@hub)
+    end
+  end
+
   private
 
   def sanitize_params
@@ -635,7 +829,7 @@ class HubsController < ApplicationController
   def add_breadcrumbs
     breadcrumbs.add @hub, hub_path(@hub) if @hub.id
   end
-  
+
   def find_hub
     @hub = Hub.find(params[:id])
     authorize @hub

@@ -11,7 +11,7 @@ module Statistics
     let(:hub) { create(:hub) }
     let(:inputs) do
       {
-        tag_counts: hub.tag_counts
+        hub: hub
       }
     end
   end
