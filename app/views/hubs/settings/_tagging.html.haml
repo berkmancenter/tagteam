@@ -16,18 +16,18 @@
 
       .form-group
         = label_tag 'official_tag_prefix', 'Official tag prefix'
-        = text_field_tag('official_tag_prefix', settings[:official_tag_prefix], {id: 'official_tag_prefix', class: 'form-control'})
-        - unless settings[:official_tag_prefix].empty?
+        = text_field_tag('official_tag_prefix', settings[:official_tag_prefix], id: 'official_tag_prefix', class: 'form-control')
+        - if settings[:official_tag_prefix].present?
           Current value
           %span.badge= settings[:official_tag_prefix].gsub(' ', '&nbsp;').html_safe
 
       .form-group
         = label_tag 'hub_approved_tags', 'Approved tags (one per line)'
-        = text_area_tag('hub_approved_tags', settings[:hub_approved_tags].map(&:tag).join("\n"), {id: 'hub_approved_tags', class: 'noEditor', cols: 32, rows: 12})
+        = text_area_tag('hub_approved_tags', settings[:hub_approved_tags].map(&:tag).join("\n"), id: 'hub_approved_tags', class: 'noEditor', cols: 32, rows: 12)
 
       .form-group.checkbox
         = label_tag 'suggest_only_approved_tags' do
-          = check_box_tag('suggest_only_approved_tags', settings[:suggest_only_approved_tags], settings[:suggest_only_approved_tags], {id: 'suggest_only_approved_tags'})
+          = check_box_tag('suggest_only_approved_tags', settings[:suggest_only_approved_tags], settings[:suggest_only_approved_tags], id: 'suggest_only_approved_tags')
           Suggest only approved tags in the bookmarklet form
 
       .form-group
