@@ -4,6 +4,7 @@ class HubsController < ApplicationController
   caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
+  caches_action :statistics, expires_in: 6.hours
 
   before_action :authenticate_user!, except: [
     :about,

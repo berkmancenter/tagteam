@@ -241,14 +241,22 @@ class Hub < ApplicationRecord
   def settings
     {
       tags_delimiter: tags_delimiter_with_default,
-      official_tag_prefix: official_tag_prefix,
+      official_tag_prefix: official_tag_prefix_with_default,
       hub_approved_tags: hub_approved_tags,
-      suggest_only_approved_tags: suggest_only_approved_tags
+      suggest_only_approved_tags: suggest_only_approved_tags_with_default
     }
   end
 
   def tags_delimiter_with_default
     tags_delimiter || ','
+  end
+
+  def official_tag_prefix_with_default
+    official_tag_prefix || ''
+  end
+
+  def suggest_only_approved_tags_with_default
+    suggest_only_approved_tags || false
   end
 
   def hub_feed_for_feed_item(feed_item)
