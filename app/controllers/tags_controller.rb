@@ -73,7 +73,7 @@ class TagsController < ApplicationController
 
   # A paginated Atom feed of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def atom
-    Feeds::StoreFeedVisitor.perform_later(
+    Feeds::StoreFeedVisitorJob.perform_later(
       request.path,
       'atom',
       request.remote_ip,
