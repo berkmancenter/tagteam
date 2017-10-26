@@ -218,7 +218,6 @@ class HubsController < ApplicationController
   def set_notifications
     messages = []
     @hub.notify_taggers = params[:notify_taggers]
-    @hub.allow_taggers_to_sign_up_for_notifications = params[:allow_taggers_to_sign_up_for_notifications]
 
     if @hub.save
       flash[:notice] = 'Saved successfully.'

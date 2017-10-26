@@ -25,7 +25,7 @@ class Hub < ApplicationRecord
   extend FriendlyId
 
   attr_accessible :title, :description, :tag_prefix, :nickname, :slug,
-                  :notify_taggers, :allow_taggers_to_sign_up_for_notifications
+                  :notify_taggers
   acts_as_authorization_object
 
   friendly_id :nickname, use: [:slugged, :history]

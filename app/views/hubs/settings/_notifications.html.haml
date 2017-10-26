@@ -10,14 +10,6 @@
             hub.notify_taggers,
             hub.notify_taggers,
             id: 'notify_taggers')
-          Notify taggers when their tags are modified
-
-      .form-group.checkbox
-        = label_tag 'allow_taggers_to_sign_up_for_notifications' do
-          = check_box_tag('allow_taggers_to_sign_up_for_notifications',
-            hub.allow_taggers_to_sign_up_for_notifications,
-            hub.allow_taggers_to_sign_up_for_notifications,
-            id: 'allow_taggers_to_sign_up_for_notifications')
-          Allow taggers to sign up for notifications of an item modification
+          Enable notifications to taggers when their tags are modified
 
       = submit_tag 'Save notifications', class: 'btn btn-primary', id: 'save_notifications'

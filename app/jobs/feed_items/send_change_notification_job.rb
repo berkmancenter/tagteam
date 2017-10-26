@@ -6,7 +6,7 @@ module FeedItems
     queue_as :default
 
     def perform(hub:, feed_item:, changes:, current_user:)
-      return unless hub.allow_taggers_to_sign_up_for_notifications?
+      return unless hub.notify_taggers?
 
       FeedItems::CreateChangeNotification.run!(
         current_user: current_user,
