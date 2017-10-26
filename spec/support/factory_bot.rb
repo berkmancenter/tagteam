@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # @TODO move to a rake task
   config.before(:suite) do
@@ -11,7 +12,7 @@ RSpec.configure do |config|
         DatabaseCleaner.clean
       end
     else
-      system("bundle exec rake factory_girl:lint RAILS_ENV='test'")
+      system("bundle exec rake factory_bot:lint RAILS_ENV='test'")
     end
   end
 end

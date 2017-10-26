@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+
+FactoryBot.define do
   factory :tagging, class: ActsAsTaggableOn::Tagging do
     tag
     association :taggable, factory: :feed_item

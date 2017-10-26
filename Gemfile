@@ -69,7 +69,7 @@ end
 group :test do
   gem 'capybara-webkit', '~> 1.12'
   gem 'database_cleaner', '~> 1.5'
-  gem 'factory_girl_rails', '~> 4.8'
+  gem 'factory_bot_rails', '~> 4.8'
   gem 'fuubar', '~> 2.2'
   gem 'headless', '~> 2.3'
   gem 'launchy', '~> 2.4'

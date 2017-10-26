@@ -139,10 +139,10 @@ GEM
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
     execjs (2.7.0)
-    factory_girl (4.8.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.8.0)
-      factory_girl (~> 4.8.0)
+    factory_bot_rails (4.8.2)
+      factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     faraday (0.12.1)
       multipart-post (>= 1.2, < 3)
@@ -429,7 +429,7 @@ DEPENDENCIES
   devise (~> 4.2)
   drg (~> 1.5)
   exception_notification (~> 2.6)
-  factory_girl_rails (~> 4.8)
+  factory_bot_rails (~> 4.8)
   feed-abstract (= 0.0.15)
   font-awesome-rails (~> 4.7)
   formtastic (~> 3.1)
@@ -485,4 +485,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.14.6
+   1.15.4

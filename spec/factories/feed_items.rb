@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+
+FactoryBot.define do
   factory :feed_item do
     title 'Test Title'
     sequence(:url) { |n| "http://example.com/?tag=#{n}" }

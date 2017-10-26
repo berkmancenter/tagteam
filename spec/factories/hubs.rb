@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 def set_roles(object, evaluator)
   evaluator.owner.has_role!(:owner, object)
   evaluator.owner.has_role!(:creator, object)
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :hub do
     title 'My hub'
 

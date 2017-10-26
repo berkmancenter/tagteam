@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+
+FactoryBot.define do
   factory :user do
     sequence(:username) { |n| "jdcc#{n}" }
     sequence(:email) { |n| "jclark+#{n}@cyber.law.harvard.edu" }
