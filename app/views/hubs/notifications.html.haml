@@ -12,5 +12,5 @@
             .checkbox
               = label_tag 'notify_about_modifications' do
                 = check_box_tag('notify_about_modifications', @notifications_setup.notify_about_modifications, @notifications_setup.notify_about_modifications, {id: 'notify_about_modifications'})
-                Notify me when any of my items modifies
+                Notify me when any of my items are modified
         = submit_tag 'Save', class: 'btn btn-primary', id: 'save_notifications'
