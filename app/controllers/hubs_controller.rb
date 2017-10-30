@@ -161,10 +161,7 @@ class HubsController < ApplicationController
   def notifications
     add_breadcrumbs
 
-    @notifications_setup = HubUserNotification.where(
-      user_id: current_user,
-      hub_id: @hub
-    ).first_or_initialize
+    @notifications_setup = HubUserNotification.find_or_initialize_by(hub: @hub, user: current_user)
 
     render layout: request.xhr? ? false : 'tabs'
   end
@@ -216,10 +213,11 @@ class HubsController < ApplicationController
   end
 
   def set_notifications
-    messages = []
-    @hub.notify_taggers = params[:notify_taggers]
+    inputs = { hub: @hub }.reverse_merge(params)
 
-    if @hub.save
+    outcome = Hubs::UpdateNotificationSettings.run(inputs)
+
+    if outcome.valid?
       flash[:notice] = 'Saved successfully.'
     else
       flash[:error] = 'Something went wrong, try again.'
@@ -229,14 +227,9 @@ class HubsController < ApplicationController
   end
 
   def set_user_notifications
-    notifications_setup = HubUserNotification.where(
-      user_id: current_user,
-      hub_id: @hub
-    ).first_or_initialize
+    hub_user_notification = HubUserNotification.find_or_initialize_by(hub: @hub, user: current_user)
 
-    notifications_setup.notify_about_modifications = params[:notify_about_modifications]
-
-    if notifications_setup.save
+    if hub_user_notification.update(notify_about_modifications: params[:notify_about_modifications])
       flash[:notice] = 'Saved successfully.'
     else
       flash[:error] = 'Something went wrong, try again.'
@@ -246,19 +239,11 @@ class HubsController < ApplicationController
   end
 
   def set_settings
-    @hub.tags_delimiter = params[:tags_delimiter]
-    @hub.official_tag_prefix = params[:official_tag_prefix]
-    @hub.suggest_only_approved_tags = params[:suggest_only_approved_tags]
-    @hub.hub_approved_tags = params[:hub_approved_tags]
-                             .split("\r\n")
-                             .uniq
-                             .map {
-                               |approved_tag| HubApprovedTag.new(
-                                 tag: approved_tag, hub_id: @hub.id
-                               )
-                             }
+    inputs = { hub: @hub }.reverse_merge(params)
 
-    if @hub.save
+    outcome = Hubs::UpdateTaggingSettings.run(inputs)
+
+    if outcome.valid?
       flash[:notice] = 'Saved successfully.'
     else
       flash[:error] = 'Something went wrong, try again.'

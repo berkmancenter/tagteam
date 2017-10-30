@@ -134,7 +134,11 @@ class User < ApplicationRecord
   end
 
   def notifications_for_hub?(hub)
-    hub_user_notifications.find_by(hub: hub).try(:notify_about_modifications?)
+    hub_user_notification = hub_user_notifications.find_by(hub: hub)
+
+    return true if hub_user_notification.blank?
+
+    hub_user_notification.notify_about_modifications?
   end
 
   def application_roles

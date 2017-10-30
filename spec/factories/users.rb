@@ -21,5 +21,15 @@ FactoryBot.define do
     trait :documentation_admin do
       after(:create) { |user| user.has_role!(:documentation_admin) }
     end
+
+    factory :user_with_hub do
+      transient do
+        hub { create(:hub) }
+      end
+
+      after(:create) do |user, evaluator|
+        user.has_role!(:creator, evaluator.hub)
+      end
+    end
   end
 end

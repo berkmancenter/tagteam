@@ -14,7 +14,7 @@ module FeedItems
 
       users_to_notify.delete(current_user)
 
-      # remove users who don't have modification notifications enabled
+      # select users who did not opt out of notifications for this hub
       users_to_notify.select { |user| user.notifications_for_hub?(hub) }
     end
 
