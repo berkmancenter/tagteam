@@ -129,7 +129,7 @@ class Hub < ApplicationRecord
     ActsAsTaggableOn::Tag.find_by_sql(
       [
         'SELECT
-          ta.*, count(*)
+          ta.*, count(DISTINCT tg.taggable_id)
         FROM
           tags ta
         JOIN
@@ -139,7 +139,7 @@ class Hub < ApplicationRecord
           tg.taggable_type = ?
         GROUP BY
           ta.id
-        ORDER BY count(*) DESC',
+        ORDER BY count(DISTINCT tg.taggable_id) DESC',
         tagging_key, 'FeedItem'
       ]
     )
