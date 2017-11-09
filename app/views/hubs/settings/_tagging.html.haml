@@ -5,14 +5,15 @@
         %strong Tagging
 
       .form-group
-        = label_tag 'tags_delimiter', 'Tag delimiters'
+        = label_tag 'tags_delimiter', 'Tag delimiter'
         = text_field_tag('tags_delimiter',
           settings[:tags_delimiter],
           id: 'tags_delimiter',
           class: 'form-control')
         - unless settings[:tags_delimiter].empty?
-          Current value
+          Tagteam will split tags on
           %span.badge= settings[:tags_delimiter].gsub(' ', '&nbsp;').html_safe
+          and spaces. Tags entered in a list with either of these two characters separating them will be treated as separate tags.
 
       .form-group
         = label_tag 'official_tag_prefix', 'Official tag prefix'
