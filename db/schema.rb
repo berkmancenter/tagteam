@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030195621) do
+ActiveRecord::Schema.define(version: 20171109213205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 20171030195621) do
     t.string   "tags_delimiter"
     t.string   "official_tag_prefix"
     t.string   "suggest_only_approved_tags"
+    t.boolean  "notifications_mandatory",                 default: false, null: false
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree

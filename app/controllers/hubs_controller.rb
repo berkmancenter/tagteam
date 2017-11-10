@@ -227,6 +227,8 @@ class HubsController < ApplicationController
   end
 
   def set_user_notifications
+    return if @hub.notifications_mandatory?
+
     hub_user_notification = HubUserNotification.find_or_initialize_by(hub: @hub, user: current_user)
 
     if hub_user_notification.update(notify_about_modifications: params[:notify_about_modifications])

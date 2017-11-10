@@ -12,7 +12,8 @@ module Hubs
     let(:inputs) do
       {
         hub: hub,
-        notify_taggers: true
+        notify_taggers: true,
+        notifications_mandatory: true
       }
     end
   end

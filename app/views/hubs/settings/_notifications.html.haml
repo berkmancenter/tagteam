@@ -7,9 +7,14 @@
       .form-group.checkbox
         = label_tag 'notify_taggers' do
           = check_box_tag('notify_taggers',
-            hub.notify_taggers,
+            true,
             hub.notify_taggers,
             id: 'notify_taggers')
           Enable notifications to taggers when their tags are modified
+        = label_tag 'notifications_mandatory' do
+          = check_box_tag('notifications_mandatory',
+            true,
+            hub.notifications_mandatory)
+          Make notifications mandatory (disable user notification preferences to opt in/out)
 
       = submit_tag 'Save notifications', class: 'btn btn-primary', id: 'save_notifications'

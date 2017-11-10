@@ -44,7 +44,7 @@
     = documentation('hub-statistics')
     = link_to('Statistics', statistics_hub_path(@hub) )
     .nav-pill-arrow
-- if current_user && @hub.notify_taggers?
+- if current_user && @hub.notify_taggers? && !@hub.notifications_mandatory?
   %li{:class => "#{'active' if active == 'notifications'}"}
     = documentation('notifications')
     = link_to('Notifications', notifications_hub_path(@hub) )
