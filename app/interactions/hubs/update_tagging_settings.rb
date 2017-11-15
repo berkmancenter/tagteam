@@ -10,12 +10,7 @@ module Hubs
     string :hub_approved_tags
 
     def execute
-      hub.assign_attributes(
-        tags_delimiter: tags_delimiter,
-        official_tag_prefix: official_tag_prefix,
-        suggest_only_approved_tags: suggest_only_approved_tags,
-        hub_approved_tags: split_hub_approved_tags(hub_approved_tags)
-      )
+      assign_attributes
 
       errors.merge!(hub.errors) unless hub.save
 
@@ -23,6 +18,13 @@ module Hubs
     end
 
     private
+
+    def assign_attributes
+      hub.tags_delimiter = tags_delimiter
+      hub.official_tag_prefix = official_tag_prefix
+      hub.suggest_only_approved_tags
+      hub.hub_approved_tags = split_hub_approved_tags(hub_approved_tags)
+    end
 
     def split_hub_approved_tags(tags)
       tags
