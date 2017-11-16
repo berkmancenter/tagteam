@@ -3,6 +3,15 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'bookmarks' }
 - content_for :tab_content do
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      = render partial: 'shared/sort_options',
+        locals: { options: ['title', 'date', 'most recent tagging', 'number of items'],
+          order: params[:order] || 'asc',
+          sort: params[:sort] || 'title',
+          path: 'bookmark_collections_hub_path' }
+
   .hub_feeds.nicely-padded
     %h1
       - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub))

@@ -70,7 +70,9 @@ class HubsController < ApplicationController
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
     'date' => ->(rel) { rel.order('created_at') },
-    'owner' => ->(rel) { rel.by_first_owner }
+    'owner' => ->(rel) { rel.by_first_owner },
+    'number of items' => -> (rel) { rel.by_feed_items_count },
+    'most recent tagging' => ->(rel) { rel.by_most_recent_tagging }
   }.freeze
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
@@ -308,7 +310,14 @@ class HubsController < ApplicationController
   # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
   def bookmark_collections
     add_breadcrumbs
-    @bookmark_collections = HubFeed.bookmark_collections.where(hub_id: @hub.id).paginate(page: params[:page], per_page: get_per_page)
+
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+
+    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id))
+    @bookmark_collections = @bookmark_collections.reverse if order == 'desc'
+
+    @bookmark_collections = @bookmark_collections.paginate(page: params[:page], per_page: get_per_page)
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default, json: @bookmark_collections }

@@ -19,6 +19,7 @@ class HubFeed < ApplicationRecord
   belongs_to :hub
   belongs_to :feed
   has_many :feed_items, through: :feed
+  has_many :tag_filters, through: :feed_items
 
   before_validation do
     auto_sanitize_html(:description)
@@ -29,6 +30,7 @@ class HubFeed < ApplicationRecord
   scope :bookmark_collections, -> { joins(:feed).where('feeds.bookmarking_feed' => true) }
   scope :rss, -> { joins(:feed).where('feeds.bookmarking_feed' => false) }
   scope :need_updating, -> { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? AND bookmarking_feed IS false', Time.current]) }
+  scope :by_hub, ->(hub_id) { where(hub_id: hub_id) }
 
   attr_accessible :title, :description
 
@@ -189,5 +191,13 @@ class HubFeed < ApplicationRecord
 
   def self.title
     'Feed'
+  end
+
+  def self.by_feed_items_count
+    includes(:feed_items).sort_by{ |i| i.feed_items.size }
+  end
+
+  def self.by_most_recent_tagging
+    includes(:tag_filters).sort_by{ |i| i.tag_filters.collect(&:created_at) }
   end
 end
