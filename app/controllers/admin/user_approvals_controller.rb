@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 module Admin
   # Controller for admins to approve/reject user signups
   class UserApprovalsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_user, only: [:approve, :deny]
+    before_action :set_user, only: %i[approve deny]
 
     after_action :verify_authorized
 
@@ -31,7 +32,7 @@ module Admin
 
       @user.destroy!
 
-      UserApprovalsMailer.notify_user_of_denial(@user).deliver_later
+      UserApprovalsMailer.notify_user_of_denial(@user.email).deliver_later
 
       redirect_to action: :index
     end

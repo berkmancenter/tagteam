@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Admin
   # Send notification emails about user approval actions
   class UserApprovalsMailer < ApplicationMailer
@@ -18,10 +19,8 @@ module Admin
       mail(to: user.email, subject: 'TagTeam: Signup approved')
     end
 
-    def notify_user_of_denial(user)
-      @user = user
-
-      mail(to: user.email, subject: 'TagTeam: Signup denied')
+    def notify_user_of_denial(email)
+      mail(to: email, subject: 'TagTeam: Signup denied')
     end
   end
 end
