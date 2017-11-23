@@ -47,11 +47,11 @@ class RepublishedFeed < ApplicationRecord
     if f.save
       user.has_role!(:owner, f)
       user.has_role!(:creator, f)
-      f
     else
       logger.warn "RepublishedFeed.create_with_user error: #{f.errors.first}"
-      nil
     end
+
+    f
   end
 
   # TODO: performance
