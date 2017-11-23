@@ -820,4 +820,15 @@ $(document).ready(function(){
   });
   $.observeListPagination();
 
+ 
+  function unescapeUrl() {
+    if (window.location.pathname.includes('item_search')) {
+      if (history.pushState) { //IE10+
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + decodeURIComponent(window.location.search);
+        window.history.pushState({path:newurl},'',newurl);
+      }
+    }
+  }
+  
+  unescapeUrl();  
 });
