@@ -692,7 +692,7 @@ class HubsController < ApplicationController
 
     @search = Hub.search do
       paginate page: params[:page], per_page: get_per_page
-      fulltext params[:q] unless params[:q].blank?
+      fulltext params[:q].split('+').join('+ ') unless params[:q].blank?
     end
 
     respond_to do |format|
