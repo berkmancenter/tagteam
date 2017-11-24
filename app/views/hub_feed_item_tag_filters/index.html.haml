@@ -36,7 +36,8 @@
     %h1 Tags
     .hub_feed_item_hub_feed_item_tag_filters
       = render partial: 'shared/line_items/tag',
-        collection: @feed_item.all_tags_on(@hub.tagging_key)
+        collection: @feed_item.all_tags_on(@hub.tagging_key),
+        locals: { feed_item: @feed_item }
     %h1 Active filters
     - if @tag_filters.empty?
       %h2 No active filters
