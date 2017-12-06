@@ -167,6 +167,8 @@ Rails.application.routes.draw do
       #        get 'by_date/:year/:month/:day' => 'feed_items#by_date', :as => 'by_date'
       #      end
     end
+
+    resources :messages, only: %i[new create]
   end
 
   devise_for :users, path: 'accounts', controllers: {
@@ -185,7 +187,6 @@ Rails.application.routes.draw do
       get :approve
       get :deny
     end
-    
     resources :users, only: :index
   end
 
