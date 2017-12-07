@@ -18,7 +18,7 @@
           %br
           = f.check_box :sent_to_all, id: 'all'
           = f.input :subject, required: true
-          = f.input :body, as: :text, input_html: { rows: 8 }
+          = f.input :body, as: :text, input_html: { rows: 8, class: 'noEditor' }
         = f.actions do
           = f.action :submit, as: :button, label: 'Submit', button_html: { class: 'btn btn-primary' }
 
