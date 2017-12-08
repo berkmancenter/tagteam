@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
+  # Controller for admins to see existing users in the system
   class UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :set_sort, only: :index
@@ -22,7 +23,7 @@ module Admin
 
     def set_sort
       @sort =
-        if %w[application_roles confirmed locked owned_hubs username].include?(params[:sort])
+        if %w[application_roles confirmed locked owned_hubs username last_sign_in_at].include?(params[:sort])
           params[:sort]
         else
           'username'

@@ -12,6 +12,8 @@
   %td
     = user.application_roles.pluck(:name).join(', ')
   %td
+    = user.last_sign_in_at.try { |u| u.strftime('%Y-%m-%d %H:%M %p') }
+  %td
     - unless user.confirmed?
       No.
       = link_to 'resend confirmation',

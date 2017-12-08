@@ -18,6 +18,8 @@ module Users
         sort_by_owned_hubs
       when 'username'
         users.sort_by { |user| user.username.downcase }
+      when 'last_sign_in_at'
+        sort_by_virtual_attribute('last_sign_in_at')
       end
     end
 

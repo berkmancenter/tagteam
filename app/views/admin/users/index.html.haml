@@ -19,6 +19,9 @@
             = link_to(sort: 'application_roles') do
               App&#8209;wide&nbsp;rights#{'&nbsp;&#9662;'.html_safe if @sort == 'application_roles'}
           %th
+            = link_to(sort: 'last_sign_in_at') do
+              Last Login#{'&nbsp;&#9662;'.html_safe if @sort == 'last_sign_in_at'}
+          %th
             = link_to(sort: 'confirmed') do
               Confirmed?#{'&nbsp;&#9662;'.html_safe if @sort == 'confirmed'}
           %th
