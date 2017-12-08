@@ -45,18 +45,18 @@ module TagsHelper
   end
 
   def hub_filter_possible?(_params, current_user)
-    current_user.is?([:owner, :hub_tag_filterer], @hub) && !@already_filtered_for_hub
+    (current_user.is?(%i[owner hub_tag_filterer], @hub) || current_user.superadmin?) && !@already_filtered_for_hub
   end
 
   def feed_filter_possible?(params, current_user)
     params[:hub_feed_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_tag_filterer], @hub) &&
+      (current_user.is?(%i[owner hub_feed_tag_filterer], @hub) || current_user.superadmin?) &&
       !@already_filtered_for_hub_feed
   end
 
   def item_filter_possible?(params, current_user)
     params[:hub_feed_item_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) &&
+      (current_user.is?(%i[owner hub_feed_item_tag_filterer], @hub) || current_user.superadmin?) &&
       !@already_filtered_for_hub_feed_item
   end
 

@@ -13,7 +13,7 @@
         currently authorized to tag
         for this hub.
     .row
-      - if current_user && current_user.is?(:owner, @hub)
+      - if current_user && (current_user.is?(:owner, @hub) || current_user.superadmin?)
         = render('hubs/team/assign_roles')
 
       = render('hubs/team/remove_roles')

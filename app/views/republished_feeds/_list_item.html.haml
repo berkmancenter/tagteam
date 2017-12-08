@@ -1,12 +1,12 @@
-- hub = (@hub.blank?) ? republished_feed.hub : @hub
-%li.republished_feed.hover_row{:id => "republished_feed_#{republished_feed.id}"}
+- hub = @hub.blank? ? republished_feed.hub : @hub
+%li.republished_feed.hover_row{ id: "republished_feed_#{republished_feed.id}" }
   .media
-    - if current_user && (current_user.is?(:owner, hub) || current_user.is?(:owner,republished_feed))
+    - if current_user && (current_user.is?(:owner, hub) || current_user.is?(:owner, republished_feed) || current_user.superadmin?)
       .pull-right
-        = link_to edit_hub_republished_feed_path(hub, republished_feed), title: "Edit this item" do
+        = link_to edit_hub_republished_feed_path(hub, republished_feed), title: 'Edit this item' do
           = fa_icon 'pencil'
-        = link_to hub_republished_feed_path(hub,republished_feed),
-          method: :delete, confirm: "Are you sure?", title: "Delete this item" do
+        = link_to hub_republished_feed_path(hub, republished_feed),
+          method: :delete, confirm: 'Are you sure?', title: 'Delete this item' do
           = fa_icon 'times'
     .media-left
       = link_to more_details_hub_republished_feed_path(hub, republished_feed),
@@ -15,12 +15,12 @@
         = fa_icon 'caret-right'
     .media-body
       %h2= hub.title
-      = link_to(republished_feed.title,remix_path(republished_feed.url_key))
+      = link_to(republished_feed.title, remix_path(republished_feed.url_key))
       |
-      \#{link_to('RSS', remix_items_path(republished_feed.url_key, format: :rss))}
+      = link_to('RSS', remix_items_path(republished_feed.url_key, format: :rss))
       \(#{pluralize(FeedSubscriber.count_for(remix_items_path(republished_feed.url_key, format: :rss)), 'subscriber')})
-      \#{link_to('ATOM', remix_items_path(republished_feed.url_key, format: :atom))}
+      = link_to('ATOM', remix_items_path(republished_feed.url_key, format: :atom))
       \(#{pluralize(FeedSubscriber.count_for(remix_items_path(republished_feed.url_key, format: :atom)), 'subscriber')})
-      \#{link_to('JSON', remix_items_path(republished_feed.url_key, format: :json, callback: 'callback'))}
+      = link_to('JSON', remix_items_path(republished_feed.url_key, format: :json, callback: 'callback'))
       \(#{pluralize(FeedSubscriber.count_for(remix_items_path(republished_feed.url_key, format: :json)), 'subscriber')})
       .metadata

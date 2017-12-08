@@ -9,10 +9,10 @@
       = form_tag(hub_hub_feeds_path(@hub), method: :get) do
         = select_tag :type, options_for_select(['Unsubscribed', 'Subscribed'], params[:type] || 'Subscribed'), class: 'unsubscribed-select', onchange: "$(this).parent('form').submit();"
     .hub_feeds
-      - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:inputter, @hub))
+      - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:inputter, @hub) || current_user.superadmin?)
         .add_feed_container
           .notices
-          = form_for(:hub, url: add_feed_hub_path(@hub), method: :post, html: { id: 'add_feed_to_hub' }) do |f|
+          = form_for(:hub, url: add_feed_hub_path(@hub), method: :post, html: { id: 'add_feed_to_hub' }) do
             .form-group
               %label{ for: 'feed_url' } New input feed
               .row
@@ -20,7 +20,8 @@
                   %input.form-control#feed_url{ name: 'feed_url', placeholder: 'Feed URL', type: 'text' }/
                 .col-sm-4
                   %input.btn.btn-success{ type: 'submit', value: 'Add' }/
-      %h1=  ("#{params[:type] || 'Subscribed'}" + ' Inputs')
+      %h1 #{params[:type] || 'Subscribed'} Inputs
+
       - if @hub_feeds.empty?
         %p This hub currently has no input feeds.
       - else
