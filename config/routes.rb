@@ -92,6 +92,7 @@ Rails.application.routes.draw do
       post 'recalc_all_tags'
       get 'item_search'
       post 'add_feed'
+      put 'unsubscribe_feed/:feed_id' => 'hubs#unsubscribe_feed', as: 'unsubscribe_feed'
       get 'custom_republished_feeds'
       get 'tag_controls'
       get 'items'
@@ -188,8 +189,8 @@ Rails.application.routes.draw do
       get :approve
       get :deny
     end
+
     resources :users, only: :index
   end
-
   root 'hubs#home'
 end

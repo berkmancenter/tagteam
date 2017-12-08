@@ -137,6 +137,8 @@ class Feed < ApplicationRecord
   # a FeedItem lives in the FeedItems::CreateOrUpdate interaction.
   def update_feed
     return if bookmarking_feed?
+    
+    return if unsubscribe
 
     self.dirty = false
     self.changelog = {}
@@ -152,6 +154,7 @@ class Feed < ApplicationRecord
     fr = FeedRetrieval.new(feed_id: id)
     fr.success = true
     fr.status_code = '200'
+
     raw_feed.items.each do |item|
       FeedItems::CreateOrUpdate.run!(feed: self, item: item, feed_retrieval: fr)
     end

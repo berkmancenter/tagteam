@@ -3,6 +3,11 @@
     %li
       = link_to hub_hub_feed_path(@hub,@hub_feed), method: :delete, confirm: "Are you sure?", title: "Delete this item" do
         = fa_icon 'times', text: 'Remove from hub'
+
+    - unless @hub_feed.try(&:feed).try(&:unsubscribe)
+      %li
+        = link_to unsubscribe_feed_hub_path(@hub, @hub_feed.feed.id), method: :put, confirm: "Are you sure?", title: "Delete this item" do
+          = fa_icon 'times', text: 'unsubscribe from hub'
     %li
       = link_to edit_hub_hub_feed_path(@hub,@hub_feed), title: "Edit this feed" do
         = fa_icon 'pencil', text: 'Edit this feed'
