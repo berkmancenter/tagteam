@@ -246,6 +246,7 @@ class Hub < ApplicationRecord
       hub_approved_tags: hub_approved_tags,
       suggest_only_approved_tags: suggest_only_approved_tags_with_default,
       bookmarklet_empty_description_reminder: bookmarklet_empty_description_reminder
+      enable_tag_scoreboard: enable_tag_scoreboard
     }
   end
 

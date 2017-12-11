@@ -64,7 +64,8 @@ class HubsController < ApplicationController
     :unapprove_tag,
     :deprecate_tag,
     :undeprecate_tag,
-    :unsubscribe_feed
+    :unsubscribe_feed,
+    :scoreboard
   ]
 
   protect_from_forgery except: :items
@@ -77,6 +78,11 @@ class HubsController < ApplicationController
     'number of items' => -> (rel) { rel.by_feed_items_count },
     'most recent tagging' => ->(rel) { rel.by_most_recent_tagging }
   }.freeze
+
+  # TAGGER_SORT_OPTIONS = {
+  #   'name' => ->(rel) { rel.sort_by { |e| e.first_name, e.last_name } }
+  # }
+
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def about
@@ -182,6 +188,12 @@ class HubsController < ApplicationController
       format.html { render layout: request.xhr? ? false : 'tabs' }
       format.json { render json: @settings }
     end
+  end
+
+  def scoreboard
+    @users = @hub.users_with_roles.paginate(page: params[:page], per_page: get_per_page)
+
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   def add_roles

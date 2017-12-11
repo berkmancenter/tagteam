@@ -56,6 +56,11 @@
     = documentation('hub-settings')
     = link_to('Settings', settings_hub_path(@hub) )
     .nav-pill-arrow
+- if current_user && @hub.enable_tag_scoreboard
+  %li{:class => "#{'active' if active == 'scoreboard'}"}
+    = documentation('hub-scoreboard')
+    = link_to('Scoreboard', scoreboard_hub_path(@hub) )
+    .nav-pill-arrow
 - if current_user && @hub.notify_taggers? && !@hub.notifications_mandatory?
   %li{ class: "#{'active' if active == 'notifications'}" }
     = documentation('notifications')

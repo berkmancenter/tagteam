@@ -9,6 +9,7 @@ module Hubs
     string :suggest_only_approved_tags, default: nil
     string :hub_approved_tags
     boolean :bookmarklet_empty_description_reminder, default: false
+    boolean :enable_tag_scoreboard
 
     def execute
       assign_attributes
@@ -26,6 +27,7 @@ module Hubs
       hub.suggest_only_approved_tags = suggest_only_approved_tags
       hub.hub_approved_tags = split_hub_approved_tags(hub_approved_tags)
       hub.bookmarklet_empty_description_reminder = bookmarklet_empty_description_reminder
+      hub.enable_tag_scoreboard = enable_tag_scoreboard
     end
 
     def split_hub_approved_tags(tags)
