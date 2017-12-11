@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TaggingNotifications
-  # Determine which users should receive a notification email about a tagging change
+  # Determine which users should receive a notification email about a tagging change affecting a single item
   class CreateNotification < ActiveInteraction::Base
     object :current_user, class: User
     object :hub

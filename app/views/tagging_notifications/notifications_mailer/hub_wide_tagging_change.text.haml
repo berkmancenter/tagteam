@@ -1,0 +1,11 @@
+Hello,
+\
+#{@changed_by.username} has made a tagging change affecting #{@feed_item_count} items in #{@hub.title} including at least one you've previously tagged.
+\
+You can view the hub at this URL: #{hub_url(@hub)}
+
+- if @changes.present?
+  \
+  Here are the recent updates to the items:
+  \
+  \  * #{@changes}

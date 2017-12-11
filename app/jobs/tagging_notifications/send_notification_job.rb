@@ -6,16 +6,40 @@ module TaggingNotifications
     queue_as :default
 
     def perform(scope, hub, current_user, changes)
-      items_to_process =
-        if scope.is_a?(TagFilter)
-          scope.items_to_modify
-        elsif scope.is_a?(FeedItem)
-          [scope]
-        end
+      affected_items = feed_items(scope)
 
-      items_to_process.each do |modified_item|
-        TaggingNotifications::CreateNotification.run!(current_user: current_user, hub: hub, feed_item: modified_item, changes: changes)
+      return if affected_items.length.zero?
+
+      if scope.is_a?(FeedItem) || scope.scope.is_a?(FeedItem) || affected_items.length == 1
+        TaggingNotifications::CreateNotification.run!(
+          changes: changes,
+          current_user: current_user,
+          feed_item: affected_items.first,
+          hub: hub
+        )
+      elsif scope.scope.is_a?(HubFeed)
+        TaggingNotifications::CreateFeedWideNotification.run!(
+          changes: changes,
+          current_user: current_user,
+          feed_items: affected_items,
+          hub_feed: scope.scope
+        )
+      elsif scope.scope.is_a?(Hub)
+        TaggingNotifications::CreateHubWideNotification.run!(
+          changes: changes,
+          current_user: current_user,
+          feed_items: affected_items,
+          hub: hub
+        )
       end
+    end
+
+    private
+
+    def feed_items(scope)
+      return [scope] if scope.is_a?(FeedItem)
+
+      scope.items_to_modify
     end
   end
 end

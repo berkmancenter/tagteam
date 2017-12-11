@@ -144,6 +144,6 @@ class TagFilter < ApplicationRecord
   end
 
   def users
-    Role.find_by(authorizable_id: self, authorizable_type: 'TagFilter').users
+    Role.find_by(authorizable_id: self, authorizable_type: 'TagFilter').try(:users) || User.none
   end
 end

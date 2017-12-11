@@ -5,6 +5,29 @@ module TaggingNotifications
   class NotificationsMailer < ActionMailer::Base
     default from: Tagteam::Application.config.default_sender
 
+    def feed_wide_tagging_change(changes:, current_user:, feed_item_count:, hub_feed:, users_to_notify:)
+      @changed_by = current_user
+      @changes = parse_changes(changes)
+      @feed_item_count = feed_item_count
+      @hub_feed = hub_feed
+      @hub = @hub_feed.hub
+
+      subject = 'Tagging update in the ' + @hub.title + ' hub'
+
+      mail(bcc: users_to_notify.collect(&:email), subject: subject)
+    end
+
+    def hub_wide_tagging_change(changes:, current_user:, feed_item_count:, hub:, users_to_notify:)
+      @changed_by = current_user
+      @changes = parse_changes(changes)
+      @feed_item_count = feed_item_count
+      @hub = hub
+
+      subject = 'Tagging update in the ' + @hub.title + ' hub'
+
+      mail(bcc: users_to_notify.collect(&:email), subject: subject)
+    end
+
     def tagging_change_notification(hub, modified_item, item_users, current_user, changes)
       @hub = hub
       @hub_url = hub_url(@hub)
