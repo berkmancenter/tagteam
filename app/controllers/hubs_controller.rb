@@ -81,7 +81,9 @@ class HubsController < ApplicationController
     'most recent tagging' => ->(rel) { rel.by_most_recent_tagging },
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
     'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
-    'items' => -> (rel) { rel.sort_by {|r| r[:count] } }
+    'items' => -> (rel) { rel.sort_by {|r| r[:count] } },
+    'created_date' => -> { rel.order('created_at') },
+    'updated_date' => -> { rel.order('updated_date') }
   }.freeze
 
   SORT_DIR_OPTIONS = %w(asc desc).freeze
@@ -869,6 +871,23 @@ class HubsController < ApplicationController
     end
 
     return redirect_to settings_hub_path(@hub)
+  end
+
+  def hub_admin
+    authorize Hub
+
+    @hubs = policy_scope(Hub).paginate(page: params[:page], per_page: 5)
+  end
+
+  def destroy_hubs
+    authorize Hub
+
+    @hubs = Hub.where(id: params[:hub_ids])
+
+    if @hubs.destroy_all
+      flash[:notice] = 'You have successfully destroyed the hub'
+      render :js => "window.location.href = '#{hub_admin_hubs_path}'"
+    end
   end
 
   private

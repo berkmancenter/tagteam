@@ -131,6 +131,8 @@ Rails.application.routes.draw do
       get 'background_activity'
       get 'all_items'
       get 'search'
+      get 'hub_admin'
+      delete 'destroy_hubs', as: 'destroy_hubs'
     end
 
     resources :hub_feeds do

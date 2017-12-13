@@ -187,6 +187,15 @@ class HubPolicy < ApplicationPolicy
     return false unless user.present?
 
     user.has_role?(:superadmin) || user.has_role?(:owner, record)
+
+  end
+    
+  def hub_admin?
+    owner_or_admin? 
+  end
+
+  def destroy_hubs?
+    owner_or_admin? 
   end
 
   private

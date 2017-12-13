@@ -28,6 +28,8 @@
                 %li{ class: ('active' if controller.class.parent == Admin) }
                   = link_to('Admin', admin_users_path)
               - if user_signed_in?
+                %li{class: (current_page?(hub_admin_hubs_path) ? 'active' : '')}
+                  = link_to('Hub Admin', hub_admin_hubs_path)
                 %li{class: (current_page?(export_import_path) ? 'active' : '')}
                   = link_to('Export/import', export_import_path)
             .nav.navbar-nav.navbar-right

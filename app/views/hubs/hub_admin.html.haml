@@ -1,0 +1,77 @@
+#users
+  #user_list
+    = render partial: 'shared/paginate', object: @hubs, as: :results
+    %br
+    .col-xs-2.selectContainer
+      %select.form-control#select-action{:name => "Action", :title => "Action"}
+        %option{:selected => "selected", :value => ""} Select Action
+        %option{:value => "Delete"} Delete
+    = link_to 'Apply', 'javascript:void(0)', class: 'btn btn-primary', id: 'bulk-action'
+    %br
+        
+    %table.table
+      %thead
+        %tr
+          %th
+            = check_box_tag 'all_id'
+          %th
+            = link_to(sort: 'id') do
+              Id#{'&nbsp;&#9662;'.html_safe if @sort == 'id'}
+          %th
+            = link_to(sort: 'title') do
+              Title#{'&nbsp;&#9662;'.html_safe if @sort == 'title'}
+          %th
+            = link_to(sort: 'owners') do
+              Owners#{'&nbsp;&#9662;'.html_safe if @sort == 'owners'}
+              
+          %th
+            = link_to(sort: 'created_date') do
+              Created Date#{'&nbsp;&#9662;'.html_safe if @sort == 'created_date'}
+          %th
+            = link_to(sort: 'updated_date') do
+              Last Modified#{'&nbsp;&#9662;'.html_safe if @sort == 'updated_date'}
+      %tbody
+        - @hubs.each do |hub|
+          %tr.user.hover_row
+            %td
+              = check_box_tag 'ids[]', hub.id
+            %td
+              = hub.id
+            %td
+              = truncate(hub.title, length: 150)
+            %td
+              = hub.owners.map(&:first_name).join(',')
+            %td
+              = hub.created_at.strftime('%Y-%m-%d %H:%M %p')
+            %td
+              = hub.updated_at.strftime('%Y-%m-%d %H:%M %p')
+    = render partial: 'shared/paginate', object: @hubs, as: :results
+
+:javascript
+  $(document).ready(function(){
+    var selected = new Array();
+
+    $("[name='all_id']").click( function () {
+      $("[name='ids[]']").prop('checked', this.checked)
+    });
+
+    $('#bulk-action').on('click', function() {
+      if(!$('#select-action').val()){
+        alert('please select action');
+      } else if ($("[name='ids[]']:checked").length < 1){
+        alert('please select atleast one item');
+      } else{
+        $("[name='ids[]']:checked").each(function() {
+          selected.push($(this).val());
+        });
+
+        confirm("Press a button!");
+
+        $.ajax({
+          url: '/hubs/destroy_hubs',
+          type: 'delete',
+          data: { hub_ids: selected }
+        });
+      }
+    });
+  });  
