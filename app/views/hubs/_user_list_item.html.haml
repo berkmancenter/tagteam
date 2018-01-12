@@ -9,6 +9,11 @@
   %h1 Scoreboard
   - if taggers.present?
     %ul.nicely-padded.scoreboard
+      %li
+        .pull-left
+          %b Taggers
+        .pull-right
+          %b Items tagged  
       - taggers.each do |tagger|
         %li{ id: "tagger-#{tagger.id}" }
           .media

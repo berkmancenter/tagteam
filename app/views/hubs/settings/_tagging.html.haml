@@ -55,7 +55,7 @@
             id: 'bookmarklet_empty_description_reminder')
           Warn users about submitting an empty description field in the bookmarklet form
         = label_tag 'Enable tag scoreboard' do
-          = check_box_tag('enable_tag_scoreboard', settings[:enable_tag_scoreboard], settings[:enable_tag_scoreboard], id: 'enable_tag_scoreboard')
+          = check_box_tag('enable_tag_scoreboard', settings[:enable_tag_scoreboard], settings[:suggest_only_approved_tags])
           Enable tag scoreboard
       .form-group
         = submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings'
