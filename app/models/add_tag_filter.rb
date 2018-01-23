@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddTagFilter < TagFilter
   def apply(items: items_in_scope)
     items = filter_to_scope(items)
@@ -6,7 +7,10 @@ class AddTagFilter < TagFilter
     items.find_each do |item|
       new_tagging = item.taggings.build(tag: tag, tagger: self,
                                         context: hub.tagging_key)
-      new_tagging.save! if new_tagging.valid?
+      if new_tagging.valid?
+        new_tagging.save!
+        item.solr_index
+      end
     end
     update_column(:applied, true)
   end
