@@ -65,13 +65,14 @@
           selected.push($(this).val());
         });
 
-        confirm("Press a button!");
-
-        $.ajax({
-          url: '/hubs/destroy_hubs',
-          type: 'delete',
-          data: { hub_ids: selected }
-        });
+        var confirmed = confirm("Press a button!");
+        if(confirmed) {
+          $.ajax({
+            url: '/hubs/destroy_hubs',
+            type: 'delete',
+            data: { hub_ids: selected }
+          });
+        }  
       }
     });
   });  
