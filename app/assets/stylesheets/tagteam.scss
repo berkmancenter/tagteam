@@ -493,3 +493,8 @@ abbr[title="required"] {
   margin-top: 4*$padding-large-vertical;
   padding: 2*$padding-base-vertical 6*$padding-large-horizontal;
 }
+.published_date {
+  position: relative;
+  left: 12px;
+  top: 30px;
+}
