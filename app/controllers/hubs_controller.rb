@@ -81,10 +81,6 @@ class HubsController < ApplicationController
     'most recent tagging' => ->(rel) { rel.by_most_recent_tagging }
   }.freeze
 
-  # TAGGER_SORT_OPTIONS = {
-  #   'name' => ->(rel) { rel.sort_by { |e| e.first_name, e.last_name } }
-  # }
-
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def about
