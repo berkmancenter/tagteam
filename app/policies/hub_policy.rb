@@ -91,7 +91,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def scoreboard?
-    user.present?
+    index?
   end
 
   def settings?

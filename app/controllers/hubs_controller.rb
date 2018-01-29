@@ -22,7 +22,8 @@ class HubsController < ApplicationController
     :request_rights,
     :retrievals,
     :search,
-    :show
+    :show,
+    :scoreboard
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
@@ -67,6 +68,7 @@ class HubsController < ApplicationController
     :unsubscribe_feed,
     :scoreboard
   ]
+  before_action :set_sort, only: :scoreboard
 
   protect_from_forgery except: :items
 
@@ -191,7 +193,10 @@ class HubsController < ApplicationController
   end
 
   def scoreboard
-    @users = @hub.users_with_roles.paginate(page: params[:page], per_page: get_per_page)
+    @taggers = Statistics::Scoreboard.run!(hub: @hub,
+      sort: @sort,
+      criteria: params[:criteria]
+    ).paginate(page: params[:page], per_page: get_per_page)
 
     render layout: request.xhr? ? false : 'tabs'
   end
@@ -885,5 +890,14 @@ class HubsController < ApplicationController
       flash[:error] = "Something went wrong, try again."
       redirect_to(hub_path(@hub))
     end
+  end
+
+  def set_sort
+    @sort =
+      if %w[name items].include?(params[:sort])
+        params[:sort]
+      else
+        'name'
+      end
   end
 end

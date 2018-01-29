@@ -2,23 +2,38 @@
   .col-md-offset-1.col-md-7.pagination-wrapper
     = render partial: 'shared/paginate', object: taggers, as: :results
   .alter-views.col-md-4
-    Sort by:
-    \#{sortable_link('name', sort, order, path)}
-    \#{sortable_link('score', sort, order, path)}
+    %form{:action => "#{scoreboard_hub_path(@hub.id)}", :method => "get"}
+      .form-group
+        %select#day-selection.form-control{ name: 'criteria', onchange: "this.form.submit()" }
+          %option Past Day
+          %option Week
+          %option Month
+          %option Year
+          %option All Data
+
 .nicely-padded.scoreboard
   %h1 Scoreboard
   - if taggers.present?
     %ul.nicely-padded.scoreboard
       %li
         .pull-left
-          %b Taggers
+          %b
+            = link_to(sort: 'name') do
+              Taggers#{'&nbsp;&#9662;'.html_safe if @sort == 'name'}
         .pull-right
-          %b Items tagged  
+          %b
+            = link_to(sort: 'items') do
+              Items Tagged#{'&nbsp;&#9662;'.html_safe if @sort == 'items'}
       - taggers.each do |tagger|
-        %li{ id: "tagger-#{tagger.id}" }
-          .media
+        %li{ id: "tagger-#{tagger[:id]}" }
+          .media.pull-left
             .pull-body
-              = tagger.first_name
-              = tagger.last_name
+              = tagger[:first_name]
+              = tagger[:last_name]
+          .pull-right
+            = tagger[:count]
   - else
     This hub currently has no scoreboard.
+
+:javascript
+  $("#day-selection").val("#{params[:criteria]}")

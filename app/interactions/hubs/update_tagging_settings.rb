@@ -9,7 +9,7 @@ module Hubs
     string :suggest_only_approved_tags, default: nil
     string :hub_approved_tags
     boolean :bookmarklet_empty_description_reminder, default: false
-    boolean :enable_tag_scoreboard
+    boolean :enable_tag_scoreboard, default: false
 
     def execute
       assign_attributes
