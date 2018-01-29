@@ -84,6 +84,7 @@ class FeedItem < ApplicationRecord
     text :contributors, more_like_this: true
     text :rights, more_like_this: true
     text :tag_list, using: :tag_list_string_for_indexing, more_like_this: true
+    text :username_list, using: :username_list_string_for_indexing, more_like_this: true
     integer :hub_ids, multiple: true
     integer :hub_feed_ids, multiple: true
     integer :id
@@ -264,6 +265,15 @@ class FeedItem < ApplicationRecord
     taggings.collect do |tg|
       tg.tag
     end.compact
+  end
+
+  def username_list_string_for_indexing
+    user_ids = ActsAsTaggableOn::Tagging.where(
+      tagger_type: User.name,
+      taggable_type: self.class.name
+    ).map(&:tagger_id)
+
+    User.where(id: user_ids).map(&:username)
   end
 
   private
