@@ -126,7 +126,7 @@ class FeedItemsController < ApplicationController
 
   def update
     authorize @feed_item
-
+    
     inputs = { feed_item: @feed_item, hub: @hub, user: current_user }.reverse_merge(feed_item_params)
     outcome = FeedItems::Update.run(inputs)
 
@@ -172,6 +172,6 @@ class FeedItemsController < ApplicationController
   end
 
   def feed_item_params
-    params.require(:feed_item).permit(:description, :title, :url)
+    params.require(:feed_item).permit(:description, :title, :url, :date_published)
   end
 end
