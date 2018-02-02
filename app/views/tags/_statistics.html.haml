@@ -1,8 +1,8 @@
 %h2 Statistics
 %p
-  There #{'is'.pluralize(tags.count)} currently
-  %span.badge= tags.count
-  = 'tag'.pluralize(tags.count)
+  There #{'is'.pluralize(tags.size)} currently
+  %span.badge= tags.size
+  = 'tag'.pluralize(tags.size)
   in use in this hub.
 
 - if prefixed_tags.any?
