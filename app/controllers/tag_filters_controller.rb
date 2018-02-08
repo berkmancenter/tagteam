@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class TagFiltersController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :load_scope
-  before_action :load_tag_filter, except: [:index, :new, :create]
+  before_action :load_tag_filter, except: %i[index new create]
 
   after_action :verify_authorized, except: :index
 
@@ -35,7 +36,11 @@ class TagFiltersController < ApplicationController
     tag_filters = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
-                    TagFilterHelper.split_tags(params[:new_tag], @hub).map do |tag|
+                    new_tags = TagFilterHelper.split_tags(params[:new_tag], @hub)
+
+                    new_tags -= @hub.deprecated_tag_names
+
+                    new_tags.map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end
                   end
