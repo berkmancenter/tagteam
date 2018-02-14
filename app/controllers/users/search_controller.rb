@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Users
   # Provides JSON api for searching User records
   class SearchController < ApplicationController
@@ -11,7 +10,7 @@ module Users
     def autocomplete
       authorize User
 
-      search = Sunspot.search(User) { fulltext params[:term], fields: %i[email username] }
+      search = Sunspot.search(User) { fulltext params[:term], fields: [:email, :username] }
 
       results = search.results.map do |user|
         {

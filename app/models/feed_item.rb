@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # A FeedItem is an individual bit of content that's gotten into TagTeam via
 # a Feed or the bookmarklet. It can belong to many Feeds, has many
 # ActsAsTaggableOn::Tag objects, and uses a subset of Dublin Core metadata to
@@ -174,7 +173,7 @@ class FeedItem < ApplicationRecord
   # search results, tags, and other areas where the HubFeed context doesn't
   # exist.
   def hub_feed_for_hub(hub_id)
-    hub_feeds.select { |hf| hf.hub_id == hub_id }.uniq.compact.first
+    hub_feeds.reject { |hf| hf.hub_id != hub_id }.uniq.compact.first
   end
 
   def tag_list_array_for_indexing
@@ -235,8 +234,8 @@ class FeedItem < ApplicationRecord
   # Necessary because we don't want to pass the huge content
   # column over the wire if we don't need to.
   def self.columns_for_line_item
-    %i[id date_published title image_url url
-       guid authors last_updated]
+    [:id, :date_published, :title, :image_url, :url,
+     :guid, :authors, :last_updated]
   end
 
   def self.tag_counts_on(context)
@@ -262,14 +261,16 @@ class FeedItem < ApplicationRecord
   end
 
   def item_tags
-    taggings.collect(&:tag).compact
+    taggings.collect do |tg|
+      tg.tag
+    end.compact
   end
 
   private
 
   def parse_out_image_url
     src = nil
-    unless description.blank? || description.index('<img').nil?
+    unless description.nil? || description.empty? || description.index('<img').nil?
       doc = Nokogiri::HTML(description)
       src = pick_image_src(doc)
     end

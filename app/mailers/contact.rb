@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Contact < ActionMailer::Base
   default from: Tagteam::Application.config.default_sender
 

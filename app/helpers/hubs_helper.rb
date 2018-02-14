@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module HubsHelper
   def limit_html(html, limit)
     require 'nokogiri'

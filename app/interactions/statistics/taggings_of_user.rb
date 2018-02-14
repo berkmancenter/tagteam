@@ -8,11 +8,11 @@ module Statistics
     object :user, class: User
 
     def execute
-      table = if deprecated
-                'deactivated_taggings'
-              else
-                'taggings'
-              end
+      if deprecated
+        table = 'deactivated_taggings'
+      else
+        table = 'taggings'
+      end
 
       ActiveRecord::Base.connection.execute(
         'SELECT

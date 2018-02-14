@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module ApplicationHelper
   def protocol_resolver
     if Rails.env == 'production' && Tagteam::Application.config.ssl_for_user_accounts == true
@@ -15,7 +14,7 @@ module ApplicationHelper
       doc_object.title = title || match_key
       doc_object.save
     end
-    if doc_object.description.present? || (current_user && current_user.is?(%i[superadmin documentation_admin]))
+    if !doc_object.description.blank? || (current_user && current_user.is?([:superadmin, :documentation_admin]))
       if label_type == 'help'
         link_to(
           raw(fa_icon('question-circle')),
@@ -63,12 +62,12 @@ module ApplicationHelper
   end
 
   def use_breadcrumbs?
-    blacklist = [%w[hubs home], %w[hubs new]]
+    blacklist = [%w(hubs home), %w(hubs new)]
     !(blacklist.include? [controller_name, action_name])
   end
 
   def show_liblab?
-    whitelist = [%w[hubs home]]
+    whitelist = [%w(hubs home)]
     whitelist.include? [controller_name, action_name]
   end
 end

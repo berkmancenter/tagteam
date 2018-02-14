@@ -1,13 +1,12 @@
 # frozen_string_literal: true
-
 # A "bookmark" is just a FeedItem that's been manually added to a Bookmark Collection. Currently the only way to add bookmarks is through the bookmarklet available under a Hub's "bookmarks" tab.
 class BookmarkletsController < ApplicationController
-  before_action :load_hub, only: %i[add_item remove_item]
+  before_action :load_hub, only: [:add_item, :remove_item]
   before_action :load_feed, only: [:remove_item]
 
   access_control do
-    allow logged_in, to: %i[add confirm]
-    allow :owner, of: :hub, to: %i[add_item remove_item]
+    allow logged_in, to: [:add, :confirm]
+    allow :owner, of: :hub, to: [:add_item, :remove_item]
     allow :owner, of: :feed, to: [:remove_item]
     allow :bookmarker, of: :hub, to: [:add_item]
     allow :superadmin
@@ -36,10 +35,10 @@ class BookmarkletsController < ApplicationController
   def add_item
     @mini_title = 'Add to bookmark collection'
     @feed_item = FeedItem.find_or_initialize_by(url: params[:feed_item][:url])
-    columns = %i[hub_id bookmark_collection_id title description authors
-                 contributors rights]
+    columns = [:hub_id, :bookmark_collection_id, :title, :description, :authors,
+               :contributors, :rights]
     columns.each do |col|
-      if params[:feed_item][col].present?
+      unless params[:feed_item][col].blank?
         @feed_item.send(%(#{col}=), params[:feed_item][col])
       end
     end
@@ -57,7 +56,7 @@ class BookmarkletsController < ApplicationController
       )
     end
 
-    if params[:feed_item][:last_updated].present?
+    unless params[:feed_item][:last_updated].blank?
       last_updated = DateTime.parse(params[:feed_item][:last_updated])
       @feed_item.last_updated = DateTime.new(
         last_updated.year,
@@ -132,7 +131,7 @@ class BookmarkletsController < ApplicationController
 
     @feed_item = FeedItem.find_or_initialize_by(url: params[:feed_item].blank? ? nil : params[:feed_item][:url])
 
-    %i[hub_id bookmark_collection_id title description tag_list date_published authors contributors rights last_updated].each do |col|
+    [:hub_id, :bookmark_collection_id, :title, :description, :tag_list, :date_published, :authors, :contributors, :rights, :last_updated].each do |col|
       next if params[:feed_item][col].blank?
       next if col == :title && @feed_item.persisted? # Don't overwrite custom-defined titles for existing records
 

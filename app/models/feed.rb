@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # A Hub contains many Feeds through the HubFeed class. A Feed belongs to many
 # HubFeeds (allowing it to be used in many Hubs) and is unique on the feed_url.
 #
@@ -58,7 +57,7 @@ class Feed < ApplicationRecord
     t.add :title
   end
 
-  searchable(include: %i[hubs hub_feeds]) do
+  searchable(include: [:hubs, :hub_feeds]) do
     text :title, :description, :link, :guid, :rights, :authors,
          :feed_url, :generator
     integer :hub_ids, multiple: true
@@ -169,7 +168,7 @@ class Feed < ApplicationRecord
   # items method that contains an array of FeedItem objects.
   def items(_not_needed)
     # TODO: - tweak the include?
-    feed_items.find(:all, include: %i[taggings tags], order: 'id desc')
+    feed_items.find(:all, include: [:taggings, :tags], order: 'id desc')
   end
 
   # Takes the parse FeedItems and saves them along with a FeedRetrieval when

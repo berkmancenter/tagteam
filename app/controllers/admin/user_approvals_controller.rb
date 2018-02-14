@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-
 module Admin
   # Controller for admins to approve/reject user signups
   class UserApprovalsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_user, only: %i[approve deny]
+    before_action :set_user, only: [:approve, :deny]
 
     after_action :verify_authorized
 

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
-
 class HubPolicy < ApplicationPolicy
   def about?
     show?
   end
 
   def add_feed?
-    return false if user.blank?
+    return false unless user.present?
     return true if user.has_role?(:superadmin)
 
     user.has_role?(:inputter, record) || user.has_role?(:owner, record)
@@ -45,7 +44,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def custom_republished_feeds?
-    return false if user.blank?
+    return false unless user.present?
     return true if user.has_role?(:superadmin)
 
     user.has_role?(:remixer, record) || user.has_role?(:owner, record)
@@ -92,7 +91,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def settings?
-    return false if user.blank?
+    return false unless user.present?
 
     user.has_role?(:superadmin) || user.has_role?(:owner, record)
   end
@@ -134,7 +133,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def recalc_all_tags?
-    return false if user.blank?
+    return false unless user.present?
     return true if user.has_role?(:superadmin)
 
     false
@@ -179,16 +178,16 @@ class HubPolicy < ApplicationPolicy
   private
 
   def owner_or_admin?
-    return false if user.blank?
+    return false unless user.present?
     return true if user.has_role?(:superadmin)
 
     user.is?(:owner, record)
   end
 
   def stats_user?
-    return false if user.blank?
+    return false unless user.present?
     return true if user.has_role?(:superadmin)
 
-    user.is?(%i[owner stats_viewer], record)
+    user.is?([:owner, :stats_viewer], record)
   end
 end

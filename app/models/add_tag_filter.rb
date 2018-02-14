@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class AddTagFilter < TagFilter
   def apply(items: items_in_scope)
     items = filter_to_scope(items)

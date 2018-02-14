@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-
 # The user-edited Documentation controller. The base docs are created via the db:seed rake task during installation.
 #
 class DocumentationsController < ApplicationController
-  caches_action :index, :show, unless: proc { |_c| current_user && current_user.is?(%i[superadmin documentation_admin]) }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :index, :show, unless: proc { |_c| current_user && current_user.is?([:superadmin, :documentation_admin]) }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  before_action :authenticate_user!, except: %i[index show]
-  before_action :find_documentation, only: %i[show edit update destroy]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_documentation, only: [:show, :edit, :update, :destroy]
 
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index

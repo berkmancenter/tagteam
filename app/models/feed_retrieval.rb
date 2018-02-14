@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # A FeedRetrieval tracks the results of the spidering of a Feed. It contains a YAML changelog of new or changed FeedItem objects, and some representation of what actually changed.
 #
 # FeedItem change tracking is used to calculate the spidering schedule for a Feed, and could be used in the future to calculate metrics and do some interesting analysis about what's getting posted when.  More on how scheduling works can be found in the Feed class.
@@ -13,7 +12,7 @@ class FeedRetrieval < ApplicationRecord
 
   # Find the HubFeed for this FeedRetrieval within a Hub. A Feed can live in multiple hubs, so this slightly contorted method is needed to find how this FeedRetrieval relates in the context of a Hub.
   def hub_feed_for_hub(hub = Hub.first)
-    feed.hub_feeds.select { |hf| hf.hub_id == hub.id }.first
+    feed.hub_feeds.reject { |hf| hf.hub_id != hub.id }.first
   end
 
   after_save :update_feed_updated_at
@@ -52,7 +51,7 @@ class FeedRetrieval < ApplicationRecord
   def parsed_changelog
     return nil if changelog.nil?
     # TODO: determine how to handle symbols in changelogs using YAML.safe_load
-    YAML.safe_load(changelog)
+    YAML.load(changelog)
   end
 
   # Extract the new FeedItem ids from the changelog.

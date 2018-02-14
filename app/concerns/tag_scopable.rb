@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module TagScopable
   extend ActiveSupport::Concern
 

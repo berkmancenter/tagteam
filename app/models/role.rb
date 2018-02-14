@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Role < ApplicationRecord
   acts_as_authorization_role join_table_name: :roles_users
   acts_as_api do |c|

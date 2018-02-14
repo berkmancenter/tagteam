@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-
 # Allows non-authenticated users to see info about InputSources. Also allows RepublishedFeed and InputSource owners to modify / add / delete.
 class InputSourcesController < ApplicationController
-  before_action :load_input_source, except: %i[new create find]
-  before_action :load_republished_feed, only: %i[new create find]
+  before_action :load_input_source, except: [:new, :create, :find]
+  before_action :load_republished_feed, only: [:new, :create, :find]
 
   access_control do
-    allow all, to: %i[show find]
-    allow :owner, of: :republished_feed, to: %i[new create edit update]
-    allow :owner, of: :input_source, to: %i[edit update destroy]
+    allow all, to: [:show, :find]
+    allow :owner, of: :republished_feed, to: [:new, :create, :edit, :update]
+    allow :owner, of: :input_source, to: [:edit, :update, :destroy]
     allow :owner, of: :hub
     allow :superadmin
   end

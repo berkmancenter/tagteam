@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Users
   # Override Devise's RegistrationsController
   class RegistrationsController < Devise::RegistrationsController

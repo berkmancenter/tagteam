@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: %i[tags user_tags tags_json
-                                                tags_rss tags_atom]
+  before_action :authenticate_user!, except: [:tags, :user_tags, :tags_json,
+                                              :tags_rss, :tags_atom]
   before_action :load_user, only: [:roles_on]
-  before_action :load_hub, only: %i[tags tags_json tags_rss tags_atom]
-  before_action :load_feed_items, only: %i[tags tags_json tags_rss
-                                           tags_atom]
-  before_action :set_home_url, only: %i[tags tags_json tags_rss
-                                        tags_atom]
+  before_action :load_hub, only: [:tags, :tags_json, :tags_rss, :tags_atom]
+  before_action :load_feed_items, only: [:tags, :tags_json, :tags_rss,
+                                         :tags_atom]
+  before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
+                                      :tags_atom]
   after_action :verify_authorized
 
   def tags
@@ -51,7 +50,7 @@ class UsersController < ApplicationController
 
   def roles_on
     @roles_on = @user.roles
-                     .select(%i[authorizable_type authorizable_id])
+                     .select([:authorizable_type, :authorizable_id])
                      .includes(:authorizable)
                      .where(authorizable_type: params[:roles_on])
                      .group(:authorizable_type, :authorizable_id)

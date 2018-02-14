@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
@@ -53,8 +52,8 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_devise_permitted_parameters
-    actions = %i[account_update sign_in sign_up]
-    keys = %i[email terms_of_service username signup_reason]
+    actions = [:account_update, :sign_in, :sign_up]
+    keys = [:email, :terms_of_service, :username, :signup_reason]
 
     actions.each { |action| devise_parameter_sanitizer.permit(action, keys: keys) }
   end

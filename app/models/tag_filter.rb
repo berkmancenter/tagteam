@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class TagFilter < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
@@ -12,10 +11,10 @@ class TagFilter < ApplicationRecord
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 
-  VALID_SCOPE_TYPES = %w[Hub HubFeed FeedItem].freeze
+  VALID_SCOPE_TYPES = %w(Hub HubFeed FeedItem).freeze
   validates :tag_id, presence: true
   validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
-  validates :tag_id, uniqueness: { scope: %i[scope_type scope_id],
+  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id],
                                    message: 'Filter conflicts with existing filter.' }
 
   attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,

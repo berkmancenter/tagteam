@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class DocumentationPolicy < ApplicationPolicy
   def create?
     user_has_superadmin_or_documentation_admin_role
@@ -16,7 +15,7 @@ class DocumentationPolicy < ApplicationPolicy
   private
 
   def user_has_superadmin_or_documentation_admin_role
-    return false if user.blank?
+    return false unless user.present?
 
     user.has_role?(:superadmin) || user.has_role?(:documentation_admin)
   end

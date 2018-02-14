@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # A Hub is the highest level of organization in TagTeam.
 # It has many HubFeed objects containing FeedItems.
 # These FeedItem objects have their ActsAsTaggableOn::Tag objects
@@ -29,7 +28,7 @@ class Hub < ApplicationRecord
                   :notify_taggers
   acts_as_authorization_object
 
-  friendly_id :nickname, use: %i[slugged history]
+  friendly_id :nickname, use: [:slugged, :history]
 
   before_validation { auto_sanitize_html(:description) }
   after_validation :move_friendly_id_error_to_nickname
@@ -76,7 +75,7 @@ class Hub < ApplicationRecord
   end
 
   def move_friendly_id_error_to_nickname
-    return if errors[:friendly_id].blank?
+    return unless errors[:friendly_id].present?
 
     errors.add :nickname, *errors.delete(:friendly_id)
   end

@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 class FeedSubscriber < ApplicationRecord
-  validates :route, uniqueness: { scope: %i[ip user_agent] }
+  validates :route, uniqueness: { scope: [:ip, :user_agent] }
 
   def self.count_for(route)
     FeedSubscriber.where(route: route).count
