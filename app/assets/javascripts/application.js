@@ -17,6 +17,7 @@
 //= require modernizr.custom.15012
 //= require jquery.sortChildren
 //= require bootstrap-sprockets
+//= require jquery-migrate-1.1.1
 //= require_tree .
 //
 ( function($){
@@ -169,79 +170,6 @@
            $(this).removeClass('over');
          }
        });
-    },
-    observeTagCloudControls: function(){
-      var sort_tags_on_change = function(e){
-        var sort_by = $('#sort-tags-by').val();
-        var sort = $("#sort-tags-direction").val();
-        var mapping_function = function(elem) {
-          var tag_frequency = $(elem).find('.tag').data('tag-frequency'),
-              tag_text = $(elem).find('.tag').data('tag-name'),
-              attributes = {};
-
-          attributes.frequency = tag_frequency;
-          attributes.name = tag_text.toString();
-
-          return attributes;
-        };
-        var compare_function = function(a,b) {
-            if(sort_by == "frequency" && sort == "desc") {
-              return (b.value.frequency - a.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
-            }
-            else if(sort_by == "frequency" && sort == "asc") {
-              return (a.value.frequency - b.value.frequency) || (b.value.frequency === a.value.frequency && a.value.name.localeCompare(b.value.name));
-            }
-            else if(sort_by == "alpha" && sort == "asc") {
-              return a.value.name.localeCompare(b.value.name);
-            }
-            else if(sort_by == "alpha" && sort == "desc") {
-              return b.value.name.localeCompare(a.value.name);
-            }
-            else {
-              return null;
-            }
-        };
-        $("#tag-cloud").detach(function() {
-          $(this).sortChildren(mapping_function, compare_function);
-        });
-      };
-      $('#sort-tags-by').change(sort_tags_on_change);
-      $('#sort-tags-direction').change(sort_tags_on_change);
-
-      $('#reset-filter').click(function(e){
-        $('#tag-cloud li').show();
-        $('#filter-by').val('');
-      });
-
-      var filterStuff = function(e){
-        if(e != ''){
-          e.preventDefault();
-        }
-        $('#tag-cloud li').show();
-        var filterVal = $('#filter-by').val();
-        var filterregex = new RegExp(filterVal,'i');
-        $('#tag-cloud li').each(function(){
-          if(! $(this).find('.tag').html().match(filterregex)){
-            $(this).hide();
-          }
-        });
-      };
-
-      $('#filter-button').click(filterStuff);
-      $('#filter-by').observe_field(1,filterStuff);
-
-      $('#tag_slider').slider({
-        value: 0,
-        min: 0,
-        max: 9,
-        step: 1,
-        slide: function(event, ui){
-          $('.tag').show();
-          for(var i = 1; i <= ui.value; i=i+1){
-            $('.s' + i).hide();
-          }
-        }
-      });
     },
     initEditor: function(textArea){
       CKEDITOR.replace(textArea);

@@ -29,4 +29,9 @@
       = render partial: 'tags/graph_item', as: :tag, collection: @tags,
         locals: { hub: @hub, hub_feed: @hub_feed, max_count: @tags.empty? ? 0 : @tags.first.count }
     :javascript
-      $(document).ready(function(){$.observeTagCloudControls()});
+      $(document).ready(
+        function () {
+          observeTagFilterControls()
+          observeTagSortControls()
+        }
+      );
