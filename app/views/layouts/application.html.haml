@@ -6,7 +6,6 @@
     = stylesheet_link_tag 'application', media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tag
-    %script{ src: 'http://code.jquery.com/jquery-migrate-1.1.1.js' }
     %link{ href: "#{root_url}humans.txt", rel: 'author' }
     %link{ href: asset_path('favicon.png'), rel: 'icon', type: 'image/png' }
     - unless @show_auto_discovery_params.blank?
