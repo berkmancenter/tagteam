@@ -5,16 +5,32 @@
         %strong Tagging
 
       .form-group
-        = label_tag 'tags_delimiter', 'Tag delimiter'
+        = label_tag 'tags_delimiter', 'Tag delimiters'
         = text_field_tag('tags_delimiter',
-          settings[:tags_delimiter],
+          nil,
           id: 'tags_delimiter',
-          class: 'form-control')
-        - unless settings[:tags_delimiter].empty?
-          TagTeam will split tags on
-          %span.badge= settings[:tags_delimiter].gsub(' ', '&nbsp;').html_safe
-          and spaces. Tags entered in a list with either of these two characters separating them will be treated as separate tags.
+          class: 'form-control',
+          maxlength: '1')
+        TagTeam will split tags on
+        %span.badge ,
+        and
+        %span.badge (&nbsp;&nbsp)
+        \. Tags entered in a list with either of these two characters separating them will be treated as separate tags.
 
+      %h2
+        - if hub.tags_delimiter.present? && settings[:tags_delimiter].present?
+          %strong Available Tag Delimiters
+          %ul.list-unstyled.nicely-padded
+            - settings[:tags_delimiter].each do |delimiter|
+              %li
+                %span.badge= delimiter.gsub(' ', '&nbsp;').html_safe
+                = link_to remove_delimiter_hub_path(delimiter: delimiter),
+                  method: :delete,
+                  title: 'Remove this delimiter',
+                  class: 'pull-right',
+                  confirm: 'Are you sure you want to remove this delimiter?' do
+                  = fa_icon 'times'
+      %br
       .form-group
         = label_tag 'official_tag_prefix', 'Official tag prefix'
         = text_field_tag('official_tag_prefix', settings[:official_tag_prefix], id: 'official_tag_prefix', class: 'form-control')

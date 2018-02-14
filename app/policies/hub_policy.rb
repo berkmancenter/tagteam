@@ -124,6 +124,10 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def remove_delimiter?
+    user.present? && user.is?(:owner, record)
+  end
+
   def tag_controls?
     user.present?
   end

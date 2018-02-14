@@ -116,6 +116,7 @@ Rails.application.routes.draw do
       post 'unapprove_tag'
       post 'deprecate_tag'
       post 'undeprecate_tag'
+      delete 'remove_delimiter'
     end
 
     collection do

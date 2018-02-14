@@ -18,6 +18,7 @@ class HubsController < ApplicationController
     :items,
     :list,
     :meta,
+    :remove_delimiter,
     :request_rights,
     :retrievals,
     :search,
@@ -44,6 +45,7 @@ class HubsController < ApplicationController
     :my_bookmark_collections,
     :recalc_all_tags,
     :request_rights,
+    :remove_delimiter,
     :remove_roles,
     :retrievals,
     :show,
@@ -805,6 +807,20 @@ class HubsController < ApplicationController
       flash[:notice] = 'Successfully undeprecated.'
       redirect_to hub_tags_path(@hub)
     end
+  end
+
+  def remove_delimiter
+    authorize @hub
+
+    if @hub.tags_delimiter.include?(params[:delimiter])
+      flash[:notice] = "Delimiter removed successfully"
+      @hub.tags_delimiter.delete(params[:delimiter])
+      @hub.save
+    else
+      flash[:error] = "Something went wrong, try again."
+    end
+
+    return redirect_to settings_hub_path(@hub)
   end
 
   private

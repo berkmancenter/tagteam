@@ -48,6 +48,8 @@ class Hub < ApplicationRecord
   # list so if we happen to apply all these in order, it's the correct order.
   has_many :all_tag_filters, -> { order(updated_at: :asc) }, class_name: 'TagFilter', dependent: :destroy
 
+  serialize :tags_delimiter, Array
+
   api_accessible :default do |t|
     t.add :id
     t.add :title
@@ -248,7 +250,7 @@ class Hub < ApplicationRecord
   end
 
   def tags_delimiter_with_default
-    tags_delimiter || ','
+    tags_delimiter.present? ? tags_delimiter : [',']
   end
 
   def official_tag_prefix_with_default
