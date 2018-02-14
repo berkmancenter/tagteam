@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # In-app documentation linked contextually via the ApplicationHelper#documentation helper.
 #
 # Most validations are contained in the ModelExtensions mixin.

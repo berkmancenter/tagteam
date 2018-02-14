@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module TagFilterHelper
   def filter_css_class(filter)
     case filter.class.name

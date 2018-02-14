@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module DelegatableRoles
   DELEGATABLE_ROLES_HASH = {
     editor: {
@@ -26,7 +27,7 @@ module DelegatableRoles
         return [
           bookmarking_feeds,
           bookmarking_feeds.collect do |f|
-            f.hub_feeds.reject { |hf| !user.is?(:owner, hf) }
+            f.hub_feeds.select { |hf| user.is?(:owner, hf) }
           end
         ].flatten.compact
       end
@@ -83,7 +84,7 @@ module DelegatableRoles
   }.freeze
 
   DELEGATABLE_ROLES_FOR_FORMS = DELEGATABLE_ROLES_HASH.keys
-                                                      .reject { |r| [:creator, :editor].include?(r) }
+                                                      .reject { |r| %i[creator editor].include?(r) }
                                                       .collect { |r| [r, DELEGATABLE_ROLES_HASH[r][:name]] }
 
   DELEGATABLE_ROLES = DELEGATABLE_ROLES_HASH.keys.reject { |r| r == :creator }

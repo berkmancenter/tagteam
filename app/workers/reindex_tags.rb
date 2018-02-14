@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ReindexTags
   include Sidekiq::Worker
   sidekiq_options queue: :reindexer

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FeedItemsController < ApplicationController
   caches_action :controls, :content, :related, :index, :show, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
@@ -8,7 +9,6 @@ class FeedItemsController < ApplicationController
 
   before_action :set_hub_feed, except: [:tag_list]
   before_action :set_feed_item, except: [:index]
-
 
   def controls
     add_breadcrumbs
@@ -149,7 +149,7 @@ class FeedItemsController < ApplicationController
       breadcrumbs.add @hub.to_s, hub_path(@hub)
       breadcrumbs.add 'Search', request.referer
     else
-      unless @hub_feed.blank?
+      if @hub_feed.present?
         breadcrumbs.add @hub.to_s, hub_path(@hub)
         breadcrumbs.add @hub_feed.to_s, hub_hub_feed_path(@hub, @hub_feed)
         if from_search?

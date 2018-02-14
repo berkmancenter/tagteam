@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A HubFeed links a Hub with a Feed. A Hub has many HubFeeds.
 #
 # A HubFeed inherits most its metadata from its parent Feed, but a Hub

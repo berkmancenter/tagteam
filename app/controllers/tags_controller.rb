@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class TagsController < ApplicationController
   before_action :load_hub
-  before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
-  before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
-  before_action :load_feed_items, only: [:show, :statistics]
+  before_action :load_tag_from_name, only: %i[rss atom show json xml statistics]
+  before_action :load_feed_items_for_rss, only: %i[rss atom json xml]
+  before_action :load_feed_items, only: %i[show statistics]
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
@@ -180,8 +181,8 @@ class TagsController < ApplicationController
   end
 
   def load_tag_from_name
-    @tag = if !params[:name].blank?
-             ActsAsTaggableOn::Tag.find_by_name_normalized(params[:name])
+    @tag = if params[:name].present?
+             ActsAsTaggableOn::Tag.find_by(name_normalized: params[:name])
            else
              ActsAsTaggableOn::Tag.find_by(id: params[:id])
            end

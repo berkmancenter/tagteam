@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class TagFiltersController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :load_scope
-  before_action :load_tag_filter, except: [:index, :new, :create]
+  before_action :load_tag_filter, except: %i[index new create]
 
   after_action :verify_authorized, except: :index
 

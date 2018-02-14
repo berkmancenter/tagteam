@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Admin
   # Send notification emails about user approval actions
   class UserApprovalsMailer < ApplicationMailer

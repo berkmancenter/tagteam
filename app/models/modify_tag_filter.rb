@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ModifyTagFilter < TagFilter
   validates :new_tag_id, presence: true
   validate :new_tag_id do

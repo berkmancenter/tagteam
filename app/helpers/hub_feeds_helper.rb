@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Helper methods for hub feeds
 module HubFeedsHelper
   def hub_feed_updated(hub_feed)

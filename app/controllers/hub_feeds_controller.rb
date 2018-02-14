@@ -1,15 +1,16 @@
 # frozen_string_literal: true
+
 # Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
   caches_action :controls, :index, :show, :more_details, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  before_action :authenticate_user!, except: [:autocomplete, :controls, :index, :more_details, :show]
-  before_action :find_hub_feed, except: [:autocomplete, :create, :index, :new]
+  before_action :authenticate_user!, except: %i[autocomplete controls index more_details show]
+  before_action :find_hub_feed, except: %i[autocomplete create index new]
   before_action :find_hub
 
-  after_action :verify_authorized, except: [:autocomplete, :controls, :index, :more_details, :show]
+  after_action :verify_authorized, except: %i[autocomplete controls index more_details show]
 
   def controls
     render layout: !request.xhr?

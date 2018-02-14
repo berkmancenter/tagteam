@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NotificationsMailer < ActionMailer::Base
   default from: Tagteam::Application.config.default_sender
 

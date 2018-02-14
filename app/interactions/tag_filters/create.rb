@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module TagFilters
   # Create a TagFilter
   class Create < ActiveInteraction::Base
@@ -11,7 +12,7 @@ module TagFilters
     integer :tag_id, default: nil
     object :user
 
-    validates :filter_type, inclusion: { in: %w(AddTagFilter DeleteTagFilter ModifyTagFilter) }
+    validates :filter_type, inclusion: { in: %w[AddTagFilter DeleteTagFilter ModifyTagFilter] }
 
     # TODO: Refactor this too-large method that was formerly the TagFiltersController#create action
     def execute

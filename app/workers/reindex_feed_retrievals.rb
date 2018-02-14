@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ReindexFeedRetrievals
   include Sidekiq::Worker
   sidekiq_options queue: :reindexer
@@ -8,6 +9,6 @@ class ReindexFeedRetrievals
   end
 
   def perform(feed_id)
-    FeedRetrieval.where(feed_id: feed_id).solr_index(batch_size: 500, batch_commit: false, include: [:hubs, :feed])
+    FeedRetrieval.where(feed_id: feed_id).solr_index(batch_size: 500, batch_commit: false, include: %i[hubs feed])
   end
 end

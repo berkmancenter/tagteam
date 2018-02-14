@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class User < ApplicationRecord
   acts_as_tagger
   has_many :hub_user_notifications
@@ -46,11 +47,11 @@ class User < ApplicationRecord
 
   # Looks for objects of the class_of_interest in a specific hub owned by this user. Not all objects have a direct relationship to a hub so this won't necesssarily work everywhere.
   def my_objects_in(class_of_interest = Hub, hub = Hub.first)
-    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable).reject { |o| o.hub_id != hub.id }
+    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable).select { |o| o.hub_id == hub.id }
   end
 
   def my_bookmarkable_hubs
-    roles.where(authorizable_type: 'Hub', name: [:owner, :bookmarker]).collect(&:authorizable)
+    roles.where(authorizable_type: 'Hub', name: %i[owner bookmarker]).collect(&:authorizable)
   end
 
   def is?(role_name, obj = nil)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 class TagSorter
-  SORT_OPTS = %w(alpha frequency created_at).freeze
+  SORT_OPTS = %w[alpha frequency created_at].freeze
   def initialize(args)
     @tags = args[:tags]
     raise 'No tags supplied' if @tags.blank?

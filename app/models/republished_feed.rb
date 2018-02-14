@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A RepublishedFeed (aka Remix) contains many InputSource objects that add and remove FeedItem objects. The end result of these additions and removals is an array of FeedItem objects found via the Sunspot search engine.
 #
 # A RepublishedFeed belongs to a Hub.
@@ -21,8 +22,8 @@ class RepublishedFeed < ApplicationRecord
 
   attr_accessible :title, :hub_id, :description, :limit, :url_key
 
-  SORTS = %w(date_published title).freeze
-  SORTS_FOR_SELECT = [['Date Published', 'date_published'], %w(Title title)].freeze
+  SORTS = %w[date_published title].freeze
+  SORTS_FOR_SELECT = [['Date Published', 'date_published'], %w[Title title]].freeze
 
   belongs_to :hub
   has_many :input_sources, -> { order(created_at: :desc) }, dependent: :destroy
@@ -56,7 +57,7 @@ class RepublishedFeed < ApplicationRecord
 
   # TODO: performance
   def removable_inputs
-    result = input_sources.reject { |ins| ins.effect != 'add' }
+    result = input_sources.select { |ins| ins.effect == 'add' }
     if item_search
       result += item_search.results.select { |r| r.input_sources.blank? }.map { |i| InputSource.new(item_source: i, republished_feed: self) }
     end
@@ -64,9 +65,9 @@ class RepublishedFeed < ApplicationRecord
   end
 
   def available_inputs
-    @available_feeds ||= hub.hub_feeds.map(&:feed).select { |h| !input_sources.map(&:item_source).include?(h) }
+    @available_feeds ||= hub.hub_feeds.map(&:feed).reject { |h| input_sources.map(&:item_source).include?(h) }
     @available_tags ||= ActsAsTaggableOn::Tag.where('id  NOT IN (?)', input_sources.select { |t| t.item_source_type == 'ActsAsTaggableOn::Tag' }.map(&:item_source_id))
-    @available_items ||= hub.hub_feeds.map(&:feed_items).flatten.select { |i| !input_sources.map(&:item_source).include?(i) }
+    @available_items ||= hub.hub_feeds.map(&:feed_items).flatten.reject { |i| input_sources.map(&:item_source).include?(i) }
     @available_tags + @available_feeds + @available_items
   end
 
@@ -135,24 +136,24 @@ class RepublishedFeed < ApplicationRecord
     add_feed_items.flatten!
     add_feed_items.uniq!
 
-    search = FeedItem.search(include: [:tags, :taggings, :feeds, :hub_feeds]) do
+    search = FeedItem.search(include: %i[tags taggings feeds hub_feeds]) do
       any_of do
-        with(:feed_ids, add_feeds) unless add_feeds.blank?
-        with(:id, add_feed_items) unless add_feed_items.blank?
-        unless add_tags.blank?
+        with(:feed_ids, add_feeds) if add_feeds.present?
+        with(:id, add_feed_items) if add_feed_items.present?
+        if add_tags.present?
           with(:tag_contexts, add_tags.collect { |t| "hub_#{hub_id}-#{t.name}" })
         end
-        unless add_tags_by_users.blank?
+        if add_tags_by_users.present?
           with(:tag_contexts_by_users, add_tags_by_users.collect { |t| "hub_#{hub_id}-#{t[:tag].name}-user_#{t[:user].id}" })
         end
       end
       any_of do
-        without(:feed_ids, remove_feeds) unless remove_feeds.blank?
-        without(:id, remove_feed_items) unless remove_feed_items.blank?
-        unless remove_tags.blank?
+        without(:feed_ids, remove_feeds) if remove_feeds.present?
+        without(:id, remove_feed_items) if remove_feed_items.present?
+        if remove_tags.present?
           without(:tag_contexts, remove_tags.collect { |t| "hub_#{hub_id}-#{t.name}" })
         end
-        unless remove_tags_by_users.blank?
+        if remove_tags_by_users.present?
           without(:tag_contexts_by_users, remove_tags_by_users.collect { |t| "hub_#{hub_id}-#{t[:tag].name}-user_#{t[:user].id}" })
         end
       end

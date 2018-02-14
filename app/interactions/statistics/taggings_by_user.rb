@@ -7,11 +7,11 @@ module Statistics
     boolean :deprecated, default: false
 
     def execute
-      if deprecated
-        table = 'deactivated_taggings'
-      else
-        table = 'taggings'
-      end
+      table = if deprecated
+                'deactivated_taggings'
+              else
+                'taggings'
+              end
 
       ActiveRecord::Base.connection.execute(
         'SELECT

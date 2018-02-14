@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DeactivatedTagging < ApplicationRecord
   belongs_to :deactivator, polymorphic: true, autosave: false
 

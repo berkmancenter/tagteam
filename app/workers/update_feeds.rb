@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UpdateFeeds
   require 'sidekiq/api'
   include Sidekiq::Worker

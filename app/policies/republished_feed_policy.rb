@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class RepublishedFeedPolicy < ApplicationPolicy
   def create?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||
@@ -9,7 +10,7 @@ class RepublishedFeedPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||
@@ -33,7 +34,7 @@ class RepublishedFeedPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||

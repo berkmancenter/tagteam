@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class TagFilterPolicy < ApplicationPolicy
   def create?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||
@@ -11,7 +12,7 @@ class TagFilterPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record.hub) ||

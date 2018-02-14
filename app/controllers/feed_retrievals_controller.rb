@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FeedRetrievalsController < ApplicationController
   caches_action :index, :show, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)

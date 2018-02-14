@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class FeedItemPolicy < ApplicationPolicy
   def update?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
     # Set authorization based on the user's roles on associated hubs

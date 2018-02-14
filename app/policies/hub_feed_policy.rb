@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class HubFeedPolicy < ApplicationPolicy
   def autocomplete?
     true
@@ -9,7 +10,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def create?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record) ||
@@ -18,7 +19,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record) ||
@@ -26,7 +27,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def import?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record) ||
@@ -34,7 +35,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def import_items?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) || user.has_role?(:owner, record.hub)
   end
@@ -44,7 +45,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def reschedule_immediately?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record) ||
@@ -56,7 +57,7 @@ class HubFeedPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
 
     user.has_role?(:superadmin) ||
       user.has_role?(:owner, record) ||

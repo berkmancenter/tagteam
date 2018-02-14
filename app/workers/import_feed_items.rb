@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ImportFeedItems
   include Sidekiq::Worker
   sidekiq_options queue: :importer
@@ -23,7 +24,7 @@ class ImportFeedItems
     items = importer.parse_items
     items.each do |item|
       feed_item = FeedItem.find_or_initialize_by(url: item[:url])
-      [:title, :url, :guid, :authors, :contributors, :description, :content, :rights, :date_published, :last_updated].each do |col|
+      %i[title url guid authors contributors description content rights date_published last_updated].each do |col|
         feed_item.send(%(#{col}=), item[col])
       end
       feed_item.set_owner_tag_list_on(current_user,

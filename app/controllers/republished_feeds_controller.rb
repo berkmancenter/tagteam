@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class RepublishedFeedsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show, :items, :inputs, :removals, :more_details]
-  before_action :load_republished_feed, except: [:new, :create, :index]
-  before_action :load_hub, only: [:new, :create, :index]
+  before_action :authenticate_user!, except: %i[index show items inputs removals more_details]
+  before_action :load_republished_feed, except: %i[new create index]
+  before_action :load_hub, only: %i[new create index]
   before_action :register_breadcrumb
 
   after_action :verify_authorized, except: :index
@@ -49,7 +50,7 @@ class RepublishedFeedsController < ApplicationController
 
     @show_auto_discovery_params = items_hub_republished_feed_url(@hub, @republished_feed, format: :rss)
     @search = @republished_feed.item_search
-    unless @search.blank?
+    if @search.present?
       @search.build do
         paginate page: params[:page], per_page: get_per_page
       end

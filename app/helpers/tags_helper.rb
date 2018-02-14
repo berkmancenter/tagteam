@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module TagsHelper
   def tag_cloud(tags, classes)
     # logger.info(tags.inspect)
@@ -18,24 +19,24 @@ module TagsHelper
                    'data-tag-name' => tag.name)
 
     hub_id = nil
-    unless options[:hub].blank?
+    if options[:hub].present?
       options['data-hub-id'] = options[:hub].id
       hub_id = options[:hub].id
       options.delete(:hub)
 
     end
 
-    unless options[:hub_feed].blank?
+    if options[:hub_feed].present?
       options['data-hub-feed-id'] = options[:hub_feed].id
       options.delete(:hub_feed)
     end
 
-    unless options[:hub_feed_item].blank?
+    if options[:hub_feed_item].present?
       options['data-hub-feed-item-id'] = options[:hub_feed_item].id
       options.delete(:hub_feed_item)
     end
 
-    unless options[:show_count].blank?
+    if options[:show_count].present?
       tag_count = options[:use_count] ? tag.count : tag.count_by_hub(Hub.find(hub_id))
       options['data-tag-frequency'] = tag_count
       options.delete(:show_count)
@@ -45,18 +46,18 @@ module TagsHelper
   end
 
   def hub_filter_possible?(_params, current_user)
-    current_user.is?([:owner, :hub_tag_filterer], @hub) && !@already_filtered_for_hub
+    current_user.is?(%i[owner hub_tag_filterer], @hub) && !@already_filtered_for_hub
   end
 
   def feed_filter_possible?(params, current_user)
     params[:hub_feed_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_tag_filterer], @hub) &&
+      current_user.is?(%i[owner hub_feed_tag_filterer], @hub) &&
       !@already_filtered_for_hub_feed
   end
 
   def item_filter_possible?(params, current_user)
     params[:hub_feed_item_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) &&
+      current_user.is?(%i[owner hub_feed_item_tag_filterer], @hub) &&
       !@already_filtered_for_hub_feed_item
   end
 

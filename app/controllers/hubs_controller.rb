@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
   caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
@@ -6,61 +7,61 @@ class HubsController < ApplicationController
   }
   caches_action :statistics, expires_in: 6.hours
 
-  before_action :authenticate_user!, except: [
-    :about,
-    :all_items,
-    :bookmark_collections,
-    :by_date,
-    :contact,
-    :home,
-    :index,
-    :item_search,
-    :items,
-    :list,
-    :meta,
-    :request_rights,
-    :retrievals,
-    :search,
-    :show
+  before_action :authenticate_user!, except: %i[
+    about
+    all_items
+    bookmark_collections
+    by_date
+    contact
+    home
+    index
+    item_search
+    items
+    list
+    meta
+    request_rights
+    retrievals
+    search
+    show
   ]
 
-  after_action :verify_authorized, except: [:index, :home, :meta]
-  after_action :verify_policy_scoped, only: [:index, :home]
+  after_action :verify_authorized, except: %i[index home meta]
+  after_action :verify_policy_scoped, only: %i[index home]
 
   before_action :sanitize_params, only: :index
-  before_action :find_hub, only: [
-    :about,
-    :add_feed,
-    :add_roles,
-    :bookmark_collections,
-    :by_date,
-    :contact,
-    :created,
-    :custom_republished_feeds,
-    :destroy,
-    :edit,
-    :item_search,
-    :items,
-    :my_bookmark_collections,
-    :recalc_all_tags,
-    :request_rights,
-    :remove_roles,
-    :retrievals,
-    :show,
-    :tag_controls,
-    :update,
-    :set_notifications,
-    :notifications,
-    :set_user_notifications,
-    :settings,
-    :set_settings,
-    :team,
-    :statistics,
-    :active_taggers,
-    :approve_tag,
-    :unapprove_tag,
-    :deprecate_tag,
-    :undeprecate_tag
+  before_action :find_hub, only: %i[
+    about
+    add_feed
+    add_roles
+    bookmark_collections
+    by_date
+    contact
+    created
+    custom_republished_feeds
+    destroy
+    edit
+    item_search
+    items
+    my_bookmark_collections
+    recalc_all_tags
+    request_rights
+    remove_roles
+    retrievals
+    show
+    tag_controls
+    update
+    set_notifications
+    notifications
+    set_user_notifications
+    settings
+    set_settings
+    team
+    statistics
+    active_taggers
+    approve_tag
+    unapprove_tag
+    deprecate_tag
+    undeprecate_tag
   ]
 
   protect_from_forgery except: :items
@@ -70,7 +71,7 @@ class HubsController < ApplicationController
     'date' => ->(rel) { rel.order('created_at') },
     'owner' => ->(rel) { rel.by_first_owner }
   }.freeze
-  SORT_DIR_OPTIONS = %w(asc desc).freeze
+  SORT_DIR_OPTIONS = %w[asc desc].freeze
 
   def about
     add_breadcrumbs
@@ -175,7 +176,7 @@ class HubsController < ApplicationController
   end
 
   def add_roles
-    if !params[:user_ids].blank? && !params[:roles].blank?
+    if params[:user_ids].present? && params[:roles].present?
       params[:user_ids].each do |u|
         user = User.find(u)
         params[:roles].each do |r|
@@ -192,7 +193,7 @@ class HubsController < ApplicationController
     params[:roles_to_remove] && params[:roles_to_remove].each do |r|
       data = r.split(':')
       user = User.find(data[1])
-      next if @hub.accepted_roles_by(user).reject { |q| q.name != data[0] }.empty?
+      next if @hub.accepted_roles_by(user).select { |q| q.name == data[0] }.empty?
       objects_of_concern = Hub::DELEGATABLE_ROLES_HASH[data[0].to_sym][:objects_of_concern].call(user, @hub)
       if params[:revocation_action] == 'reassign'
         potential_user_to_reassign_to = User.find(params[:reassign_to])
@@ -381,15 +382,15 @@ class HubsController < ApplicationController
     hub_id = @hub.id
 
     @search = if request.format.to_s =~ /rss|atom/i
-                FeedItem.search(include: [:feeds, :hub_feeds]) do
-                  with(:hub_ids, hub_id) unless hub_id.blank?
+                FeedItem.search(include: %i[feeds hub_feeds]) do
+                  with(:hub_ids, hub_id) if hub_id.present?
                   order_by('date_published', :desc)
                   order_by('id', :asc)
                   paginate page: params[:page], per_page: get_per_page
                 end
               else
-                FeedItem.search(select: FeedItem.columns_for_line_item, include: [:feeds, :hub_feeds]) do
-                  with(:hub_ids, hub_id) unless hub_id.blank?
+                FeedItem.search(select: FeedItem.columns_for_line_item, include: %i[feeds hub_feeds]) do
+                  with(:hub_ids, hub_id) if hub_id.present?
                   order_by('date_published', :desc)
                   order_by('id', :asc)
                   paginate page: params[:page], per_page: get_per_page
@@ -398,7 +399,7 @@ class HubsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        unless @hub.blank?
+        if @hub.present?
           @show_auto_discovery_params = items_hub_url(@hub, format: :rss)
         end
         template = if params[:view] == 'grid'
@@ -654,7 +655,7 @@ class HubsController < ApplicationController
       with :hub_ids, hub_id
       paginate page: params[:page], per_page: get_per_page
       order_by(:date_published, :desc)
-      unless params[:q].blank?
+      if params[:q].present?
         fulltext params[:q]
         adjust_solr_params do |params|
           params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
@@ -662,7 +663,7 @@ class HubsController < ApplicationController
       end
     end
 
-    unless params[:q].blank?
+    if params[:q].present?
       params[:q].gsub! "tag_contexts_sm:#{@hub.tagging_key}-", '#'
     end
 
@@ -678,7 +679,7 @@ class HubsController < ApplicationController
 
     @search = Hub.search do
       paginate page: params[:page], per_page: get_per_page
-      fulltext params[:q] unless params[:q].blank?
+      fulltext params[:q] if params[:q].present?
     end
 
     respond_to do |format|
