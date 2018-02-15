@@ -87,8 +87,8 @@ class UsersController < ApplicationController
   end
 
   def show
-    breadcrumbs.add 'Users', admin_users_path
-    @user = User.find(params[:id])
+    breadcrumbs.add 'users', admin_users_path
+    @user = user.find(params[:id])
     authorize @user
     render layout: 'tabs'
   end
@@ -133,7 +133,7 @@ class UsersController < ApplicationController
   def load_feed_items
     authorize User
 
-    @user = User.find_by(username: params[:username])
+    @user = User.find_by!(username: params[:username])
 
     if params[:tagname]
       @tag = ActsAsTaggableOn::Tag.where(name: params[:tagname]).first

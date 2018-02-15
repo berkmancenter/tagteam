@@ -3,4 +3,4 @@
 - content_for :tabs do
   = render partial: 'tabs', locals: { active: 'about' }
 - content_for :tab_content do
-  = render partial: 'about'
+  = render partial: 'about', locals: { hub: @hub, hub_feed: @hub_feed }
