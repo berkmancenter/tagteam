@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109213205) do
+ActiveRecord::Schema.define(version: 20180215200418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,19 +171,20 @@ ActiveRecord::Schema.define(version: 20171109213205) do
   end
 
   create_table "hubs", force: :cascade do |t|
-    t.string   "title",                      limit: 500,  null: false
-    t.string   "description",                limit: 2048
-    t.string   "tag_prefix",                 limit: 25
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.string   "nickname",                   limit: 255
-    t.string   "slug",                       limit: 255
+    t.string   "title",                                  limit: 500,                  null: false
+    t.string   "description",                            limit: 2048
+    t.string   "tag_prefix",                             limit: 25
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.string   "nickname",                               limit: 255
+    t.string   "slug",                                   limit: 255
     t.text     "tag_count"
     t.boolean  "notify_taggers"
     t.string   "tags_delimiter"
     t.string   "official_tag_prefix"
     t.string   "suggest_only_approved_tags"
-    t.boolean  "notifications_mandatory",                 default: false, null: false
+    t.boolean  "notifications_mandatory",                             default: false, null: false
+    t.boolean  "bookmarklet_empty_description_reminder"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree

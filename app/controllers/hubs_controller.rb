@@ -173,7 +173,10 @@ class HubsController < ApplicationController
 
     @settings = @hub.settings
 
-    render layout: request.xhr? ? false : 'tabs'
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render json: @settings }
+    end
   end
 
   def add_roles

@@ -8,6 +8,7 @@ module Hubs
     string :official_tag_prefix
     string :suggest_only_approved_tags, default: nil
     string :hub_approved_tags
+    boolean :bookmarklet_empty_description_reminder, default: false
 
     def execute
       assign_attributes
@@ -24,6 +25,7 @@ module Hubs
       hub.official_tag_prefix = official_tag_prefix
       hub.suggest_only_approved_tags = suggest_only_approved_tags
       hub.hub_approved_tags = split_hub_approved_tags(hub_approved_tags)
+      hub.bookmarklet_empty_description_reminder = bookmarklet_empty_description_reminder
     end
 
     def split_hub_approved_tags(tags)

@@ -47,5 +47,12 @@
           = check_box_tag('suggest_only_approved_tags', settings[:suggest_only_approved_tags], settings[:suggest_only_approved_tags], id: 'suggest_only_approved_tags')
           Suggest only approved tags in the bookmarklet form
 
+      .form-group.checkbox
+        = label_tag 'bookmarklet_empty_description_reminder' do
+          = check_box_tag('bookmarklet_empty_description_reminder',
+            true,
+            settings[:bookmarklet_empty_description_reminder],
+            id: 'bookmarklet_empty_description_reminder')
+          Warn users about submitting an empty description field in the bookmarklet form
       .form-group
         = submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings'
