@@ -88,7 +88,7 @@ class UsersController < ApplicationController
 
   def show
     breadcrumbs.add 'users', admin_users_path
-    @user = user.find(params[:id])
+    @user = User.find(params[:id])
     authorize @user
     render layout: 'tabs'
   end
