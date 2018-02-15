@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
 
+  helper_method :get_per_page
+
   # The per_page setting for pagination can be overrided by cgi parameters but will fall back to the cookie "per_page" or ultimately the default_tagteam_per_page config entry defined in config/tagteam.yml
   def get_per_page
     per_page = params[:per_page] || cookies[:per_page] || Tagteam::Application.config.default_tagteam_per_page.to_s
