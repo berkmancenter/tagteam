@@ -20,7 +20,7 @@ module Hubs
     private
 
     def assign_attributes
-      hub.tags_delimiter << tags_delimiter
+      hub.tags_delimiter << tags_delimiter unless tags_delimiter.blank?
       hub.official_tag_prefix = official_tag_prefix
       hub.suggest_only_approved_tags = suggest_only_approved_tags
       hub.hub_approved_tags = split_hub_approved_tags(hub_approved_tags)
