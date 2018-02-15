@@ -1,2 +1,2 @@
-%tr.hover_row{:id => "tag#{tag.id}"}
-  %td{:colspan => "2"}= tag_display(tag, :hub => @hub, :id => "Tag-#{tag.id}-link")
+%tr.hover_row{ id: "tag#{tag.id}" }
+  %td{ colspan: '2' }= tag_display(tag, hub: @hub, id: "Tag-#{tag.id}-link", hub_feed_item: feed_item)
