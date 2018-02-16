@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       post 'resend_confirmation_token'
       post 'resend_unlock_token'
       get 'roles_on'
+      post 'lock_user'
+      post 'superadmin_role'
+      post 'documentation_admin_role'
     end
   end
 

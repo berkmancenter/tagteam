@@ -29,6 +29,24 @@ class UserPolicy < ApplicationPolicy
     user.has_role?(:superadmin)
   end
 
+  def lock_user?
+    return false if user.blank?
+
+    user.has_role?(:superadmin)
+  end
+
+  def superadmin_role?
+    return false if user.blank?
+
+    user.has_role?(:superadmin)
+  end
+
+  def documentation_admin_role?
+    return false if user.blank?
+
+    user.has_role?(:superadmin)
+  end
+
   def roles_on?
     user.present?
   end
