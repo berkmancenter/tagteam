@@ -19,12 +19,15 @@ module TagFilters
 
       tag = ActsAsTaggableOn::Tag.find(tag_id) if tag_id.present?
 
+      @new_tag_name = @new_tag_name.chomp('.') if @new_tag_name.end_with?('.')
+      @new_tag_name = @new_tag_name[1..-1] if @new_tag_name.start_with?('.')
+
       hub.tags_delimiter.each do |delimiter|
         @new_tag_name.slice!(delimiter)
       end
 
-
       @new_tag_name.delete(hub.tags_delimiter.join) if @new_tag_name.present?
+
       if filter_type_class == ModifyTagFilter
         tag ||= find_or_create_tag_by_name(modify_tag_name)
         new_tag = find_or_create_tag_by_name(new_tag_name)

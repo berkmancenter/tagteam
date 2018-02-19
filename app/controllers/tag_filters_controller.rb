@@ -31,6 +31,7 @@ class TagFiltersController < ApplicationController
     authorize authorize_tag_filter
 
     # Allow multiple TagFilters to be created from a comma-separated string of tags
+    params[:new_tag] = params[:new_tag].split(',').join('.')
     tag_filters = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
