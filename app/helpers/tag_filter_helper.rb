@@ -38,10 +38,11 @@ module TagFilterHelper
     # then split by the delimiter
     all_tags << whitespace_tags.map do |tag|
       delimiters.map do |delimiter|
-        tag.split(delimiter)
+        new_tag = tag.split(delimiter)
+        new_tag unless new_tag[0] == tags
       end
     end
 
-    all_tags.flatten.uniq
+    all_tags.flatten.compact.uniq
   end
 end

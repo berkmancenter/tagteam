@@ -2,14 +2,10 @@
 
 class ChangeTagsDelimiterToArray < ActiveRecord::Migration[5.0]
   def self.up
-    Hub.find_each do |hub|
-      hub.update(tags_delimiter: hub.tags_delimiter.split('')) if hub.tags_delimiter.present?
-    end
+    change_column :hubs, :tags_delimiter, :string, array: true, default: [], using: "(string_to_array(tags_delimiter, ''))"
   end
 
   def self.down
-    Hub.find_each do |hub|
-      hub.update(tags_delimiter: hub.tags_delimiter.join) if hub.tags_delimiter.present?
-    end
+    change_column :hubs, :tags_delimiter, :string, array: false, default: nil, using: "(array_to_string(tags_delimiter, ''))"
   end
 end
