@@ -1,0 +1,10 @@
+#all {
+  float: left;
+  margin-right: 10px;
+  margin-top: 6px;
+}
+@-moz-document url-prefix() {
+  #all {
+    margin-top: 3px;
+  }
+}

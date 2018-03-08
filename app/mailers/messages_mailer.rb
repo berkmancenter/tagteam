@@ -4,7 +4,7 @@
 class MessagesMailer < ActionMailer::Base
   default from: Tagteam::Application.config.default_sender
 
-  def send_message(recipients, subject, body)
-    mail(to: recipients, subject: subject, body: body)
+  def send_message(recipient, subject, body)
+    mail(to: recipient, subject: subject, body: body)
   end
 end

@@ -11,20 +11,35 @@ module Messages
 
     validates :subject, :body, presence: true
     validates :to, presence: true, unless: :sent_to_all_members?
-    validates_format_of :to, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/, unless: :sent_to_all_members?
-
+    validate :user_by_username, unless: :sent_to_all_members?
+    
     def execute
-      MessagesMailer.send_message(recipients, subject, body).deliver_later
+      recipients.each do |recipient|
+        MessagesMailer.send_message(recipient, subject, body).deliver_later
+      end
     end
 
     private
 
     def recipients
-      sent_to_all ? hub.users_with_roles.map(&:email) : to
+      emails = []
+      emails << valid_user if valid_user.present?
+
+      sent_to_all ? hub.users_with_roles.map(&:email) : emails
+    end
+
+    def valid_user
+      User.find_by(username: to).try(&:email)
     end
 
     def sent_to_all_members?
       sent_to_all
+    end
+
+    def user_by_username
+      return if valid_user.present?
+
+      errors.add(:base, 'Please enter a valid username')
     end
   end
 end
