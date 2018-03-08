@@ -10,13 +10,11 @@
     #contact
       %h1 Send message to hub members
       = semantic_form_for(:message, url: hub_messages_path(@hub)) do |f|
-
         = f.inputs do
           = f.input :to
           %label
             Email to all hub members
-          %br
-          = f.check_box :sent_to_all, id: 'all'
+            = f.check_box :sent_to_all, id: 'all'
           = f.input :subject, required: true
           = f.input :body, as: :text, input_html: { rows: 8, class: 'noEditor' }
         = f.actions do
