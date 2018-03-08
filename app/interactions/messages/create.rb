@@ -12,7 +12,7 @@ module Messages
     validates :subject, :body, presence: true
     validates :to, presence: true, unless: :sent_to_all_members?
     validate :user_by_username, unless: :sent_to_all_members?
-    
+
     def execute
       recipients.each do |recipient|
         MessagesMailer.send_message(recipient, subject, body).deliver_later
