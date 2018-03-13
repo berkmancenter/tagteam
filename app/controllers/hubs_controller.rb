@@ -69,6 +69,7 @@ class HubsController < ApplicationController
 
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
+    'bookmark_collections_title' => ->(rel) { rel.sort_by { |hf| hf.title.downcase } },
     'date' => ->(rel) { rel.order('created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
     'number of items' => -> (rel) { rel.by_feed_items_count },
@@ -311,7 +312,8 @@ class HubsController < ApplicationController
   def taggers
     add_breadcrumbs
 
-    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'bookmark_collections_title'
+    sort = 'bookmark_collections_title' if params[:sort] == 'title'
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 
     @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id))
