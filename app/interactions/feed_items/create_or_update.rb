@@ -29,16 +29,12 @@ module FeedItems
       new_tags = []
 
       item.categories.map do |category|
-        new_tags << if category.match(/\s/).present? 
-          category.split(" ")
-        else  
-          category
-        end
+        new_tags << category.match(/\s/).present? ? category.split(' ') : category
       end
 
       # Merge tags...
       new_tags = new_tags.flatten
-      
+
       new_tags.flatten.map do |tag|
         ActsAsTaggableOn::Tag.normalize_name(tag)
       end
