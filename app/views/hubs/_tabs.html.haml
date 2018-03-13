@@ -13,11 +13,11 @@
     = documentation('hub-tag-cloud')
   = link_to('Tags', hub_tags_path(@hub))
   .nav-pill-arrow
-%li{ class: "last-of-section #{'active' if active == 'remixes'}" }
+%li{ class: "#{'active' if active == 'remixes'}" }
   = documentation('hub-republished-feeds-list')
   = link_to('Remixes', hub_republished_feeds_path(@hub))
   .nav-pill-arrow
-%li{ class: "last-of-section #{'active' if active == 'filters'}" }
+%li{ class: "#{'active' if active == 'filters'}" }
   = documentation('hub-wide-tag-filters')
   = link_to('Filters', hub_tag_filters_path(@hub) )
   .nav-pill-arrow
@@ -57,7 +57,7 @@
     = link_to('Notifications', notifications_hub_path(@hub) )
     .nav-pill-arrow
   .nav-pill-arrow
-%li{ class: "last-of-section #{'active' if active == 'messaging'}" }
+%li{ class: "#{'active' if active == 'messaging'}" }
   = documentation('hub-messages')
   = link_to('Messaging', new_hub_message_path(@hub))
   .nav-pill-arrow
