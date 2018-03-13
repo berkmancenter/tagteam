@@ -2,17 +2,9 @@
   = documentation('hub-wide-item-list')
   = link_to('Items', items_hub_path(@hub))
   .nav-pill-arrow
-%li{ class: "#{'active' if active == 'inputs'}" }
-  = documentation('hub-watched-feeds-list')
-  = link_to('Inputs', hub_hub_feeds_path(@hub))
-  .nav-pill-arrow
 %li{ class: "#{'active' if active == 'bookmarks'}" }
   = documentation('hub-bookmark_collections-list')
   = link_to('Taggers', bookmark_collections_hub_path(@hub))
-  .nav-pill-arrow
-%li{ class: "last-of-section #{'active' if active == 'remixes'}" }
-  = documentation('hub-republished-feeds-list')
-  = link_to('Remixes', hub_republished_feeds_path(@hub))
   .nav-pill-arrow
 %li{ class: "#{'active' if active == 'tags'}" }
   - if !@hub_feed.blank?
@@ -21,13 +13,28 @@
     = documentation('hub-tag-cloud')
   = link_to('Tags', hub_tags_path(@hub))
   .nav-pill-arrow
+%li{ class: "last-of-section #{'active' if active == 'remixes'}" }
+  = documentation('hub-republished-feeds-list')
+  = link_to('Remixes', hub_republished_feeds_path(@hub))
+  .nav-pill-arrow
 %li{ class: "last-of-section #{'active' if active == 'filters'}" }
   = documentation('hub-wide-tag-filters')
   = link_to('Filters', hub_tag_filters_path(@hub) )
   .nav-pill-arrow
+%li{ class: "#{'active' if active == 'inputs'}" }
+  = documentation('hub-watched-feeds-list')
+  = link_to('Inputs', hub_hub_feeds_path(@hub))
+  .nav-pill-arrow
 %li{ class: "#{'active' if active == 'history'}" }
   = documentation('hub-wide-feed-retrievals-list')
   = link_to('History', retrievals_hub_path(@hub) )
+  .nav-pill-arrow
+%li{ class: "#{'active' if active == 'about'}" }
+  = documentation('hub_about')
+  = link_to('About', about_hub_path(@hub))
+%li{ class: "#{'active' if active == 'contact'}" }
+  = documentation('hub-contact')
+  = link_to('Contact', contact_hub_path(@hub))
   .nav-pill-arrow
 - if current_user && current_user.is?(:owner, @hub)
   %li{ class: "#{'active' if active == 'settings'}" }
@@ -49,13 +56,6 @@
     = documentation('notifications')
     = link_to('Notifications', notifications_hub_path(@hub) )
     .nav-pill-arrow
-%li{ class: "#{'active' if active == 'about'}" }
-  = documentation('hub_about')
-  = link_to('About', about_hub_path(@hub))
-  .nav-pill-arrow
-%li{ class: "#{'active' if active == 'contact'}" }
-  = documentation('hub-contact')
-  = link_to('Contact', contact_hub_path(@hub))
   .nav-pill-arrow
 %li{ class: "last-of-section #{'active' if active == 'messaging'}" }
   = documentation('hub-messages')
