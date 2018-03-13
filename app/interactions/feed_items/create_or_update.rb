@@ -26,8 +26,16 @@ module FeedItems
       fi.feed_retrievals << feed_retrieval
       fi.feeds << feed unless fi.feeds.include?(feed)
 
+      new_tags = []
+
+      item.categories.map do |category|
+        new_tags << category.match(/\s/).present? ? category.split(' ') : category
+      end
+
       # Merge tags...
-      new_tags = item.categories.map do |tag|
+      new_tags = new_tags.flatten
+
+      new_tags.flatten.map do |tag|
         ActsAsTaggableOn::Tag.normalize_name(tag)
       end
 
