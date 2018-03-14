@@ -23,7 +23,7 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
-  def bookmark_collections?
+  def taggers?
     show?
   end
 
