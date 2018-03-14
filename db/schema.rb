@@ -180,7 +180,7 @@ ActiveRecord::Schema.define(version: 20180215200418) do
     t.string   "slug",                                   limit: 255
     t.text     "tag_count"
     t.boolean  "notify_taggers"
-    t.string   "tags_delimiter"
+    t.string   "tags_delimiter",                                      default: [],                 array: true
     t.string   "official_tag_prefix"
     t.string   "suggest_only_approved_tags"
     t.boolean  "notifications_mandatory",                             default: false, null: false
