@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
   caches_action :statistics, expires_in: 6.hours
@@ -9,7 +9,7 @@ class HubsController < ApplicationController
   before_action :authenticate_user!, except: [
     :about,
     :all_items,
-    :bookmark_collections,
+    :taggers,
     :by_date,
     :contact,
     :home,
@@ -33,7 +33,7 @@ class HubsController < ApplicationController
     :about,
     :add_feed,
     :add_roles,
-    :bookmark_collections,
+    :taggers,
     :by_date,
     :contact,
     :created,
@@ -69,6 +69,7 @@ class HubsController < ApplicationController
 
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
+    'bookmark_collections_title' => ->(rel) { rel.sort_by { |hf| hf.title.downcase } },
     'date' => ->(rel) { rel.order('created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
     'number of items' => -> (rel) { rel.by_feed_items_count },
@@ -308,10 +309,11 @@ class HubsController < ApplicationController
   end
 
   # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
-  def bookmark_collections
+  def taggers
     add_breadcrumbs
 
-    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'bookmark_collections_title'
+    sort = 'bookmark_collections_title' if params[:sort] == 'title'
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 
     @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id))

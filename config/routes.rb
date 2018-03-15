@@ -98,7 +98,7 @@ Rails.application.routes.draw do
       get 'by_date/:year/:month/:day' => 'hubs#by_date', :as => 'by_date'
       get 'retrievals'
       get 'my_bookmark_collections'
-      get 'bookmark_collections'
+      get 'taggers'
       get 'team'
       get 'statistics'
       get 'notifications'
