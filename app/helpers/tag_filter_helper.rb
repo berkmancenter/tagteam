@@ -24,13 +24,7 @@ module TagFilterHelper
 
   def self.split_tags(tags, hub)
     all_tags = []
-
-    delimiters =
-      if hub.tags_delimiter_with_default.respond_to?(:map)
-        hub.tags_delimiter_with_default
-      else
-        [',']
-      end
+    delimiters = hub.tags_delimiter_with_default
 
     # split by whitespace first
     whitespace_tags = tags.gsub(/\s+/m, ' ').gsub(/^\s+|\s+$/m, '').split(' ')
