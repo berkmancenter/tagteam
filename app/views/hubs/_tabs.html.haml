@@ -34,32 +34,32 @@
     = documentation('hub-team')
     = link_to('Team', team_hub_path(@hub) )
     .nav-pill-arrow
-%li{ class: "#{'active' if active == 'about'}" }
-  = documentation('hub_about')
-  = link_to('About', about_hub_path(@hub))
 %li{ class: "#{'active' if active == 'contact'}" }
   = documentation('hub-contact')
   = link_to('Contact', contact_hub_path(@hub))
+  .nav-pill-arrow
+%li{ class: "#{'active' if active == 'messaging'}" }
+  = documentation('hub-messages')
+  = link_to('Messaging', new_hub_message_path(@hub))
+  .nav-pill-arrow
+- if current_user && current_user.is?([:owner, :stats_viewer], @hub)
+  %li{ class: "#{'active' if active == 'statistics'}" }
+    = documentation('hub-statistics')
+    = link_to('Statistics', statistics_hub_path(@hub) )
+    .nav-pill-arrow
+%li{ class: "#{'active' if active == 'about'}" }
+  = documentation('hub_about')
+  = link_to('About', about_hub_path(@hub))
   .nav-pill-arrow
 - if current_user && current_user.is?(:owner, @hub)
   %li{ class: "#{'active' if active == 'settings'}" }
     = documentation('hub-settings')
     = link_to('Settings', settings_hub_path(@hub) )
     .nav-pill-arrow
-- if current_user && current_user.is?([:owner, :stats_viewer], @hub)
-  %li{ class: "#{'active' if active == 'statistics'}" }
-    = documentation('hub-statistics')
-    = link_to('Statistics', statistics_hub_path(@hub) )
-    .nav-pill-arrow
 - if current_user && @hub.notify_taggers? && !@hub.notifications_mandatory?
   %li{ class: "#{'active' if active == 'notifications'}" }
     = documentation('notifications')
     = link_to('Notifications', notifications_hub_path(@hub) )
     .nav-pill-arrow
-  .nav-pill-arrow
-%li{ class: "#{'active' if active == 'messaging'}" }
-  = documentation('hub-messages')
-  = link_to('Messaging', new_hub_message_path(@hub))
-  .nav-pill-arrow
 %li.search-pill
   = render partial: 'hubs/search_form'
