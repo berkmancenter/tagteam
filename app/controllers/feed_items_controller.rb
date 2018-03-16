@@ -9,6 +9,12 @@ class FeedItemsController < ApplicationController
   before_action :set_hub_feed, except: [:tag_list]
   before_action :set_feed_item, except: [:index]
 
+  SORT_OPTIONS = {
+    'created_at' => -> (rel) { rel.order('created_at') },
+    'date_published' => ->(rel) { rel.order('date_published') },
+  }.freeze
+
+  SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def controls
     add_breadcrumbs
@@ -65,12 +71,16 @@ class FeedItemsController < ApplicationController
     )
 
     @show_auto_discovery_params = hub_feed_feed_items_url(@hub_feed, format: :rss)
-    @feed_items =
+
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+    @feed_items = SORT_OPTIONS[sort].call(
       @hub_feed
       .feed_items
       .includes(:feeds, :hub_feeds)
-      .order(date_published: :desc, created_at: :desc)
       .paginate(page: params[:page], per_page: get_per_page)
+    )
+    @feed_items = @feed_items.reverse_order if order == 'desc'
     breadcrumbs.add @hub_feed.hub, hub_path(@hub_feed.hub)
     breadcrumbs.add @hub_feed.feed, hub_hub_feed_path(@hub_feed.hub, @hub_feed)
     respond_to do |format|
@@ -116,7 +126,7 @@ class FeedItemsController < ApplicationController
 
   def update
     authorize @feed_item
-
+    
     inputs = { feed_item: @feed_item, hub: @hub, user: current_user }.reverse_merge(feed_item_params)
     outcome = FeedItems::Update.run(inputs)
 
@@ -162,6 +172,6 @@ class FeedItemsController < ApplicationController
   end
 
   def feed_item_params
-    params.require(:feed_item).permit(:description, :title, :url)
+    params.require(:feed_item).permit(:description, :title, :url, :date_published)
   end
 end

@@ -23,4 +23,6 @@
   = @feed_item.rights
 - unless @feed_item.date_published.blank?
   %h3 Added:
+  = l(@feed_item.created_at, format: :date_and_time_short)
+  %h3 Published Date:
   = l(@feed_item.date_published, format: :date_and_time_short)
