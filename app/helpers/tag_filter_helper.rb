@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module TagFilterHelper
   def filter_css_class(filter)
     case filter.class.name
@@ -30,13 +31,15 @@ module TagFilterHelper
     whitespace_tags = tags.gsub(/\s+/m, ' ').gsub(/^\s+|\s+$/m, '').split(' ')
 
     # then split by the delimiter
-    all_tags << whitespace_tags.map do |tag|
-      delimiters.map do |delimiter|
-        new_tag = tag.split(delimiter)
-        new_tag unless new_tag[0] == tags
+    split_tags = whitespace_tags
+    delimiters.each do |delimiter|
+      arr = []
+      split_tags.each do |tag|
+        arr << tag.split(delimiter)
       end
+      split_tags = arr.flatten.compact.uniq
     end
 
-    all_tags.flatten.compact.uniq
+    split_tags
   end
 end
