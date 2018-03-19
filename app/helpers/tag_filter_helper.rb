@@ -31,15 +31,15 @@ module TagFilterHelper
     whitespace_tags = tags.gsub(/\s+/m, ' ').gsub(/^\s+|\s+$/m, '').split(' ')
 
     # then split by the delimiter
-    splited_tags = whitespace_tags
+    split_tags = whitespace_tags
     delimiters.each do |delimiter|
       arr = []
-      splited_tags.each do |tag|
+      split_tags.each do |tag|
         arr << tag.split(delimiter)
       end
-      splited_tags = arr.flatten.compact.uniq
+      split_tags = arr.flatten.compact.uniq
     end
 
-    splited_tags
+    split_tags
   end
 end
