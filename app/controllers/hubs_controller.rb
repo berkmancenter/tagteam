@@ -523,7 +523,7 @@ class HubsController < ApplicationController
     @feed.unsubscribe = true
 
     if @feed.save
-      flash[:notice] = 'You have successfully unsubscribed the feed'
+      flash[:notice] = 'You have unsubscribed from the feed'
       redirect_to(hub_path(@hub))
     else
       flash[:error] = "Something went wrong, try again."
@@ -868,7 +868,7 @@ class HubsController < ApplicationController
 
   def find_feed
     @feed = Feed.find(params[:feed_id])
-    
+
     if @feed.blank?
       flash[:error] = "Something went wrong, try again."
       redirect_to(hub_path(@hub))
