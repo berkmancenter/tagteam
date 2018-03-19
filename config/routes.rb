@@ -69,7 +69,7 @@ Rails.application.routes.draw do
     get 'tag/json/:name' => 'tags#json', :as => 'tag_json', :constraints => { name: /.+/ }
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
     get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
-    get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }
+    get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }, :defaults => { :format => 'html' }
 
     get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { username: /[^\/]+/ }
     get 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { username: /[^\/]+/ }
