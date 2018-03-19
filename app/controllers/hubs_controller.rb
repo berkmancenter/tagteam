@@ -29,6 +29,7 @@ class HubsController < ApplicationController
   after_action :verify_policy_scoped, only: [:index, :home]
 
   before_action :sanitize_params, only: :index
+  before_action :find_feed, only: :unsubscribe_feed
   before_action :find_hub, only: [
     :about,
     :add_feed,
@@ -62,7 +63,8 @@ class HubsController < ApplicationController
     :approve_tag,
     :unapprove_tag,
     :deprecate_tag,
-    :undeprecate_tag
+    :undeprecate_tag,
+    :unsubscribe_feed
   ]
 
   protect_from_forgery except: :items
@@ -517,6 +519,18 @@ class HubsController < ApplicationController
     end
   end
 
+  def unsubscribe_feed
+    @feed.unsubscribe = true
+
+    if @feed.save
+      flash[:notice] = 'You have unsubscribed from the feed'
+      redirect_to(hub_path(@hub))
+    else
+      flash[:error] = "Something went wrong, try again."
+      redirect_to(hub_path(@hub))
+    end
+  end
+
   # A list of all republished feeds(aka remixed feeds) that can be added to for the current user.
   def custom_republished_feeds
     add_breadcrumbs
@@ -850,5 +864,14 @@ class HubsController < ApplicationController
   def find_hub
     @hub = Hub.find(params[:id])
     authorize @hub
+  end
+
+  def find_feed
+    @feed = Feed.find(params[:feed_id])
+
+    if @feed.blank?
+      flash[:error] = "Something went wrong, try again."
+      redirect_to(hub_path(@hub))
+    end
   end
 end

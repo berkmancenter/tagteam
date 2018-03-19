@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20180316092704) do
     t.datetime "next_scheduled_retrieval"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
+    t.boolean  "unsubscribe",                           default: false
     t.index ["authors"], name: "index_feeds_on_authors", using: :btree
     t.index ["bookmarking_feed"], name: "index_feeds_on_bookmarking_feed", using: :btree
     t.index ["feed_url"], name: "index_feeds_on_feed_url", using: :btree

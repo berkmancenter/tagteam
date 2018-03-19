@@ -179,6 +179,12 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def unsubscribe_feed?
+    return false unless user.present?
+
+    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+  end
+
   private
 
   def owner_or_admin?
