@@ -25,26 +25,15 @@ class TagsController < ApplicationController
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
     hub_id = @hub.id
-
-    if @hub.settings[:suggest_only_approved_tags]
-      approved_tags = @hub.hub_approved_tags.map(&:tag)
-      @search = ActsAsTaggableOn::Tag.where(name: approved_tags)
-                                     .where('name LIKE \'%' + params[:term] + '%\'')
-
-      result = @search - @hub.deprecated_tags
-    else
-      @search = ActsAsTaggableOn::Tag.search do
-        with :hub_ids, hub_id
-        fulltext params[:term]
-      end
-
-      result = @search.results - @hub.deprecated_tags
-    end
+    approved_tags = @hub.hub_approved_tags.map(&:tag)
+    @search = ActsAsTaggableOn::Tag.where('name LIKE \'%' + params[:term] + '%\'')
+    result = @search - @hub.fetch_deprecated_tags
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
-        render json: result.collect { |r| { id: r.id, label: r.name } }
+        results = result.map { |r| { id: r.id, label: r.name } if (r.name.length < 20) && !(r.name =~ /\s/) }
+        render json: results.compact
       end
     end
   rescue
