@@ -9,5 +9,5 @@
     = link_to 'Sidekiq', sidekiq_web_path, target: '_blank'
   %li{ role: 'presentation' }
     = link_to 'Background Jobs', nil, id: 'background_jobs'
-  %li{ role: 'presentation' }
-    = link_to 'Settings', new_admin_setting_path
+  %li{ role: 'presentation', class: ('active' if controller_name == 'home') }
+    = link_to 'Settings', admin_users_path

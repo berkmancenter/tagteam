@@ -5,20 +5,13 @@ module Admin
   class SettingsController < ApplicationController
     before_action :find_setting, only: :update
 
-    def new
-      authorize :admin_setting, :new?
-      breadcrumbs.add 'Admin Setting', new_admin_setting_path
-
-      @setting = Admin::Setting.first_or_initialize
-    end
-
     def create
       authorize :admin_setting, :create?
 
       @setting = Admin::Setting.new(settings_params)
 
       if @setting.save
-        redirect_to new_admin_setting_path, notice: 'Setting was created sucessfully'
+        redirect_to admin_root_path, notice: 'Setting was created sucessfully'
       else
         render :index
       end
@@ -28,7 +21,7 @@ module Admin
       authorize :admin_setting, :update?
 
       if @setting.update(settings_params)
-        redirect_to new_admin_setting_path, notice: 'Setting was updated sucessfully'
+        redirect_to admin_root_path, notice: 'Setting was updated sucessfully'
       else
         render :index
       end
