@@ -685,7 +685,7 @@ class HubsController < ApplicationController
       paginate page: params[:page], per_page: get_per_page
       order_by(:date_published, :desc)
       unless params[:q].blank?
-        fulltext params[:q]
+        fulltext params[:q].split('+').join('+ ')
         adjust_solr_params do |params|
           params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
         end
