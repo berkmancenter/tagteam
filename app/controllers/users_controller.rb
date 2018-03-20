@@ -8,6 +8,9 @@ class UsersController < ApplicationController
                                          :tags_atom]
   before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
                                       :tags_atom]
+  before_action :find_user, only: [:documentation_admin_role, :superadmin_role,
+                                   :lock_user, :destroy, :show, :resend_confirmation_token,
+                                   :resend_unlock_token]
   after_action :verify_authorized
 
   def tags
@@ -66,8 +69,7 @@ class UsersController < ApplicationController
 
   def resend_unlock_token
     authorize User
-    u = User.find(params[:id])
-    u.resend_unlock_token
+    @user.resend_unlock_token
     flash[:notice] = 'We resent the account unlock email to that user.'
     redirect_to request.referer
   rescue Exception => e
@@ -77,8 +79,7 @@ class UsersController < ApplicationController
 
   def resend_confirmation_token
     authorize User
-    u = User.find(params[:id])
-    u.resend_confirmation_token
+    @user.resend_confirmation_token
     flash[:notice] = 'We resent the account confirmation email to that user.'
     redirect_to request.referer
   rescue Exception => e
@@ -87,14 +88,13 @@ class UsersController < ApplicationController
   end
 
   def show
-    breadcrumbs.add 'users', admin_users_path
-    @user = User.find(params[:id])
+    breadcrumbs.add 'Users', admin_users_path
     authorize @user
     render layout: 'tabs'
   end
 
   def destroy
-    @user = User.find(params[:id])
+    #@user = User.find(params[:id])
     authorize @user
     @user.destroy
     flash[:notice] = 'Deleted that user'
@@ -103,6 +103,44 @@ class UsersController < ApplicationController
         redirect_to admin_users_path
       end
     end
+  end
+
+  def lock_user
+    authorize current_user
+    if @user.access_locked?
+      @user.unlock_access!
+      flash[:notice] = 'User has been unlocked successfully'
+    else
+      @user.lock_access!
+      flash[:notice] = 'User has been locked successfully'
+    end
+    redirect_to user_path
+  end
+
+  def superadmin_role
+    role = Role.find_or_create_by(name: 'superadmin')
+    authorize current_user
+    if @user.has_role?(:superadmin)
+      @user.roles.destroy(role)
+      flash[:notice] = 'Superadmin permission has been revoked for the user'
+    else
+      @user.roles << role
+      flash[:notice] = 'User has been granted superadmin permission'
+    end
+    redirect_to user_path
+  end
+
+  def documentation_admin_role
+    role = Role.find_or_create_by(name: 'documentation_admin')
+    authorize current_user
+    if @user.has_role?(:documentation_admin)
+      @user.roles.destroy(role)
+      flash[:notice] = 'Documentation Admin permission has been revoked for the user'
+    else
+      @user.roles << role
+      flash[:notice] = 'User has been granted Documentation Admin permission'
+    end
+    redirect_to user_path
   end
 
   private
@@ -163,5 +201,9 @@ class UsersController < ApplicationController
 
     @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
                           .paginate(page: params[:page], per_page: get_per_page)
+  end
+
+  def find_user
+    @user = User.find(params[:id])
   end
 end
