@@ -84,7 +84,7 @@ class FeedItem < ApplicationRecord
     text :contributors, more_like_this: true
     text :rights, more_like_this: true
     text :tag_list, using: :tag_list_string_for_indexing, more_like_this: true
-    text :username_list, using: :username_list_string_for_indexing, more_like_this: true
+    text :username_list
     integer :hub_ids, multiple: true
     integer :hub_feed_ids, multiple: true
     integer :id
@@ -124,32 +124,31 @@ class FeedItem < ApplicationRecord
 
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
-    taggings.collect do |tg|
-      "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'
-    end.compact
+    taggings.includes(:tag).where.not(context: 'tags').map do |tagging|
+      "#{tagging.context}-#{tagging.tag.name}"
+    end
   end
 
   def tag_contexts_by_users
-    taggings.collect do |tg|
-      next if tg.context.eql? 'tags'
+    taggings.includes(:tag, :tagger).where.not(context: 'tags').map do |tagging|
+      auth_user =
+        if tagging.tagger_type == 'User'
+          tagging.tagger
+        else
+          role = Role.find_by(
+            authorizable_id: tagging.tagger_id,
+            authorizable_type: 'TagFilter',
+            name: 'creator'
+          )
 
-      if tg.tagger_type.eql? 'User'
-        auth_user = User.where(id: tg.tagger_id).first
-      else
-        role = Role.where(
-          authorizable_id: tg.tagger_id,
-          authorizable_type: 'TagFilter',
-          name: 'creator'
-        ).first
+          next if role.nil?
 
-        next if role.nil?
-
-        auth_user = role.users.first
-      end
+          role.users.first
+        end
 
       next if auth_user.nil?
 
-      "#{tg.context}-#{tg.tag.name}-user_#{auth_user.id}"
+      "#{tagging.context}-#{tagging.tag.name}-user_#{auth_user.id}"
     end.compact
   end
 
@@ -178,16 +177,11 @@ class FeedItem < ApplicationRecord
   end
 
   def tag_list_array_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query.
-    # Construct the tag list correctly.
-    item_tags.collect(&:name)
+    tags.pluck(:name)
   end
 
   def tag_list_string_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query.
-    # Construct the tag list correctly.
-
-    item_tags.collect(&:name).join(', ')
+    tag_list_array_for_indexing.join(', ')
   end
 
   def to_s
@@ -261,19 +255,12 @@ class FeedItem < ApplicationRecord
     feed_item.apply_tag_filters(hub_ids)
   end
 
-  def item_tags
-    taggings.collect do |tg|
-      tg.tag
-    end.compact
-  end
+  def username_list
+    user_ids = taggings.where(tagger_type: 'User').distinct.pluck(:tagger_id)
 
-  def username_list_string_for_indexing
-    user_ids = ActsAsTaggableOn::Tagging.where(
-      tagger_type: User.name,
-      taggable_type: self.class.name
-    ).map(&:tagger_id)
+    return [] if user_ids.blank?
 
-    User.where(id: user_ids).map(&:username)
+    User.where(id: user_ids).pluck(:username)
   end
 
   private
