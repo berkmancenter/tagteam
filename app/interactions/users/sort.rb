@@ -19,7 +19,7 @@ module Users
       when 'username'
         users.sort_by { |user| user.username.downcase }
       when 'last_sign_in_at'
-        sort_by_virtual_attribute('last_sign_in_at')
+        users.order(last_sign_in_at: :asc)
       end
     end
 
