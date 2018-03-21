@@ -1,37 +1,26 @@
 # frozen_string_literal: true
 
 module Statistics
+  # Generate data for the hub scoreboard UI
   class Scoreboard < ActiveInteraction::Base
     object :hub, class: Hub
     string :sort, default: 'name'
     string :criteria, default: 'Past Day'
 
     def execute
-      users = @hub.users_with_roles.map { |u| { id: u.id, first_name: u.first_name, last_name: u.last_name } }
+      counts_by_user_id = count_taggings_by_user_id
+      scoreboard = format_tagging_users(counts_by_user_id.keys)
+      scoreboard = insert_user_counts(scoreboard, counts_by_user_id)
+      scoreboard = insert_user_ranks(scoreboard)
+      scoreboard = sort_scoreboard_values(scoreboard.values)
 
-      taggings = ActsAsTaggableOn::Tagging.where(created_at: set_criteria)
-
-      users.each do |user|
-        user[:count] = taggings.where(
-          tagger_type: User.name,
-          tagger_id: user[:id],
-          taggable_type: 'FeedItem'
-        ).count
-      end
-
-      users.sort_by do |user|
-        if @sort == 'name'
-          [user[:first_name], user[:last_name]]
-        else
-          user.count
-        end
-      end
+      scoreboard
     end
 
     private
 
     def set_criteria
-      case @criteria
+      case criteria
       when 'Past Day'
         1.day.ago.beginning_of_day..1.day.ago.end_of_day
       when 'Week'
@@ -40,6 +29,50 @@ module Statistics
         1.month.ago.beginning_of_day..(1.week.ago + 30.days).end_of_day
       when 'Year'
         1.year.ago.beginning_of_day..(1.year.ago + 365.days).end_of_day
+      end
+    end
+
+    def count_taggings_by_user_id
+      ActsAsTaggableOn::Tagging
+        .where(
+          context: "hub_#{hub.id}",
+          created_at: set_criteria,
+          tagger_type: 'User',
+          taggable_type: 'FeedItem'
+        )
+        .group(:tagger_id)
+        .count
+    end
+
+    def format_tagging_users(user_ids)
+      users = User.where(id: user_ids).pluck(:id, :username)
+
+      users.each_with_object({}) do |(user_id, username), users_hash|
+        users_hash[user_id] = { username: username }
+      end
+    end
+
+    def insert_user_counts(scoreboard, counts_by_user_id)
+      counts_by_user_id.each do |user_id, count|
+        scoreboard[user_id][:count] = count
+      end
+
+      scoreboard
+    end
+
+    def insert_user_ranks(scoreboard)
+      sorted_scoreboard = scoreboard.sort_by { |_id, user| user[:count] }.reverse
+
+      sorted_scoreboard.each_with_index do |(id), i|
+        scoreboard[id][:rank] = i + 1
+      end
+
+      scoreboard
+    end
+
+    def sort_scoreboard_values(scoreboard_values)
+      scoreboard_values.sort_by do |row|
+        sort == 'name' ? row[:username].downcase : row[:rank]
       end
     end
   end
