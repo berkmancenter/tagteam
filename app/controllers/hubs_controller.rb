@@ -70,6 +70,8 @@ class HubsController < ApplicationController
   ]
   before_action :set_sort, only: :scoreboard
 
+  before_action :set_sort, only: :hub_admin
+
   protect_from_forgery except: :items
 
   SORT_OPTIONS = {
@@ -82,8 +84,9 @@ class HubsController < ApplicationController
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
     'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
     'items' => -> (rel) { rel.sort_by {|r| r[:count] } },
-    'created_date' => -> { rel.order('created_at') },
-    'updated_date' => -> { rel.order('updated_date') }
+    'created_date' => ->(rel) { rel.order('created_at') },
+    'updated_date' => ->(rel) { rel.order('updated_at') },
+    'owners' => ->(rel) { rel.by_first_owner },
   }.freeze
 
   SORT_DIR_OPTIONS = %w(asc desc).freeze
@@ -876,7 +879,11 @@ class HubsController < ApplicationController
   def hub_admin
     authorize Hub
 
-    @hubs = policy_scope(Hub).paginate(page: params[:page], per_page: 5)
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+
+    @hubs = SORT_OPTIONS[sort].call(policy_scope(Hub)).paginate(page: params[:page], per_page: get_per_page)
+    @hubs = @hubs.reverse_order if order == 'desc'
   end
 
   def destroy_hubs
@@ -915,11 +922,10 @@ class HubsController < ApplicationController
   end
 
   def set_sort
-    @sort =
-      if %w[name items rank].include?(params[:sort])
-        params[:sort]
-      else
-        'name'
-      end
+    @sort = if %w[name items rank id title owners created_date updated_date].include?(params[:sort])
+      params[:sort]
+    else
+      'id'
+    end
   end
 end

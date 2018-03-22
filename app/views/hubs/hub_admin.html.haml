@@ -40,7 +40,7 @@
             %td
               = truncate(hub.title, length: 150)
             %td
-              = hub.owners.map(&:first_name).join(',')
+              = hub.owners.map(&:username).join(',')
             %td
               = hub.created_at.strftime('%Y-%m-%d %H:%M %p')
             %td
@@ -57,15 +57,15 @@
 
     $('#bulk-action').on('click', function() {
       if(!$('#select-action').val()){
-        alert('please select action');
+        alert('Please select an action');
       } else if ($("[name='ids[]']:checked").length < 1){
-        alert('please select atleast one item');
+        alert('Please select at least one item');
       } else{
         $("[name='ids[]']:checked").each(function() {
           selected.push($(this).val());
         });
 
-        var confirmed = confirm("Press a button!");
+        var confirmed = confirm("Are you sure?");
         if(confirmed) {
           $.ajax({
             url: '/hubs/destroy_hubs',
