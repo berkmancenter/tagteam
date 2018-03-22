@@ -9,12 +9,12 @@ module Statistics
 
     def execute
       counts_by_user_id = count_taggings_by_user_id
-      scoreboard = format_tagging_users(counts_by_user_id.keys)
+
+      scoreboard = create_scoreboard(counts_by_user_id.keys)
       scoreboard = insert_user_counts(scoreboard, counts_by_user_id)
       scoreboard = insert_user_ranks(scoreboard)
-      scoreboard = sort_scoreboard_values(scoreboard.values)
 
-      scoreboard
+      sort_scoreboard_values(scoreboard.values)
     end
 
     private
@@ -44,30 +44,26 @@ module Statistics
         .count
     end
 
-    def format_tagging_users(user_ids)
+    def create_scoreboard(user_ids)
       users = User.where(id: user_ids).pluck(:id, :username)
 
-      users.each_with_object({}) do |(user_id, username), users_hash|
-        users_hash[user_id] = { username: username }
+      users.each_with_object({}) do |(user_id, username), scoreboard|
+        scoreboard[user_id] = { username: username }
       end
     end
 
     def insert_user_counts(scoreboard, counts_by_user_id)
-      counts_by_user_id.each do |user_id, count|
-        scoreboard[user_id][:count] = count
+      counts_by_user_id.each_with_object(scoreboard) do |(user_id, count), local_scoreboard|
+        local_scoreboard[user_id][:count] = count
       end
-
-      scoreboard
     end
 
     def insert_user_ranks(scoreboard)
       sorted_scoreboard = scoreboard.sort_by { |_id, user| user[:count] }.reverse
 
-      sorted_scoreboard.each_with_index do |(id), i|
-        scoreboard[id][:rank] = i + 1
+      sorted_scoreboard.each_with_object(scoreboard).with_index do |((user_id), local_scoreboard), i|
+        local_scoreboard[user_id][:rank] = i + 1
       end
-
-      scoreboard
     end
 
     def sort_scoreboard_values(scoreboard_values)
