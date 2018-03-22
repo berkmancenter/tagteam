@@ -68,6 +68,7 @@ module TagsHelper
 
     options[:data_id] = context[:tag].id if context[:tag]
     options[:data_hub_id] = context[:hub].id
+    options[:tag_list] = context[:tag_list] if context[:tag_list]
 
     if context[:feed]
       path = hub_feed_tag_filters_path(context[:feed])
