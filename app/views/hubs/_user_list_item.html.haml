@@ -14,24 +14,24 @@
 .nicely-padded.scoreboard
   %h1 Scoreboard
   - if taggers.present?
-    %ul.nicely-padded.scoreboard
-      %li
-        .pull-left
-          %b
-            = link_to(sort: 'name') do
-              Taggers#{'&nbsp;&#9662;'.html_safe if @sort == 'name'}
-        .pull-right
-          %b
-            = link_to(sort: 'items') do
-              Items Tagged#{'&nbsp;&#9662;'.html_safe if @sort == 'items'}
-      - taggers.each do |tagger|
-        %li{ id: "tagger-#{tagger[:id]}" }
-          .media.pull-left
-            .pull-body
-              = tagger[:first_name]
-              = tagger[:last_name]
-          .pull-right
-            = tagger[:count]
+    %table.table
+      %th
+        = link_to(sort: 'rank') do
+          Rank#{'&nbsp;&#9662;'.html_safe if @sort == 'rank'}
+      %th
+        = link_to(sort: 'name') do
+          Taggers#{'&nbsp;&#9662;'.html_safe if @sort == 'name'}
+      %th
+        = link_to(sort: 'items') do
+          Items Tagged#{'&nbsp;&#9662;'.html_safe if @sort == 'items'}
+      - taggers.each do |tagger|    
+        %tr
+          %td
+            = tagger[:rank]
+          %td
+            = tagger[:username]
+          %td
+            = tagger[:count]    
   - else
     This hub currently has no scoreboard.
 
