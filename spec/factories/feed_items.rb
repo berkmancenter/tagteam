@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :feed_item do
     title 'Test Title'
+    date_published { Date.today }
     sequence(:url) { |n| "http://example.com/?tag=#{n}" }
 
     transient do

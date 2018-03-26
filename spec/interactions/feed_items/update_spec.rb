@@ -19,7 +19,8 @@ module FeedItems
         hub: hub,
         title: 'Example Title',
         url: 'http://www.example.com/',
-        user: user
+        user: user,
+        date_published: Date.today
       }
     end
   end

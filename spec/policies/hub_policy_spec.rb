@@ -14,7 +14,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to forbid_action(:add_roles) }
     it { is_expected.to permit_action(:all_items) }
     it { is_expected.to forbid_action(:background_activity) }
-    it { is_expected.to permit_action(:bookmark_collections) }
+    it { is_expected.to permit_action(:taggers) }
     it { is_expected.to permit_action(:by_date) }
     it { is_expected.to permit_action(:contact) }
     it { is_expected.to forbid_action(:create) }
@@ -52,7 +52,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:about) }
     it { is_expected.to permit_action(:all_items) }
     it { is_expected.to permit_action(:background_activity) }
-    it { is_expected.to permit_action(:bookmark_collections) }
+    it { is_expected.to permit_action(:taggers) }
     it { is_expected.to permit_action(:by_date) }
     it { is_expected.to permit_action(:contact) }
     it { is_expected.to permit_action(:create) }
@@ -140,7 +140,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:add_roles) }
     it { is_expected.to permit_action(:all_items) }
     it { is_expected.to permit_action(:background_activity) }
-    it { is_expected.to permit_action(:bookmark_collections) }
+    it { is_expected.to permit_action(:taggers) }
     it { is_expected.to permit_action(:by_date) }
     it { is_expected.to permit_action(:contact) }
     it { is_expected.to permit_action(:create) }
