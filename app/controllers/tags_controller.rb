@@ -127,7 +127,7 @@ class TagsController < ApplicationController
              ActsAsTaggableOn::Tag.find_by(id: params[:id])
            end
     unless @tag
-      flash.now[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
+      flash[:error] = "We're sorry, but '#{params[:id]}' is not a tag for '#{@hub.title}'"
 
       redirect_to hub_path(@hub)
     end
