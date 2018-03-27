@@ -64,6 +64,8 @@ class Hub < ApplicationRecord
     text :nickname
   end
 
+  SCOREBOARD = ['Past Day', 'Week', 'Month', 'Year']
+
   def feed_items
     FeedItem.joins(:hubs).where(hubs: { id: id })
   end

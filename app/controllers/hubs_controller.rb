@@ -194,7 +194,7 @@ class HubsController < ApplicationController
   def scoreboard
     @taggers = Statistics::Scoreboard.run!(hub: @hub,
       sort: @sort,
-      criteria: params[:criteria]
+      criteria: params[:criteria] || 'Year'
     )
 
     @taggers = SORT_OPTIONS[@sort].call(@taggers)
