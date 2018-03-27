@@ -25,7 +25,7 @@ xml.rss(
         xml.link item.url
         xml.guid item.guid
         xml.author item.authors
-        item.all_tags_on(@hub_feed.hub.tagging_key).each do|tag|
+        (item.all_tags_on(@hub_feed.hub.tagging_key) - @hub.deprecated_tags).each do|tag|
           xml.category (@hub_feed.hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub_feed.hub.tag_prefix)
         end
         unless item.rights.blank?
