@@ -1,0 +1,31 @@
+.hub-item-view.row
+  .col-md-offset-1.col-md-7.pagination-wrapper
+    = render partial: 'shared/paginate', object: taggers, as: :results
+  .alter-views.col-md-4.day-selction
+    = form_tag(scoreboard_hub_path(@hub.id), method: :get, class: 'criteria-selection') do
+      .form-group
+        = select_tag :criteria, options_for_select(Hub::SCOREBOARD, params[:criteria] || 'Year'), class: 'form-control', onchange: "$('.criteria-selection').submit();"
+
+.nicely-padded.scoreboard
+  %h1 Scoreboard
+  - if taggers.present?
+    %table.table
+      %th
+        = link_to(sort: 'rank') do
+          Rank#{'&nbsp;&#9662;'.html_safe if sort == 'rank'}
+      %th
+        = link_to(sort: 'name') do
+          Taggers#{'&nbsp;&#9662;'.html_safe if sort == 'name'}
+      %th
+        = link_to(sort: 'items') do
+          Items Tagged#{'&nbsp;&#9662;'.html_safe if sort == 'items'}
+      - taggers.each do |tagger|
+        %tr
+          %td
+            = tagger[:rank]
+          %td
+            = tagger[:username]
+          %td
+            = tagger[:count]
+  - else
+    This hub currently has no scoreboard.

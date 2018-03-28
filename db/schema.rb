@@ -186,6 +186,7 @@ ActiveRecord::Schema.define(version: 20180316092704) do
     t.string   "suggest_only_approved_tags"
     t.boolean  "notifications_mandatory",                             default: false, null: false
     t.boolean  "bookmarklet_empty_description_reminder"
+    t.boolean  "enable_tag_scoreboard",                               default: false
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree

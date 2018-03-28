@@ -90,6 +90,10 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
+  def scoreboard?
+    index?
+  end
+
   def settings?
     return false unless user.present?
 

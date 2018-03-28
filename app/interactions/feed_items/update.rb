@@ -12,7 +12,7 @@ module FeedItems
     object :user
 
     def execute
-      changes = detect_changes(feed_item, description, title, url)
+      changes = detect_changes(feed_item, description, title, url, )
 
       if feed_item.update(description: description, title: title, url: url)
         FeedItems::SendChangeNotificationJob.perform_later(

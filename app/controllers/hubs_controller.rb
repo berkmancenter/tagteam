@@ -22,7 +22,8 @@ class HubsController < ApplicationController
     :request_rights,
     :retrievals,
     :search,
-    :show
+    :show,
+    :scoreboard
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
@@ -64,8 +65,10 @@ class HubsController < ApplicationController
     :unapprove_tag,
     :deprecate_tag,
     :undeprecate_tag,
-    :unsubscribe_feed
+    :unsubscribe_feed,
+    :scoreboard
   ]
+  before_action :set_sort, only: :scoreboard
 
   protect_from_forgery except: :items
 
@@ -75,8 +78,12 @@ class HubsController < ApplicationController
     'date' => ->(rel) { rel.order('created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
     'number of items' => -> (rel) { rel.by_feed_items_count },
-    'most recent tagging' => ->(rel) { rel.by_most_recent_tagging }
+    'most recent tagging' => ->(rel) { rel.by_most_recent_tagging },
+    'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
+    'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
+    'items' => -> (rel) { rel.sort_by {|r| r[:count] } }
   }.freeze
+
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def about
@@ -182,6 +189,19 @@ class HubsController < ApplicationController
       format.html { render layout: request.xhr? ? false : 'tabs' }
       format.json { render json: @settings }
     end
+  end
+
+  def scoreboard
+    @taggers = Statistics::Scoreboard.run!(hub: @hub,
+      sort: @sort,
+      criteria: params[:criteria] || 'Year'
+    )
+
+    @taggers = SORT_OPTIONS[@sort].call(@taggers)
+
+    @taggers = @taggers.paginate(page: params[:page], per_page: get_per_page)
+
+    render layout: request.xhr? ? false : 'tabs'
   end
 
   def add_roles
@@ -873,5 +893,14 @@ class HubsController < ApplicationController
       flash[:error] = "Something went wrong, try again."
       redirect_to(hub_path(@hub))
     end
+  end
+
+  def set_sort
+    @sort =
+      if %w[name items rank].include?(params[:sort])
+        params[:sort]
+      else
+        'name'
+      end
   end
 end
