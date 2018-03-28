@@ -68,9 +68,8 @@ class HubsController < ApplicationController
     :unsubscribe_feed,
     :scoreboard
   ]
-  before_action :set_sort, only: :scoreboard
 
-  before_action :set_sort, only: :hub_admin
+  before_action :set_sort, only: [:hub_admin, :scoreboard]
 
   protect_from_forgery except: :items
 
@@ -87,6 +86,7 @@ class HubsController < ApplicationController
     'created_date' => ->(rel) { rel.order('created_at') },
     'updated_date' => ->(rel) { rel.order('updated_at') },
     'owners' => ->(rel) { rel.by_first_owner },
+    'id' => ->(rel) { rel.order(:id) }
   }.freeze
 
   SORT_DIR_OPTIONS = %w(asc desc).freeze
@@ -922,10 +922,11 @@ class HubsController < ApplicationController
   end
 
   def set_sort
-    @sort = if %w[name items rank id title owners created_date updated_date].include?(params[:sort])
-      params[:sort]
-    else
-      'id'
-    end
+    @sort =
+      if %w[id name items rank title owners created_date updated_date].include?(params[:sort])
+        params[:sort]
+      else
+        'name'
+      end
   end
 end
