@@ -1,14 +1,14 @@
 #users
-  #user_list
+  #user-list
     = render partial: 'shared/paginate', object: @hubs, as: :results
     %br
     .col-xs-2.selectContainer
-      %select.form-control#select-action{:name => "Action", :title => "Action"}
-        %option{:selected => "selected", :value => ""} Select Action
-        %option{:value => "Delete"} Delete
+      %select.form-control#select-action{ name: 'Action', title: 'Action' }
+        %option{ selected: 'selected', value: '' } Select Action
+        %option{ value: 'Delete' } Delete
     = link_to 'Apply', 'javascript:void(0)', class: 'btn btn-primary', id: 'bulk-action'
     %br
-        
+
     %table.table
       %thead
         %tr
@@ -23,7 +23,6 @@
           %th
             = link_to(sort: 'owners') do
               Owners#{'&nbsp;&#9662;'.html_safe if @sort == 'owners'}
-              
           %th
             = link_to(sort: 'created_date') do
               Created Date#{'&nbsp;&#9662;'.html_safe if @sort == 'created_date'}
@@ -72,7 +71,7 @@
             type: 'delete',
             data: { hub_ids: selected }
           });
-        }  
+        }
       }
     });
-  });  
+  });
