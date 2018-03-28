@@ -19,7 +19,6 @@ class HubFeed < ApplicationRecord
   belongs_to :hub
   belongs_to :feed
   has_many :feed_items, through: :feed
-  has_many :tag_filters, through: :feed_items
 
   before_validation do
     auto_sanitize_html(:description)
