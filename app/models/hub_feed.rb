@@ -192,11 +192,16 @@ class HubFeed < ApplicationRecord
     'Feed'
   end
 
+  def by_most_recent_tagging
+    if feed_items.any?
+      feed_items.first.date_published
+    else
+      feed.updated_at
+    end
+  end
+  
   def self.by_feed_items_count
     includes(:feed_items).sort_by{ |i| i.feed_items.size }
   end
 
-  def self.by_most_recent_tagging
-    includes(:tag_filters).sort_by{ |i| i.tag_filters.collect(&:created_at) }
-  end
 end

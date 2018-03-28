@@ -101,6 +101,7 @@ class HubsController < ApplicationController
     'title' => ->(rel) { rel.order('title') },
     'bookmark_collections_title' => ->(rel) { rel.sort_by { |hf| hf.title.downcase } },
     'date' => ->(rel) { rel.order('created_at') },
+    'date started' => ->(rel) { rel.order('created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
     'number of items' => -> (rel) { rel.by_feed_items_count },
     'most recent tagging' => ->(rel) { rel.by_most_recent_tagging },
