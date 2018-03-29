@@ -13,12 +13,12 @@ module Admin
       'id' => ->(rel) { rel.order(:id) }
     }.freeze
 
-    SORT_DIR_OPTIONS = %w(asc desc).freeze
+    SORT_DIR_OPTIONS = %w[asc desc].freeze
 
     def index
       authorize :admin_hub, :index?
       @order =  params[:order] || 'asc'
-      @sort =  params[:sort] || 'title'
+      @sort = params[:sort] || 'title'
 
       sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
       order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
@@ -34,10 +34,10 @@ module Admin
       if @hubs.destroy_all
         flash[:notice] = 'You have successfully destroyed the hub'
       else
-        flash[:error] = "Something went wrong, try again."
+        flash[:error] = 'Something went wrong, try again.'
       end
-      
-      render :js => "window.location.href = '#{admin_hubs_path}'"
+
+      render js: "window.location.href = '#{admin_hubs_path}'"
     end
   end
 end
