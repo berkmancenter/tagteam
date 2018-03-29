@@ -1,0 +1,67 @@
+#users
+  #user-list
+    = render partial: 'shared/paginate', object: @hubs, as: :results
+    %br
+    .col-xs-2.selectContainer
+      %select.form-control#select-action{ name: 'Action', title: 'Action' }
+        %option{ selected: 'selected', value: '' } Select Action
+        %option{ value: 'Delete' } Delete
+    = link_to 'Apply', 'javascript:void(0)', class: 'btn btn-primary', id: 'bulk-action'
+    %br
+    %table.table
+      %thead
+        %tr
+          %th
+            = check_box_tag 'all_id'
+          %th
+            \#{sortable_link('id', @sort, @order, 'admin_hubs_path')}
+          %th
+            \#{sortable_link('title', @sort, @order, 'admin_hubs_path')}
+          %th
+            \#{sortable_link('owners', @sort, @order, 'admin_hubs_path')}
+          %th
+            \#{sortable_link('created_date', @sort, @order, 'admin_hubs_path')}
+      %tbody
+        - @hubs.each do |hub|
+          %tr.user.hover_row
+            %td
+              = check_box_tag 'ids[]', hub.id
+            %td
+              = hub.id
+            %td
+              = truncate(hub.title, length: 150)
+            %td
+              = hub.owners.map(&:username).join(',')
+            %td
+              = hub.created_at.strftime('%Y-%m-%d %H:%M %p')            
+    = render partial: 'shared/paginate', object: @hubs, as: :results
+
+:javascript
+  $(document).ready(function(){
+    var selected = new Array();
+
+    $("[name='all_id']").click( function () {
+      $("[name='ids[]']").prop('checked', this.checked)
+    });
+
+    $('#bulk-action').on('click', function() {
+      if(!$('#select-action').val()){
+        alert('Please select an action');
+      } else if ($("[name='ids[]']:checked").length < 1){
+        alert('Please select at least one item');
+      } else{
+        $("[name='ids[]']:checked").each(function() {
+          selected.push($(this).val());
+        });
+
+        var confirmed = confirm("Are you sure?");
+        if(confirmed) {
+          $.ajax({
+            url: '/admin/hubs/:id',
+            type: 'delete',
+            data: { hub_ids: selected }
+          });
+        }
+      }
+    });
+  });

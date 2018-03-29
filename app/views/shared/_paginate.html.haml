@@ -1,13 +1,15 @@
 - show_per_page_select = true if local_assigns[:show_per_page_select].blank?
-= will_paginate results,
-  renderer: BootstrapPagination::Rails,
-  inner_window: 1,
-  outer_window: 0,
-  next_label: fa_icon('chevron-right'),
-  previous_label: fa_icon('chevron-left')
-- if results.total_pages > 1
-  %span.pagination-counts= page_entries_info results
-  - if show_per_page_select.present?
-    %span.pagination-per-page
-      = select_tag :per_page, options_for_select([25, 50, 100], params[:per_page].to_i || get_per_page),
-        onchange: "if(this.value){ window.location='?per_page='+this.value; }"
+%div.pagination-content
+  = will_paginate results,
+    renderer: BootstrapPagination::Rails,
+    inner_window: 1,
+    outer_window: 0,
+    next_label: fa_icon('chevron-right'),
+    previous_label: fa_icon('chevron-left')
+  %div.per-page-selection
+    - if results.total_pages > 1
+      %span.pagination-counts= page_entries_info results
+      - if show_per_page_select.present?
+        %span.pagination-per-page
+          = select_tag :per_page, options_for_select([25, 50, 100], params[:per_page].to_i || get_per_page),
+            onchange: "if(this.value){ window.location='?per_page='+this.value; }"

@@ -131,7 +131,6 @@ Rails.application.routes.draw do
       get 'background_activity'
       get 'all_items'
       get 'search'
-      get 'hub_admin'
       delete 'destroy_hubs', as: 'destroy_hubs'
     end
 
@@ -197,6 +196,7 @@ Rails.application.routes.draw do
     end
 
     resources :users, only: :index
+    resources :hubs, only: [:index, :destroy]
   end
   root 'hubs#home'
 end
