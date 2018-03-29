@@ -69,7 +69,7 @@ class HubsController < ApplicationController
     :scoreboard
   ]
 
-  before_action :set_sort, only: [:hub_admin, :scoreboard]
+  before_action :set_sort, only: :scoreboard
 
   protect_from_forgery except: :items
 
