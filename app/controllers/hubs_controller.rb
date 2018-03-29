@@ -68,6 +68,7 @@ class HubsController < ApplicationController
     :unsubscribe_feed,
     :scoreboard
   ]
+
   before_action :set_sort, only: :scoreboard
 
   protect_from_forgery except: :items
@@ -81,7 +82,11 @@ class HubsController < ApplicationController
     'most recent tagging' => ->(rel) { rel.by_most_recent_tagging },
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
     'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
-    'items' => -> (rel) { rel.sort_by {|r| r[:count] } }
+    'items' => -> (rel) { rel.sort_by {|r| r[:count] } },
+    'created_date' => ->(rel) { rel.order('created_at') },
+    'updated_date' => ->(rel) { rel.order('updated_at') },
+    'owners' => ->(rel) { rel.by_first_owner },
+    'id' => ->(rel) { rel.order(:id) }
   }.freeze
 
   SORT_DIR_OPTIONS = %w(asc desc).freeze
@@ -897,7 +902,7 @@ class HubsController < ApplicationController
 
   def set_sort
     @sort =
-      if %w[name items rank].include?(params[:sort])
+      if %w[id name items rank title owners created_date updated_date].include?(params[:sort])
         params[:sort]
       else
         'name'

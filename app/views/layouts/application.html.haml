@@ -27,6 +27,8 @@
               - if policy(:admin_home).index?
                 %li{ class: ('active' if controller.class.parent == Admin) }
                   = link_to('Admin', admin_users_path)
+                %li{class: (current_page?(admin_hubs_path) ? 'active' : '')}
+                  = link_to('Hub Admin', admin_hubs_path)
               - if user_signed_in?
                 %li{class: (current_page?(export_import_path) ? 'active' : '')}
                   = link_to('Export/import', export_import_path)
