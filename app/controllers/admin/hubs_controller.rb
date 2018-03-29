@@ -29,13 +29,15 @@ module Admin
 
     def destroy
       authorize :admin_hub, :index?
-
       @hubs = Hub.where(id: params[:hub_ids])
 
       if @hubs.destroy_all
         flash[:notice] = 'You have successfully destroyed the hub'
-        render :js => "window.location.href = '#{admin_hubs_path}'"
+      else
+        flash[:error] = "Something went wrong, try again."
       end
+      
+      render :js => "window.location.href = '#{admin_hubs_path}'"
     end
   end
 end

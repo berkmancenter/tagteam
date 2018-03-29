@@ -876,27 +876,6 @@ class HubsController < ApplicationController
     return redirect_to settings_hub_path(@hub)
   end
 
-  def hub_admin
-    authorize Hub
-
-    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
-    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
-
-    @hubs = SORT_OPTIONS[sort].call(policy_scope(Hub)).paginate(page: params[:page], per_page: get_per_page)
-    @hubs = @hubs.reverse_order if order == 'desc'
-  end
-
-  def destroy_hubs
-    authorize Hub
-
-    @hubs = Hub.where(id: params[:hub_ids])
-
-    if @hubs.destroy_all
-      flash[:notice] = 'You have successfully destroyed the hub'
-      render :js => "window.location.href = '#{hub_admin_hubs_path}'"
-    end
-  end
-
   private
 
   def sanitize_params
