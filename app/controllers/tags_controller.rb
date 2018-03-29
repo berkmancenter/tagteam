@@ -3,7 +3,8 @@ class TagsController < ApplicationController
   before_action :load_hub
   before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
-  before_action :load_feed_items, only: [:show, :statistics]
+  before_action :load_feed_items, only: :statistics
+  before_action :fetch_feed_items, only: :show
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
@@ -195,6 +196,18 @@ class TagsController < ApplicationController
   def load_feed_items_for_rss
     @feed_items = FeedItem.tagged_with(@tag.name, on: @hub.tagging_key)
                           .limit(50).order('date_published DESC, created_at DESC')
+  end
+
+  def fetch_feed_items
+    @feed_items = if @hub.deprecated_tags.map(&:name).include?(@tag.name)
+      []  
+    else
+      FeedItem
+      .tagged_with(@tag.name, on: @hub.tagging_key)
+      .uniq
+      .order(date_published: :desc, created_at: :desc)
+    end
+    @feed_items = @feed_items.paginate(page: params[:page], per_page: get_per_page)
   end
 
   def load_feed_items
