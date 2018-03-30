@@ -1,6 +1,6 @@
 %ul.nav.nav-tabs
-  -# %li{ role: 'presentation', class: ('active' if controller_name == 'home') }
-    -# = link_to 'Admin Home', admin_root_path
+  %li{ role: 'presentation', class: ('active' if controller_name == 'home') }
+    = link_to 'Settings', admin_root_path
   %li{ role: 'presentation', class: ('active' if controller_name == 'users') }
     = link_to 'Users', admin_users_path
   %li{ role: 'presentation', class: ('active' if controller_name == 'user_approvals') }

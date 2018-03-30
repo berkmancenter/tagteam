@@ -196,7 +196,8 @@ Rails.application.routes.draw do
     end
 
     resources :users, only: :index
-    resources :hubs, only: [:index, :destroy]
+    resources :hubs, only: %i[index destroy]
+    resources :settings, only: %i[new create update]
   end
   root 'hubs#home'
 end

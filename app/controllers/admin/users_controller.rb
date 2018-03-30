@@ -10,7 +10,7 @@ module Admin
     def index
       authorize User
 
-      breadcrumbs.add 'Admin', admin_users_path
+      breadcrumbs.add 'Admin', admin_root_path
       breadcrumbs.add 'Users', admin_users_path
 
       @users =

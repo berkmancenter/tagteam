@@ -11,7 +11,7 @@ module Admin
     def index
       authorize :user_approval
 
-      breadcrumbs.add 'Admin', admin_users_path
+      breadcrumbs.add 'Admin', admin_root_path
       breadcrumbs.add 'User Approvals', admin_user_approvals_path
 
       @unapproved_users = User.unapproved

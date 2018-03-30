@@ -4,6 +4,8 @@
   %p The TagTeam project is open source and you're free to host an instance of TagTeam elsewhere: #{link_to('https://github.com/berkmancenter/tagteam')}
   %p If signing up with a non-.edu address, please tell us in 1-2 sentences something about the academic or research project you'd like to join or create on the Harvard instance of TagTeam.
   %p
+    = @setting&.signup_description
+  %p
     %strong Note:
     You will need to confirm your TagTeam account via a link sent to the email address you enter below.
   %p.text-danger
@@ -31,7 +33,8 @@
       = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control'
     .form-group
       = f.label :signup_reason do
-        Reason for signup <em>(optional for .edu users)</em>
+        Reason for signup <em>(optional for whitelisted</em><em data-toggle="tooltip" title="Optional for #{ @setting.present? && @setting.whitelisted_domains.present? ? @setting.whitelisted_domains.join(', ') : '.edu'} domains"> * </em><em>domains)</em>
+
       = f.text_area :signup_reason, class: 'form-control noEditor'
     .form-group
       %label Terms of Service
@@ -45,3 +48,8 @@
       = f.submit 'Sign up', class: 'btn btn-success btn-block'
   %hr/
   = render 'devise/shared/links'
+
+:javascript
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });

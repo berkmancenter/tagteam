@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
   validates :terms_of_service, acceptance: true
-  validates :signup_reason, presence: true, unless: 'edu_email?', on: :create
+  validates :signup_reason, presence: true, unless: 'whitelisted_domains?', on: :create
 
   # automatically approve .edu signups
   before_create { self.approved = edu_email? }
@@ -154,6 +154,18 @@ class User < ApplicationRecord
     @role_cache = {}
     roles.each do |r|
       @role_cache["#{r.authorizable_type}-#{r.authorizable_id}-#{r.name}"] = 1
+    end
+  end
+
+  def whitelisted_domains?
+    setting = Admin::Setting.first
+
+    # TODO create edu domain as default whitelisted_domains
+    if setting.present? && setting.whitelisted_domains.present?
+      domain = Mail::Address.new(email).domain
+      setting.whitelisted_domains.include?(domain)
+    else
+      edu_email?
     end
   end
 end

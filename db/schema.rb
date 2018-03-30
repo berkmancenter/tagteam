@@ -15,6 +15,12 @@ ActiveRecord::Schema.define(version: 20180316092704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "admin_settings", force: :cascade do |t|
+    t.text   "signup_description"
+    t.string "whitelisted_domains"
+    t.string "blacklisted_domains"
+  end
+
   create_table "deactivated_taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -185,8 +191,8 @@ ActiveRecord::Schema.define(version: 20180316092704) do
     t.string   "official_tag_prefix"
     t.string   "suggest_only_approved_tags"
     t.boolean  "notifications_mandatory",                             default: false, null: false
-    t.boolean  "bookmarklet_empty_description_reminder"
     t.boolean  "enable_tag_scoreboard",                               default: false
+    t.boolean  "bookmarklet_empty_description_reminder"
     t.index ["slug"], name: "index_hubs_on_slug", using: :btree
     t.index ["tag_prefix"], name: "index_hubs_on_tag_prefix", using: :btree
     t.index ["title"], name: "index_hubs_on_title", using: :btree

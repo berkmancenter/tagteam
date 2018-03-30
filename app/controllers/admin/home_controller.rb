@@ -11,6 +11,8 @@ module Admin
       authorize :admin_home, :index?
 
       breadcrumbs.add 'Admin Home', admin_root_path
+
+      @setting = Admin::Setting.first_or_initialize
     end
   end
 end
