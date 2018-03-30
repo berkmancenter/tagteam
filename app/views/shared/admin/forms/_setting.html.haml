@@ -2,8 +2,8 @@
   = f.inputs do
     %br/
     = f.input :signup_description, as: :text, input_html: { class: 'noEditor', rows: 4 }
-    = f.input :whitelisted_domains, hint: 'Please enter , separated domain names', input_html: { value: setting.whitelisted_domains.join(',') }
-    = f.input :blacklisted_domains, hint: 'Please enter , separated domain names', input_html: { value: setting.blacklisted_domains.join(',') }
+    = f.input :whitelisted_domains, hint: 'Please enter comma-separated domain names', input_html: { value: setting.whitelisted_domains.join(',') }
+    = f.input :blacklisted_domains, hint: 'Please enter comma-separated domain names', input_html: { value: setting.blacklisted_domains.join(',') }
   .text-center
     = f.actions do
       = f.action :submit, as: :button, label: 'submit',
