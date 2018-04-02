@@ -93,6 +93,7 @@ class HubsController < ApplicationController
     team
     update
   ]
+  before_action :authorize_user, only: :settings
 
   protect_from_forgery except: :items
 
@@ -895,5 +896,11 @@ class HubsController < ApplicationController
       request.remote_ip,
       request.user_agent
     )
+  end  
+
+  def authorize_user
+    unless current_user.has_role?(:superadmin) || current_user.has_role?(:owner, @hub)
+      raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
+    end
   end
 end
