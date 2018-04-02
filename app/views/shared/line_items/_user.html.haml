@@ -27,3 +27,5 @@
         resend_unlock_token_user_path(user),
         method: :post,
         confirm: 'Resend unlock email to user?'
+  %td
+    = user.created_at.try { |u| u.strftime('%Y-%m-%d %H:%M %p') }
