@@ -68,7 +68,7 @@ th, dt, b, strong, label {
 
     &:hover {
       background-color: $gray-lighter;
-      
+
       > a {
         &.doc-control {
           .fa {
@@ -187,7 +187,7 @@ th, dt, b, strong, label {
   border-left: $arrow-width solid $brand-primary;
   display: none;
   z-index: 10;
-  
+
   &:before {
     content: " ";
     height: $pill-height - 3;
@@ -217,7 +217,7 @@ th, dt, b, strong, label {
       padding-bottom: 2*$padding-large-vertical;
       margin-bottom: 2*$padding-large-vertical;
       margin-top: 6*$padding-large-vertical;
-      
+
       &:first-child {
         margin-top: 2*$padding-large-vertical;
       }
@@ -355,7 +355,7 @@ th, dt, b, strong, label {
 
 .pagination {
   > li {
-    > span, a { 
+    > span, a {
       > .fa {
         vertical-align: bottom;
         color: $gray-lightish;
@@ -423,7 +423,7 @@ body > .container {
 
   div.row.export-formats {
     margin-top: 0.8em;
-    
+
     div {
       padding: 0 0.4em;
       text-align: center;
