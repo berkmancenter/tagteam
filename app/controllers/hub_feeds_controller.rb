@@ -68,7 +68,9 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
+    type = params[:type] == 'Unsubscribed'
+    @hub_feeds = @hub.hub_feeds.joins(:feed).where("feeds.unsubscribe = ? ", type).rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
+
     add_breadcrumbs
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }

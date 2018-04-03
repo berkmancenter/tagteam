@@ -549,10 +549,10 @@ class HubsController < ApplicationController
 
     if @feed.save
       flash[:notice] = 'You have unsubscribed from the feed'
-      redirect_to(hub_path(@hub))
+      redirect_to(hub_hub_feeds_path(@hub))
     else
       flash[:error] = "Something went wrong, try again."
-      redirect_to(hub_path(@hub))
+      redirect_to(hub_hub_feeds_path(@hub))
     end
   end
 
