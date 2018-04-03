@@ -90,7 +90,7 @@ class BookmarkletsController < ApplicationController
 
         new_tags -= @hub.deprecated_tag_names
 
-        new_tags.map!{|tag| tag.gsub(',', '.')}
+        new_tags.map! { |tag| tag.tr(',', '.') }
 
         new_tags.map do |tag|
           ActsAsTaggableOn::Tag.normalize_name(tag)
