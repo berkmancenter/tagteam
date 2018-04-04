@@ -11,11 +11,11 @@
           id: 'tags_delimiter',
           class: 'form-control',
           maxlength: '1')
-        TagTeam will split tags on
+        TagTeam will split tags on the delimiters
         %span.badge ,
-        and
-        %span.badge (&nbsp;&nbsp)
-        \. Tags entered in a list with either of these two characters separating them will be treated as separate tags.
+        (comma) and
+        %span.badge ⎵
+        \(space), in addition to any specified delimiters shown below. Tags entered in a list with any of the delimiters will be treated as separate tags.
 
       %h2
         - if hub.tags_delimiter.present? && settings[:tags_delimiter].present?
