@@ -3,27 +3,21 @@
 = render('admin/shared/nav_menu')
 
 #users
-  #user_list
+  #user-list
     = render partial: 'shared/paginate', object: @users, as: :results
+
     %table.table
       %thead
         %tr
           %th
-          %th
-            = link_to(sort: 'username') do
-              User#{'&nbsp;&#9662;'.html_safe if @sort == 'username'}
-          %th
-            = link_to(sort: 'owned_hubs') do
-              Owns#{'&nbsp;&#9662;'.html_safe if @sort == 'owned_hubs'}
-          %th
-            = link_to(sort: 'application_roles') do
-              App&#8209;wide&nbsp;rights#{'&nbsp;&#9662;'.html_safe if @sort == 'application_roles'}
-          %th
-            = link_to(sort: 'confirmed') do
-              Confirmed?#{'&nbsp;&#9662;'.html_safe if @sort == 'confirmed'}
-          %th
-            = link_to(sort: 'locked') do
-              Locked?#{'&nbsp;&#9662;'.html_safe if @sort == 'locked'}
+          %th= sortable_link('username', @sort, @order, 'admin_users_path')
+          %th= sortable_link('owned hubs', @sort, @order, 'admin_users_path')
+          %th= sortable_link('application roles', @sort, @order, 'admin_users_path')
+          %th= sortable_link('confirmed', @sort, @order, 'admin_users_path')
+          %th= sortable_link('locked', @sort, @order, 'admin_users_path')
+          %th.date= sortable_link('last sign in at', @sort, @order, 'admin_users_path')
+          %th.date= sortable_link('date account created', @sort, @order, 'admin_users_path')
       %tbody
         = render partial: 'shared/line_items/user', collection: @users
+
     = render partial: 'shared/paginate', object: @users, as: :results

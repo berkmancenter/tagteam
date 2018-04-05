@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module HubsHelper
   def limit_html(html, limit)
     require 'nokogiri'
@@ -8,9 +9,11 @@ module HubsHelper
 
   def sortable_link(name, sort, order, path = 'hubs_path')
     has_name_and_asc = ((sort == name) && (order == 'asc'))
+    display_name = name.capitalize.to_s
+    display_name += '?' if %w[locked confirmed].include?(name)
     link_to method(path).call(order: (has_name_and_asc ? 'desc' : 'asc'), sort: name),
             class: sort == name ? 'active text-primary' : '' do
-      raw "#{name.capitalize} #{fa_icon('caret-' + (has_name_and_asc || sort != name ? 'down' : 'up'))}"
+      raw "#{display_name} #{fa_icon('caret-' + (has_name_and_asc || sort != name ? 'down' : 'up'))}"
     end
   end
 

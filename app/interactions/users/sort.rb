@@ -5,19 +5,24 @@ module Users
   class Sort < ActiveInteraction::Base
     array :users
     string :sort_method
+    string :order
 
     def execute
       case sort_method
-      when 'application_roles'
+      when 'application roles'
         sort_by_application_roles
       when 'confirmed'
         sort_by_virtual_attribute('confirmed?')
       when 'locked'
         sort_by_virtual_attribute('access_locked?')
-      when 'owned_hubs'
+      when 'owned hubs'
         sort_by_owned_hubs
       when 'username'
         users.sort_by { |user| user.username.downcase }
+      when 'last sign in at'
+        users.order(last_sign_in_at: :asc)
+      when 'date account created'
+        users.order(created_at: :asc)
       end
     end
 
