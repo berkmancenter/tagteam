@@ -13,9 +13,9 @@
           %th= sortable_link('username', @sort, @order, 'admin_users_path')
           %th= sortable_link('owned hubs', @sort, @order, 'admin_users_path')
           %th= sortable_link('application roles', @sort, @order, 'admin_users_path')
-          %th.date= sortable_link('last sign in at', @sort, @order, 'admin_users_path')
           %th= sortable_link('confirmed', @sort, @order, 'admin_users_path')
           %th= sortable_link('locked', @sort, @order, 'admin_users_path')
+          %th.date= sortable_link('last sign in at', @sort, @order, 'admin_users_path')
           %th.date= sortable_link('date account created', @sort, @order, 'admin_users_path')
       %tbody
         = render partial: 'shared/line_items/user', collection: @users
