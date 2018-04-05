@@ -1,0 +1,13 @@
+#user-list {
+  td {
+    max-width: 300px;
+  }
+
+  th {
+    min-width: 135px;
+
+    &.date {
+      min-width: 165px;
+    }
+  }
+}
