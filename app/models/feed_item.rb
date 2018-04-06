@@ -263,8 +263,8 @@ class FeedItem < ApplicationRecord
     User.where(id: user_ids).pluck(:username)
   end
 
-  def applied_tags
-    all_tags_on(@hub.tagging_key).map(&:name).join(', ')
+  def applied_tags(hub)
+    all_tags_on(hub.tagging_key).map(&:name).join(', ')
   end
 
   private

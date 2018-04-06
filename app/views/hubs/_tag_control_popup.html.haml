@@ -8,10 +8,10 @@
   \:
   %ul
     - if hub_filter_possible?(params, current_user)
-      %li= link_to_tag_filter 'all items in this hub', type, { hub: @hub, tag: @tag,  tag_list: @feed_item.applied_tags }
+      %li= link_to_tag_filter 'all items in this hub', type, { hub: @hub, tag: @tag, tag_list: @feed_item.applied_tags(@hub) }
     - if feed_filter_possible?(params, current_user)
       %li
         = link_to_tag_filter 'all items in this feed', type,
-          { hub: @hub, feed: @hub_feed, tag: @tag, tag_list: @feed_item.applied_tags }
+          { hub: @hub, feed: @hub_feed, tag: @tag, tag_list: @feed_item.applied_tags(@hub) }
     - if item_filter_possible?(params, current_user) && type != :add
-      %li= link_to_tag_filter 'just this item', type, { hub: @hub, item: @feed_item, tag: @tag, tag_list: @feed_item.applied_tags }
+      %li= link_to_tag_filter 'just this item', type, { hub: @hub, item: @feed_item, tag: @tag, tag_list: @feed_item.applied_tags(@hub) }
