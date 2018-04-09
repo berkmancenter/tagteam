@@ -145,6 +145,10 @@ class User < ApplicationRecord
     roles.where(authorizable_type: nil).order(:name)
   end
 
+  def superadmin?
+    has_role?(:superadmin)
+  end
+
   protected
 
   def gen_role_cache

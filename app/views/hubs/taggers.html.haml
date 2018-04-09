@@ -14,12 +14,12 @@
 
   .hub_feeds.nicely-padded
     %h1
-      - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub))
+      - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub) || current_user.superadmin?)
         .pull-right
-          = link_to new_hub_feed_path(hub_id: @hub.id), class: 'btn btn-success new_object' do
+          = link_to new_hub_feed_path(hub_id: @hub.id), class: 'btn btn-success new_objec' do
             = fa_icon 'plus-circle', text: 'New bookmark collection'
-      Tagger collections
-    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub))
+      Bookmark collections
+    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub) || current_user.superadmin?)
       %p.info
         You can use a bookmarklet to add pages directly to your bookmark collections.
         Drag the

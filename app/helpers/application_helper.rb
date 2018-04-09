@@ -30,12 +30,10 @@ module ApplicationHelper
   def page_title(tag = nil)
     if tag.present?
       "TagTeam :: Tag Library for #{tag}"
+    elsif breadcrumbs.items.length == 1
+      'TagTeam'
     else
-      if breadcrumbs.items.length == 1
-        'TagTeam'
-      else
-        "TagTeam :: #{breadcrumbs.items.collect { |i| i[0] }.reject { |i| i == 'Home' }.reverse.flatten.compact.join(' - ')}"
-      end
+      "TagTeam :: #{breadcrumbs.items.collect { |i| i[0] }.reject { |i| i == 'Home' }.reverse.flatten.compact.join(' - ')}"
     end
   end
 

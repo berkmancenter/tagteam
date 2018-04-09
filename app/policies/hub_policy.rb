@@ -96,9 +96,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def settings?
-    return false if user.blank?
-
-    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+    owner_or_admin?
   end
 
   def remove_roles?
