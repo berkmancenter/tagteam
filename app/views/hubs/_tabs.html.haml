@@ -29,7 +29,7 @@
   = documentation('hub-wide-feed-retrievals-list')
   = link_to('History', retrievals_hub_path(@hub))
   .nav-pill-arrow
-- if user_access?(current_user, @hub)
+- if policy(:hub).team?
   %li{ class: "#{'active' if active == 'team'}" }
     = documentation('hub-team')
     = link_to('Team', team_hub_path(@hub))
@@ -51,7 +51,7 @@
   = documentation('hub_about')
   = link_to('About', about_hub_path(@hub))
   .nav-pill-arrow
-- if user_access?(current_user, @hub)
+- if policy(:hub).settings?
   %li{ class: "#{'active' if active == 'settings'}" }
     = documentation('hub-settings')
     = link_to('Settings', settings_hub_path(@hub))

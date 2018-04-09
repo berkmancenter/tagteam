@@ -73,8 +73,4 @@ module ApplicationHelper
     whitelist = [%w[hubs home]]
     whitelist.include? [controller_name, action_name]
   end
-
-  def user_access?(user, hub)
-    user && (user.is?(:owner, hub) || user.superadmin?)
-  end
 end
