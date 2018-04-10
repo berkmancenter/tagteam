@@ -3,5 +3,5 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'scoreboard' }
 - content_for :tab_content do
-  - cache("hub-scoreboard-#{@hub.try(:id)}", :expires => 6.hours ) do
-    = render partial: 'user_list_item', locals: { taggers: @taggers, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path' }
+  - cache("hub-scoreboard-#{@hub.try(:id)}", expires: 6.hours) do
+    = render partial: 'user_list_item', locals: { taggers: @taggers, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }

@@ -202,7 +202,11 @@ class HubsController < ApplicationController
       criteria: params[:criteria] || 'Year'
     )
 
+    @order =  params[:order] || 'asc'
+
     @taggers = SORT_OPTIONS[@sort].call(@taggers)
+
+    @taggers = @taggers.reverse if @order == 'desc'
 
     @taggers = @taggers.paginate(page: params[:page], per_page: get_per_page)
 
