@@ -13,7 +13,7 @@
         = f.inputs do
           = f.input :name, required: false
           = f.input :email, input_html: { value: (current_user.blank? ? '' : current_user.email) }
-          = f.input :reason, required: false, as: :select, collection: [%w(Question question),
+          = f.input :reason, required: false, as: :select, collection: [%w[Question question],
             ['Bug report', 'bug'],
             ['Broken feed', 'broken feed'],
             ['Feed suggestion', 'feed suggestion'],
@@ -34,6 +34,8 @@
               'Input feed manager',
               'Statistics viewer']
           = f.input :message, as: :text, input_html: { rows: 8 }
+          = recaptcha_tags
+          %br
         = f.actions do
           = f.action :submit, as: :button, label: 'Submit', button_html: { class: 'btn btn-primary' }
     :javascript
