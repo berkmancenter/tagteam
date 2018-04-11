@@ -31,6 +31,7 @@ gem 'protected_attributes_continued', '~> 1.3' # TODO: switch to strong paramete
 gem 'pundit', '~> 1.1'
 gem 'rails', '~> 5.1.0' # @drg frozen
 gem 'rails-observers', '~> 0.1'
+gem 'recaptcha'
 gem 'redis-namespace', '~> 1.6'
 gem 'sanitize', '~> 4.6'
 gem 'sass-rails', '~> 5.0'

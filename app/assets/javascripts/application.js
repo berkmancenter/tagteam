@@ -54,6 +54,7 @@
           modal: true
           }).dialog({modal: true, width: 700, height: 'auto'}).dialog('open');
         }
+        grecaptcha.reset();
     },
     initPerPage: function(){
       $('.per_page_selector').val($.cookie('per_page') || 25);

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
+  include Recaptcha::Verify
+
   caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
@@ -137,6 +139,9 @@ class HubsController < ApplicationController
   def request_rights
     breadcrumbs.add @hub, hub_path(@hub)
     @errors = ''
+
+    @errors += 'reCAPTCHA verification failed <br/>' unless verify_recaptcha
+    
     if params[:contact][:email].nil? || params[:contact][:email] !~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
       @errors += 'Email address is invalid<br/>'
     end
