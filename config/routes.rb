@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   end
   resources :input_source
 
-  resources :hub_feeds do
+  resources :hub_feeds, except: :new do
     collection do
       get 'autocomplete'
     end
