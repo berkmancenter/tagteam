@@ -20,6 +20,9 @@ module Admin
       @order =  params[:order] || 'asc'
       @sort = params[:sort] || 'title'
 
+      breadcrumbs.add 'Admin', admin_root_path
+      breadcrumbs.add 'Hubs', admin_hubs_path
+
       sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
       order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 

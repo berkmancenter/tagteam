@@ -1,3 +1,7 @@
+%h1 Hubs
+
+= render('admin/shared/nav_menu')
+
 #users
   #user-list
     = render partial: 'shared/paginate', object: @hubs, as: :results
@@ -11,16 +15,11 @@
     %table.table
       %thead
         %tr
-          %th
-            = check_box_tag 'all_id'
-          %th
-            \#{sortable_link('id', @sort, @order, 'admin_hubs_path')}
-          %th
-            \#{sortable_link('title', @sort, @order, 'admin_hubs_path')}
-          %th
-            \#{sortable_link('owners', @sort, @order, 'admin_hubs_path')}
-          %th
-            \#{sortable_link('created_date', @sort, @order, 'admin_hubs_path')}
+          %th= check_box_tag 'all_id'
+          %th= sortable_link('id', @sort, @order, 'admin_hubs_path')
+          %th= sortable_link('title', @sort, @order, 'admin_hubs_path')
+          %th= sortable_link('owners', @sort, @order, 'admin_hubs_path')
+          %th= sortable_link('created_date', @sort, @order, 'admin_hubs_path')
       %tbody
         - @hubs.each do |hub|
           %tr.user.hover_row
@@ -33,7 +32,7 @@
             %td
               = hub.owners.map(&:username).join(',')
             %td
-              = hub.created_at.strftime('%Y-%m-%d %H:%M %p')            
+              = hub.created_at.strftime('%Y-%m-%d %H:%M %p')
     = render partial: 'shared/paginate', object: @hubs, as: :results
 
 :javascript
