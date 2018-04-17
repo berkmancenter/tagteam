@@ -84,13 +84,15 @@ class BookmarkletsController < ApplicationController
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
 
+        params[:feed_item][:tag_list] = params[:feed_item][:tag_list].split(',').join('.')
+
         new_tags = TagFilterHelper.split_tags(
           params[:feed_item][:tag_list], @hub
         )
 
-        new_tags -= @hub.deprecated_tag_names
+        new_tags = trim_tags(new_tags)
 
-        new_tags.map! { |tag| tag.tr(',', '.') }
+        new_tags -= @hub.deprecated_tag_names
 
         new_tags.map do |tag|
           ActsAsTaggableOn::Tag.normalize_name(tag)
@@ -159,5 +161,16 @@ class BookmarkletsController < ApplicationController
 
   def load_feed
     @feed = Feed.find(params[:feed_id])
+  end
+
+  def trim_tags(tags)
+    processed_tags = []
+
+    tags.map do |tag|
+      new_tag = tag.chomp('.') if tag.end_with?('.')
+      new_tag = tag[1..-1] if tag.start_with?('.')
+      processed_tags << (new_tag.present? ? new_tag : tag)
+    end
+    processed_tags
   end
 end
