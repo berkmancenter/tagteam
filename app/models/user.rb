@@ -165,11 +165,9 @@ class User < ApplicationRecord
     setting = Admin::Setting.first
 
     # TODO create edu domain as default whitelisted_domains
-    if setting.present? && setting.whitelisted_domains.present?
-      domain = Mail::Address.new(email).domain
-      setting.whitelisted_domains.include?(domain)
-    else
-      edu_email?
-    end
+    return true unless setting&.whitelisted_domains.present?
+    
+    domain = Mail::Address.new(email).domain
+    setting.whitelisted_domains.include?(domain)
   end
 end
