@@ -81,6 +81,7 @@ group :test do
   gem 'headless', '~> 2.3'
   gem 'launchy', '~> 2.4'
   gem 'pundit-matchers', '~> 1.6'
+  gem 'rails-controller-testing', '~> 1.0.2'
   gem 'selenium-client', '~> 1.2'
   gem 'selenium-webdriver', '~> 3.12'
   gem 'shoulda-matchers', '~> 3.1'
