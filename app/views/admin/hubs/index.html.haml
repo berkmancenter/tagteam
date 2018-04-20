@@ -4,7 +4,8 @@
 
 #users
   #user-list
-    = render partial: 'shared/paginate', object: @hubs, as: :results
+    #admin-pagination
+      = render partial: 'shared/paginate', object: @hubs, as: :results
     %br
     .col-xs-2.selectContainer
       %select.form-control#select-action{ name: 'Action', title: 'Action' }
