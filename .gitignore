@@ -15,7 +15,7 @@ log/
 nginx/
 pgsql/
 redis/
-solr/data/*
+solr/*/data/
 solr/pids/
 ./tags
 tmp/
