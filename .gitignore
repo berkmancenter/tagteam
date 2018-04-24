@@ -3,7 +3,7 @@
 .DS_Store
 .bundle
 .rvmrc
-bin
+bin/camp-restart-hook.sh
 config/initializers/tagteam_shared_key.rb
 config/database.yml
 config/sunspot.yml
