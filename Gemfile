@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 ruby '2.3.0'
 
-gem 'acl9', git: 'https://github.com/be9/acl9.git', branch: 'finalist-update-rails'
+gem 'acl9', '~> 3.1'
 gem 'actionpack-action_caching', '~> 1.2'
 gem 'active_interaction', '~> 3.5'
 gem 'acts-as-taggable-on', '~> 4.0'

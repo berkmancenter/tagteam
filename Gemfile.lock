@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/be9/acl9.git
-  revision: 96797dbb6b85131e9a1d98f4b0fa2d3b6b16f6b7
-  branch: finalist-update-rails
-  specs:
-    acl9 (2.1.1)
-      rails (>= 4.0.0, < 5.1)
-
-GIT
   remote: https://github.com/mjbellantoni/formtastic-bootstrap.git
   revision: cececb84e631b08e5b7ff8504d612f7941afcdd3
   specs:
@@ -23,6 +15,8 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    acl9 (3.1.0)
+      rails (~> 5.0)
     actioncable (5.0.3)
       actionpack (= 5.0.3)
       nio4r (>= 1.2, < 3.0)
@@ -413,7 +407,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acl9!
+  acl9 (~> 3.1)
   actionpack-action_caching (~> 1.2)
   active_interaction (~> 3.5)
   acts-as-taggable-on (~> 4.0)
@@ -485,4 +479,4 @@ RUBY VERSION
    ruby 2.3.0p0
 
 BUNDLED WITH
-   1.15.4
+   1.16.1
