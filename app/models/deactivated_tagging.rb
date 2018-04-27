@@ -18,7 +18,7 @@ class DeactivatedTagging < ApplicationRecord
     tagging_attrs = attributes.except('deactivator_id', 'deactivator_type')
 
     tagging_hash = {}
-    %w[taggable_type taggable_id tagger_type tagger_id context tag_id].each do |attribute|
+    %w[id taggable_type taggable_id tagger_type tagger_id context tag_id].each do |attribute|
       tagging_hash[attribute] = tagging_attrs[attribute]
     end
 
