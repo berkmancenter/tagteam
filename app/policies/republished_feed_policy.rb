@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 class RepublishedFeedPolicy < ApplicationPolicy
   def create?
-    return false unless user.present?
+    return false if user.blank?
+    return true if user.has_role?(:superadmin)
+    return false if record.hub.blank?
 
-    user.has_role?(:superadmin) ||
-      user.has_role?(:owner, record.hub) ||
-      user.has_role?(:remixer, record.hub)
+    user.has_role?(:owner, record.hub) || user.has_role?(:remixer, record.hub)
   end
 
   def destroy?
-    return false unless user.present?
+    return false if user.blank?
+    return true if user.has_role?(:superadmin)
+    return true if user.has_role?(:owner, record)
 
-    user.has_role?(:superadmin) ||
-      user.has_role?(:owner, record.hub) ||
-      user.has_role?(:owner, record)
+    record.hub.present? && user.has_role?(:owner, record.hub)
   end
 
   def inputs?
@@ -33,10 +33,10 @@ class RepublishedFeedPolicy < ApplicationPolicy
   end
 
   def update?
-    return false unless user.present?
+    return false if user.blank?
+    return true if user.has_role?(:superadmin)
+    return true if user.has_role?(:owner, record)
 
-    user.has_role?(:superadmin) ||
-      user.has_role?(:owner, record.hub) ||
-      user.has_role?(:owner, record)
+    record.hub.present? && user.has_role?(:owner, record.hub)
   end
 end
