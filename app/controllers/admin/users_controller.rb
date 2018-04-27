@@ -16,7 +16,7 @@ module Admin
       breadcrumbs.add 'Admin', admin_root_path
       breadcrumbs.add 'Users', admin_users_path
 
-      @users = Users::Sort.run!(users: policy_scope(User), sort_method: @sort, order: @order)
+      @users = Users::Sort.run!(users: policy_scope(User), sort_method: @sort)
       @users = @users.reverse if @order == 'desc'
       @users = @users.paginate(page: params[:page], per_page: get_per_page)
     end

@@ -5,7 +5,6 @@ module Users
   class Sort < ActiveInteraction::Base
     array :users
     string :sort_method
-    string :order
 
     def execute
       case sort_method
