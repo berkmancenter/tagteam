@@ -10,7 +10,7 @@ xml.rss(
     xml.link hub_url(@hub)
     xml.generator Tagteam::Application.config.rss_generator
 
-    @search.results.each do |item|
+    @feed_items.each do |item|
       xml.item do
         xml.title item.title
         unless item.description.blank?
@@ -25,7 +25,7 @@ xml.rss(
         xml.link item.url
         xml.guid item.guid
         xml.author item.authors
-        (item.all_tags_on(@hub.tagging_key) - @hub.hub.deprecated_tags).each do|tag|
+        (item.all_tags_on(@hub.tagging_key) - @hub.deprecated_tags).each do|tag|
           xml.category (@hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub.tag_prefix)
         end
         unless item.rights.blank?

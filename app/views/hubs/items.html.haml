@@ -3,13 +3,13 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'items' }
 - content_for :tab_content do
-  = render partial: 'feed_items/alter_view', locals: { view: 'list', results: @search.results }
-  - if @search.total == 0
+  = render partial: 'feed_items/alter_view', locals: { view: 'list', results: @feed_items }
+  - if @feed_items.blank?
     .nicely-padded
       %p
         None yet. Please add some feeds from the #{link_to "Inputs tab", hub_hub_feeds_path(@hub)}.
   - else
     %ul.list-unstyled.flush-top
-      = render partial: 'feed_items/list_item', collection: @search.results, as: :feed_item
+      = render partial: 'feed_items/list_item', collection: @feed_items, as: :feed_item
     .text-center
-      = render partial: 'shared/paginate', object: @search.results, as: :results
+      = render partial: 'shared/paginate', object: @feed_items, as: :results

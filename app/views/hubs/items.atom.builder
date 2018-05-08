@@ -1,9 +1,9 @@
 atom_feed(:root_url => hub_url(@hub), :language => 'en-US') do |atom|
   atom.title @hub.title
-  atom.updated (@search.results.blank?) ? Time.now : @search.results.first.updated_at
+  atom.updated (@feed_items.blank?) ? Time.now : @feed_items.first.updated_at
   atom.generator Tagteam::Application.config.rss_generator
 
-  @search.results.each do |item|
+  @feed_items.each do |item|
     atom.entry( item , :url => item.url ) do |entry|
       unless item.authors.blank?
         entry.author do |author|
