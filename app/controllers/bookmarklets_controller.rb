@@ -6,7 +6,7 @@ class BookmarkletsController < ApplicationController
   before_action :load_feed, only: [:remove_item]
 
   access_control do
-    allow logged_in, to: %i[add confirm]
+    allow logged_in, to: %i[add confirm add_item]
     allow :owner, of: :hub, to: %i[add_item remove_item]
     allow :owner, of: :feed, to: [:remove_item]
     allow :bookmarker, of: :hub, to: [:add_item]
