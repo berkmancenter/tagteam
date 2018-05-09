@@ -899,7 +899,7 @@ class HubsController < ApplicationController
   end  
 
   def authorize_user
-    unless current_user.has_role?(:superadmin) || current_user.has_role?(:owner, @hub)
+    unless policy(@hub).settings?
       raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
     end
   end
