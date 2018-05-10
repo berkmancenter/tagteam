@@ -838,14 +838,14 @@ class HubsController < ApplicationController
     authorize @hub
 
     if @hub.tags_delimiter.include?(params[:delimiter])
-      flash[:notice] = "Delimiter removed successfully"
+      flash[:notice] = 'Delimiter removed successfully'
       @hub.tags_delimiter.delete(params[:delimiter])
       @hub.save
     else
-      flash[:error] = "Something went wrong, try again."
+      flash[:error] = 'Something went wrong, try again.'
     end
 
-    return redirect_to settings_hub_path(@hub)
+    redirect_to settings_hub_path(@hub)
   end
 
   private
@@ -867,7 +867,7 @@ class HubsController < ApplicationController
     @feed = Feed.find(params[:feed_id])
 
     if @feed.blank?
-      flash[:error] = "Something went wrong, try again."
+      flash[:error] = 'Something went wrong, try again.'
       redirect_to(hub_path(@hub))
     end
   end
@@ -896,11 +896,11 @@ class HubsController < ApplicationController
       request.remote_ip,
       request.user_agent
     )
-  end  
+  end
 
   def authorize_user
-    unless policy(@hub).settings?
-      raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
-    end
+    return if policy(@hub).settings?
+
+    raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
   end
 end
