@@ -1,7 +1,8 @@
 .center-block.devise-form
   %h2 Sign up
-  %p.signup-description
-    = raw @setting&.signup_description
+  - if @setting.present? && @setting.signup_description.present?
+    %p.signup-description
+      = raw @setting.signup_description
   %p Please fill out the following fields to create your Tagteam account.
   %p
     %strong Note:

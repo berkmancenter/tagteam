@@ -166,33 +166,22 @@ class User < ApplicationRecord
   def whitelisted_domains?
     setting = Admin::Setting.first
 
-    # TODO: create edu domain as default whitelisted_domains
-    return true if setting&.whitelisted_domains.blank?
-
-    domain = Mail::Address.new(email).domain
-    setting.whitelisted_domains.include?(domain)
-  end
-
-  def blacklisted_domains?
-    setting = Admin::Setting.first
-    domain = Mail::Address.new(email).domain
-
-    return false if setting&.blacklisted_domains.blank?
-
-    setting.blacklisted_domains.include?(domain)
+    setting.blank? || setting.whitelisted_domains.blank? || setting.whitelisted_domains.include?(domain)
   end
 
   def set_approved
-    self.approved = if whitelisted_domains?
-                      true
-                    elsif blacklisted_domains?
-                      false
-                    else
-                      false
-    end
+    self.approved = whitelisted_domains?
   end
 
   def blacklisted_domains
-    errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin') if blacklisted_domains?
+    setting = Admin::Setting.first
+
+    if setting && setting.blacklisted_domains.include?(domain)
+      errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin')
+    end
+  end
+
+  def domain
+    Mail::Address.new(email).domain
   end
 end
