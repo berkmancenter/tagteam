@@ -93,6 +93,7 @@ class HubsController < ApplicationController
     team
     update
   ]
+  before_action :authorize_user, only: :settings
 
   protect_from_forgery except: :items
 
@@ -837,14 +838,14 @@ class HubsController < ApplicationController
     authorize @hub
 
     if @hub.tags_delimiter.include?(params[:delimiter])
-      flash[:notice] = "Delimiter removed successfully"
+      flash[:notice] = 'Delimiter removed successfully'
       @hub.tags_delimiter.delete(params[:delimiter])
       @hub.save
     else
-      flash[:error] = "Something went wrong, try again."
+      flash[:error] = 'Something went wrong, try again.'
     end
 
-    return redirect_to settings_hub_path(@hub)
+    redirect_to settings_hub_path(@hub)
   end
 
   private
@@ -854,7 +855,7 @@ class HubsController < ApplicationController
   end
 
   def add_breadcrumbs
-    breadcrumbs.add @hub, hub_path(@hub) if @hub.id
+    breadcrumbs.add @hub, hub_path(@hub) if @hub&.id
   end
 
   def set_hub
@@ -866,7 +867,7 @@ class HubsController < ApplicationController
     @feed = Feed.find(params[:feed_id])
 
     if @feed.blank?
-      flash[:error] = "Something went wrong, try again."
+      flash[:error] = 'Something went wrong, try again.'
       redirect_to(hub_path(@hub))
     end
   end
@@ -895,5 +896,11 @@ class HubsController < ApplicationController
       request.remote_ip,
       request.user_agent
     )
+  end
+
+  def authorize_user
+    return if policy(@hub).settings?
+
+    raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
   end
 end
