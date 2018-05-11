@@ -13,7 +13,7 @@ module Admin
       if @setting.save
         redirect_to admin_root_path, notice: 'Setting was created sucessfully'
       else
-        render :index
+        render 'admin/home/index'
       end
     end
 
@@ -23,7 +23,7 @@ module Admin
       if @setting.update(settings_params)
         redirect_to admin_root_path, notice: 'Setting was updated sucessfully'
       else
-        render :index
+        render 'admin/home/index'
       end
     end
 
