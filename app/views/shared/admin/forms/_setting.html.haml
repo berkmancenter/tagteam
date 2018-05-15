@@ -1,3 +1,10 @@
+- if setting.errors.any?
+  %h2
+    #{pluralize(setting.errors.count, 'error')} prohibited this setting from being saved:
+  %ul
+    - setting.errors.full_messages.each do |msg|
+      %li
+        = msg
 = semantic_form_for(setting) do |f|
   = f.inputs do
     %br/

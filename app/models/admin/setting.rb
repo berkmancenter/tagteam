@@ -7,5 +7,15 @@ module Admin
 
     serialize :whitelisted_domains, Array
     serialize :blacklisted_domains, Array
+
+    validate :uniqueness_of_domains
+
+    private
+
+    def uniqueness_of_domains
+      return unless (whitelisted_domains & blacklisted_domains).any?
+
+      errors.add(:base, 'You can\'t add same domain in whitelisted_domains and blacklisted_domains')
+    end
   end
 end

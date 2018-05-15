@@ -1,8 +1,9 @@
 .center-block.devise-form
   %h2 Sign up
+  - if @setting.present? && @setting.signup_description.present?
+    %p.signup-description
+      = raw @setting.signup_description
   %p Please fill out the following fields to create your Tagteam account.
-  %p
-    = raw @setting&.signup_description
   %p
     %strong Note:
     You will need to confirm your TagTeam account via a link sent to the email address you enter below.
@@ -31,7 +32,7 @@
       = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control'
     .form-group
       = f.label :signup_reason do
-        Reason for signup <em>(optional for whitelisted</em><em data-toggle="tooltip" title="Optional for #{ @setting.present? && @setting.whitelisted_domains.present? ? @setting.whitelisted_domains.join(', ') : 'all'} domains"> * </em><em>domains)</em>
+        Reason for signup <em>(optional for whitelisted</em><em data-toggle="tooltip" title="Optional for #{ @setting.present? && @setting.whitelisted_domains.present? ? @setting.whitelisted_domains.join(', ') : 'all'} domains">* </em><em>domains)</em>
 
       = f.text_area :signup_reason, class: 'form-control noEditor'
     .form-group
