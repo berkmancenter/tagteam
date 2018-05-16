@@ -30,7 +30,7 @@ module Admin
     private
 
     def settings_params
-      settings_parameters = params.require(:admin_setting).permit(:signup_description)
+      settings_parameters = params.require(:admin_setting).permit(:signup_description, :require_admin_approval_for_all)
 
       settings_parameters[:whitelisted_domains] = domain_params(:whitelisted_domains)
       settings_parameters[:blacklisted_domains] = domain_params(:blacklisted_domains)

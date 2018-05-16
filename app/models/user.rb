@@ -166,7 +166,7 @@ class User < ApplicationRecord
   def whitelisted_domains?
     setting = Admin::Setting.first
 
-    setting&.whitelisted_domains&.include?(domain)
+    !setting&.require_admin_approval_for_all && setting&.whitelisted_domains&.include?(domain)
   end
 
   def set_approved
@@ -176,7 +176,7 @@ class User < ApplicationRecord
   def blacklisted_domains
     setting = Admin::Setting.first
 
-    if setting&.blacklisted_domains&.include?(domain)
+    if !setting&.require_admin_approval_for_all && setting&.blacklisted_domains&.include?(domain)
       errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin')
     end
   end
