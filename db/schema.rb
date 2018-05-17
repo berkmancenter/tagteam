@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316092704) do
+ActiveRecord::Schema.define(version: 20180516171333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "admin_settings", force: :cascade do |t|
-    t.text   "signup_description"
-    t.string "whitelisted_domains"
-    t.string "blacklisted_domains"
+    t.text    "signup_description"
+    t.string  "whitelisted_domains"
+    t.string  "blacklisted_domains"
+    t.boolean "require_admin_approval_for_all", default: true
   end
 
   create_table "deactivated_taggings", force: :cascade do |t|
