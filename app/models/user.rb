@@ -18,11 +18,11 @@ class User < ApplicationRecord
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
   validates :terms_of_service, acceptance: true
-  validates :signup_reason, presence: true, unless: 'whitelisted_domains?', on: :create
   validate :blacklisted_domains
-
-  # automatically approve .edu signups
-  before_create :set_approved
+  validates :signup_reason, presence: true, unless: 'auto_approved?', on: :create
+  before_create do
+    self.approved = auto_approved?
+  end
 
   scope :unapproved, -> { where(approved: false) }
   scope :superadmin, -> { joins(:roles).where('roles.name = ?', :superadmin).distinct }
@@ -163,14 +163,18 @@ class User < ApplicationRecord
     end
   end
 
-  def whitelisted_domains?
+  # checks if user should be auto approved
+  def auto_approved?
     setting = Admin::Setting.first
 
-    !setting&.require_admin_approval_for_all && setting&.whitelisted_domains&.include?(domain)
-  end
+    # not auto approved if require_admin_approval_for_all is true
+    return false if setting.require_admin_approval_for_all
 
-  def set_approved
-    self.approved = whitelisted_domains?
+    # else auto approved if user is from whitelisted domain
+    # or if user is not from blacklisted domain
+    setting&.whitelisted_domains&.include?(domain) ||
+      (setting&.whitelisted_domains.empty? && setting&.blacklisted_domains.any? && !setting&.blacklisted_domains&.include?(domain)) ||
+      (setting&.whitelisted_domains&.empty? && setting&.blacklisted_domains&.empty?)
   end
 
   def blacklisted_domains
@@ -179,6 +183,12 @@ class User < ApplicationRecord
     if !setting&.require_admin_approval_for_all && setting&.blacklisted_domains&.include?(domain)
       errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin')
     end
+  end
+
+  def whitelisted_domains?
+    setting = Admin::Setting.first
+
+    !setting&.require_admin_approval_for_all && setting&.whitelisted_domains&.include?(domain)
   end
 
   def domain
