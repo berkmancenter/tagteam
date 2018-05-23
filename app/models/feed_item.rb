@@ -263,6 +263,10 @@ class FeedItem < ApplicationRecord
     User.where(id: user_ids).pluck(:username)
   end
 
+  def applied_tags(hub)
+    all_tags_on(hub.tagging_key).map(&:name).join(', ')
+  end
+
   private
 
   def parse_out_image_url

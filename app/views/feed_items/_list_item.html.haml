@@ -21,6 +21,6 @@
               class: 'date')
       %div
         - unless feed_item.all_tags_on(hub.tagging_key).empty?
-          = raw (feed_item.all_tags_on(hub.tagging_key) - hub.deprecated_tags).collect { |t| tag_display(t, hub: hub, hub_feed: hub_feed, hub_feed_item: feed_item) }.join(' ')
-        - if current_user && current_user.is?(%i[owner hub_feed_item_tag_filterer], @hub)
-          = link_to_tag_filter raw(fa_icon('plus', title: 'Add a tag to this item')), :add, { hub: @hub, item: feed_item }
+          = raw feed_item.all_tags_on(hub.tagging_key).collect { |t| tag_display(t, hub: hub, hub_feed: hub_feed, hub_feed_item: feed_item) }.join(' ')
+        - if current_user&.is?(%i[owner hub_feed_item_tag_filterer], @hub)
+          = link_to_tag_filter raw(fa_icon('plus', title: 'Add a tag to this item')), :add, { hub: @hub, item: feed_item, tag_list: feed_item.applied_tags(@hub) }
