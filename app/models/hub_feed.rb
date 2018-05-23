@@ -112,6 +112,10 @@ class HubFeed < ApplicationRecord
   alias display_title title
   alias to_s title
 
+  def author_title
+    "#{self.owners.first.username}'s tagged items"
+  end
+
   def display_description
     description.blank? ? feed.description : description
   end

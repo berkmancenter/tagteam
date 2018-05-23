@@ -69,7 +69,6 @@ class HubsController < ApplicationController
     :scoreboard
   ]
 
-  before_action :set_sort, only: :scoreboard
   before_action :set_feed_items, only: :items
   before_action :store_feed_visitor, only: :items
   before_action :add_breadcrumbs, only: %i[
@@ -97,21 +96,23 @@ class HubsController < ApplicationController
 
   protect_from_forgery except: :items
 
+  # There is some redundancy here, but these can not be reduced without further work
+  # index sorts by title, date, owner
+  # taggers sorts by username, date started, most recent tagging, # of items
+  # scoreboard sorts by rank, username (name), # of items
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
-    'bookmark_collections_title' => ->(rel) { rel.sort_by { |hf| hf.title.downcase } },
-    'date' => ->(rel) { rel.order('created_at') },
-    'date started' => ->(rel) { rel.order('created_at') },
+    'date' => ->(rel) { rel.order('hubs.created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
+    # ---
+    'username' => ->(rel) { rel.sort_by { |hf| hf.owners.first.username } },
+    'date started' => ->(rel) { rel.order('hubs.created_at') },
+    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.most_recent_tagging } },
     'number of items' => -> (rel) { rel.by_feed_items_count },
-    'most recent tagging' => ->(rel) { rel.by_most_recent_tagging },
+    # ---
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
     'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
-    'items' => -> (rel) { rel.sort_by {|r| r[:count] } },
-    'created_date' => ->(rel) { rel.order('created_at') },
-    'updated_date' => ->(rel) { rel.order('updated_at') },
-    'owners' => ->(rel) { rel.by_first_owner },
-    'id' => ->(rel) { rel.order(:id) }
+    'items' => -> (rel) { rel.sort_by {|r| r[:count] } }
   }.freeze
 
   SORT_DIR_OPTIONS = %w(asc desc).freeze
@@ -210,6 +211,7 @@ class HubsController < ApplicationController
   end
 
   def scoreboard
+    @sort = %w[rank name items].include?(params[:sort]) ? params[:sort] : 'rank'
     @taggers = Statistics::Scoreboard.run!(hub: @hub,
       sort: @sort,
       criteria: params[:criteria] || 'Year'
@@ -218,7 +220,6 @@ class HubsController < ApplicationController
     @order =  params[:order] || 'asc'
 
     @taggers = SORT_OPTIONS[@sort].call(@taggers)
-
     @taggers = @taggers.reverse if @order == 'desc'
 
     @taggers = @taggers.paginate(page: params[:page], per_page: get_per_page)
@@ -353,11 +354,10 @@ class HubsController < ApplicationController
 
   # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
   def taggers
-    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'bookmark_collections_title'
-    sort = 'bookmark_collections_title' if params[:sort] == 'title'
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'username'
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 
-    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id))
+    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed))
     @bookmark_collections = @bookmark_collections.reverse if order == 'desc'
 
     @bookmark_collections = @bookmark_collections.paginate(page: params[:page], per_page: get_per_page)
@@ -871,15 +871,6 @@ class HubsController < ApplicationController
       flash[:error] = 'Something went wrong, try again.'
       redirect_to(hub_path(@hub))
     end
-  end
-
-  def set_sort
-    @sort =
-      if %w[id name items rank title owners created_date updated_date].include?(params[:sort])
-        params[:sort]
-      else
-        'name'
-      end
   end
 
   def set_feed_items
