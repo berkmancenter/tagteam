@@ -7,9 +7,9 @@
     .alter-views.col-md-12
       Sort by:
       = render partial: 'shared/sort_options',
-        locals: { options: ['title', 'date', 'most recent tagging', 'number of items'],
+        locals: { options: ['username', 'date started', 'most recent tagging', 'number of items'],
           order: params[:order] || 'asc',
-          sort: params[:sort] || 'title',
+          sort: params[:sort] || 'username',
           path: 'taggers_hub_path' }
 
   .hub_feeds.nicely-padded
