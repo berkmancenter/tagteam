@@ -113,7 +113,7 @@ class HubFeed < ApplicationRecord
   alias to_s title
 
   def author_title
-    "#{self.owners.first.username}'s tagged items"
+    self.owners.any? ? "#{self.owners.first.username}'s tagged items" : "#{self.title} tagged items"
   end
 
   def display_description

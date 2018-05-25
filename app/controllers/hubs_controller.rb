@@ -105,7 +105,7 @@ class HubsController < ApplicationController
     'date' => ->(rel) { rel.order('hubs.created_at') },
     'owner' => ->(rel) { rel.by_first_owner },
     # ---
-    'username' => ->(rel) { rel.sort_by { |hf| hf.owners.first.username } },
+    'username' => ->(rel) { rel.sort_by { |hf| hf.owners.any? ? hf.owners.first.username : 'ZZZ' } }, ## Force sort at end if missing username
     'date started' => ->(rel) { rel.order('hubs.created_at') },
     'most recent tagging' => ->(rel) { rel.sort_by { |r| r.most_recent_tagging } },
     'number of items' => -> (rel) { rel.by_feed_items_count },
