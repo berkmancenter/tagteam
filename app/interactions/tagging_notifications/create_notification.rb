@@ -24,7 +24,7 @@ module TaggingNotifications
     private
 
     def tag_exist?
-      unique_tag_filters.include?(changes['tags_added'][0])
+      feed_item.tag_filters.map(&:tag).map(&:name).uniq.include?(changes['tags_added'][0])
     end
   end
 end
