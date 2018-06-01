@@ -8,7 +8,7 @@ class TagsController < ApplicationController
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params.has_key?(:username) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
       params[:format] = :rss
     elsif request.fullpath =~ /tag\/atom/
@@ -27,7 +27,8 @@ class TagsController < ApplicationController
   def autocomplete
     hub_id = @hub.id
     approved_tags = @hub.hub_approved_tags.map(&:tag)
-    @search = ActsAsTaggableOn::Tag.where('name LIKE \'%' + params[:term] + '%\'')
+    @search = ActsAsTaggableOn::Tag.where('name LIKE \'%' + params[:term] + '%\'') #.limit(100)
+
     result = @search - @hub.fetch_deprecated_tags
 
     respond_to do |format|
@@ -43,12 +44,8 @@ class TagsController < ApplicationController
 
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.
   def index
-    @tags = if @hub_feed.blank?
-              @hub.tag_counts
-            else
-              FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id),
-                                           @hub.tagging_key).all
-            end
+    @tags = @hub_feed.blank? ? @hub.tag_counts :
+      FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id), @hub.tagging_key).all
 
     if @tags.any?
       # tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
@@ -161,6 +158,10 @@ class TagsController < ApplicationController
       @hub = @hub_feed.hub
     else
       @hub = Hub.find(params[:hub_id])
+    end
+    if params.has_key?(:username)
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
     end
   end
 

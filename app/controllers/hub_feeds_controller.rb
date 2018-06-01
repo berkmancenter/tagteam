@@ -155,8 +155,14 @@ class HubFeedsController < ApplicationController
   private
 
   def find_hub_feed
-    @hub_feed = HubFeed.find(params[:id])
-    authorize @hub_feed
+    if params.has_key?(:username)
+      @hub = Hub.find(params[:hub_id])
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    else
+      @hub_feed = HubFeed.find(params[:id])
+      authorize @hub_feed
+    end
   end
 
   def find_hub

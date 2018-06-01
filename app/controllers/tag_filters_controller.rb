@@ -76,6 +76,11 @@ class TagFiltersController < ApplicationController
     @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
     @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
 
+    if params.has_key?(:username)
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    end
+
     # We'll only get a feed item id if we're scoped to an item.
     if @feed_item
       # We could load a hub feed here, but it could be one of many (if the same

@@ -48,7 +48,13 @@ class FeedRetrievalsController < ApplicationController
   private
 
   def load_hub_feed
-    @hub_feed = HubFeed.find(params[:hub_feed_id])
-    @hub = @hub_feed.hub
+    if params.has_key?(:username)
+      @hub = Hub.find(params[:hub_id])
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    else
+      @hub_feed = HubFeed.find(params[:hub_feed_id])
+      @hub = @hub_feed.hub
+    end
   end
 end

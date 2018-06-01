@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:tags, :user_tags, :tags_json,
+  before_action :authenticate_user!, except: [:hub_items, :tags, :user_tags, :tags_json,
                                               :tags_rss, :tags_atom]
   before_action :load_user, only: [:roles_on]
-  before_action :load_hub, only: [:tags, :tags_json, :tags_rss, :tags_atom]
+  before_action :load_hub, only: [:tags, :tags_json, :tags_rss, :tags_atom,
+    :hub_items]
   before_action :load_feed_items, only: [:tags, :tags_json, :tags_rss,
                                          :tags_atom]
   before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
@@ -11,7 +12,34 @@ class UsersController < ApplicationController
   before_action :find_user, only: [:documentation_admin_role, :superadmin_role,
                                    :lock_user, :destroy, :show, :resend_confirmation_token,
                                    :resend_unlock_token]
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:hub_items]
+
+  SORT_OPTIONS = {
+    'created_at' => -> (rel) { rel.order('created_at') },
+    'date_published' => ->(rel) { rel.order('date_published') },
+  }.freeze
+
+  SORT_DIR_OPTIONS = %w(asc desc).freeze
+
+  def hub_items
+
+    breadcrumbs.add @hub, hub_path(@hub)
+    @user = User.find_by(username: params[:username])
+
+    @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) }
+
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+    @feed_items = SORT_OPTIONS[sort].call(
+      @hub_feed
+      .feed_items
+      .includes(:feeds, :hub_feeds)
+      .paginate(page: params[:page], per_page: get_per_page)
+    )
+    @feed_items = @feed_items.reverse_order if order == 'desc'
+
+    render 'hub_items', layout: request.xhr? ? false : 'tabs'
+  end
 
   def tags
     breadcrumbs.add @hub, hub_path(@hub)
@@ -159,13 +187,8 @@ class UsersController < ApplicationController
   end
 
   def set_home_url
-    @home_url = if @tag
-                  hub_user_tags_name_path(
-                    @hub, @user.username, @tag.name
-                  )
-                else
-                  hub_user_tags_path(@hub, @user.username)
-                end
+    @home_url = @tag ? hub_user_tags_name_path(@hub, @user.username, @tag.name) :
+      hub_user_hub_items_path(@hub, @user.username)
   end
 
   def load_feed_items
@@ -191,16 +214,14 @@ class UsersController < ApplicationController
                      deprecated: true
                    ).map(&:deep_symbolize_keys!)
                  end
-    else
-      taggings = ActsAsTaggableOn::Tagging.select('DISTINCT ON ("context") *')
-                                          .where(context: "hub_#{@hub.id}",
-                                                 taggable_type: 'FeedItem',
-                                                 tagger_id: @user,
-                                                 tagger_type: 'User')
-    end
-
-    @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
+      @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
                           .paginate(page: params[:page], per_page: get_per_page)
+                          .order('date_published DESC')
+    else
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) }
+      @feed_items = @hub_feed.feed_items
+    end
   end
 
   def find_user

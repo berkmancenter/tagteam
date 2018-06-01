@@ -3,10 +3,7 @@
 - content_for :tabs do
   %li.active
     = documentation('tagged-item-list')
-    - if @tag
-      = link_to('Items', hub_user_tags_name_path(@hub, @user.username, @tag.name))
-    - else
-      = link_to('Items', hub_user_tags_path(@hub, u(@user.username)))
+    = link_to('Items', hub_user_tags_name_path(@hub, @user.username, @tag.name))
     .nav-pill-arrow
 - content_for :tab_content do
   = render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @feed_items }

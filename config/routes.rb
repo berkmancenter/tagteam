@@ -74,12 +74,16 @@ Rails.application.routes.draw do
     get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
     get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }, :defaults => { :format => 'html' }
 
-    get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { username: /[^\/]+/ }
+    get 'user/:username' => 'users#hub_items', :as => 'user_hub_items', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/tags' => 'tags#index', :as => 'user_hub_items_tags', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/filters' => 'tag_filters#index', :as => 'user_hub_items_filters', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/updates' => 'feed_retrievals#index', :as => 'user_hub_items_updates', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/about' => 'hub_feeds#show', :as => 'user_hub_items_about', :constraints => { username: /[^\/]+/ }
+
     get 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { username: /[^\/]+/ }
     get 'user/:username/atom' => 'users#tags_atom', :as => 'user_tags_atom', :constraints => { username: /[^\/]+/ }
     get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { username: /[^\/]+/ }
     get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { username: /[^\/]+/ }
-
     get 'user/:username/tag/:tagname(/:deprecated)' => 'users#tags', :as => 'user_tags_name', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
     get 'user/:username/tag/:tagname(/:deprecated)/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
     get 'user/:username/tag/:tagname(/:deprecated)/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }

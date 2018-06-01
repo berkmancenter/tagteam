@@ -1,0 +1,20 @@
+%li{ class: ('active' if active == 'items') }
+  = documentation('hub-feed-feed-item-list')
+  = link_to('Items', hub_user_hub_items_path(@hub, @user.username))
+  .nav-pill-arrow
+%li{ class: ('active' if active == 'tags') }
+  = documentation('hub-feed-tag-cloud')
+  = link_to('Tags', hub_user_hub_items_tags_path(@hub, @user.username))
+  .nav-pill-arrow
+%li{ class: ('active' if active == 'filters') }
+  = documentation('hub-feed-filter-tab')
+  = link_to('Filters', hub_user_hub_items_filters_path(@hub, @user.username))
+  .nav-pill-arrow
+%li{ class: ('active' if active == 'updates') }
+  = documentation('hub-feed-retrievals-list')
+  = link_to('Updates', hub_user_hub_items_updates_path(@hub, @user.username))
+  .nav-pill-arrow
+%li{ class: ['last-of-section', ('active' if active == 'about')] }
+  = documentation('hub-feed-about-tab')
+  = link_to('About', hub_user_hub_items_about_path(@hub, @user.username))
+  .nav-pill-arrow
