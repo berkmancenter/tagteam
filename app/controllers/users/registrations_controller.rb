@@ -20,7 +20,7 @@ module Users
     end
 
     def set_setting
-      @setting = Admin::Setting.first
+      @setting = Admin::Setting.first_or_initialize
     end
   end
 end

@@ -165,7 +165,7 @@ class User < ApplicationRecord
 
   # checks if user should be auto approved
   def auto_approved?
-    setting = Admin::Setting.first
+    setting = Admin::Setting.first_or_initialize
 
     # not auto approved if require_admin_approval_for_all is true
     return false if setting.require_admin_approval_for_all
@@ -178,7 +178,7 @@ class User < ApplicationRecord
   end
 
   def blacklisted_domains
-    setting = Admin::Setting.first
+    setting = Admin::Setting.first_or_initialize
 
     if !setting&.require_admin_approval_for_all && setting&.blacklisted_domains&.include?(domain)
       errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin')
@@ -186,7 +186,7 @@ class User < ApplicationRecord
   end
 
   def whitelisted_domains?
-    setting = Admin::Setting.first
+    setting = Admin::Setting.first_or_initialize
 
     !setting&.require_admin_approval_for_all && setting&.whitelisted_domains&.include?(domain)
   end
