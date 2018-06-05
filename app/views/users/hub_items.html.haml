@@ -5,8 +5,8 @@
 - content_for :tab_content do
   %span.published_date
     Sort by:
-    \#{sortable_link('Tagging Date', (params[:sort] || 'created_at'), (params[:order] || 'asc'), 'hub_user_hub_items_path')}
-    \#{sortable_link('Published Date', (params[:sort] || 'date_published'), (params[:order] || 'asc'), 'hub_user_hub_items_path')}
+    \#{sortable_link('Date tagged', (params[:sort] || 'created_at'), (params[:order] || 'asc'), 'hub_user_hub_items_path')}
+    \#{sortable_link('Date published', (params[:sort] || 'date_published'), (params[:order] || 'asc'), 'hub_user_hub_items_path')}
   = render partial: 'feed_items/alter_view', locals: { view: params.has_key?(:view) ? params[:view] : 'list' , results: @feed_items }
   %ul.list-unstyled
     - if params[:view] == 'grid'
