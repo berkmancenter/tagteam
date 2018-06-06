@@ -2,6 +2,13 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  before do
+    Admin::Setting.create(
+      require_admin_approval_for_all: false,
+      whitelisted_domains: ['example.edu']
+    )
+  end
+
   describe 'approved attribute set by before_create callback' do
     subject { user.approved }
 
@@ -24,10 +31,6 @@ RSpec.describe User, type: :model do
     subject { user }
 
     let(:user) { build(:user, email: email, signup_reason: nil) }
-
-    before do
-      Admin::Setting.create(whitelisted_domains: ['example.edu'])
-    end
 
     context 'for a user with an .edu email address' do
       let(:email) { 'example@example.edu' }
