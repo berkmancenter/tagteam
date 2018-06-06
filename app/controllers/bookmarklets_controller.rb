@@ -138,7 +138,9 @@ class BookmarkletsController < ApplicationController
 
     @mini_title = 'Add to TagTeam'
 
-    @feed_item = FeedItem.find_or_initialize_by(url: params[:feed_item].blank? ? nil : params[:feed_item][:url])
+    url = params[:feed_item].blank? ? nil : params[:feed_item][:url]
+    stripped_url = UrlsStripper.remove_trackers_hashs_from_url(url)
+    @feed_item = FeedItem.find_or_initialize_by(url: stripped_url)
 
     %i[hub_id bookmark_collection_id title description tag_list date_published authors contributors rights last_updated].each do |col|
       next if params[:feed_item][col].blank?
