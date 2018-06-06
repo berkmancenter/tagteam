@@ -36,8 +36,8 @@ class FeedItem < ApplicationRecord
   end
   validates :url, uniqueness: true
 
-  has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals'
-  has_and_belongs_to_many :feeds
+  has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals', optional: true
+  has_and_belongs_to_many :feeds, optional: true
   has_many :hub_feeds, through: :feeds
   has_many :hubs, through: :hub_feeds
   has_many :input_sources, dependent: :destroy, as: :item_source

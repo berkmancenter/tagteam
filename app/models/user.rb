@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   validates :terms_of_service, acceptance: true
   validate :blacklisted_domains
-  validates :signup_reason, presence: true, unless: 'auto_approved?', on: :create
+  validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
   before_create do
     self.approved = auto_approved?
   end

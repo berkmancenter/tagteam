@@ -4,5 +4,6 @@ begin
 rescue LoadError => e
   raise unless e.message.include?('spring')
 end
-require 'bundler/setup'
-load Gem.bin_path('rake', 'rake')
+require_relative '../config/boot'
+require 'rake'
+Rake.application.run

@@ -4,10 +4,10 @@ class TagFilter < ApplicationRecord
   include ModelExtensions
   include TaggingDeactivator
 
-  belongs_to :hub
-  belongs_to :scope, polymorphic: true
-  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag'
-  belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag'
+  belongs_to :hub, optional: true
+  belongs_to :scope, polymorphic: true, optional: true
+  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag', optional: true
+  belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag', optional: true
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
 

@@ -16,8 +16,8 @@ class HubFeed < ApplicationRecord
     c.allow_jsonp_callback = true
   end
 
-  belongs_to :hub
-  belongs_to :feed
+  belongs_to :hub, optional: true
+  belongs_to :feed, optional: true
   has_many :feed_items, through: :feed
 
   before_validation do

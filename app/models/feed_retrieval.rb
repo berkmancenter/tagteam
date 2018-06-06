@@ -4,7 +4,7 @@
 # FeedItem change tracking is used to calculate the spidering schedule for a Feed, and could be used in the future to calculate metrics and do some interesting analysis about what's getting posted when.  More on how scheduling works can be found in the Feed class.
 #
 class FeedRetrieval < ApplicationRecord
-  belongs_to :feed
+  belongs_to :feed, optional: true
   has_and_belongs_to_many :feed_items, join_table: 'feed_items_feed_retrievals'
   has_many :hubs, through: :feed
 

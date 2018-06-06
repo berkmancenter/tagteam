@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   # TODO: enforce SSL for UsersController in production
   resources :users, except: :index do
     member do

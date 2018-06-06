@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DeactivatedTagging < ApplicationRecord
-  belongs_to :deactivator, polymorphic: true, autosave: false
+  belongs_to :deactivator, polymorphic: true, autosave: false, optional: true
 
   def reactivate
     tagging = ActsAsTaggableOn::Tagging.find_or_initialize_by(tagging_attributes)

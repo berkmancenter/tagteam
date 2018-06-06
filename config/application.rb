@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -9,6 +10,9 @@ Bundler.require(*Rails.groups)
 
 module Tagteam
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
+
     tagteam_config = YAML.load_file("#{Rails.root}/config/tagteam.yml")
     tagteam_config.keys.collect do |k|
       Tagteam::Application.config.send("#{k}=", tagteam_config[k])
