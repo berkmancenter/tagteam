@@ -26,7 +26,7 @@ class HubFeed < ApplicationRecord
   validates :feed_id, uniqueness: { scope: :hub_id }
   validates :feed_id, :hub_id, presence: true
 
-  scope :bookmark_collections, -> { joins(:feed).where('feeds.bookmarking_feed' => true) }
+  scope :bookmark_collections, -> { includes(:feed).where('feeds.bookmarking_feed' => true) }
   scope :rss, -> { joins(:feed).where('feeds.bookmarking_feed' => false) }
   scope :need_updating, -> { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? AND bookmarking_feed IS false', Time.current]) }
   scope :by_hub, ->(hub_id) { where(hub_id: hub_id) }

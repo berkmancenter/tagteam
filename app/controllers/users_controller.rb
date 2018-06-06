@@ -22,11 +22,12 @@ class UsersController < ApplicationController
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def hub_items
-
     breadcrumbs.add @hub, hub_path(@hub)
     @user = User.find_by(username: params[:username])
 
     @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) }
+
+    redirect_to hub_path(@hub) and return if @hub_feed.nil?
 
     sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
