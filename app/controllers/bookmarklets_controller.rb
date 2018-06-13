@@ -81,6 +81,8 @@ class BookmarkletsController < ApplicationController
           @feed.feed_items << @feed_item
           @feed.save
         end
+        @hub.apply_tag_filters_to_item_async(@feed_item)
+
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
 

@@ -110,18 +110,6 @@ class FeedItem < ApplicationRecord
     FeedItem.where(id: id)
   end
 
-  def apply_tag_filters(hub_ids = [])
-    # So we can pass a single hub id
-    hub_ids = [hub_ids] unless hub_ids.respond_to? :each
-    hubs = hub_ids.empty? ? self.hubs : Hub.where(id: hub_ids)
-
-    hubs.each do |hub|
-      hub.tag_filters.order('updated_at ASC').each do |filter|
-        filter.apply(items: FeedItem.where(id: id))
-      end
-    end
-  end
-
   # An array of all tag contexts for every tagging on this item.
   def tag_contexts
     taggings.includes(:tag).where.not(context: 'tags').map do |tagging|
@@ -250,11 +238,6 @@ class FeedItem < ApplicationRecord
     query
   end
 
-  def self.apply_tag_filters(item_id, hub_ids = [])
-    feed_item = find(item_id)
-    feed_item.apply_tag_filters(hub_ids)
-  end
-
   def username_list
     user_ids = taggings.where(tagger_type: 'User').distinct.pluck(:tagger_id)
 
@@ -264,7 +247,7 @@ class FeedItem < ApplicationRecord
   end
 
   def applied_tags(hub)
-    all_tags_on(hub.tagging_key).map(&:name).join(', ')
+    all_tags_on(hub.tagging_key) - hub.deprecated_tags
   end
 
   private

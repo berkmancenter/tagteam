@@ -176,6 +176,10 @@ class Hub < ApplicationRecord
     'Hub'
   end
 
+  def apply_tag_filters_to_item_async(item)
+    ApplyTagFilters.perform_async(self.all_tag_filters.pluck(:id), item.id, true)
+  end
+
   # Used when a new item is created
   def self.apply_all_tag_filters_to_item_async(item)
     item.hubs.each do |hub|

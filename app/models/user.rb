@@ -90,6 +90,7 @@ class User < ApplicationRecord
 
       has_role!(:owner, hf)
       has_role!(:creator, hf)
+
       feed
     else
       bookmark_collections.first

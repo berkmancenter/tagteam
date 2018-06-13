@@ -3,7 +3,7 @@
   hub = @hub || feed_item.hubs.first
   hub_feed = @hub_feed || feed_item.hub_feed_for_hub(hub.id) || feed_item.hub_feeds.first
   user_id = current_user.try(:id) || 'anon'
-  tag_list = feed_item.all_tags_on(hub.tagging_key)
+  tag_list = feed_item&.applied_tags(hub)
   tag_list_display = tag_list.map(&:name).join('-')
 - if hub_feed.present?
   %li.feed-item.row
@@ -25,4 +25,4 @@
           - unless tag_list.empty?
             = raw tag_list.collect { |t| tag_display(t, hub: hub, hub_feed: hub_feed, hub_feed_item: feed_item) }.join(' ')
           - if current_user&.is?(%i[owner hub_feed_item_tag_filterer], @hub)
-            = link_to_tag_filter raw(fa_icon('plus', title: 'Add a tag to this item')), :add, { hub: @hub, item: feed_item, tag_list: feed_item.applied_tags(@hub) }
+            = link_to_tag_filter raw(fa_icon('plus', title: 'Add a tag to this item')), :add, { hub: @hub, item: feed_item, tag_list: tag_list.map(&:name).join(', ') }
