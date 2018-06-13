@@ -247,7 +247,7 @@ class FeedItem < ApplicationRecord
   end
 
   def applied_tags(hub)
-    all_tags_on(hub.tagging_key) - hub.deprecated_tags
+    all_tags_on(hub.tagging_key)
   end
 
   private

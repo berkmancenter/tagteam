@@ -66,6 +66,12 @@ module TagFilters
       end
 
       tag_filter.apply_async
+      if tag_filter.type == 'AddTagFilter' && tag_filter.scope_type == 'FeedItem'
+        hub.all_tag_filters.each do |old_filter|
+          next if old_filter.scope_type == 'FeedItem'
+          old_filter.apply_async(true)
+        end
+      end
 
       tag_filter
     end
