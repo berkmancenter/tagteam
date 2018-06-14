@@ -27,7 +27,7 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    authorize_tag_filter = TagFilter.new
+    authorize_tag_filter = TagFilter.new(type: params[:filter_type])
     authorize_tag_filter.hub = @hub
     authorize authorize_tag_filter
 

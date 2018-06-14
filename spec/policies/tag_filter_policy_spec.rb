@@ -14,12 +14,12 @@ RSpec.describe TagFilterPolicy do
     it { is_expected.to forbid_action(:new) }
   end
 
-  context 'for a user with the hub_tag_filterer role on the hub' do
+  context 'for a user with the hub_tag roles on the hub' do
     let(:hub) { create(:hub) }
     let(:tag_filter) { create(:tag_filter, hub: hub) }
     let(:user) { create(:user) }
 
-    before { user.has_role!(:hub_tag_filterer, hub) }
+    before { user.has_role!(:hub_tag_adder, hub); user.has_role!(:hub_tag_deleter, hub); user.has_role!(:hub_tag_modifier, hub) }
 
     it { is_expected.to permit_action(:create) }
     it { is_expected.to permit_action(:destroy) }

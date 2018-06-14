@@ -1,4 +1,4 @@
-class CreateHubFeeds < ActiveRecord::Migration
+class CreateHubFeeds < ActiveRecord::Migration[4.2]
   def change
     create_table :hub_feeds do |t|
       t.integer :feed_id, :null => false

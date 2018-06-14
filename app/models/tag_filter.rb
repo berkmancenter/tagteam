@@ -14,7 +14,7 @@ class TagFilter < ApplicationRecord
   VALID_SCOPE_TYPES = %w(Hub HubFeed FeedItem).freeze
   validates :tag_id, presence: true
   validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
-  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id],
+  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id, :type],
                                    message: 'Filter conflicts with existing filter.' }
 
   attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,

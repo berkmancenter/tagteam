@@ -1,4 +1,4 @@
-class CreateDocumentations < ActiveRecord::Migration
+class CreateDocumentations < ActiveRecord::Migration[4.2]
   def change
     create_table :documentations do |t|
       t.string :match_key, :limit => 100.bytes, :null => false

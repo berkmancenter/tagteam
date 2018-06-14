@@ -39,13 +39,31 @@ module DelegatableRoles
         return user.my_objects_in(RepublishedFeed, hub)
       end
     },
-    hub_tag_filterer: {
-      name: 'Hub-wide tag filter manager',
-      description: 'Can manage hub-wide tag filters in this hub',
+    hub_tag_adder: {
+      name: 'Hub-wide tag filter adder',
+      description: 'Can add hub-wide tag filters in this hub',
       objects_of_concern: lambda do |user, hub|
         # Find all hub_tag_filters in this hub owned by this user.
         return user.my_objects_in(TagFilter, hub)
-                   .select { |filter| filter.scope_type == 'Hub' }
+                   .select { |filter| filter.scope_type == 'Hub' && filter.type == 'AddTagFilter' }
+      end
+    },
+    hub_tag_deleter: {
+      name: 'Hub-wide tag filter deleter',
+      description: 'Can delete hub-wide tag filters in this hub',
+      objects_of_concern: lambda do |user, hub|
+        # Find all hub_tag_filters in this hub owned by this user.
+        return user.my_objects_in(TagFilter, hub)
+                   .select { |filter| filter.scope_type == 'Hub' && filter.type == 'DeleteTagFilter' }
+      end
+    },
+    hub_tag_modifier: {
+      name: 'Hub-wide tag filter modifier',
+      description: 'Can modify hub-wide tag filters in this hub',
+      objects_of_concern: lambda do |user, hub|
+        # Find all hub_tag_filters in this hub owned by this user.
+        return user.my_objects_in(TagFilter, hub)
+                   .select { |filter| filter.scope_type == 'Hub' && filter.type == 'ModifyTagFilter' }
       end
     },
     hub_feed_tag_filterer: {

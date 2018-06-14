@@ -1,4 +1,4 @@
-class CreateModifyTagFilters < ActiveRecord::Migration
+class CreateModifyTagFilters < ActiveRecord::Migration[4.2]
   def change
     create_table :modify_tag_filters do |t|
       t.references :tag

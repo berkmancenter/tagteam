@@ -44,8 +44,19 @@ module TagsHelper
     link_to(tag.name, hub_tag_show_path(hub_id, tag.name), options)
   end
 
-  def hub_filter_possible?(_params, current_user)
-    (current_user.is?(%i[owner hub_tag_filterer], @hub) || current_user.superadmin?) && !@already_filtered_for_hub
+  def hub_filter_possible?(type, _params, current_user)
+    roles = [:owner]
+
+    case type
+    when :add
+      roles << :hub_tag_adder
+    when :delete
+      roles << :hub_tag_deleter
+    when :modify
+      roles << :hub_tag_modifier
+    end
+
+    (current_user.is?(roles, @hub) || current_user.superadmin?) && !@already_filtered_for_hub
   end
 
   def feed_filter_possible?(params, current_user)
