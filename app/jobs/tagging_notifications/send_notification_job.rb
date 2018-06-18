@@ -17,20 +17,8 @@ module TaggingNotifications
           feed_item: affected_items.first,
           hub: hub
         )
-      elsif scope.scope.is_a?(HubFeed)
-        TaggingNotifications::CreateFeedWideNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_items: affected_items,
-          hub_feed: scope.scope
-        )
-      elsif scope.scope.is_a?(Hub)
-        TaggingNotifications::CreateHubWideNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_items: affected_items,
-          hub: hub
-        )
+      elsif scope.scope.is_a?(TagFilter)
+        # Nothing to be done here, although this is called from a couple of places
       end
     end
 

@@ -20,6 +20,7 @@ module TagFilters
     def send_tagging_change_notification(tag_filter, hub, current_user)
       changes = determine_changes(tag_filter)
 
+      # Note, this isn't doing anything for the tag_filter as scope
       TaggingNotifications::SendNotificationJob.perform_later(
         tag_filter,
         hub,

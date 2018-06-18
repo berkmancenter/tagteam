@@ -57,6 +57,7 @@ module TagFilters
             { tags_modified: [tag.name, new_tag.name] }
           end
 
+        # Note, this isn't doing anything for the tag_filter as scope
         TaggingNotifications::SendNotificationJob.perform_later(
           tag_filter,
           hub,
