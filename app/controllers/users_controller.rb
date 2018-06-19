@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 
   def tags
     breadcrumbs.add @hub, hub_path(@hub)
-    breadcrumbs.add @user.username, hub_user_tags_path(@hub, @user.username)
+    breadcrumbs.add @user.username, hub_user_hub_items_path(@hub, @user.username)
     if @tag
       breadcrumbs.add @tag.name, hub_user_tags_name_path(
         @hub, @user.username, @tag.name
