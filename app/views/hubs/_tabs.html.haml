@@ -57,9 +57,10 @@
   = documentation('hub-contact')
   = link_to('Contact', contact_hub_path(@hub))
   .nav-pill-arrow
-%li{ :class => "last-of-section #{'active' if active == 'messaging'}" }
-  = documentation('hub-messages')
-  = link_to('Messaging', new_hub_message_path(@hub))
-  .nav-pill-arrow
+- if current_user && current_user.is?(:owner, @hub)
+  %li{ :class => "last-of-section #{'active' if active == 'messaging'}" }
+    = documentation('hub-messages')
+    = link_to('Messaging', new_hub_message_path(@hub))
+    .nav-pill-arrow
 %li.search-pill
   = render partial: 'hubs/search_form'

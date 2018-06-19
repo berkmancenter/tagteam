@@ -43,6 +43,10 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
+  def create_message?
+    owner_or_admin?
+  end
+
   def custom_republished_feeds?
     return false unless user.present?
     return true if user.has_role?(:superadmin)
