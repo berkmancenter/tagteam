@@ -2,7 +2,7 @@
 # A "bookmark" is just a FeedItem that's been manually added to a Bookmark Collection. Currently the only way to add bookmarks is through the bookmarklet available under a Hub's "bookmarks" tab.
 class BookmarkletsController < ApplicationController
   before_action :load_hub, only: [:add_item, :remove_item]
-  before_action :load_feed, only: [:remove_item]
+  before_action :load_feed, only: [:add_item, :remove_item]
 
   access_control do
     allow logged_in, to: [:add, :confirm]
@@ -151,6 +151,6 @@ class BookmarkletsController < ApplicationController
   end
 
   def load_feed
-    @feed = Feed.find(params[:feed_id])
+    @feed = params.has_key?(:feed_id) ? Feed.find(params[:feed_id]) : Feed.new
   end
 end
