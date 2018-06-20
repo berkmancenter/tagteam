@@ -18,10 +18,8 @@
             = 'time'.pluralize(tagging_by_user['count'])
             by
             %span.badge= User.find(tagging_by_user['tagger_id']).username
-    %h2 Taggers before tag was deprecated
-    - if @before_deprecated_taggings_by_user.count == 0
-      %p None
-    - else
+    - if @tag.deprecated?(@hub)
+      %h2 Taggers before tag was deprecated
       %ul.list-unstyled
         - @before_deprecated_taggings_by_user.each do |tagging_by_user|
           %li
@@ -31,10 +29,8 @@
             = 'time'.pluralize(tagging_by_user['count'])
             by
             %span.badge= User.find(tagging_by_user['tagger_id']).username
-    %h2 Taggers after tag was deprecated
-    - if @after_deprecated_taggings_by_user.count == 0
-      %p None
-    - else
+    - if @tag.deprecated?(@hub)
+      %h2 Taggers after tag was deprecated
       %ul.list-unstyled
         - @after_deprecated_taggings_by_user.each do |tagging_by_user|
           %li

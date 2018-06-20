@@ -42,6 +42,17 @@ ActsAsTaggableOn::Tag.class_eval do
     # TODO: convert to taggings.where() .. and handle the include parameter
     taggings.find(:all, include: [:taggable], conditions: { context: hub.tagging_key.to_s }, order: 'created_at desc').collect(&:taggable)
   end
+
+  def deprecated?(hub)
+    hub
+     .all_tag_filters
+     .where(
+       scope_type: 'Hub',
+       tag_id: id
+     )
+     .where.not(new_tag_id: nil)
+     .present?
+  end
 end
 
 ActsAsTaggableOn::Tag.instance_eval do
