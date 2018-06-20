@@ -245,3 +245,10 @@ form.hub {
     padding-bottom: 0;
   }
 }
+
+.tab-layout {
+  .tab-content.tab-content-scoreboard {
+    border-left: none;
+    border-right: none;
+  }
+}

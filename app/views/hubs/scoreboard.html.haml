@@ -12,5 +12,13 @@
           = select_tag :criteria, options_for_select(Hub::SCOREBOARD, params[:criteria] || 'Year'), class: 'form-control', onchange: "$('.criteria-selection').submit();"
   .nicely-padded.scoreboard
     %h1 Scoreboard
-    = render partial: 'user_list_item', locals: { taggers: @taggers, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }
-    = render partial: 'tag_list_item', locals: { tags: @tags, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: '#users-scoreboard', data: { toggle: 'tab' } } Users
+      %li
+        %a{ href: '#tags-scoreboard', data: { toggle: 'tab' } } Tags
+    .tab-content.tab-content-scoreboard
+      #users-scoreboard.tab-pane.fade.in.active
+        = render partial: 'user_list_item', locals: { taggers: @taggers, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }
+      #tags-scoreboard.tab-pane.fade
+        = render partial: 'tag_list_item', locals: { tags: @tags, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }
