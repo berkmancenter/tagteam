@@ -6,15 +6,25 @@ module Statistics
     object :hub, class: Hub
     string :sort, default: 'name'
     string :criteria, default: 'Past Day'
+    string :type, default: 'users'
 
     def execute
       counts_by_user_id = count_taggings_by_user_id
+      counts_by_tag_id = count_taggings_by_tag_id
 
-      scoreboard = create_scoreboard(counts_by_user_id.keys)
-      scoreboard = insert_user_counts(scoreboard, counts_by_user_id)
-      scoreboard = insert_user_ranks(scoreboard)
+      scoreboard_users = create_users_scoreboard(counts_by_user_id.keys)
+      scoreboard_users = insert_user_counts(scoreboard_users, counts_by_user_id)
+      scoreboard_users = insert_user_ranks(scoreboard_users)
 
-      sort_scoreboard_values(scoreboard.values)
+      scoreboard_tags = create_tags_scoreboard(counts_by_tag_id.keys)
+      scoreboard_tags = insert_tag_counts(scoreboard_tags, counts_by_tag_id)
+      scoreboard_tags = insert_tag_ranks(scoreboard_tags)
+
+      if type == 'users'
+        sort_scoreboard_values(scoreboard_users.values)
+      else
+        sort_scoreboard_values(scoreboard_tags.values)
+      end
     end
 
     private
@@ -33,18 +43,27 @@ module Statistics
     end
 
     def count_taggings_by_user_id
+      count_taggings :tagger_id
+    end
+
+    def count_taggings_by_tag_id
+      count_taggings :tag_id
+    end
+
+    def count_taggings(grouping_object)
       ActsAsTaggableOn::Tagging
+        .select('DISTINCT taggings.taggable_id')
         .where(
           context: "hub_#{hub.id}",
           created_at: set_criteria,
           tagger_type: 'User',
           taggable_type: 'FeedItem'
         )
-        .group(:tagger_id)
+        .group(grouping_object)
         .count
     end
 
-    def create_scoreboard(user_ids)
+    def create_users_scoreboard(user_ids)
       users = User.where(id: user_ids).pluck(:id, :username)
 
       users.each_with_object({}) do |(user_id, username), scoreboard|
@@ -63,6 +82,28 @@ module Statistics
 
       sorted_scoreboard.each_with_object(scoreboard).with_index do |((user_id), local_scoreboard), i|
         local_scoreboard[user_id][:rank] = i + 1
+      end
+    end
+
+    def create_tags_scoreboard(tag_ids)
+      tags = ActsAsTaggableOn::Tag.where(id: tag_ids).pluck(:id, :name)
+
+      tags.each_with_object({}) do |(tag_id, name), scoreboard|
+        scoreboard[tag_id] = { name: name }
+      end
+    end
+
+    def insert_tag_counts(scoreboard, counts_by_tag_id)
+      counts_by_tag_id.each_with_object(scoreboard) do |(tag_id, count), local_scoreboard|
+        local_scoreboard[tag_id][:count] = count
+      end
+    end
+
+    def insert_tag_ranks(scoreboard)
+      sorted_scoreboard = scoreboard.sort_by { |_id, tag| tag[:count] }.reverse
+
+      sorted_scoreboard.each_with_object(scoreboard).with_index do |((tag_id), local_scoreboard), i|
+        local_scoreboard[tag_id][:rank] = i + 1
       end
     end
 

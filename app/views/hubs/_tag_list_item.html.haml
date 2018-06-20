@@ -1,0 +1,16 @@
+%h2 Tags
+- if tags.present?
+  %table.table
+    - %w[rank name items].each do |sort_option|
+      %th= sortable_link(sort_option, sort, order, 'scoreboard_hub_path')
+
+    - tags.each do |tag|
+      %tr
+        %td
+          = tag[:rank]
+        %td
+          = tag[:name]
+        %td
+          = tag[:count]
+- else
+  This hub currently has no tags scoreboard.

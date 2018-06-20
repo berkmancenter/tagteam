@@ -212,17 +212,28 @@ class HubsController < ApplicationController
 
   def scoreboard
     @sort = %w[rank name items].include?(params[:sort]) ? params[:sort] : 'rank'
+    @order =  params[:order] || 'asc'
+
     @taggers = Statistics::Scoreboard.run!(hub: @hub,
       sort: @sort,
       criteria: params[:criteria] || 'Year'
     )
 
-    @order =  params[:order] || 'asc'
-
     @taggers = SORT_OPTIONS[@sort].call(@taggers)
     @taggers = @taggers.reverse if @order == 'desc'
 
     @taggers = @taggers.paginate(page: params[:page], per_page: get_per_page)
+
+    @tags = Statistics::Scoreboard.run!(hub: @hub,
+      sort: @sort,
+      criteria: params[:criteria] || 'Year',
+      type: 'tags'
+    )
+
+    @tags = SORT_OPTIONS[@sort].call(@tags)
+    @tags = @tags.reverse if @order == 'desc'
+
+    @tags = @tags.paginate(page: params[:page], per_page: get_per_page)
 
     render layout: request.xhr? ? false : 'tabs'
   end
