@@ -18,12 +18,21 @@
             = 'time'.pluralize(tagging_by_user['count'])
             by
             %span.badge= User.find(tagging_by_user['tagger_id']).username
-    %h2 Taggers before tag was deprecated
-    - if @deprecated_taggings_by_user.count == 0
-      %p None
-    - else
+    - if @tag.deprecated?(@hub)
+      %h2 Taggers before tag was deprecated
       %ul.list-unstyled
-        - @deprecated_taggings_by_user.each do |tagging_by_user|
+        - @before_deprecated_taggings_by_user.each do |tagging_by_user|
+          %li
+            Tagged
+            %a{ href: hub_user_tags_name_path(@hub, User.find(tagging_by_user['tagger_id']).username, @tag.name, 'deprecated') }
+              %span.badge= tagging_by_user['count']
+            = 'time'.pluralize(tagging_by_user['count'])
+            by
+            %span.badge= User.find(tagging_by_user['tagger_id']).username
+    - if @tag.deprecated?(@hub)
+      %h2 Taggers after tag was deprecated
+      %ul.list-unstyled
+        - @after_deprecated_taggings_by_user.each do |tagging_by_user|
           %li
             Tagged
             %a{ href: hub_user_tags_name_path(@hub, User.find(tagging_by_user['tagger_id']).username, @tag.name, 'deprecated') }

@@ -106,10 +106,18 @@ class TagsController < ApplicationController
       tag: @tag
     )
 
-    @deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
+    @before_deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
       hub: @hub,
       tag: @tag,
-      deprecated: true
+      deprecated: true,
+      after: false
+    )
+
+    @after_deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
+      hub: @hub,
+      tag: @tag,
+      deprecated: true,
+      after: true
     )
 
     render layout: request.xhr? ? false : 'tabs'
@@ -190,21 +198,23 @@ class TagsController < ApplicationController
 
   def fetch_feed_items
     @feed_items = if @hub.deprecated_tags.map(&:name).include?(@tag.name)
-      []  
-    else
-      FeedItem
-      .tagged_with(@tag.name, on: @hub.tagging_key)
-      .uniq
-      .order(date_published: :desc, created_at: :desc)
-    end
-    @feed_items = @feed_items.paginate(page: params[:page], per_page: get_per_page)
+                    []
+                  else
+                    FeedItem
+                      .tagged_with(@tag.name, on: @hub.tagging_key)
+                      .order(date_published: :desc, created_at: :desc)
+                  end
+
+    @feed_items = @feed_items.paginate(
+      page: params[:page],
+      per_page: get_per_page
+    )
   end
 
   def load_feed_items
     @feed_items =
       FeedItem
       .tagged_with(@tag.name, on: @hub.tagging_key)
-      .uniq
       .order(date_published: :desc, created_at: :desc)
       .paginate(page: params[:page], per_page: get_per_page)
   end
