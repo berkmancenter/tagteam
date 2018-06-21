@@ -4,7 +4,9 @@
   inner_window: 1,
   outer_window: 0,
   next_label: fa_icon('chevron-right'),
-  previous_label: fa_icon('chevron-left')
+  previous_label: fa_icon('chevron-left'),
+  param_name: local_assigns[:param_name] || 'page',
+  params: { anchor: local_assigns[:anchor] || nil }
 - if results.total_pages > 1
   %span.pagination-counts= page_entries_info results
   - if show_per_page_select.present?
