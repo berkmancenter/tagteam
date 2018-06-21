@@ -222,7 +222,7 @@ class HubsController < ApplicationController
     @taggers = SORT_OPTIONS[@sort].call(@taggers)
     @taggers = @taggers.reverse if @order == 'desc'
 
-    @taggers = @taggers.paginate(page: params[:page], per_page: get_per_page)
+    @taggers = @taggers.paginate(page: params[:taggers_page], per_page: get_per_page)
 
     @tags = Statistics::Scoreboard.run!(hub: @hub,
       sort: @sort,
@@ -233,7 +233,7 @@ class HubsController < ApplicationController
     @tags = SORT_OPTIONS[@sort].call(@tags)
     @tags = @tags.reverse if @order == 'desc'
 
-    @tags = @tags.paginate(page: params[:page], per_page: get_per_page)
+    @tags = @tags.paginate(page: params[:tags_page], per_page: get_per_page)
 
     render layout: request.xhr? ? false : 'tabs'
   end

@@ -12,5 +12,6 @@
           = tag[:name]
         %td
           = tag[:count]
+  = render partial: 'shared/paginate', locals: { param_name: 'tags_page', anchor: 'tags-scoreboard' }, object: tags, as: :results
 - else
   This hub currently has no tags scoreboard.
