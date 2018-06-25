@@ -715,7 +715,7 @@ $(document).ready(function(){
         var filter_href = $(this).attr('href');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
-          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+          tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
         }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
@@ -742,6 +742,7 @@ $(document).ready(function(){
               $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
                 source: function( request, response ) {
                   $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
+                    tags_applied: $('div.tags-applied-list:visible').data('tags'),
                     term: request.term,
                     offset: 0
                   }, function (data) {

@@ -26,6 +26,9 @@ class TagsController < ApplicationController
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
     deprecated_tags_names = @hub.deprecated_tags.pluck(:name)
+
+    tags_applied = params.has_key?(:tags_applied) ? params[:tags_applied].split(', ') : []
+
     if params[:offset].nil?
       limit = 25
     else
@@ -36,6 +39,7 @@ class TagsController < ApplicationController
       approved_tags = @hub
                      .hub_approved_tags
                      .where.not(tag: deprecated_tags_names)
+                     .where.not(tag: tags_applied)
                      .pluck(:tag)
 
       result = ActsAsTaggableOn::Tag
@@ -54,10 +58,14 @@ class TagsController < ApplicationController
               .where(name: approved_tags)
               .count
     else
+      tag_ids = FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id')
+
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
                .where.not(name: deprecated_tags_names)
+               .where.not(name: tags_applied)
                .where('name LIKE \'%' + params[:term] + '%\'')
+               .where(id: tag_ids)
                .group(:id)
                .order('COUNT(taggings.id) DESC')
                .limit(limit)
@@ -67,21 +75,16 @@ class TagsController < ApplicationController
               .left_joins(:taggings)
               .where.not(name: deprecated_tags_names)
               .where('name LIKE \'%' + params[:term] + '%\'')
+              .where(id: tag_ids)
               .count
     end
-
-    more = if count > limit
-             true
-           else
-             false
-           end
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
         results = {
           items: result.map { |r| { id: r[:id], label: r[:name] } },
-          more: more
+          more: count > limit
         }
         render json: results.compact
       end
