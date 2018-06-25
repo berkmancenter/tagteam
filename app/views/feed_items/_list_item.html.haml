@@ -5,7 +5,7 @@
   user_id = current_user.try(:id) || 'anon'
   tag_list = feed_item&.applied_tags(hub)
   tag_list_display = tag_list.map(&:name).join('-')
-- if hub_feed.present?
+- if hub_feed.present? && hub_feed.present?
   %li.feed-item.row
     - cache("feed-item-tag-list-#{hub.try(:id)}-#{hub_feed.try(:id)}-#{tag_list_display}-#{feed_item.try(:id)}-#{user_id}-list", expires: 120.minutes) do
       .col-xs-10.col-xs-offset-1

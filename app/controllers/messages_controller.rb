@@ -27,7 +27,7 @@ class MessagesController < ApplicationController
 
   def find_hub
     @hub = Hub.find(params[:hub_id])
-    authorize @hub
+    authorize @hub, :create_message?
   end
 
   def messages_attributes
