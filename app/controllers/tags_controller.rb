@@ -25,21 +25,72 @@ class TagsController < ApplicationController
 
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
-    hub_id = @hub.id
-    approved_tags = @hub.hub_approved_tags.map(&:tag)
-    @search = ActsAsTaggableOn::Tag.where('name LIKE \'%' + params[:term] + '%\'') #.limit(100)
+    deprecated_tags_names = @hub.deprecated_tags.pluck(:name)
 
-    result = @search - @hub.fetch_deprecated_tags
+    tags_applied = params.has_key?(:tags_applied) ? params[:tags_applied].split(', ') : []
+
+    if params[:offset].nil?
+      limit = 25
+    else
+      limit = params[:offset].to_i + 25
+    end
+
+    if @hub.settings[:suggest_only_approved_tags]
+      approved_tags = @hub
+                     .hub_approved_tags
+                     .where.not(tag: deprecated_tags_names)
+                     .where.not(tag: tags_applied)
+                     .pluck(:tag)
+
+      result = ActsAsTaggableOn::Tag
+               .left_joins(:taggings)
+               .where('name LIKE \'%' + params[:term] + '%\'')
+               .where(name: approved_tags)
+               .group(:id)
+               .order('COUNT(taggings.id) DESC')
+               .limit(limit)
+
+      count = ActsAsTaggableOn::Tag
+              .select('DISTINCT(tags.id)')
+              .left_joins(:taggings)
+              .where.not(name: deprecated_tags_names)
+              .where('name LIKE \'%' + params[:term] + '%\'')
+              .where(name: approved_tags)
+              .count
+    else
+      tag_ids = FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id')
+
+      result = ActsAsTaggableOn::Tag
+               .left_joins(:taggings)
+               .where.not(name: deprecated_tags_names)
+               .where.not(name: tags_applied)
+               .where('name LIKE \'%' + params[:term] + '%\'')
+               .where(id: tag_ids)
+               .group(:id)
+               .order('COUNT(taggings.id) DESC')
+               .limit(limit)
+
+      count = ActsAsTaggableOn::Tag
+              .select('DISTINCT(tags.id)')
+              .left_joins(:taggings)
+              .where.not(name: deprecated_tags_names)
+              .where('name LIKE \'%' + params[:term] + '%\'')
+              .where(id: tag_ids)
+              .count
+    end
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
-        results = result.map { |r| { id: r.id, label: r.name } if (r.name.length < 20) && !(r.name =~ /\s/) }
+        results = {
+          items: result.map { |r| { id: r[:id], label: r[:name] } },
+          more: count > limit
+        }
         render json: results.compact
       end
     end
-  rescue
-    render plain: 'Please try a different search term', layout: !request.xhr?
+  # rescue
+  #   render plain: 'Please try a different search term', layout: !request.xhr?
   end
 
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.

@@ -213,6 +213,11 @@
             return split( term ).pop();
           }
 
+          var autocomplete_offset = 0;
+          var autocomplete_last_selected = false;
+          var spinner = $('<i/>', {
+            class: 'fa fa-spinner fa-spin bookmarklet-autocomplete-spinner'
+          });
           $( "#feed_item_tag_list" )
           .bind( "keydown", function( event ) {
             if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -223,8 +228,20 @@
           .autocomplete({
             source: function( request, response ) {
               $.getJSON( $.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete', {
-                term: extractLast( request.term )
-              }, response );
+                term: extractLast( request.term ),
+                offset: autocomplete_offset
+              }, function (data) {
+                var values = data.items;
+
+                if (data.more) {
+                  values.push({
+                    label: '>> LOAD MORE <<',
+                    value: 'load_more'
+                  });
+                }
+
+                response(values);
+              });
             },
             search: function() {
               // custom minLength
@@ -233,11 +250,29 @@
                 return false;
               }
             },
-            focus: function() {
+            focus: function(event, ui) {
               // prevent value inserted on focus
               return false;
             },
             select: function( event, ui ) {
+              autocomplete_last_selected = ui.item;
+
+              if (ui.item.value === 'load_more') {
+                autocomplete_offset += 25;
+                $('#feed_item_tag_list').autocomplete('search');
+                $('.ui-menu-item:contains("LOAD MORE") a').first().append(spinner);
+
+                // HACK jQuery UI menu jumps to the top of the page
+                // this is the easiest way to prevent it, can find anything
+                // nicer ATM
+                setTimeout(function () {
+                  var scrollingElement = (document.scrollingElement || document.body);
+                  scrollingElement.scrollTop = scrollingElement.scrollHeight;
+                }, 1);
+
+                return false;
+              }
+
               var terms = split( this.value );
               // remove the current input
               terms.pop();
@@ -246,10 +281,19 @@
               // add placeholder to get the comma-and-space at the end
               terms.push( "" );
               this.value = terms.join( ", " );
+
               return false;
-            }
+            },
+            minLength: 3
           });
 
+          $( "#feed_item_tag_list" ).data( "autocomplete" ).close = function(e) {
+            if (!autocomplete_last_selected || autocomplete_last_selected.value != 'load_more') {
+              this.cancelSearch = true;
+              this._close(event);
+              autocomplete_offset = 0;
+            }
+          }
         }
       });
     },
@@ -671,7 +715,7 @@ $(document).ready(function(){
         var filter_href = $(this).attr('href');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
-          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+          tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
         }
         if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
@@ -696,7 +740,17 @@ $(document).ready(function(){
             title: '',
             create: function(){
               $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
-                source: $.rootPath() + "hubs/" + hub_id + "/tags/autocomplete",
+                source: function( request, response ) {
+                  $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
+                    tags_applied: $('div.tags-applied-list:visible').data('tags'),
+                    term: request.term,
+                    offset: 0
+                  }, function (data) {
+                    var values = data.items;
+
+                    response(values);
+                  });
+                },
                 minLength: 2
               });
             },

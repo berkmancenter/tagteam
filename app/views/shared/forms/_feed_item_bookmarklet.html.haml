@@ -10,7 +10,7 @@
               class: 'form-control'
           .col-xs-6
             = f.input :bookmark_collection_id, as: :select, required: true, label: 'To collection', class: 'form-control'
-        = f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags.'
+        = f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags. Type at least 3 characters to load tag suggestions.'
         .feed-item-existing-tags
         = f.input :title, required: true
         = f.input :url, label: 'URL', required: true
