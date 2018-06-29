@@ -732,7 +732,7 @@ $(document).ready(function(){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           } else if (filter_type == 'SupplementTagFilter') {
             if(tag_id == undefined){
-              prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
+              prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='supplement_tag_for_filter' class='form-control' />";
             }
             message = "<h2>Please enter the tag to add</h2>";
           }
@@ -744,7 +744,7 @@ $(document).ready(function(){
             height: 'auto',
             title: '',
             create: function(){
-              $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
+              $( "#new_tag_for_filter,#modify_tag_for_filter,#supplement_tag_for_filter" ).autocomplete({
                 source: function( request, response ) {
                   $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
                     tags_applied: $('div.tags-applied-list:visible').data('tags'),
@@ -774,6 +774,9 @@ $(document).ready(function(){
                   var replace_tag = undefined;
                   if ($(this).find('#modify_tag_for_filter').length > 0){
                     replace_tag = $(this).find('#modify_tag_for_filter').val();
+                  }
+                  if ($(this).find('#supplement_tag_for_filter').length > 0){
+                    replace_tag = $(this).find('#supplement_tag_for_filter').val();
                   }
                   $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                   $(dialogNode).dialog('close');

@@ -39,7 +39,6 @@ class TagsController < ApplicationController
       approved_tags = @hub
                      .hub_approved_tags
                      .where.not(tag: deprecated_tags_names)
-                     .where.not(tag: tags_applied)
                      .pluck(:tag)
 
       result = ActsAsTaggableOn::Tag
@@ -63,7 +62,6 @@ class TagsController < ApplicationController
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
                .where.not(name: deprecated_tags_names)
-               .where.not(name: tags_applied)
                .where('name LIKE \'%' + params[:term] + '%\'')
                .where(id: tag_ids)
                .group(:id)
