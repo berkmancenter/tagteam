@@ -52,6 +52,10 @@ module TaggingNotifications
         "Tags modified: #{tags.first} was changed to #{tags.last}"
       when :tags_deleted
         "Tags deleted: #{tags.join(', ')}"
+      when :tags_supplemented
+        "Tag #{tags.first} has been supplemented with tag #{tags.last}"
+      when :tags_supplemented_deletion
+        "Tag #{tags.first} is no longer being supplemented with tag #{tags.last}"
       end
     end
   end

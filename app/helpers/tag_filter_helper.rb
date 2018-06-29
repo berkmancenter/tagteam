@@ -23,6 +23,13 @@ module TagFilterHelper
         text: 'Modify a tag for every item in this hub',
         icon: 'pencil',
         button: 'default'
+      },
+      {
+        role: :hub_tag_supplementer,
+        data_type: 'SupplementTagFilter',
+        text: 'Supplement a tag with a second tag for every item in this hub',
+        icon: 'plus-circle',
+        button: 'primary'
       }
     ]
   end
@@ -35,6 +42,8 @@ module TagFilterHelper
       'modify'
     when 'DeleteTagFilter'
       'delete'
+    when 'SupplementTagFilter'
+      'supplement'
     end
   end
 
@@ -46,6 +55,8 @@ module TagFilterHelper
       'Change'
     when 'DeleteTagFilter'
       'Delete'
+    when 'SupplementTagFilter'
+      'Supplement'
     end
   end
 

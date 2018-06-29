@@ -12,3 +12,6 @@
   - if hub_tag_filter.class == ModifyTagFilter
     %span.filter-action to
     = tag_display(hub_tag_filter.new_tag, hub: hub_tag_filter.hub)
+  - if hub_tag_filter.class == SupplementTagFilter
+    %span.filter-action with
+    = tag_display(hub_tag_filter.new_tag, hub: hub_tag_filter.hub)

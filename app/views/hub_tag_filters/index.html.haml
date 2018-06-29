@@ -4,7 +4,7 @@
   = render partial: 'hubs/tabs', locals: { active: 'filters' }
 - content_for :tab_content do
   .nicely-padded
-    - if current_user && (current_user.is?([:owner, :hub_tag_adder, :hub_tag_deleter, :hub_tag_modifier], @hub) || current_user.superadmin?)
+    - if current_user && (current_user.is?([:owner, :hub_tag_adder, :hub_tag_deleter, :hub_tag_modifier, :hub_tag_supplementer], @hub) || current_user.superadmin?)
       %h1 Create hub-wide filters
       %ul.tag_filter_controls.list-unstyled
         - filter_buttons.each do |method|

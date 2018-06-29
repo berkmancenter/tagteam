@@ -14,3 +14,8 @@
     = tag_display hub_feed_item_tag_filter.new_tag,
       hub: hub_feed_item_tag_filter.hub,
       hub_feed_item: hub_feed_item_tag_filter.scope
+  - if hub_feed_item_tag_filter.class == SupplementTagFilter
+    %span.filter-action with
+    = tag_display hub_feed_item_tag_filter.new_tag,
+      hub: hub_feed_item_tag_filter.hub,
+      hub_feed_item: hub_feed_item_tag_filter.scope

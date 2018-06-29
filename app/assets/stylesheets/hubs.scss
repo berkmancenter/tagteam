@@ -225,6 +225,12 @@ form.hub {
     }
   }
 
+  &.supplement {
+    .filter-action {
+      color: $brand-primary;
+    }
+  }
+
   &.add {
     .filter-action {
       color: $brand-success;

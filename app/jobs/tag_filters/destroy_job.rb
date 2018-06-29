@@ -38,6 +38,8 @@ module TagFilters
         { tags_added: [tag_filter.tag_name] }
       when 'ModifyTagFilter'
         { tags_modified: [tag_filter.new_tag_name, tag_filter.tag_name] }
+      when 'SupplementTagFilter'
+        { tags_supplemented_deletion: [tag_filter.tag_name, tag_filter.new_tag_name] }
       else
         raise 'Unknown tag filter type'
       end

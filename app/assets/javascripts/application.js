@@ -717,7 +717,7 @@ $(document).ready(function(){
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
           tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
         }
-        if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
+        if(filter_type == 'SupplementTagFilter' || filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
           var message = '';
           var prepend = '';
@@ -730,6 +730,11 @@ $(document).ready(function(){
             message = "<h2>Please enter the replacement tag</h2>";
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
+          } else if (filter_type == 'SupplementTagFilter') {
+            if(tag_id == undefined){
+              prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
+            }
+            message = "<h2>Please enter the tag to add</h2>";
           }
           $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" class="form-control" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({

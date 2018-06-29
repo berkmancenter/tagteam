@@ -11,5 +11,8 @@ FactoryBot.define do
     factory :modify_tag_filter, class: ModifyTagFilter do
       association :new_tag, factory: :tag
     end
+    factory :supplement_tag_filter, class: SupplementTagFilter do
+      association :new_tag, factory: :tag
+    end
   end
 end

@@ -32,6 +32,13 @@
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-default' do
             = fa_icon 'pencil', text: 'Modify a tag on all items in this feed'
+        %li
+          = link_to hub_feed_tag_filters_path(@hub_feed),
+            data_hub_id: @hub.id,
+            data_type: 'SupplementTagFilter',
+            tag_list: tag_list,
+            class: 'add_filter_control hub_feed_tag_filter btn btn-primary' do
+            = fa_icon 'plus-circle', text: 'Supplement a tag with a second tag on all items in this feed'
     %h1 Active filters
     - if @tag_filters.empty?
       %h2 No active filters

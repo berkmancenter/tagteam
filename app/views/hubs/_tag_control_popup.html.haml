@@ -1,10 +1,13 @@
 %div{ class: "tag_filter #{type.to_s}" }
   %span.filter-action= type.to_s.capitalize
   %em= @tag.name
-  - case type
-  - when :add then 'to'
-  - when :modify then 'for'
-  - when :delete then 'from'
+  :ruby
+    case type
+    when :add then 'to'
+    when :modify then 'for'
+    when :delete then 'from'
+    when :supplement then 'with'
+    end
   \:
   %ul
     - if hub_filter_possible?(type, params, current_user)

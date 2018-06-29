@@ -66,6 +66,15 @@ module DelegatableRoles
                    .select { |filter| filter.scope_type == 'Hub' && filter.type == 'ModifyTagFilter' }
       end
     },
+    hub_tag_supplementer: {
+      name: 'Hub-wide tag filter supplementer',
+      description: 'Can add supplemental hub-wide tag filters in this hub',
+      objects_of_concern: lambda do |user, hub|
+        # Find all hub_tag_filters in this hub owned by this user.
+        return user.my_objects_in(TagFilter, hub)
+                   .select { |filter| filter.scope_type == 'Hub' && filter.type == 'SupplementTagFilter' }
+      end
+    },
     hub_feed_tag_filterer: {
       name: 'Feed-wide tag filter manager',
       description: 'Can manage feed-level tag filters in this hub',

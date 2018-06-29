@@ -54,6 +54,8 @@ module TagsHelper
       roles << :hub_tag_deleter
     when :modify
       roles << :hub_tag_modifier
+    when :supplement
+      roles << :hub_tag_supplementer
     end
 
     (current_user.is?(roles, @hub) || current_user.superadmin?) && !@already_filtered_for_hub

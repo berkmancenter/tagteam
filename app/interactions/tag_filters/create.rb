@@ -11,7 +11,7 @@ module TagFilters
     integer :tag_id, default: nil
     object :user
 
-    validates :filter_type, inclusion: { in: %w(AddTagFilter DeleteTagFilter ModifyTagFilter) }
+    validates :filter_type, inclusion: { in: %w[AddTagFilter DeleteTagFilter ModifyTagFilter SupplementTagFilter] }
 
     # TODO: Refactor this too-large method that was formerly the TagFiltersController#create action
     def execute
@@ -28,7 +28,7 @@ module TagFilters
 
       @new_tag_name.delete(hub.tags_delimiter.join) if @new_tag_name.present?
 
-      if filter_type_class == ModifyTagFilter
+      if [ModifyTagFilter, SupplementTagFilter].include?(filter_type_class)
         tag ||= find_or_create_tag_by_name(modify_tag_name)
         new_tag = find_or_create_tag_by_name(new_tag_name)
       else
@@ -55,6 +55,8 @@ module TagFilters
             { tags_deleted: [tag.name] }
           when 'ModifyTagFilter'
             { tags_modified: [tag.name, new_tag.name] }
+          when 'SupplementTagFilter'
+            { tags_supplemented: [tag.name, new_tag.name] }
           end
 
         # Note, this isn't doing anything for the tag_filter as scope
