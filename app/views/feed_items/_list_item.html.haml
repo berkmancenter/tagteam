@@ -16,7 +16,11 @@
         %p.text-nowrap
           = link_to feed_item.url, feed_item.url, target: '_blank'
         %p
-          = link_to(hub_feed.display_title, hub_hub_feed_path(hub, hub_feed))
+          - if hub_feed.feed.is_bookmarking_feed? && hub_feed.owners.any?
+            = link_to hub_feed.author_title, hub_user_hub_items_path(hub, hub_feed.owners.first.username)
+          - else
+            = link_to(hub_feed.display_title, hub_hub_feed_path(hub, hub_feed))
+
           - if feed_item.date_published.present?
             = link_to(l(feed_item.date_published, format: :date_short),
                 by_date_hub_path(hub, year: feed_item.date_published.year, month: feed_item.date_published.month, day: feed_item.date_published.day),
