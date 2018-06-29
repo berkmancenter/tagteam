@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     breadcrumbs.add @hub, hub_path(@hub)
     @user = User.find_by(username: params[:username])
 
-    @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) }
+    @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) && hf.feed.is_bookmarking_feed? }
 
     redirect_to hub_path(@hub) and return if @hub_feed.nil?
 
