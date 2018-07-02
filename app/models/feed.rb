@@ -221,7 +221,7 @@ class Feed < ApplicationRecord
   private
 
   def remove_feed_items_feeds
-    connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
+    self.class.connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
   end
 
   def feed_url_format
