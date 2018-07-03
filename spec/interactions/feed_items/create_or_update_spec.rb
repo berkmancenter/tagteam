@@ -6,7 +6,6 @@ require 'support/interactions'
 module FeedItems
   RSpec.describe CreateOrUpdate do
     include_context 'interactions'
-    it_behaves_like 'an interaction'
 
     let(:feed) { create(:feed) }
     let(:feed_retrieval) { create(:feed_retrieval, feed: feed) }
@@ -17,7 +16,7 @@ module FeedItems
       instance_double(
         FeedAbstract::Item::Atom,
         author: 'Example Author',
-        categories: [],
+        categories: ['tag1', 'tag2', 'tag3,tag4', 'tag5 tag6'],
         content: 'Example Content',
         contributor: 'Example Contributor',
         guid: '0000',
@@ -38,8 +37,10 @@ module FeedItems
       }
     end
 
+    it_behaves_like 'an interaction'
+
     describe 'the interaction' do
-      context 'for an item with an existing URL' do
+      context 'when given a feed item with an existing URL' do
         let(:url) { feed_item.url }
 
         it 'updates the existing FeedItem record' do
@@ -59,7 +60,7 @@ module FeedItems
         end
       end
 
-      context 'for an item with a new URL' do
+      context 'when given an item with a new URL' do
         let(:url) { 'https://www2.example.com' }
 
         it 'creates a new FeedItem record' do
@@ -73,6 +74,10 @@ module FeedItems
         it 'sets last_updated for the feed item' do
           expect(result.last_updated).to eq(raw_item.updated)
         end
+      end
+
+      it 'parses the tags correctly' do
+        expect(result.tags.map(&:name)).to match_array(%w[tag1 tag2 tag3 tag4 tag5 tag6])
       end
 
       it 'associates the feed retrieval with the feed item' do
