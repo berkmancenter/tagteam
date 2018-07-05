@@ -46,29 +46,23 @@ module TagFilters
       user.has_role!(:owner, tag_filter)
       user.has_role!(:creator, tag_filter)
 
-      if hub.notify_taggers?
-        changes =
-          case filter_type
-          when 'AddTagFilter'
-            { tags_added: [tag.name] }
-          when 'DeleteTagFilter'
-            { tags_deleted: [tag.name] }
-          when 'ModifyTagFilter'
-            { tags_modified: [tag.name, new_tag.name] }
-          when 'SupplementTagFilter'
-            { tags_supplemented: [tag.name, new_tag.name] }
-          end
+      changes =
+        case filter_type
+        when 'DeleteTagFilter'
+          { tags_deleted: [tag.name] }
+        when 'ModifyTagFilter'
+          { tags_modified: [[tag.name, new_tag.name]] }
+        when 'SupplementTagFilter'
+          { tags_supplemented: [[tag.name, new_tag.name]] }
+        end
+      TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(
+        tag_filter,
+        hub,
+        user,
+        changes
+      )
 
-        # Note, this isn't doing anything for the tag_filter as scope
-        TaggingNotifications::SendNotificationJob.perform_later(
-          tag_filter,
-          hub,
-          user,
-          changes
-        )
-      end
-
-      tag_filter.apply_async
+      # Not sure what this is doing - revisit?
       if tag_filter.type == 'AddTagFilter' && tag_filter.scope_type == 'FeedItem'
         hub.all_tag_filters.each do |old_filter|
           next if old_filter.scope_type == 'FeedItem'

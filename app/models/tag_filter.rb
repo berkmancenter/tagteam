@@ -39,6 +39,13 @@ class TagFilter < ApplicationRecord
     scope.taggable_items
   end
 
+  def filtered_feed_items
+    return [self.scope] if self.scope.is_a?(FeedItem)
+
+    return FeedItem.find(DeactivatedTagging.where(deactivator_id: self.id, deactivator_type: 'TagFilter').map(&:taggable_id).uniq) if self.scope.is_a?(Hub)
+    return []
+  end
+
   def filter_to_scope(items)
     items.where(id: items_in_scope.pluck(:id))
   end
@@ -116,22 +123,6 @@ class TagFilter < ApplicationRecord
 
   def self.rollback_by_id(id)
     find(id).rollback
-  end
-
-  def items_to_modify
-    items_to_process = []
-
-    if type == 'AddTagFilter'
-      items_to_process = items_in_scope
-    elsif type == 'DeleteTagFilter' || type == 'ModifyTagFilter'
-      items_to_process = FeedItem
-                         .joins(:taggings)
-                         .where(id: items_in_scope.pluck(:id))
-                         .group('feed_items.id,taggings.id')
-                         .having('taggings.tag_id=' + tag.id.to_s)
-    end
-
-    items_to_process
   end
 
   # Fix Pundit policy lookup for STI classes that inherit from TagFilter

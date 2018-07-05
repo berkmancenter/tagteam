@@ -727,7 +727,10 @@ $(document).ready(function(){
             if(tag_id == undefined){
               prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
             }
-            message = "<h2>Please enter the replacement tag</h2>";
+            message = "<h2>Please enter the replacement tag for: " + $(this).attr('tag_name') + "</h2>";
+            if ($(this).attr('other_tags') != null && $(this).attr('other_tags') != '' ) {
+              tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('other_tags') + '">Other tags applied: ' + $(this).attr('other_tags') + '</div>';
+            }
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
           } else if (filter_type == 'SupplementTagFilter') {

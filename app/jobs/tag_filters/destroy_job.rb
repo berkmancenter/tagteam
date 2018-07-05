@@ -8,28 +8,20 @@ module TagFilters
     def perform(tag_filter, current_user)
       hub = tag_filter.hub
 
+      TaggingNotifications::SendNotificationJob.perform_later(
+        hub,
+        tag_filter.filtered_feed_items,
+        [tag_filter],
+        current_user,
+        determine_changes(tag_filter)
+      )
+
       tag_filter.rollback
-
-      send_tagging_change_notification(tag_filter, hub, current_user) if hub.notify_taggers?
-
       tag_filter.destroy
     end
 
     private
 
-    def send_tagging_change_notification(tag_filter, hub, current_user)
-      changes = determine_changes(tag_filter)
-
-      # Note, this isn't doing anything for the tag_filter as scope
-      TaggingNotifications::SendNotificationJob.perform_later(
-        tag_filter,
-        hub,
-        current_user,
-        changes
-      )
-    end
-
-    # When rolling back a tag filter the tagging changes are the opposite of when the tag filter was added
     def determine_changes(tag_filter)
       case tag_filter.class.to_s
       when 'AddTagFilter'
@@ -37,9 +29,9 @@ module TagFilters
       when 'DeleteTagFilter'
         { tags_added: [tag_filter.tag_name] }
       when 'ModifyTagFilter'
-        { tags_modified: [tag_filter.new_tag_name, tag_filter.tag_name] }
+        { tags_modified: [[tag_filter.new_tag_name, tag_filter.tag_name]] }
       when 'SupplementTagFilter'
-        { tags_supplemented_deletion: [tag_filter.tag_name, tag_filter.new_tag_name] }
+        { tags_supplemented_deletion: [[tag_filter.tag_name, tag_filter.new_tag_name]] }
       else
         raise 'Unknown tag filter type'
       end

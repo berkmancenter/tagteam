@@ -5,29 +5,45 @@ module TaggingNotifications
   class SendNotificationJob < ApplicationJob
     queue_as :default
 
-    def perform(scope, hub, current_user, changes)
-      affected_items = feed_items(scope)
-
-      return if affected_items.length.zero?
-
-      if scope.is_a?(FeedItem) || scope.scope.is_a?(FeedItem) || affected_items.length == 1
-        TaggingNotifications::CreateNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_item: affected_items.first,
-          hub: hub
-        )
-      elsif scope.scope.is_a?(TagFilter)
-        # Nothing to be done here, although this is called from a couple of places
+    def perform(hub, feed_items, tag_filters, updated_by_user, changes)
+      # No tag filters means that all tag filters applied to the single feed item need to be found
+      notifications = {}
+      if tag_filters.empty? # for feed items that were just created
+        feed_item = feed_items.first
+        notifications[updated_by_user] = feed_items
+        DeactivatedTagging.where(taggable_id: feed_item.id, deactivator_type: 'TagFilter').map(&:deactivator).uniq.each do |deactivator|
+          if deactivator.is_a?(DeleteTagFilter)
+            changes[:tags_deleted] ||= []
+            changes[:tags_deleted] << deactivator.tag.name
+          elsif deactivator.is_a?(ModifyTagFilter)
+            changes[:tags_modified] ||= []
+            changes[:tags_modified] << [deactivator.tag.name, deactivator.new_tag.name]
+          end
+        end
+        return if changes.keys.empty?
+      else
+        feed_items.each do |feed_item|
+          feed_item.hub_feeds.each do |hub_feed|
+            hub_feed.owners.each do |owner|
+              next if owner == updated_by_user
+              notifications[owner] ||= []
+              notifications[owner] << feed_item
+            end
+          end
+        end
       end
-    end
 
-    private
-
-    def feed_items(scope)
-      return [scope] if scope.is_a?(FeedItem)
-
-      scope.items_to_modify
+      notifications.each do |owner, feed_items|
+        if owner.notifications_for_hub?(hub)
+          TaggingNotifications::NotificationsMailer.tagging_change_notification(
+            hub,
+            feed_items,
+            owner,
+            updated_by_user,
+            changes
+          ).deliver
+        end
+      end
     end
   end
 end

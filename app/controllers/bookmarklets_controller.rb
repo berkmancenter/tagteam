@@ -81,8 +81,6 @@ class BookmarkletsController < ApplicationController
           @feed.feed_items << @feed_item
           @feed.save
         end
-        @hub.apply_tag_filters_to_item_async(@feed_item)
-
         current_user.has_role!(:owner, @feed_item)
         current_user.has_role!(:creator, @feed_item)
 
@@ -92,24 +90,23 @@ class BookmarkletsController < ApplicationController
           params[:feed_item][:tag_list], @hub
         )
 
-        new_tags = trim_tags(new_tags)
+        new_tags = trim_tags(new_tags).map { |tag| ActsAsTaggableOn::Tag.normalize_name(tag) }
 
-        new_tags -= @hub.deprecated_tag_names
-
-        new_tags.map do |tag|
-          ActsAsTaggableOn::Tag.normalize_name(tag)
-        end
-
-        @feed_item.add_tags(new_tags, @hub.tagging_key, current_user)
-
-        if new_tags
-          TaggingNotifications::SendNotificationJob.perform_later(
-            @feed_item,
-            @hub,
-            current_user,
-            tags_added: new_tags.map(&:to_s)
+        new_tags.map do |new_tag|
+          ActsAsTaggableOn::Tagging.create(
+            tag: ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(new_tag),
+            taggable: @feed_item,
+            tagger: current_user,
+            context: @hub.tagging_key
           )
         end
+
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(
+          @feed_item,
+          @hub,
+          current_user,
+          {}
+        )
 
         @feed_item.reload.solr_index
 

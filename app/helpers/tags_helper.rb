@@ -79,9 +79,13 @@ module TagsHelper
       data_type: "#{type.to_s.capitalize}TagFilter"
     }
 
-    options[:data_id] = context[:tag].id if context[:tag]
+    if context[:tag]
+      options[:data_id] = context[:tag].id
+      options[:tag_name] = context[:tag].name
+      options[:other_tags] = (context[:tag_list] - [context[:tag].name]).join(', ') if context[:tag_list]
+    end
     options[:data_hub_id] = context[:hub].id
-    options[:tag_list] = context[:tag_list] if context[:tag_list]
+    options[:tag_list] = context[:tag_list].join(', ') if context[:tag_list]
 
     if context[:feed]
       path = hub_feed_tag_filters_path(context[:feed])
