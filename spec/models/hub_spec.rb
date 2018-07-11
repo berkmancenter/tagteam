@@ -1,8 +1,12 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/shared_context'
 
 RSpec.describe Hub, type: :model do
+  let(:valid_tag_delimiters) { ['&', '^'] }
+  let(:hub) { create(:hub, tags_delimiter: [valid_tag_delimiters[1]]) }
+
   context 'it has items' do
     include_context 'user owns a hub with a feed and items'
 
@@ -95,6 +99,24 @@ RSpec.describe Hub, type: :model do
             expect(@hub.last_applied_tag_filter).to eq(new_filter_1)
           end
         end
+      end
+    end
+  end
+
+  context 'tags_delimiter' do
+    describe 'validation' do
+      it 'creates tags_delimiter' do
+        hub.tags_delimiter << valid_tag_delimiters[0]
+        hub.save
+
+        expect(hub.tags_delimiter).to include(valid_tag_delimiters[0])
+      end
+
+      it 'does not create tags_delimiter for duplicate delimiter' do
+        hub.tags_delimiter << valid_tag_delimiters[1]
+        hub.save
+
+        expect(hub.errors.keys).to include(:tags_delimiter)
       end
     end
   end

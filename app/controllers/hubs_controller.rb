@@ -307,12 +307,17 @@ class HubsController < ApplicationController
   def set_settings
     inputs = { hub: @hub }.reverse_merge(params)
 
+    params[:tags_delimiter].gsub!(/\s/, '⎵')
     outcome = Hubs::UpdateTaggingSettings.run(inputs)
 
     if outcome.valid?
       flash[:notice] = 'Saved successfully.'
     else
-      flash[:error] = 'Something went wrong, try again.'
+      if outcome.errors.keys.include?(:tags_delimiter)
+        flash[:error] = outcome.errors.messages[:tags_delimiter].join('<br>')
+      else
+        flash[:error] = 'Something went wrong, try again.'
+      end
     end
 
     redirect_to request.referer
@@ -851,7 +856,7 @@ class HubsController < ApplicationController
 
     if @hub.tags_delimiter.include?(params[:delimiter])
       flash[:notice] = 'Delimiter removed successfully'
-      @hub.tags_delimiter.delete(params[:delimiter])
+      @hub.tags_delimiter.delete(params[:delimiter]) if params[:delimiter] != ','
       @hub.save
     else
       flash[:error] = 'Something went wrong, try again.'

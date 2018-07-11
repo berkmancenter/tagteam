@@ -49,6 +49,7 @@ class Hub < ApplicationRecord
   # list so if we happen to apply all these in order, it's the correct order.
   has_many :all_tag_filters, -> { order(updated_at: :asc) }, class_name: 'TagFilter', dependent: :destroy
 
+  validate :duplicate_delimiter
   api_accessible :default do |t|
     t.add :id
     t.add :title
@@ -243,17 +244,13 @@ class Hub < ApplicationRecord
 
   def settings
     {
-      tags_delimiter: tags_delimiter_with_default,
+      tags_delimiter: tags_delimiter,
       official_tag_prefix: official_tag_prefix_with_default,
       hub_approved_tags: hub_approved_tags,
       suggest_only_approved_tags: suggest_only_approved_tags_with_default,
       bookmarklet_empty_description_reminder: bookmarklet_empty_description_reminder,
       enable_tag_scoreboard: enable_tag_scoreboard
     }
-  end
-
-  def tags_delimiter_with_default
-    tags_delimiter.present? ? tags_delimiter : [',']
   end
 
   def official_tag_prefix_with_default
@@ -285,5 +282,15 @@ class Hub < ApplicationRecord
   def fetch_deprecated_tags
     tags = all_tag_filters.where(type: 'DeleteTagFilter', scope_type: 'Hub').select(:tag_id)
     ActsAsTaggableOn::Tag.where(id: tags)
+  end
+
+  private
+
+  def duplicate_delimiter
+    tags_delimiter.detect do |delimiter|
+      if tags_delimiter.count(delimiter) > 1
+        errors.add(:tags_delimiter, "You have already created #{delimiter} as delimiter")
+      end
+    end
   end
 end

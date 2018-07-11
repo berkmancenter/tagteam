@@ -6,30 +6,29 @@
 
       .form-group
         = label_tag 'tags_delimiter', 'Tag delimiters'
-        = text_field_tag('tags_delimiter',
-          nil,
-          id: 'tags_delimiter',
-          class: 'form-control',
-          maxlength: '1')
-        TagTeam will split tags on the delimiters
-        %span.badge ,
-        (comma) and
-        %span.badge ⎵
-        \(space), in addition to any specified delimiters shown below. Tags entered in a list with any of the delimiters will be treated as separate tags.
-
-      %h2
-        - if hub.tags_delimiter.present? && settings[:tags_delimiter].present?
-          %strong Available Tag Delimiters
-          %ul.list-unstyled.nicely-padded
-            - settings[:tags_delimiter].each do |delimiter|
-              %li
-                %span.badge= delimiter.gsub(' ', '&nbsp;').html_safe
+        %p
+          TagTeam will split tags based on the delimiters listed below. The delimiter
+          %span.badge ,
+          cannot be removed (as a default).
+        %ul.list-unstyled.nicely-padded.delimiter-list
+          - settings[:tags_delimiter].each do |delimiter|
+            %li
+              %span.badge= delimiter.html_safe
+              - if delimiter == '⎵'
+                (space)
+              - if delimiter != ','
                 = link_to remove_delimiter_hub_path(delimiter: delimiter),
                   method: :delete,
                   title: 'Remove this delimiter',
                   class: 'pull-right',
                   confirm: 'Are you sure you want to remove this delimiter?' do
                   = fa_icon 'times'
+        = text_field_tag('tags_delimiter',
+          nil,
+          id: 'tags_delimiter',
+          class: 'form-control',
+          maxlength: '1',
+          placeholder: 'Add another delimiter')
       %br
       .form-group
         = label_tag 'official_tag_prefix', 'Optional tag prefix'
@@ -58,6 +57,6 @@
           = check_box_tag('enable_tag_scoreboard',
             true,
             hub.enable_tag_scoreboard)
-          Enable tag scoreboard  
+          Enable tag scoreboard
       .form-group
         = submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings'
