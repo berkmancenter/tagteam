@@ -6,6 +6,8 @@ module TaggingNotifications
     queue_as :default
 
     def perform(hub, feed_items, tag_filters, updated_by_user, changes)
+      return unless hub.notify_taggers?
+
       # No tag filters means that all tag filters applied to the single feed item need to be found
       notifications = {}
       if tag_filters.empty? # for feed items that were just created
