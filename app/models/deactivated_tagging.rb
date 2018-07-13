@@ -4,14 +4,19 @@ class DeactivatedTagging < ApplicationRecord
   belongs_to :deactivator, polymorphic: true, autosave: false, optional: true
 
   def reactivate
-    tagging = ActsAsTaggableOn::Tagging.find_or_initialize_by(tagging_attributes)
-
-    DeactivatedTagging.transaction do
-      tagging.save! if tagging.new_record?
-      destroy
+    # if feed item already has deactivated tag, destroy deactivated tag and return
+    tagging = ActsAsTaggableOn::Tagging.where({ tag_id: tagging_attributes['tag_id'], taggable_id: tagging_attributes['taggable_id'], taggable_type: 'FeedItem' })
+    if tagging.any?
+      DeactivatedTagging.transaction do
+        destroy
+      end
+    else
+      tagging = ActsAsTaggableOn::Tagging.find_or_initialize_by(tagging_attributes)
+      DeactivatedTagging.transaction do
+        tagging.save!
+        destroy
+      end
     end
-
-    tagging
   end
 
   def tagging_attributes
