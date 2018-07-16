@@ -21,19 +21,14 @@ function toggleListItemMetadata (e) {
 
 function hideListItemMetadata (element) {
   element.removeClass('more_details_included')
-  element.closest('li').find('.metadata').empty()
+  element.closest('li').find('.metadata').addClass('hidden')
   element.find('.fa').removeClass('fa-caret-down').addClass('fa-caret-right')
 }
 
 function showListItemMetadata (element) {
-  $.ajax({
-    url: element.attr('href'),
-    success: function (html) {
-      element.addClass('more_details_included')
-      element.closest('li').find('.metadata').replaceWith(html)
-      element.find('.fa').removeClass('fa-caret-right').addClass('fa-caret-down')
-    }
-  })
+  element.addClass('more_details_included')
+  element.closest('li').find('.metadata').removeClass('hidden')
+  element.find('.fa').removeClass('fa-caret-right').addClass('fa-caret-down')
 }
 
 function toggleAllBookmarkCollections (e) {

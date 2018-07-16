@@ -2,15 +2,15 @@
 
 # Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
-  caches_action :controls, :index, :show, :more_details, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :controls, :index, :show, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  before_action :authenticate_user!, except: %i[autocomplete controls index more_details show]
+  before_action :authenticate_user!, except: %i[autocomplete controls index show]
   before_action :find_hub_feed, except: %i[autocomplete create index new]
   before_action :find_hub
 
-  after_action :verify_authorized, except: %i[autocomplete controls index more_details show]
+  after_action :verify_authorized, except: %i[autocomplete controls index show]
 
   def controls
     render layout: !request.xhr?
@@ -50,10 +50,6 @@ class HubFeedsController < ApplicationController
       flash[:notice] = 'The file has been uploaded and scheduled for import. Please see the "background jobs" link in the footer to track progress.'
     end
     redirect_to import_hub_feed_path(@hub_feed)
-  end
-
-  def more_details
-    render layout: !request.xhr?
   end
 
   def reschedule_immediately

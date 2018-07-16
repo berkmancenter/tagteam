@@ -39,10 +39,6 @@ class HubFeedPolicy < ApplicationPolicy
     user.has_role?(:superadmin) || user.has_role?(:owner, record.hub)
   end
 
-  def more_details?
-    true
-  end
-
   def reschedule_immediately?
     return false unless user.present?
 

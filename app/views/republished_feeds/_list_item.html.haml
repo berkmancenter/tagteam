@@ -9,7 +9,7 @@
           method: :delete, confirm: 'Are you sure?', title: 'Delete this item' do
           = fa_icon 'times'
     .media-left
-      = link_to more_details_hub_republished_feed_path(hub, republished_feed),
+      = link_to '#',
         class: 'republished_feed_more_control',
         data_republished_feed_id: republished_feed.id do
         = fa_icon 'caret-right'
@@ -23,4 +23,4 @@
       \(#{pluralize(FeedSubscriber.count_for(remix_items_path(republished_feed.url_key, format: :atom)), 'subscriber')})
       = link_to('JSON', remix_items_path(republished_feed.url_key, format: :json, callback: 'callback'))
       \(#{pluralize(FeedSubscriber.count_for(remix_items_path(republished_feed.url_key, format: :json)), 'subscriber')})
-      .metadata
+      = render 'more_details', republished_feed: republished_feed

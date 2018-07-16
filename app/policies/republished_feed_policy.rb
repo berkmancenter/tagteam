@@ -24,10 +24,6 @@ class RepublishedFeedPolicy < ApplicationPolicy
     true
   end
 
-  def more_details?
-    true
-  end
-
   def removals?
     true
   end

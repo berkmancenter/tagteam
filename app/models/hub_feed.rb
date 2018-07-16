@@ -19,6 +19,8 @@ class HubFeed < ApplicationRecord
   belongs_to :hub, optional: true
   belongs_to :feed, optional: true
   has_many :feed_items, through: :feed
+  has_many :owner_roles, -> { where(authorizable_type: 'HubFeed', name: 'owner') }, foreign_key: :authorizable_id, class_name: 'Role'
+  has_many :owners, through: :owner_roles, source: :users
 
   before_validation do
     auto_sanitize_html(:description)

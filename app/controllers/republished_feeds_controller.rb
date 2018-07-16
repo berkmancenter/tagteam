@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class RepublishedFeedsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show, :items, :inputs, :removals, :more_details]
+  before_action :authenticate_user!, except: [:index, :show, :items, :inputs, :removals]
   before_action :load_republished_feed, except: [:new, :create, :index]
   before_action :load_hub, only: [:new, :create, :index]
   before_action :register_breadcrumb
@@ -8,15 +8,11 @@ class RepublishedFeedsController < ApplicationController
   after_action :verify_authorized, except: :index
 
   # Beef up cache rules.
-  caches_action :index, :show, :items, :inputs, :removals, :more_details, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :index, :show, :items, :inputs, :removals, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
   protect_from_forgery except: :items
-
-  def more_details
-    render layout: !request.xhr?
-  end
 
   # A list of RepublishedFeeds (aka "remixed feeds") in a hub. Returns html, json, and xml.
   def index

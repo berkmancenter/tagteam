@@ -373,7 +373,7 @@ class HubsController < ApplicationController
     sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'username'
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 
-    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed))
+    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed)) # TBD: Eager loading on :owners
     @bookmark_collections = @bookmark_collections.reverse if order == 'desc'
 
     @bookmark_collections = @bookmark_collections.paginate(page: params[:page], per_page: get_per_page)
