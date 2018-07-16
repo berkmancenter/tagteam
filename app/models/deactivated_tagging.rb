@@ -5,8 +5,8 @@ class DeactivatedTagging < ApplicationRecord
 
   def reactivate
     # if feed item already has deactivated tag, destroy deactivated tag and return
-    tagging = ActsAsTaggableOn::Tagging.where({ tag_id: tagging_attributes['tag_id'], taggable_id: tagging_attributes['taggable_id'], taggable_type: 'FeedItem' })
-    if tagging.any?
+    found_tagging = ActsAsTaggableOn::Tagging.where({ tag_id: tagging_attributes['tag_id'], taggable_id: tagging_attributes['taggable_id'], taggable_type: 'FeedItem' })
+    if found_tagging.any?
       DeactivatedTagging.transaction do
         destroy
       end

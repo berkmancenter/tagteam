@@ -12,7 +12,7 @@ RSpec.describe DeleteTagFilter, type: :model do
     before do
       @tag = create(:tag, name: 'a')
       @feed_items.each do |item|
-        create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first)
+        create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first, context: "hub_#{@hub.id}")
         # This doesn't run on its own because items have already been created.
         item.copy_global_tags_to_hubs
       end

@@ -14,7 +14,6 @@ RSpec.describe RepublishedFeedPolicy do
     it { is_expected.to forbid_action(:edit) }
     it { is_expected.to permit_action(:inputs) }
     it { is_expected.to permit_action(:items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to forbid_action(:new) }
     it { is_expected.to permit_action(:removals) }
     it { is_expected.to permit_action(:show) }
@@ -33,7 +32,6 @@ RSpec.describe RepublishedFeedPolicy do
     it { is_expected.to permit_action(:edit) }
     it { is_expected.to permit_action(:inputs) }
     it { is_expected.to permit_action(:items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to permit_action(:new) }
     it { is_expected.to permit_action(:removals) }
     it { is_expected.to permit_action(:show) }
@@ -50,7 +48,6 @@ RSpec.describe RepublishedFeedPolicy do
     it { is_expected.to permit_action(:edit) }
     it { is_expected.to permit_action(:inputs) }
     it { is_expected.to permit_action(:items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to forbid_action(:new) }
     it { is_expected.to permit_action(:removals) }
     it { is_expected.to permit_action(:show) }
@@ -69,7 +66,6 @@ RSpec.describe RepublishedFeedPolicy do
     it { is_expected.to forbid_action(:edit) }
     it { is_expected.to permit_action(:inputs) }
     it { is_expected.to permit_action(:items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to permit_action(:new) }
     it { is_expected.to permit_action(:removals) }
     it { is_expected.to permit_action(:show) }
@@ -84,7 +80,6 @@ RSpec.describe RepublishedFeedPolicy do
     it { is_expected.to permit_action(:edit) }
     it { is_expected.to permit_action(:inputs) }
     it { is_expected.to permit_action(:items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to permit_action(:new) }
     it { is_expected.to permit_action(:removals) }
     it { is_expected.to permit_action(:show) }
