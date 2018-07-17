@@ -17,8 +17,8 @@ class User < ApplicationRecord
   # This should be a url friendly username because it's used to see the user's tags
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
-  validates :terms_of_service, acceptance: true
   validate :blacklisted_domains
+  validates :terms_of_service, acceptance: true
   validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
   before_create do
     self.approved = auto_approved?
@@ -164,6 +164,14 @@ class User < ApplicationRecord
     end
   end
 
+  def is_whitelisted?(setting)
+    (setting&.whitelisted_domains&.include?(domain) || setting&.whitelisted_domains.any? { |b_domain| domain.match?(/\.#{b_domain}/) }) 
+  end
+
+  def is_blacklisted?(setting)
+    (setting&.blacklisted_domains&.include?(domain) || setting&.blacklisted_domains.any? { |b_domain| domain.match?(/\.#{b_domain}/) }) 
+  end
+
   # checks if user should be auto approved
   def auto_approved?
     setting = Admin::Setting.first_or_initialize
@@ -173,23 +181,15 @@ class User < ApplicationRecord
 
     # else auto approved if user is from whitelisted domain
     # or if user is not from blacklisted domain
-    setting&.whitelisted_domains&.include?(domain) ||
-      (setting&.whitelisted_domains.empty? && setting&.blacklisted_domains.any? && !setting&.blacklisted_domains&.include?(domain)) ||
-      (setting&.whitelisted_domains&.empty? && setting&.blacklisted_domains&.empty?)
+    is_whitelisted?(setting) || (setting&.whitelisted_domains.empty? && !is_blacklisted?(setting))
   end
 
   def blacklisted_domains
     setting = Admin::Setting.first_or_initialize
 
-    if !setting&.require_admin_approval_for_all && setting&.blacklisted_domains&.include?(domain)
-      errors.add(:base, 'Please try with another email, Your domain is blacklisted by Admin')
+    if !setting&.require_admin_approval_for_all && is_blacklisted?(setting)
+      errors.add(:base, 'Your domain is blacklisted by admin. You can not register with that email.')
     end
-  end
-
-  def whitelisted_domains?
-    setting = Admin::Setting.first_or_initialize
-
-    !setting&.require_admin_approval_for_all && setting&.whitelisted_domains&.include?(domain)
   end
 
   def domain
