@@ -139,6 +139,17 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def remove_item
+    authorize @hub
+
+    @feed_item.feeds = @feed_item.feeds.select { |fi_feed| fi_feed != @hub_feed.feed }
+    flash[:notice] = 'Item successfully removed from the hub.'
+    redirect_to items_hub_path(@hub_feed.hub)
+  rescue Exception => e
+    flash[:notice] = 'There was a problem while removing the item from hub.'
+    redirect_to items_hub_path(@hub_feed.hub)
+  end
+
   private
 
   def set_hub_feed

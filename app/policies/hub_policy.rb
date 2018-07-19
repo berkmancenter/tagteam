@@ -202,6 +202,10 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def remove_item?
+    owner_or_admin?
+  end
+
   private
 
   def owner_or_admin?

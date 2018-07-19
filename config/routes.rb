@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         get 'about'
         get 'related'
         get 'controls'
+        delete 'remove_item'
       end
     end
     resources :tags
