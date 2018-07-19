@@ -43,7 +43,7 @@ class TagsController < ApplicationController
 
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
-               .where('name LIKE \'%' + params[:term] + '%\'')
+               .where('name LIKE \'' + params[:term] + '%\'')
                .where(name: approved_tags)
                .group(:id)
                .order('COUNT(taggings.id) DESC')
@@ -53,7 +53,7 @@ class TagsController < ApplicationController
               .select('DISTINCT(tags.id)')
               .left_joins(:taggings)
               .where.not(name: deprecated_tags_names)
-              .where('name LIKE \'%' + params[:term] + '%\'')
+              .where('name LIKE \'' + params[:term] + '%\'')
               .where(name: approved_tags)
               .count
     else
@@ -62,7 +62,7 @@ class TagsController < ApplicationController
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
                .where.not(name: deprecated_tags_names)
-               .where('name LIKE \'%' + params[:term] + '%\'')
+               .where('name LIKE \'' + params[:term] + '%\'')
                .where(id: tag_ids)
                .group(:id)
                .order('COUNT(taggings.id) DESC')
@@ -72,7 +72,7 @@ class TagsController < ApplicationController
               .select('DISTINCT(tags.id)')
               .left_joins(:taggings)
               .where.not(name: deprecated_tags_names)
-              .where('name LIKE \'%' + params[:term] + '%\'')
+              .where('name LIKE \'' + params[:term] + '%\'')
               .where(id: tag_ids)
               .count
     end
