@@ -106,9 +106,9 @@ class HubsController < ApplicationController
     'owner' => ->(rel) { rel.by_first_owner },
     # ---
     'username' => ->(rel) { rel.sort_by { |hf| hf.owners.any? ? hf.owners.first.username.downcase : 'ZZZ' } }, ## Force sort at end if missing username
-    'date started' => ->(rel) { rel.order('hubs.created_at') },
+    'date started' => ->(rel) { rel.order('hub_feeds.created_at') },
     'most recent tagging' => ->(rel) { rel.sort_by { |r| r.most_recent_tagging } },
-    'number of items' => -> (rel) { rel.by_feed_items_count },
+    'number of items' => -> (rel) { rel.sort_by { |hf| hf.feed.feed_items.count } },
     # ---
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
     'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
@@ -373,7 +373,7 @@ class HubsController < ApplicationController
     sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'username'
     order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
 
-    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed)) # TBD: Eager loading on :owners
+    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed))
     @bookmark_collections = @bookmark_collections.reverse if order == 'desc'
 
     @bookmark_collections = @bookmark_collections.paginate(page: params[:page], per_page: get_per_page)

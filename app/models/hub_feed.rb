@@ -205,9 +205,4 @@ class HubFeed < ApplicationRecord
       feed.updated_at
     end
   end
-  
-  def self.by_feed_items_count
-    includes(:feed_items).sort_by{ |i| i.feed_items.size }
-  end
-
 end
