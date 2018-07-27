@@ -6,11 +6,8 @@
   .hub-item-view.row
     .alter-views.col-md-12
       Sort by:
-      = render partial: 'shared/sort_options',
-        locals: { options: ['username', 'date started', 'most recent tagging', 'number of items'],
-          order: params[:order] || 'asc',
-          sort: params[:sort] || 'username',
-          path: 'taggers_hub_path' }
+      - [{ key: 'username', default: 'asc' },{ key: 'date started', default: 'asc' },{ key: 'most recent tagging', default: 'desc' },{ key: 'number of items', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'username', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'taggers_hub_path')} 
 
   .hub_feeds.nicely-padded
     %h1

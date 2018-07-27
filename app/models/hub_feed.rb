@@ -35,8 +35,6 @@ class HubFeed < ApplicationRecord
 
   attr_accessible :title, :description
 
-  delegate :most_recent_tagging, to: :feed
-
   api_accessible :default do |t|
     t.add :id
     t.add :display_title, as: :title
@@ -196,13 +194,5 @@ class HubFeed < ApplicationRecord
 
   def self.title
     'Feed'
-  end
-
-  def by_most_recent_tagging
-    if feed_items.any?
-      feed_items.first.date_published
-    else
-      feed.updated_at
-    end
   end
 end
