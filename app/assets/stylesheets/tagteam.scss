@@ -21,6 +21,9 @@ th, dt, b, strong, label {
 .navbar {
   font-weight: normal;
   margin-bottom: 0;
+  &.navbar-static-top {
+    z-index: 2;
+  }
 
   .welcome {
     color: $gray-lighter;
