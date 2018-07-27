@@ -57,7 +57,9 @@ class TagsController < ApplicationController
               .where(name: approved_tags)
               .count
     else
-      tag_ids = FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
+      tag_ids = Rails.cache.fetch("all-tag-ids-#{@hub.id}", expires_in: 1.hour) do
+        FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
+      end
 
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
