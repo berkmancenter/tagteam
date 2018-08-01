@@ -5,6 +5,11 @@
 - content_for :tabs do
   = render partial: 'tabs', locals: { active: 'show' }
 - content_for :tab_content do
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      - [{ key: 'Date tagged', default: 'desc' },{ key: 'Date published', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'Date tagged', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'hub_tag_show_path')} 
   = render partial: 'feed_items/alter_view', locals: { view: 'list', results: @feed_items }
   %ul.list-unstyled
     = render partial: 'feed_items/list_item', collection: @feed_items, as: :feed_item

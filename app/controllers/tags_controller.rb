@@ -4,7 +4,6 @@ class TagsController < ApplicationController
   before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
   before_action :load_feed_items, only: :statistics
-  before_action :fetch_feed_items, only: :show
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
@@ -143,6 +142,16 @@ class TagsController < ApplicationController
 
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+
+    if @hub.deprecated_tags.include?(@tag)
+      @feed_items = []
+    else
+      feed_item_ids = ActsAsTaggableOn::Tagging.where(tag_id: @tag.id, context: @hub.tagging_key, taggable_type: 'FeedItem').map(&:taggable_id).compact 
+      @feed_items = FeedItem.where(id: feed_item_ids).order("feed_items.#{sort} #{order}").paginate(page: params[:page], per_page: get_per_page)
+    end
+
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
 
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
@@ -248,18 +257,6 @@ class TagsController < ApplicationController
   end
 
   def fetch_feed_items
-    @feed_items = if @hub.deprecated_tags.map(&:name).include?(@tag.name)
-                    []
-                  else
-                    FeedItem
-                      .tagged_with(@tag.name, on: @hub.tagging_key)
-                      .order(date_published: :desc, created_at: :desc)
-                  end
-
-    @feed_items = @feed_items.paginate(
-      page: params[:page],
-      per_page: get_per_page
-    )
   end
 
   def load_feed_items

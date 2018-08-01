@@ -69,7 +69,6 @@ class HubsController < ApplicationController
     :scoreboard
   ]
 
-  before_action :set_feed_items, only: :items
   before_action :store_feed_visitor, only: :items
   before_action :add_breadcrumbs, only: %i[
     about
@@ -441,6 +440,14 @@ class HubsController < ApplicationController
 
   # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml.
   def items
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @feed_items =
+      @hub
+      .feed_items
+      .order("feed_items.#{sort} #{order}")
+      .paginate(page: params[:page], per_page: get_per_page)
+
     respond_to do |format|
       format.html do
         @show_auto_discovery_params = items_hub_url(@hub, format: :rss) if @hub.present?
@@ -694,10 +701,13 @@ class HubsController < ApplicationController
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
 
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+
     @search = FeedItem.search do
       with :hub_ids, hub_id
       paginate page: params[:page], per_page: get_per_page
-      order_by(:date_published, :desc)
+      order_by(sort.to_sym, order.to_sym)
       unless params[:q].blank?
         fulltext params[:q].split('+').join('+ ')
         adjust_solr_params do |params|
@@ -890,11 +900,6 @@ class HubsController < ApplicationController
   end
 
   def set_feed_items
-    @feed_items =
-      @hub
-      .feed_items
-      .order(date_published: :desc, id: :desc)
-      .paginate(page: params[:page], per_page: get_per_page)
   end
 
   def store_feed_visitor

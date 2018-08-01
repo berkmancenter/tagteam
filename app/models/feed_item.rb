@@ -102,6 +102,7 @@ class FeedItem < ApplicationRecord
     string :description
     string :rights
     time :date_published
+    time :created_at
     time :last_updated
   end
 

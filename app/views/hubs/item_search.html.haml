@@ -3,6 +3,11 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'items' }
 - content_for :tab_content do
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      - [{ key: 'Date tagged', default: 'desc' },{ key: 'Date published', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'Date tagged', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'item_search_hub_path', { q: params[:q] })} 
   .nicely-padded
     %h1 Search
     = form_tag(item_search_hub_path(@hub), method: :get, id: 'hub_search_form') do

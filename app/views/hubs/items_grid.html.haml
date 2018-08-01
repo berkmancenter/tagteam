@@ -3,9 +3,14 @@
 - content_for :tabs do
   = render partial: 'tabs', locals: { active: 'items' }
 - content_for :tab_content do
-  = render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @search.results }
-  - if @search.total == 0
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      - [{ key: 'Date tagged', default: 'desc' },{ key: 'Date published', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'Date tagged', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'items_hub_path', { view: 'grid' })} 
+  = render partial: 'feed_items/alter_view', locals: { view: 'grid', results: @feed_items }
+  - if @feed_items.blank?
     %p
       None yet. Please add some feeds from the #{link_to "Inputs tab", hub_hub_feeds_path(@hub)}.
   - else
-    = render partial: 'feed_items/grid', object: @search.results, as: :feed_items
+    = render partial: 'feed_items/grid', object: @feed_items, as: :feed_items

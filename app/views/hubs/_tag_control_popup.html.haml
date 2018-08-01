@@ -11,7 +11,7 @@
   \:
   %ul
     - if hub_filter_possible?(type, params, current_user)
-      %li= link_to_tag_filter 'all items in this hub', type, { hub: @hub, tag: @tag, tag_list: @feed_item&.applied_tags(@hub).map(&:name) }
+      %li= link_to_tag_filter 'all items in this hub', type, { hub: @hub, tag: @tag, tag_list: @feed_item&.applied_tags(@hub)&.map(&:name) }
     - if feed_filter_possible?(params, current_user)
       %li
         = link_to_tag_filter 'all items in this feed', type,
