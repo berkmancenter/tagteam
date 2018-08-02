@@ -67,22 +67,14 @@ class TagsController < ApplicationController
                .where(id: tag_ids)
                .group(:id)
                .order('COUNT(taggings.id) DESC')
-               .limit(limit)
-
-      count = ActsAsTaggableOn::Tag
-              .select('DISTINCT(tags.id)')
-              .left_joins(:taggings)
-              .where.not(name: deprecated_tags_names)
-              .where('name LIKE \'' + params[:term] + '%\'')
-              .where(id: tag_ids)
-              .count
+      count = result.length
     end
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
         results = {
-          items: result.map { |r| { id: r[:id], label: r[:name] } },
+          items: result[0..25].map { |r| { id: r[:id], label: r[:name] } },
           more: count > limit
         }
         render json: results.compact
