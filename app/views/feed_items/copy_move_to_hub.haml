@@ -1,0 +1,11 @@
+- if @hubs.any?
+  Select a hub:
+  %ul
+    - @hubs.each do |hub|
+      %li
+        - if @type == 'copy'
+          = link_to hub, copy_item_hub_feed_feed_item_path(@hub_feed, @feed_item, to_hub_id: hub.id), method: :post
+        - else
+          = link_to hub, move_item_hub_feed_feed_item_path(@hub_feed, @feed_item, to_hub_id: hub.id), method: :post
+- else
+  You can't copy the item, you don't have access to any other hub.
