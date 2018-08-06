@@ -446,6 +446,7 @@ class HubsController < ApplicationController
       @hub
       .feed_items
       .order("feed_items.#{sort} #{order}")
+      .group(:id)
       .paginate(page: params[:page], per_page: get_per_page)
 
     respond_to do |format|
