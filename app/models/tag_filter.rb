@@ -140,7 +140,7 @@ class TagFilter < ApplicationRecord
 
     new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
     return filter if new_filter.empty?
-    return new_filter if new_filter.first.type == 'DeleteTagFilter'
+    return new_filter.first if new_filter.first.type == 'DeleteTagFilter'
 
     find_recursive(hub_id, new_filter.first.new_tag.name, new_filter.first)
   end
