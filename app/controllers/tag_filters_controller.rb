@@ -37,9 +37,7 @@ class TagFiltersController < ApplicationController
                     [TagFilters::Create.run(tag_filter_params)]
                   else
                     new_tags = TagFilterHelper.split_tags(params[:new_tag], @hub)
-
                     new_tags -= @hub.deprecated_tag_names
-
                     new_tags.map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end

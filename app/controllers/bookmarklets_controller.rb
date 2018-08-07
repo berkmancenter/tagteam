@@ -93,13 +93,7 @@ class BookmarkletsController < ApplicationController
             context: @hub.tagging_key
           )
         end
-
-        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(
-          @feed_item,
-          @hub,
-          current_user,
-          {}
-        )
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(@feed_item, nil, @hub, current_user)
 
         @feed_item.reload.solr_index
 

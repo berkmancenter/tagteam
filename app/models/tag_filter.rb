@@ -57,10 +57,6 @@ class TagFilter < ApplicationRecord
       (hub.tag_filters_after(self).applied.count == 0)
   end
 
-  def apply_async(reapply = false)
-    ApplyTagFilters.perform_async(id, [], reapply)
-  end
-
   # Filter application can occur on a subset of items in a scope (if a new
   # items comes in from a feed, for example), but filter rollback always
   # happens for all items at once, so we don't need an items argument here.
@@ -136,5 +132,16 @@ class TagFilter < ApplicationRecord
 
   def users
     Role.find_by(authorizable_id: self, authorizable_type: 'TagFilter').try(:users) || User.none
+  end
+
+  def self.find_recursive(hub_id, tag_name, filter = nil)
+    tag = ActsAsTaggableOn::Tag.find_by_name_normalized(tag_name)
+    return filter if tag.nil?
+
+    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
+    return filter if new_filter.empty?
+    return new_filter if new_filter.first.type == 'DeleteTagFilter'
+
+    find_recursive(hub_id, new_filter.first.new_tag.name, new_filter.first)
   end
 end

@@ -46,28 +46,13 @@ module TagFilters
       user.has_role!(:owner, tag_filter)
       user.has_role!(:creator, tag_filter)
 
-      changes =
-        case filter_type
-        when 'DeleteTagFilter'
-          { tags_deleted: [tag.name] }
-        when 'ModifyTagFilter'
-          { tags_modified: [[tag.name, new_tag.name]] }
-        when 'SupplementTagFilter'
-          { tags_supplemented: [[tag.name, new_tag.name]] }
-        end
-      TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(
-        tag_filter,
-        hub,
-        user,
-        changes
-      )
-
-      # Not sure what this is doing - revisit?
-      if tag_filter.type == 'AddTagFilter' && tag_filter.scope_type == 'FeedItem'
-        hub.all_tag_filters.each do |old_filter|
-          next if old_filter.scope_type == 'FeedItem'
-          old_filter.apply_async(true)
-        end
+      # No notifications on AddTagFilter (to anyone)
+      # Send notifications immediately if Delete or Modify created
+      if tag_filter.scope_type == 'FeedItem'
+        tag_filter.apply(items: FeedItem.where(id: scope.id))
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(scope, tag_filter, hub, user)
+      else
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(nil, tag_filter, hub, user)
       end
 
       tag_filter
