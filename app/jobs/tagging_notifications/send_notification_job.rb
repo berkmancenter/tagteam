@@ -10,6 +10,8 @@ module TaggingNotifications
       return unless changes.any?
 
       notifications = {}
+      # Notifications are either going to the owners of the feed items (skipping the updater)
+      # or they are going to the updater
       if recipients == :owners
         feed_items.each do |feed_item|
           feed_item.hub_feeds.each do |hub_feed|
@@ -24,6 +26,7 @@ module TaggingNotifications
         notifications[updated_by_user] = feed_items
       end
 
+      # Send notifications only if notifications are enabled for hub
       notifications.each do |owner, feed_items|
         if owner.notifications_for_hub?(hub)
           TaggingNotifications::NotificationsMailer.tagging_change_notification(
