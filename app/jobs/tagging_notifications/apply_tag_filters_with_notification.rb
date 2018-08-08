@@ -10,10 +10,11 @@ module TaggingNotifications
 
       if feed_item.present?
         ::ApplyTagFilters.new.perform(hub.all_tag_filters.select { |tf| tf.scope_type != 'FeedItem' }.map(&:id), [feed_item.id], true)
-        tag_name = tag_filter.type == 'ModifyTagFilter' ? tag_filter.new_tag.name : tag_filter.tag.name
-        resulting_tag_filter = tag_filter.type == 'DeleteTagFilter' ? nil : TagFilter.find_recursive(hub.id, tag_name)
 
         if tag_filter.present?
+          tag_name = tag_filter.type == 'ModifyTagFilter' ? tag_filter.new_tag.name : tag_filter.tag.name
+          resulting_tag_filter = tag_filter.type == 'DeleteTagFilter' ? nil : TagFilter.find_recursive(hub.id, tag_name)
+
           # In the case of a tag filter being applied and terminating in another filter,
           # the updater is sent a notification
           if ['AddTagFilter', 'ModifyTagFilter'].include?(tag_filter.type)
