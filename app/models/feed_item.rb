@@ -206,7 +206,7 @@ class FeedItem < ApplicationRecord
     end
 
     new_taggings.each do |tagging|
-      deactivated_taggings = tagging.deactivate_taggings!
+      deactivated_taggings = tagging.deactivate_taggings!([self.id])
       tagging.save!
       deactivated_taggings.each do |deactivated_tagging|
         deactivated_tagging.deactivator = tagging

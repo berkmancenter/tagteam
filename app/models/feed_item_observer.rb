@@ -9,6 +9,6 @@ class FeedItemObserver < ActiveRecord::Observer
     return if item.previous_changes.empty? # Don't run if nothing changed
     item.copy_global_tags_to_hubs unless item.skip_global_tag_copy
 
-    Hub.apply_all_tag_filters_to_item_async(item)
+    item.hubs.each { |hub| TagFilter.apply_hub_filters(hub, item) }
   end
 end

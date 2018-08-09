@@ -15,35 +15,24 @@ class ModifyTagFilter < TagFilter
     t.add :new_tag
   end
 
-  def items_with_old_tag(items = items_in_scope)
-    items.tagged_with(tag.name, on: hub.tagging_key)
-  end
+  # Options are either item_ids passed in, or nothing passed in
+  def apply(item_ids = [])
+    items = item_ids.any? ? FeedItem.where(id: item_ids).tagged_with(tag.name, on: hub.tagging_key) :
+      scope.taggable_items.tagged_with(tag.name, on: hub.tagging_key)
 
-  def items_with_new_tag(items = items_in_scope)
-    items.tagged_with(new_tag.name, on: hub.tagging_key, owned_by: self)
-  end
+    # This deactivates old and duplicate tags, which forces the cache to clear
+    deactivate_taggings!(items.map(&:id))
 
-  def apply(items: items_with_old_tag)
-    items = filter_to_scope(items)
-    # Fetch the items here because once we deactivate taggings,
-    # #items_with_old_tag returns nothing.
-    fetched_item_ids = items_with_old_tag(items).pluck(:id)
+    # Mass insert
+    values = items.map { |item| "(#{new_tag.id},#{item.id},'FeedItem',#{self.id},'TagFilter','#{hub.tagging_key}')" }.join(',')
+    ActiveRecord::Base.connection.execute("INSERT INTO taggings (tag_id, taggable_id, taggable_type, tagger_id, tagger_type, context) VALUES #{values}")
+    items.each { |item| item.solr_index }
 
-    deactivate_taggings!(items: items)
-    FeedItem.where(id: fetched_item_ids).find_each do |item|
-      new_tagging = item.taggings.build(tag: new_tag, tagger: self,
-                                        context: hub.tagging_key)
-      if new_tagging.valid?
-        new_tagging.save!
-        item.solr_index
-      end
-    end
     update_column(:applied, true)
   end
 
-  def deactivates_taggings(items: items_in_scope)
+  def deactivates_taggings(item_ids)
     taggings = ActsAsTaggableOn::Tagging.arel_table
-    selected_items_with_old_tag = items_with_old_tag(items)
 
     # Deactivates any taggings that have the old tag
     old_tag = taggings.grouping(
@@ -52,7 +41,7 @@ class ModifyTagFilter < TagFilter
       ).and(
         taggings[:taggable_type].eq('FeedItem')
       ).and(
-        taggings[:taggable_id].in(items.pluck(:id))
+        taggings[:taggable_id].in(item_ids)
       )
     )
 
@@ -65,7 +54,7 @@ class ModifyTagFilter < TagFilter
       ).and(
         taggings[:taggable_type].eq('FeedItem')
       ).and(
-        taggings[:taggable_id].in(selected_items_with_old_tag.pluck(:id))
+        taggings[:taggable_id].in(item_ids)
       )
     )
 

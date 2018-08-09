@@ -177,13 +177,6 @@ class Hub < ApplicationRecord
     'Hub'
   end
 
-  # Used when a new item is created
-  def self.apply_all_tag_filters_to_item_async(item)
-    item.hubs.each do |hub|
-      ApplyTagFilters.perform_async(hub.all_tag_filters.pluck(:id), item.id, true)
-    end
-  end
-
   # all tags used in the hub
   def tags
     filters_applied = (

@@ -49,10 +49,11 @@ module TagFilters
       # No notifications on AddTagFilter (to anyone)
       # Send notifications immediately if Delete or Modify created
       if tag_filter.scope_type == 'FeedItem'
-        tag_filter.apply(items: FeedItem.where(id: scope.id))
-        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(scope, tag_filter, hub, user)
+        tag_filter.apply([scope.id])
+        TagFilter.apply_hub_filters(hub, scope)
+        TaggingNotifications::FeedItemNotification.perform_later(scope, tag_filter, hub, user)
       else
-        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(nil, tag_filter, hub, user)
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(tag_filter, hub, user)
       end
 
       tag_filter
