@@ -23,10 +23,17 @@ class ModifyTagFilter < TagFilter
     # This deactivates old and duplicate tags, which forces the cache to clear
     deactivate_taggings!(items.map(&:id))
 
-    # Mass insert
-    values = items.map { |item| "(#{new_tag.id},#{item.id},'FeedItem',#{self.id},'TagFilter','#{hub.tagging_key}')" }.join(',')
-    ActiveRecord::Base.connection.execute("INSERT INTO taggings (tag_id, taggable_id, taggable_type, tagger_id, tagger_type, context) VALUES #{values}")
-    items.each { |item| item.solr_index }
+    # Mass insert doesn't work on really large inserts 
+    # values = items.map { |item| "(#{new_tag.id},#{item.id},'FeedItem',#{self.id},'TagFilter','#{hub.tagging_key}')" }.join(',')
+    # ActiveRecord::Base.connection.execute("INSERT INTO taggings (tag_id, taggable_id, taggable_type, tagger_id, tagger_type, context) VALUES #{values}")
+    # items.each { |item| item.solr_index }
+    items.each do |item|
+      new_tagging = item.taggings.build(tag: new_tag, tagger: self, context: hub.tagging_key)
+      if new_tagging.valid?
+        new_tagging.save!
+        item.solr_index
+      end
+    end
 
     update_column(:applied, true)
   end
