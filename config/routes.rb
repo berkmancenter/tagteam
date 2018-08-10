@@ -190,6 +190,11 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
+  # Allow users to log out using both DELETE and GET
+  devise_scope :user do
+    get '/accounts/sign_out', to: 'devise/sessions#destroy'
+  end
+
   require 'sidekiq/web'
   authenticate :user, ->(u) { u.has_role? :superadmin } do
     mount Sidekiq::Web => '/sidekiq'
