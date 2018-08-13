@@ -14,18 +14,20 @@ module TaggingNotifications
 
         # In the case of a tag filter being applied and terminating in another filter,
         # the updater is sent a notification
-        if ['AddTagFilter', 'ModifyTagFilter'].include?(tag_filter.type)
-          if resulting_tag_filter.present?
-            mod_changes = []
-            if resulting_tag_filter.type == 'DeleteTagFilter'
-              mod_changes << { type: :tags_deleted, values: [tag_name] }
-            elsif resulting_tag_filter.type == 'ModifyTagFilter'
-              mod_changes << { type: :tags_modified, values: [[tag_name], [resulting_tag_filter.new_tag.name]] }
-            end
-            SendNotificationJob.new.perform(hub, [feed_item], [], updated_by_user, mod_changes, :updater)
+        updater_changes =
+          case "#{tag_filter.class.to_s}-#{resulting_tag_filter.class.to_s}"
+          when 'ModifyTagFilter-DeleteTagFilter'
+            { type: :tags_deleted, values: [tag_name] }
+          when 'ModifyTagFilter-ModifyTagFilter'
+            { type: :tags_modified, values: [[tag_name], [resulting_tag_filter.new_tag.name]] }
+          when 'AddTagFilter-DeleteTagFilter'
+            { type: :tags_deleted, values: [tag_name] }
+          when 'AddTagFilter-ModifyTagFilter'
+            { type: :tags_modified, values: [[tag_name], [resulting_tag_filter.new_tag.name]] }
           end
-        end
+        SendNotificationJob.new.perform(hub, [feed_item], [], updated_by_user, updater_changes, :updater)
 
+        # Notify owners of feed item, skips updater
         changes =
           case "#{tag_filter.class.to_s}-#{resulting_tag_filter.class.to_s}"
           when 'DeleteTagFilter-NilClass'
