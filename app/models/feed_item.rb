@@ -166,7 +166,7 @@ class FeedItem < ApplicationRecord
   end
 
   def tag_list_array_for_indexing
-    tags.pluck(:name)
+    ActsAsTaggableOn::Tagging.joins(:tag).where(taggable_type: FeedItem.name, taggable_id: self.id).pluck("tags.name").uniq
   end
 
   def tag_list_string_for_indexing
