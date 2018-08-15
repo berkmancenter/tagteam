@@ -2,7 +2,11 @@
   %h1.title= fa_icon 'bolt', text: 'TagTeam'
 .row
   .col-md-offset-3.col-md-6
-    %h2.page-header Start a new hub
+    %h2.page-header
+      - if @hub.new_record?
+        Start a new hub
+      - else
+        Edit the #{@hub.title} hub
     = semantic_form_for(@hub) do |f|
       = f.inputs do
         = f.input :title
