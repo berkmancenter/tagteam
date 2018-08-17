@@ -64,7 +64,7 @@ class TagFiltersController < ApplicationController
     when 'Hub'
       { template: 'hub_tag_filters/index', redirection_path: hub_tag_filters_path(@hub) }
     when 'HubFeed'
-      { template: 'hub_feed_tag_filters/index', redirection_path: hub_feed_tag_filters(@hub, @scope) }
+      { template: 'hub_feed_tag_filters/index', redirection_path: hub_feed_tag_filters_path(@hub, @scope) }
     when 'FeedItem'
       { template:'hub_feed_item_tag_filters/index', redirection_path: hub_feed_item_tag_filters_path(@hub, @scope) }
     end

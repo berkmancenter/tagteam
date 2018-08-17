@@ -17,28 +17,28 @@
             data_type: 'AddTagFilter',
             tag_list: tag_list,
             class: 'add_filter_control force_confirm hub_feed_tag_filter btn btn-success' do
-            = fa_icon 'plus-circle', text: 'Add a tag to all items in this feed'
+            = fa_icon 'plus-circle', text: 'Add a tag to every item in this feed'
         %li
           = link_to hub_feed_tag_filters_path(@hub_feed),
             data_hub_id: @hub.id,
             data_type: 'DeleteTagFilter',
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-danger' do
-            = fa_icon 'minus-circle', text: 'Remove a tag from all items in this feed'
+            = fa_icon 'minus-circle', text: 'Remove a tag from every item in this feed'
         %li
           = link_to hub_feed_tag_filters_path(@hub_feed),
             data_hub_id: @hub.id,
             data_type: 'ModifyTagFilter',
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-default' do
-            = fa_icon 'pencil', text: 'Modify a tag on all items in this feed'
+            = fa_icon 'pencil', text: 'Modify a tag on every item in this feed'
         %li
           = link_to hub_feed_tag_filters_path(@hub_feed),
             data_hub_id: @hub.id,
             data_type: 'SupplementTagFilter',
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-primary' do
-            = fa_icon 'plus-circle', text: 'Supplement a tag with a second tag on all items in this feed'
+            = fa_icon 'plus-circle', text: 'Supplement a tag with a second tag on every item in this feed'
     %h1 Active filters (#{@tag_filters.size})
     - if @tag_filters.empty?
       %h2 No active filters
