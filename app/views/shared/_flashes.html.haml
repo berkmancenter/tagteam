@@ -1,20 +1,19 @@
-- unless flash.blank?
-  %section#notices.row
-    - unless flash[:notice].blank?
-      .alert.alert-success.alert-dismissable.col-md-12{:role => "alert"}
-        %button.close{"data-dismiss" => "alert", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-          %span.sr-only Close
-        %strong= flash[:notice]
-    - unless flash[:error].blank?
-      .alert.alert-danger.alert-dismissable.col-md-12{:role => "alert"}
-        %button.close{"data-dismiss" => "alert", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-          %span.sr-only Close
-        %strong= flash[:error]
-    - unless flash[:alert].blank?
-      .alert.alert-warning.alert-dismissable.col-md-12{:role => "alert"}
-        %button.close{"data-dismiss" => "alert", :type => "button"}
-          %span{"aria-hidden" => "true"} ×
-          %span.sr-only Close
-        %strong= flash[:alert]
+- if flash.present?
+  - if flash[:notice].present?
+    .alert.alert-success.alert-dismissable.col-md-12{ role: 'alert' }
+      %button.close{ 'data-dismiss': 'alert', type: 'button' }
+        %span{ 'aria-hidden': 'true' } ×
+        %span.sr-only Close
+      %strong= flash[:notice]
+  - if flash[:error].present?
+    .alert.alert-danger.alert-dismissable.col-md-12{ role: 'alert' }
+      %button.close{ 'data-dismiss': 'alert', type: 'button' }
+        %span{ 'aria-hidden': 'true' } ×
+        %span.sr-only Close
+      %strong= flash[:error]
+  - if flash[:alert].present?
+    .alert.alert-warning.alert-dismissable.col-md-12{ role: 'alert' }
+      %button.close{ 'data-dismiss': 'alert', type: 'button' }
+        %span{ 'aria-hidden': 'true' } ×
+        %span.sr-only Close
+      %strong= flash[:alert]
