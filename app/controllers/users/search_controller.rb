@@ -10,7 +10,11 @@ module Users
     def autocomplete
       authorize User
 
-      search = Sunspot.search(User) { fulltext params[:term], fields: [:email, :username] }
+      search = Sunspot.search(User) do
+        fulltext params[:term], fields: [:email, :username]
+        with :approved, true
+        with(:confirmed_at).less_than(Time.now)
+      end
 
       results = search.results.map do |user|
         {
