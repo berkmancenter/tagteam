@@ -14,7 +14,7 @@
                 data_hub_id: @hub.id,
                 data_type: method[:data_type],
                 tag_list: @tag_filters.map {|f| f.tag.name}.uniq.join(', '),
-                class: "add_filter_control hub_tag_filter btn btn-#{method[:button]}" do
+                class: "add_filter_control hub_tag_filter btn btn-#{method[:button]} #{method[:extra_class].to_s}" do
                 = fa_icon method[:icon], text: method[:text]
     %h1.hub-filters-title Active filters
     - if @tag_filters.empty?
