@@ -5,8 +5,8 @@ class User < ApplicationRecord
   has_many :hub_user_notifications
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
+  devise :database_authenticatable, :registerable, :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :lockable
 
   # Virtual attribute for authenticating by either username or email
   attr_accessor :login
@@ -21,7 +21,13 @@ class User < ApplicationRecord
   validates :terms_of_service, acceptance: true
   validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
   before_create do
+    self.skip_confirmation_notification!
     self.approved = auto_approved?
+  end
+  after_update do
+    if self.approved_changed? && self.approved
+      self.send_confirmation_instructions
+    end
   end
 
   scope :unapproved, -> { where(approved: false) }
@@ -34,6 +40,7 @@ class User < ApplicationRecord
     string :first_name
     string :last_name
     string :url
+    boolean :approved
     time :confirmed_at
   end
 
