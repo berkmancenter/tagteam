@@ -39,7 +39,7 @@
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-primary' do
             = fa_icon 'plus-circle', text: 'Supplement a tag with a second tag on all items in this feed'
-    %h1 Active filters
+    %h1 Active filters (#{@tag_filters.size})
     - if @tag_filters.empty?
       %h2 No active filters
     - else

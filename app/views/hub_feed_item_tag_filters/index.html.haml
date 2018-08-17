@@ -49,7 +49,7 @@
       = render partial: 'shared/line_items/tag',
         collection: (@feed_item.all_tags_on(@hub.tagging_key) - @hub.deprecated_tags),
         locals: { feed_item: @feed_item }
-    %h1 Active filters
+    %h1 Active filters (#{@tag_filters.size})
     - if @tag_filters.empty?
       %h2 No active filters
     - else
