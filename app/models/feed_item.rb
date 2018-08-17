@@ -206,7 +206,8 @@ class FeedItem < ApplicationRecord
     end
 
     new_taggings.each do |tagging|
-      deactivated_taggings = tagging.deactivate_taggings!([self.id])
+      taggings_to_deactivate = ActsAsTaggableOn::Tagging.where(tag_id: tagging.tag_id, context: context, taggable_id: self.id, taggable_type: 'FeedItem')
+      deactivated_taggings = taggings_to_deactivate.map { |tagging| TagFilter.new.deactivate_tagging(tagging) }
       tagging.save!
       deactivated_taggings.each do |deactivated_tagging|
         deactivated_tagging.deactivator = tagging
