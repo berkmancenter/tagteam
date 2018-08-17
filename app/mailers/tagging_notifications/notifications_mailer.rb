@@ -3,7 +3,8 @@
 module TaggingNotifications
   # Send email to user with tagging changes made to their item
   class NotificationsMailer < ActionMailer::Base
-    default from: Tagteam::Application.config.default_sender
+    default from: Tagteam::Application.config.default_sender,
+      return_path: Tagteam::Application.config.return_path
 
     def tagging_change_notification(hub, modified_items, user_to_notify, updated_by_user, changes)
       @hub = hub

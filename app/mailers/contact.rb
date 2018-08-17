@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Contact < ActionMailer::Base
-  default from: Tagteam::Application.config.default_sender
+  default from: Tagteam::Application.config.default_sender,
+    return_path: Tagteam::Application.config.return_path
 
   def request_rights(params, hub)
     @hub = hub
