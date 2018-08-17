@@ -25,7 +25,8 @@ module TaggingNotifications
           when 'AddTagFilter-ModifyTagFilter'
             { type: :tags_modified, values: [[tag_name], [resulting_tag_filter.new_tag.name]] }
           end
-        SendNotificationJob.new.perform(hub, [feed_item], [], updated_by_user, updater_changes, :updater)
+        SendNotificationJob.new.perform(hub, [feed_item], [], updated_by_user, [updater_changes], :updater)
+
 
         # Notify owners of feed item, skips updater
         changes =
