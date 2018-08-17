@@ -239,7 +239,7 @@ class TagsController < ApplicationController
     unless @tag
       flash[:error] = "We're sorry, but '#{params[:name]}' is not a tag for '#{@hub.title}'"
 
-      redirect_to hub_path(@hub) + '?no_cache=true'
+      redirect_to items_hub_path(@hub) + '?no_cache=true'
     end
   end
 
