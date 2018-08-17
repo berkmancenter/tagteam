@@ -21,7 +21,7 @@
             data_hub_id: @hub.id,
             data_type: 'AddTagFilter',
             tag_list: tag_list,
-            class: 'add_filter_control hub_feed_item_tag_filter btn btn-success' do
+            class: 'add_filter_control force_confirm hub_feed_item_tag_filter btn btn-success' do
             = fa_icon 'plus-circle', text: 'Add a tag to this item'
         %li
           = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
