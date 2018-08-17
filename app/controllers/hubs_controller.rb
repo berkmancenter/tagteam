@@ -508,7 +508,7 @@ class HubsController < ApplicationController
   end
 
   def removed_tag_suggestion
-    authorize @hub, :toggle_tag_display?
+    authorize @hub
 
     if params[:remove] == 'true'
       removed_tag_suggestions = ActsAsTaggableOn::Tag.where(id: params[:tag_id]).map do |tag|

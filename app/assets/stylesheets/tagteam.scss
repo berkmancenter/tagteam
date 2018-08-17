@@ -536,3 +536,20 @@ abbr[title="required"] {
 .tab-layout .tab-content ul.nicely-padded.delimiter-list {
   margin-top: 5px;
 }
+
+span#readonly-tag-description {
+  margin-right: 5px;
+  &.empty {
+    opacity: 0.5;
+  }
+}
+textarea#tag-description {
+  width: 100%;
+}
+#update-tag-description,
+#cancel-tag-description,
+#submit-tag-dewscription {
+  .fa {
+    font-size: 14px;
+  }
+}

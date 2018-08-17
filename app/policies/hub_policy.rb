@@ -149,7 +149,7 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
-  def toggle_tag_display?
+  def tag_descriptions?
     owner_or_admin?
   end
 

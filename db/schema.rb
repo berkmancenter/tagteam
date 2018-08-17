@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710170657) do
+ActiveRecord::Schema.define(version: 20180816161305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,17 @@ ActiveRecord::Schema.define(version: 20180710170657) do
     t.index ["feed_id"], name: "index_hub_feeds_on_feed_id"
     t.index ["hub_id", "feed_id"], name: "index_hub_feeds_on_hub_id_and_feed_id", unique: true
     t.index ["hub_id"], name: "index_hub_feeds_on_hub_id"
+  end
+
+  create_table "hub_tag_descriptions", force: :cascade do |t|
+    t.bigint "hub_id"
+    t.bigint "tag_id"
+    t.string "description", limit: 400
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hub_id", "tag_id"], name: "index_hub_tag_descriptions_on_hub_id_and_tag_id", unique: true
+    t.index ["hub_id"], name: "index_hub_tag_descriptions_on_hub_id"
+    t.index ["tag_id"], name: "index_hub_tag_descriptions_on_tag_id"
   end
 
   create_table "hub_user_notifications", id: :serial, force: :cascade do |t|
