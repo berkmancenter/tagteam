@@ -43,7 +43,8 @@
         %section.row.breadcrumbs_holder
           .breadcrumbs.col-md-12
             = breadcrumbs.render(format: :inline, separator: fa_icon('chevron-right'))
-      = render partial: 'shared/flashes'
+      %section#notices.row
+        = render partial: 'shared/flashes'
       %section.row#content
         .col-md-12
           = content_for?(:content) ? yield(:content) : yield

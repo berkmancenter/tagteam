@@ -15,7 +15,7 @@ class TagFiltersController < ApplicationController
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed) if @hub_feed
     breadcrumbs.add @feed_item, hub_feed_item_path(@hub, @feed_item) if @feed_item
     respond_to do |format|
-      format.html { render template, layout: request.xhr? ? false : 'tabs' }
+      format.html { render controller_response[:template], layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default, json: @tag_filters }
       format.xml { render_for_api :default, xml: @tag_filters }
     end
@@ -51,19 +51,22 @@ class TagFiltersController < ApplicationController
 
     flash[:notice] = 'Deleting that tag filter.'
 
-    redirect_back fallback_location: hub_tag_filters_path(@hub)
+    respond_to do |format|
+      format.html { redirect_back fallback_location: controller_response[:redirection_path] }
+      format.js { render template:  'hub_feed_item_tag_filters/destroy', layout: false } #only used in the case of the item-lvel filter
+    end
   end
 
   private
 
-  def template
+  def controller_response
     case @scope.class.name
     when 'Hub'
-      'hub_tag_filters/index'
+      { template: 'hub_tag_filters/index', redirection_path: hub_tag_filters_path(@hub) }
     when 'HubFeed'
-      'hub_feed_tag_filters/index'
+      { template: 'hub_feed_tag_filters/index', redirection_path: hub_feed_tag_filters(@hub, @scope) }
     when 'FeedItem'
-      'hub_feed_item_tag_filters/index'
+      { template:'hub_feed_item_tag_filters/index', redirection_path: hub_feed_item_tag_filters_path(@hub, @scope) }
     end
   end
 
