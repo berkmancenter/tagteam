@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   acts_as_tagger
   has_many :hub_user_notifications
+  has_many :removed_tag_suggestions
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
@@ -157,6 +158,10 @@ class User < ApplicationRecord
 
   def superadmin?
     has_role?(:superadmin)
+  end
+
+  def removed_tag_suggestions_name
+    removed_tag_suggestions.joins(:tag).map{|removed_suggestion| removed_suggestion.tag.name }.uniq
   end
 
   protected

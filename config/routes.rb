@@ -102,6 +102,7 @@ Rails.application.routes.draw do
       get 'about'
       post 'recalc_all_tags'
       get 'item_search'
+      post 'removed_tag_suggestion'
       post 'add_feed'
       put 'unsubscribe_feed/:feed_id' => 'hubs#unsubscribe_feed', as: 'unsubscribe_feed'
       get 'custom_republished_feeds'
