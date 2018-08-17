@@ -6,6 +6,7 @@ hostport: 80
 default_sender: no_reply@example.com
 exceptions_mailed_to: exceptions@example.com
 ssl_for_user_accounts: true
+return_path: user@example.com
 
 ###############################
 # Spidering and schedule options

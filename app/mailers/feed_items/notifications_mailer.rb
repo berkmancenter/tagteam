@@ -3,8 +3,6 @@
 module FeedItems
   # Send email to users when changes are made to a feed item
   class NotificationsMailer < ApplicationMailer
-    default from: Tagteam::Application.config.default_sender
-
     def feed_item_change_notification(hub:, modified_item:, users_to_notify:, current_user:, changes:)
       @hub = hub
       @hub_url = hub_url(@hub)
