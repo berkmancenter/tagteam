@@ -300,6 +300,21 @@ th, dt, b, strong, label {
   }
 }
 
+.recommend-tag {
+  background: $gray-lightish;
+  color: #222222;
+  padding: 2px $padding-large-horizontal 4px;
+  margin-top: 30px;
+  margin-right: 2px;
+  margin-left: 2px;
+  border-radius: 10px;
+  font-weight: normal;
+  line-height: 2.5em;
+  span {
+    color: #555555;
+  }
+}
+
 .alert {
   margin-top: $padding-large-vertical;
 }

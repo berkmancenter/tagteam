@@ -704,6 +704,11 @@ class HubsController < ApplicationController
 
     sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
     order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @modify_tag_filters = params[:q].gsub(/^#/, '').split(/\s/).delete_if { |b| !b.present? }.map do |tag_name|
+      ModifyTagFilter.find_recursive(@hub.id, tag_name)
+    end.compact
+    @filtered_params = params[:q].dup
+    @modify_tag_filters.each { |mf| @filtered_params.gsub!(/#{mf.tag.name}/, mf.new_tag.name) }
 
     @search = FeedItem.search do
       with :hub_ids, hub_id
