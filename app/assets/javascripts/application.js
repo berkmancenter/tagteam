@@ -744,6 +744,7 @@ $(document).ready(function(){
               },
               {
                 text: 'Submit',
+                type: 'submit',
                 click: function(){
                   if(!forceConfirm || confirm('Are you sure you want to add a filter to all feed items?')) {
                     var replace_tag = undefined;
@@ -762,6 +763,14 @@ $(document).ready(function(){
               }
             ]
           });
+
+          $('#new_tag_for_filter').on('keypress', function (event) {
+            // event 13 is the Enter/Return key
+            if (event.which === 13) {
+              dialogNode.parent().find('button:submit').click();
+            }
+          });
+
           return false;
         }
         $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'','');
