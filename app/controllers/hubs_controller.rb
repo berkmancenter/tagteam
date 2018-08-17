@@ -49,6 +49,7 @@ class HubsController < ApplicationController
     :request_rights,
     :remove_delimiter,
     :remove_roles,
+    :removed_tag_suggestion,
     :retrievals,
     :show,
     :tag_controls,
@@ -504,6 +505,20 @@ class HubsController < ApplicationController
         render layout: !request.xhr?
       end
     end
+  end
+
+  def removed_tag_suggestion
+    authorize @hub, :toggle_tag_display?
+
+    if params[:remove] == 'true'
+      removed_tag_suggestions = ActsAsTaggableOn::Tag.where(id: params[:tag_id]).map do |tag|
+        RemovedTagSuggestion.create(tag: tag, hub_id: @hub.id, user_id: current_user.id)
+      end
+    else
+      RemovedTagSuggestion.where(tag_id: params[:tag_id], hub_id: @hub.id).destroy_all
+    end
+
+    render json: {}
   end
 
   def add_feed

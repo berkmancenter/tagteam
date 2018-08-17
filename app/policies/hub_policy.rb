@@ -12,6 +12,10 @@ class HubPolicy < ApplicationPolicy
     user.has_role?(:inputter, record) || user.has_role?(:owner, record)
   end
 
+  def removed_tag_suggestion?
+    owner_or_admin?
+  end
+
   def add_roles?
     owner_or_admin?
   end
@@ -142,6 +146,10 @@ class HubPolicy < ApplicationPolicy
   end
 
   def update?
+    owner_or_admin?
+  end
+
+  def toggle_tag_display?
     owner_or_admin?
   end
 

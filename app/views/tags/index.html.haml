@@ -28,9 +28,10 @@
         %select.form-control#sort-tags-direction
           %option{ value: 'asc' } Ascending
           %option{ selected: 'selected', value: 'desc' } Descending
+
     %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
       = render partial: 'tags/graph_item', as: :tag, collection: @tags,
-        locals: { hub: @hub, hub_feed: @hub_feed, max_count: @tags.empty? ? 0 : @tags.first.count }
+        locals: { show_removed_tags: policy(@hub).toggle_tag_display?, hub: @hub, hub_feed: @hub_feed, max_count: @tags.empty? ? 0 : @tags.first.count }
     :javascript
       $(document).ready(
         function () {

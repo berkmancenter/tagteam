@@ -9,4 +9,4 @@
       - if @tags_approved.any?
         %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
           = render partial: 'tags/graph_item', as: :tag, collection: @tags_approved,
-            locals: { hub: @hub, hub_feed: nil, max_count: @tags_approved.first.count }
+            locals: { show_removed_tags: false, hub: @hub, hub_feed: nil, max_count: @tags_approved.first.count }

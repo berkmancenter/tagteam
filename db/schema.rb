@@ -216,6 +216,13 @@ ActiveRecord::Schema.define(version: 20180710170657) do
     t.index ["republished_feed_id"], name: "index_input_sources_on_republished_feed_id"
   end
 
+  create_table "removed_tag_suggestions", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "hub_id"
+    t.integer "user_id"
+    t.index ["hub_id"], name: "index_removed_tag_suggestions_on_hub_id"
+  end
+
   create_table "republished_feeds", id: :serial, force: :cascade do |t|
     t.integer "hub_id"
     t.string "title", limit: 500, null: false

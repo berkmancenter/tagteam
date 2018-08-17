@@ -877,5 +877,24 @@ $(document).ready(function(){
     }
   }
   
-  unescapeUrl();  
+  unescapeUrl();
+
+  $('.remove-suggestion-toggle').live('click', function(e) {
+    e.preventDefault();
+    var $link = $(this);
+    var hubId = $link.attr('data-hub-id');
+    $.ajax({
+      url: $.rootPath() + 'hubs/' + hubId + '/removed_tag_suggestion',
+      type: 'post',
+      data: { tag_id: $link.attr('data-tag-id'), remove: $link.find('span').hasClass('fa-eye-slash') },
+      success: (data) => {
+        $link.find('span').toggleClass('fa-eye fa-eye-slash');
+        if($link.find('span').hasClass('fa-eye')) {
+          $link.attr('title', 'Show on autocomplete');
+        } else {
+          $link.attr('title', 'Hide from autocomplete');
+        }
+      }
+    });
+  });
 });

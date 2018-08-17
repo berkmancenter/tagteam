@@ -7,7 +7,7 @@ class TagsController < ApplicationController
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params.has_key?(:username) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params.has_key?(:username) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
       params[:format] = :rss
     elsif request.fullpath =~ /tag\/atom/
@@ -59,10 +59,12 @@ class TagsController < ApplicationController
       tag_ids = Rails.cache.fetch("all-tag-ids-#{@hub.id}", expires_in: 1.hour) do
         FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
       end
+      remove_suggested = RemovedTagSuggestion.where(hub_id: @hub.id).map { |rts| rts.tag.name }
 
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
                .where.not(name: deprecated_tags_names)
+               .where.not(name: remove_suggested)
                .where('name LIKE \'' + params[:term] + '%\'')
                .where(id: tag_ids)
                .group(:id)
@@ -88,6 +90,8 @@ class TagsController < ApplicationController
   def index
     @tags = @hub_feed.blank? ? @hub.tag_counts :
       FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id), @hub.tagging_key).all
+
+    @removed_tag_suggestions = RemovedTagSuggestion.where(hub_id: @hub.id).map(&:tag_id)
 
     if @tags.any?
       # tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
