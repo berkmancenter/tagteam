@@ -675,6 +675,42 @@ $(document).ready(function(){
     $.initEditor(this);
   });
 
+  $('#update-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').removeClass('hidden');
+      $('span#readonly-tag-description,a#update-tag-description').hide();
+    }
+  });
+  $('#submit-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $.ajax({
+        cache: false,
+        dataType: 'json',
+        url: $(this).attr('href'),
+        type: 'post',
+        data: { description: $('textarea#tag-description').val() },
+        success: function(data){
+          if($('textarea#tag-description').val() != '') {
+            $('span#readonly-tag-description').html($('textarea#tag-description').val()).removeClass('empty');
+          }
+          $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+          $('span#readonly-tag-description,a#update-tag-description').show();
+        },
+        error: function(data) {
+        }
+      });
+    }
+  });
+  $('#cancel-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+      $('span#readonly-tag-description,a#update-tag-description').show();
+    }
+  });
+
   if($('#logged_in, #bookmarklet-tag-controls-allowed').length > 0){
     $('.add_filter_control').live({
       click: function(e){

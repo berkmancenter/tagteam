@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
     get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
     get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }, :defaults => { :format => 'html' }
+    post 'tag/:name/description' => 'tags#description', :as => 'tag_description', :constraints => { name: /.+/ }
 
     get 'user/:username' => 'users#hub_items', :as => 'user_hub_items', :constraints => { username: /[^\/]+/ }
     get 'user/:username/tags' => 'tags#index', :as => 'user_hub_items_tags', :constraints => { username: /[^\/]+/ }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class TagsController < ApplicationController
   before_action :load_hub
-  before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
+  before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics, :description]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
   before_action :load_feed_items, only: :statistics
   before_action :add_breadcrumbs
@@ -149,9 +149,23 @@ class TagsController < ApplicationController
     end
 
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
+    @tag_description = HubTagDescription.where(hub_id: @hub.id, tag_id: @tag.id).first
 
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
     render template, layout: request.xhr? ? false : 'tabs'
+  end
+
+  def description
+    # TODO: Authorize
+
+    hub_tag_desc = HubTagDescription.find_or_initialize_by(tag_id: @tag.id, hub_id: @hub.id)
+    hub_tag_desc.update_attributes!(description: params[:description])
+
+    # TODO: Eventually track role here?
+
+    render json: {}
+  rescue Exception => e
+    render json: {}
   end
 
   def statistics
