@@ -57,6 +57,9 @@ Rails.application.routes.draw do
         get 'related'
         get 'controls'
         delete 'remove_item'
+        get 'copy_move_to_hub'
+        post 'copy_item'
+        post 'move_item'
       end
     end
     resources :tags
