@@ -22,7 +22,6 @@ module TagsHelper
       options['data-hub-id'] = options[:hub].id
       hub_id = options[:hub].id
       options.delete(:hub)
-
     end
 
     unless options[:hub_feed].blank?
@@ -39,6 +38,29 @@ module TagsHelper
       tag_count = options[:use_count] ? tag.count : tag.count_by_hub(Hub.find(hub_id))
       options['data-tag-frequency'] = tag_count
       options.delete(:show_count)
+    end
+
+    if options[:allow_remove].present?
+      if hub_filter_possible?(:delete, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+        remove_tag_link = link_to_tag_filter(
+          fa_icon('times', class: 'tag-remover'),
+          'Delete',
+          hub: @hub,
+          item: @feed_item,
+          tag: tag,
+          tag_list: @feed_item.applied_tags(@hub).map(&:name),
+          confirm: true,
+          confirm_message: 'Are you sure to remove the "' + tag.name + '" tag?'
+        )
+
+        options.delete(:allow_remove)
+
+        return link_to(
+          tag.name,
+          hub_tag_show_path(hub_id, tag.name),
+          options
+        ) + remove_tag_link
+      end
     end
 
     link_to(tag.name, hub_tag_show_path(hub_id, tag.name), options)
@@ -96,6 +118,10 @@ module TagsHelper
     elsif context[:hub]
       path = hub_tag_filters_path(context[:hub])
       add_class = 'hub_tag_filter'
+    end
+
+    if context[:confirm].present? && context[:confirm_message].present?
+      options['data-confirm'] = context[:confirm_message]
     end
 
     options[:class] += ' ' + add_class
