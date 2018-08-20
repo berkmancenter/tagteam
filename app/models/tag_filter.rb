@@ -62,8 +62,37 @@ class TagFilter < ApplicationRecord
     self.class.base_class.notify_observers :after_rollback, self
   end
 
-  def rollback_and_destroy_async(current_user)
-    TagFilters::DestroyJob.perform_later(self, current_user)
+  def rollback_and_destroy(current_user, async = true)
+    if async
+      TagFilters::DestroyJob.perform_later(self, current_user)
+    else
+      # TagFilter::DestroyJob.perform_now still puts this into a queue and the page loads
+      # before it's done, so we are pulling it out of queue
+      self.queue_destroy_notification(current_user)
+      self.rollback
+      self.destroy
+    end
+  end
+
+  def queue_destroy_notification(updater)
+    changes = case self.class.to_s
+      when 'AddTagFilter'
+        { type: 'tags_deleted', values: [self.tag_name] }
+      when 'DeleteTagFilter'
+        { type: 'tags_added', values: [self.tag_name] }
+      when 'ModifyTagFilter'
+        { type: 'tags_modified', values: [[self.new_tag_name], [self.tag_name]] }
+      when 'SupplementTagFilter'
+        { type: 'tags_supplemented_deletion', values: [[self.tag_name, self.new_tag_name]] }
+      end
+
+    TaggingNotifications::SendNotificationJob.perform_later(
+        self.hub,
+        self.filtered_feed_items,
+        [self],
+        updater,
+        [changes]
+      )
   end
 
   # End API for filters,
