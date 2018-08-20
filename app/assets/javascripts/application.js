@@ -305,6 +305,9 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tag_list',
+          data: {
+            allow_remove: true
+          },
           success: function(tagList){
             if ($(tagList).find('a').length > 0) {
               $('.feed-item-existing-tags').append(
