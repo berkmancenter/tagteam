@@ -834,7 +834,7 @@ class HubsController < ApplicationController
       user: current_user
     )
 
-    if (add_filter.nil? || add_filter.rollback_and_destroy_async(current_user)) && deprecation_filter.valid?
+    if (add_filter.nil? || add_filter.rollback_and_destroy(current_user)) && deprecation_filter.valid?
       if request.xhr?
         render(html: 'Successfully deprecated.', layout: false)
       else
@@ -871,8 +871,8 @@ class HubsController < ApplicationController
     removed_filters = TagFilter.where(removed_params)
     replaced_filters = TagFilter.where(replaced_params)
 
-    removed_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
-    replaced_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+    removed_filters.map { |filter| filter.rollback_and_destroy(current_user) }
+    replaced_filters.map { |filter| filter.rollback_and_destroy(current_user) }
 
     if request.xhr?
       render(html: 'Successfully undeprecated.', layout: false)

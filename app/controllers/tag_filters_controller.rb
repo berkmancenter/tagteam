@@ -47,14 +47,13 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
-    @tag_filter.rollback_and_destroy_async(current_user)
+    # If scope is a single feed item, rollback and destroy immediately,
+    # else destroy asynchronously (default is asynchronous)
+    @tag_filter.rollback_and_destroy(current_user, !@tag_filter.scope_type == 'FeedItem')
 
-    flash[:notice] = 'Deleting that tag filter.'
+    flash[:notice] = @tag_filter.scope_type == 'FeedItem' ? 'Deleted that tag filter.' : 'Deleting that tag filter.'
 
-    respond_to do |format|
-      format.html { redirect_back fallback_location: controller_response[:redirection_path] }
-      format.js { render template:  'hub_feed_item_tag_filters/destroy', layout: false } #only used in the case of the item-lvel filter
-    end
+    redirect_back fallback_location: controller_response[:redirection_path]
   end
 
   private

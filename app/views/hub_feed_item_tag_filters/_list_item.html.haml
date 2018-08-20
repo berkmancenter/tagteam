@@ -4,7 +4,6 @@
       = link_to hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub, hub_feed_item_tag_filter.scope, hub_feed_item_tag_filter),
         method: :delete,
         title: 'Remove this filter',
-        remote: true,
         data: { confirm: 'Are you sure you want to remove this filter?' } do
         = fa_icon 'times'
   %span.filter-action= filter_description(hub_feed_item_tag_filter)
