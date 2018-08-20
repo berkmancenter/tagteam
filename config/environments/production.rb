@@ -94,13 +94,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: config.hostname, protocol: 'https' }
   config.action_mailer.delivery_method = :sendmail
 
-  config.middleware.use(
-    ExceptionNotifier,
-    email_prefix: '[tagteam-errors] ',
-    sender_address: config.default_sender,
-    exception_recipients: config.exceptions_mailed_to,
-    ignore_exceptions: [Acl9::AccessDenied, ActionController::RoutingError, ActiveRecord::RecordNotFound]
-  )
+config.middleware.use ExceptionNotification::Rack,
+  :ignore_exceptions => [Acl9::AccessDenied, ActionController::RoutingError, ActiveRecord::RecordNotFound],
+  :email => {
+    :email_prefix => "[tagteam-errors] ",
+    :sender_address => config.default_sender,
+    :exception_recipients => config.exceptions_mailed_to
+  }
 
   config.to_prepare { Devise::SessionsController.force_ssl }
   config.to_prepare { Devise::RegistrationsController.force_ssl }
