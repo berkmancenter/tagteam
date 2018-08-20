@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 class HubPolicy < ApplicationPolicy
   def about?
     show?
   end
 
   def add_feed?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
     user.has_role?(:inputter, record) || user.has_role?(:owner, record)
@@ -23,7 +24,7 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
-  def bookmark_collections?
+  def taggers?
     show?
   end
 
@@ -48,7 +49,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def custom_republished_feeds?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
     user.has_role?(:remixer, record) || user.has_role?(:owner, record)
@@ -94,10 +95,14 @@ class HubPolicy < ApplicationPolicy
     user.present?
   end
 
-  def settings?
-    return false unless user.present?
+  def scoreboard?
+    index?
+  end
 
-    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+  def settings?
+    return false if user.blank?
+
+    user.has_role?(:superadmin) || user.has_role?(:owner, record) || user.has_role?(:bookmarker, record)
   end
 
   def remove_roles?
@@ -128,6 +133,10 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def remove_delimiter?
+    owner_or_admin?
+  end
+
   def tag_controls?
     user.present?
   end
@@ -137,7 +146,7 @@ class HubPolicy < ApplicationPolicy
   end
 
   def recalc_all_tags?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
     false
@@ -179,19 +188,37 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def unsubscribe_feed?
+    return false if user.blank?
+
+    user.has_role?(:superadmin) || user.has_role?(:owner, record)
+  end
+
+  def hub_admin?
+    owner_or_admin?
+  end
+
+  def destroy_hubs?
+    owner_or_admin?
+  end
+
+  def remove_item?
+    owner_or_admin?
+  end
+
   private
 
   def owner_or_admin?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
     user.is?(:owner, record)
   end
 
   def stats_user?
-    return false unless user.present?
+    return false if user.blank?
     return true if user.has_role?(:superadmin)
 
-    user.is?([:owner, :stats_viewer], record)
+    user.is?(%i[owner stats_viewer], record)
   end
 end

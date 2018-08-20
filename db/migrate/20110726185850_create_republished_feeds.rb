@@ -1,4 +1,4 @@
-class CreateRepublishedFeeds < ActiveRecord::Migration
+class CreateRepublishedFeeds < ActiveRecord::Migration[4.2]
   def change
     create_table :republished_feeds do |t|
       t.integer :hub_id

@@ -16,7 +16,6 @@ RSpec.describe HubFeedPolicy do
     it { is_expected.to forbid_action(:edit) }
     it { is_expected.to forbid_action(:import) }
     it { is_expected.to forbid_action(:import_items) }
-    it { is_expected.to permit_action(:more_details) }
     it { is_expected.to forbid_action(:new) }
     it { is_expected.to forbid_action(:reschedule_immediately) }
     it { is_expected.to permit_action(:show) }

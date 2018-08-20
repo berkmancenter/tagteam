@@ -1,12 +1,31 @@
-= form_for @feed_item, url: hub_feed_feed_item_path(@hub_feed, @feed_item) do |f|
+= semantic_form_for(@feed_item, url: hub_feed_feed_item_path(@hub_feed, @feed_item)) do |f|
   - text_field_size = 80
-  %h3 Title:
-  = f.text_field :title, size: text_field_size
-  %h3 Summary:
-  = f.text_area :description
-  %h3 Link:
-  = f.text_field :url, size: text_field_size
-  %br
-  %br
-  = f.submit 'Update', class: 'btn btn-success'
-  = link_to 'Cancel', hub_feed_feed_item_path(@hub_feed, @feed_item), class: 'btn btn-default'
+
+  = f.inputs do
+    .row
+      .col-md-10
+        = f.input :title, size: text_field_size
+    .row
+      .col-md-10    
+        %label Description
+        = f.text_area :description
+    %br    
+    .row
+      .col-md-10
+        %label Link
+        = f.text_field :url, size: text_field_size
+    %br
+    .row
+      .col-md-3
+        = f.input :date_published, as: :string, label: 'Date published', hint: 'yyyy-mm-dd format', input_html: { class: :datepicker }
+
+    = f.action :submit, label: 'Update', as: :button, button_html: { class: 'btn btn-success' }
+
+:javascript
+  $('.datepicker').datepicker({
+    changeMonth: true,
+    changeYear:true,
+    changeDay: true,
+    yearRange: 'c-500',
+    dateFormat: 'yy-mm-dd'
+  });

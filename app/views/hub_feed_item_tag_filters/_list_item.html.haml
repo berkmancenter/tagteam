@@ -1,4 +1,4 @@
-%div{:class => "tag_filter hub_feed_item_tag_filter #{filter_css_class(hub_feed_item_tag_filter)}"}
+%div{ class: "tag_filter hub_feed_item_tag_filter #{filter_css_class(hub_feed_item_tag_filter)}" }
   - if user_signed_in? && (current_user.is?(:owner, @hub) || current_user.is?(:owner, hub_feed_item_tag_filter))
     .pull-right
       = link_to hub_feed_item_tag_filter_path(hub_feed_item_tag_filter.hub, hub_feed_item_tag_filter.scope, hub_feed_item_tag_filter),
@@ -8,9 +8,14 @@
         = fa_icon 'times'
   %span.filter-action= filter_description(hub_feed_item_tag_filter)
   tag
-  \#{tag_display hub_feed_item_tag_filter.tag, hub: hub_feed_item_tag_filter.hub, feed_item: hub_feed_item_tag_filter.scope}
+  = tag_display(hub_feed_item_tag_filter.tag, hub: hub_feed_item_tag_filter.hub, hub_feed_item: hub_feed_item_tag_filter.scope).to_s
   - if hub_feed_item_tag_filter.class == ModifyTagFilter
     %span.filter-action to
     = tag_display hub_feed_item_tag_filter.new_tag,
       hub: hub_feed_item_tag_filter.hub,
-      feed_item: hub_feed_item_tag_filter.scope
+      hub_feed_item: hub_feed_item_tag_filter.scope
+  - if hub_feed_item_tag_filter.class == SupplementTagFilter
+    %span.filter-action with
+    = tag_display hub_feed_item_tag_filter.new_tag,
+      hub: hub_feed_item_tag_filter.hub,
+      hub_feed_item: hub_feed_item_tag_filter.scope

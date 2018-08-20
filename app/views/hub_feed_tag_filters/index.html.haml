@@ -1,7 +1,10 @@
 - content_for :top_panel do
   = render partial: 'hub_feeds/top_panel', locals: { hub: @hub, hub_feed: @hub_feed }
 - content_for :tabs do
-  = render partial: 'hub_feeds/tabs', locals: { active: 'filters' }
+  - if @user
+    = render partial: 'users/hub_items_tabs', locals: { active: 'filters' }
+  - else
+    = render partial: 'hub_feeds/tabs', locals: { active: 'filters' }
 - content_for :tab_content do
   .nicely-padded
     - if current_user && current_user.is?([:owner, :hub_feed_tag_filterer], @hub)
@@ -29,6 +32,13 @@
             tag_list: tag_list,
             class: 'add_filter_control hub_feed_tag_filter btn btn-default' do
             = fa_icon 'pencil', text: 'Modify a tag on all items in this feed'
+        %li
+          = link_to hub_feed_tag_filters_path(@hub_feed),
+            data_hub_id: @hub.id,
+            data_type: 'SupplementTagFilter',
+            tag_list: tag_list,
+            class: 'add_filter_control hub_feed_tag_filter btn btn-primary' do
+            = fa_icon 'plus-circle', text: 'Supplement a tag with a second tag on all items in this feed'
     %h1 Active filters
     - if @tag_filters.empty?
       %h2 No active filters

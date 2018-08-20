@@ -1,0 +1,17 @@
+%h2 Users
+- if taggers.present?
+  %table.table
+    - %w[rank name items].each do |sort_option|
+      %th= sortable_link(sort_option, sort, order, 'scoreboard_hub_path')
+
+    - taggers.each do |tagger|
+      %tr
+        %td
+          = tagger[:rank]
+        %td
+          = tagger[:username]
+        %td
+          = tagger[:count]
+  = render partial: 'shared/paginate', locals: { param_name: 'taggers_page', anchor: 'users-scoreboard' }, object: taggers, as: :results
+- else
+  This hub currently has no users scoreboard.

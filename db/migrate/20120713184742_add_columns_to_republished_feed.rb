@@ -1,4 +1,4 @@
-class AddColumnsToRepublishedFeed < ActiveRecord::Migration
+class AddColumnsToRepublishedFeed < ActiveRecord::Migration[4.2]
   def change
     add_column :republished_feeds, :url_key, :string, :limit => 50.bytes
 

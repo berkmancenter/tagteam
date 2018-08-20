@@ -44,19 +44,32 @@ module TagsHelper
     link_to(tag.name, hub_tag_show_path(hub_id, tag.name), options)
   end
 
-  def hub_filter_possible?(_params, current_user)
-    current_user.is?([:owner, :hub_tag_filterer], @hub) && !@already_filtered_for_hub
+  def hub_filter_possible?(type, _params, current_user)
+    roles = [:owner]
+
+    case type
+    when :add
+      roles << :hub_tag_adder
+    when :delete
+      roles << :hub_tag_deleter
+    when :modify
+      roles << :hub_tag_modifier
+    when :supplement
+      roles << :hub_tag_supplementer
+    end
+
+    (current_user.is?(roles, @hub) || current_user.superadmin?) && !@already_filtered_for_hub
   end
 
   def feed_filter_possible?(params, current_user)
     params[:hub_feed_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_tag_filterer], @hub) &&
+      (current_user.is?(%i[owner hub_feed_tag_filterer], @hub) || current_user.superadmin?) &&
       !@already_filtered_for_hub_feed
   end
 
   def item_filter_possible?(params, current_user)
     params[:hub_feed_item_id].to_i != 0 &&
-      current_user.is?([:owner, :hub_feed_item_tag_filterer], @hub) &&
+      (current_user.is?(%i[owner hub_feed_item_tag_filterer], @hub) || current_user.superadmin?) &&
       !@already_filtered_for_hub_feed_item
   end
 
@@ -66,8 +79,13 @@ module TagsHelper
       data_type: "#{type.to_s.capitalize}TagFilter"
     }
 
-    options[:data_id] = context[:tag].id if context[:tag]
+    if context[:tag]
+      options[:data_id] = context[:tag].id
+      options[:tag_name] = context[:tag].name
+      options[:other_tags] = (context[:tag_list] - [context[:tag].name]).join(', ') if context[:tag_list]
+    end
     options[:data_hub_id] = context[:hub].id
+    options[:tag_list] = context[:tag_list].join(', ') if context[:tag_list]
 
     if context[:feed]
       path = hub_feed_tag_filters_path(context[:feed])

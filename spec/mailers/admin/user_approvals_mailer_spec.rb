@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 module Admin
@@ -26,7 +27,7 @@ module Admin
 
     describe '#notify_user_of_denial' do
       let(:user) { create(:user) }
-      let(:mail) { described_class.notify_user_of_denial(user) }
+      let(:mail) { described_class.notify_user_of_denial(user.email) }
 
       it 'sets the recipient' do
         expect(mail.to).to contain_exactly(user.email)

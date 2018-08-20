@@ -1,4 +1,4 @@
-class CreateHubTagFilters < ActiveRecord::Migration
+class CreateHubTagFilters < ActiveRecord::Migration[4.2]
   def change
     create_table :hub_tag_filters do |t|
       t.references :hub

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A Hub is the highest level of organization in TagTeam.
 # It has many HubFeed objects containing FeedItems.
 # These FeedItem objects have their ActsAsTaggableOn::Tag objects
@@ -28,7 +29,7 @@ class Hub < ApplicationRecord
                   :notify_taggers
   acts_as_authorization_object
 
-  friendly_id :nickname, use: [:slugged, :history]
+  friendly_id :nickname, use: %i[slugged history]
 
   before_validation { auto_sanitize_html(:description) }
   after_validation :move_friendly_id_error_to_nickname
@@ -48,6 +49,7 @@ class Hub < ApplicationRecord
   # list so if we happen to apply all these in order, it's the correct order.
   has_many :all_tag_filters, -> { order(updated_at: :asc) }, class_name: 'TagFilter', dependent: :destroy
 
+  validate :duplicate_delimiter
   api_accessible :default do |t|
     t.add :id
     t.add :title
@@ -63,6 +65,8 @@ class Hub < ApplicationRecord
     text :nickname
   end
 
+  SCOREBOARD = ['Past Day', 'Week', 'Month', 'Year']
+
   def feed_items
     FeedItem.joins(:hubs).where(hubs: { id: id })
   end
@@ -75,7 +79,7 @@ class Hub < ApplicationRecord
   end
 
   def move_friendly_id_error_to_nickname
-    return unless errors[:friendly_id].present?
+    return if errors[:friendly_id].blank?
 
     errors.add :nickname, *errors.delete(:friendly_id)
   end
@@ -173,13 +177,6 @@ class Hub < ApplicationRecord
     'Hub'
   end
 
-  # Used when a new item is created
-  def self.apply_all_tag_filters_to_item_async(item)
-    item.hubs.each do |hub|
-      ApplyTagFilters.perform_async(hub.all_tag_filters.pluck(:id), item.id, true)
-    end
-  end
-
   # all tags used in the hub
   def tags
     filters_applied = (
@@ -240,15 +237,13 @@ class Hub < ApplicationRecord
 
   def settings
     {
-      tags_delimiter: tags_delimiter_with_default,
+      tags_delimiter: tags_delimiter,
       official_tag_prefix: official_tag_prefix_with_default,
       hub_approved_tags: hub_approved_tags,
-      suggest_only_approved_tags: suggest_only_approved_tags_with_default
+      suggest_only_approved_tags: suggest_only_approved_tags_with_default,
+      bookmarklet_empty_description_reminder: bookmarklet_empty_description_reminder,
+      enable_tag_scoreboard: enable_tag_scoreboard
     }
-  end
-
-  def tags_delimiter_with_default
-    tags_delimiter || ','
   end
 
   def official_tag_prefix_with_default
@@ -270,5 +265,25 @@ class Hub < ApplicationRecord
                              .group(:tag_id).reorder('')
 
     ActsAsTaggableOn::Tag.where(id: filters.map(&:tag_id))
+  end
+
+  def deprecated_tag_names
+    tags = all_tag_filters.where(type: 'DeleteTagFilter', scope_type: 'Hub').select(:tag_id)
+    ActsAsTaggableOn::Tag.where(id: tags).map(&:name).uniq
+  end
+
+  def fetch_deprecated_tags
+    tags = all_tag_filters.where(type: 'DeleteTagFilter', scope_type: 'Hub').select(:tag_id)
+    ActsAsTaggableOn::Tag.where(id: tags)
+  end
+
+  private
+
+  def duplicate_delimiter
+    tags_delimiter.detect do |delimiter|
+      if tags_delimiter.count(delimiter) > 1
+        errors.add(:tags_delimiter, "You have already created #{delimiter} as delimiter")
+      end
+    end
   end
 end

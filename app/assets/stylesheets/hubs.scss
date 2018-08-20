@@ -225,6 +225,12 @@ form.hub {
     }
   }
 
+  &.supplement {
+    .filter-action {
+      color: $brand-primary;
+    }
+  }
+
   &.add {
     .filter-action {
       color: $brand-success;
@@ -246,8 +252,9 @@ form.hub {
   }
 }
 
-.hub-settings {
-  li {
-    margin-bottom: 10px;
+.tab-layout {
+  .tab-content.tab-content-scoreboard {
+    border-left: none;
+    border-right: none;
   }
 }

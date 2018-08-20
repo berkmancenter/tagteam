@@ -1,9 +1,22 @@
 - content_for :top_panel do
   %h1= @user.username
+
 - content_for :tabs do
   = render partial: 'tabs', locals: { active: 'about' }
 - content_for :tab_content do
   .nicely-padded
     = @user.first_name
     = @user.last_name
-    = mail_to(@user.email, @user.email, :encode => 'javascript')
+    = mail_to(@user.email, @user.email, encode: 'javascript')
+    - if current_user.has_role?(:superadmin)
+      = form_tag(lock_user_user_path(id: @user)) do
+        = check_box_tag('lock_user', 'lock', @user.access_locked?, onclick: 'this.form.submit()')
+        Lock User
+      = form_tag(superadmin_role_user_path(id: @user)) do
+        = check_box_tag('superadmin', 'superadmin', @user.has_role?(:superadmin), onclick: 'this.form.submit()')
+        Superadmin
+      = form_tag(documentation_admin_role_user_path(id: @user)) do
+        = check_box_tag('documentation_admin', 'documentation_admin', @user.has_role?(:documentation_admin), onclick: 'this.form.submit()')
+        Documentation Admin
+
+

@@ -14,7 +14,7 @@
         .panel-heading#additional-tags-heading{ role: 'tab' }
           %h4.panel-title
             %a{ role: 'button', 'data-toggle' => 'collapse', 'data-parent' => '#accordion', href: '#additional-tags', 'aria-expanded' => 'true', 'aria-controls' => 'additional-tags' }
-              Additional Tag Statistics
+              Additional tag statistics
         .panel-collapse.collapse#additional-tags{ role: 'tabpanel', 'aria-labelledby' => 'additional-tags-heading' }
           .panel-body
             - prefixed_tags.drop(1).each do |tag_prefix, tag_count|

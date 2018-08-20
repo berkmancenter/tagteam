@@ -1,0 +1,24 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'scoreboard' }
+- content_for :tab_content do
+  .hub-item-view.row
+    .col-md-offset-1.col-md-7.pagination-wrapper
+      = render partial: 'shared/paginate', object: @taggers, as: :results
+    .alter-views.col-md-4.day-selction
+      = form_tag(scoreboard_hub_path(@hub.id), method: :get, class: 'criteria-selection') do
+        .form-group
+          = select_tag :criteria, options_for_select(Hub::SCOREBOARD, params[:criteria] || 'Year'), class: 'form-control', onchange: "$('.criteria-selection').submit();"
+  .nicely-padded.scoreboard
+    %h1 Scoreboard
+    %ul.nav.nav-tabs
+      %li.active
+        %a{ href: '#users-scoreboard', data: { toggle: 'tab' } } Users
+      %li
+        %a{ href: '#tags-scoreboard', data: { toggle: 'tab' } } Tags
+    .tab-content.tab-content-scoreboard
+      #users-scoreboard.tab-pane.fade.in.active
+        = render partial: 'user_list_item', locals: { taggers: @taggers, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }
+      #tags-scoreboard.tab-pane.fade
+        = render partial: 'tag_list_item', locals: { tags: @tags, order: params[:order] || 'asc', sort: @sort || 'name', path: 'scoreboard_hub_path', hub: @hub }

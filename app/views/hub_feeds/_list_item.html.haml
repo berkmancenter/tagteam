@@ -4,17 +4,10 @@
       = link_to controls_hub_hub_feed_path(@hub, hub_feed), class: 'control', title: 'Feed actions' do
         = fa_icon 'cog'
     .media-left
-      = link_to more_details_hub_hub_feed_path(@hub, hub_feed),
+      = link_to '#',
         class: 'hub_feed_more_control', data_hub_feed_id: hub_feed.id do
         = fa_icon('caret-right')
     .media-body
-      - if hub_feed.feed.is_bookmarking_feed?
-        = link_to hub_feed_feed_items_path(hub_feed) do
-          %h2= sanitize strip_tags(hub_feed.to_s)
-      - else
-        = link_to hub_hub_feed_path(@hub, hub_feed) do
-          %h2= sanitize strip_tags(hub_feed.to_s)
-      .metadata
-      - if defined?(show_hubs) && show_hubs == true
-        %span.smaller
-          in #{link_to(hub_feed.hub, hub_path(hub_feed.hub))}
+      = link_to (hub_feed.feed.is_bookmarking_feed? && hub_feed.owners.any? ? hub_user_hub_items_path(@hub, hub_feed.owners.first.username) : hub_hub_feed_path(@hub, hub_feed)) do
+        %h2= sanitize strip_tags(params[:action] == 'taggers' ? hub_feed.author_title : hub_feed.to_s)
+      = render 'hub_feeds/more_details', hub_feed: hub_feed

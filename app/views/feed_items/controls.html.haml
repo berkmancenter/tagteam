@@ -1,6 +1,6 @@
 %ul.list-unstyled
-  - if current_user && current_user.is?([:owner,:remixer,:hub_feed_item_tag_filterer,:bookmarker],@hub)
-    - if current_user.is?([:owner, :remixer],@hub)
+  - if current_user&.is?(%i[owner remixer hub_feed_item_tag_filterer bookmarker], @hub)
+    - if current_user.is?(%i[owner remixer], @hub)
       %li
         = link_to custom_republished_feeds_hub_path(@hub),
           title: "Add #{@feed_item} to a remix feed",
@@ -15,16 +15,38 @@
           data_item_type: 'FeedItem',
           data_item_id: @feed_item.id do
           = fa_icon 'minus-square', text: 'Remove from a remix feed', class: 'text-warning'
-    - if @hub_feed && @hub_feed.feed.is_bookmarking_feed? && (current_user.is?(:owner, @hub) || current_user.is?(:owner,@hub_feed.feed))
+
+    - if @hub_feed&.feed&.is_bookmarking_feed? && (current_user.is?(:owner, @hub) || current_user.is?(:owner, @hub_feed.feed))
       %li
         = link_to bookmarklets_remove_item_path(hub_id: @hub,
           feed_id: @hub_feed.feed,
           feed_item_id: @feed_item),
           title: "Remove #{@feed_item} from this bookmarking collection",
           method: :post,
-          confirm: "Are you sure?" do
+          confirm: 'Are you sure?' do
           = fa_icon 'minus-circle', text: 'Remove from this bookmarking collection', class: 'text-danger'
-    %hr/
+    - if policy(@hub).remove_item?
+      %li
+        = link_to remove_item_hub_feed_feed_item_path(@hub_feed, @feed_item),
+          title: "Remove #{@feed_item} from the hub",
+          method: :delete,
+          data: { confirm: 'Are you sure?' } do
+          = fa_icon 'trash', text: 'Remove item from hub', class: 'text-warning'
+      - tag_list = @feed_item.all_tags_list_on(@hub.tagging_key).join(', ')
+      %li.top-spacer
+        = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
+          data_hub_id: @hub.id,
+          data_type: 'DeleteTagFilter',
+          tag_list: tag_list,
+          class: 'add_filter_control hub_feed_item_tag_filter' do
+          = fa_icon 'minus-circle', text: 'Remove a tag from this item', class: 'text-danger'
+      %li.bottom-spacer
+        = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
+          data_hub_id: @hub.id,
+          data_type: 'ModifyTagFilter',
+          tag_list: tag_list,
+          class: 'add_filter_control hub_feed_item_tag_filter' do
+          = fa_icon 'pencil', text: 'Modify a tag on this item', class: 'text-warning'
   %li
     = link_to(raw(fa_icon('link', text: 'Original link')), @feed_item.url, rel: 'nofollow', target: '_blank')
   = sanitize insert_social_links(@feed_item.url)

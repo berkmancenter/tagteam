@@ -36,8 +36,8 @@ class FeedItem < ApplicationRecord
   end
   validates :url, uniqueness: true
 
-  has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals'
-  has_and_belongs_to_many :feeds
+  has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals', optional: true
+  has_and_belongs_to_many :feeds, optional: true
   has_many :hub_feeds, through: :feeds
   has_many :hubs, through: :hub_feeds
   has_many :input_sources, dependent: :destroy, as: :item_source
@@ -84,6 +84,7 @@ class FeedItem < ApplicationRecord
     text :contributors, more_like_this: true
     text :rights, more_like_this: true
     text :tag_list, using: :tag_list_string_for_indexing, more_like_this: true
+    text :username_list
     integer :hub_ids, multiple: true
     integer :hub_feed_ids, multiple: true
     integer :id
@@ -101,6 +102,7 @@ class FeedItem < ApplicationRecord
     string :description
     string :rights
     time :date_published
+    time :created_at
     time :last_updated
   end
 
@@ -109,46 +111,33 @@ class FeedItem < ApplicationRecord
     FeedItem.where(id: id)
   end
 
-  def apply_tag_filters(hub_ids = [])
-    # So we can pass a single hub id
-    hub_ids = [hub_ids] unless hub_ids.respond_to? :each
-    hubs = hub_ids.empty? ? self.hubs : Hub.where(id: hub_ids)
-
-    hubs.each do |hub|
-      hub.tag_filters.order('updated_at ASC').each do |filter|
-        filter.apply(items: FeedItem.where(id: id))
-      end
+  # An array of all tag contexts for every tagging on this item.
+  def tag_contexts
+    taggings.includes(:tag).where.not(context: 'tags').map do |tagging|
+      "#{tagging.context}-#{tagging.tag.name}"
     end
   end
 
-  # An array of all tag contexts for every tagging on this item.
-  def tag_contexts
-    taggings.collect do |tg|
-      "#{tg.context}-#{tg.tag.name}" unless tg.context.eql? 'tags'
-    end.compact
-  end
-
   def tag_contexts_by_users
-    taggings.collect do |tg|
-      next if tg.context.eql? 'tags'
+    taggings.includes(:tag, :tagger).where.not(context: 'tags').map do |tagging|
+      auth_user =
+        if tagging.tagger_type == 'User'
+          tagging.tagger
+        else
+          role = Role.find_by(
+            authorizable_id: tagging.tagger_id,
+            authorizable_type: 'TagFilter',
+            name: 'creator'
+          )
 
-      if tg.tagger_type.eql? 'User'
-        auth_user = User.where(id: tg.tagger_id).first
-      else
-        role = Role.where(
-          authorizable_id: tg.tagger_id,
-          authorizable_type: 'TagFilter',
-          name: 'creator'
-        ).first
+          next if role.nil?
 
-        next if role.nil?
-
-        auth_user = role.users.first
-      end
+          role.users.first
+        end
 
       next if auth_user.nil?
 
-      "#{tg.context}-#{tg.tag.name}-user_#{auth_user.id}"
+      "#{tagging.context}-#{tagging.tag.name}-user_#{auth_user.id}"
     end.compact
   end
 
@@ -177,16 +166,11 @@ class FeedItem < ApplicationRecord
   end
 
   def tag_list_array_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query.
-    # Construct the tag list correctly.
-    item_tags.collect(&:name)
+    ActsAsTaggableOn::Tagging.joins(:tag).where(taggable_type: FeedItem.name, taggable_id: self.id).pluck("tags.name").uniq
   end
 
   def tag_list_string_for_indexing
-    # tag_list as provided by ActsAsTaggableOn always does a sql query.
-    # Construct the tag list correctly.
-
-    item_tags.collect(&:name).join(', ')
+    tag_list_array_for_indexing.join(', ')
   end
 
   def to_s
@@ -222,7 +206,8 @@ class FeedItem < ApplicationRecord
     end
 
     new_taggings.each do |tagging|
-      deactivated_taggings = tagging.deactivate_taggings!
+      taggings_to_deactivate = ActsAsTaggableOn::Tagging.where(tag_id: tagging.tag_id, context: context, taggable_id: self.id, taggable_type: 'FeedItem')
+      deactivated_taggings = taggings_to_deactivate.map { |tagging| TagFilter.new.deactivate_tagging(tagging) }
       tagging.save!
       deactivated_taggings.each do |deactivated_tagging|
         deactivated_tagging.deactivator = tagging
@@ -255,15 +240,16 @@ class FeedItem < ApplicationRecord
     query
   end
 
-  def self.apply_tag_filters(item_id, hub_ids = [])
-    feed_item = find(item_id)
-    feed_item.apply_tag_filters(hub_ids)
+  def username_list
+    user_ids = taggings.where(tagger_type: 'User').distinct.pluck(:tagger_id)
+
+    return [] if user_ids.blank?
+
+    User.where(id: user_ids).pluck(:username)
   end
 
-  def item_tags
-    taggings.collect do |tg|
-      tg.tag
-    end.compact
+  def applied_tags(hub)
+    all_tags_on(hub.tagging_key)
   end
 
   private

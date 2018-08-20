@@ -1,4 +1,4 @@
-class CreateHubs < ActiveRecord::Migration
+class CreateHubs < ActiveRecord::Migration[4.2]
   def change
     create_table :hubs do |t|
       t.string :title, :limit => 500.bytes, :null => false

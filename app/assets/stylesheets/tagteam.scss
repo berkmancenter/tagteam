@@ -21,6 +21,9 @@ th, dt, b, strong, label {
 .navbar {
   font-weight: normal;
   margin-bottom: 0;
+  &.navbar-static-top {
+    z-index: 2;
+  }
 
   .welcome {
     color: $gray-lighter;
@@ -68,7 +71,7 @@ th, dt, b, strong, label {
 
     &:hover {
       background-color: $gray-lighter;
-      
+
       > a {
         &.doc-control {
           .fa {
@@ -187,7 +190,7 @@ th, dt, b, strong, label {
   border-left: $arrow-width solid $brand-primary;
   display: none;
   z-index: 10;
-  
+
   &:before {
     content: " ";
     height: $pill-height - 3;
@@ -217,7 +220,7 @@ th, dt, b, strong, label {
       padding-bottom: 2*$padding-large-vertical;
       margin-bottom: 2*$padding-large-vertical;
       margin-top: 6*$padding-large-vertical;
-      
+
       &:first-child {
         margin-top: 2*$padding-large-vertical;
       }
@@ -315,13 +318,22 @@ th, dt, b, strong, label {
       border-top: 1px solid lighten($gray, 10%);
     }
   }
-
   ul.list-unstyled {
     margin: 0;
 
     li {
       padding: $padding-large-vertical $padding-base-horizontal;
       border-bottom-color: lighten($gray, 10%);
+      &.top-spacer {
+        border-top: 1px solid lighten($gray, 10%);
+        margin-top: 5px;
+        padding-top: 15px;
+      }
+      &.bottom-spacer {
+        border-bottom: 1px solid lighten($gray, 10%);
+        margin-bottom: 5px;
+        padding-bottom: 15px;
+      }
 
       &:first-child {
         border-top: 0;
@@ -355,7 +367,7 @@ th, dt, b, strong, label {
 
 .pagination {
   > li {
-    > span, a { 
+    > span, a {
       > .fa {
         vertical-align: bottom;
         color: $gray-lightish;
@@ -378,7 +390,8 @@ th, dt, b, strong, label {
   }
 }
 
-.pagination-counts {
+.pagination-counts,
+.pagination-per-page {
   display: inline-block;
   position: relative;
   top: -1.2em;
@@ -422,7 +435,7 @@ body > .container {
 
   div.row.export-formats {
     margin-top: 0.8em;
-    
+
     div {
       padding: 0 0.4em;
       text-align: center;
@@ -492,4 +505,19 @@ abbr[title="required"] {
   margin-top: 4*$padding-large-vertical;
   padding: 2*$padding-base-vertical 6*$padding-large-horizontal;
 }
-
+.published_date {
+  position: relative;
+  left: 20px;
+  top: 4px;
+}
+.day-selction{
+  margin-top: 5px;
+}
+.unsubscribed-select {
+  position: absolute;
+  top: 50px;
+  right: 80px;
+}
+.tab-layout .tab-content ul.nicely-padded.delimiter-list {
+  margin-top: 5px;
+}

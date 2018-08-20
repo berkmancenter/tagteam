@@ -15,19 +15,19 @@ namespace :tagteam do
         end
       end
       class HubTagFilter < ApplicationRecord
-        belongs_to :hub
+        belongs_to :hub, optional: true
         acts_as_authorization_object
         include MockTagFilter
       end
       class HubFeedTagFilter < ApplicationRecord
-        belongs_to :hub_feed
+        belongs_to :hub_feed, optional: true
         has_one :hub, through: :hub_feed
         acts_as_authorization_object
         include MockTagFilter
       end
       class HubFeedItemTagFilter < ApplicationRecord
-        belongs_to :hub
-        belongs_to :feed_item
+        belongs_to :hub, optional: true
+        belongs_to :feed_item, optional: true
         acts_as_authorization_object
         include MockTagFilter
       end
@@ -162,19 +162,19 @@ namespace :tagteam do
         end
       end
       class HubTagFilter < ApplicationRecord
-        belongs_to :hub
+        belongs_to :hub, optional: true
         acts_as_authorization_object
         include MockTagFilter
       end
       class HubFeedTagFilter < ApplicationRecord
-        belongs_to :hub
-        belongs_to :hub_feed
+        belongs_to :hub, optional: true
+        belongs_to :hub_feed, optional: true
         acts_as_authorization_object
         include MockTagFilter
       end
       class HubFeedItemTagFilter < ApplicationRecord
-        belongs_to :hub
-        belongs_to :feed_item
+        belongs_to :hub, optional: true
+        belongs_to :feed_item, optional: true
         acts_as_authorization_object
         include MockTagFilter
       end

@@ -8,10 +8,11 @@ module FeedItems
     object :hub
     string :title
     string :url
+    date :date_published
     object :user
 
     def execute
-      changes = detect_changes(feed_item, description, title, url)
+      changes = detect_changes(feed_item, description, title, url, )
 
       if feed_item.update(description: description, title: title, url: url)
         FeedItems::SendChangeNotificationJob.perform_later(
@@ -35,6 +36,8 @@ module FeedItems
       changes[:description] = [strip_tags(feed_item.description), strip_tags(description)] if feed_item.description != description
       changes[:title] = [feed_item.title, title] if feed_item.title != title
       changes[:url] = [feed_item.url, url] if feed_item.url != url
+
+      changes[:date_published] = [feed_item.date_published.to_s, @date_published.to_s] if @date_published != @feed_item.date_published.to_date
 
       changes
     end

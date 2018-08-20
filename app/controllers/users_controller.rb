@@ -1,18 +1,45 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:tags, :user_tags, :tags_json,
+  before_action :authenticate_user!, except: [:hub_items, :tags, :user_tags, :tags_json,
                                               :tags_rss, :tags_atom]
   before_action :load_user, only: [:roles_on]
-  before_action :load_hub, only: [:tags, :tags_json, :tags_rss, :tags_atom]
+  before_action :load_hub, only: [:tags, :tags_json, :tags_rss, :tags_atom,
+    :hub_items]
   before_action :load_feed_items, only: [:tags, :tags_json, :tags_rss,
                                          :tags_atom]
   before_action :set_home_url, only: [:tags, :tags_json, :tags_rss,
                                       :tags_atom]
-  after_action :verify_authorized
+  before_action :find_user, only: [:documentation_admin_role, :superadmin_role,
+                                   :lock_user, :destroy, :show, :resend_confirmation_token,
+                                   :resend_unlock_token]
+  after_action :verify_authorized, except: [:hub_items]
+
+  SORT_OPTIONS = {
+    'Date tagged' => 'created_at',
+    'Date published' => 'date_published'
+  }
+
+  def hub_items
+    breadcrumbs.add @hub, hub_path(@hub)
+    @user = User.find_by(username: params[:username])
+
+    @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) && hf.feed.is_bookmarking_feed? }
+
+    redirect_to hub_path(@hub) and return if @hub_feed.nil?
+
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? SORT_OPTIONS[params[:sort]] : 'created_at'
+    order = %w(desc asc).include?(params[:order]) ? params[:order] : 'desc'
+    @feed_items = FeedItem.where(id: @hub_feed.feed_items.map(&:id))
+      .includes(:feeds, :hub_feeds)
+      .order("feed_items.#{sort} #{order}")
+      .paginate(page: params[:page], per_page: get_per_page)
+
+    render 'hub_items', layout: request.xhr? ? false : 'tabs'
+  end
 
   def tags
     breadcrumbs.add @hub, hub_path(@hub)
-    breadcrumbs.add @user.username, hub_user_tags_path(@hub, @user.username)
+    breadcrumbs.add @user.username, hub_user_hub_items_path(@hub, @user.username)
     if @tag
       breadcrumbs.add @tag.name, hub_user_tags_name_path(
         @hub, @user.username, @tag.name
@@ -66,8 +93,7 @@ class UsersController < ApplicationController
 
   def resend_unlock_token
     authorize User
-    u = User.find(params[:id])
-    u.resend_unlock_token
+    @user.resend_unlock_token
     flash[:notice] = 'We resent the account unlock email to that user.'
     redirect_to request.referer
   rescue Exception => e
@@ -77,8 +103,7 @@ class UsersController < ApplicationController
 
   def resend_confirmation_token
     authorize User
-    u = User.find(params[:id])
-    u.resend_confirmation_token
+    @user.resend_confirmation_token
     flash[:notice] = 'We resent the account confirmation email to that user.'
     redirect_to request.referer
   rescue Exception => e
@@ -88,13 +113,12 @@ class UsersController < ApplicationController
 
   def show
     breadcrumbs.add 'Users', admin_users_path
-    @user = User.find(params[:id])
     authorize @user
     render layout: 'tabs'
   end
 
   def destroy
-    @user = User.find(params[:id])
+    #@user = User.find(params[:id])
     authorize @user
     @user.destroy
     flash[:notice] = 'Deleted that user'
@@ -103,6 +127,44 @@ class UsersController < ApplicationController
         redirect_to admin_users_path
       end
     end
+  end
+
+  def lock_user
+    authorize current_user
+    if @user.access_locked?
+      @user.unlock_access!
+      flash[:notice] = 'User has been unlocked successfully'
+    else
+      @user.lock_access!
+      flash[:notice] = 'User has been locked successfully'
+    end
+    redirect_to user_path
+  end
+
+  def superadmin_role
+    role = Role.find_or_create_by(name: 'superadmin')
+    authorize current_user
+    if @user.has_role?(:superadmin)
+      @user.roles.destroy(role)
+      flash[:notice] = 'Superadmin permission has been revoked for the user'
+    else
+      @user.roles << role
+      flash[:notice] = 'User has been granted superadmin permission'
+    end
+    redirect_to user_path
+  end
+
+  def documentation_admin_role
+    role = Role.find_or_create_by(name: 'documentation_admin')
+    authorize current_user
+    if @user.has_role?(:documentation_admin)
+      @user.roles.destroy(role)
+      flash[:notice] = 'Documentation Admin permission has been revoked for the user'
+    else
+      @user.roles << role
+      flash[:notice] = 'User has been granted Documentation Admin permission'
+    end
+    redirect_to user_path
   end
 
   private
@@ -121,19 +183,14 @@ class UsersController < ApplicationController
   end
 
   def set_home_url
-    @home_url = if @tag
-                  hub_user_tags_name_path(
-                    @hub, @user.username, @tag.name
-                  )
-                else
-                  hub_user_tags_path(@hub, @user.username)
-                end
+    @home_url = @tag ? hub_user_tags_name_path(@hub, @user.username, @tag.name) :
+      hub_user_hub_items_path(@hub, @user.username)
   end
 
   def load_feed_items
     authorize User
 
-    @user = User.find_by(username: params[:username])
+    @user = User.find_by!(username: params[:username])
 
     if params[:tagname]
       @tag = ActsAsTaggableOn::Tag.where(name: params[:tagname]).first
@@ -153,15 +210,17 @@ class UsersController < ApplicationController
                      deprecated: true
                    ).map(&:deep_symbolize_keys!)
                  end
-    else
-      taggings = ActsAsTaggableOn::Tagging.select('DISTINCT ON ("context") *')
-                                          .where(context: "hub_#{@hub.id}",
-                                                 taggable_type: 'FeedItem',
-                                                 tagger_id: @user,
-                                                 tagger_type: 'User')
-    end
-
-    @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
+      @feed_items = FeedItem.where(id: taggings.pluck(:taggable_id))
                           .paginate(page: params[:page], per_page: get_per_page)
+                          .order('date_published DESC')
+    else
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.owners.include?(@user) }
+      @feed_items = @hub_feed.feed_items
+    end
+  end
+
+  def find_user
+    @user = User.find(params[:id])
   end
 end

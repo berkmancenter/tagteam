@@ -5,18 +5,33 @@
         %strong Tagging
 
       .form-group
-        = label_tag 'tags_delimiter', 'Tag delimiter'
+        = label_tag 'tags_delimiter', 'Tag delimiters'
+        %p
+          TagTeam will split tags based on the delimiters listed below. The delimiter
+          %span.badge ,
+          cannot be removed (as a default).
+        %ul.list-unstyled.nicely-padded.delimiter-list
+          - settings[:tags_delimiter].each do |delimiter|
+            %li
+              %span.badge= delimiter.html_safe
+              - if delimiter == '⎵'
+                (space)
+              - if delimiter != ','
+                = link_to remove_delimiter_hub_path(delimiter: delimiter),
+                  method: :delete,
+                  title: 'Remove this delimiter',
+                  class: 'pull-right',
+                  confirm: 'Are you sure you want to remove this delimiter?' do
+                  = fa_icon 'times'
         = text_field_tag('tags_delimiter',
-          settings[:tags_delimiter],
+          nil,
           id: 'tags_delimiter',
-          class: 'form-control')
-        - unless settings[:tags_delimiter].empty?
-          TagTeam will split tags on
-          %span.badge= settings[:tags_delimiter].gsub(' ', '&nbsp;').html_safe
-          and spaces. Tags entered in a list with either of these two characters separating them will be treated as separate tags.
-
+          class: 'form-control',
+          maxlength: '1',
+          placeholder: 'Add another delimiter')
+      %br
       .form-group
-        = label_tag 'official_tag_prefix', 'Official tag prefix'
+        = label_tag 'official_tag_prefix', 'Optional tag prefix'
         = text_field_tag('official_tag_prefix', settings[:official_tag_prefix], id: 'official_tag_prefix', class: 'form-control')
         - if settings[:official_tag_prefix].present?
           Current value
@@ -31,5 +46,17 @@
           = check_box_tag('suggest_only_approved_tags', settings[:suggest_only_approved_tags], settings[:suggest_only_approved_tags], id: 'suggest_only_approved_tags')
           Suggest only approved tags in the bookmarklet form
 
+      .form-group.checkbox
+        = label_tag 'bookmarklet_empty_description_reminder' do
+          = check_box_tag('bookmarklet_empty_description_reminder',
+            true,
+            settings[:bookmarklet_empty_description_reminder],
+            id: 'bookmarklet_empty_description_reminder')
+          Warn users about submitting an empty description field in the bookmarklet form
+        = label_tag 'enable_tag_scoreboard' do
+          = check_box_tag('enable_tag_scoreboard',
+            true,
+            hub.enable_tag_scoreboard)
+          Enable tag scoreboard
       .form-group
         = submit_tag 'Save', class: 'btn btn-primary', id: 'save_settings'

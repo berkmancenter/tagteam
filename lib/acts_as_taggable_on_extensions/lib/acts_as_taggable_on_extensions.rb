@@ -42,6 +42,20 @@ ActsAsTaggableOn::Tag.class_eval do
     # TODO: convert to taggings.where() .. and handle the include parameter
     taggings.find(:all, include: [:taggable], conditions: { context: hub.tagging_key.to_s }, order: 'created_at desc').collect(&:taggable)
   end
+
+  def deprecated?(hub)
+    hub
+     .all_tag_filters
+     .where(
+       scope_type: 'Hub',
+       tag_id: id
+     )
+     .where.not(new_tag_id: nil)
+     .present?
+  end
+  def first_use_of_tag_in_context(tag, context)
+    tagged_with(tag, on: context).order('created_at').limit(1).first.created_at
+  end
 end
 
 ActsAsTaggableOn::Tag.instance_eval do
@@ -72,23 +86,5 @@ ActsAsTaggableOn::Tag.instance_eval do
 
   def self.title
     'Tag'
-  end
-end
-
-ActsAsTaggableOn::Tagging.class_eval do
-  def deactivates_taggings(items: taggable)
-    items = [items] unless items.respond_to? :map
-    self.class.where(tag_id: tag_id, context: context,
-                     taggable_id: items.map(&:id), taggable_type: 'FeedItem')
-  end
-end
-
-ActsAsTaggableOn::Tagging.instance_eval do
-  include TaggingDeactivator
-end
-
-ActsAsTaggableOn::Taggable.class_eval do
-  def first_use_of_tag_in_context(tag, context)
-    tagged_with(tag, on: context).order('created_at').limit(1).first.created_at
   end
 end

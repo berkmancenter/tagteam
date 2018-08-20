@@ -12,6 +12,10 @@ RSpec::Matchers.define :show_effects_of do |filter|
       true
     when 'DeleteTagFilter'
       tag_lists.none? { |tag_list| tag_list.include? filter.tag.name }
+    when 'SupplementTagFilter'
+      old_tag = filter.tag.name
+      new_tag = filter.new_tag.name
+      tag_lists.any? { |tag_list| tag_list.include?(new_tag) & tag_list.include?(old_tag) }
     end
   end
 
@@ -24,6 +28,8 @@ RSpec::Matchers.define :show_effects_of do |filter|
         "and zero instances of '#{filter.tag.name}', but got #{tag_lists}"
     when 'DeleteTagFilter'
       "expected #{tag_lists} to never include '#{filter.tag.name}'"
+    when 'SupplementTagFilter'
+      "expected #{tag_lists} to include '#{filter.tag.name}' and '#{filter.new_tag.name}'"
     end
   end
 
@@ -36,6 +42,8 @@ RSpec::Matchers.define :show_effects_of do |filter|
         "and zero instances of '#{filter.new_tag.name}', but got #{tag_lists}"
     when 'DeleteTagFilter'
       "expected #{tag_lists} to include '#{filter.tag.name}'"
+    when 'SupplementTagFilter'
+      "expected #{tag_lists} to not include '#{filter.tag.name}' or '#{filter.new_tag.name}'"
     end
   end
 end

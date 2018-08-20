@@ -6,7 +6,6 @@ require 'support/interactions'
 module Users
   RSpec.describe Sort do
     include_context 'interactions'
-    it_behaves_like 'an interaction'
 
     let(:alpha) { create(:user, username: 'alpha') }
     let(:bravo) { create(:user, username: 'bravo') }
@@ -26,11 +25,13 @@ module Users
       }
     end
 
+    it_behaves_like 'an interaction'
+
     describe 'the result' do
       subject { result }
 
       context 'when sorting by application roles' do
-        let(:sort_method) { 'application_roles' }
+        let(:sort_method) { 'application roles' }
 
         before { bravo.has_role!(:superadmin) }
 
@@ -55,7 +56,7 @@ module Users
 
       context 'when sorting by owned hubs' do
         let(:hub) { build(:hub) }
-        let(:sort_method) { 'owned_hubs' }
+        let(:sort_method) { 'owned hubs' }
 
         before { charlie.has_role!(:owner, hub) }
 

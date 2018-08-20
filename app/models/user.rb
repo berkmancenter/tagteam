@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class User < ApplicationRecord
   acts_as_tagger
   has_many :hub_user_notifications
@@ -16,11 +17,12 @@ class User < ApplicationRecord
   # This should be a url friendly username because it's used to see the user's tags
   validates :username, format: { with: /\A[A-Za-z0-9_-]+\z/, message: 'Usernames may only contain letters, numbers, underscores, and hyphens.' }
 
+  validate :blacklisted_domains
   validates :terms_of_service, acceptance: true
-  validates :signup_reason, presence: true, unless: 'edu_email?', on: :create
-
-  # automatically approve .edu signups
-  before_create { self.approved = edu_email? }
+  validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
+  before_create do
+    self.approved = auto_approved?
+  end
 
   scope :unapproved, -> { where(approved: false) }
   scope :superadmin, -> { joins(:roles).where('roles.name = ?', :superadmin).distinct }
@@ -46,11 +48,11 @@ class User < ApplicationRecord
 
   # Looks for objects of the class_of_interest in a specific hub owned by this user. Not all objects have a direct relationship to a hub so this won't necesssarily work everywhere.
   def my_objects_in(class_of_interest = Hub, hub = Hub.first)
-    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable).reject { |o| o.hub_id != hub.id }
+    roles.includes(:authorizable).where(authorizable_type: class_of_interest.name, name: 'owner').collect(&:authorizable).select { |o| o.hub_id == hub.id }
   end
 
   def my_bookmarkable_hubs
-    roles.where(authorizable_type: 'Hub', name: [:owner, :bookmarker]).collect(&:authorizable)
+    roles.where(authorizable_type: 'Hub', name: %i[owner bookmarker]).collect(&:authorizable)
   end
 
   def is?(role_name, obj = nil)
@@ -88,6 +90,7 @@ class User < ApplicationRecord
 
       has_role!(:owner, hf)
       has_role!(:creator, hf)
+
       feed
     else
       bookmark_collections.first
@@ -145,6 +148,10 @@ class User < ApplicationRecord
     roles.where(authorizable_type: nil).order(:name)
   end
 
+  def superadmin?
+    has_role?(:superadmin)
+  end
+
   protected
 
   def gen_role_cache
@@ -155,5 +162,37 @@ class User < ApplicationRecord
     roles.each do |r|
       @role_cache["#{r.authorizable_type}-#{r.authorizable_id}-#{r.name}"] = 1
     end
+  end
+
+  def is_whitelisted?(setting)
+    (setting&.whitelisted_domains&.include?(domain) || setting&.whitelisted_domains.any? { |b_domain| domain.match?(/\.#{b_domain}/) }) 
+  end
+
+  def is_blacklisted?(setting)
+    (setting&.blacklisted_domains&.include?(domain) || setting&.blacklisted_domains.any? { |b_domain| domain.match?(/\.#{b_domain}/) }) 
+  end
+
+  # checks if user should be auto approved
+  def auto_approved?
+    setting = Admin::Setting.first_or_initialize
+
+    # not auto approved if require_admin_approval_for_all is true
+    return false if setting.require_admin_approval_for_all
+
+    # else auto approved if user is from whitelisted domain
+    # or if user is not from blacklisted domain
+    is_whitelisted?(setting) || (setting&.whitelisted_domains.empty? && !is_blacklisted?(setting))
+  end
+
+  def blacklisted_domains
+    setting = Admin::Setting.first_or_initialize
+
+    if !setting&.require_admin_approval_for_all && is_blacklisted?(setting)
+      errors.add(:base, 'Your domain is blacklisted by admin. You can not register with that email.')
+    end
+  end
+
+  def domain
+    Mail::Address.new(email).domain
   end
 end

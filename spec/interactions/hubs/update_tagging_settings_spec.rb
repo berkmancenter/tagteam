@@ -12,7 +12,7 @@ module Hubs
     let(:inputs) do
       {
         hub: hub,
-        tags_delimiter: ',',
+        tags_delimiter: '-',
         official_tag_prefix: 'test',
         hub_approved_tags: 'test'
       }

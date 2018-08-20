@@ -5,41 +5,39 @@ module TaggingNotifications
   class SendNotificationJob < ApplicationJob
     queue_as :default
 
-    def perform(scope, hub, current_user, changes)
-      affected_items = feed_items(scope)
+    def perform(hub, feed_items, tag_filters, updated_by_user, changes, recipients = :owners)
+      return unless hub.notify_taggers?
+      return unless changes.any?
 
-      return if affected_items.length.zero?
-
-      if scope.is_a?(FeedItem) || scope.scope.is_a?(FeedItem) || affected_items.length == 1
-        TaggingNotifications::CreateNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_item: affected_items.first,
-          hub: hub
-        )
-      elsif scope.scope.is_a?(HubFeed)
-        TaggingNotifications::CreateFeedWideNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_items: affected_items,
-          hub_feed: scope.scope
-        )
-      elsif scope.scope.is_a?(Hub)
-        TaggingNotifications::CreateHubWideNotification.run!(
-          changes: changes,
-          current_user: current_user,
-          feed_items: affected_items,
-          hub: hub
-        )
+      notifications = {}
+      # Notifications are either going to the owners of the feed items (skipping the updater)
+      # or they are going to the updater
+      if recipients == :owners
+        feed_items.each do |feed_item|
+          feed_item.hub_feeds.each do |hub_feed|
+            hub_feed.owners.each do |owner|
+              next if owner == updated_by_user
+              notifications[owner] ||= []
+              notifications[owner] << feed_item
+            end
+          end
+        end
+      elsif recipients == :updater
+        notifications[updated_by_user] = feed_items
       end
-    end
 
-    private
-
-    def feed_items(scope)
-      return [scope] if scope.is_a?(FeedItem)
-
-      scope.items_to_modify
+      # Send notifications only if notifications are enabled for hub
+      notifications.each do |owner, feed_items|
+        if owner.notifications_for_hub?(hub)
+          TaggingNotifications::NotificationsMailer.tagging_change_notification(
+            hub,
+            feed_items,
+            owner,
+            updated_by_user,
+            changes
+          ).deliver
+        end
+      end
     end
   end
 end

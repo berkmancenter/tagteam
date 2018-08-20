@@ -1,4 +1,4 @@
-class CreateFeedRetrievals < ActiveRecord::Migration
+class CreateFeedRetrievals < ActiveRecord::Migration[4.2]
   def change
     create_table :feed_retrievals do |t|
       t.integer :feed_id

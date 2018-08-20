@@ -213,6 +213,11 @@
             return split( term ).pop();
           }
 
+          var autocomplete_offset = 0;
+          var autocomplete_last_selected = false;
+          var spinner = $('<i/>', {
+            class: 'fa fa-spinner fa-spin bookmarklet-autocomplete-spinner'
+          });
           $( "#feed_item_tag_list" )
           .bind( "keydown", function( event ) {
             if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -223,8 +228,20 @@
           .autocomplete({
             source: function( request, response ) {
               $.getJSON( $.rootPath() + 'hubs/' + hubChoiceId + '/tags/autocomplete', {
-                term: extractLast( request.term )
-              }, response );
+                term: extractLast( request.term ),
+                offset: autocomplete_offset
+              }, function (data) {
+                var values = data.items;
+
+                if (data.more) {
+                  values.push({
+                    label: '>> LOAD MORE <<',
+                    value: 'load_more'
+                  });
+                }
+
+                response(values);
+              });
             },
             search: function() {
               // custom minLength
@@ -233,11 +250,29 @@
                 return false;
               }
             },
-            focus: function() {
+            focus: function(event, ui) {
               // prevent value inserted on focus
               return false;
             },
             select: function( event, ui ) {
+              autocomplete_last_selected = ui.item;
+
+              if (ui.item.value === 'load_more') {
+                autocomplete_offset += 25;
+                $('#feed_item_tag_list').autocomplete('search');
+                $('.ui-menu-item:contains("LOAD MORE") a').first().append(spinner);
+
+                // HACK jQuery UI menu jumps to the top of the page
+                // this is the easiest way to prevent it, can find anything
+                // nicer ATM
+                setTimeout(function () {
+                  var scrollingElement = (document.scrollingElement || document.body);
+                  scrollingElement.scrollTop = scrollingElement.scrollHeight;
+                }, 1);
+
+                return false;
+              }
+
               var terms = split( this.value );
               // remove the current input
               terms.pop();
@@ -246,10 +281,19 @@
               // add placeholder to get the comma-and-space at the end
               terms.push( "" );
               this.value = terms.join( ", " );
+
               return false;
-            }
+            },
+            minLength: 3
           });
 
+          $( "#feed_item_tag_list" ).data( "autocomplete" ).close = function(e) {
+            if (!autocomplete_last_selected || autocomplete_last_selected.value != 'load_more') {
+              this.cancelSearch = true;
+              this._close(event);
+              autocomplete_offset = 0;
+            }
+          }
         }
       });
     },
@@ -280,7 +324,9 @@
       $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
         $.initHubFeedItemTagList($(this).val(), feedItemId);
+        $.setEmptyDescriptionNotification();
       });
+      $.setEmptyDescriptionNotification();
     },
     initBookmarklet: function(feedItemId){
       $('#feed_item_bookmark_collection_id_input').hide();
@@ -292,6 +338,36 @@
         changeDay: true,
         yearRange: 'c-500',
         dateFormat: 'yy-mm-dd'
+      });
+
+      var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
+      itemForm.on('submit', function (e) {
+        if(itemForm.data('notify-empty-description-reminder') === true && !$('#feed_item_description_input iframe').contents().find('body').text()) {
+          var response = confirm('Description is empty. Do you want to continue?');
+
+          if (response === false) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    },
+    setEmptyDescriptionNotification: function () {
+      $.ajax({
+        url: $.rootPath() + 'hubs/' + $('#feed_item_hub_id').val() + '/settings',
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+          var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
+          var notify = false;
+
+          if (response.bookmarklet_empty_description_reminder === true) {
+            notify = true;
+          }
+
+          itemForm.data('notify-empty-description-reminder', notify);
+        }
       });
     },
     checkPlaceholders: function(){
@@ -639,9 +715,9 @@ $(document).ready(function(){
         var filter_href = $(this).attr('href');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
-          tagList =  '<div>Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+          tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
         }
-        if(filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
+        if(filter_type == 'SupplementTagFilter' || filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
           var message = '';
           var prepend = '';
@@ -651,9 +727,17 @@ $(document).ready(function(){
             if(tag_id == undefined){
               prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
             }
-            message = "<h2>Please enter the replacement tag</h2>";
+            message = "<h2>Please enter the replacement tag for: " + $(this).attr('tag_name') + "</h2>";
+            if ($(this).attr('other_tags') != null && $(this).attr('other_tags') != '' ) {
+              tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('other_tags') + '">Other tags applied: ' + $(this).attr('other_tags') + '</div>';
+            }
           } else if (filter_type == 'DeleteTagFilter'){
             message = "<h2>Please enter the tag you'd like to remove</h2>";
+          } else if (filter_type == 'SupplementTagFilter') {
+            if(tag_id == undefined){
+              prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='supplement_tag_for_filter' class='form-control' />";
+            }
+            message = "<h2>Please enter the tag to add</h2>";
           }
           $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" class="form-control" /><div id="new_tag_container"></div>' + tagList);
           $(dialogNode).dialog({
@@ -663,8 +747,18 @@ $(document).ready(function(){
             height: 'auto',
             title: '',
             create: function(){
-              $( "#new_tag_for_filter,#modify_tag_for_filter" ).autocomplete({
-                source: $.rootPath() + "hubs/" + hub_id + "/tags/autocomplete",
+              $( "#new_tag_for_filter,#modify_tag_for_filter,#supplement_tag_for_filter" ).autocomplete({
+                source: function( request, response ) {
+                  $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
+                    tags_applied: $('div.tags-applied-list:visible').data('tags'),
+                    term: request.term,
+                    offset: 0
+                  }, function (data) {
+                    var values = data.items;
+
+                    response(values);
+                  });
+                },
                 minLength: 2
               });
             },
@@ -683,6 +777,9 @@ $(document).ready(function(){
                   var replace_tag = undefined;
                   if ($(this).find('#modify_tag_for_filter').length > 0){
                     replace_tag = $(this).find('#modify_tag_for_filter').val();
+                  }
+                  if ($(this).find('#supplement_tag_for_filter').length > 0){
+                    replace_tag = $(this).find('#supplement_tag_for_filter').val();
                   }
                   $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                   $(dialogNode).dialog('close');
@@ -788,4 +885,15 @@ $(document).ready(function(){
   });
   $.observeListPagination();
 
+ 
+  function unescapeUrl() {
+    if (window.location.pathname.includes('item_search')) {
+      if (history.pushState) { //IE10+
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + decodeURIComponent(window.location.search);
+        window.history.pushState({path:newurl},'',newurl);
+      }
+    }
+  }
+  
+  unescapeUrl();  
 });

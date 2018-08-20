@@ -16,9 +16,11 @@ class HubFeed < ApplicationRecord
     c.allow_jsonp_callback = true
   end
 
-  belongs_to :hub
-  belongs_to :feed
+  belongs_to :hub, optional: true
+  belongs_to :feed, optional: true
   has_many :feed_items, through: :feed
+  has_many :owner_roles, -> { where(authorizable_type: 'HubFeed', name: 'owner') }, foreign_key: :authorizable_id, class_name: 'Role'
+  has_many :owners, through: :owner_roles, source: :users
 
   before_validation do
     auto_sanitize_html(:description)
@@ -26,13 +28,12 @@ class HubFeed < ApplicationRecord
   validates :feed_id, uniqueness: { scope: :hub_id }
   validates :feed_id, :hub_id, presence: true
 
-  scope :bookmark_collections, -> { joins(:feed).where('feeds.bookmarking_feed' => true) }
+  scope :bookmark_collections, -> { includes(:feed).where('feeds.bookmarking_feed' => true) }
   scope :rss, -> { joins(:feed).where('feeds.bookmarking_feed' => false) }
   scope :need_updating, -> { joins(:feed).where(['feeds.next_scheduled_retrieval <= ? AND bookmarking_feed IS false', Time.current]) }
+  scope :by_hub, ->(hub_id) { where(hub_id: hub_id) }
 
   attr_accessible :title, :description
-
-  delegate :most_recent_tagging, to: :feed
 
   api_accessible :default do |t|
     t.add :id
@@ -110,6 +111,10 @@ class HubFeed < ApplicationRecord
   end
   alias display_title title
   alias to_s title
+
+  def author_title
+    self.owners.any? ? "#{self.owners.first.username}'s tagged items" : "#{self.title} tagged items"
+  end
 
   def display_description
     description.blank? ? feed.description : description

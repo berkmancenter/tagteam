@@ -5,54 +5,35 @@ module TaggingNotifications
   class NotificationsMailer < ActionMailer::Base
     default from: Tagteam::Application.config.default_sender
 
-    def feed_wide_tagging_change(changes:, current_user:, feed_item_count:, hub_feed:, users_to_notify:)
-      @changed_by = current_user
-      @changes = parse_changes(changes)
-      @feed_item_count = feed_item_count
-      @hub_feed = hub_feed
-      @hub = @hub_feed.hub
-
-      subject = 'Tagging update in the ' + @hub.title + ' hub'
-
-      mail(bcc: users_to_notify.collect(&:email), subject: subject)
-    end
-
-    def hub_wide_tagging_change(changes:, current_user:, feed_item_count:, hub:, users_to_notify:)
-      @changed_by = current_user
-      @changes = parse_changes(changes)
-      @feed_item_count = feed_item_count
+    def tagging_change_notification(hub, modified_items, user_to_notify, updated_by_user, changes)
       @hub = hub
-
-      subject = 'Tagging update in the ' + @hub.title + ' hub'
-
-      mail(bcc: users_to_notify.collect(&:email), subject: subject)
-    end
-
-    def tagging_change_notification(hub, modified_item, item_users, current_user, changes)
-      @hub = hub
-      @hub_url = hub_url(@hub)
-      @modified_item = modified_item
-      @hub_feed = @hub.hub_feed_for_feed_item(@modified_item)
-      @updated_by = current_user
+      @modified_items = modified_items
+      @updated_by_display = updated_by_user == user_to_notify ? 'Tag filters have' : "#{updated_by_user.username} has"
       @changes = parse_changes(changes)
 
       subject = 'Tagging update in the ' + @hub.title + ' hub'
-      mail(bcc: item_users.collect(&:email), subject: subject)
+      mail(to: user_to_notify.email, subject: subject)
     end
 
     private
 
     def parse_changes(changes)
-      change_type, tags = changes.first
-
-      case change_type.to_sym
-      when :tags_added
-        "Tags added: #{tags.join(', ')}"
-      when :tags_modified
-        "Tags modified: #{tags.first} was changed to #{tags.last}"
-      when :tags_deleted
-        "Tags deleted: #{tags.join(', ')}"
+      all_changes = []
+      changes.each do |change|
+      case change[:type].to_sym
+        when :tags_modified
+          all_changes << "Tags modified: #{change[:values].first.join(', ')} changed to: #{change[:values].last.join(', ')}"
+        when :tags_deleted
+          all_changes << "Tags deleted: #{change[:values].first}"
+        when :tags_added
+          all_changes << "Tags added: #{change[:values].first}"
+        when :tags_supplemented
+          all_changes << "Tag #{change[:values].first} has been supplemented with tag #{change[:values].last}"
+        when :tags_supplemented_deletion
+          all_changes << "Tag #{change[:values].first} is no longer being supplemented with tag #{change[:values].last}"
+        end
       end
+      all_changes.join(', ')
     end
   end
 end

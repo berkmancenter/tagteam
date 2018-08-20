@@ -11,7 +11,7 @@
     .col-xs-4= link_to "RSS", hub_tag_rss_path(@hub, @tag.name)
     .col-xs-4= link_to 'ATOM', hub_tag_atom_path(@hub, @tag.name)
     .col-xs-4= link_to 'JSON', hub_tag_json_path(@hub, @tag.name, :callback => 'callback')
-  - if current_user.is?([:owner, :hub_tag_filterer, :hub_feed_tag_filterer, :hub_feed_item_tag_filterer], @hub)
+  - if (current_user.is?([:owner, :hub_tag_adder, :hub_tag_deleter, :hub_tag_modifier, :hub_tag_supplementer, :hub_feed_tag_filterer, :hub_feed_item_tag_filterer], @hub) || current_user.superadmin?)
     %h3 Filtering
     %hr/
   - if @already_filtered_for_hub
@@ -29,13 +29,15 @@
       A filter affecting "
       %em>= @tag
       " already exists on this item.
-  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user)
+  - if hub_filter_possible?(:add, params, current_user) || feed_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :add, params: params, current_user: current_user }
-  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+  - if hub_filter_possible?(:modify, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :modify, params: params, current_user: current_user }
-  - if hub_filter_possible?(params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+  - if hub_filter_possible?(:supplement, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+    = render partial: 'tag_control_popup', locals: { type: :supplement, params: params, current_user: current_user }
+  - if hub_filter_possible?(:delete, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
     = render partial: 'tag_control_popup', locals: { type: :delete, params: params, current_user: current_user }
-  - if current_user.is?([:owner, :remixer], @hub)
+  - if (current_user.is?([:owner, :remixer], @hub) || current_user.superadmin?)
     %h3 Publishing
     %hr/
     %ul
@@ -53,7 +55,7 @@
           class: 'dialog-show remove_item_source_from_custom_republished_feed',
           data_item_type: 'ActsAsTaggableOn::Tag',
           data_item_id: @tag.id
-  - if current_user.is?([:owner], @hub)
+  - if (current_user.is?([:owner], @hub) || current_user.superadmin?)
     %h3 Status
     %hr/
     %p

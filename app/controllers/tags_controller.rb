@@ -4,11 +4,10 @@ class TagsController < ApplicationController
   before_action :load_tag_from_name, only: [:rss, :atom, :show, :json, :xml, :statistics]
   before_action :load_feed_items_for_rss, only: [:rss, :atom, :json, :xml]
   before_action :load_feed_items, only: :statistics
-  before_action :fetch_feed_items, only: :show
   before_action :add_breadcrumbs
   before_action :set_prefixed_tags, only: [:index]
 
-  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :rss, :atom, :json, :xml, :autocomplete, :index, :show, :statistics, unless: proc { |_c| (current_user && current_user.is?(:owner, @hub)) || params.has_key?(:username) || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     if request.fullpath =~ /tag\/rss/
       params[:format] = :rss
     elsif request.fullpath =~ /tag\/atom/
@@ -25,41 +24,70 @@ class TagsController < ApplicationController
 
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
-    hub_id = @hub.id
+    deprecated_tags_names = @hub.deprecated_tags.pluck(:name)
+
+    tags_applied = params.has_key?(:tags_applied) ? params[:tags_applied].split(', ') : []
+
+    if params[:offset].nil?
+      limit = 25
+    else
+      limit = params[:offset].to_i + 25
+    end
 
     if @hub.settings[:suggest_only_approved_tags]
-      approved_tags = @hub.hub_approved_tags.map(&:tag)
-      @search = ActsAsTaggableOn::Tag.where(name: approved_tags)
-                                     .where('name LIKE \'%' + params[:term] + '%\'')
+      approved_tags = @hub
+                     .hub_approved_tags
+                     .where.not(tag: deprecated_tags_names)
+                     .pluck(:tag)
 
-      result = @search - @hub.deprecated_tags
+      result = ActsAsTaggableOn::Tag
+               .left_joins(:taggings)
+               .where('name LIKE \'' + params[:term] + '%\'')
+               .where(name: approved_tags)
+               .group(:id)
+               .order('COUNT(taggings.id) DESC')
+               .limit(limit)
+
+      count = ActsAsTaggableOn::Tag
+              .select('DISTINCT(tags.id)')
+              .left_joins(:taggings)
+              .where.not(name: deprecated_tags_names)
+              .where('name LIKE \'' + params[:term] + '%\'')
+              .where(name: approved_tags)
+              .count
     else
-      @search = ActsAsTaggableOn::Tag.search do
-        with :hub_ids, hub_id
-        fulltext params[:term]
+      tag_ids = Rails.cache.fetch("all-tag-ids-#{@hub.id}", expires_in: 1.hour) do
+        FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
       end
 
-      result = @search.results - @hub.deprecated_tags
+      result = ActsAsTaggableOn::Tag
+               .left_joins(:taggings)
+               .where.not(name: deprecated_tags_names)
+               .where('name LIKE \'' + params[:term] + '%\'')
+               .where(id: tag_ids)
+               .group(:id)
+               .order('COUNT(taggings.id) DESC')
+      count = result.length
     end
 
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
-        render json: result.collect { |r| { id: r.id, label: r.name } }
+        results = {
+          items: result[0..25].map { |r| { id: r[:id], label: r[:name] } },
+          more: count > limit
+        }
+        render json: results.compact
       end
     end
-  rescue
-    render plain: 'Please try a different search term', layout: !request.xhr?
+  # rescue
+  #   render plain: 'Please try a different search term', layout: !request.xhr?
   end
 
   # A paginated list of ActsAsTaggableOn::Tag objects for a Hub. Returns html, json, and xml.
   def index
-    @tags = if @hub_feed.blank?
-              @hub.tag_counts
-            else
-              FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id),
-                                           @hub.tagging_key).all
-            end
+    @tags = @hub_feed.blank? ? @hub.tag_counts :
+      FeedItem.tag_counts_on_items(@hub_feed.feed_items.pluck(:id), @hub.tagging_key).all
 
     if @tags.any?
       # tag_sorter = TagSorter.new(:tags => @tags, :sort_by => :created_at, :context => @hub.tagging_key, :class => FeedItem)
@@ -106,6 +134,16 @@ class TagsController < ApplicationController
 
   # A paginated html list of FeedItem objects for a Hub and a ActsAsTaggableOn::Tag.
   def show
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+
+    if @hub.deprecated_tags.include?(@tag)
+      @feed_items = []
+    else
+      feed_item_ids = ActsAsTaggableOn::Tagging.where(tag_id: @tag.id, context: @hub.tagging_key, taggable_type: 'FeedItem').map(&:taggable_id).compact 
+      @feed_items = FeedItem.where(id: feed_item_ids).order("feed_items.#{sort} #{order}").paginate(page: params[:page], per_page: get_per_page)
+    end
+
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
 
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
@@ -120,10 +158,18 @@ class TagsController < ApplicationController
       tag: @tag
     )
 
-    @deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
+    @before_deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
       hub: @hub,
       tag: @tag,
-      deprecated: true
+      deprecated: true,
+      after: false
+    )
+
+    @after_deprecated_taggings_by_user = Statistics::TaggingsByUser.run!(
+      hub: @hub,
+      tag: @tag,
+      deprecated: true,
+      after: true
     )
 
     render layout: request.xhr? ? false : 'tabs'
@@ -173,6 +219,10 @@ class TagsController < ApplicationController
     else
       @hub = Hub.find(params[:hub_id])
     end
+    if params.has_key?(:username)
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    end
   end
 
   def add_breadcrumbs
@@ -199,22 +249,12 @@ class TagsController < ApplicationController
   end
 
   def fetch_feed_items
-    @feed_items = if @hub.deprecated_tags.map(&:name).include?(@tag.name)
-      []  
-    else
-      FeedItem
-      .tagged_with(@tag.name, on: @hub.tagging_key)
-      .uniq
-      .order(date_published: :desc, created_at: :desc)
-    end
-    @feed_items = @feed_items.paginate(page: params[:page], per_page: get_per_page)
   end
 
   def load_feed_items
     @feed_items =
       FeedItem
       .tagged_with(@tag.name, on: @hub.tagging_key)
-      .uniq
       .order(date_published: :desc, created_at: :desc)
       .paginate(page: params[:page], per_page: get_per_page)
   end

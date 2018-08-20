@@ -1,4 +1,4 @@
-class CreateDeactivatedTaggings < ActiveRecord::Migration
+class CreateDeactivatedTaggings < ActiveRecord::Migration[4.2]
   def change
     create_table :deactivated_taggings do |t|
       t.references :tag

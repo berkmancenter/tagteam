@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
 
+  helper_method :get_per_page
+
   # The per_page setting for pagination can be overrided by cgi parameters but will fall back to the cookie "per_page" or ultimately the default_tagteam_per_page config entry defined in config/tagteam.yml
   def get_per_page
     per_page = params[:per_page] || cookies[:per_page] || Tagteam::Application.config.default_tagteam_per_page.to_s
@@ -23,6 +25,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from StandardError, with: :render_500 unless Rails.env.development?
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   rescue_from Acl9::AccessDenied do |_exception|
@@ -38,6 +42,15 @@ class ApplicationController < ActionController::Base
 
   def find_or_create_tag_by_name(name)
     ActsAsTaggableOn::Tag.find_or_create_by_name_normalized(name)
+  end
+
+  def render_500(exception)
+    logger.info exception.backtrace.join("\n")
+
+    respond_to do |format|
+      format.html { render template: 'errors/500', layout: 'layouts/application', status: 500 }
+      format.all { render nothing: true, status: 500 }
+    end
   end
 
   private

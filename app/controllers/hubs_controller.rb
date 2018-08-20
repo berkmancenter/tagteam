@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  caches_action :index, :items, :show, :search, :by_date, :retrievals, :bookmark_collections, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
   caches_action :statistics, expires_in: 6.hours
@@ -9,7 +9,7 @@ class HubsController < ApplicationController
   before_action :authenticate_user!, except: [
     :about,
     :all_items,
-    :bookmark_collections,
+    :taggers,
     :by_date,
     :contact,
     :home,
@@ -18,21 +18,24 @@ class HubsController < ApplicationController
     :items,
     :list,
     :meta,
+    :remove_delimiter,
     :request_rights,
     :retrievals,
     :search,
-    :show
+    :show,
+    :scoreboard
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
   after_action :verify_policy_scoped, only: [:index, :home]
 
   before_action :sanitize_params, only: :index
-  before_action :find_hub, only: [
+  before_action :set_feed, only: :unsubscribe_feed
+  before_action :set_hub, only: [
     :about,
     :add_feed,
     :add_roles,
-    :bookmark_collections,
+    :taggers,
     :by_date,
     :contact,
     :created,
@@ -44,6 +47,7 @@ class HubsController < ApplicationController
     :my_bookmark_collections,
     :recalc_all_tags,
     :request_rights,
+    :remove_delimiter,
     :remove_roles,
     :retrievals,
     :show,
@@ -60,26 +64,63 @@ class HubsController < ApplicationController
     :approve_tag,
     :unapprove_tag,
     :deprecate_tag,
-    :undeprecate_tag
+    :undeprecate_tag,
+    :unsubscribe_feed,
+    :scoreboard
   ]
+
+  before_action :store_feed_visitor, only: :items
+  before_action :add_breadcrumbs, only: %i[
+    about
+    by_date
+    contact
+    create
+    created
+    custom_republished_feeds
+    edit
+    item_search
+    items
+    my_bookmark_collections
+    notifications
+    retrievals
+    settings
+    show
+    statistics
+    tag_controls
+    taggers
+    team
+    update
+  ]
+  before_action :authorize_user, only: :settings
 
   protect_from_forgery except: :items
 
+  # There is some redundancy here, but these can not be reduced without further work
+  # index sorts by title, date, owner
+  # taggers sorts by username, date started, most recent tagging, # of items
+  # scoreboard sorts by rank, username (name), # of items
   SORT_OPTIONS = {
     'title' => ->(rel) { rel.order('title') },
-    'date' => ->(rel) { rel.order('created_at') },
-    'owner' => ->(rel) { rel.by_first_owner }
+    'date' => ->(rel) { rel.order('hubs.created_at') },
+    'owner' => ->(rel) { rel.by_first_owner },
+    # ---
+    'username' => ->(rel) { rel.sort_by { |hf| hf.owners.any? ? hf.owners.first.username.downcase : 'ZZZ' } }, ## Force sort at end if missing username
+    'date started' => ->(rel) { rel.order('hub_feeds.created_at') },
+    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.feed_items.any? ? r.feed_items.first.updated_at : r.feed.updated_at } },
+    'number of items' => -> (rel) { rel.sort_by { |hf| hf.feed.feed_items.count } },
+    # ---
+    'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
+    'rank' => -> (rel) { rel.sort_by {|r| r[:rank] } },
+    'items' => -> (rel) { rel.sort_by {|r| r[:count] } }
   }.freeze
+
   SORT_DIR_OPTIONS = %w(asc desc).freeze
 
   def about
-    add_breadcrumbs
     render layout: 'tabs'
   end
 
-  def created
-    add_breadcrumbs
-  end
+  def created; end
 
   def meta
     render layout: !request.xhr?
@@ -87,7 +128,7 @@ class HubsController < ApplicationController
 
   def list
     authorize Hub
-    @hubs = Hub.paginate(page: params[:p] || 1, per_page: 25).order('title ASC')
+    @hubs = Hub.paginate(page: params[:p] || 1, per_page: get_per_page).order('title ASC')
   end
 
   def request_rights
@@ -108,21 +149,16 @@ class HubsController < ApplicationController
   end
 
   def contact
-    add_breadcrumbs
     render layout: request.xhr? ? false : 'tabs'
   end
 
   def team
-    add_breadcrumbs
-
     @allowed_to_tag = @hub.users_with_roles.size
 
     render layout: request.xhr? ? false : 'tabs'
   end
 
   def statistics
-    add_breadcrumbs
-
     authorize @hub
 
     @tags = @hub.tags
@@ -159,17 +195,44 @@ class HubsController < ApplicationController
   end
 
   def notifications
-    add_breadcrumbs
-
     @notifications_setup = HubUserNotification.find_or_initialize_by(hub: @hub, user: current_user)
 
     render layout: request.xhr? ? false : 'tabs'
   end
 
   def settings
-    add_breadcrumbs
-
     @settings = @hub.settings
+
+    respond_to do |format|
+      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.json { render json: @settings }
+    end
+  end
+
+  def scoreboard
+    @sort = %w[rank name items].include?(params[:sort]) ? params[:sort] : 'rank'
+    @order =  params[:order] || 'asc'
+
+    @taggers = Statistics::Scoreboard.run!(hub: @hub,
+      sort: @sort,
+      criteria: params[:criteria] || 'Year'
+    )
+
+    @taggers = SORT_OPTIONS[@sort].call(@taggers)
+    @taggers = @taggers.reverse if @order == 'desc'
+
+    @taggers = @taggers.paginate(page: params[:taggers_page], per_page: get_per_page)
+
+    @tags = Statistics::Scoreboard.run!(hub: @hub,
+      sort: @sort,
+      criteria: params[:criteria] || 'Year',
+      type: 'tags'
+    )
+
+    @tags = SORT_OPTIONS[@sort].call(@tags)
+    @tags = @tags.reverse if @order == 'desc'
+
+    @tags = @tags.paginate(page: params[:tags_page], per_page: get_per_page)
 
     render layout: request.xhr? ? false : 'tabs'
   end
@@ -243,12 +306,17 @@ class HubsController < ApplicationController
   def set_settings
     inputs = { hub: @hub }.reverse_merge(params)
 
+    params[:tags_delimiter].gsub!(/\s/, '⎵')
     outcome = Hubs::UpdateTaggingSettings.run(inputs)
 
     if outcome.valid?
       flash[:notice] = 'Saved successfully.'
     else
-      flash[:error] = 'Something went wrong, try again.'
+      if outcome.errors.keys.include?(:tags_delimiter)
+        flash[:error] = outcome.errors.messages[:tags_delimiter].join('<br>')
+      else
+        flash[:error] = 'Something went wrong, try again.'
+      end
     end
 
     redirect_to request.referer
@@ -256,7 +324,6 @@ class HubsController < ApplicationController
 
   # A list of feed retrievals for the feeds in this hub, accessible via html, json, and xml.
   def retrievals
-    add_breadcrumbs
     hub_id = @hub.id
     @feed_retrievals = FeedRetrieval.search(include: [feed: { hub_feeds: [:feed] }]) do
       with(:hub_ids, hub_id)
@@ -301,9 +368,14 @@ class HubsController < ApplicationController
   end
 
   # A users' bookmark collections, only accessible to logged in users. Accessible as html, json, and xml.
-  def bookmark_collections
-    add_breadcrumbs
-    @bookmark_collections = HubFeed.bookmark_collections.where(hub_id: @hub.id).paginate(page: params[:page], per_page: get_per_page)
+  def taggers
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : 'username'
+    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
+
+    @bookmark_collections = SORT_OPTIONS[sort].call(HubFeed.bookmark_collections.by_hub(@hub.id).includes(:hub, :feed))
+    @bookmark_collections = @bookmark_collections.reverse if order == 'desc'
+
+    @bookmark_collections = @bookmark_collections.paginate(page: params[:page], per_page: get_per_page)
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default, json: @bookmark_collections }
@@ -313,8 +385,6 @@ class HubsController < ApplicationController
 
   # Accessible via html, json, and xml. Pass in the date by appending "/" separated parameters to this action, so: /hubs/1/by_date/2012/03/28. If you put in "00" for the month or day parameter, we'll search for all items form that month or year.
   def by_date
-    add_breadcrumbs
-
     if params[:month] == '00'
       # Year search
       date = DateTime.parse("#{params[:year]}-01-01")
@@ -370,54 +440,32 @@ class HubsController < ApplicationController
 
   # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml.
   def items
-    Feeds::StoreFeedVisitorJob.perform_later(
-      request.path,
-      request.format.symbol.to_s,
-      request.remote_ip,
-      request.user_agent
-    )
-
-    add_breadcrumbs
-    hub_id = @hub.id
-
-    @search = if request.format.to_s =~ /rss|atom/i
-                FeedItem.search(include: [:feeds, :hub_feeds]) do
-                  with(:hub_ids, hub_id) unless hub_id.blank?
-                  order_by('date_published', :desc)
-                  order_by('id', :asc)
-                  paginate page: params[:page], per_page: get_per_page
-                end
-              else
-                FeedItem.search(select: FeedItem.columns_for_line_item, include: [:feeds, :hub_feeds]) do
-                  with(:hub_ids, hub_id) unless hub_id.blank?
-                  order_by('date_published', :desc)
-                  order_by('id', :asc)
-                  paginate page: params[:page], per_page: get_per_page
-                end
-              end
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @feed_items =
+      @hub
+      .feed_items
+      .order("feed_items.#{sort} #{order}")
+      .group(:id)
+      .paginate(page: params[:page], per_page: get_per_page)
 
     respond_to do |format|
       format.html do
-        unless @hub.blank?
-          @show_auto_discovery_params = items_hub_url(@hub, format: :rss)
-        end
-        template = if params[:view] == 'grid'
-                     'hubs/items_grid'
-                   else
-                     'hubs/items'
-                   end
+        @show_auto_discovery_params = items_hub_url(@hub, format: :rss) if @hub.present?
+
+        template = params[:view] == 'grid' ? 'hubs/items_grid' : 'hubs/items'
+
         render template, layout: request.xhr? ? false : 'tabs'
       end
+
       format.rss { render template: 'hubs/items.rss' }
       format.atom { render template: 'hubs/items.atom' }
-      format.json { render_for_api :default, json: @search.blank? ? [] : @search.results }
-      format.xml { render_for_api :default, xml: @search.blank? ? [] : @search.results }
+      format.json { render_for_api :default, json: @feed_items.presence || [] }
+      format.xml { render_for_api :default, xml: @feed_items.presence || [] }
     end
   end
 
   def tag_controls
-    add_breadcrumbs
-
     @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
 
     @already_filtered_for_hub = @hub.tag_filtered?(@tag)
@@ -501,9 +549,20 @@ class HubsController < ApplicationController
     end
   end
 
+  def unsubscribe_feed
+    @feed.unsubscribe = true
+
+    if @feed.save
+      flash[:notice] = 'You have unsubscribed from the feed'
+      redirect_to(hub_hub_feeds_path(@hub))
+    else
+      flash[:error] = "Something went wrong, try again."
+      redirect_to(hub_hub_feeds_path(@hub))
+    end
+  end
+
   # A list of all republished feeds(aka remixed feeds) that can be added to for the current user.
   def custom_republished_feeds
-    add_breadcrumbs
     @republished_feeds = RepublishedFeed.select('DISTINCT republished_feeds.*').joins(accepted_roles: [:users]).where(['roles.name = ? and roles.authorizable_type = ? and roles_users.user_id = ? and hub_id = ?', 'owner', 'RepublishedFeed', (current_user.blank? ? nil : current_user.id), @hub.id]).order('updated_at')
 
     respond_to do |format|
@@ -543,7 +602,6 @@ class HubsController < ApplicationController
 
   # Available as html, json, or xml.
   def show
-    add_breadcrumbs
     @show_auto_discovery_params = items_hub_url(@hub, format: :rss)
     redirect_to items_hub_path(@hub)
 
@@ -579,7 +637,6 @@ class HubsController < ApplicationController
 
   # A list of the current users' bookmark collections for a specific hub, used mostly by the bookmarklet.
   def my_bookmark_collections
-    add_breadcrumbs
     @bookmark_collections = current_user.my_bookmarking_bookmark_collections_in(@hub)
     respond_to do |format|
       format.json { render_for_api :bookmarklet_choices, json: @bookmark_collections }
@@ -591,7 +648,6 @@ class HubsController < ApplicationController
     @hub = Hub.new
     authorize @hub
     @hub.attributes = params[:hub]
-    add_breadcrumbs
     respond_to do |format|
       if @hub.save
         current_user.has_role!(:owner, @hub)
@@ -613,12 +669,9 @@ class HubsController < ApplicationController
     end
   end
 
-  def edit
-    add_breadcrumbs
-  end
+  def edit; end
 
   def update
-    add_breadcrumbs
     @hub.attributes = params[:hub]
     respond_to do |format|
       if @hub.save
@@ -644,18 +697,20 @@ class HubsController < ApplicationController
 
   # Search results are available as html, json, or xml.
   def item_search
-    add_breadcrumbs
     breadcrumbs.add 'Search', request.url
 
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
 
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+
     @search = FeedItem.search do
       with :hub_ids, hub_id
       paginate page: params[:page], per_page: get_per_page
-      order_by(:date_published, :desc)
+      order_by(sort.to_sym, order.to_sym)
       unless params[:q].blank?
-        fulltext params[:q]
+        fulltext params[:q].split('+').join('+ ')
         adjust_solr_params do |params|
           params[:q].gsub! '#', "tag_contexts_sm:#{tagging_key}-"
         end
@@ -678,7 +733,7 @@ class HubsController < ApplicationController
 
     @search = Hub.search do
       paginate page: params[:page], per_page: get_per_page
-      fulltext params[:q] unless params[:q].blank?
+      fulltext params[:q].split('+').join('+ ') unless params[:q].blank?
     end
 
     respond_to do |format|
@@ -807,6 +862,20 @@ class HubsController < ApplicationController
     end
   end
 
+  def remove_delimiter
+    authorize @hub
+
+    if @hub.tags_delimiter.include?(params[:delimiter])
+      flash[:notice] = 'Delimiter removed successfully'
+      @hub.tags_delimiter.delete(params[:delimiter]) if params[:delimiter] != ','
+      @hub.save
+    else
+      flash[:error] = 'Something went wrong, try again.'
+    end
+
+    redirect_to settings_hub_path(@hub)
+  end
+
   private
 
   def sanitize_params
@@ -814,11 +883,38 @@ class HubsController < ApplicationController
   end
 
   def add_breadcrumbs
-    breadcrumbs.add @hub, hub_path(@hub) if @hub.id
+    breadcrumbs.add @hub, hub_path(@hub) if @hub&.id
   end
 
-  def find_hub
+  def set_hub
     @hub = Hub.find(params[:id])
     authorize @hub
+  end
+
+  def set_feed
+    @feed = Feed.find(params[:feed_id])
+
+    if @feed.blank?
+      flash[:error] = 'Something went wrong, try again.'
+      redirect_to(hub_path(@hub))
+    end
+  end
+
+  def set_feed_items
+  end
+
+  def store_feed_visitor
+    Feeds::StoreFeedVisitorJob.perform_later(
+      request.path,
+      request.format.symbol.to_s,
+      request.remote_ip,
+      request.user_agent
+    )
+  end
+
+  def authorize_user
+    return if policy(@hub).settings?
+
+    raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
   end
 end

@@ -4,8 +4,7 @@
 #
 # A Feed maps directly to an individual RSS feed, unless it's a bookmark
 # collection. A Feed contains many FeedItem objects.
-#
-# If a Feed is a bookmark collection, it serves only to hold FeedItems added
+# # If a Feed is a bookmark collection, it serves only to hold FeedItems added
 # via the Bookmarklet. This lets us leverage the rest of the filtering,
 # searching, aggregating and other features built into TagTeam. A bookmark
 # collection is identified by the "bookmarking_feed" boolean being true. When
@@ -137,6 +136,8 @@ class Feed < ApplicationRecord
   # a FeedItem lives in the FeedItems::CreateOrUpdate interaction.
   def update_feed
     return if bookmarking_feed?
+    
+    return if unsubscribe
 
     self.dirty = false
     self.changelog = {}
@@ -152,6 +153,7 @@ class Feed < ApplicationRecord
     fr = FeedRetrieval.new(feed_id: id)
     fr.success = true
     fr.status_code = '200'
+
     raw_feed.items.each do |item|
       FeedItems::CreateOrUpdate.run!(feed: self, item: item, feed_retrieval: fr)
     end
@@ -209,16 +211,10 @@ class Feed < ApplicationRecord
     'Feed'
   end
 
-  # Return the most recent tagging on any of the items in this feed
-  def most_recent_tagging
-    feed_item_ids = feed_items.pluck(:id)
-    ActsAsTaggableOn::Tagging.where(taggable_type: 'FeedItem', taggable_id: feed_item_ids).last
-  end
-
   private
 
   def remove_feed_items_feeds
-    connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
+    self.class.connection.execute("DELETE FROM feed_items_feeds WHERE feed_id = #{id}")
   end
 
   def feed_url_format

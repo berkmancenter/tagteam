@@ -7,4 +7,7 @@ Metrics/LineLength:
 Rails:
   Enabled: true
 AllCops:
-  TargetRubyVersion: 2.3
+  Exclude:
+    - 'db/**/*'
+  TargetRubyVersion: 2.4
+  TargetRailsVersion: 5.1

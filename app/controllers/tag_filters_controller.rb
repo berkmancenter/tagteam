@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class TagFiltersController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :load_scope
-  before_action :load_tag_filter, except: [:index, :new, :create]
+  before_action :load_tag_filter, except: %i[index new create]
 
   after_action :verify_authorized, except: :index
 
@@ -26,15 +27,18 @@ class TagFiltersController < ApplicationController
   end
 
   def create
-    authorize_tag_filter = TagFilter.new
+    authorize_tag_filter = TagFilter.new(type: params[:filter_type])
     authorize_tag_filter.hub = @hub
     authorize authorize_tag_filter
 
     # Allow multiple TagFilters to be created from a comma-separated string of tags
+    params[:new_tag] = params[:new_tag].split(',').join('.')
     tag_filters = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
-                    TagFilterHelper.split_tags(params[:new_tag], @hub).map do |tag|
+                    new_tags = TagFilterHelper.split_tags(params[:new_tag], @hub)
+                    new_tags -= @hub.deprecated_tag_names
+                    new_tags.map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end
                   end
@@ -46,7 +50,8 @@ class TagFiltersController < ApplicationController
     @tag_filter.rollback_and_destroy_async(current_user)
 
     flash[:notice] = 'Deleting that tag filter.'
-    redirect_to hub_tag_filters_path(@hub)
+
+    redirect_back fallback_location: hub_tag_filters_path(@hub)
   end
 
   private
@@ -68,6 +73,11 @@ class TagFiltersController < ApplicationController
     @hub = Hub.find(params[:hub_id]) if params[:hub_id]
     @hub_feed = HubFeed.find(params[:hub_feed_id]) if params[:hub_feed_id]
     @feed_item = FeedItem.find(params[:feed_item_id]) if params[:feed_item_id]
+
+    if params.has_key?(:username)
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    end
 
     # We'll only get a feed item id if we're scoped to an item.
     if @feed_item

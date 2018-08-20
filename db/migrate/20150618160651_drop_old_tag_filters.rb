@@ -1,4 +1,4 @@
-class DropOldTagFilters < ActiveRecord::Migration
+class DropOldTagFilters < ActiveRecord::Migration[4.2]
   def up
     drop_table :hub_tag_filters
     drop_table :hub_feed_tag_filters

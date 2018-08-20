@@ -1,0 +1,19 @@
+- if setting.errors.any?
+  %h2
+    #{pluralize(setting.errors.count, 'error')} prohibited this setting from being saved:
+  %ul
+    - setting.errors.full_messages.each do |msg|
+      %li
+        = msg
+= semantic_form_for(setting) do |f|
+  = f.inputs do
+    %br/
+    = f.input :signup_description, as: :text, input_html: { class: 'noEditor', rows: 4 }
+    = f.input :require_admin_approval_for_all, as: :boolean, input_html: { checked: setting.require_admin_approval_for_all }
+    %div{ class: setting.require_admin_approval_for_all ? 'domains disabled' : 'domains' }
+      = f.input :whitelisted_domains, hint: 'Please enter comma-separated domain names from which new account requests will be automatically approved.', input_html: { value: setting.whitelisted_domains.join(',') }
+      = f.input :blacklisted_domains, hint: 'Please enter comma-separated domain names from which new account requests will be automatically rejected.', input_html: { value: setting.blacklisted_domains.join(',') }
+  .text-center
+    = f.actions do
+      = f.action :submit, as: :button, label: 'submit',
+        button_html: { class: 'btn btn-primary btn-lg' }

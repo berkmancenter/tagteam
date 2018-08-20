@@ -1,4 +1,4 @@
-class CreateFeedItems < ActiveRecord::Migration
+class CreateFeedItems < ActiveRecord::Migration[4.2]
   def change
     create_table :feed_items do |t|
       t.string :title,              :limit => 500.bytes

@@ -11,7 +11,7 @@ module TagFilters
     integer :tag_id, default: nil
     object :user
 
-    validates :filter_type, inclusion: { in: %w(AddTagFilter DeleteTagFilter ModifyTagFilter) }
+    validates :filter_type, inclusion: { in: %w[AddTagFilter DeleteTagFilter ModifyTagFilter SupplementTagFilter] }
 
     # TODO: Refactor this too-large method that was formerly the TagFiltersController#create action
     def execute
@@ -19,7 +19,16 @@ module TagFilters
 
       tag = ActsAsTaggableOn::Tag.find(tag_id) if tag_id.present?
 
-      if filter_type_class == ModifyTagFilter
+      @new_tag_name = @new_tag_name.chomp('.') if @new_tag_name.end_with?('.')
+      @new_tag_name = @new_tag_name[1..-1] if @new_tag_name.start_with?('.')
+
+      hub.tags_delimiter.each do |delimiter|
+        @new_tag_name.slice!(delimiter)
+      end
+
+      @new_tag_name.delete(hub.tags_delimiter.join) if @new_tag_name.present?
+
+      if [ModifyTagFilter, SupplementTagFilter].include?(filter_type_class)
         tag ||= find_or_create_tag_by_name(modify_tag_name)
         new_tag = find_or_create_tag_by_name(new_tag_name)
       else
@@ -37,26 +46,15 @@ module TagFilters
       user.has_role!(:owner, tag_filter)
       user.has_role!(:creator, tag_filter)
 
-      if hub.notify_taggers?
-        changes =
-          case filter_type
-          when 'AddTagFilter'
-            { tags_added: [tag.name] }
-          when 'DeleteTagFilter'
-            { tags_deleted: [tag.name] }
-          when 'ModifyTagFilter'
-            { tags_modified: [tag.name, new_tag.name] }
-          end
-
-        TaggingNotifications::SendNotificationJob.perform_later(
-          tag_filter,
-          hub,
-          user,
-          changes
-        )
+      # No notifications on AddTagFilter (to anyone)
+      # Send notifications immediately if Delete or Modify created
+      if tag_filter.scope_type == 'FeedItem'
+        tag_filter.apply([scope.id])
+        TagFilter.apply_hub_filters(hub, scope)
+        TaggingNotifications::FeedItemNotification.perform_later(scope, tag_filter, hub, user)
+      else
+        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(tag_filter, hub, user)
       end
-
-      tag_filter.apply_async
 
       tag_filter
     end

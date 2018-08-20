@@ -10,7 +10,7 @@ xml.rss(
     xml.link hub_url(@hub)
     xml.generator Tagteam::Application.config.rss_generator
 
-    @search.results.each do |item|
+    @feed_items.each do |item|
       xml.item do
         xml.title item.title
         unless item.description.blank?

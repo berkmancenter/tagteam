@@ -2,7 +2,12 @@
   %h1
     User "
     %em>= user.username
-    " –
+    "
+    - if params[:tagname].present?
+      , Tag "
+      %em>= params[:tagname]
+      "
+    –
     \#{feed_items.count} #{'item'.pluralize(feed_items.count)}
 
 .col-sm-4

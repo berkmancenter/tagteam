@@ -1,0 +1,40 @@
+- content_for :top_panel do
+  = render partial: 'hubs/top_panel', locals: { hub: @hub }
+- content_for :tabs do
+  = render partial: 'hubs/tabs', locals: { active: 'bookmarks' }
+- content_for :tab_content do
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      - [{ key: 'username', default: 'asc' },{ key: 'date started', default: 'asc' },{ key: 'most recent tagging', default: 'desc' },{ key: 'number of items', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'username', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'taggers_hub_path')} 
+
+  .hub_feeds.nicely-padded
+    %h1
+      Bookmark collections
+    - if current_user && (current_user.is?(:owner, @hub) || current_user.is?(:bookmarker, @hub) || current_user.superadmin?)
+      %p.info
+        You can use a bookmarklet to add pages directly to your bookmark collections.
+        Drag the
+        %em Add to TagTeam
+        button below to your browser's bookmarks
+        bar to get started.
+      .text-center= render partial: 'shared/bookmarklet_button'
+    - if @bookmark_collections.empty?
+      %p This hub currently has no bookmark collections.
+    - else
+      .text-right
+        = render partial: 'shared/paginate', object: @bookmark_collections, as: :results, locals: { show_per_page_select: false }
+      .media-left
+      %ul.hub_feeds.list-unstyled.nicely-padded{ id: "hub_feed_list_#{@hub.id}" }
+        %li
+          = link_to '', class: 'bookmark-collections-toggler' do
+            .media
+              .media-left
+                = fa_icon('caret-right')
+              .media-body
+                %h2
+                  %strong Toggle details for all taggers
+        = render partial: 'hub_feeds/list_item', collection: @bookmark_collections, as: :hub_feed
+      .text-center
+        = render partial: 'shared/paginate', object: @bookmark_collections, as: :results, locals: { show_per_page_select: false }

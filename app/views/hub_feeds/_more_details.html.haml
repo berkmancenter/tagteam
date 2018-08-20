@@ -1,0 +1,15 @@
+.metadata{ id: "hub_feed_metadata_#{hub_feed.id}", class: 'hidden' }
+  %span.updated{ title: 'Last updated' } Last tagged #{hub_feed_updated(hub_feed)}
+
+  |&nbsp;
+
+  %span.items= pluralize(hub_feed.feed.feed_items.count, 'item')
+
+  |&nbsp;
+
+  = link_to('RSS', hub_feed_feed_items_path(hub_feed, format: :rss), title: 'An RSS feed with tag filters applied to it.')
+  = link_to('ATOM', hub_feed_feed_items_path(hub_feed, format: :atom), title: 'An Atom feed with tag filters applied to it.')
+  = link_to('JSON', hub_feed_feed_items_path(hub_feed, format: :json, callback: 'callback'), title: 'jsonp with tag filters applied to it.')
+
+  .feed-item-tags
+    = raw hub_feed.latest_tags(10).collect { |t| tag_display(t, hub: @hub, hub_feed: hub_feed) }.join(' ')

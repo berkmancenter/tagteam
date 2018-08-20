@@ -1,8 +1,12 @@
 Hello,
 \
-#{@updated_by.username} has updated the tag record for an item you've previously tagged. You can find the current version of the record at this URL:
+#{@updated_by_display} updated the tag record for #{@modified_items.size > 1 ? 'items' : 'an item'} you've previously tagged. You can find the current version of the record at the following URL(s):
 \
-= hub_feed_feed_item_url(@hub_feed, @modified_item)
+- if @modified_items.size > 1
+  - @modified_items.each do |modified_item|
+    = hub_feed_feed_item_url(@hub.hub_feed_for_feed_item(modified_item), modified_item)
+- else
+  = hub_feed_feed_item_url(@hub.hub_feed_for_feed_item(@modified_items.first), @modified_items.first)
 
 - if @changes.present?
   \

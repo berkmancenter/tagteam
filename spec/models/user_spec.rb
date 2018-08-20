@@ -2,6 +2,13 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  before do
+    Admin::Setting.create(
+      require_admin_approval_for_all: false,
+      whitelisted_domains: ['example.edu']
+    )
+  end
+
   describe 'approved attribute set by before_create callback' do
     subject { user.approved }
 

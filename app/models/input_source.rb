@@ -16,8 +16,8 @@ class InputSource < ApplicationRecord
 
   EFFECTS = %w(add remove).freeze
 
-  belongs_to :republished_feed
-  belongs_to :item_source, polymorphic: true
+  belongs_to :republished_feed, optional: true
+  belongs_to :item_source, polymorphic: true, optional: true
 
   acts_as_api do |c|
     c.allow_jsonp_callback = true

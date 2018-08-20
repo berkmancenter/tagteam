@@ -18,9 +18,5 @@ RSpec.describe DeactivatedTagging, type: :model do
     it 'removes itself from the deactivated taggings table' do
       expect { reactivated_tagging }.to change { described_class.count }.by(-1)
     end
-
-    it 'returns the reactivated copy of itself' do
-      expect(reactivated_tagging).to eq(tagging)
-    end
   end
 end

@@ -2,19 +2,20 @@
 class TagFilter < ApplicationRecord
   include AuthUtilities
   include ModelExtensions
-  include TaggingDeactivator
 
-  belongs_to :hub
-  belongs_to :scope, polymorphic: true
-  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag'
-  belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag'
+  belongs_to :hub, optional: true
+  belongs_to :scope, polymorphic: true, optional: true
+  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag', optional: true
+  belongs_to :new_tag, class_name: 'ActsAsTaggableOn::Tag', optional: true
   has_many :taggings, as: :tagger, class_name: 'ActsAsTaggableOn::Tagging'
   has_many :deactivated_taggings, as: :tagger
+  has_many :self_deactivated_taggings, class_name: 'DeactivatedTagging',
+                                         as: :deactivator
 
   VALID_SCOPE_TYPES = %w(Hub HubFeed FeedItem).freeze
   validates :tag_id, presence: true
   validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
-  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id],
+  validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id, :type],
                                    message: 'Filter conflicts with existing filter.' }
 
   attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,
@@ -35,12 +36,11 @@ class TagFilter < ApplicationRecord
   delegate :name, to: :tag, prefix: true
   delegate :name, to: :new_tag, prefix: true
 
-  def items_in_scope
-    scope.taggable_items
-  end
+  def filtered_feed_items
+    return [self.scope] if self.scope.is_a?(FeedItem)
 
-  def filter_to_scope(items)
-    items.where(id: items_in_scope.pluck(:id))
+    return FeedItem.find(DeactivatedTagging.where(deactivator_id: self.id, deactivator_type: 'TagFilter').map(&:taggable_id).uniq) if self.scope.is_a?(Hub)
+    return []
   end
 
   def next_to_apply?
@@ -48,10 +48,6 @@ class TagFilter < ApplicationRecord
       (hub.tag_filters_before(self).count ==
         hub.tag_filters_before(self).applied.count) &&
       (hub.tag_filters_after(self).applied.count == 0)
-  end
-
-  def apply_async(reapply = false)
-    ApplyTagFilters.perform_async(id, [], reapply)
   end
 
   # Filter application can occur on a subset of items in a scope (if a new
@@ -70,6 +66,12 @@ class TagFilter < ApplicationRecord
     TagFilters::DestroyJob.perform_later(self, current_user)
   end
 
+  # End API for filters,
+  # but this calls model override for ModifyTagFilter
+  def deactivate_taggings!(item_ids)
+    deactivates_taggings(item_ids).find_each { |tagging| deactivate_tagging(tagging) }
+  end
+
   # Somewhat surprisingly, this code is the same for the add and delete
   # filters. In the add filter, it deactivates what would be duplicate
   # taggings. In the delete filter, it deactivates the taggings it's supposed
@@ -78,23 +80,42 @@ class TagFilter < ApplicationRecord
   # For example, if hub filter adds 'tag1', and now we create a feed filter
   # that adds 'tag1', all the 'tag1' tags for items in this feed should be
   # owned by the feed filter.
-  def deactivates_taggings(items: items_in_scope)
+  def deactivates_taggings(item_ids)
     # Deactivates any taggings that are the same except in owner, and do not
     # deactivate own taggings.
-    return ActsAsTaggableOn::Tagging.where('1=2') if items.empty?
+    return ActsAsTaggableOn::Tagging.where('1=2') if item_ids.empty?
+
     ActsAsTaggableOn::Tagging
       .where(context: hub.tagging_key, tag_id: tag.id,
-             taggable_type: 'FeedItem', taggable_id: items.pluck(:id))
+             taggable_type: 'FeedItem', taggable_id: item_ids)
       .where('("taggings"."tagger_id" IS NULL AND ' \
             '"taggings"."tagger_type" IS NULL) OR ' \
             '(NOT ("taggings"."tagger_id" = ? AND "taggings"."tagger_type" = ?))',
              id, self.class.base_class.name)
   end
 
-  def deactivate_taggings!(items: items_in_scope)
-    deactivates_taggings(items: items).find_each do |tagging|
-      deactivate_tagging(tagging)
+  def deactivate_tagging(tagging)
+    deactivated = DeactivatedTagging.new
+    tagging.attributes.each do |key, value|
+      deactivated.send("#{key}=", value)
     end
+
+    deactivated.deactivator = self unless new_record?
+
+    DeactivatedTagging.transaction do
+      deactivated.save!
+      tagging.destroy
+    end
+
+    deactivated
+  end
+
+  def reactivates_taggings
+    self_deactivated_taggings
+  end
+
+  def reactivate_taggings!
+    reactivates_taggings.each(&:reactivate)
   end
 
   def filter_chain
@@ -109,31 +130,6 @@ class TagFilter < ApplicationRecord
     where(hub_id: hub.id)
   end
 
-  # This is useful when we're using sidekiq.
-  def self.apply_by_id(id)
-    find(id).apply
-  end
-
-  def self.rollback_by_id(id)
-    find(id).rollback
-  end
-
-  def items_to_modify
-    items_to_process = []
-
-    if type == 'AddTagFilter'
-      items_to_process = items_in_scope
-    elsif type == 'DeleteTagFilter' || type == 'ModifyTagFilter'
-      items_to_process = FeedItem
-                         .joins(:taggings)
-                         .where(id: items_in_scope.pluck(:id))
-                         .group('feed_items.id,taggings.id')
-                         .having('taggings.tag_id=' + tag.id.to_s)
-    end
-
-    items_to_process
-  end
-
   # Fix Pundit policy lookup for STI classes that inherit from TagFilter
   def self.policy_class
     TagFilterPolicy
@@ -145,5 +141,40 @@ class TagFilter < ApplicationRecord
 
   def users
     Role.find_by(authorizable_id: self, authorizable_type: 'TagFilter').try(:users) || User.none
+  end
+
+  def self.apply_hub_filters(hub, feed_item)
+    hub_feed = hub.hub_feed_for_feed_item(feed_item)
+    filters = TagFilter.where("(scope_type = 'Hub' AND scope_id = #{hub.id}) OR (scope_type = 'HubFeed' AND scope_id = #{hub_feed.id})").order("created_at ASC")
+    applied_tag_ids = ActsAsTaggableOn::Tagging.where(taggable_id: feed_item.id).where("context <= 'hub_#{hub.id}'").map(&:tag_id)
+    filters.each do |filter|
+      # apply tag filter if item has tag for certain filter types
+      # apply tag filter for all AddTagFilters
+      if filter.type == 'DeleteTagFilter' && applied_tag_ids.include?(filter.tag_id)
+        filter.apply([feed_item.id])
+        applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
+      elsif filter.type == 'ModifyTagFilter' && applied_tag_ids.include?(filter.tag_id)
+        filter.apply([feed_item.id])
+        applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
+        applied_tag_ids << filter.new_tag_id
+      elsif filter.type == 'SupplementTagFilter' && applied_tag_ids.include?(filter.tag_id)
+        filter.apply([feed_item.id])
+        applied_tag_ids << filter.new_tag_id
+      elsif filter.type == 'AddTagFilter'
+        filter.apply([feed_item.id])
+        applied_tag_ids << filter.tag_id
+      end
+    end
+  end
+
+  def self.find_recursive(hub_id, tag_name, filter = nil)
+    tag = ActsAsTaggableOn::Tag.find_by_name_normalized(tag_name)
+    return filter if tag.nil?
+
+    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
+    return filter if new_filter.empty?
+    return new_filter.first if new_filter.first.type == 'DeleteTagFilter'
+
+    find_recursive(hub_id, new_filter.first.new_tag.name, new_filter.first)
   end
 end

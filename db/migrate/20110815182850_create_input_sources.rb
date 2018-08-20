@@ -1,4 +1,4 @@
-class CreateInputSources < ActiveRecord::Migration
+class CreateInputSources < ActiveRecord::Migration[4.2]
   def change
     create_table :input_sources do |t|
       t.integer :republished_feed_id,     :null => false

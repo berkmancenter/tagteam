@@ -1,15 +1,16 @@
 # frozen_string_literal: true
+
 # Allow a Hub owner to add HubTagFilters.
 class HubFeedsController < ApplicationController
-  caches_action :controls, :index, :show, :more_details, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :controls, :index, :show, :autocomplete, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
 
-  before_action :authenticate_user!, except: [:autocomplete, :controls, :index, :more_details, :show]
-  before_action :find_hub_feed, except: [:autocomplete, :create, :index, :new]
+  before_action :authenticate_user!, except: %i[autocomplete controls index show]
+  before_action :find_hub_feed, except: %i[autocomplete create index new]
   before_action :find_hub
 
-  after_action :verify_authorized, except: [:autocomplete, :controls, :index, :more_details, :show]
+  after_action :verify_authorized, except: %i[autocomplete controls index show]
 
   def controls
     render layout: !request.xhr?
@@ -51,10 +52,6 @@ class HubFeedsController < ApplicationController
     redirect_to import_hub_feed_path(@hub_feed)
   end
 
-  def more_details
-    render layout: !request.xhr?
-  end
-
   def reschedule_immediately
     feed = @hub_feed.feed
     feed.next_scheduled_retrieval = Time.now
@@ -67,7 +64,9 @@ class HubFeedsController < ApplicationController
   end
 
   def index
-    @hub_feeds = @hub.hub_feeds.rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
+    type = params[:type] == 'Unsubscribed'
+    @hub_feeds = @hub.hub_feeds.joins(:feed).where("feeds.unsubscribe = ? ", type).rss.order(created_at: :desc).paginate(page: params[:page], per_page: get_per_page)
+
     add_breadcrumbs
     respond_to do |format|
       format.html { render layout: request.xhr? ? false : 'tabs' }
@@ -113,7 +112,7 @@ class HubFeedsController < ApplicationController
         current_user.has_role!(:editor, @hub_feed)
         current_user.has_role!(:owner, @hub_feed)
         flash[:notice] = 'Created that bookmarking collection.'
-        format.html { redirect_to hub_path(@hub) }
+        format.html { redirect_to taggers_hub_path(@hub) }
       else
         flash[:error] = 'Couldn\'t create that bookmarking collection!'
         format.html { render action: :new }
@@ -152,8 +151,14 @@ class HubFeedsController < ApplicationController
   private
 
   def find_hub_feed
-    @hub_feed = HubFeed.find(params[:id])
-    authorize @hub_feed
+    if params.has_key?(:username)
+      @hub = Hub.find(params[:hub_id])
+      @user = User.find_by(username: params[:username])
+      @hub_feed = @hub.hub_feeds.detect { |hf| hf.creators.include?(@user) }
+    else
+      @hub_feed = HubFeed.find(params[:id])
+      authorize @hub_feed
+    end
   end
 
   def find_hub

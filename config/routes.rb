@@ -1,11 +1,17 @@
 # frozen_string_literal: true
+
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   # TODO: enforce SSL for UsersController in production
   resources :users, except: :index do
     member do
       post 'resend_confirmation_token'
       post 'resend_unlock_token'
       get 'roles_on'
+      post 'lock_user'
+      post 'superadmin_role'
+      post 'documentation_admin_role'
     end
   end
 
@@ -30,7 +36,7 @@ Rails.application.routes.draw do
   end
   resources :input_source
 
-  resources :hub_feeds do
+  resources :hub_feeds, except: :new do
     collection do
       get 'autocomplete'
     end
@@ -50,6 +56,7 @@ Rails.application.routes.draw do
         get 'about'
         get 'related'
         get 'controls'
+        delete 'remove_item'
       end
     end
     resources :tags
@@ -69,14 +76,18 @@ Rails.application.routes.draw do
     get 'tag/json/:name' => 'tags#json', :as => 'tag_json', :constraints => { name: /.+/ }
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
     get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
-    get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }
+    get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }, :defaults => { :format => 'html' }
 
-    get 'user/:username' => 'users#tags', :as => 'user_tags', :constraints => { username: /[^\/]+/ }
+    get 'user/:username' => 'users#hub_items', :as => 'user_hub_items', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/tags' => 'tags#index', :as => 'user_hub_items_tags', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/filters' => 'tag_filters#index', :as => 'user_hub_items_filters', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/updates' => 'feed_retrievals#index', :as => 'user_hub_items_updates', :constraints => { username: /[^\/]+/ }
+    get 'user/:username/about' => 'hub_feeds#show', :as => 'user_hub_items_about', :constraints => { username: /[^\/]+/ }
+
     get 'user/:username/rss' => 'users#tags_rss', :as => 'user_tags_rss', :constraints => { username: /[^\/]+/ }
     get 'user/:username/atom' => 'users#tags_atom', :as => 'user_tags_atom', :constraints => { username: /[^\/]+/ }
     get 'user/:username/json' => 'users#tags_json', :as => 'user_tags_json', :constraints => { username: /[^\/]+/ }
     get 'user/:username/xml' => 'users#tags_xml', :as => 'user_tags_xml', :constraints => { username: /[^\/]+/ }
-
     get 'user/:username/tag/:tagname(/:deprecated)' => 'users#tags', :as => 'user_tags_name', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
     get 'user/:username/tag/:tagname(/:deprecated)/rss' => 'users#tags_rss', :as => 'user_tags_name_rss', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
     get 'user/:username/tag/:tagname(/:deprecated)/atom' => 'users#tags_atom', :as => 'user_tags_name_atom', :constraints => { tagname: /[^\/]+/, username: /.+/ }, defaults: { deprecated: nil }
@@ -92,17 +103,19 @@ Rails.application.routes.draw do
       post 'recalc_all_tags'
       get 'item_search'
       post 'add_feed'
+      put 'unsubscribe_feed/:feed_id' => 'hubs#unsubscribe_feed', as: 'unsubscribe_feed'
       get 'custom_republished_feeds'
       get 'tag_controls'
       get 'items'
       get 'by_date/:year/:month/:day' => 'hubs#by_date', :as => 'by_date'
       get 'retrievals'
       get 'my_bookmark_collections'
-      get 'bookmark_collections'
+      get 'taggers'
       get 'team'
       get 'statistics'
       get 'notifications'
       get 'settings'
+      get 'scoreboard'
       post 'add_roles'
       post 'remove_roles'
       post 'request_rights'
@@ -116,6 +129,7 @@ Rails.application.routes.draw do
       post 'unapprove_tag'
       post 'deprecate_tag'
       post 'undeprecate_tag'
+      delete 'remove_delimiter'
     end
 
     collection do
@@ -125,6 +139,7 @@ Rails.application.routes.draw do
       get 'background_activity'
       get 'all_items'
       get 'search'
+      delete 'destroy_hubs', as: 'destroy_hubs'
     end
 
     resources :hub_feeds do
@@ -187,8 +202,10 @@ Rails.application.routes.draw do
       get :approve
       get :deny
     end
-    resources :users, only: :index
-  end
 
+    resources :users, only: :index
+    resources :hubs, only: %i[index destroy]
+    resources :settings, only: %i[new create update]
+  end
   root 'hubs#home'
 end

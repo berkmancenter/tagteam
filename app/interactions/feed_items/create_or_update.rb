@@ -26,13 +26,7 @@ module FeedItems
       fi.feed_retrievals << feed_retrieval
       fi.feeds << feed unless fi.feeds.include?(feed)
 
-      # Merge tags...
-      new_tags = item.categories.map do |tag|
-        ActsAsTaggableOn::Tag.normalize_name(tag)
-      end
-
-      new_tags.sort_by!(&:to_s)
-      new_tags.uniq!(&:to_s)
+      new_tags = parse_tags(item.categories)
 
       tag_context = Rails.application.config.global_tag_context
       old_tags = fi.all_tags_list_on(tag_context).dup.sort
@@ -112,6 +106,26 @@ module FeedItems
       end
 
       attrs
+    end
+
+    def parse_tags(tags)
+      tags
+        .map { |jumbo_tags| split_tags(jumbo_tags) }
+        .flatten
+        .map { |tag| ActsAsTaggableOn::Tag.normalize_name(tag).to_s }
+        .uniq
+        .sort
+    end
+
+    def split_tags(tags)
+      delimiter =
+        if tags.match?(/\s/)
+          ' '
+        elsif tags.match?(/,/)
+          ','
+        end
+
+      tags.split(delimiter)
     end
   end
 end

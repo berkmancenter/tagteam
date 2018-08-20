@@ -24,7 +24,7 @@ class RepublishedFeed < ApplicationRecord
   SORTS = %w(date_published title).freeze
   SORTS_FOR_SELECT = [['Date Published', 'date_published'], %w(Title title)].freeze
 
-  belongs_to :hub
+  belongs_to :hub, optional: true
   has_many :input_sources, -> { order(created_at: :desc) }, dependent: :destroy
 
   validates :url_key, uniqueness: true
@@ -47,11 +47,11 @@ class RepublishedFeed < ApplicationRecord
     if f.save
       user.has_role!(:owner, f)
       user.has_role!(:creator, f)
-      f
     else
       logger.warn "RepublishedFeed.create_with_user error: #{f.errors.first}"
-      nil
     end
+
+    f
   end
 
   # TODO: performance

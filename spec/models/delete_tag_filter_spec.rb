@@ -12,7 +12,7 @@ RSpec.describe DeleteTagFilter, type: :model do
     before do
       @tag = create(:tag, name: 'a')
       @feed_items.each do |item|
-        create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first)
+        create(:tagging, tag: @tag, taggable: item, tagger: item.feeds.first, context: "hub_#{@hub.id}")
         # This doesn't run on its own because items have already been created.
         item.copy_global_tags_to_hubs
       end
@@ -81,7 +81,7 @@ RSpec.describe DeleteTagFilter, type: :model do
   context 'the filter is scoped to a hub' do
     def add_filter(old_tag = 'social')
       filter = create(:delete_tag_filter,
-                      tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
+                      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: old_tag),
                       hub: @hub, scope: @hub)
       filter
     end
@@ -110,7 +110,7 @@ RSpec.describe DeleteTagFilter, type: :model do
   context 'the filter is scoped to a feed' do
     def add_filter(old_tag = 'social')
       create(:delete_tag_filter,
-             tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
+             tag: ActsAsTaggableOn::Tag.find_or_create_by(name: old_tag),
              hub: @hub, scope: @hub_feed)
     end
 
@@ -143,7 +143,7 @@ RSpec.describe DeleteTagFilter, type: :model do
 
   context 'the filter is scoped to an item' do
     def add_filter(old_tag = 'social')
-      create(:delete_tag_filter, tag: ActsAsTaggableOn::Tag.find_by(name: old_tag),
+      create(:delete_tag_filter, tag: ActsAsTaggableOn::Tag.find_or_create_by(name: old_tag),
                                  hub: @hub, scope: @feed_item)
     end
 
