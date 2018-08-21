@@ -126,6 +126,7 @@ class BookmarkletsController < ApplicationController
     @mini_title = 'Add to TagTeam'
 
     url = params[:feed_item].blank? ? nil : params[:feed_item][:url]
+    require 'urls_stripper'
     stripped_url = UrlsStripper.remove_trackers_hashs_from_url(url)
     @feed_item = FeedItem.find_or_initialize_by(url: stripped_url)
 
