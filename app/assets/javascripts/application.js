@@ -682,6 +682,26 @@ $(document).ready(function(){
       $('span#readonly-tag-description,a#update-tag-description').hide();
     }
   });
+  $('#apply-old-description').live({
+    click: function(e) {
+      var $link = $(this);
+      e.preventDefault();
+      $.ajax({
+        cache: false,
+        dataType: 'json',
+        url: $link.attr('href'),
+        type: 'post',
+        data: { description: $link.attr('data-old-value') },
+        success: function(data){
+          $('span#readonly-tag-description').html($link.attr('data-old-value')).removeClass('empty');
+          $('p.old-description,textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+          $('span#readonly-tag-description,a#update-tag-description').show();
+        },
+        error: function(data) {
+        }
+      });
+    }
+  });
   $('#submit-tag-description').live({
     click: function(e) {
       e.preventDefault();

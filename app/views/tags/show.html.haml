@@ -1,7 +1,7 @@
 - content_for :title do
   = page_title(@tag.name)
 - content_for :top_panel do
-  = render partial: 'top_panel', locals: { feed_items: @feed_items, hub: @hub, tag: @tag, tag_description: @tag_description&.description }
+  = render partial: 'top_panel', locals: { feed_items: @feed_items, hub: @hub, tag: @tag, tag_description: @tag_description&.description, old_tag_description: @old_tag_description }
 - content_for :tabs do
   = render partial: 'tabs', locals: { active: 'show' }
 - content_for :tab_content do

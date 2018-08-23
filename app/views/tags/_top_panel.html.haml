@@ -17,6 +17,9 @@
         = fa_icon 'check'
       = link_to '#', title: 'Cancel editing this hub tag description', id: 'cancel-tag-description', class: 'hidden' do
         = fa_icon 'close'
+      - if @old_tag_description.present?
+        %p.old-description
+          An active hub-wide filter is changing tag #{@tag_filter.tag.name} to #{@tag_filter.new_tag.name}. The old tag, #{@tag_filter.tag.name}, had an accompanying definition. Would you like to move that definition to this page? #{link_to 'Yes', hub_tag_description_url(hub, tag.name), title: 'Apply this description.', id: 'apply-old-description', 'data-old-value': @old_tag_description.description}
   - elsif tag_description.present?
     %p
       %span#readonly-tag-description
