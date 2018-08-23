@@ -15,6 +15,7 @@
             = f.input :bookmark_collection_id, as: :select, required: true, label: 'To collection', class: 'form-control'
         = f.input :tag_list, label: 'Tags', hint: 'A comma separated list of tags. Type at least 3 characters to load tag suggestions.'
         .feed-item-existing-tags
+        .feed-item-tags-actions.form-group
         = f.input :title, required: true
         = f.input :url, label: 'URL', required: true
         = f.input :description, as: :text, hint: "Select text on the page you're bookmarking to auto-populate the description field"

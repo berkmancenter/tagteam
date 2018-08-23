@@ -179,6 +179,7 @@ Rails.application.routes.draw do
         get 'tag_list'
         get 'content'
         get 'related'
+        get 'tags_actions'
       end
       #      collection do
       #        get 'by_date/:year/:month/:day' => 'feed_items#by_date', :as => 'by_date'
