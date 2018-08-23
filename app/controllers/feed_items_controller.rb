@@ -6,7 +6,7 @@ class FeedItemsController < ApplicationController
 
   protect_from_forgery except: :index
 
-  before_action :set_hub_feed, except: [:tag_list]
+  before_action :set_hub_feed, except: [:tag_list, :tags_actions]
   before_action :set_feed_item, except: [:index]
 
   SORT_OPTIONS = {
@@ -132,6 +132,18 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def tags_actions
+    @hub = Hub.find(params[:hub_id])
+
+    @actions = FeedItems::ItemTagActionsByUser.run!(hub: @hub, feed_item: @feed_item)
+
+    respond_to do |format|
+      format.html do
+        render layout: request.xhr? ? false : 'tabs'
+      end
+    end
+  end
+
   def edit
     authorize @feed_item
 
@@ -246,7 +258,7 @@ class FeedItemsController < ApplicationController
       end
     end
   end
-  
+
   def feed_item_params
     params.require(:feed_item).permit(:description, :title, :url, :date_published)
   end
