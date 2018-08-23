@@ -144,12 +144,18 @@ class TagsController < ApplicationController
     if @hub.deprecated_tags.include?(@tag)
       @feed_items = [].paginate
     else
-      feed_item_ids = ActsAsTaggableOn::Tagging.where(tag_id: @tag.id, context: @hub.tagging_key, taggable_type: 'FeedItem').map(&:taggable_id).compact 
+      feed_item_ids = ActsAsTaggableOn::Tagging.where(tag_id: @tag.id, context: @hub.tagging_key, taggable_type: 'FeedItem').map(&:taggable_id).compact
       @feed_items = FeedItem.where(id: feed_item_ids).order("feed_items.#{sort} #{order}").paginate(page: params[:page], per_page: get_per_page)
     end
 
     @show_auto_discovery_params = hub_tag_rss_url(@hub, @tag.name)
     @tag_description = HubTagDescription.where(hub_id: @hub.id, tag_id: @tag.id).first
+    if @tag_description.nil?
+      @tag_filter = TagFilter.where(type: 'ModifyTagFilter', hub_id: @hub.id, new_tag_id: @tag.id, scope_type: 'Hub').first
+      if @tag_filter.present?
+        @old_tag_description = HubTagDescription.where(hub_id: @hub.id, tag_id: @tag_filter.tag_id).first
+      end
+    end
 
     template = params[:view] == 'grid' ? 'show_grid' : 'show'
     render template, layout: request.xhr? ? false : 'tabs'
