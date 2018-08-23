@@ -314,6 +314,21 @@
         });
       }
     },
+    initHubFeedItemTagActionsList: function(hubId, feedItemId) {
+      $('.feed-item-tags-actions').empty();
+      if (feedItemId >= 0) {
+        $.ajax({
+          type: 'GET',
+          cache: false,
+          url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
+          feedItemId + '/tags_actions',
+          success: function(tagActionsList){
+            $('.feed-item-tags-actions').append(
+              '<p class="control-label">Actions</p>' + tagActionsList);
+          }
+        });
+      }
+    },
     observeHubSelector: function(feedItemId){
       if($.cookie('bookmarklet_hub_choice') != undefined){
         // A selection! Set the defaults.
@@ -321,9 +336,11 @@
       }
       $.initBookmarkCollectionChoices($('#feed_item_hub_id').val());
       $.initHubFeedItemTagList($('#feed_item_hub_id').val(), feedItemId);
+      $.initHubFeedItemTagActionsList($('#feed_item_hub_id').val(), feedItemId);
       $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
         $.initHubFeedItemTagList($(this).val(), feedItemId);
+        $.initHubFeedItemTagActionsList($('#feed_item_hub_id').val(), feedItemId);
         $.setEmptyDescriptionNotification();
       });
       $.setEmptyDescriptionNotification();
