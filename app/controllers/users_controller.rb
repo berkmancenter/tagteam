@@ -103,11 +103,11 @@ class UsersController < ApplicationController
 
   def resend_confirmation_token
     authorize User
-    @user.resend_confirmation_token
+    @user.resend_confirmation_instructions
     flash[:notice] = 'We resent the account confirmation email to that user.'
     redirect_to request.referer
   rescue Exception => e
-    flash[:notice] = 'Woops. We could not send that right now. Please try again later.'
+    flash[:notice] = 'Whoops. We could not send that right now. Please try again later.'
     redirect_to request.referer
   end
 
