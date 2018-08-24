@@ -22,8 +22,14 @@ class User < ApplicationRecord
   validates :terms_of_service, acceptance: true
   validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
   before_create do
-    self.skip_confirmation_notification!
-    self.approved = auto_approved?
+    # If a user is auto approved, send them the confirmation right away
+    # else wait to send them a confirmation until approved
+    if auto_approved?
+      self.approved = true
+    else
+      self.skip_confirmation_notification!
+      self.approved = false
+    end
   end
   after_update do
     if self.approved_changed? && self.approved
