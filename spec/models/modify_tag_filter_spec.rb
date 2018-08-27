@@ -229,6 +229,56 @@ RSpec.describe ModifyTagFilter, type: :model do
 
         expect(new_tag_lists).to show_effects_of filter
       end
+
+      it 'modifies tags using wildcards' do
+        old_tag_name = 'just-a-great-tag'
+        new_tag_name = 'just-a-bad-tag'
+        filter_tag_name = '*great*'
+        new_filter_tag_name = '*bad*'
+
+        old_tag = create(:tag, name: old_tag_name)
+        create(:tagging, tag: old_tag, taggable: @feed_items.first,
+                         context: @hub.tagging_key)
+
+        filter = add_filter(filter_tag_name, new_filter_tag_name)
+        filter.apply
+
+        new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
+
+        expect(new_tag_lists.first).to include(new_tag_name)
+
+        old_tag_name = 'testy-tag'
+        new_tag_name = 'no-wildcards-tag'
+        filter_tag_name = 'testy*'
+        new_filter_tag_name = 'no-wildcards-tag'
+
+        old_tag = create(:tag, name: old_tag_name)
+        create(:tagging, tag: old_tag, taggable: @feed_items.first,
+                         context: @hub.tagging_key)
+
+        filter = add_filter(filter_tag_name, new_filter_tag_name)
+        filter.apply
+
+        new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
+
+        expect(new_tag_lists.first).to include(new_tag_name)
+
+        old_tag_name = 'testy-single-wildcard-tag'
+        new_tag_name = 'single-wildcard-tag'
+        filter_tag_name = 'testy-*'
+        new_filter_tag_name = '*'
+
+        old_tag = create(:tag, name: old_tag_name)
+        create(:tagging, tag: old_tag, taggable: @feed_items.first,
+                         context: @hub.tagging_key)
+
+        filter = add_filter(filter_tag_name, new_filter_tag_name)
+        filter.apply
+
+        new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
+
+        expect(new_tag_lists.first).to include(new_tag_name)
+      end
     end
 
     it_behaves_like 'a hub-level tag filter'
