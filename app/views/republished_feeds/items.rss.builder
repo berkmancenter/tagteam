@@ -6,7 +6,7 @@ xml.rss(
 ) do
     xml.channel do
         xml.title @republished_feed.title
-        xml.description @republished_feed.description
+        xml.description strip_tags(@republished_feed.description)
         xml.link hub_republished_feed_url(@hub,@republished_feed)
         xml.generator Tagteam::Application.config.rss_generator
 
@@ -15,7 +15,7 @@ xml.rss(
                 xml.item do
                     xml.title item.title
                     unless item.description.blank?
-                        xml.description item.description
+                        xml.description strip_tags(item.description)
                     end
                     unless item.content.blank?
                         xml.tag!('content:encoded', item.content)
@@ -23,9 +23,9 @@ xml.rss(
                     unless item.date_published.blank?
                         xml.pubDate item.date_published.to_s(:rfc822)
                     end
-                    xml.link item.url
-                    xml.guid item.guid
-                    xml.author item.authors
+                    xml.link item.url if valid_url?(item.url)
+                    xml.guid item.guid if valid_url?(item.guid)
+                    xml.author item.authors if valid_email?(item.authors)
                     item.all_tags_on(@republished_feed.hub.tagging_key).each do|tag|
                         xml.category (@republished_feed.hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@republished_feed.hub.tag_prefix)
                     end

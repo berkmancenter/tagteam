@@ -5,10 +5,8 @@ atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US') d
 
   @feed_items.each do |item|
     atom.entry( item, :url => item.url ) do |entry|
-      unless item.authors.blank?
-        entry.author do |author|
-          author.name item.authors
-        end
+      entry.author do |author|
+        author.name item.authors || ''
       end
       unless item.contributors.blank?
         entry.contributor do |contributor|
@@ -19,7 +17,7 @@ atom_feed(:root_url => hub_tag_show_url(@hub,@tag.name), :language => 'en-US') d
 #      entry.link( :type => 'text/html', :href => hub_feed_feed_item_url(item.hub_feed_for_hub(@hub.id),item), :rel => 'self' )
       entry.title item.title
       (item.all_tags_on(@hub.tagging_key) - @hub.deprecated_tags).each do |tag|
-        entry.category(:term => (@hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub.tag_prefix), :scheme => hub_tag_path(@hub,@tag))
+        entry.category(:term => (@hub.tag_prefix.blank?) ? tag.name : tag.name_prefixed_with(@hub.tag_prefix), :scheme => hub_tag_url(@hub,@tag))
       end
       unless item.rights.blank?
         entry.rights item.rights
