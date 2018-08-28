@@ -15,11 +15,9 @@ class UsersController < ApplicationController
   after_action :verify_authorized, except: [:hub_items]
 
   SORT_OPTIONS = {
-    'created_at' => -> (rel) { rel.order('created_at') },
-    'date_published' => ->(rel) { rel.order('date_published') },
-  }.freeze
-
-  SORT_DIR_OPTIONS = %w(asc desc).freeze
+    'Date tagged' => 'created_at',
+    'Date published' => 'date_published'
+  }
 
   def hub_items
     breadcrumbs.add @hub, hub_path(@hub)
@@ -29,15 +27,12 @@ class UsersController < ApplicationController
 
     redirect_to hub_path(@hub) and return if @hub_feed.nil?
 
-    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? params[:sort] : SORT_OPTIONS.keys.first
-    order = SORT_DIR_OPTIONS.include?(params[:order]) ? params[:order] : SORT_DIR_OPTIONS.first
-    @feed_items = SORT_OPTIONS[sort].call(
-      @hub_feed
-      .feed_items
+    sort = SORT_OPTIONS.keys.include?(params[:sort]) ? SORT_OPTIONS[params[:sort]] : 'created_at'
+    order = %w(desc asc).include?(params[:order]) ? params[:order] : 'desc'
+    @feed_items = FeedItem.where(id: @hub_feed.feed_items.map(&:id))
       .includes(:feeds, :hub_feeds)
+      .order("feed_items.#{sort} #{order}")
       .paginate(page: params[:page], per_page: get_per_page)
-    )
-    @feed_items = @feed_items.reverse_order if order == 'desc'
 
     render 'hub_items', layout: request.xhr? ? false : 'tabs'
   end
@@ -108,11 +103,11 @@ class UsersController < ApplicationController
 
   def resend_confirmation_token
     authorize User
-    @user.resend_confirmation_token
+    @user.resend_confirmation_instructions
     flash[:notice] = 'We resent the account confirmation email to that user.'
     redirect_to request.referer
   rescue Exception => e
-    flash[:notice] = 'Woops. We could not send that right now. Please try again later.'
+    flash[:notice] = 'Whoops. We could not send that right now. Please try again later.'
     redirect_to request.referer
   end
 

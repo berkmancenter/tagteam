@@ -102,6 +102,7 @@ class FeedItem < ApplicationRecord
     string :description
     string :rights
     time :date_published
+    time :created_at
     time :last_updated
   end
 
@@ -165,7 +166,7 @@ class FeedItem < ApplicationRecord
   end
 
   def tag_list_array_for_indexing
-    tags.pluck(:name)
+    ActsAsTaggableOn::Tagging.joins(:tag).where(taggable_type: FeedItem.name, taggable_id: self.id).pluck("tags.name").uniq
   end
 
   def tag_list_string_for_indexing
@@ -205,7 +206,8 @@ class FeedItem < ApplicationRecord
     end
 
     new_taggings.each do |tagging|
-      deactivated_taggings = tagging.deactivate_taggings!
+      taggings_to_deactivate = ActsAsTaggableOn::Tagging.where(tag_id: tagging.tag_id, context: context, taggable_id: self.id, taggable_type: 'FeedItem')
+      deactivated_taggings = taggings_to_deactivate.map { |tagging| TagFilter.new.deactivate_tagging(tagging) }
       tagging.save!
       deactivated_taggings.each do |deactivated_tagging|
         deactivated_tagging.deactivator = tagging

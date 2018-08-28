@@ -314,6 +314,21 @@
         });
       }
     },
+    initHubFeedItemTagActionsList: function(hubId, feedItemId) {
+      $('.feed-item-tags-actions').empty();
+      if (feedItemId >= 0) {
+        $.ajax({
+          type: 'GET',
+          cache: false,
+          url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
+          feedItemId + '/tags_actions',
+          success: function(tagActionsList){
+            $('.feed-item-tags-actions').append(
+              '<p class="control-label">Actions</p>' + tagActionsList);
+          }
+        });
+      }
+    },
     observeHubSelector: function(feedItemId){
       if($.cookie('bookmarklet_hub_choice') != undefined){
         // A selection! Set the defaults.
@@ -321,9 +336,11 @@
       }
       $.initBookmarkCollectionChoices($('#feed_item_hub_id').val());
       $.initHubFeedItemTagList($('#feed_item_hub_id').val(), feedItemId);
+      $.initHubFeedItemTagActionsList($('#feed_item_hub_id').val(), feedItemId);
       $('#feed_item_hub_id').change(function() {
         $.initBookmarkCollectionChoices($(this).val());
         $.initHubFeedItemTagList($(this).val(), feedItemId);
+        $.initHubFeedItemTagActionsList($('#feed_item_hub_id').val(), feedItemId);
         $.setEmptyDescriptionNotification();
       });
       $.setEmptyDescriptionNotification();
@@ -675,37 +692,63 @@ $(document).ready(function(){
     $.initEditor(this);
   });
 
-  if($('#logged_in, #bookmarklet-tag-controls-allowed').length > 0){
-    $('.add_input_source_control').live({
-      click: function(e){
-        e.preventDefault();
-        var remix_id = $(this).attr('republished_feed_id');
-        var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
-          var prepend = '';
-          var message = "<h2>Please enter the tag you'd like to add<h2>";
-          $(dialogNode).append(prepend + '<h2>' + message + '</h2><form method="post" action="/input_sources" accept-charset="UTF-8"><input type="hidden" value="' + $('[name=csrf-token]').attr('content') + '" name="authenticity_token"><input type="hidden" name="return_to" value="' + window.location+ '"><input type="text" id="new_tag_for_filter" name="input_source[item_source_attributes][name]" size="40" /><input type="hidden" value="ActsAsTaggableOn::Tag" name="input_source[item_source_attributes][type]" id="input_source_item_source_type"><input type="hidden" value="' + remix_id + '" name="input_source[republished_feed_id]" id="input_source_republished_feed_id"><input type="hidden" value="add" name="input_source[effect]" id="input_source_effect"></form>');        
-  $(dialogNode).dialog({
-            modal: true,
-            width: 600,
-            minWidth: 400,
-            height: 'auto',
-            title: '',
-            buttons: {
-              Cancel: function(){
-                $(dialogNode).dialog('close');
-                $(dialogNode).remove();
-              },
-              Submit: function(){
-                $('#new_tag_for_filter').parent('form').submit();
-                $(dialogNode).dialog('close');
-                $(dialogNode).remove();
-              }
-            }
-          });
-          return false;
-       }
-    });
+  $('#update-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').removeClass('hidden');
+      $('span#readonly-tag-description,a#update-tag-description').hide();
+    }
+  });
+  $('#apply-old-description').live({
+    click: function(e) {
+      var $link = $(this);
+      e.preventDefault();
+      $.ajax({
+        cache: false,
+        dataType: 'json',
+        url: $link.attr('href'),
+        type: 'post',
+        data: { description: $link.attr('data-old-value') },
+        success: function(data){
+          $('span#readonly-tag-description').html($link.attr('data-old-value')).removeClass('empty');
+          $('p.old-description,textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+          $('span#readonly-tag-description,a#update-tag-description').show();
+        },
+        error: function(data) {
+        }
+      });
+    }
+  });
+  $('#submit-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $.ajax({
+        cache: false,
+        dataType: 'json',
+        url: $(this).attr('href'),
+        type: 'post',
+        data: { description: $('textarea#tag-description').val() },
+        success: function(data){
+          if($('textarea#tag-description').val() != '') {
+            $('span#readonly-tag-description').html($('textarea#tag-description').val()).removeClass('empty');
+          }
+          $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+          $('span#readonly-tag-description,a#update-tag-description').show();
+        },
+        error: function(data) {
+        }
+      });
+    }
+  });
+  $('#cancel-tag-description').live({
+    click: function(e) {
+      e.preventDefault();
+      $('textarea#tag-description,a#submit-tag-description,a#cancel-tag-description').addClass('hidden');
+      $('span#readonly-tag-description,a#update-tag-description').show();
+    }
+  });
 
+  if($('#logged_in, #bookmarklet-tag-controls-allowed').length > 0){
     $('.add_filter_control').live({
       click: function(e){
         e.preventDefault();
@@ -713,6 +756,7 @@ $(document).ready(function(){
         var hub_id = $(this).attr('data_hub_id');
         var filter_type = $(this).attr('data_type');
         var filter_href = $(this).attr('href');
+        var forceConfirm = $(this).hasClass('force_confirm');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
           tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
@@ -773,15 +817,18 @@ $(document).ready(function(){
               },
               {
                 text: 'Submit',
+                type: 'submit',
                 click: function(){
-                  var replace_tag = undefined;
-                  if ($(this).find('#modify_tag_for_filter').length > 0){
-                    replace_tag = $(this).find('#modify_tag_for_filter').val();
+                  if(!forceConfirm || confirm('Are you sure you want to add a filter to all feed items?')) {
+                    var replace_tag = undefined;
+                    if ($(this).find('#modify_tag_for_filter').length > 0){
+                      replace_tag = $(this).find('#modify_tag_for_filter').val();
+                    }
+                    if ($(this).find('#supplement_tag_for_filter').length > 0){
+                      replace_tag = $(this).find('#supplement_tag_for_filter').val();
+                    }
+                    $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                   }
-                  if ($(this).find('#supplement_tag_for_filter').length > 0){
-                    replace_tag = $(this).find('#supplement_tag_for_filter').val();
-                  }
-                  $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
                   $(dialogNode).dialog('close');
                   $(dialogNode).remove();
                 },
@@ -789,6 +836,14 @@ $(document).ready(function(){
               }
             ]
           });
+
+          $('#new_tag_for_filter').on('keypress', function (event) {
+            // event 13 is the Enter/Return key
+            if (event.which === 13) {
+              dialogNode.parent().find('button:submit').click();
+            }
+          });
+
           return false;
         }
         $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'','');
@@ -895,5 +950,24 @@ $(document).ready(function(){
     }
   }
   
-  unescapeUrl();  
+  unescapeUrl();
+
+  $('.remove-suggestion-toggle').live('click', function(e) {
+    e.preventDefault();
+    var $link = $(this);
+    var hubId = $link.attr('data-hub-id');
+    $.ajax({
+      url: $.rootPath() + 'hubs/' + hubId + '/removed_tag_suggestion',
+      type: 'post',
+      data: { tag_id: $link.attr('data-tag-id'), remove: $link.find('span').hasClass('fa-eye-slash') },
+      success: (data) => {
+        $link.find('span').toggleClass('fa-eye fa-eye-slash');
+        if($link.find('span').hasClass('fa-eye')) {
+          $link.attr('title', 'Show on autocomplete');
+        } else {
+          $link.attr('title', 'Hide from autocomplete');
+        }
+      }
+    });
+  });
 });

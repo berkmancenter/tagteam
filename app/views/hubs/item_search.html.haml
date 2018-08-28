@@ -3,6 +3,11 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'items' }
 - content_for :tab_content do
+  .hub-item-view.row
+    .alter-views.col-md-12
+      Sort by:
+      - [{ key: 'Date tagged', default: 'desc' },{ key: 'Date published', default: 'desc' }].each do |option|
+        \#{sortable_link(option[:key], params[:sort] || 'Date tagged', params.has_key?(:sort) && params[:sort] == option[:key] ? params[:order] : option[:default], 'item_search_hub_path', { q: params[:q] })} 
   .nicely-padded
     %h1 Search
     = form_tag(item_search_hub_path(@hub), method: :get, id: 'hub_search_form') do
@@ -11,7 +16,7 @@
           = text_field_tag :q, params[:q], size: 50, placeholder: 'Search this hub', class: 'form-control'
           %span.input-group-btn
             = submit_tag('Search', class: 'btn btn-success')
-      - unless @search.blank? || @search.results.length == 0
+      - unless @modify_tag_filters.any? || @search.results.empty?
         = link_to('Permalink', item_search_hub_path(@hub, q: params[:q]))
 
         - if current_user.present?
@@ -20,7 +25,12 @@
             data_item_type: 'SearchRemix',
             title: "Choose the remix feed to add this search to",
             class: "dialog-show add_item_source_to_custom_republished_feed")
-    - if @search.blank? || @search.results.length == 0
+    - if @modify_tag_filters.any?
+      - if @modify_tag_filters.size > 1
+        %p.recommend-tag Tags <span>#{@modify_tag_filters.collect { |mf| mf.tag.name }.join(', ')}</span> have been deprecated. Search for these tags instead: #{link_to(@filtered_params, item_search_hub_path(@hub, q: @filtered_params)) }
+      - else
+        %p.recommend-tag <span>#{@modify_tag_filters.first.tag.name}</span> has been deprecated. Search for this instead: #{link_to(@filtered_params, item_search_hub_path(@hub, q: @filtered_params)) }
+    - elsif @search.results.empty?
       %h3 Nothing. Please try a different term.
     - else
       .row

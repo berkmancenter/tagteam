@@ -15,7 +15,7 @@ class TagFiltersController < ApplicationController
     breadcrumbs.add @hub_feed, hub_hub_feed_path(@hub, @hub_feed) if @hub_feed
     breadcrumbs.add @feed_item, hub_feed_item_path(@hub, @feed_item) if @feed_item
     respond_to do |format|
-      format.html { render template, layout: request.xhr? ? false : 'tabs' }
+      format.html { render controller_response[:template], layout: request.xhr? ? false : 'tabs' }
       format.json { render_for_api :default, json: @tag_filters }
       format.xml { render_for_api :default, xml: @tag_filters }
     end
@@ -37,9 +37,7 @@ class TagFiltersController < ApplicationController
                     [TagFilters::Create.run(tag_filter_params)]
                   else
                     new_tags = TagFilterHelper.split_tags(params[:new_tag], @hub)
-
                     new_tags -= @hub.deprecated_tag_names
-
                     new_tags.map do |tag|
                       TagFilters::Create.run(tag_filter_params.merge(new_tag_name: tag))
                     end
@@ -49,23 +47,25 @@ class TagFiltersController < ApplicationController
   end
 
   def destroy
-    @tag_filter.rollback_and_destroy_async(current_user)
+    # If scope is a single feed item, rollback and destroy immediately,
+    # else destroy asynchronously (default is asynchronous)
+    @tag_filter.rollback_and_destroy(current_user, !@tag_filter.scope_type == 'FeedItem')
 
-    flash[:notice] = 'Deleting that tag filter.'
+    flash[:notice] = @tag_filter.scope_type == 'FeedItem' ? 'Deleted that tag filter.' : 'Deleting that tag filter.'
 
-    redirect_back fallback_location: hub_tag_filters_path(@hub)
+    redirect_back fallback_location: controller_response[:redirection_path]
   end
 
   private
 
-  def template
+  def controller_response
     case @scope.class.name
     when 'Hub'
-      'hub_tag_filters/index'
+      { template: 'hub_tag_filters/index', redirection_path: hub_tag_filters_path(@hub) }
     when 'HubFeed'
-      'hub_feed_tag_filters/index'
+      { template: 'hub_feed_tag_filters/index', redirection_path: hub_feed_tag_filters_path(@hub, @scope) }
     when 'FeedItem'
-      'hub_feed_item_tag_filters/index'
+      { template:'hub_feed_item_tag_filters/index', redirection_path: hub_feed_item_tag_filters_path(@hub, @scope) }
     end
   end
 

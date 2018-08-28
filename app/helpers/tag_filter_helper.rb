@@ -6,9 +6,10 @@ module TagFilterHelper
       {
         role: :hub_tag_adder,
         data_type: 'AddTagFilter',
-        text: 'Add a tag to all items in this hub',
+        text: 'Add a tag to every item in this hub',
         icon: 'plus-circle',
-        button: 'success'
+        button: 'success',
+        extra_class: 'force_confirm'
       },
       {
         role: :hub_tag_deleter,

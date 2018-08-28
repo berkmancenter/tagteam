@@ -29,7 +29,7 @@ class ApplyTagFilters
       if item_ids.empty?
         filter.apply
       else
-        filter.apply(items: FeedItem.where(id: item_ids))
+        filter.apply(item_ids)
       end
     end
   end

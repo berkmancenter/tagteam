@@ -22,11 +22,17 @@
             label: "Ways you'd like to collaborate",
             required: false,
             hint: 'Please describe why you\'d like to collaborate in this hub in the field below.',
-            collection: ['Full rights to manage this hub',
-              'Add bookmarked items',
-              'Add new input RSS / Atom feeds',
-              'Create new feed remixes',
-              'Manage tag filters']
+            collection: ['Owner',
+              'Tagger',
+              'Feed remixer',
+              'Hub-wide tag filter adder',
+              'Hub-wide tag filter deleter',
+              'Hub-wide tag filter modifier',
+              'Hub-wide tag filter supplementer',
+              'Feed-wide tag filter manager',
+              'Item-level tag filter manager',
+              'Input feed manager',
+              'Statistics viewer']
           = f.input :message, as: :text, input_html: { rows: 8 }
         = f.actions do
           = f.action :submit, as: :button, label: 'Submit', button_html: { class: 'btn btn-primary' }

@@ -21,6 +21,9 @@ th, dt, b, strong, label {
 .navbar {
   font-weight: normal;
   margin-bottom: 0;
+  &.navbar-static-top {
+    z-index: 2;
+  }
 
   .welcome {
     color: $gray-lighter;
@@ -279,7 +282,8 @@ th, dt, b, strong, label {
   }
 }
 
-.tag {
+.tag,
+.feed-item-tags-actions-action-user {
   background: $gray-light;
   color: white;
   padding: 2px $padding-large-horizontal 4px;
@@ -294,6 +298,21 @@ th, dt, b, strong, label {
     text-decoration: none;
     background: $gray;
     color: white;
+  }
+}
+
+.recommend-tag {
+  background: $gray-lightish;
+  color: #222222;
+  padding: 2px $padding-large-horizontal 4px;
+  margin-top: 30px;
+  margin-right: 2px;
+  margin-left: 2px;
+  border-radius: 10px;
+  font-weight: normal;
+  line-height: 2.5em;
+  span {
+    color: #555555;
   }
 }
 
@@ -517,4 +536,30 @@ abbr[title="required"] {
 }
 .tab-layout .tab-content ul.nicely-padded.delimiter-list {
   margin-top: 5px;
+}
+
+span#readonly-tag-description {
+  margin-right: 5px;
+  &.empty {
+    opacity: 0.5;
+  }
+}
+textarea#tag-description {
+  width: 100%;
+}
+#update-tag-description,
+#cancel-tag-description,
+#submit-tag-dewscription {
+  .fa {
+    font-size: 14px;
+  }
+}
+
+.feed-item-tags-actions-action {
+  background-color: #EDEDED;
+  padding: 0px 5px;
+  margin-right: 10px;
+  display: inline-block;
+  margin-bottom: 7px;
+  border-radius: 6px;
 }

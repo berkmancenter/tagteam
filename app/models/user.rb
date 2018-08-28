@@ -3,10 +3,11 @@
 class User < ApplicationRecord
   acts_as_tagger
   has_many :hub_user_notifications
+  has_many :removed_tag_suggestions
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
+  devise :database_authenticatable, :registerable, :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :lockable
 
   # Virtual attribute for authenticating by either username or email
   attr_accessor :login
@@ -21,7 +22,19 @@ class User < ApplicationRecord
   validates :terms_of_service, acceptance: true
   validates :signup_reason, presence: true, unless: :auto_approved?, on: :create
   before_create do
-    self.approved = auto_approved?
+    # If a user is auto approved, send them the confirmation right away
+    # else wait to send them a confirmation until approved
+    if auto_approved?
+      self.approved = true
+    else
+      self.skip_confirmation_notification!
+      self.approved = false
+    end
+  end
+  after_update do
+    if self.approved_changed? && self.approved
+      self.send_confirmation_instructions
+    end
   end
 
   scope :unapproved, -> { where(approved: false) }
@@ -34,6 +47,7 @@ class User < ApplicationRecord
     string :first_name
     string :last_name
     string :url
+    boolean :approved
     time :confirmed_at
   end
 
@@ -150,6 +164,10 @@ class User < ApplicationRecord
 
   def superadmin?
     has_role?(:superadmin)
+  end
+
+  def removed_tag_suggestions_name
+    removed_tag_suggestions.joins(:tag).map{|removed_suggestion| removed_suggestion.tag.name }.uniq
   end
 
   protected

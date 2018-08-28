@@ -93,13 +93,8 @@ class BookmarkletsController < ApplicationController
             context: @hub.tagging_key
           )
         end
-
-        TaggingNotifications::ApplyTagFiltersWithNotification.perform_later(
-          @feed_item,
-          @hub,
-          current_user,
-          {}
-        )
+        TagFilter.apply_hub_filters(@hub, @feed_item)
+        TaggingNotifications::FeedItemNotification.perform_later(@feed_item, nil, @hub, current_user)
 
         @feed_item.reload.solr_index
 
@@ -131,6 +126,7 @@ class BookmarkletsController < ApplicationController
     @mini_title = 'Add to TagTeam'
 
     url = params[:feed_item].blank? ? nil : params[:feed_item][:url]
+    require 'urls_stripper'
     stripped_url = UrlsStripper.remove_trackers_hashs_from_url(url)
     @feed_item = FeedItem.find_or_initialize_by(url: stripped_url)
 

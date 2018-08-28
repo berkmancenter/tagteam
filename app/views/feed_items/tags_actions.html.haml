@@ -1,0 +1,16 @@
+- @actions.each do |username, user_actions|
+  .feed-item-tags-actions-user-actions
+    = link_to(username, hub_user_hub_items_path(@hub, username), class: 'feed-item-tags-actions-action-user')
+    - user_actions.each do |action|
+      %span.feed-item-tags-actions-action
+        - if action[:type] == 'added'
+          added
+          = tag_display(action[:tag], hub: @hub, hub_feed_item: @feed_item)
+        - elsif action[:type] == 'modified'
+          changed
+          = tag_display(action[:tag], hub: @hub, hub_feed_item: @feed_item)
+          to
+          = tag_display(action[:new_tag], hub: @hub, hub_feed_item: @feed_item)
+        - elsif action[:type] == 'deleted'
+          deleted
+          = tag_display(action[:tag], hub: @hub, hub_feed_item: @feed_item)

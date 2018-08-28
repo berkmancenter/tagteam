@@ -1,10 +1,11 @@
 #bookmarklet-tag-controls-allowed
 .page-header
-  %ul.nav.nav-pills.pull-right{:role => "tablist"}
-    %li.active{:role => "presentation"}
-      %a{"data-toggle" => "tab", :href => "#basics"} Basics
-    %li{:role => "presentation"}
-      %a{"data-toggle" => "tab", :href => "#advanced"} Advanced
-  - unless @mini_title.blank?
+  - if @mini_title.present?
     %h1= fa_icon 'bolt', text: @mini_title
-= render :partial => 'shared/forms/feed_item_bookmarklet'
+= render partial: 'shared/forms/feed_item_bookmarklet'
+.basic-advance-option
+  %ul.nav.nav-pills.text-center{ role: 'tablist' }
+    %li.active{ role: 'presentation' }
+      %a{ 'data-toggle': 'tab', href: '#basics' } Basics
+    %li{ role: 'presentation' }
+      %a{ 'data-toggle': 'tab', href: '#advanced' } Advanced

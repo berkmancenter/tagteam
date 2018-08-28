@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
   caches_action :statistics, expires_in: 6.hours
@@ -49,6 +49,7 @@ class HubsController < ApplicationController
     :request_rights,
     :remove_delimiter,
     :remove_roles,
+    :removed_tag_suggestion,
     :retrievals,
     :show,
     :tag_controls,
@@ -69,7 +70,6 @@ class HubsController < ApplicationController
     :scoreboard
   ]
 
-  before_action :set_feed_items, only: :items
   before_action :store_feed_visitor, only: :items
   before_action :add_breadcrumbs, only: %i[
     about
@@ -107,7 +107,7 @@ class HubsController < ApplicationController
     # ---
     'username' => ->(rel) { rel.sort_by { |hf| hf.owners.any? ? hf.owners.first.username.downcase : 'ZZZ' } }, ## Force sort at end if missing username
     'date started' => ->(rel) { rel.order('hub_feeds.created_at') },
-    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.most_recent_tagging } },
+    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.feed_items.any? ? r.feed_items.first.updated_at : r.feed.updated_at } },
     'number of items' => -> (rel) { rel.sort_by { |hf| hf.feed.feed_items.count } },
     # ---
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
@@ -441,6 +441,15 @@ class HubsController < ApplicationController
 
   # A paginated list of all items in this hub. Available as html, atom, rss, json, and xml.
   def items
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @feed_items =
+      @hub
+      .feed_items
+      .order("feed_items.#{sort} #{order}")
+      .group(:id)
+      .paginate(page: params[:page], per_page: get_per_page)
+
     respond_to do |format|
       format.html do
         @show_auto_discovery_params = items_hub_url(@hub, format: :rss) if @hub.present?
@@ -496,6 +505,20 @@ class HubsController < ApplicationController
         render layout: !request.xhr?
       end
     end
+  end
+
+  def removed_tag_suggestion
+    authorize @hub
+
+    if params[:remove] == 'true'
+      removed_tag_suggestions = ActsAsTaggableOn::Tag.where(id: params[:tag_id]).map do |tag|
+        RemovedTagSuggestion.create(tag: tag, hub_id: @hub.id, user_id: current_user.id)
+      end
+    else
+      RemovedTagSuggestion.where(tag_id: params[:tag_id], hub_id: @hub.id).destroy_all
+    end
+
+    render json: {}
   end
 
   def add_feed
@@ -694,10 +717,18 @@ class HubsController < ApplicationController
     hub_id = @hub.id
     tagging_key = @hub.tagging_key
 
+    sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
+    order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @modify_tag_filters = params[:q].gsub(/^#/, '').split(/\s/).delete_if { |b| !b.present? }.map do |tag_name|
+      ModifyTagFilter.find_recursive(@hub.id, tag_name)
+    end.compact
+    @filtered_params = params[:q].dup
+    @modify_tag_filters.each { |mf| @filtered_params.gsub!(/#{mf.tag.name}/, mf.new_tag.name) }
+
     @search = FeedItem.search do
       with :hub_ids, hub_id
       paginate page: params[:page], per_page: get_per_page
-      order_by(:date_published, :desc)
+      order_by(sort.to_sym, order.to_sym)
       unless params[:q].blank?
         fulltext params[:q].split('+').join('+ ')
         adjust_solr_params do |params|
@@ -803,7 +834,7 @@ class HubsController < ApplicationController
       user: current_user
     )
 
-    if (add_filter.nil? || add_filter.rollback_and_destroy_async(current_user)) && deprecation_filter.valid?
+    if (add_filter.nil? || add_filter.rollback_and_destroy(current_user)) && deprecation_filter.valid?
       if request.xhr?
         render(html: 'Successfully deprecated.', layout: false)
       else
@@ -840,8 +871,8 @@ class HubsController < ApplicationController
     removed_filters = TagFilter.where(removed_params)
     replaced_filters = TagFilter.where(replaced_params)
 
-    removed_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
-    replaced_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+    removed_filters.map { |filter| filter.rollback_and_destroy(current_user) }
+    replaced_filters.map { |filter| filter.rollback_and_destroy(current_user) }
 
     if request.xhr?
       render(html: 'Successfully undeprecated.', layout: false)
@@ -890,11 +921,6 @@ class HubsController < ApplicationController
   end
 
   def set_feed_items
-    @feed_items =
-      @hub
-      .feed_items
-      .order(date_published: :desc, id: :desc)
-      .paginate(page: params[:page], per_page: get_per_page)
   end
 
   def store_feed_visitor
