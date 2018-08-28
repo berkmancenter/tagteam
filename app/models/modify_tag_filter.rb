@@ -98,7 +98,7 @@ class ModifyTagFilter < TagFilter
     tag = ActsAsTaggableOn::Tag.find_by_name_normalized(tag_name)
     return filter if tag.nil?
 
-    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
+    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id).where.not(type: 'SupplementTagFilter')
     return filter if new_filter.empty?
 
     find_recursive(hub_id, new_filter.first.new_tag.name, new_filter.first)

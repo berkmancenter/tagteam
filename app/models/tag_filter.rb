@@ -186,7 +186,7 @@ class TagFilter < ApplicationRecord
         filter.apply([feed_item.id])
         applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
         applied_tag_ids << filter.new_tag_id
-      elsif filter.type == 'SupplementTagFilter' && applied_tag_ids.include?(filter.tag_id)
+      elsif filter.type == 'SupplementTagFilter' && applied_tag_ids.include?(filter.tag_id) && !applied_tag_ids.include?(filter.new_tag_id)
         filter.apply([feed_item.id])
         applied_tag_ids << filter.new_tag_id
       elsif filter.type == 'AddTagFilter'
@@ -200,7 +200,7 @@ class TagFilter < ApplicationRecord
     tag = ActsAsTaggableOn::Tag.find_by_name_normalized(tag_name)
     return filter if tag.nil?
 
-    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
+    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id).where.not(type: 'SupplementTagFilter')
     return filter if new_filter.empty?
     return new_filter.first if new_filter.first.type == 'DeleteTagFilter'
 
