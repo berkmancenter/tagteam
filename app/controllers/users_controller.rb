@@ -183,8 +183,8 @@ class UsersController < ApplicationController
   end
 
   def set_home_url
-    @home_url = @tag ? hub_user_tags_name_path(@hub, @user.username, @tag.name) :
-      hub_user_hub_items_path(@hub, @user.username)
+    @home_url = @tag ? hub_user_tags_name_url(@hub, @user.username, @tag.name) :
+      hub_user_hub_items_url(@hub, @user.username)
   end
 
   def load_feed_items

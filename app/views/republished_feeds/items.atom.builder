@@ -6,10 +6,8 @@ atom_feed(:root_url => hub_republished_feed_url(@hub,@republished_feed), :langua
     unless @republished_feed.item_search.nil?
         @republished_feed.item_search.results.each do |item|
             atom.entry( item , :url => item.url ) do |entry|
-                unless item.authors.blank?
-                    entry.author do |author|
-                        author.name item.authors
-                    end
+                entry.author do |author|
+                  author.name item.authors || ''
                 end
                 unless item.contributors.blank?
                     entry.contributor do |contributor|

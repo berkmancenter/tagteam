@@ -26,4 +26,15 @@ module HubsHelper
   def items_feed_titles(item, hub)
     item.feeds.where(id: hub.feeds.pluck(:id)).map(&:title).join(', ')
   end
+
+  def valid_url?(url)
+    uri = URI.parse(url)
+    uri.is_a?(URI::HTTP) && !uri.host.nil?
+  rescue URI::InvalidURIError
+    false
+  end
+
+  def valid_email?(email)
+    /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/.match(email)
+  end
 end
