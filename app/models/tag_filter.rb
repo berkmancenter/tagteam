@@ -176,13 +176,26 @@ class TagFilter < ApplicationRecord
     hub_feed = hub.hub_feed_for_feed_item(feed_item)
     filters = TagFilter.where("(scope_type = 'Hub' AND scope_id = #{hub.id}) OR (scope_type = 'HubFeed' AND scope_id = #{hub_feed.id})").order("created_at ASC")
     applied_tag_ids = ActsAsTaggableOn::Tagging.where(taggable_id: feed_item.id).where("context <= 'hub_#{hub.id}'").map(&:tag_id)
+    applied_tags = ActsAsTaggableOn::Tag.where(id: applied_tag_ids)
+
     filters.each do |filter|
       # apply tag filter if item has tag for certain filter types
       # apply tag filter for all AddTagFilters
       if filter.type == 'DeleteTagFilter' && applied_tag_ids.include?(filter.tag_id)
         filter.apply([feed_item.id])
         applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
-      elsif filter.type == 'ModifyTagFilter' && applied_tag_ids.include?(filter.tag_id)
+      elsif filter.type == 'ModifyTagFilter'
+        filter_tag_name = ActsAsTaggableOn::Tag.find(filter.tag_id).name
+        if filter_tag_name.include?('*')
+          queried_tag_name = filter_tag_name.tr('*', '%')
+          filter_applied_tags = applied_tags
+                                .where('name LIKE ?', queried_tag_name)
+
+          next if filter_applied_tags.count.zero?
+        else
+          next unless applied_tag_ids.include?(filter.tag_id)
+        end
+
         filter.apply([feed_item.id])
         applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
         applied_tag_ids << filter.new_tag_id
