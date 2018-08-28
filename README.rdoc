@@ -95,4 +95,4 @@ TagTeam is licensed under the AGPL
 
 == Performance Monitoring
 
-[![View performance data on Skylight](https://badges.skylight.io/status/M7Po69KatXyB.svg?token=3JeDBjiwdf1D1dBRbQOqoMnB9BrUjajtvvQXwOTlvXc)](https://www.skylight.io/app/applications/M7Po69KatXyB)
+[View performance data on Skylight](https://www.skylight.io/app/applications/M7Po69KatXyB)
