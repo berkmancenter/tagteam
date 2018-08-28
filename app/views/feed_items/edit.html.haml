@@ -1,6 +1,10 @@
 - content_for :top_panel do
   .col-sm-12
-    %h1= @feed_item.title
+    %h1
+      = @feed_item.title
+      - unless current_user.nil?
+        = link_to controls_hub_feed_feed_item_path(@hub_feed, @feed_item), class: 'control', title: 'Item actions' do
+          = fa_icon 'cog'
     %h4
       = @hub_feed.feed.title
       = @feed_item.created_at.strftime('%F')
