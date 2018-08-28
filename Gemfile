@@ -36,7 +36,7 @@ gem 'sanitize', '~> 4.6'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.1'
 gem 'sinatra', '~> 2.0', require: false
-gem 'sprockets', '~> 3.7'
+gem 'sprockets', '~> 3.7.2'
 # TODO: resolve errors when upgrading sunspot_rails/sunspot_solr from these pinned versions
 gem 'sunspot_rails', '2.2.7' # @drg frozen
 gem 'sunspot_solr', '2.2.0' # @drg frozen
