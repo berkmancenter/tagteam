@@ -214,6 +214,12 @@ class HubPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  def leave?
+    return false if user.blank?
+
+    user.has_roles_for?(record)
+  end
+
   private
 
   def owner_or_admin?

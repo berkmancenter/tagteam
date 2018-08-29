@@ -167,6 +167,22 @@ class UsersController < ApplicationController
     redirect_to user_path
   end
 
+  def selfremove
+    authorize current_user
+
+    outcome = Users::SelfRemove.run(user: current_user)
+
+    if outcome.valid?
+      flash[:notice] = 'You have been removed from the site.'
+
+      redirect_to root_path
+    else
+      flash[:error] = outcome.errors.full_messages.join(' and ')
+
+      redirect_to edit_user_registration_path
+    end
+  end
+
   private
 
   def load_user
