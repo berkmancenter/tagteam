@@ -959,13 +959,13 @@ $(document).ready(function(){
     $.ajax({
       url: $.rootPath() + 'hubs/' + hubId + '/removed_tag_suggestion',
       type: 'post',
-      data: { tag_id: $link.attr('data-tag-id'), remove: $link.find('span').hasClass('fa-eye-slash') },
+      data: { tag_id: $link.attr('data-tag-id'), remove: $link.find('span').hasClass('fa-eye') },
       success: (data) => {
         $link.find('span').toggleClass('fa-eye fa-eye-slash');
-        if($link.find('span').hasClass('fa-eye')) {
-          $link.attr('title', 'Show on autocomplete');
+        if($link.find('span').hasClass('fa-eye-slash')) {
+          $link.attr('title', 'Click to include this tag in the autocomplete tag list.');
         } else {
-          $link.attr('title', 'Hide from autocomplete');
+          $link.attr('title', 'Click to exclude this tag from the autocomplete tag list.');
         }
       }
     });
