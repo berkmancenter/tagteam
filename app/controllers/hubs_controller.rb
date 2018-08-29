@@ -23,7 +23,8 @@ class HubsController < ApplicationController
     :retrievals,
     :search,
     :show,
-    :scoreboard
+    :scoreboard,
+    :leave
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
@@ -67,7 +68,8 @@ class HubsController < ApplicationController
     :deprecate_tag,
     :undeprecate_tag,
     :unsubscribe_feed,
-    :scoreboard
+    :scoreboard,
+    :leave
   ]
 
   before_action :store_feed_visitor, only: :items
@@ -894,6 +896,20 @@ class HubsController < ApplicationController
     end
 
     redirect_to settings_hub_path(@hub)
+  end
+
+  def leave
+    authorize @hub
+
+    outcome = Hubs::Leave.run(hub: @hub, user: current_user)
+
+    if outcome.valid?
+      flash[:notice] = 'You have been removed from the hub.'
+    else
+      flash[:error] = outcome.errors.full_messages.join(' and ')
+    end
+
+    redirect_to request.referer
   end
 
   private

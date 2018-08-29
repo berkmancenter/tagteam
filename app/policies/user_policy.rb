@@ -77,6 +77,12 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def selfremove?
+    return false if user.blank?
+
+    true
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       return User.none if user.blank?

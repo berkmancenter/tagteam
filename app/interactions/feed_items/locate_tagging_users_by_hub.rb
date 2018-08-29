@@ -14,7 +14,13 @@ module FeedItems
         context: "hub_#{hub.id}"
       )
 
-      User.find(taggings.pluck(:tagger_id))
+      taggers = User.find(taggings.pluck(:tagger_id))
+
+      # Remove users that tagged the item, but are not subscribed to the hub
+      # anymore
+      taggers.select! { |tagger| tagger.subscribed_to_hub?(hub) }
+
+      taggers
     end
   end
 end

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     get 'search/autocomplete'
+    post 'selfremove'
   end
 
   post 'bookmarklets/add_item'
@@ -135,6 +136,7 @@ Rails.application.routes.draw do
       post 'deprecate_tag'
       post 'undeprecate_tag'
       delete 'remove_delimiter'
+      post 'leave'
     end
 
     collection do

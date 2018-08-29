@@ -170,6 +170,10 @@ class User < ApplicationRecord
     removed_tag_suggestions.joins(:tag).map{|removed_suggestion| removed_suggestion.tag.name }.uniq
   end
 
+  def subscribed_to_hub?(hub)
+    has_roles_for?(hub)
+  end
+
   protected
 
   def gen_role_cache
