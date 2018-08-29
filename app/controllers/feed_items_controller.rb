@@ -186,10 +186,12 @@ class FeedItemsController < ApplicationController
       redirect_after_move_copy(@hub_feed, @feed_item)
     end
 
-    FeedItems::CopyToHub.run!(
+    FeedItems::CopyMoveToHub.run!(
       current_user: current_user,
       feed_item: @feed_item,
-      hub: hub
+      from_hub_feed: @hub_feed,
+      to_hub: hub,
+      action_type: 'copy'
     )
 
     flash[:notice] = 'Item successfully copied to the hub.'
@@ -213,11 +215,12 @@ class FeedItemsController < ApplicationController
       redirect_after_move_copy(@hub_feed, @feed_item)
     end
 
-    FeedItems::MoveToHub.run!(
+    FeedItems::CopyMoveToHub.run!(
       current_user: current_user,
       feed_item: @feed_item,
       from_hub_feed: @hub_feed,
-      to_hub: to_hub
+      to_hub: to_hub,
+      action_type: 'move'
     )
 
     flash[:notice] = 'Item successfully moved from the hub.'
