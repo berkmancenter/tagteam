@@ -24,7 +24,7 @@ class TagsController < ApplicationController
 
   # Autocomplete ActsAsTaggableOn::Tag results for a Hub as json.
   def autocomplete
-    deprecated_tags_names = @hub.deprecated_tags.pluck(:name)
+    deprecated_tag_names = @hub.deprecated_tag_names
 
     tags_applied = params.has_key?(:tags_applied) ? params[:tags_applied].split(', ') : []
 
@@ -37,7 +37,7 @@ class TagsController < ApplicationController
     if @hub.settings[:suggest_only_approved_tags]
       approved_tags = @hub
                      .hub_approved_tags
-                     .where.not(tag: deprecated_tags_names)
+                     .where.not(tag: deprecated_tag_names)
                      .pluck(:tag)
 
       result = ActsAsTaggableOn::Tag
@@ -51,27 +51,23 @@ class TagsController < ApplicationController
       count = ActsAsTaggableOn::Tag
               .select('DISTINCT(tags.id)')
               .left_joins(:taggings)
-              .where.not(name: deprecated_tags_names)
+              .where.not(name: deprecated_tag_names)
               .where('name LIKE \'' + params[:term] + '%\'')
               .where(name: approved_tags)
               .count
     else
-      tag_ids = Rails.cache.fetch("all-tag-ids-#{@hub.id}", expires_in: 1.hour) do
-        FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
-      end
-      remove_suggested = RemovedTagSuggestion.where(hub_id: @hub.id).map { |rts| rts.tag.name }
+      tag_ids = FeedItem.joins(:hubs, :taggings).where(hubs: { id: @hub.id }).pluck('taggings.tag_id').uniq
+      exclude_tag_names = RemovedTagSuggestion.where(hub_id: @hub.id).map { |rts| rts.tag.name } + deprecated_tag_names
 
       result = ActsAsTaggableOn::Tag
                .left_joins(:taggings)
-               .where.not(name: deprecated_tags_names)
-               .where.not(name: remove_suggested)
+               .where.not(name: exclude_tag_names)
                .where('name LIKE \'' + params[:term] + '%\'')
                .where(id: tag_ids)
                .group(:id)
                .order('COUNT(taggings.id) DESC')
       count = result.length
     end
-
     respond_to do |format|
       format.json do
         # Should probably change this to use render_for_api
