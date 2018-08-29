@@ -329,6 +329,10 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.2)
       tilt (~> 2.0)
+    skylight (2.0.2)
+      skylight-core (= 2.0.2)
+    skylight-core (2.0.2)
+      activesupport (>= 4.2.0)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
@@ -450,6 +454,7 @@ DEPENDENCIES
   shoulda-matchers (~> 3.1)
   sidekiq (~> 5.1)
   sinatra (~> 2.0)
+  skylight
   spring (~> 2.0)
   spring-commands-rspec (~> 1.0)
   spring-commands-rubocop (~> 0.2)
