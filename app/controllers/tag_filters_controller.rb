@@ -33,7 +33,7 @@ class TagFiltersController < ApplicationController
 
     # Allow multiple TagFilters to be created from a comma-separated string of tags
     params[:new_tag] = params[:new_tag].split(',').join('.')
-    tag_filters = if params[:new_tag].empty?
+    tag_filter_interactions = if params[:new_tag].empty?
                     [TagFilters::Create.run(tag_filter_params)]
                   else
                     new_tags = TagFilterHelper.split_tags(params[:new_tag], @hub)
@@ -43,6 +43,7 @@ class TagFiltersController < ApplicationController
                     end
                   end
 
+    tag_filters = tag_filter_interactions.map(&:result)
     tag_filters.all?(&:valid?) ? process_successful_create(tag_filters) : process_failed_create(tag_filters)
   end
 
@@ -122,7 +123,7 @@ class TagFiltersController < ApplicationController
     render plain: notice, layout: !request.xhr?
   end
 
-  def process_failed_create
+  def process_failed_create(tag_filters)
     flash[:error] = t('tag_filters.errors_when_adding', count: tag_filters.size)
 
     errors = tag_filters.map { |tag_filter| tag_filter.errors.full_messages.join('<br/>') }
