@@ -37,7 +37,7 @@
         .nicely-padded
           = render partial: 'shared/paginate', locals: { results: @search.results }
           %h2
-            Items: #{@search.total} total
+            Items: #{@search.results.size} total
         %ul.hub.list-unstyled
           - @search.results.each do|r|
             = render partial: 'feed_items/list_item', as: :feed_item, object: r
