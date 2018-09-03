@@ -41,7 +41,7 @@ module TagsHelper
     end
 
     if options[:allow_remove].present?
-      if hub_filter_possible?(:delete, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
+      if hub_filter_possible?(:add, params, current_user) || feed_filter_possible?(params, current_user) || item_filter_possible?(params, current_user)
         remove_tag_link = link_to_tag_filter(
           fa_icon('times', class: 'tag-remover'),
           'Delete',
