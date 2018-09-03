@@ -28,7 +28,8 @@ $(function () {
           ajaxPath: $.rootPath() + 'hubs/' + hubId + '/tag_controls/?tag_id=' + tagId + '&hub_feed_id=' + hubFeedId + '&hub_feed_item_id=' + hubFeedItemId,
           trigger: 'none',
           closeWhenOthersOpen: true,
-          clickAnywhereToClose: true
+          clickAnywhereToClose: true,
+          positions: ['left', 'right', 'bottom', 'top']
         })
 
         $(this).btOn()
