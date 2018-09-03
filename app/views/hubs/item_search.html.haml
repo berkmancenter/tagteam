@@ -16,6 +16,19 @@
           = text_field_tag :q, params[:q], size: 50, placeholder: 'Search this hub', class: 'form-control'
           %span.input-group-btn
             = submit_tag('Search', class: 'btn btn-success')
+      .search-date-range-elements
+        .search-date-range-element
+          %span.form-label
+            %span.control-label
+              Date tagged
+          = text_field_tag :last_updated_from, params[:last_updated_from], class: 'datepicker form-control', placeholder: 'from'
+          = text_field_tag :last_updated_to, params[:last_updated_to], class: 'datepicker form-control', placeholder: 'to'
+        .search-date-range-element
+          %span.form-label
+            %span.control-label
+              Date published
+          = text_field_tag :date_published_from, params[:date_published_from], class: 'datepicker form-control', placeholder: 'from'
+          = text_field_tag :date_published_to, params[:date_published_to], class: 'datepicker form-control', placeholder: 'to'
       - unless @modify_tag_filters.any? || @search.results.empty?
         = link_to('Permalink', item_search_hub_path(@hub, q: params[:q]))
 
