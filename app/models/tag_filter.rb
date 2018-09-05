@@ -16,7 +16,8 @@ class TagFilter < ApplicationRecord
   validates :tag_id, presence: true
   validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
   validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id, :type],
-                                   message: 'Filter conflicts with existing filter.' }
+                                   message: 'Filter conflicts with existing filter.' },
+    unless: Proc.new { |tag_filter| Rails.logger.warn "stephie here: #{tag_filter.inspect}"; tag_filter.type == 'SupplementTagFilter' }
 
   attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,
                   :applied
