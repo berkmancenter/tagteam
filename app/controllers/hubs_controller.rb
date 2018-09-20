@@ -727,8 +727,32 @@ class HubsController < ApplicationController
     @filtered_params = params[:q].dup
     @modify_tag_filters.each { |mf| @filtered_params.gsub!(/#{mf.tag.name}/, mf.new_tag.name) }
 
+    date_params = [
+      {
+        param: :last_updated,
+        param_from: :last_updated_from,
+        param_to: :last_updated_to,
+      },
+      {
+        param: :date_published,
+        param_from: :date_published_from,
+        param_to: :date_published_to,
+      }
+    ]
+
     @search = FeedItem.search do
       with :hub_ids, hub_id
+      date_params.each do |date_param|
+        if !params[date_param[:param_from]].present? && params[date_param[:param_to]].present?
+          with(date_param[:param]).less_than Date.strptime(params[date_param[:param_to]], '%m/%d/%Y').to_date
+        end
+        if params[date_param[:param_from]].present? && !params[date_param[:param_to]].present?
+          with(date_param[:param]).greater_than Date.strptime(params[date_param[:param_from]], '%m/%d/%Y').to_date
+        end
+        if params[date_param[:param_from]].present? && params[date_param[:param_to]].present?
+          with(date_param[:param]).between Date.strptime(params[date_param[:param_from]], '%m/%d/%Y').to_date..Date.strptime(params[date_param[:param_to]], '%m/%d/%Y').to_date
+        end
+      end
       paginate page: params[:page], per_page: get_per_page
       order_by(sort.to_sym, order.to_sym)
       unless params[:q].blank?

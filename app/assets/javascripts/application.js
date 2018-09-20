@@ -871,19 +871,6 @@ $(document).ready(function(){
     }
   });
 
-  if($('.ui-widget-content').length > 0){
-    $('#hub_search_form,#hub_tag_search_form').live({
-      submit: function(e){
-        e.preventDefault();
-        $(this).ajaxSubmit({
-          success: function(html){
-            $('#hub_search_form').closest('.ui-widget-content').html(html);
-          }
-        });
-      }
-    });
-  }
-
   $.observeDialogShow('.dialog-show');
 
   $('a.add_item_source_to_custom_republished_feed,a.remove_item_source_from_custom_republished_feed').live({
