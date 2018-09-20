@@ -413,7 +413,6 @@ jQuery.bt = {version: '0.9.5-rc1'};
             }
           }
         }
-  alert
         // horizontal (left) offset for the box
         var horiz = left + ((width - textOutWidth) * .5);
         // vertical (top) offset for the box
