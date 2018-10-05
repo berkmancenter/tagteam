@@ -31,7 +31,7 @@ gem 'protected_attributes_continued', '~> 1.3' # TODO: switch to strong paramete
 gem 'pundit', '~> 1.1'
 gem 'rails', '~> 5.1.0' # @drg frozen
 gem 'rails-observers', '~> 0.1'
-gem 'recaptcha'
+gem 'recaptcha', '~> 4.12'
 gem 'redis-namespace', '~> 1.6'
 gem 'sanitize', '~> 4.6'
 gem 'sass-rails', '~> 5.0'
@@ -81,7 +81,7 @@ group :test do
   gem 'headless', '~> 2.3'
   gem 'launchy', '~> 2.4'
   gem 'pundit-matchers', '~> 1.6'
-  gem 'rails-controller-testing', '~> 1.0.2'
+  gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-client', '~> 1.2'
   gem 'selenium-webdriver', '~> 3.12'
   gem 'shoulda-matchers', '~> 3.1'
