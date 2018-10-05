@@ -448,9 +448,9 @@ DEPENDENCIES
   pundit (~> 1.1)
   pundit-matchers (~> 1.6)
   rails (~> 5.1.0)
-  rails-controller-testing (~> 1.0.2)
+  rails-controller-testing (~> 1.0)
   rails-observers (~> 0.1)
-  recaptcha
+  recaptcha (~> 4.12)
   redis-namespace (~> 1.6)
   rspec-rails (~> 3.7)
   rubocop (~> 0.57)
