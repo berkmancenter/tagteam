@@ -36,8 +36,8 @@ gem 'sanitize', '~> 4.6'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.1'
 gem 'sinatra', '~> 2.0', require: false
-gem 'skylight'
-gem 'sprockets', '~> 3.7.2'
+gem 'skylight', '~> 2.0'
+gem 'sprockets', '~> 3.7'
 # TODO: resolve errors when upgrading sunspot_rails/sunspot_solr from these pinned versions
 gem 'sunspot_rails', '2.2.7' # @drg frozen
 gem 'sunspot_solr', '2.2.0' # @drg frozen
@@ -54,7 +54,7 @@ group :development do
   gem 'haml_lint', '~> 0.27'
   gem 'listen', '~> 3.1'
   gem 'rubocop', '~> 0.57'
-  gem 'rubocop-rspec', '~> 1.26'
+  gem 'rubocop-rspec', '~> 1.27'
   gem 'spring', '~> 2.0'
   gem 'spring-commands-rspec', '~> 1.0'
   gem 'spring-commands-rubocop', '~> 0.2'
