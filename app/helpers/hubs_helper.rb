@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module HubsHelper
+  include Recaptcha::ClientHelper
+
   def limit_html(html, limit)
     require 'nokogiri'
     html = html[0..limit]
