@@ -6,7 +6,7 @@ class ModifyTagFilter < TagFilter
   validate :new_tag_id do
     terminating_tag_filter = ModifyTagFilter.find_recursive(self.hub_id, self.new_tag.name)
     if terminating_tag_filter.present? && terminating_tag_filter.new_tag.name == self.tag.name
-      errors.add(:new_tag_id, " can't create an infinite loop of tag filters")
+      errors.add(:base, "New filter can't create an infinite loop of tag filters")
     end
     if new_tag_id == tag_id
       errors.add(:new_tag_id, " can't be the same as the original tag")
