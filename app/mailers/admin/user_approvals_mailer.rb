@@ -13,12 +13,6 @@ module Admin
       )
     end
 
-    def notify_user_of_approval(user)
-      @user = user
-
-      mail(to: user.email, subject: 'TagTeam: Signup approved')
-    end
-
     def notify_user_of_denial(email)
       mail(to: email, subject: 'TagTeam: Signup denied')
     end
