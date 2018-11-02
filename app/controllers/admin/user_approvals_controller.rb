@@ -21,8 +21,7 @@ module Admin
       flash[:notice] = "Access for #{@user.email} has been approved."
 
       @user.update!(approved: true)
-
-      UserApprovalsMailer.notify_user_of_approval(@user).deliver_later
+      @user.send_confirmation_instructions
 
       redirect_to action: :index
     end

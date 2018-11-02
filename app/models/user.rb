@@ -31,11 +31,6 @@ class User < ApplicationRecord
       self.approved = false
     end
   end
-  after_update do
-    if self.approved_changed? && self.approved
-      self.send_confirmation_instructions
-    end
-  end
 
   scope :unapproved, -> { where(approved: false) }
   scope :superadmin, -> { joins(:roles).where('roles.name = ?', :superadmin).distinct }

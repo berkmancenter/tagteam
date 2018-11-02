@@ -16,7 +16,7 @@ module Users
     private
 
     def notify_for_resource?(resource)
-      resource.persisted? && !resource.edu_email?
+      resource.persisted? && !resource.approved
     end
 
     def set_setting
