@@ -48,6 +48,14 @@ TagTeam is a fairly traditional rails 5.0 app that needs a java daemon and redis
 * rake sunspot:solr:start
 * Start sidekiq (bundle exec sidekiq) to run scheduled tasks
 
+== Development
+
+The only thing you need is Docker (https://docs.docker.com/install/).
+
+* Install Docker
+* Run "docker-compose up" and wait until it sets up everything
+* The app will be available on "http://localhost:8888"
+
 == Caching
 
 Most of TagTeam is action cached for non-authenticated users, and sometimes for users without administrative rights. The default cache time is 15 minutes, and the file-based cache is expired via the cron jobs articulated above. Feel free to switch the caching backend, but honestly if you're not clustering and have a moderately fast disk subsystem there's almost no point. "rake tmp:clear" can be your cache-clearing sledgehammer, of course.
