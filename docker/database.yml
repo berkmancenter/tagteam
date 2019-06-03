@@ -38,6 +38,9 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
+  host: postgres
+  user: docker
+  password: docker
   database: tagteam_test
   pool: 5
 
