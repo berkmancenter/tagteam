@@ -6,5 +6,5 @@ cp -n config/tagteam.yml.example config/tagteam.yml
 
 bundle exec rake db:migrate
 bundle exec rake sunspot:solr:start
-sidekiq -C config/sidekiq.yml -L log/sidekiq.log -d -e development
-rails server --binding 0.0.0.0 --port 3000
+bundle exec sidekiq -C config/sidekiq.yml -L log/sidekiq.log -d -e development
+bundle exec rails server --binding 0.0.0.0 --port 3000
