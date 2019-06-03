@@ -54,7 +54,7 @@ The only thing you need is Docker (https://docs.docker.com/install/).
 
 * Install Docker
 * Run "docker-compose up" and wait until it sets up everything
-* The app will be available on "http://localhost:8888"
+* The app will be available on "http://localhost:3000"
 
 == Caching
 
