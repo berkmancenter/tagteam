@@ -12,10 +12,6 @@ RUN apt-get update && apt-get install -y build-essential nodejs bash \
 RUN mkdir /app
 WORKDIR /app
 
-COPY . .
-COPY docker/start_dev.sh .
-# capybara-webkit needs it
-ENV PATH /usr/lib/qt5/bin:$PATH
-RUN bundle install
+COPY . /app
 
-CMD ["/bin/bash", "start_dev.sh"]
+CMD ["/bin/bash", "docker/start_dev.sh"]
