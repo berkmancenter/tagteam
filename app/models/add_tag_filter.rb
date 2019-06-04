@@ -2,8 +2,12 @@
 
 class AddTagFilter < TagFilter
   def apply(item_ids = [])
-    items = item_ids.any? ? FeedItem.find(item_ids) :
-      scope.taggable_items
+    if item_ids.any?
+      item_ids &= scope.taggable_items.pluck(:id)
+      items = FeedItem.where(id: item_ids)
+    else
+      items = scope.taggable_items
+    end
 
     # This does not deal with duplicates
     deactivate_taggings!(items.map(&:id))

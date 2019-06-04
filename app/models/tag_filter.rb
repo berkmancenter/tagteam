@@ -113,7 +113,7 @@ class TagFilter < ApplicationRecord
   def deactivates_taggings(item_ids)
     # Deactivates any taggings that are the same except in owner, and do not
     # deactivate own taggings.
-    return ActsAsTaggableOn::Tagging.where('1=2') if item_ids.empty?
+    return ActsAsTaggableOn::Tagging.none if item_ids.empty?
 
     ActsAsTaggableOn::Tagging
       .where(context: hub.tagging_key, tag_id: tag.id,

@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe HubsController, type: :controller do
-  let(:current_user) { create(:user) }
+  let(:user) { create(:confirmed_user) }
   let(:hub) { create(:hub, :owned) }
 
   context 'contact action' do
     it 'available to sign-in user' do
-      sign_in current_user
+      stub_sign_in user
       get :contact, params: { id: hub.id }
 
       expect(response).to render_template('contact')

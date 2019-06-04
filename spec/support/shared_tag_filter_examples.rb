@@ -16,21 +16,21 @@ RSpec.shared_examples 'a tag filter' do |filter_type|
     context 'scoped to hub' do
       it 'returns all items in the hub' do
         filter = create(filter_type, scope: @hub)
-        expect(filter.items_in_scope).to match_array(@hub.feed_items)
+        expect(filter.scope.taggable_items).to match_array(@hub.feed_items)
       end
     end
 
     context 'scoped to feed' do
       it 'returns all items from the feed' do
         filter = create(filter_type, scope: @hub.hub_feeds.first)
-        expect(filter.items_in_scope).to match_array(@hub_feed.feed_items)
+        expect(filter.scope.taggable_items).to match_array(@hub_feed.feed_items)
       end
     end
 
     context 'scoped to item' do
       it 'returns the item itself' do
         filter = create(filter_type, scope: @hub.feed_items.first)
-        expect(filter.items_in_scope).to match_array([@hub.feed_items.first])
+        expect(filter.scope.taggable_items).to match_array([@hub.feed_items.first])
       end
     end
   end
@@ -122,7 +122,7 @@ RSpec.shared_examples 'a tag filter in an empty hub' do |filter_type|
 
   describe '#deactivates_taggings' do
     it 'returns nothing' do
-      expect(@filter.deactivates_taggings).to be_empty
+      expect(@filter.deactivates_taggings(@hub.taggable_items.pluck(:id))).to be_empty
     end
   end
 end
@@ -135,7 +135,7 @@ RSpec.shared_examples 'an existing tag filter in a populated hub' do
       without_some_items = @feed_items
                              .where('feed_items.id NOT IN (?)', some_ids)
 
-      @filter.apply(items: some_items)
+      @filter.apply(some_items.pluck(:id))
 
       tag_lists = tag_lists_for(some_items, @hub.tagging_key)
       without_tag_lists = tag_lists_for(without_some_items, @hub.tagging_key)
@@ -154,8 +154,7 @@ RSpec.shared_examples 'an existing tag filter in a populated hub' do
 
   describe '#deactivates_taggings' do
     it 'does not return its own taggings' do
-      @filter.apply
-      expect(@filter.deactivates_taggings.map(&:tagger).uniq)
+      expect(@filter.deactivates_taggings(@hub.taggable_items.pluck(:id)).map(&:tagger).uniq)
         .to not_contain @filter
     end
   end
@@ -234,13 +233,13 @@ RSpec.shared_examples 'an item-level tag filter' do |_filter_type|
     end
 
     it 'cannot be compelled to affect items outside its scope' do
-      filer_old = new_add_filter
-      filer_old.apply
+      filter_old = new_add_filter
+      filter_old.apply
 
       filter = add_filter
       setup_other_items_tags(filter, @feed_item2)
 
-      filter.apply(items: FeedItem.where(id: [@feed_item.id, @feed_item2.id]))
+      filter.apply(FeedItem.where(id: [@feed_item.id, @feed_item2.id]).pluck(:id))
 
       tag_lists = tag_lists_for(@feed_item, @hub.tagging_key)
       other_tag_lists = tag_lists_for(@feed_item2, @hub.tagging_key)
@@ -250,8 +249,8 @@ RSpec.shared_examples 'an item-level tag filter' do |_filter_type|
     end
 
     it "doesn't affect other items" do
-      filer_old = new_add_filter
-      filer_old.apply
+      filter_old = new_add_filter
+      filter_old.apply
 
       filter = add_filter
       setup_other_items_tags(filter, @feed_item2)
