@@ -52,7 +52,7 @@ RSpec.describe DeleteTagFilter, type: :model do
         it 'returns all tag "a" taggings' do
           taggings = ActsAsTaggableOn::Tagging
                      .where(context: @hub.tagging_key, tag_id: @tag.id)
-          expect(@filter.deactivates_taggings).to match_array(taggings)
+          expect(@filter.deactivates_taggings(@filter.scope.taggable_items.pluck(:id))).to match_array(taggings)
         end
 
         context 'a feed item exists with tag "b"' do
@@ -61,7 +61,7 @@ RSpec.describe DeleteTagFilter, type: :model do
                                                      tag_context: @hub.tagging_key)
           end
           it 'does not return that tagging' do
-            expect(@filter.deactivates_taggings)
+            expect(@filter.deactivates_taggings(@filter.scope.taggable_items.pluck(:id)))
               .to not_contain @feed_item.taggings.first
           end
         end

@@ -54,7 +54,7 @@ RSpec.describe ModifyTagFilter, type: :model do
 
         it 'only changes taggings on items that had tag "a" even if passed them' do
           affected = @feed_items.tagged_with(@tag.name, on: @hub.tagging_key).to_a
-          @filter.apply(items: @feed_items)
+          @filter.apply(@feed_items.pluck(:id))
           now_affected = @feed_items.tagged_with(@new_tag.name, on: @hub.tagging_key).to_a
           expect(affected).to match_array(now_affected)
         end
@@ -89,7 +89,7 @@ RSpec.describe ModifyTagFilter, type: :model do
                              context: @hub.tagging_key)
           end
           it 'returns both taggings' do
-            expect(@filter.deactivates_taggings).to include(*@feed_item.taggings)
+            expect(@filter.deactivates_taggings(@hub.taggable_items.pluck(:id))).to include(*@feed_item.taggings)
           end
         end
 
@@ -99,7 +99,7 @@ RSpec.describe ModifyTagFilter, type: :model do
                                                      tag_context: @hub.tagging_key)
           end
           it 'does not return that tagging' do
-            expect(@filter.deactivates_taggings)
+            expect(@filter.deactivates_taggings(@hub.taggable_items.pluck(:id)))
               .to not_contain @feed_item.taggings.first
           end
         end
