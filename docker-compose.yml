@@ -11,7 +11,8 @@ services:
     depends_on:
       - 'postgres'
       - 'redis'
-    build: .
+    build:
+      context: .
     ports:
       - '3000:3000'
     env_file:
