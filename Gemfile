@@ -10,7 +10,7 @@ gem 'active_interaction', '~> 3.6'
 gem 'acts-as-taggable-on', '~> 5.0'
 gem 'acts_as_api', '~> 1.0'
 gem 'bootsnap', '~> 1.3', require: false
-gem 'bootstrap-sass', '~> 3.3'
+gem 'bootstrap-sass', '~> 3.4'
 gem 'breadcrumbs', '~> 0.1'
 gem 'browser', '~> 2.5'
 gem 'devise', '~> 4.4'
@@ -30,7 +30,7 @@ gem 'pg', '~> 1.0'
 gem 'progress_bar', '~> 1.2'
 gem 'protected_attributes_continued', '~> 1.3' # TODO: switch to strong parameters
 gem 'pundit', '~> 1.1'
-gem 'rails', '~> 5.1.0' # @drg frozen
+gem 'rails', '~> 5.1.6' # @drg frozen
 gem 'rails-observers', '~> 0.1'
 gem 'recaptcha', '~> 4.12'
 gem 'redis-namespace', '~> 1.6'
