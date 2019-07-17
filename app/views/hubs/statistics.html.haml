@@ -3,7 +3,7 @@
 - content_for :tabs do
   = render partial: 'hubs/tabs', locals: { active: 'statistics' }
 - content_for :tab_content do
-  - cache("hub-stats-#{@hub.try(:id)}", :expires => 6.hours ) do
+  - cache("hub-stats-#{@hub.try(:id)}", :expires_in => 6.hours ) do
     .nicely-padded.statistics
       %h1 Statistics
       .row
