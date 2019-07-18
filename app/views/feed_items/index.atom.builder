@@ -5,10 +5,8 @@ atom_feed(:root_url => hub_hub_feed_url(@hub,@hub_feed), :language => 'en-US') d
 
   @feed_items.each do |item|
     atom.entry( item , :url => item.url ) do |entry|
-      unless item.authors.blank?
-        entry.author do |author|
-          author.name item.authors
-        end
+      entry.author do |author|
+        author.name item.authors || ''
       end
       unless item.contributors.blank?
         entry.contributor do |contributor|

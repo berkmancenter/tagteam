@@ -10,10 +10,11 @@ gem 'active_interaction', '~> 3.6'
 gem 'acts-as-taggable-on', '~> 5.0'
 gem 'acts_as_api', '~> 1.0'
 gem 'bootsnap', '~> 1.3', require: false
-gem 'bootstrap-sass', '~> 3.3'
+gem 'bootstrap-sass', '~> 3.4'
 gem 'breadcrumbs', '~> 0.1'
 gem 'browser', '~> 2.5'
 gem 'devise', '~> 4.4'
+gem 'dotenv-rails', '~> 2.5'
 gem 'exception_notification', '~> 4.2'
 gem 'feed-abstract', '0.0.15'
 gem 'font-awesome-rails', '~> 4.7'
@@ -29,13 +30,15 @@ gem 'pg', '~> 1.0'
 gem 'progress_bar', '~> 1.2'
 gem 'protected_attributes_continued', '~> 1.3' # TODO: switch to strong parameters
 gem 'pundit', '~> 1.1'
-gem 'rails', '~> 5.1.0' # @drg frozen
+gem 'rails', '~> 5.1.6' # @drg frozen
 gem 'rails-observers', '~> 0.1'
+gem 'recaptcha', '~> 4.12'
 gem 'redis-namespace', '~> 1.6'
 gem 'sanitize', '~> 4.6'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.1'
 gem 'sinatra', '~> 2.0', require: false
+gem 'skylight', '~> 2.0'
 gem 'sprockets', '~> 3.7'
 # TODO: resolve errors when upgrading sunspot_rails/sunspot_solr from these pinned versions
 gem 'sunspot_rails', '2.2.7' # @drg frozen
@@ -53,7 +56,7 @@ group :development do
   gem 'haml_lint', '~> 0.27'
   gem 'listen', '~> 3.1'
   gem 'rubocop', '~> 0.57'
-  gem 'rubocop-rspec', '~> 1.26'
+  gem 'rubocop-rspec', '~> 1.27'
   gem 'spring', '~> 2.0'
   gem 'spring-commands-rspec', '~> 1.0'
   gem 'spring-commands-rubocop', '~> 0.2'
@@ -79,6 +82,7 @@ group :test do
   gem 'headless', '~> 2.3'
   gem 'launchy', '~> 2.4'
   gem 'pundit-matchers', '~> 1.6'
+  gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-client', '~> 1.2'
   gem 'selenium-webdriver', '~> 3.12'
   gem 'shoulda-matchers', '~> 3.1'

@@ -25,14 +25,30 @@
           method: :post,
           confirm: 'Are you sure?' do
           = fa_icon 'minus-circle', text: 'Remove from this bookmarking collection', class: 'text-danger'
+    %li
+      = link_to copy_move_to_hub_hub_feed_feed_item_path(@hub_feed, @feed_item, type: 'copy'),
+        title: "Copy the item #{@feed_item} to a hub",
+        class: 'dialog-show',
+        data_item_type: 'FeedItem',
+        data_item_id: @feed_item.id do
+        = fa_icon 'copy', text: 'Copy the item to a hub', class: 'text-warning'
+    - if policy(@hub).remove_item?
+      %li
+        = link_to copy_move_to_hub_hub_feed_feed_item_path(@hub_feed, @feed_item, type: 'move'),
+          title: "Move the item #{@feed_item} to a hub",
+          class: 'dialog-show',
+          data_item_type: 'FeedItem',
+          data_item_id: @feed_item.id do
+          = fa_icon 'angle-double-right', text: 'Move the item to a hub', class: 'text-warning'
     - if policy(@hub).remove_item?
       %li
         = link_to remove_item_hub_feed_feed_item_path(@hub_feed, @feed_item),
-          title: "Remove #{@feed_item} from the hub",
+          title: "Remove the #{@feed_item} from the hub",
           method: :delete,
           data: { confirm: 'Are you sure?' } do
-          = fa_icon 'trash', text: 'Remove item from hub', class: 'text-warning'
+          = fa_icon 'trash', text: 'Remove the item from the hub', class: 'text-warning'
       - tag_list = @feed_item.all_tags_list_on(@hub.tagging_key).join(', ')
+    - if policy(@hub).remove_item?
       %li.top-spacer
         = link_to hub_feed_item_tag_filters_path(@hub, @feed_item),
           data_hub_id: @hub.id,

@@ -5,3 +5,9 @@
 # Disallow: /
 User-Agent: *
 Disallow: /hub_feeds/*/feed_items/*/related
+Disallow: /hubs/*/feed_items/*/tag_filters
+Disallow: /hubs/*/tag/*
+Disallow: /hubs/*/by_date/
+Disallow: /hubs/*/items.atom
+Disallow: /hubs/*/items.json
+Disallow: /hubs/*/items.rss

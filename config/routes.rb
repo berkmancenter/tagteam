@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     get 'search/autocomplete'
+    post 'selfremove'
   end
 
   post 'bookmarklets/add_item'
@@ -57,6 +58,9 @@ Rails.application.routes.draw do
         get 'related'
         get 'controls'
         delete 'remove_item'
+        get 'copy_move_to_hub'
+        post 'copy_item'
+        post 'move_item'
       end
     end
     resources :tags
@@ -77,6 +81,7 @@ Rails.application.routes.draw do
     get 'tag/xml/:name' => 'tags#xml', :as => 'tag_xml', :constraints => { name: /.+/ }
     get 'tag/:name/statistics' => 'tags#statistics', :as => 'tag_statistics', :constraints => { name: /.+/ }
     get 'tag/:name' => 'tags#show', :as => 'tag_show', :constraints => { name: /.+/ }, :defaults => { :format => 'html' }
+    post 'tag/:name/description' => 'tags#description', :as => 'tag_description', :constraints => { name: /.+/ }
 
     get 'user/:username' => 'users#hub_items', :as => 'user_hub_items', :constraints => { username: /[^\/]+/ }
     get 'user/:username/tags' => 'tags#index', :as => 'user_hub_items_tags', :constraints => { username: /[^\/]+/ }
@@ -102,6 +107,7 @@ Rails.application.routes.draw do
       get 'about'
       post 'recalc_all_tags'
       get 'item_search'
+      post 'removed_tag_suggestion'
       post 'add_feed'
       put 'unsubscribe_feed/:feed_id' => 'hubs#unsubscribe_feed', as: 'unsubscribe_feed'
       get 'custom_republished_feeds'
@@ -130,6 +136,7 @@ Rails.application.routes.draw do
       post 'deprecate_tag'
       post 'undeprecate_tag'
       delete 'remove_delimiter'
+      post 'leave'
     end
 
     collection do
@@ -177,6 +184,7 @@ Rails.application.routes.draw do
         get 'tag_list'
         get 'content'
         get 'related'
+        get 'tags_actions'
       end
       #      collection do
       #        get 'by_date/:year/:month/:day' => 'feed_items#by_date', :as => 'by_date'
@@ -189,6 +197,11 @@ Rails.application.routes.draw do
   devise_for :users, path: 'accounts', controllers: {
     registrations: 'users/registrations'
   }
+
+  # Allow users to log out using both DELETE and GET
+  devise_scope :user do
+    get '/accounts/sign_out', to: 'devise/sessions#destroy'
+  end
 
   require 'sidekiq/web'
   authenticate :user, ->(u) { u.has_role? :superadmin } do

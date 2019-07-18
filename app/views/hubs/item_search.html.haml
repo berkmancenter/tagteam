@@ -16,7 +16,20 @@
           = text_field_tag :q, params[:q], size: 50, placeholder: 'Search this hub', class: 'form-control'
           %span.input-group-btn
             = submit_tag('Search', class: 'btn btn-success')
-      - unless @search.blank? || @search.results.length == 0
+      .search-date-range-elements
+        .search-date-range-element
+          %span.form-label
+            %span.control-label
+              Date tagged
+          = text_field_tag :last_updated_from, params[:last_updated_from], class: 'datepicker form-control', placeholder: 'from'
+          = text_field_tag :last_updated_to, params[:last_updated_to], class: 'datepicker form-control', placeholder: 'to'
+        .search-date-range-element
+          %span.form-label
+            %span.control-label
+              Date published
+          = text_field_tag :date_published_from, params[:date_published_from], class: 'datepicker form-control', placeholder: 'from'
+          = text_field_tag :date_published_to, params[:date_published_to], class: 'datepicker form-control', placeholder: 'to'
+      - unless @modify_tag_filters.any? || @search.results.empty?
         = link_to('Permalink', item_search_hub_path(@hub, q: params[:q]))
 
         - if current_user.present?
@@ -25,14 +38,19 @@
             data_item_type: 'SearchRemix',
             title: "Choose the remix feed to add this search to",
             class: "dialog-show add_item_source_to_custom_republished_feed")
-    - if @search.blank? || @search.results.length == 0
+    - if @modify_tag_filters.any?
+      - if @modify_tag_filters.size > 1
+        %p.recommend-tag Tags <span>#{@modify_tag_filters.collect { |mf| mf.tag.name }.join(', ')}</span> have been deprecated. Search for these tags instead: #{link_to(@filtered_params, item_search_hub_path(@hub, q: @filtered_params)) }
+      - else
+        %p.recommend-tag <span>#{@modify_tag_filters.first.tag.name}</span> has been deprecated. Search for this instead: #{link_to(@filtered_params, item_search_hub_path(@hub, q: @filtered_params)) }
+    - elsif @search.results.empty?
       %h3 Nothing. Please try a different term.
     - else
       .row
         .nicely-padded
           = render partial: 'shared/paginate', locals: { results: @search.results }
           %h2
-            Items: #{@search.total} total
+            Items: #{@search.results.size} total
         %ul.hub.list-unstyled
           - @search.results.each do|r|
             = render partial: 'feed_items/list_item', as: :feed_item, object: r

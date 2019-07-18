@@ -34,7 +34,15 @@
     .actions
       = f.submit "Update", class: "btn btn-primary btn-block"
   %hr/
-  %h3 Cancel my account
-  %p
-    Unhappy? #{button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: "btn"}
+  %h3 Remove my account
+  %p.alert.alert-danger
+    Deleting your account will also delete all the hubs of which you are the sole owner. 
+    If you want any of those hubs to continue, then create at least one co-owner of each before you delete your account. 
+    You can do this through the Team tab of your hubs.
+    %br
+    %br
+    You can also export all your data before removing it using the #{ link_to('Export section', export_import_path) }</a>.
+
+    #{button_to "Remove my account", users_selfremove_path, data: { confirm: "Are you sure?" }, method: :post, class: "btn"}
+
   = link_to "Back", :back

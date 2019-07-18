@@ -103,11 +103,11 @@ class UsersController < ApplicationController
 
   def resend_confirmation_token
     authorize User
-    @user.resend_confirmation_token
+    @user.resend_confirmation_instructions
     flash[:notice] = 'We resent the account confirmation email to that user.'
     redirect_to request.referer
   rescue Exception => e
-    flash[:notice] = 'Woops. We could not send that right now. Please try again later.'
+    flash[:notice] = 'Whoops. We could not send that right now. Please try again later.'
     redirect_to request.referer
   end
 
@@ -167,6 +167,22 @@ class UsersController < ApplicationController
     redirect_to user_path
   end
 
+  def selfremove
+    authorize current_user
+
+    outcome = Users::SelfRemove.run(user: current_user)
+
+    if outcome.valid?
+      flash[:notice] = 'You have been removed from the site.'
+
+      redirect_to root_path
+    else
+      flash[:error] = outcome.errors.full_messages.join(' and ')
+
+      redirect_to edit_user_registration_path
+    end
+  end
+
   private
 
   def load_user
@@ -183,8 +199,8 @@ class UsersController < ApplicationController
   end
 
   def set_home_url
-    @home_url = @tag ? hub_user_tags_name_path(@hub, @user.username, @tag.name) :
-      hub_user_hub_items_path(@hub, @user.username)
+    @home_url = @tag ? hub_user_tags_name_url(@hub, @user.username, @tag.name) :
+      hub_user_hub_items_url(@hub, @user.username)
   end
 
   def load_feed_items

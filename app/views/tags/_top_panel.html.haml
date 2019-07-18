@@ -5,6 +5,27 @@
     " –
     \#{feed_items.count} #{'item'.pluralize(feed_items.count)}
 
+  - if policy(hub).tag_descriptions?
+    %p
+      %span#readonly-tag-description{class: tag_description.nil? ? 'empty' : '' }
+        #{tag_description.present? ? tag_description : 'Add a description'}
+      = link_to '#', title: 'Edit this hub tag description', id: 'update-tag-description' do
+        = fa_icon 'pencil'
+      %textarea#tag-description.hidden.noEditor{placeholder: 'Add a description'}
+        #{tag_description}
+      = link_to hub_tag_description_url(hub, tag.name), title: 'Update this hub tag description', id: 'submit-tag-description', class: 'hidden' do
+        = fa_icon 'check'
+      = link_to '#', title: 'Cancel editing this hub tag description', id: 'cancel-tag-description', class: 'hidden' do
+        = fa_icon 'close'
+      - if @old_tag_description.present?
+        %p.old-description
+          An active hub-wide filter is changing tag <span class="tag">#{@tag_filter.tag.name}</span> to <span class="tag">#{@tag_filter.new_tag.name}</span>. The old tag, <span class="tag">#{@tag_filter.tag.name}</span>, had an accompanying definition. Would you like to move that definition to this page? #{link_to 'Yes', hub_tag_description_url(hub, tag.name), title: 'Apply this description.', id: 'apply-old-description', 'data-old-value': @old_tag_description.description}
+  - elsif tag_description.present?
+    %p
+      %span#readonly-tag-description
+        #{tag_description}
+
+
 .col-sm-4
   .export-menu.text-right
     = link_to hub_tag_rss_path(hub, tag.name), title: 'An RSS feed of all items in this hub, with tag filters applied.', class: 'btn btn-default' do

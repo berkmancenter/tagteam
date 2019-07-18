@@ -7,7 +7,7 @@ module TaggingNotifications
 
     def perform(hub, feed_items, tag_filters, updated_by_user, changes, recipients = :owners)
       return unless hub.notify_taggers?
-      return unless changes.any?
+      return unless changes.present? && changes.any?
 
       notifications = {}
       # Notifications are either going to the owners of the feed items (skipping the updater)

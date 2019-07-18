@@ -6,7 +6,7 @@ class FeedItemsController < ApplicationController
 
   protect_from_forgery except: :index
 
-  before_action :set_hub_feed, except: [:tag_list]
+  before_action :set_hub_feed, except: [:tag_list, :tags_actions]
   before_action :set_feed_item, except: [:index]
 
   SORT_OPTIONS = {
@@ -116,6 +116,34 @@ class FeedItemsController < ApplicationController
     end
   end
 
+  def copy_move_to_hub
+    @from_hub = @hub_feed.hub
+    @hubs = current_user.my_bookmarkable_hubs.uniq - [@from_hub]
+    @type = params[:type]
+
+    respond_to do |format|
+      format.html do
+        if request.xhr?
+          render layout: false
+        else
+          render
+        end
+      end
+    end
+  end
+
+  def tags_actions
+    @hub = Hub.find(params[:hub_id])
+
+    @actions = FeedItems::ItemTagActionsByUser.run!(hub: @hub, feed_item: @feed_item)
+
+    respond_to do |format|
+      format.html do
+        render layout: request.xhr? ? false : 'tabs'
+      end
+    end
+  end
+
   def edit
     authorize @feed_item
 
@@ -126,7 +154,7 @@ class FeedItemsController < ApplicationController
 
   def update
     authorize @feed_item
-    
+
     inputs = { feed_item: @feed_item, hub: @hub, user: current_user }.reverse_merge(feed_item_params)
     outcome = FeedItems::Update.run(inputs)
 
@@ -148,6 +176,58 @@ class FeedItemsController < ApplicationController
   rescue Exception => e
     flash[:notice] = 'There was a problem while removing the item from hub.'
     redirect_to items_hub_path(@hub_feed.hub)
+  end
+
+  def copy_item
+    hub = Hub.find(params[:to_hub_id])
+
+    unless current_user.is?(%i[owner bookmarker], hub)
+      flash[:notice] = 'You have no access to the destination hub.'
+      redirect_after_move_copy(@hub_feed, @feed_item)
+    end
+
+    FeedItems::CopyMoveToHub.run!(
+      current_user: current_user,
+      feed_item: @feed_item,
+      from_hub_feed: @hub_feed,
+      to_hub: hub,
+      action_type: 'copy'
+    )
+
+    flash[:notice] = 'Item successfully copied to the hub.'
+    redirect_after_move_copy(@hub_feed, @feed_item)
+  rescue Exception => e
+    flash[:notice] = 'There was a problem while copying the item to the hub.'
+    redirect_after_move_copy(@hub_feed, @feed_item)
+  end
+
+  def move_item
+    from_hub = @hub_feed.hub
+    to_hub = Hub.find(params[:to_hub_id])
+
+    unless current_user.is?(%i[owner bookmarker], to_hub)
+      flash[:notice] = 'You have no access to the destination hub.'
+      redirect_after_move_copy(@hub_feed, @feed_item)
+    end
+
+    unless policy(from_hub).remove_item?
+      flash[:notice] = 'You have no access to move items from the source hub.'
+      redirect_after_move_copy(@hub_feed, @feed_item)
+    end
+
+    FeedItems::CopyMoveToHub.run!(
+      current_user: current_user,
+      feed_item: @feed_item,
+      from_hub_feed: @hub_feed,
+      to_hub: to_hub,
+      action_type: 'move'
+    )
+
+    flash[:notice] = 'Item successfully moved from the hub.'
+    redirect_after_move_copy(@hub_feed, @feed_item)
+  rescue Exception => e
+    flash[:notice] = 'There was a problem while moving the item from the hub.'
+    redirect_after_move_copy(@hub_feed, @feed_item)
   end
 
   private
@@ -184,5 +264,15 @@ class FeedItemsController < ApplicationController
 
   def feed_item_params
     params.require(:feed_item).permit(:description, :title, :url, :date_published)
+  end
+
+  def redirect_after_move_copy(hub_feed, feed_item)
+    referer = Rails.application.routes.recognize_path(request.referrer)
+
+    if referer[:action] == 'items'
+      redirect_to items_hub_path(hub_feed.hub)
+    else
+      redirect_to hub_feed_feed_item_path(hub_feed, feed_item)
+    end
   end
 end

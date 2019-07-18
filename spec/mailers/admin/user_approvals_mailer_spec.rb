@@ -16,15 +16,6 @@ module Admin
       end
     end
 
-    describe '#notify_user_of_approval' do
-      let(:user) { create(:user) }
-      let(:mail) { described_class.notify_user_of_approval(user) }
-
-      it 'sets the recipient' do
-        expect(mail.to).to contain_exactly(user.email)
-      end
-    end
-
     describe '#notify_user_of_denial' do
       let(:user) { create(:user) }
       let(:mail) { described_class.notify_user_of_denial(user.email) }

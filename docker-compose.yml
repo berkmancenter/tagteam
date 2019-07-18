@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  postgres:
+    image: 'postgres:10.3-alpine'
+    volumes:
+      - './docker/postgres_data:/var/lib/postgresql/data'
+      - './docker/init_db.sql:/docker-entrypoint-initdb.d/init.sql'
+
+  app:
+    depends_on:
+      - 'postgres'
+    build: .
+    ports:
+      - '3000:3000'
+    env_file:
+      - '.env.development'
+    volumes:
+      - '.:/app'

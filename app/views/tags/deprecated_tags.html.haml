@@ -22,4 +22,4 @@
       - if @deprecated_hub_tags.any?
         %ul.list-unstyled#tag-cloud{ 'data-hub-id' => @hub.id }
           = render partial: 'tags/graph_item', as: :tag, collection: @deprecated_hub_tags,
-            locals: { hub: @hub, hub_feed: nil, max_count: @deprecated_hub_tags.first.count }
+            locals: { show_removed_tags: false, hub: @hub, hub_feed: nil, max_count: @deprecated_hub_tags.first.count }

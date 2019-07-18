@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class DeleteTagFilter < TagFilter
   def apply(item_ids = [])
-    items = item_ids.any? ? FeedItem.where(id: item_ids).tagged_with(tag.name, on: hub.tagging_key) :
-      scope.taggable_items.tagged_with(tag.name, on: hub.tagging_key)
+    if item_ids.any?
+      item_ids &= scope.taggable_items.pluck(:id)
+      items = FeedItem.where(id: item_ids).tagged_with(tag.name, on: hub.tagging_key)
+    else
+      items = scope.taggable_items.tagged_with(tag.name, on: hub.tagging_key)
+    end
 
     deactivate_taggings!(items.map(&:id))
     update_column(:applied, true)

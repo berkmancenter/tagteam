@@ -2,4 +2,7 @@
   = tag_display(tag, show_count: true, use_count: true, hub: hub, hub_feed: hub_feed)
   %span.tag-count
     = tag.count
+  - if show_removed_tags
+    = link_to '#', title: "#{@removed_tag_suggestions.include?(tag.id) ? 'Click to include this tag in' : 'Click to exclude this tag from'} the autocomplete tag list.", class: 'remove-suggestion-toggle', "data-hub-id": hub.id, "data-tag-id": tag.id do
+      %span{ class: "fa #{@removed_tag_suggestions.include?(tag.id) ? 'fa-eye-slash' : 'fa-eye'}" }
   .tag-graph-bar{:style => "width: #{tag.count.to_f / max_count * 100}%"}

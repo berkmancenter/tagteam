@@ -12,6 +12,10 @@ class HubPolicy < ApplicationPolicy
     user.has_role?(:inputter, record) || user.has_role?(:owner, record)
   end
 
+  def removed_tag_suggestion?
+    owner_or_admin?
+  end
+
   def add_roles?
     owner_or_admin?
   end
@@ -102,7 +106,7 @@ class HubPolicy < ApplicationPolicy
   def settings?
     return false if user.blank?
 
-    user.has_role?(:superadmin) || user.has_role?(:owner, record) || user.has_role?(:bookmarker, record)
+    user.has_role?(:superadmin) || user.has_role?(:owner, record)
   end
 
   def remove_roles?
@@ -142,6 +146,10 @@ class HubPolicy < ApplicationPolicy
   end
 
   def update?
+    owner_or_admin?
+  end
+
+  def tag_descriptions?
     owner_or_admin?
   end
 
@@ -204,6 +212,12 @@ class HubPolicy < ApplicationPolicy
 
   def remove_item?
     owner_or_admin?
+  end
+
+  def leave?
+    return false if user.blank?
+
+    user.has_roles_for?(record)
   end
 
   private

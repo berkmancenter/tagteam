@@ -47,7 +47,7 @@ RSpec.describe AddTagFilter, type: :model do
                                                      tag_context: @hub.tagging_key)
           end
           it 'does not return that tagging' do
-            expect(@filter.deactivates_taggings)
+            expect(@filter.deactivates_taggings(@filter.scope.taggable_items.pluck(:id)))
               .not_to include(@feed_item.taggings.first)
           end
         end
@@ -108,7 +108,7 @@ RSpec.describe AddTagFilter, type: :model do
 
         describe '#deactivates_taggings' do
           it 'returns the taggings attaching tag "a" to those feed items' do
-            expect(@filter.deactivates_taggings)
+            expect(@filter.deactivates_taggings(@filter.scope.taggable_items.pluck(:id)))
               .to match_array(@tagged_feed_items.map(&:taggings).flatten)
           end
         end

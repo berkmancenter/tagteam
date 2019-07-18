@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 # A Hub is the base unit of organization for TagTeam. Please see README_FOR_APP for more details on how everything fits together.
 class HubsController < ApplicationController
-  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
+  include Recaptcha::Verify
+
+  caches_action :index, :items, :show, :search, :by_date, :retrievals, :taggers, :meta, unless: proc { |_c| current_user || params[:no_cache] == 'true' }, expires_in: Tagteam::Application.config.default_action_cache_time, cache_path: proc {
     Digest::MD5.hexdigest(request.fullpath + '&per_page=' + get_per_page)
   }
   caches_action :statistics, expires_in: 6.hours
@@ -23,7 +25,8 @@ class HubsController < ApplicationController
     :retrievals,
     :search,
     :show,
-    :scoreboard
+    :scoreboard,
+    :leave
   ]
 
   after_action :verify_authorized, except: [:index, :home, :meta]
@@ -49,6 +52,7 @@ class HubsController < ApplicationController
     :request_rights,
     :remove_delimiter,
     :remove_roles,
+    :removed_tag_suggestion,
     :retrievals,
     :show,
     :tag_controls,
@@ -66,7 +70,8 @@ class HubsController < ApplicationController
     :deprecate_tag,
     :undeprecate_tag,
     :unsubscribe_feed,
-    :scoreboard
+    :scoreboard,
+    :leave
   ]
 
   before_action :store_feed_visitor, only: :items
@@ -134,6 +139,9 @@ class HubsController < ApplicationController
   def request_rights
     breadcrumbs.add @hub, hub_path(@hub)
     @errors = ''
+
+    @errors += 'reCAPTCHA verification failed <br/>' unless verify_recaptcha
+    
     if params[:contact][:email].nil? || params[:contact][:email] !~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
       @errors += 'Email address is invalid<br/>'
     end
@@ -506,6 +514,20 @@ class HubsController < ApplicationController
     end
   end
 
+  def removed_tag_suggestion
+    authorize @hub
+
+    if params[:remove] == 'true'
+      removed_tag_suggestions = ActsAsTaggableOn::Tag.where(id: params[:tag_id]).map do |tag|
+        RemovedTagSuggestion.create(tag: tag, hub_id: @hub.id, user_id: current_user.id)
+      end
+    else
+      RemovedTagSuggestion.where(tag_id: params[:tag_id], hub_id: @hub.id).destroy_all
+    end
+
+    render json: {}
+  end
+
   def add_feed
     @feed = Feed.find_or_initialize_by(feed_url: params[:feed_url])
 
@@ -704,9 +726,38 @@ class HubsController < ApplicationController
 
     sort = params[:sort] == 'Date published' ? 'date_published' : 'created_at'
     order = ['desc', 'asc'].include?(params[:order]) ? params[:order] : 'desc'
+    @modify_tag_filters = params[:q].gsub(/^#/, '').split(/\s/).delete_if { |b| !b.present? }.map do |tag_name|
+      ModifyTagFilter.find_recursive(@hub.id, tag_name)
+    end.compact
+    @filtered_params = params[:q].dup
+    @modify_tag_filters.each { |mf| @filtered_params.gsub!(/#{mf.tag.name}/, mf.new_tag.name) }
+
+    date_params = [
+      {
+        param: :last_updated,
+        param_from: :last_updated_from,
+        param_to: :last_updated_to,
+      },
+      {
+        param: :date_published,
+        param_from: :date_published_from,
+        param_to: :date_published_to,
+      }
+    ]
 
     @search = FeedItem.search do
       with :hub_ids, hub_id
+      date_params.each do |date_param|
+        if !params[date_param[:param_from]].present? && params[date_param[:param_to]].present?
+          with(date_param[:param]).less_than Date.strptime(params[date_param[:param_to]], '%m/%d/%Y').to_date
+        end
+        if params[date_param[:param_from]].present? && !params[date_param[:param_to]].present?
+          with(date_param[:param]).greater_than Date.strptime(params[date_param[:param_from]], '%m/%d/%Y').to_date
+        end
+        if params[date_param[:param_from]].present? && params[date_param[:param_to]].present?
+          with(date_param[:param]).between Date.strptime(params[date_param[:param_from]], '%m/%d/%Y').to_date..Date.strptime(params[date_param[:param_to]], '%m/%d/%Y').to_date
+        end
+      end
       paginate page: params[:page], per_page: get_per_page
       order_by(sort.to_sym, order.to_sym)
       unless params[:q].blank?
@@ -814,7 +865,7 @@ class HubsController < ApplicationController
       user: current_user
     )
 
-    if (add_filter.nil? || add_filter.rollback_and_destroy_async(current_user)) && deprecation_filter.valid?
+    if (add_filter.nil? || add_filter.rollback_and_destroy(current_user)) && deprecation_filter.valid?
       if request.xhr?
         render(html: 'Successfully deprecated.', layout: false)
       else
@@ -851,8 +902,8 @@ class HubsController < ApplicationController
     removed_filters = TagFilter.where(removed_params)
     replaced_filters = TagFilter.where(replaced_params)
 
-    removed_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
-    replaced_filters.map { |filter| filter.rollback_and_destroy_async(current_user) }
+    removed_filters.map { |filter| filter.rollback_and_destroy(current_user) }
+    replaced_filters.map { |filter| filter.rollback_and_destroy(current_user) }
 
     if request.xhr?
       render(html: 'Successfully undeprecated.', layout: false)
@@ -874,6 +925,20 @@ class HubsController < ApplicationController
     end
 
     redirect_to settings_hub_path(@hub)
+  end
+
+  def leave
+    authorize @hub
+
+    outcome = Hubs::Leave.run(hub: @hub, user: current_user)
+
+    if outcome.valid?
+      flash[:notice] = 'You have been removed from the hub.'
+    else
+      flash[:error] = outcome.errors.full_messages.join(' and ')
+    end
+
+    redirect_to request.referer
   end
 
   private

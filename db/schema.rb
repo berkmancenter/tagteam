@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710170657) do
+ActiveRecord::Schema.define(version: 20180822171418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,6 +167,17 @@ ActiveRecord::Schema.define(version: 20180710170657) do
     t.index ["hub_id"], name: "index_hub_feeds_on_hub_id"
   end
 
+  create_table "hub_tag_descriptions", force: :cascade do |t|
+    t.bigint "hub_id"
+    t.bigint "tag_id"
+    t.string "description", limit: 400
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hub_id", "tag_id"], name: "index_hub_tag_descriptions_on_hub_id_and_tag_id", unique: true
+    t.index ["hub_id"], name: "index_hub_tag_descriptions_on_hub_id"
+    t.index ["tag_id"], name: "index_hub_tag_descriptions_on_tag_id"
+  end
+
   create_table "hub_user_notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "hub_id", null: false
@@ -214,6 +225,13 @@ ActiveRecord::Schema.define(version: 20180710170657) do
     t.index ["item_source_type", "item_source_id", "effect", "republished_feed_id", "created_by_only_id"], name: "bob_the_index", unique: true
     t.index ["position"], name: "index_input_sources_on_position"
     t.index ["republished_feed_id"], name: "index_input_sources_on_republished_feed_id"
+  end
+
+  create_table "removed_tag_suggestions", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "hub_id"
+    t.integer "user_id"
+    t.index ["hub_id"], name: "index_removed_tag_suggestions_on_hub_id"
   end
 
   create_table "republished_feeds", id: :serial, force: :cascade do |t|
@@ -293,6 +311,7 @@ ActiveRecord::Schema.define(version: 20180710170657) do
 
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name", limit: 255
+    t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 

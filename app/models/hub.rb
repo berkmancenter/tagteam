@@ -259,17 +259,11 @@ class Hub < ApplicationRecord
   end
 
   def deprecated_tags
-    TagFilter.where(hub_id: self.id, scope_type: 'Hub', type: ['DeleteTagFilter', 'ModifyTagFilter']).map(&:tag).uniq
+    TagFilter.where(hub_id: self.id, scope_type: 'Hub', type: 'DeleteTagFilter').map(&:tag).uniq
   end
 
   def deprecated_tag_names
-    tags = all_tag_filters.where(type: 'DeleteTagFilter', scope_type: 'Hub').select(:tag_id)
-    ActsAsTaggableOn::Tag.where(id: tags).map(&:name).uniq
-  end
-
-  def fetch_deprecated_tags
-    tags = all_tag_filters.where(type: 'DeleteTagFilter', scope_type: 'Hub').select(:tag_id)
-    ActsAsTaggableOn::Tag.where(id: tags)
+    deprecated_tags.map(&:name)
   end
 
   private

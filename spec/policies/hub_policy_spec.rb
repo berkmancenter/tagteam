@@ -44,6 +44,7 @@ RSpec.describe HubPolicy do
     it { is_expected.to forbid_action(:statistics) }
     it { is_expected.to forbid_action(:active_taggers) }
     it { is_expected.to forbid_action(:tags_used_not_approved) }
+    it { is_expected.to forbid_action(:leave) }
   end
 
   context 'for a logged in user' do
@@ -91,6 +92,7 @@ RSpec.describe HubPolicy do
       it { is_expected.to permit_action(:statistics) }
       it { is_expected.to permit_action(:active_taggers) }
       it { is_expected.to permit_action(:tags_used_not_approved) }
+      it { is_expected.to permit_action(:leave) }
     end
 
     context 'with an inputter role on the hub' do
@@ -104,6 +106,7 @@ RSpec.describe HubPolicy do
       it { is_expected.to forbid_action(:remove_roles) }
       it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to permit_action(:leave) }
     end
 
     context 'with a remixer role on the hub' do
@@ -117,6 +120,7 @@ RSpec.describe HubPolicy do
       it { is_expected.to forbid_action(:remove_roles) }
       it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to permit_action(:leave) }
     end
 
     context "for a hub they don't have a role on" do
@@ -129,6 +133,7 @@ RSpec.describe HubPolicy do
       it { is_expected.to forbid_action(:set_notifications) }
       it { is_expected.to forbid_action(:team) }
       it { is_expected.to forbid_action(:update) }
+      it { is_expected.to forbid_action(:leave) }
     end
   end
 
@@ -170,5 +175,6 @@ RSpec.describe HubPolicy do
     it { is_expected.to permit_action(:statistics) }
     it { is_expected.to permit_action(:active_taggers) }
     it { is_expected.to permit_action(:tags_used_not_approved) }
+    it { is_expected.to forbid_action(:leave) }
   end
 end

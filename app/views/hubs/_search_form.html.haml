@@ -1,4 +1,4 @@
-= form_tag(item_search_hub_path(@hub), :method => :get) do
+= form_tag(item_search_hub_path(@hub), :method => :get, enforce_utf8: false) do
   .input-group
     = text_field_tag :q, params[:q], size: 14, placeholder: 'Search', class: 'form-control'
     %span.input-group-btn

@@ -16,7 +16,8 @@ class TagFilter < ApplicationRecord
   validates :tag_id, presence: true
   validates :scope_type, inclusion: { in: VALID_SCOPE_TYPES }
   validates :tag_id, uniqueness: { scope: [:scope_type, :scope_id, :type],
-                                   message: 'Filter conflicts with existing filter.' }
+                                   message: 'Filter conflicts with existing filter.' },
+    unless: Proc.new { |tag_filter| Rails.logger.warn "stephie here: #{tag_filter.inspect}"; tag_filter.type == 'SupplementTagFilter' }
 
   attr_accessible :tag_id, :hub_id, :new_tag_id, :type, :scope_type, :scope_id,
                   :applied
@@ -62,8 +63,37 @@ class TagFilter < ApplicationRecord
     self.class.base_class.notify_observers :after_rollback, self
   end
 
-  def rollback_and_destroy_async(current_user)
-    TagFilters::DestroyJob.perform_later(self, current_user)
+  def rollback_and_destroy(current_user, async = true)
+    if async
+      TagFilters::DestroyJob.perform_later(self, current_user)
+    else
+      # TagFilter::DestroyJob.perform_now still puts this into a queue and the page loads
+      # before it's done, so we are pulling it out of queue
+      self.queue_destroy_notification(current_user)
+      self.rollback
+      self.destroy
+    end
+  end
+
+  def queue_destroy_notification(updater)
+    changes = case self.class.to_s
+      when 'AddTagFilter'
+        { type: 'tags_deleted', values: [self.tag_name] }
+      when 'DeleteTagFilter'
+        { type: 'tags_added', values: [self.tag_name] }
+      when 'ModifyTagFilter'
+        { type: 'tags_modified', values: [[self.new_tag_name], [self.tag_name]] }
+      when 'SupplementTagFilter'
+        { type: 'tags_supplemented_deletion', values: [[self.tag_name, self.new_tag_name]] }
+      end
+
+    TaggingNotifications::SendNotificationJob.perform_later(
+        self.hub,
+        self.filtered_feed_items,
+        [self],
+        updater,
+        [changes]
+      )
   end
 
   # End API for filters,
@@ -83,7 +113,7 @@ class TagFilter < ApplicationRecord
   def deactivates_taggings(item_ids)
     # Deactivates any taggings that are the same except in owner, and do not
     # deactivate own taggings.
-    return ActsAsTaggableOn::Tagging.where('1=2') if item_ids.empty?
+    return ActsAsTaggableOn::Tagging.none if item_ids.empty?
 
     ActsAsTaggableOn::Tagging
       .where(context: hub.tagging_key, tag_id: tag.id,
@@ -147,17 +177,30 @@ class TagFilter < ApplicationRecord
     hub_feed = hub.hub_feed_for_feed_item(feed_item)
     filters = TagFilter.where("(scope_type = 'Hub' AND scope_id = #{hub.id}) OR (scope_type = 'HubFeed' AND scope_id = #{hub_feed.id})").order("created_at ASC")
     applied_tag_ids = ActsAsTaggableOn::Tagging.where(taggable_id: feed_item.id).where("context <= 'hub_#{hub.id}'").map(&:tag_id)
+    applied_tags = ActsAsTaggableOn::Tag.where(id: applied_tag_ids)
+
     filters.each do |filter|
       # apply tag filter if item has tag for certain filter types
       # apply tag filter for all AddTagFilters
       if filter.type == 'DeleteTagFilter' && applied_tag_ids.include?(filter.tag_id)
         filter.apply([feed_item.id])
         applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
-      elsif filter.type == 'ModifyTagFilter' && applied_tag_ids.include?(filter.tag_id)
+      elsif filter.type == 'ModifyTagFilter'
+        filter_tag_name = ActsAsTaggableOn::Tag.find(filter.tag_id).name
+        if filter_tag_name.include?('*')
+          queried_tag_name = filter_tag_name.tr('*', '%')
+          filter_applied_tags = applied_tags
+                                .where('name LIKE ?', queried_tag_name)
+
+          next if filter_applied_tags.count.zero?
+        else
+          next unless applied_tag_ids.include?(filter.tag_id)
+        end
+
         filter.apply([feed_item.id])
         applied_tag_ids.reject! { |tag_id| tag_id == filter.tag_id }
         applied_tag_ids << filter.new_tag_id
-      elsif filter.type == 'SupplementTagFilter' && applied_tag_ids.include?(filter.tag_id)
+      elsif filter.type == 'SupplementTagFilter' && applied_tag_ids.include?(filter.tag_id) && !applied_tag_ids.include?(filter.new_tag_id)
         filter.apply([feed_item.id])
         applied_tag_ids << filter.new_tag_id
       elsif filter.type == 'AddTagFilter'
@@ -171,7 +214,7 @@ class TagFilter < ApplicationRecord
     tag = ActsAsTaggableOn::Tag.find_by_name_normalized(tag_name)
     return filter if tag.nil?
 
-    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id)
+    new_filter = self.where(scope_type: 'Hub', scope_id: hub_id, tag_id: tag.id).where.not(type: 'SupplementTagFilter')
     return filter if new_filter.empty?
     return new_filter.first if new_filter.first.type == 'DeleteTagFilter'
 

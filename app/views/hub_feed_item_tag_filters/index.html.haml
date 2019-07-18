@@ -1,6 +1,10 @@
 - content_for :top_panel do
   .col-sm-12
-    %h1= @feed_item.title
+    %h1
+      = @feed_item.title
+      - unless current_user.nil?
+        = link_to controls_hub_feed_feed_item_path(@hub_feed, @feed_item), class: 'control', title: 'Item actions' do
+          = fa_icon 'cog'
     %h4
       = items_feed_titles(@feed_item, @hub)
       = @feed_item.created_at.strftime('%F')
@@ -45,7 +49,7 @@
       = render partial: 'shared/line_items/tag',
         collection: (@feed_item.all_tags_on(@hub.tagging_key) - @hub.deprecated_tags),
         locals: { feed_item: @feed_item }
-    %h1 Active filters
+    %h1 Active filters (#{@tag_filters.size})
     - if @tag_filters.empty?
       %h2 No active filters
     - else
