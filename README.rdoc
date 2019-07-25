@@ -41,20 +41,33 @@ TagTeam is a fairly traditional rails 5.0 app that needs a java daemon and redis
 * +git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle+
 * Review config files:
   * +config/environments/production.rb+: configure email delivery if "sendmail" isn't good enough.
-  * +config/initializers/devise.rb+: Check values; set +DEVISE_PEPPER+ and +DEVISE_MAILER_SENDER+ in +.env+ as needed.
+  * +config/initializers/devise.rb+: Check values, especially +pepper+ and +mailer_sender+.
 * Set up +.yml+ configs:
   * +cp config/sunspot.yml.example config/sunspot.yml+
   * +cp config/tagteam.yml.example config/tagteam.yml+
   * +cp config/database.yml.example config/database.yml+ and set it up to connect to your postgres database.
+* `cp .env.development .env` and alter it as needed for your environment.
 * Make sure sunspot is running all on the same port in +sunspot.yml+ and +solr/conf/scripts.conf+ or else the test suite will not run.
 * +export RAILS_ENV=production+
 * Set up databases and docs via +rake db:setup && rake db:migrate && rake db:seed+
 * +rake sunspot:solr:start+
 * Start sidekiq (+bundle exec sidekiq+) to run scheduled tasks
 
+=== To run with `RAILS_ENV=production` on localhost
+* Add +config.serve_static_assets = true+ to +config/production.rb+
+* Comment out the lines with +force_ssl+ in +config/production.rb+
+  - _Remove both of the above before git push._
+* Install yarn
+* +rake assets:precompile+
+* In +config/sunspot.yml+, change the production solr path to +/solr/default+.
+* +redis-server+
+* +rake sunspot:solr:start+
+* +bundle exec sidekiq+
+* +RAILS_ENV=production rails s+
+
 == Testing
 
-
++rspec+
 
 == Development
 
