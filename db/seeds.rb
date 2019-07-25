@@ -13,7 +13,10 @@ require 'digest/md5'
 
 # get the Documentation class in here.
 Documentation.destroy_all
-docs = YAML.safe_load(File.read("#{Rails.root}/db/documentation.yml"))
+docs = YAML.safe_load(
+  File.read("#{Rails.root}/db/documentation.yml"),
+  [Documentation, Time]
+)
 docs.each do |doc_attr|
   d = Documentation.find_or_initialize_by(match_key: doc_attr.attributes[:match_key])
   d.attributes = doc_attr.attributes

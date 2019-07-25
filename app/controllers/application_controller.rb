@@ -60,8 +60,9 @@ class ApplicationController < ActionController::Base
   end
 
   def user_not_authorized
+    logger.warn "User #{current_user.id} not authorized for request: #{request}"
     flash[:alert] = "You can't access that - sorry!"
-    redirect_to(request.referer || root_path)
+    redirect_to root_path
   end
 
   def configure_devise_permitted_parameters

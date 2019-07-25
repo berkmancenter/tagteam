@@ -31,7 +31,7 @@
     },
     hideSpinner: function(){
       $('#spinner').hide();
-    }, 
+    },
     processReturnCookie: function(){
       var anchor = document.cookie.match('(^|;) ?return_to=([^;]*)(;|$)');
         if (anchor != null) {
@@ -182,6 +182,7 @@
         cache: false,
         url: $.rootPath() + 'hubs/' + hubChoiceId + '/my_bookmark_collections',
         dataType: 'json',
+				headers: getHeaders,
         success: function(json){
           $('#feed_item_bookmark_collection_id_input').show();
           $('#feed_item_bookmark_collection_id').html('');
@@ -306,6 +307,7 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tag_list',
+					headers: getHeaders,
           data: {
             allow_remove: true
           },
@@ -326,6 +328,7 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tags_actions',
+					headers: getHeaders,
           success: function(tagActionsList){
             $('.feed-item-tags-actions').append(
               '<p class="control-label">Actions</p>' + tagActionsList);
@@ -379,6 +382,7 @@
         url: $.rootPath() + 'hubs/' + $('#feed_item_hub_id').val() + '/settings',
         dataType: 'json',
         cache: false,
+				headers: getHeaders,
         success: function(response) {
           var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
           var notify = false;
@@ -476,10 +480,13 @@
       });
 
       $(filterContainer).append($('<span/> ').attr({id: 'reset-filter' }).html("<strong>Show all</strong>"));
-
-
     },
-
+		getHeaders: function() {
+			{
+				'Content-Type': 'application/json',
+				'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'))
+			}
+		},
 });
 
 })(jQuery);
@@ -514,7 +521,7 @@ $(document).ready(function(){
         itemSelector : '.hub',     // selector for all items you'll retrieve
         loading: {
          finishedMsg: '',
-         msgText: '' 
+         msgText: ''
         },
         errorCallback: function(){
           $.hideSpinner();
@@ -600,7 +607,7 @@ $(document).ready(function(){
   /*
   $('.hub_tabs').tabs({
     cookie: {
-      expires: 3 
+      expires: 3
     },
     beforeLoad: function(event, ui){
       $.showSpinner();
@@ -634,7 +641,7 @@ $(document).ready(function(){
     }
   });
   */
-  
+
   // bound dynamically b/c the jquery ui tabs() function creates elements
   $('.hub_tabs .ui-tabs-nav').addClass('grid_3');
   $('.hub_tabs .ui-tabs-panel').addClass('grid_13');
@@ -661,7 +668,7 @@ $(document).ready(function(){
         if($(this).hasClass('remove_after_toggling')){
           $(this).remove();
         }
-        
+
       }
     }
   });
@@ -763,7 +770,7 @@ $(document).ready(function(){
         var forceConfirm = $(this).hasClass('force_confirm');
         var tagList = '';
         if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
-          tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>'; 
+          tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>';
         }
         if(filter_type == 'SupplementTagFilter' || filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
           var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
@@ -862,7 +869,7 @@ $(document).ready(function(){
       var anchor = $(this).prev().attr('name');
       if (anchor != "" && anchor != null && anchor != undefined) {
         document.cookie = 'return_to=' + anchor;
-      } 
+      }
       $(this).bt({
         trigger: 'none',
         ajaxPath: url,
@@ -896,13 +903,13 @@ $(document).ready(function(){
       var user_id = $('input[name="user_ids[]"]').val();
       var search_query = $('#q').val();
       var hub_id = $('body').data('hub_id');
-      var args = { 
-        search_string: search_query, 
+      var args = {
+        search_string: search_query,
         hub_id: hub_id,
         input_source: {
-          republished_feed_id: republished_feed_id, 
-          item_source_type: item_source_type, 
-          item_source_id: item_source_id, 
+          republished_feed_id: republished_feed_id,
+          item_source_type: item_source_type,
+          item_source_id: item_source_id,
           effect: item_effect,
           created_by_only_id: (typeof user_id === 'undefined' ? false : user_id)
         }
@@ -915,7 +922,7 @@ $(document).ready(function(){
         url: $.rootPath() + 'input_sources',
         type: 'post',
         data: args,
-        beforeSend: function(){ 
+        beforeSend: function(){
           $.showSpinner();
           $('.dialog-error,.dialog-notice').html('').hide();
         },
@@ -931,7 +938,7 @@ $(document).ready(function(){
   });
   $.observeListPagination();
 
- 
+
   function unescapeUrl() {
     if (window.location.pathname.includes('item_search')) {
       if (history.pushState) { //IE10+
@@ -940,7 +947,7 @@ $(document).ready(function(){
       }
     }
   }
-  
+
   unescapeUrl();
 
   $('.remove-suggestion-toggle').live('click', function(e) {

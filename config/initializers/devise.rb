@@ -13,7 +13,8 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'null@cyber.law.harvard.edu'
+  config.mailer_sender = ENV.fetch(
+    'DEVISE_MAILER_SENDER', 'null@cyber.law.harvard.edu')
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -110,7 +111,8 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  config.pepper = 'asdf asrt098aert laksdfj w4958asdflkjg xcvblkwet94'
+  config.pepper = ENV.fetch('DEVISE_PEPPER',
+    'asdf asrt098aert laksdfj w4958asdflkjg xcvblkwet94')
 
   # Send a notification email when the user's password is changed
   # config.send_password_change_notification = false
