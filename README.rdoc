@@ -21,32 +21,53 @@ TagTeam can be many things to many people, allowing you to ignore or utilize its
 * It can collect data about the input sources you watch (as it keeps detailed changelogs of all content it collects) for later analysis,
 * It can be a permanent archive of anything that emits formats TagTeam understands.
 
-== Requirements
+== System Requirements
 
 * A 'nix hosting environment,
 * postgres - though mysql should work with minimal changes, it's just not tested,
 * redis - for resque background job processing,
 * java - for sunspot fulltext searching. This has been tested under openjdk-6-jre on multiple flavors of ubuntu,
-* ruby 2.3.3
+* ruby 2.4.1
 * wget
 
 == Installation
 
 TagTeam is a fairly traditional rails 5.0 app that needs a java daemon and redis for job tracking / management.
 
-* Install ruby 2.3.3, rvm is probably your best choice.
-* Install all requirements. Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
-* If you're using rvm, create a gemset to hold this application's gem environment
-* git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle
-* Review config/environments/production.rb to configure email delivery if "sendmail" isn't good enough.
-* Review config/initializers/devise.rb to set proper values- you probably want to fix the sender and the pepper for password encryption.
-* Move sunspot.yml.example.yml to sunspot.yml
-* Make sure sunspot is running all on the same port in sunspot.yml and solr/conf/scripts.conf or else the test suite will not run.
-* Copy config/database.yml.example to config/database.yml and set it up to connect to your postgres database.
-* export RAILS_ENV=production
-* Set up databases and docs via "rake db:setup && rake db:migrate && rake db:seed"
-* rake sunspot:solr:start
-* Start sidekiq (bundle exec sidekiq) to run scheduled tasks
+* Install all system requirements (above).
+  * Redis is really only being used as a job queue, so configuring it to write to disk isn't all that necessary.
+  * If you get an installation failure related to openssl on OS X: +rvm install 2.4.1 --with-openssl-dir=/usr/local/opt/openssl+.
+  * If you're using rvm, create a gemset to hold this application's gem environment
+* +git clone https://github.com:berkmancenter/tagteam.git tagteam && cd tagteam && bundle+
+* Review config files:
+  * +config/environments/production.rb+: configure email delivery if "sendmail" isn't good enough.
+  * +config/initializers/devise.rb+: Check values, especially +pepper+ and +mailer_sender+.
+* Set up +.yml+ configs:
+  * +cp config/sunspot.yml.example config/sunspot.yml+
+  * +cp config/tagteam.yml.example config/tagteam.yml+
+  * +cp config/database.yml.example config/database.yml+ and set it up to connect to your postgres database.
+* `cp .env.development .env` and alter it as needed for your environment.
+* Make sure sunspot is running all on the same port in +sunspot.yml+ and +solr/conf/scripts.conf+ or else the test suite will not run.
+* +export RAILS_ENV=production+
+* Set up databases and docs via +rake db:setup && rake db:migrate && rake db:seed+
+* +rake sunspot:solr:start+
+* Start sidekiq (+bundle exec sidekiq+) to run scheduled tasks
+
+=== To run with `RAILS_ENV=production` on localhost
+* Add +config.serve_static_assets = true+ to +config/production.rb+
+* Comment out the lines with +force_ssl+ in +config/production.rb+
+  - _Remove both of the above before git push._
+* Install yarn
+* +rake assets:precompile+
+* In +config/sunspot.yml+, change the production solr path to +/solr/default+.
+* +redis-server+
+* +rake sunspot:solr:start+
+* +bundle exec sidekiq+
+* +RAILS_ENV=production rails s+
+
+== Testing
+
++rspec+
 
 == Development
 

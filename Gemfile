@@ -75,17 +75,18 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara-webkit', '~> 1.15'
   gem 'database_cleaner', '~> 1.7'
   gem 'factory_bot_rails', '~> 4.10'
   gem 'fuubar', '~> 2.3'
   gem 'headless', '~> 2.3'
   gem 'launchy', '~> 2.4'
+  gem 'poltergeist'
   gem 'pundit-matchers', '~> 1.6'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-client', '~> 1.2'
   gem 'selenium-webdriver', '~> 3.12'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'simplecov', require: false
   gem 'vcr', '~> 4.0'
   gem 'webmock', '~> 3.4'
 end

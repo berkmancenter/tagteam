@@ -25,6 +25,12 @@ spec/examples.txt
 add_test_mappings.vim
 run-test-listener.sh
 .env.production
+coverage/
+.env
+public/assets/
+yarn.lock
+node_modules/
+*.rdb
 
 # Docker
 /docker/postgres_data
