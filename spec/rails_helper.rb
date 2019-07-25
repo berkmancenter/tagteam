@@ -9,20 +9,13 @@ require 'spec_helper'
 require 'rspec/rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'capybara/poltergeist'
 require 'capybara/rspec'
 require 'pundit/matchers'
 require 'pundit/rspec'
-require 'support/database_cleaner'
-require 'support/devise'
-require 'support/factory_bot'
-require 'support/shoulda_matchers'
-require 'support/sidekiq'
-require 'support/sunspot'
-require 'support/vcr'
-require 'support/shared_context'
-require 'support/shared_tag_filter_examples'
 require 'webmock/rspec'
-require 'support/controller_helpers'
+
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -42,6 +35,16 @@ require 'support/controller_helpers'
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(
+    app,
+    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", 'a')
+  )
+end
+
+Capybara.javascript_driver = :poltergeist
+Capybara.server = :webrick
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -73,4 +76,5 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include ControllerHelpers, type: :controller
+  config.include Capybara::DSL
 end

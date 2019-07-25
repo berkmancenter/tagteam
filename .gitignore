@@ -25,6 +25,7 @@ spec/examples.txt
 add_test_mappings.vim
 run-test-listener.sh
 .env.production
+coverage/
 
 # Docker
 /docker/postgres_data
