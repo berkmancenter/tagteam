@@ -182,7 +182,7 @@
         cache: false,
         url: $.rootPath() + 'hubs/' + hubChoiceId + '/my_bookmark_collections',
         dataType: 'json',
-				headers: getHeaders,
+				headers: $.getHeaders(),
         success: function(json){
           $('#feed_item_bookmark_collection_id_input').show();
           $('#feed_item_bookmark_collection_id').html('');
@@ -307,7 +307,7 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tag_list',
-					headers: getHeaders,
+					headers: $.getHeaders(),
           data: {
             allow_remove: true
           },
@@ -328,7 +328,7 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tags_actions',
-					headers: getHeaders,
+					headers: $.getHeaders(),
           success: function(tagActionsList){
             $('.feed-item-tags-actions').append(
               '<p class="control-label">Actions</p>' + tagActionsList);
@@ -382,7 +382,7 @@
         url: $.rootPath() + 'hubs/' + $('#feed_item_hub_id').val() + '/settings',
         dataType: 'json',
         cache: false,
-				headers: getHeaders,
+				headers: $.getHeaders(),
         success: function(response) {
           var itemForm = $('.bookmarklet #feed_item_submit_action').parents('form').first();
           var notify = false;
@@ -482,10 +482,10 @@
       $(filterContainer).append($('<span/> ').attr({id: 'reset-filter' }).html("<strong>Show all</strong>"));
     },
 		getHeaders: function() {
-			{
+			return ({
 				'Content-Type': 'application/json',
-				'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'))
-			}
+				'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
+			})
 		},
 });
 
