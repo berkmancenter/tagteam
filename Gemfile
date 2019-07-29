@@ -83,8 +83,6 @@ group :test do
   gem 'poltergeist'
   gem 'pundit-matchers', '~> 1.6'
   gem 'rails-controller-testing', '~> 1.0'
-  gem 'selenium-client', '~> 1.2'
-  gem 'selenium-webdriver', '~> 3.12'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
   gem 'vcr', '~> 4.0'
