@@ -96,7 +96,6 @@ class HubsController < ApplicationController
     team
     update
   ]
-  before_action :authorize_user, only: :settings
 
   protect_from_forgery except: :items
 
@@ -141,7 +140,7 @@ class HubsController < ApplicationController
     @errors = ''
 
     @errors += 'reCAPTCHA verification failed <br/>' unless verify_recaptcha
-    
+
     if params[:contact][:email].nil? || params[:contact][:email] !~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
       @errors += 'Email address is invalid<br/>'
     end
@@ -212,7 +211,11 @@ class HubsController < ApplicationController
     @settings = @hub.settings
 
     respond_to do |format|
-      format.html { render layout: request.xhr? ? false : 'tabs' }
+      format.html do
+        # See policies/hub_policy and discussion on issue #16810.
+        raise Pundit::NotAuthorizedError unless current_user.has_role?(:superadmin) || current_user.has_role?(:owner, record)
+        render layout: request.xhr? ? false : 'tabs'
+      end
       format.json { render json: @settings }
     end
   end
@@ -951,6 +954,9 @@ class HubsController < ApplicationController
     breadcrumbs.add @hub, hub_path(@hub) if @hub&.id
   end
 
+  # Technical debt warning: this function actually does two things (sets @hub,
+  # and authorizes it). This means that setting the @hub instance variable --
+  # necessary for
   def set_hub
     @hub = Hub.find(params[:id])
     authorize @hub
@@ -975,11 +981,5 @@ class HubsController < ApplicationController
       request.remote_ip,
       request.user_agent
     )
-  end
-
-  def authorize_user
-    return if policy(@hub).settings?
-
-    raise Pundit::NotAuthorizedError, "You can't access that - sorry!"
   end
 end

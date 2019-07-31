@@ -105,7 +105,13 @@ class HubPolicy < ApplicationPolicy
 
   def settings?
     return false if user.blank?
-
+    # It's necessary to allow bookmarkers access here because they need to be
+    # able to see the settings in order to populate fields on their bookmarklet
+    # (via ajax calls to the settings page). *Seeing* the settings doesn't let
+    # them *set* the settings because that post action goes to the set_settings
+    # path, which has its own authorization. However, it's confusing to allow
+    # them to see and manipulate the settings form, so we will disallow that
+    # specifically in the controller.
     user.has_role?(:superadmin) || user.has_role?(:owner, record) || user.has_role?(:bookmarker, record)
   end
 
