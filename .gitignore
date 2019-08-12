@@ -31,6 +31,7 @@ public/assets/
 yarn.lock
 node_modules/
 *.rdb
+.byebug_history
 
 # Docker
 /docker/postgres_data
