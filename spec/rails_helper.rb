@@ -39,7 +39,8 @@ ActiveRecord::Migration.maintain_test_schema!
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(
     app,
-    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", 'a')
+    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", 'a'),
+    js_errors: false
   )
 end
 
@@ -77,4 +78,6 @@ RSpec.configure do |config|
 
   config.include ControllerHelpers, type: :controller
   config.include Capybara::DSL
+
+  config.include Devise::Test::IntegrationHelpers
 end
