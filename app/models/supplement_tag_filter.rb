@@ -17,6 +17,8 @@ class SupplementTagFilter < TagFilter
       items = scope.taggable_items
     end
 
+    items = items.tagged_with(tag.name, on: hub.tagging_key)
+
     # TODO: This can be done, but caching would need to be dealt with
     #values = items.map { |item| "(#{new_tag.id},#{item.id},'FeedItem',#{self.id},'TagFilter','#{hub.tagging_key}')" }.join(',')
     #ActiveRecord::Base.connection.execute("INSERT INTO taggings (tag_id, taggable_id, taggable_type, tagger_id, tagger_type, context) VALUES #{values}")

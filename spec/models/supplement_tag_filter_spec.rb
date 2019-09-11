@@ -43,8 +43,10 @@ RSpec.describe SupplementTagFilter, type: :model do
         filter.apply
 
         new_tag_lists = tag_lists_for(@feed_items.reload, @hub.tagging_key)
+        tag_lists_not_supplemented = @feed_items.reload.last.applied_tags(@hub).pluck(:name)
 
         expect(new_tag_lists).to show_effects_of filter
+        expect(tag_lists_not_supplemented).not_to include(new_tag_name)
       end
     end
 
