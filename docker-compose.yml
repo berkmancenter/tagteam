@@ -10,6 +10,7 @@ services:
   app:
     depends_on:
       - 'postgres'
+      - 'redis'
     build: .
     ports:
       - '3000:3000'
@@ -17,3 +18,13 @@ services:
       - '.env.development'
     volumes:
       - '.:/app'
+
+  redis:
+    image: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
