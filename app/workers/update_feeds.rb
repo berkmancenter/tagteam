@@ -10,9 +10,15 @@ class UpdateFeeds
 
   def perform
     return if other_updaters_running?
+
     feeds = HubFeed.need_updating
     feeds.find_each do |hf|
-      hf.feed.update_feed
+      begin
+        hf.feed.update_feed
+      rescue StandardError => e
+        logger.error 'Can\'t update feed id ' + hf.feed.id.to_s
+        logger.error e.inspect
+      end
     end
   end
 

@@ -35,6 +35,7 @@ class FeedItem < ApplicationRecord
                           :description, :content, :rights)
   end
   validates :url, uniqueness: true
+  validates :url, presence: true, allow_blank: false
 
   has_and_belongs_to_many :feed_retrievals, join_table: 'feed_items_feed_retrievals', optional: true
   has_and_belongs_to_many :feeds, optional: true
