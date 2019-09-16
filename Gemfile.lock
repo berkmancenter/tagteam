@@ -122,7 +122,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
-    feed-abstract (0.0.15)
+    feed-abstract (0.0.16)
     ffi (1.11.1)
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
@@ -434,7 +434,7 @@ DEPENDENCIES
   drg (~> 1.5)
   exception_notification (~> 4.2)
   factory_bot_rails (~> 4.10)
-  feed-abstract (= 0.0.15)
+  feed-abstract (= 0.0.16)
   font-awesome-rails (~> 4.7)
   formtastic (~> 3.1)
   formtastic-bootstrap!
