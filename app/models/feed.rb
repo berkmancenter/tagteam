@@ -136,7 +136,7 @@ class Feed < ApplicationRecord
   # a FeedItem lives in the FeedItems::CreateOrUpdate interaction.
   def update_feed
     return if bookmarking_feed?
-    
+
     return if unsubscribe
 
     self.dirty = false
