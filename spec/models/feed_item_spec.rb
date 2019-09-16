@@ -2,6 +2,8 @@
 require 'rails_helper'
 
 RSpec.describe FeedItem, type: :model do
+  it { is_expected.to validate_presence_of :url }
+
   describe '#add_tags' do
     context 'a feed with with tag "a" exists' do
       before do
