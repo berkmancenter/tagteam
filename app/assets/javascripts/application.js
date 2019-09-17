@@ -328,7 +328,7 @@
           cache: false,
           url: $.rootPath() + 'hubs/' + hubId + '/feed_items/' +
           feedItemId + '/tags_actions',
-					headers: $.getHeaders(),
+          headers: $.getHeaders(),
           success: function(tagActionsList){
             $('.feed-item-tags-actions').append(
               '<p class="control-label">Actions</p>' + tagActionsList);

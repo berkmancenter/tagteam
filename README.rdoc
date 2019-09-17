@@ -1,3 +1,5 @@
+{<img src="https://travis-ci.org/berkmancenter/tagteam.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/berkmancenter/tagteam]
+
 = TagTeam
 
 TagTeam is an RSS / Atom / RDF aggregator with the ability to filter and remix its input feeds with a high degree of flexibility.
@@ -71,11 +73,11 @@ TagTeam is a fairly traditional rails 5.0 app that needs a java daemon and redis
 
 == Development
 
-The only thing you need is Docker (https://docs.docker.com/install/).
+The only thing you need is +Docker+ (https://docs.docker.com/install/) and +Docker Compose+ (https://docs.docker.com/compose/install/).
 
-* Install Docker
-* Run "docker-compose up" and wait until it sets up everything
-* The app will be available on "http://localhost:3000"
+* Install Docker and Docker Compose
+* Run +docker-compose up+ and wait until it sets up everything
+* The app will be available on http://localhost:3000
 
 == Caching
 
