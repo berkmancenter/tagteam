@@ -16,7 +16,7 @@ rss_generator: TagTeam social RSS aggregrator
 # If a feed has changed, schedule it to be spidered again within this interval. Seconds.
 minimum_feed_spider_interval: 180
 
-# If a feed has not changed within this interval, back off for spider_decay_interval. This is set to 6 hours to 
+# If a feed has not changed within this interval, back off for spider_decay_interval. This is set to 6 hours to
 # ensure we don't entirely forget that a feed is busy over night. Seconds.
 spider_update_decay: 3600
 
@@ -51,7 +51,7 @@ html_tags_to_allow:
 - thead
 - tfoot
 - i
-- code 
+- code
 - strike
 - abbr
 - address
@@ -100,7 +100,7 @@ allowed_protocols:
 # UI settings
 default_tagteam_per_page: 25
 default_action_cache_time: 1800
-social_links: 
+social_links:
 - twitter
 - facebook
 - google_plus
@@ -114,5 +114,4 @@ global_tag_context: 'tags'
 # Random
 
 redis_namespace: 'resque:TagTeam'
-redis_host: 'redis://localhost:6379'
-
+redis_host: 'redis://redis:6379'
