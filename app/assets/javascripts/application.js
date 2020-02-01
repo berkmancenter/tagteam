@@ -760,107 +760,116 @@ $(document).ready(function(){
   });
 
   if($('#logged_in, #bookmarklet-tag-controls-allowed').length > 0){
+    var processAddFilterControl = function (targetElem) {
+      var tag_id = targetElem.attr('data_id');
+      var hub_id = targetElem.attr('data_hub_id');
+      var filter_type = targetElem.attr('data_type');
+      var filter_href = targetElem.attr('href');
+      var forceConfirm = targetElem.hasClass('force_confirm');
+      var tagList = '';
+      if (targetElem.attr('tag_list') != null && targetElem.attr('tag_list') != '' ) {
+        tagList =  '<div class="tags-applied-list" data-tags="' + targetElem.attr('tag_list') + '">Tags applied: ' + targetElem.attr('tag_list') + '</div>';
+      }
+      if(filter_type == 'SupplementTagFilter' || filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
+        var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
+        var message = '';
+        var prepend = '';
+        if(filter_type == 'AddTagFilter'){
+          message = "<h2>Please enter the tag you'd like to add<h2>";
+        } else if (filter_type == 'ModifyTagFilter') {
+          if(tag_id == undefined){
+            prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
+          }
+          message = "<h2>Please enter the replacement tag for: " + targetElem.attr('tag_name') + "</h2>";
+          if (targetElem.attr('other_tags') != null && targetElem.attr('other_tags') != '' ) {
+            tagList =  '<div class="tags-applied-list" data-tags="' + targetElem.attr('other_tags') + '">Other tags applied: ' + targetElem.attr('other_tags') + '</div>';
+          }
+        } else if (filter_type == 'DeleteTagFilter'){
+          message = "<h2>Please enter the tag you'd like to remove</h2>";
+        } else if (filter_type == 'SupplementTagFilter') {
+          if(tag_id == undefined){
+            prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='supplement_tag_for_filter' class='form-control' />";
+          }
+          message = "<h2>Please enter the tag to add</h2>";
+        }
+        $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" class="form-control" /><div id="new_tag_container"></div>' + tagList);
+        $(dialogNode).dialog({
+          modal: true,
+          width: 600,
+          minWidth: 400,
+          height: 'auto',
+          title: '',
+          create: function(){
+            $( "#new_tag_for_filter,#modify_tag_for_filter,#supplement_tag_for_filter" ).autocomplete({
+              source: function( request, response ) {
+                $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
+                  tags_applied: $('div.tags-applied-list:visible').data('tags'),
+                  term: request.term,
+                  offset: 0
+                }, function (data) {
+                  var values = data.items;
+
+                  response(values);
+                });
+              },
+              minLength: 2
+            });
+          },
+          buttons: [
+            {
+              click: function(){
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+              text: 'Cancel',
+              class: 'btn btn-primary'
+            },
+            {
+              text: 'Submit',
+              type: 'submit',
+              click: function(){
+                if(!forceConfirm || confirm('Are you sure you want to add a filter to all feed items?')) {
+                  var replace_tag = undefined;
+                  if ($(this).find('#modify_tag_for_filter').length > 0){
+                    replace_tag = $(this).find('#modify_tag_for_filter').val();
+                  }
+                  if ($(this).find('#supplement_tag_for_filter').length > 0){
+                    replace_tag = $(this).find('#supplement_tag_for_filter').val();
+                  }
+                  $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
+                }
+                $(dialogNode).dialog('close');
+                $(dialogNode).remove();
+              },
+              class: 'btn btn-primary'
+            }
+          ]
+        });
+
+        $('#new_tag_for_filter').on('keypress', function (event) {
+          // event 13 is the Enter/Return key
+          if (event.which === 13) {
+            dialogNode.parent().find('button:submit').click();
+          }
+        });
+
+        return false;
+      }
+      $.submitTagFilter(targetElem.attr('href'), filter_type, tag_id,'','');
+    }
+
     $('.add_filter_control').live({
       click: function(e){
         e.preventDefault();
+        var targetElem = $(this);
 
-        var confirmed = confirm('Are you sure?');
-        if (confirmed) {
-          var tag_id = $(this).attr('data_id');
-          var hub_id = $(this).attr('data_hub_id');
-          var filter_type = $(this).attr('data_type');
-          var filter_href = $(this).attr('href');
-          var forceConfirm = $(this).hasClass('force_confirm');
-          var tagList = '';
-          if ($(this).attr('tag_list') != null && $(this).attr('tag_list') != '' ) {
-            tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('tag_list') + '">Tags applied: ' + $(this).attr('tag_list') + '</div>';
+        if (targetElem.hasClass('hub_tag_filter')) {
+          var confirmed = confirm('Are you sure?');
+          if (confirmed) {
+            processAddFilterControl(targetElem);
           }
-          if(filter_type == 'SupplementTagFilter' || filter_type == 'ModifyTagFilter' || (filter_type == 'AddTagFilter' && tag_id == undefined) || (filter_type == 'DeleteTagFilter' && tag_id == undefined)){
-            var dialogNode = $('<div><div class="dialog-error alert alert-danger" style="display:none;"></div><div class="dialog-notice alert alert-info" style="display:none;"></div></div>');
-            var message = '';
-            var prepend = '';
-            if(filter_type == 'AddTagFilter'){
-              message = "<h2>Please enter the tag you'd like to add<h2>";
-            } else if (filter_type == 'ModifyTagFilter') {
-              if(tag_id == undefined){
-                prepend = "<h2>Please enter the tag you want to replace</h2><input type='text' id='modify_tag_for_filter' class='form-control' /><div id='replace_tag_container'></div>";
-              }
-              message = "<h2>Please enter the replacement tag for: " + $(this).attr('tag_name') + "</h2>";
-              if ($(this).attr('other_tags') != null && $(this).attr('other_tags') != '' ) {
-                tagList =  '<div class="tags-applied-list" data-tags="' + $(this).attr('other_tags') + '">Other tags applied: ' + $(this).attr('other_tags') + '</div>';
-              }
-            } else if (filter_type == 'DeleteTagFilter'){
-              message = "<h2>Please enter the tag you'd like to remove</h2>";
-            } else if (filter_type == 'SupplementTagFilter') {
-              if(tag_id == undefined){
-                prepend = "<h2>Please enter the tag you want to supplement</h2><input type='text' id='supplement_tag_for_filter' class='form-control' />";
-              }
-              message = "<h2>Please enter the tag to add</h2>";
-            }
-            $(dialogNode).append(prepend + '<h2>' + message + '</h2><input type="text" id="new_tag_for_filter" class="form-control" /><div id="new_tag_container"></div>' + tagList);
-            $(dialogNode).dialog({
-              modal: true,
-              width: 600,
-              minWidth: 400,
-              height: 'auto',
-              title: '',
-              create: function(){
-                $( "#new_tag_for_filter,#modify_tag_for_filter,#supplement_tag_for_filter" ).autocomplete({
-                  source: function( request, response ) {
-                    $.getJSON( $.rootPath() + 'hubs/' + hub_id + '/tags/autocomplete', {
-                      tags_applied: $('div.tags-applied-list:visible').data('tags'),
-                      term: request.term,
-                      offset: 0
-                    }, function (data) {
-                      var values = data.items;
-
-                      response(values);
-                    });
-                  },
-                  minLength: 2
-                });
-              },
-              buttons: [
-                {
-                  click: function(){
-                    $(dialogNode).dialog('close');
-                    $(dialogNode).remove();
-                  },
-                  text: 'Cancel',
-                  class: 'btn btn-primary'
-                },
-                {
-                  text: 'Submit',
-                  type: 'submit',
-                  click: function(){
-                    if(!forceConfirm || confirm('Are you sure you want to add a filter to all feed items?')) {
-                      var replace_tag = undefined;
-                      if ($(this).find('#modify_tag_for_filter').length > 0){
-                        replace_tag = $(this).find('#modify_tag_for_filter').val();
-                      }
-                      if ($(this).find('#supplement_tag_for_filter').length > 0){
-                        replace_tag = $(this).find('#supplement_tag_for_filter').val();
-                      }
-                      $.submitTagFilter(filter_href, filter_type, tag_id, $(this).find('#new_tag_for_filter').val(), replace_tag);
-                    }
-                    $(dialogNode).dialog('close');
-                    $(dialogNode).remove();
-                  },
-                  class: 'btn btn-primary'
-                }
-              ]
-            });
-
-            $('#new_tag_for_filter').on('keypress', function (event) {
-              // event 13 is the Enter/Return key
-              if (event.which === 13) {
-                dialogNode.parent().find('button:submit').click();
-              }
-            });
-
-            return false;
-          }
-          $.submitTagFilter($(this).attr('href'), filter_type, tag_id,'','');
+        } else {
+          processAddFilterControl(targetElem);
         }
       }
     });
