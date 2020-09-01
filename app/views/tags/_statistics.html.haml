@@ -1,8 +1,9 @@
+- tags_count = tags.each.count
 %h2 Statistics
 %p
-  There #{'is'.pluralize(tags.count)} currently
-  %span.badge= tags.count
-  = 'tag'.pluralize(tags.count)
+  There #{'is'.pluralize(tags_count)} currently
+  %span.badge= tags_count
+  = 'tag'.pluralize()
   in use in this hub.
 
 - if prefixed_tags.any?
