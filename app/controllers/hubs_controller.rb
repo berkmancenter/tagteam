@@ -110,7 +110,7 @@ class HubsController < ApplicationController
     # ---
     'username' => ->(rel) { rel.sort_by { |hf| hf.owners.any? ? hf.owners.first.username.downcase : 'ZZZ' } }, ## Force sort at end if missing username
     'date started' => ->(rel) { rel.order('hub_feeds.created_at') },
-    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.feed_items.any? ? r.feed_items.first.updated_at : r.feed.updated_at } },
+    'most recent tagging' => ->(rel) { rel.sort_by { |r| r.feed_items.any? ? r.feed_items.reorder('').first.updated_at : r.feed.updated_at } },
     'number of items' => -> (rel) { rel.sort_by { |hf| hf.feed.feed_items.count } },
     # ---
     'name' => -> (rel) { rel.sort_by {|r| r[:username].downcase } },
