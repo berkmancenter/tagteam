@@ -195,4 +195,12 @@ class HubFeed < ApplicationRecord
   def self.title
     'Feed'
   end
+
+  def fetch_latest_feed_item
+    result = ActiveRecord::Base.connection.exec_query(
+      "SELECT * FROM get_latest_feed_item($1)", "SQL", [[nil, self.id]]
+    )
+
+    result.first
+  end
 end

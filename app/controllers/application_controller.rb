@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
   end
 
   def user_not_authorized
-    logger.warn "User #{current_user.id} not authorized for request: #{request}"
+    logger.warn "User #{current_user.id} not authorized for request: #{request}" unless current_user.nil?
     flash[:alert] = "You can't access that - sorry!"
     redirect_to root_path
   end
