@@ -2,18 +2,18 @@
 
 source 'http://rubygems.org'
 
-ruby '2.4.1'
+ruby '2.7.8'
 
 gem 'acl9', '~> 3.1'
 gem 'actionpack-action_caching', '~> 1.2'
 gem 'active_interaction', '~> 3.6'
 gem 'acts-as-taggable-on', '~> 5.0'
 gem 'acts_as_api', '~> 1.0'
-gem 'bootsnap', '~> 1.3', require: false
+gem 'bootsnap', '~> 1.16', require: false
 gem 'bootstrap-sass', '~> 3.4'
 gem 'breadcrumbs', '~> 0.1'
 gem 'browser', '~> 2.5'
-gem 'devise', '~> 4.4'
+gem 'devise', '~> 4.9'
 gem 'dotenv-rails', '~> 2.5'
 gem 'exception_notification', '~> 4.2'
 gem 'feed-abstract', '0.0.16'
@@ -24,17 +24,18 @@ gem 'friendly_id', '~> 5.2'
 gem 'haml-rails', '~> 1.0'
 gem 'jquery-rails', '~> 4.3'
 gem 'mail', '~> 2.7'
-gem 'nokogiri', '~> 1.8'
+gem 'nokogiri', '~> 1.15'
 gem 'non-stupid-digest-assets', '~> 1.0'
-gem 'pg', '~> 1.0'
+gem 'pg', '~> 1.5'
 gem 'progress_bar', '~> 1.2'
 gem 'protected_attributes_continued', '~> 1.3' # TODO: switch to strong parameters
-gem 'pundit', '~> 1.1'
-gem 'rails', '~> 5.1.6' # @drg frozen
+gem 'pundit', '~> 2.3'
+gem 'rails', '~> 5.2.8'
 gem 'rails-observers', '~> 0.1'
 gem 'recaptcha', '~> 4.12'
 gem 'redis-namespace', '~> 1.6'
 gem 'sanitize', '~> 4.6'
+gem 'ffi', '~> 1.15.5'
 gem 'sass-rails', '~> 5.0'
 gem 'sidekiq', '~> 5.1'
 gem 'sinatra', '~> 2.0', require: false
@@ -70,8 +71,8 @@ group :development, :test do
   gem 'pry-byebug', '~> 3.6'
   gem 'pry-rails', '~> 0.3'
   gem 'rspec-rails', '~> 3.7'
-  gem 'sqlite3', '~> 1.3'
-  gem 'therubyracer', '~> 0.12'
+  gem 'sqlite3', '~> 1.4.4'
+  # gem 'therubyracer', '~> 0.12'  # Temporarily disabled - causing crash on macOS ARM64
 end
 
 group :test do

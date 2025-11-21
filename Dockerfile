@@ -1,4 +1,4 @@
-FROM ruby:2.4.1
+FROM ruby:2.7.8
 
 # Debian issue in Docker
 # https://superuser.com/a/1423685
